@@ -46,6 +46,8 @@ const config = {
               require('@babel/plugin-proposal-object-rest-spread'),
               require('@babel/plugin-transform-destructuring'),
               require('@babel/plugin-proposal-function-bind'),
+              require('@babel/plugin-transform-runtime'),
+              require('babel-plugin-styled-components'),
             ],
           },
         },
