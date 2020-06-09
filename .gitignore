@@ -9,6 +9,7 @@ frontend/coverage
 # builds
 frontend/public/bundle.js
 frontend/build
+frontend/dist
 
 # misc
 .DS_Store
@@ -22,3 +23,6 @@ frontend/build
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
+
+# intellij
+.idea/

@@ -1,64 +1,61 @@
 {
   "name": "oslo-kommune-ombruk",
   "version": "1.0.0",
-  "description": "Initial commit",
-  "main": "index.js",
+  "description": "",
+  "main": "index.tsx",
   "scripts": {
-    "lint": "eslint --ignore-path .eslintignore --ext js,jsx .",
     "test": "jest",
-    "validate": "yarn lint && yarn test",
-    "build": "webpack -p --progress --config ./webpack.production.config.js",
-    "watch": "webpack --progress -d --config ./webpack.development.config.js --watch",
-    "start": "webpack-dev-server --config ./webpack.development.config.js --mode development --host 0.0.0.0 --port 8080"
+    "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix",
+    "check-types": "tsc",
+    "watch": "webpack --config webpack.config.js --watch",
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack-dev-server --open --config webpack.config.js --port 8080"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint",
-      "pre-push": "yarn validate"
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint && npm run test"
     }
   },
   "repository": {
     "type": "git",
     "url": "ssh://git@kode.knowit.no:7999/oko/ombruk.git"
   },
+  "keywords": [],
   "author": "",
-  "license": "",
-  "dependencies": {
-    "@babel/runtime": "^7.8.3",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "history": "^4.10.1",
-    "husky": "^4.0.10",
-    "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-i18next": "^11.5.0",
-    "react-router-dom": "^5.1.2",
-    "styled-components": "^5.0.0",
-    "styled-icons": "^9.2.0"
-  },
+  "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/plugin-proposal-function-bind": "^7.0.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/plugin-transform-destructuring": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.7.4",
-    "@babel/polyfill": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
-    "@babel/preset-react": "^7.0.0",
-    "babel-eslint": "^10.0.3",
-    "babel-jest": "^24.9.0",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-styled-components": "^1.10.6",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-plugin-import": "^2.20.0",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.18.0",
-    "url-loader": "^3.0.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1"
+    "@testing-library/jest-dom": "^5.9.0",
+    "@testing-library/react": "^10.2.1",
+    "@types/jest": "^25.2.3",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/parser": "^3.2.0",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-typescript-prettier": "^2.1.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-react": "^7.20.0",
+    "html-webpack-plugin": "^4.3.0",
+    "husky": "^4.2.5",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "source-map-loader": "^1.0.0",
+    "ts-jest": "^26.1.0",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "@types/react-router-dom": "^5.1.5",
+    "@types/styled-components": "^5.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.1.1"
   }
 }
