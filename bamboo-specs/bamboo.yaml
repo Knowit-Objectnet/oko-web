@@ -1,0 +1,40 @@
+---
+version: 2
+plan:
+  project-key: OKO
+  name: Default Plan
+  key: DEF
+
+stages:
+  - Code Analysis:
+      jobs:
+        - ESLint
+        - TS-check
+  - Tests:
+      jobs:
+        - Jest
+
+# JOBS
+ESLint:
+  tasks:
+    - script:
+      - cd frontend && npm install
+    - script: 
+      - cd frontend && npm run lint
+  docker: node:lts
+
+TS-check:
+  tasks:
+    - script: 
+      - cd frontend && npm install
+    - script: 
+      - cd frontend && npm run check-types
+  docker: node:lts
+
+Jest: 
+  tasks:
+    - script:
+      - cd frontend && npm install
+    - script:
+      - cd frontend && npm test
+  docker: node:lts
