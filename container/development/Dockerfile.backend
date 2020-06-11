@@ -1,0 +1,8 @@
+FROM gradle:6.5.0-jdk8
+
+RUN mkdir -p /usr/src/app/backend
+COPY ./backend /usr/src/app/backend
+
+WORKDIR /srv/ombruk-backend
+CMD gradle -t installDist & gradle run
+
