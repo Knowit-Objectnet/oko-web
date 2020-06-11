@@ -49,8 +49,8 @@ def apiYml = "$rootDir/resources/api.yml".toString()
 
 /* java client configuration */
 task buildSomething(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
-    generatorName = "kotlin"
-    inputSpec = petstoreApiYml
+    generatorName = "kotlin-server"
+    inputSpec = apiYml
     outputDir = "$buildDir/generated".toString()
 
     groupId = "$project.group"

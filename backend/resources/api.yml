@@ -7,6 +7,5 @@ info:
 servers:
   - url: http://example.com
 paths:
-
-components:
-  schemas:
+  /test:
+    summary: Summary
