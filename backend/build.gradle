@@ -2,10 +2,14 @@ buildscript {
     repositories {
         jcenter()
     }
-    
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
+}
+
+plugins {
+    id "org.openapi.generator" version "4.3.1"
 }
 
 apply plugin: 'kotlin'
@@ -39,4 +43,49 @@ dependencies {
     implementation "io.ktor:ktor-server-host-common:$ktor_version"
     implementation "io.ktor:ktor-gson:$ktor_version"
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"
+}
+
+def apiYml = "$rootDir/resources/api.yml".toString()
+
+/* java client configuration */
+task buildSomething(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+    generatorName = "kotlin-server"
+    inputSpec = apiYml
+    outputDir = "$buildDir/generated".toString()
+
+    groupId = "$project.group"
+    id = "$project.name-generated"
+    version = "$project.version"
+    apiPackage = "oslokommune.ombruk.api"
+    invokerPackage = "oslokommune.ombruk.api.invoker"
+    modelPackage = "oslokommune.ombruk.api.model"
+    enablePostProcessFile = true
+    skipOverwrite = false
+    systemProperties = [
+            modelDocs: "true"
+    ]
+}
+
+task generateCode(type: Copy, dependsOn: ['buildSomething']) {
+
+    def srcPath = "$buildDir/generated"
+    def targetPath = "$rootDir/docs"
+
+    // copy docs
+    from(srcPath + "/docs")
+    into(targetPath)
+    include('*.md')
+}
+
+// code will be generated during compilation
+compileJava.dependsOn(generateCode)
+
+
+// attach the generated folder as source for this project
+sourceSets {
+    main {
+        java {
+            srcDir "$buildDir/generated/src/main/java"
+        }
+    }
 }
