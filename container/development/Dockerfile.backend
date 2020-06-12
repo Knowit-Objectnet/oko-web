@@ -6,5 +6,5 @@ COPY ./container/development/wait-for-it.sh /opt
 RUN chmod +x /opt/wait-for-it.sh
 
 WORKDIR /srv/ombruk-backend
-CMD gradle run & ../../opt/wait-for-it.sh 0.0.0.0:8080 -t 0 -- gradle -t installDist
+CMD gradle run & ../../opt/wait-for-it.sh 0.0.0.0:8080 -t 0 -- gradle -t installDist --watch-fs
 
