@@ -2,7 +2,9 @@ FROM gradle:6.5.0-jdk8
 
 RUN mkdir -p /usr/src/app/backend
 COPY ./backend /usr/src/app/backend
+COPY ./container/development/wait-for-it.sh /opt
+RUN chmod +x /opt/wait-for-it.sh
 
 WORKDIR /srv/ombruk-backend
-CMD gradle -t installDist & gradle run
+CMD gradle run & ../../opt/wait-for-it.sh 0.0.0.0:8080 -t 0 -- gradle -t installDist
 
