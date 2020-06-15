@@ -3,4 +3,7 @@ FROM node:12
 COPY ./frontend /srv/ombruk-frontend
 
 WORKDIR /srv/ombruk-frontend
+
+EXPOSE 8080
+
 CMD npm cache verify && npm install && npm start
