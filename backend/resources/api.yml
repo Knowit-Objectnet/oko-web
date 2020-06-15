@@ -1,0 +1,11 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Ombruk API
+  license:
+    name: MIT
+servers:
+  - url: http://example.com
+paths:
+  /test:
+    summary: Summary

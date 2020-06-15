@@ -13,6 +13,7 @@ stages:
   - Tests:
       jobs:
         - Jest
+        - Ktor-test
 
 # JOBS
 ESLint:
@@ -25,8 +26,8 @@ ESLint:
 
 TS-check:
   tasks:
-    - script: 
-      - cd frontend && npm install
+    - script:
+       - cd frontend && npm install
     - script: 
       - cd frontend && npm run check-types
   docker: node:lts
@@ -38,3 +39,9 @@ Jest:
     - script:
       - cd frontend && npm test
   docker: node:lts
+
+Ktor-test:
+  tasks:
+    - script:
+      - cd backend && gradle test
+  docker: gradle:6.5.0-jdk8
