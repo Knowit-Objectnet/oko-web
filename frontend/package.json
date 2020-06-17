@@ -9,7 +9,7 @@
     "check-types": "tsc",
     "watch": "webpack --config webpack.config.js --watch",
     "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server --open --config webpack.config.js --port 8080"
+    "start": "webpack-dev-server --open --config webpack.config.js --host 0.0.0.0 --port 8080"
   },
   "husky": {
     "hooks": {
