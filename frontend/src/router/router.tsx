@@ -11,7 +11,7 @@ export const RouterComponent: React.FC = () => (
     <Router history={historyObj}>
         <Switch>
             <Route exact path="/">
-                <h1>Hello World</h1>
+                <h1>Hello World!</h1>
             </Route>
             <Route path="/login" component={Login} />
         </Switch>

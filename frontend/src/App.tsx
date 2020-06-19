@@ -7,10 +7,10 @@ import { GlobalStyle } from './global-styles';
 export const App: React.FC = () => {
     return (
         <>
-        <KeycloakProvider keycloak={keycloak}>
-            <RouterComponent />
-        </KeycloakProvider>
-        <GlobalStyle />
+            <KeycloakProvider keycloak={keycloak}>
+                <RouterComponent />
+            </KeycloakProvider>
+            <GlobalStyle />
         </>
     );
 };

@@ -1,2 +1,2 @@
-declare module "@react-keycloak/web";
-declare module "keycloak-js";
+declare module '@react-keycloak/web';
+declare module 'keycloak-js';

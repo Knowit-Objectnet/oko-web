@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
 import styled from 'styled-components';
-import { useKeycloak } from '@react-keycloak/web'
+import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     display: flex;
@@ -15,7 +15,7 @@ export const Login: React.FC<null> = () => {
     const [keycloak, initialized] = useKeycloak();
 
     const onButtonClick = () => {
-        keycloak.login()
+        keycloak.login();
     };
 
     return (
@@ -25,4 +25,4 @@ export const Login: React.FC<null> = () => {
             </button>
         </Wrapper>
     );
-}
+};
