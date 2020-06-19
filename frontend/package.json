@@ -9,7 +9,7 @@
     "check-types": "tsc",
     "watch": "webpack --config webpack.config.js --watch",
     "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server --open --config webpack.config.js --host 0.0.0.0 --port 8080"
+    "start": "webpack-dev-server --open --config webpack.config.js --history-api-fallback --host 0.0.0.0 --port 8080"
   },
   "husky": {
     "hooks": {
@@ -50,10 +50,12 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@react-keycloak/web": "^2.1.1",
     "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.0",
     "history": "^4.10.1",
     "i18next": "^19.4.5",
+    "keycloak-js": "^10.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
