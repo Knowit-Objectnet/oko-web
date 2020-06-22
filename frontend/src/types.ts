@@ -3,5 +3,11 @@ export interface eventInfo {
     start: Date;
     end: Date;
     allDay?: boolean;
-    resource?: any;
+    resource?: eventInfoResource;
+}
+
+interface eventInfoResource {
+    location: string;
+    driver: string;
+    weight?: number;
 }
