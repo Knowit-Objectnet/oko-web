@@ -21,7 +21,7 @@ export const Login: React.FC<null> = () => {
     return (
         <Wrapper>
             <button type="button" onClick={onButtonClick}>
-                Login
+                Logg inn
             </button>
         </Wrapper>
     );
