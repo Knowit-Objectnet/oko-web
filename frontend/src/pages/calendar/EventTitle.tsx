@@ -35,6 +35,7 @@ const EditTitle = styled.div`
 interface EventTitleProps {
     title: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    editable: boolean;
     isEditing: boolean;
     onEditClick: () => void;
 }
@@ -48,7 +49,7 @@ export const EventTitle: React.FC<EventTitleProps> = (props) => (
             readOnly={!props.isEditing}
             disabled={!props.isEditing}
         />
-        {props.isEditing ? null : (
+        {props.isEditing || !props.editable ? null : (
             <EditTitle>
                 <Edit size="1em" onClick={props.onEditClick} />
             </EditTitle>

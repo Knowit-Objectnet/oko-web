@@ -23,17 +23,33 @@ const Button = styled.button`
 `;
 
 interface EventSubmissionProps {
-    onCancel: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    onSubmit: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    onCancel: () => void;
+    onSubmit: () => void;
 }
 
-export const EventSubmission: React.FC<EventSubmissionProps> = (props) => (
-    <Submission>
-        <Button color="#EC7070" name="cancelButton" onClick={props.onCancel}>
-            Avbryt
-        </Button>
-        <Button color="#52CC91" name="submitButton" onClick={props.onSubmit}>
-            Godkjenn
-        </Button>
-    </Submission>
-);
+export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
+    const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.persist();
+        switch (e.currentTarget.name) {
+            case 'cancelButton': {
+                props.onCancel();
+                break;
+            }
+            case 'submitButton': {
+                props.onSubmit();
+                break;
+            }
+        }
+    };
+
+    return (
+        <Submission>
+            <Button color="#EC7070" name="cancelButton" onClick={onClick}>
+                Avbryt
+            </Button>
+            <Button color="#52CC91" name="submitButton" onClick={onClick}>
+                Godkjenn
+            </Button>
+        </Submission>
+    );
+};

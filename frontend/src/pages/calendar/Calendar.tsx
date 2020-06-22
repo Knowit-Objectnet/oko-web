@@ -61,9 +61,8 @@ export const CalendarPage: React.FC<null> = () => {
     };
 
     const onSelectSlot = (slotInfo: SlotInfo) => {
-        console.log(slotInfo);
-        //setModalContent(<NewEvent start={slotInfo.start} end={slotInfo.end} />);
-        //setShowModal(true);
+        setModalContent(<NewEvent start={new Date(slotInfo.start)} end={new Date(slotInfo.end)} />);
+        setShowModal(true);
     };
 
     return (

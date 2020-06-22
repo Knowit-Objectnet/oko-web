@@ -57,20 +57,6 @@ export const Event: React.FC<EventInfo> = (props) => {
         onEdit();
     };
 
-    const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.persist();
-        switch (e.currentTarget.name) {
-            case 'cancelButton': {
-                onCancel();
-                break;
-            }
-            case 'submitButton': {
-                onSubmit();
-                break;
-            }
-        }
-    };
-
     const onEdit = () => {
         setIsEditing(true);
     };
@@ -87,7 +73,7 @@ export const Event: React.FC<EventInfo> = (props) => {
 
     return (
         <Wrapper>
-            <EventTitle title={props.title} onChange={onChange} isEditing={isEditing} onEditClick={onEditClick} />
+            <EventTitle title={props.title} editable={true} onChange={onChange} isEditing={isEditing} onEditClick={onEditClick} />
             <Body>
                 <Options>
                     <EventOptionDateRange start={props.start} end={props.end} />
@@ -109,7 +95,7 @@ export const Event: React.FC<EventInfo> = (props) => {
                 </Options>
                 {props.resource && props.resource.message ? <MessageBox {...props.resource.message} /> : null}
             </Body>
-            {isEditing ? <EventSubmission onSubmit={onClick} onCancel={onClick} /> : null}
+            {isEditing ? <EventSubmission onSubmit={onSubmit} onCancel={onCancel} /> : null}
         </Wrapper>
     );
 };
