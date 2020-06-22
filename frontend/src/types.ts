@@ -1,14 +1,14 @@
 import { stringOrDate } from 'react-big-calendar';
 
-export interface eventInfo {
+export interface EventInfo {
     title: string;
     start: Date;
     end: Date;
     allDay?: boolean;
-    resource?: eventInfoResource;
+    resource?: EventInfoResource;
 }
 
-interface eventInfoResource {
+interface EventInfoResource {
     location: string;
     driver: string;
     weight?: number;
@@ -19,7 +19,7 @@ interface eventInfoResource {
     };
 }
 
-export interface slotInfo {
+export interface SlotInfo {
     start: stringOrDate;
     end: stringOrDate;
     slots: Date[] | string[];

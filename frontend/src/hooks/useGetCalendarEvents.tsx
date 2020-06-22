@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
-import { eventInfo } from '../types';
+import { EventInfo } from '../types';
 
-export const useGetCalendarEvents: () => Array<eventInfo> = () => {
+export const useGetCalendarEvents: () => Array<EventInfo> = () => {
     const [events, setEvents] = useState([]);
     const { keycloak } = useKeycloak();
 

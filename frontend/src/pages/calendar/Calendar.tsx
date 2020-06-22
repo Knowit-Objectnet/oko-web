@@ -6,7 +6,8 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Modal } from '../../sharedComponents/Modal';
 import { Event } from './Event';
-import { eventInfo, slotInfo } from '../../types';
+import { NewEvent } from './NewEvent';
+import { EventInfo, SlotInfo } from '../../types';
 import { useGetCalendarEvents } from '../../hooks/useGetCalendarEvents';
 
 const localizer = momentLocalizer(moment);
@@ -20,7 +21,7 @@ export const CalendarPage: React.FC<null> = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
 
-    const dummyData: Array<eventInfo> = [
+    const dummyData: Array<EventInfo> = [
         {
             title: 'Test',
             start: new Date(new Date().setHours(10)),
@@ -54,13 +55,15 @@ export const CalendarPage: React.FC<null> = () => {
 
     // eslint-disable-next-line
     const onSelectEvent = (event: Object, e: React.SyntheticEvent) => {
-        const eventProps: eventInfo = event as eventInfo;
+        const eventProps: EventInfo = event as EventInfo;
         setModalContent(<Event {...eventProps} />);
         setShowModal(true);
     };
 
-    const onSelectSlot = (slotInfo: slotInfo) => {
-        setShowModal(false);
+    const onSelectSlot = (slotInfo: SlotInfo) => {
+        console.log(slotInfo);
+        //setModalContent(<NewEvent start={slotInfo.start} end={slotInfo.end} />);
+        //setShowModal(true);
     };
 
     return (
