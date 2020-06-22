@@ -73,7 +73,13 @@ export const Event: React.FC<EventInfo> = (props) => {
 
     return (
         <Wrapper>
-            <EventTitle title={props.title} editable={true} onChange={onChange} isEditing={isEditing} onEditClick={onEditClick} />
+            <EventTitle
+                title={props.title}
+                editable={true}
+                onChange={onChange}
+                isEditing={isEditing}
+                onEditClick={onEditClick}
+            />
             <Body>
                 <Options>
                     <EventOptionDateRange start={props.start} end={props.end} />
