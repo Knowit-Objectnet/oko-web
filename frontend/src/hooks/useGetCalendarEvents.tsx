@@ -1,13 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
-
-interface eventInfo {
-    title: string;
-    start: Date;
-    end: Date;
-    allDay?: boolean;
-    resource?: any;
-}
+import { eventInfo } from "../types";
 
 export const useGetCalendarEvents: () => Array<eventInfo> = () => {
     const [events, setEvents] = useState([]);
