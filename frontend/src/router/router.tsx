@@ -6,6 +6,7 @@ import { historyObj } from './historyObj';
 
 // Pages
 import { Login } from '../pages/login/Login';
+import { CalendarPage } from '../pages/calendar/Calendar';
 
 export const RouterComponent: React.FC = () => (
     <Router history={historyObj}>
@@ -14,6 +15,7 @@ export const RouterComponent: React.FC = () => (
                 <h1>Hello World!</h1>
             </Route>
             <Route path="/login" component={Login} />
+            <Route path="/calendar" component={CalendarPage} />
         </Switch>
     </Router>
 );
