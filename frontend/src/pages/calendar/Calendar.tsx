@@ -1,27 +1,46 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { eventInfo } from '../../types';
+import { Modal } from '../../sharedComponents/Modal';
+import { Event } from './Event';
+import { eventInfo, slotInfo } from '../../types';
 import { useGetCalendarEvents } from '../../hooks/useGetCalendarEvents';
 
 const localizer = momentLocalizer(moment);
 
 const Wrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 90%;
+    height: 50%;
     width: 100%;
 `;
 
 export const CalendarPage: React.FC<null> = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
+
     const dummyData: Array<eventInfo> = [
         {
             title: 'Test',
             start: new Date(new Date().setHours(10)),
             end: new Date(new Date().setHours(12)),
+            allDay: false,
+            resource: {
+                location: 'grønmo',
+                driver: 'odd',
+                weight: 100,
+                message: {
+                    start: new Date(),
+                    end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+                    text: 'Tar ikke i mot barneleker ifm. Covid-19 tiltak.',
+                },
+            },
+        },
+        {
+            title: 'Test',
+            start: new Date(new Date().setHours(16)),
+            end: new Date(new Date().setHours(20)),
             allDay: false,
             resource: {
                 location: 'grønmo',
@@ -35,19 +54,37 @@ export const CalendarPage: React.FC<null> = () => {
 
     // eslint-disable-next-line
     const onSelectEvent = (event: Object, e: React.SyntheticEvent) => {
-        console.log(event);
+        const eventProps: eventInfo = event as eventInfo;
+        setModalContent(<Event {...eventProps} />);
+        setShowModal(true);
+    };
+
+    const onSelectSlot = (slotInfo: slotInfo) => {
+        setShowModal(false);
     };
 
     return (
-        <Wrapper>
-            <Calendar
-                localizer={localizer}
-                defaultView="week"
-                events={events}
-                startAccessor="start"
-                endAccessor="end"
-                onSelectEvent={onSelectEvent}
-            />
-        </Wrapper>
+        <>
+            {showModal ? (
+                <Modal
+                    exitModalCallback={() => {
+                        setShowModal(false);
+                    }}
+                    content={modalContent}
+                />
+            ) : null}
+            <Wrapper>
+                <Calendar
+                    localizer={localizer}
+                    defaultView="week"
+                    selectable={true}
+                    events={events}
+                    startAccessor="start"
+                    endAccessor="end"
+                    onSelectEvent={onSelectEvent}
+                    onSelectSlot={onSelectSlot}
+                />
+            </Wrapper>
+        </>
     );
 };
