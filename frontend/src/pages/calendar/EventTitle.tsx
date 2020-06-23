@@ -10,45 +10,22 @@ const Title = styled.div`
     margin-bottom: 32px;
 `;
 
-const TitleInput = styled.input`
-    width: fit-content(5px);
-    border: none;
-
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 29px;
-    line-height: 34px;
-
-    color: #000000;
-
-    &:disabled {
-        background-color: transparent;
-    }
-`;
-
 const EditTitle = styled.div`
     display: flex;
     justify-content: flex-start;
+    margin-left: 20px;
 `;
 
 interface EventTitleProps {
     title: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    editable: boolean;
     isEditing: boolean;
-    onEditClick: () => void;
+    editable: boolean;
+    onEditClick?: () => void;
 }
 
 export const EventTitle: React.FC<EventTitleProps> = (props) => (
     <Title>
-        <TitleInput
-            name="titleInput"
-            value={props.title}
-            onChange={props.onChange}
-            readOnly={!props.isEditing}
-            disabled={!props.isEditing}
-        />
+        <h2>{props.title}</h2>
         {props.isEditing || !props.editable ? null : (
             <EditTitle>
                 <Edit size="1em" onClick={props.onEditClick} />

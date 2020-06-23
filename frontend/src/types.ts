@@ -10,7 +10,7 @@ export interface EventInfo {
 
 interface EventInfoResource {
     location: string;
-    driver: string;
+    driver?: string;
     weight?: number;
     message?: {
         start: Date;

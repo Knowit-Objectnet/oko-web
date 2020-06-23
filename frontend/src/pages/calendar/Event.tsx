@@ -3,13 +3,13 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { MessageBox } from './MessageBox';
 import { EventTitle } from './EventTitle';
-import { EventOption } from './EventOption';
 import { EventOptionDateRange } from './EventOptionDateRange';
+import { EventOptionDriver } from './EventOptionDriver';
 import { EventSubmission } from './EventSubmission';
-import { LocationOn } from '@styled-icons/material/LocationOn';
-import { Truck } from '@styled-icons/fa-solid/Truck';
-import { WeightHanging } from '@styled-icons/fa-solid/WeightHanging';
 import { EventInfo } from '../../types';
+import { EventOptionLocation } from './EventOptionLocation';
+import { useGetLocations } from '../../hooks/useGetLocations.jsx';
+import { EventOptionWeight } from './EventOptionWeight';
 
 const Wrapper = styled.div`
     display: flex;
@@ -29,28 +29,47 @@ const Options = styled.div`
     flex: 1;
 `;
 
-const GrayBox = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 128px;
-    height: 40px;
-    background: #f2f2f2;
-    border-radius: 5px;
-`;
-
 export const Event: React.FC<EventInfo> = (props) => {
+    let locations = useGetLocations();
+    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
     const [isEditing, setIsEditing] = useState(false);
-    const [title, setTitle] = useState(props.title);
+    const [isRecurring, setIsRecurring] = useState(false);
+    const [startDate, setStartDate] = useState(props.start);
+    const [endDate, setEndDate] = useState(props.end);
+    const [locationIndex, setLocationIndex] = useState(locations.indexOf(props.resource?.location || ''));
+    const [driver, setDriver] = useState(props.resource?.driver);
+    const [weight, setWeight] = useState(props.resource?.weight);
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onDateRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         switch (e.currentTarget.name) {
-            case 'titleInput': {
-                setTitle(e.currentTarget.value);
+            case 'startDate': {
+                setStartDate(new Date(e.currentTarget.value));
+                break;
+            }
+            case 'endDate': {
+                setEndDate(new Date(e.currentTarget.value));
+                break;
+            }
+            case 'recurring': {
+                setIsRecurring(!isRecurring);
                 break;
             }
         }
+    };
+
+    const onLocationChange = (index: number) => {
+        setLocationIndex(index);
+    };
+
+    const onDriverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.persist();
+        setDriver(e.currentTarget.value || undefined);
+    };
+
+    const onWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.persist();
+        setWeight(parseInt(e.currentTarget.value));
     };
 
     const onEditClick = () => {
@@ -62,8 +81,12 @@ export const Event: React.FC<EventInfo> = (props) => {
     };
 
     const onCancel = () => {
-        setTitle(props.title);
         setIsEditing(false);
+        setStartDate(props.start);
+        setEndDate(props.end);
+        setLocationIndex(locations.indexOf(props.resource?.location || ''));
+        setDriver(props.resource?.driver);
+        setWeight(props.resource?.weight);
     };
 
     const onSubmit = () => {
@@ -73,33 +96,28 @@ export const Event: React.FC<EventInfo> = (props) => {
 
     return (
         <Wrapper>
-            <EventTitle
-                title={props.title}
-                editable={true}
-                onChange={onChange}
-                isEditing={isEditing}
-                onEditClick={onEditClick}
-            />
+            <EventTitle title={props.title} isEditing={isEditing} editable={true} onEditClick={onEditClick} />
             <Body>
                 <Options>
-                    <EventOptionDateRange start={props.start} end={props.end} />
-                    <EventOption icon={LocationOn}>
-                        <GrayBox>
-                            {props.resource && props.resource.location ? props.resource.location.toUpperCase() : null}
-                        </GrayBox>
-                    </EventOption>
-                    <EventOption icon={Truck}>
-                        <GrayBox>
-                            {props.resource && props.resource.driver
-                                ? props.resource.driver.charAt(0).toUpperCase() + props.resource.driver.slice(1)
-                                : null}
-                        </GrayBox>
-                    </EventOption>
-                    <EventOption icon={WeightHanging}>
-                        <GrayBox>{props.resource ? props.resource.weight : null}</GrayBox>
-                    </EventOption>
+                    <EventOptionDateRange
+                        start={startDate}
+                        end={endDate}
+                        isRecurring={isRecurring}
+                        isEditing={isEditing}
+                        onChange={onDateRangeChange}
+                    />
+                    <EventOptionLocation
+                        isEditing={isEditing}
+                        selectedLocation={locationIndex}
+                        locations={locations}
+                        onChange={onLocationChange}
+                    />
+                    <EventOptionDriver driver={driver} isEditing={isEditing} onChange={onDriverChange} />
+                    <EventOptionWeight weight={weight} isEditing={isEditing} onChange={onWeightChange} />
                 </Options>
-                {props.resource && props.resource.message ? <MessageBox {...props.resource.message} /> : null}
+                {props.resource && props.resource.message && !isEditing ? (
+                    <MessageBox {...props.resource.message} />
+                ) : null}
             </Body>
             {isEditing ? <EventSubmission onSubmit={onSubmit} onCancel={onCancel} /> : null}
         </Wrapper>

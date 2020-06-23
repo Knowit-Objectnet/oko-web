@@ -10,6 +10,9 @@ const Option = styled.div`
 
 const OptionInfo = styled.div`
     margin-left: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 interface EventOptionProps {

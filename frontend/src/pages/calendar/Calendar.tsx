@@ -45,8 +45,6 @@ export const CalendarPage: React.FC<null> = () => {
             allDay: false,
             resource: {
                 location: 'grønmo',
-                driver: 'odd',
-                weight: 100,
             },
         },
     ];
@@ -61,7 +59,15 @@ export const CalendarPage: React.FC<null> = () => {
     };
 
     const onSelectSlot = (slotInfo: SlotInfo) => {
-        setModalContent(<NewEvent start={new Date(slotInfo.start)} end={new Date(slotInfo.end)} />);
+        setModalContent(
+            <NewEvent
+                start={new Date(slotInfo.start)}
+                end={new Date(slotInfo.end)}
+                onFinished={() => {
+                    setShowModal(false);
+                }}
+            />,
+        );
         setShowModal(true);
     };
 
