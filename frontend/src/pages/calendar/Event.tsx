@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { MessageBox } from './MessageBox';
-import { EventTitle } from './EventTitle';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionDriver } from './EventOptionDriver';
 import { EventSubmission } from './EventSubmission';
@@ -10,13 +9,7 @@ import { EventInfo } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { useGetLocations } from '../../hooks/useGetLocations.jsx';
 import { EventOptionWeight } from './EventOptionWeight';
-
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 700px;
-    margin: 50px;
-`;
+import { EventTemplate } from './EventTemplate';
 
 const Body = styled.div`
     display: flex;
@@ -95,8 +88,7 @@ export const Event: React.FC<EventInfo> = (props) => {
     };
 
     return (
-        <Wrapper>
-            <EventTitle title={props.title} isEditing={isEditing} editable={true} onEditClick={onEditClick} />
+        <EventTemplate title={props.title} showEditSymbol={true} isEditing={isEditing} onEditClick={onEditClick}>
             <Body>
                 <Options>
                     <EventOptionDateRange
@@ -120,6 +112,6 @@ export const Event: React.FC<EventInfo> = (props) => {
                 ) : null}
             </Body>
             {isEditing ? <EventSubmission onSubmit={onSubmit} onCancel={onCancel} /> : null}
-        </Wrapper>
+        </EventTemplate>
     );
 };

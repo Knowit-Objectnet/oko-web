@@ -3,19 +3,12 @@ import styled from 'styled-components';
 import { Person } from '@styled-icons/material/Person';
 import { EventSubmission } from './EventSubmission';
 import { useState } from 'react';
-import { EventTitle } from './EventTitle';
 import { EventOption } from './EventOption';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
 import { useGetLocations } from '../../hooks/useGetLocations.jsx';
 import { useGetPartners } from '../../hooks/useGetPartners';
-
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 700px;
-    margin: 50px;
-`;
+import { EventTemplate } from './EventTemplate';
 
 const Options = styled.div`
     display: flex;
@@ -77,8 +70,7 @@ export const NewEvent: React.FC<newEventProps> = (props) => {
     };
 
     return (
-        <Wrapper>
-            <EventTitle title="Opprett ny avtale" isEditing={false} editable={false} />
+        <EventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
             <Options>
                 <EventOption icon={Person}>
                     <select value={selectedPartner} onChange={onPartnerChange}>
@@ -107,6 +99,6 @@ export const NewEvent: React.FC<newEventProps> = (props) => {
                 />
             </Options>
             <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />
-        </Wrapper>
+        </EventTemplate>
     );
 };
