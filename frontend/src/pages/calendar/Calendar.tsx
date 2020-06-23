@@ -7,6 +7,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Modal } from '../../sharedComponents/Modal';
 import { Event } from './Event';
 import { NewEvent } from './NewEvent';
+import { ExtraEvent } from './ExtraEvent';
 import { EventInfo, SlotInfo } from '../../types';
 import { useGetCalendarEvents } from '../../hooks/useGetCalendarEvents';
 
@@ -60,7 +61,7 @@ export const CalendarPage: React.FC<null> = () => {
 
     const onSelectSlot = (slotInfo: SlotInfo) => {
         setModalContent(
-            <NewEvent
+            <ExtraEvent
                 start={new Date(slotInfo.start)}
                 end={new Date(slotInfo.end)}
                 onFinished={() => {

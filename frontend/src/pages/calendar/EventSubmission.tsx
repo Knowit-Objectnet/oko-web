@@ -23,6 +23,8 @@ const Button = styled.button`
 `;
 
 interface EventSubmissionProps {
+    cancelText?: string;
+    submitText?: string;
     onCancel: () => void;
     onSubmit: () => void;
 }
@@ -45,10 +47,10 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
     return (
         <Submission>
             <Button color="#EC7070" name="cancelButton" onClick={onClick}>
-                Avbryt
+                {props.cancelText || 'Avbryt'}
             </Button>
             <Button color="#52CC91" name="submitButton" onClick={onClick}>
-                Godkjenn
+                {props.submitText || 'Godkjenn'}
             </Button>
         </Submission>
     );

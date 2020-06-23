@@ -27,7 +27,7 @@ export const NewEvent: React.FC<newEventProps> = (props) => {
     locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
     let partners = useGetPartners();
     partners = partners.length === 0 ? ['Fretex', 'Sykkel gutta'] : partners;
-    const [selectedPartner, setSelectedPartner] = useState('');
+    const [selectedPartner, setSelectedPartner] = useState(-1);
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
     const [locationIndex, setLocationIndex] = useState(0);
@@ -53,7 +53,7 @@ export const NewEvent: React.FC<newEventProps> = (props) => {
 
     const onPartnerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.persist();
-        setSelectedPartner(e.currentTarget.value);
+        setSelectedPartner(parseInt(e.currentTarget.value));
     };
 
     const onLocationChange = (index: number) => {
@@ -74,7 +74,7 @@ export const NewEvent: React.FC<newEventProps> = (props) => {
             <Options>
                 <EventOption icon={Person}>
                     <select value={selectedPartner} onChange={onPartnerChange}>
-                        <option value="" disabled>
+                        <option value={-1} disabled>
                             Velg samarbeidspartner
                         </option>
                         {partners.map((partner, index) => (
