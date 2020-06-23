@@ -23,13 +23,3 @@ frontend/dist
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
-
-# intellij
-.idea/
-backend/.idea/
-backend/.gradle
-backend/out
-backend/build
-*.iml
-*.ipr
-*.iws
