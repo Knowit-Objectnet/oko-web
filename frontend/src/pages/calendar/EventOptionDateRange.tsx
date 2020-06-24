@@ -23,12 +23,12 @@ interface EventOptionDateRangeProps {
 
 export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props) => {
     const DateToString = (date: Date): string => {
-        let dateString = date.getFullYear() + '-'
-        dateString += date.getMonth().toString().padStart(2, "0") + '-'
-        dateString += date.getDate().toString().padStart(2, "0") + 'T'
-        dateString += date.getHours().toString().padStart(2, "0") + ':'
-        dateString += date.getMinutes().toString().padStart(2, "0")
-        return dateString
+        let dateString = date.getFullYear() + '-';
+        dateString += date.getMonth().toString().padStart(2, '0') + '-';
+        dateString += date.getDate().toString().padStart(2, '0') + 'T';
+        dateString += date.getHours().toString().padStart(2, '0') + ':';
+        dateString += date.getMinutes().toString().padStart(2, '0');
+        return dateString;
     };
 
     return (
