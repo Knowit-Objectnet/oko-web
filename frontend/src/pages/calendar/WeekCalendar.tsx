@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { Plus } from '@styled-icons/boxicons-regular/Plus';
 import { Calendar, Culture, DateFormatFunction, DateLocalizer, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { EventInfo, SlotInfo } from '../../types';
@@ -11,8 +12,29 @@ import { Modal } from '../../sharedComponents/Modal';
 import { useGetCalendarEvents } from '../../hooks/useGetCalendarEvents';
 import moment from 'moment';
 
+const OverflowWrapper = styled.div`
+    overflow: auto;
+    flex: 1;
+`;
+
 const CalendarWrapper = styled.div`
     overflow: auto;
+    display: flex;
+    flex-direction: row;
+`;
+
+const ButtonWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-contents: center;
+    align-items: center;
+    margin-left: 20px;
+`;
+
+const Button = styled.button`
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 export const WeekCalendar: React.FC<unknown> = () => {
@@ -87,6 +109,19 @@ export const WeekCalendar: React.FC<unknown> = () => {
         setShowModal(true);
     };
 
+    const onNewEventButtonClick = (e: React.SyntheticEvent) => {
+        setModalContent(
+            <ExtraEvent
+                start={new Date()}
+                end={new Date(new Date().setHours(1))}
+                onFinished={() => {
+                    setShowModal(false);
+                }}
+            />,
+        );
+        setShowModal(true);
+    };
+
     return (
         <>
             {showModal ? (
@@ -98,21 +133,29 @@ export const WeekCalendar: React.FC<unknown> = () => {
                 />
             ) : null}
             <CalendarWrapper>
-                <Calendar
-                    localizer={localizer}
-                    culture="nb"
-                    formats={formats}
-                    toolbar={false}
-                    views={['month', 'work_week', 'day', 'agenda']}
-                    defaultView="work_week"
-                    selectable={true}
-                    step={15}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    onSelectEvent={onSelectEvent}
-                    onSelectSlot={onSelectSlot}
-                />
+                <OverflowWrapper>
+                    <Calendar
+                        localizer={localizer}
+                        culture="nb"
+                        formats={formats}
+                        toolbar={false}
+                        views={['month', 'work_week', 'day', 'agenda']}
+                        defaultView="work_week"
+                        selectable={true}
+                        step={15}
+                        events={events}
+                        startAccessor="start"
+                        endAccessor="end"
+                        onSelectEvent={onSelectEvent}
+                        onSelectSlot={onSelectSlot}
+                    />
+                </OverflowWrapper>
+                <ButtonWrapper>
+                    <Button onClick={onNewEventButtonClick}>
+                        <Plus size="1em" />
+                        Legg til avtale
+                    </Button>
+                </ButtonWrapper>
             </CalendarWrapper>
         </>
     );
