@@ -9,7 +9,7 @@ const Element = styled.div<StyledElementProps>`
     width: 184px;
     background-color: #ffffff;
     border-radius: 10px 10px 0px 0px;
-    border-bottom: ${(props) => (props.selected ? null : 'solid 1px #AFAFAF')};
+    border-bottom: ${(props) => (props.selected ? null : 'solid 2px #AFAFAF')};
     display: flex;
     justify-content: center;
     align-items: center;

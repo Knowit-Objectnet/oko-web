@@ -8,7 +8,7 @@ const StyledHeader = styled.header`
     height: 125px;
 `;
 
-export const Header: React.FC<{}> = () => {
+export const Header: React.FC<unknown> = () => {
     return (
         <StyledHeader>
             <TopBar />

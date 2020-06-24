@@ -9,7 +9,7 @@ const Nav = styled.nav`
     background-color: #afafaf;
 `;
 
-export const Navigation: React.FC<{}> = () => {
+export const Navigation: React.FC<unknown> = () => {
     const history = useHistory();
 
     const onClick = (location: string) => {
@@ -20,25 +20,25 @@ export const Navigation: React.FC<{}> = () => {
         <Nav>
             <NavElement
                 text={'Kalender'}
-                location={history.location.pathname.slice(1)}
+                location={'/calendar'}
                 selected={history.location.pathname.slice(1) === 'calendar'}
                 onClick={onClick}
             />
             <NavElement
                 text={'Historikk'}
-                location={history.location.pathname.slice(1)}
+                location={'/history'}
                 selected={history.location.pathname.slice(1) === 'history'}
                 onClick={onClick}
             />
             <NavElement
                 text={'Sam. partnere'}
-                location={history.location.pathname.slice(1)}
+                location={'partners'}
                 selected={history.location.pathname.slice(1) === 'partners'}
                 onClick={onClick}
             />
             <NavElement
                 text={'Info fra Oslo kommune'}
-                location={history.location.pathname.slice(1)}
+                location={'info'}
                 selected={history.location.pathname.slice(1) === 'info'}
                 onClick={onClick}
             />

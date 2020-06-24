@@ -18,20 +18,18 @@ export const RouterComponent: React.FC = () => (
                 path="/"
                 render={(props) => (
                     <Dashboard>
-                        <Route exact path={`${props.match.url}/`}>
-                            "Hello World!"
+                        <Route exact path={`${props.match.url}`}>
+                            Hello default!
                         </Route>
-                        <Route exact path={`${props.match.url}/calendar`}>
-                            "Hello World!"
+                        <Route exact path={`${props.match.url}calendar`} component={CalendarPage} />
+                        <Route exact path={`${props.match.url}history`}>
+                            Hello history!
                         </Route>
-                        <Route exact path={`${props.match.url}/history`}>
-                            "Hello World!"
+                        <Route exact path={`${props.match.url}partners`}>
+                            Hello partners!
                         </Route>
-                        <Route exact path={`${props.match.url}/partners`}>
-                            "Hello World!"
-                        </Route>
-                        <Route exact path={`${props.match.url}/info`}>
-                            "Hello World!"
+                        <Route exact path={`${props.match.url}info`}>
+                            Hello info!
                         </Route>
                     </Dashboard>
                 )}

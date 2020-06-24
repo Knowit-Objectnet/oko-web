@@ -24,7 +24,7 @@ const ImageWrapper = styled.div`
 
 const Image = styled.img``;
 
-export const TopBar: React.FC<{}> = () => {
+export const TopBar: React.FC<unknown> = () => {
     return (
         <Bar>
             <StyledBars size="2em" />
