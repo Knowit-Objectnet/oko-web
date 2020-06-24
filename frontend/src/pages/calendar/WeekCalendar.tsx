@@ -25,7 +25,7 @@ export const WeekCalendar: React.FC<unknown> = () => {
     ): string => {
         let formatString = '';
         if (localizer) {
-            formatString = culture ? localizer.format(date, 'HH:mm', culture) : localizer.format(date, 'HH:mm', 'no');
+            formatString = culture ? localizer.format(date, 'HH:mm', culture) : localizer.format(date, 'HH:mm', 'nb');
         }
         return formatString;
     };
@@ -100,6 +100,7 @@ export const WeekCalendar: React.FC<unknown> = () => {
             <CalendarWrapper>
                 <Calendar
                     localizer={localizer}
+                    culture="nb"
                     formats={formats}
                     toolbar={false}
                     views={['month', 'work_week', 'day', 'agenda']}
