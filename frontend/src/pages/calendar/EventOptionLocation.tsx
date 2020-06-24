@@ -16,6 +16,7 @@ const GrayBox = styled.div<GrayBoxProps>`
     background: #f2f2f2;
     border-radius: 5px;
     border: ${(props) => (props.selected ? 'solid 1px black' : null)};
+    box-sizing: border-box;
 
     &:nth-child(2) {
         margin: 0px 15px;
