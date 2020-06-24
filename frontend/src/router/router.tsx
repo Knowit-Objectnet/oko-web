@@ -8,6 +8,7 @@ import { Dashboard } from '../sharedComponents/Dashboard/Dashboard';
 
 // Pages
 import { Login } from '../pages/login/Login';
+import { CalendarPage } from '../pages/calendar/Calendar';
 
 export const RouterComponent: React.FC = () => (
     <Router history={historyObj}>

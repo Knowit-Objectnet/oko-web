@@ -12,6 +12,7 @@
     "target": "es6",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true
   }

@@ -17,6 +17,10 @@
         "jsx": true
       }
   },
+  "rules": {
+    "react/prop-types": 0,
+    "semi": 2
+  },
   "settings": {
       "react": {
           "version": "detect"
