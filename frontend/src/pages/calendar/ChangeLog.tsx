@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { useGetChangeLog } from '../../hooks/useGetChangeLog';
 
 const Wrapper = styled.div`
     background-color: #f2f1f1;
@@ -8,10 +9,10 @@ const Wrapper = styled.div`
     min-height: 110px;
 `;
 
-interface ChangeLogProps {
-    changes: Array<string>;
-}
+export const ChangeLog: React.FC<unknown> = (props) => {
+    const dummyChanges = ['A change was made'];
+    let changes = useGetChangeLog();
+    changes = changes.length !== 0 ? changes : dummyChanges;
 
-export const ChangeLog: React.FC<ChangeLogProps> = (props) => {
     return <Wrapper></Wrapper>;
 };

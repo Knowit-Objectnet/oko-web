@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { useGetNotifications } from '../../hooks/useGetNotifications';
 
 const Wrapper = styled.div`
     background-color: #f2f1f1;
@@ -8,10 +9,10 @@ const Wrapper = styled.div`
     min-height: 110px;
 `;
 
-interface NotificationsProps {
-    notifications: Array<string>;
-}
+export const Notifications: React.FC<unknown> = (props) => {
+    const dummyNotifications = ['Notification'];
+    let notifications = useGetNotifications();
+    notifications = notifications.length !== 0 ? notifications : dummyNotifications;
 
-export const Notifications: React.FC<NotificationsProps> = (props) => {
     return <Wrapper></Wrapper>;
 };
