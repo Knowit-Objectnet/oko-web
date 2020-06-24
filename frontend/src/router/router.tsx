@@ -28,6 +28,12 @@ export const RouterComponent: React.FC = () => (
                         <Route exact path={`${props.match.url}partners`}>
                             Hello partners!
                         </Route>
+                        <Route exact path={`${props.match.url}reporting`}>
+                            Hello reporting!
+                        </Route>
+                        <Route exact path={`${props.match.url}deviations`}>
+                            Hello deviations!
+                        </Route>
                         <Route exact path={`${props.match.url}info`}>
                             Hello info!
                         </Route>

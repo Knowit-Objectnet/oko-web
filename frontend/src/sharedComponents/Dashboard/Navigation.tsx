@@ -37,6 +37,18 @@ export const Navigation: React.FC<unknown> = () => {
                 onClick={onClick}
             />
             <NavElement
+                text={'Rapportering'}
+                location={'reporting'}
+                selected={history.location.pathname.slice(1) === 'reporting'}
+                onClick={onClick}
+            />
+            <NavElement
+                text={'Avvik'}
+                location={'deviations'}
+                selected={history.location.pathname.slice(1) === 'deviations'}
+                onClick={onClick}
+            />
+            <NavElement
                 text={'Info fra Oslo kommune'}
                 location={'info'}
                 selected={history.location.pathname.slice(1) === 'info'}
