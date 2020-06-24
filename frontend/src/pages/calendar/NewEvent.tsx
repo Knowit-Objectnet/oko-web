@@ -87,6 +87,7 @@ export const NewEvent: React.FC<newEventProps> = (props) => {
                 <EventOptionDateRange
                     start={startDate}
                     end={endDate}
+                    isRecurringEnabled={true}
                     isRecurring={isRecurring}
                     isEditing={true}
                     onChange={onChange}

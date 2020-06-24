@@ -26,7 +26,6 @@ export const Event: React.FC<EventInfo> = (props) => {
     let locations = useGetLocations();
     locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
     const [isEditing, setIsEditing] = useState(false);
-    const [isRecurring, setIsRecurring] = useState(false);
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
     const [locationIndex, setLocationIndex] = useState(locations.indexOf(props.resource?.location || ''));
@@ -42,10 +41,6 @@ export const Event: React.FC<EventInfo> = (props) => {
             }
             case 'endDate': {
                 setEndDate(new Date(e.currentTarget.value));
-                break;
-            }
-            case 'recurring': {
-                setIsRecurring(!isRecurring);
                 break;
             }
         }
@@ -94,7 +89,7 @@ export const Event: React.FC<EventInfo> = (props) => {
                     <EventOptionDateRange
                         start={startDate}
                         end={endDate}
-                        isRecurring={isRecurring}
+                        isRecurringEnabled={false}
                         isEditing={isEditing}
                         onChange={onDateRangeChange}
                     />

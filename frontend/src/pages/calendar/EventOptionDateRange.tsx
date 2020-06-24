@@ -16,7 +16,8 @@ const Label = styled.label`
 interface EventOptionDateRangeProps {
     start: Date;
     end: Date;
-    isRecurring: boolean;
+    isRecurringEnabled: boolean;
+    isRecurring?: boolean;
     isEditing: boolean;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -52,10 +53,17 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                             min={DateToString(props.start)}
                         />
                     </div>
-                    <Label>
-                        FAST OPPDRAG
-                        <input type="checkbox" name="recurring" checked={props.isRecurring} onChange={props.onChange} />
-                    </Label>
+                    {props.isRecurringEnabled ? (
+                        <Label>
+                            FAST OPPDRAG
+                            <input
+                                type="checkbox"
+                                name="recurring"
+                                checked={props.isRecurring}
+                                onChange={props.onChange}
+                            />
+                        </Label>
+                    ) : null}
                 </>
             ) : (
                 `

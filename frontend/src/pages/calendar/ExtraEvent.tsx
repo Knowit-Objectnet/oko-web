@@ -31,7 +31,6 @@ export const ExtraEvent: React.FC<newEventProps> = (props) => {
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
     const [locationIndex, setLocationIndex] = useState(0);
-    const [isRecurring, setIsRecurring] = useState(false);
     const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
 
@@ -44,10 +43,6 @@ export const ExtraEvent: React.FC<newEventProps> = (props) => {
             }
             case 'endDate': {
                 setEndDate(new Date(e.currentTarget.value));
-                break;
-            }
-            case 'recurring': {
-                setIsRecurring(!isRecurring);
                 break;
             }
         }
@@ -81,7 +76,7 @@ export const ExtraEvent: React.FC<newEventProps> = (props) => {
             <EventOptionDateRange
                 start={startDate}
                 end={endDate}
-                isRecurring={isRecurring}
+                isRecurringEnabled={false}
                 isEditing={true}
                 onChange={onDateRangeChange}
             />

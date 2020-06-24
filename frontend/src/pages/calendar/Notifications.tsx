@@ -9,7 +9,7 @@ const Wrapper = styled.div`
     min-height: 110px;
 `;
 
-export const Notifications: React.FC<unknown> = (props) => {
+export const Notifications: React.FC<unknown> = () => {
     const dummyNotifications = ['Notification'];
     let notifications = useGetNotifications();
     notifications = notifications.length !== 0 ? notifications : dummyNotifications;

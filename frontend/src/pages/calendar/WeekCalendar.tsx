@@ -15,7 +15,7 @@ const CalendarWrapper = styled.div`
     overflow: auto;
 `;
 
-export const WeekCalendar: React.FC<unknown> = (props) => {
+export const WeekCalendar: React.FC<unknown> = () => {
     const localizer = momentLocalizer(moment);
 
     const [showModal, setShowModal] = useState(false);

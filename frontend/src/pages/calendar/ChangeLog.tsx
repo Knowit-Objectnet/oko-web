@@ -9,7 +9,7 @@ const Wrapper = styled.div`
     min-height: 110px;
 `;
 
-export const ChangeLog: React.FC<unknown> = (props) => {
+export const ChangeLog: React.FC<unknown> = () => {
     const dummyChanges = ['A change was made'];
     let changes = useGetChangeLog();
     changes = changes.length !== 0 ? changes : dummyChanges;
