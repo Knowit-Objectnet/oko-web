@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 const Body = styled.div`
-    height: Calc(100% - 125px)
+    height: Calc(100% - 125px);
 `;
 
 interface DashboardProps {
