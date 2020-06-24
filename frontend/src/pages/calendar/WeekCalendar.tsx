@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import {Calendar, Culture, DateFormatFunction, DateLocalizer, momentLocalizer} from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { EventInfo, SlotInfo } from '../../types';
 import { Event } from './Event';
@@ -17,6 +17,18 @@ const CalendarWrapper = styled.div`
 
 export const WeekCalendar: React.FC<unknown> = () => {
     const localizer = momentLocalizer(moment);
+
+    const timeFormatfunction: DateFormatFunction = (date: Date, culture?: Culture, localizer?: DateLocalizer): string => {
+        let formatString = "";
+        if(localizer) {
+            formatString = culture ? localizer.format(date, "HH:mm", culture) : localizer.format(date, "HH:mm", "no");
+        }
+        return formatString;
+    }
+
+    let formats = {
+        timeGutterFormat: timeFormatfunction
+    }
 
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
@@ -84,6 +96,7 @@ export const WeekCalendar: React.FC<unknown> = () => {
             <CalendarWrapper>
                 <Calendar
                     localizer={localizer}
+                    formats={formats}
                     toolbar={false}
                     views={['month', 'work_week', 'day', 'agenda']}
                     defaultView="work_week"
