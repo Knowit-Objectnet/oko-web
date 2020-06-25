@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-    render, wait, fireEvent,
+    render, fireEvent, waitFor, cleanup,
 } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import fetch from 'jest-fetch-mock';
 import { Router } from 'react-router-dom';
 import { KeycloakProvider } from '@react-keycloak/web';
@@ -11,6 +12,8 @@ import {createMemoryHistory, MemoryHistory} from 'history';
 import { CalendarPage } from "../../src/pages/calendar/Calendar";
 
 global.fetch = fetch;
+
+jest.mock('../../src/keycloak');
 
 describe('Provides a page to view the calendar in addition to change log and notifications', () => {
     // router history
@@ -47,12 +50,16 @@ describe('Provides a page to view the calendar in addition to change log and not
             } else if (url.startsWith("/api/calendar/events/")) {
                 return JSON.stringify(mockEvents);
             }
-            else if (['/api/notifications', '/api/locations', '/api/log/changes'].includes(url)) {
+            else if (['/api/notifications', '/api/locations', '/api/log/changes', '/api/categories'].includes(url)) {
                 return JSON.stringify([]);
             }
             return '';
         })
         history = createMemoryHistory();
+    });
+
+    afterEach(() => {
+        cleanup()
     });
 
     const originalError = console.error
@@ -81,14 +88,58 @@ describe('Provides a page to view the calendar in addition to change log and not
     });
 
     it('Should show Event on event click', async () => {
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>
+        );
 
+        const event = await findByText(mockEvents[0].title);
+        expect(event).toBeInTheDocument();
+
+        await waitFor(() => {
+            fireEvent(
+                event,
+                new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                }),
+            );
+        });
+
+        const message = await findByText(mockEvents[0].resource.message.text);
+        expect(message).toBeInTheDocument();
     });
 
     it('Should show NewEvent on calendar click', async () => {
-
+        // TODO
     });
 
     it('Should show NewEvent on new event button click', async () => {
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>
+        );
 
+        const button = await findByText("Legg til avtale");
+        expect(button).toBeInTheDocument();
+
+        await waitFor(() => {
+            fireEvent(
+                button,
+                new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                }),
+            );
+        });
+
+        const title = await findByText("Søk om ekstrahenting");
+        expect(title).toBeInTheDocument();
     });
 });
