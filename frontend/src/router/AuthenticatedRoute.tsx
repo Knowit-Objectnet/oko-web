@@ -13,23 +13,25 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (props) => 
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
-    const {path, is, not} = props;
+    const { path, is, not } = props;
 
     return (
         <>
-        {
-            keycloak.authenticated
-            ? (
-                    <Route path={path} render={(props)  => {
-                        return (is instanceof Function ? is() : is)
-                    }}/>
-                )
-            : (
-                    <Route path={path} render={(props)  => {
-                        return (not instanceof Function ? not() : not)
-                    }} />
-                )
-        }
+            {keycloak.authenticated ? (
+                <Route
+                    path={path}
+                    render={(props) => {
+                        return is instanceof Function ? is() : is;
+                    }}
+                />
+            ) : (
+                <Route
+                    path={path}
+                    render={(props) => {
+                        return not instanceof Function ? not() : not;
+                    }}
+                />
+            )}
         </>
-    )
+    );
 };
