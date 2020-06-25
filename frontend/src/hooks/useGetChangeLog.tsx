@@ -29,7 +29,7 @@ export const useGetChangeLog: () => Array<string> = () => {
             // If response is OK then extract result and update the state if it's not null
             if (response.ok && response.status === 200) {
                 const _changes = await response.json();
-                if (!_changes) {
+                if (_changes) {
                     return setChanges(_changes);
                 }
             }

@@ -29,7 +29,7 @@ export const useGetNotifications: () => Array<string> = () => {
             // If response is OK then extract result and update the state if it's not null
             if (response.ok && response.status === 200) {
                 const _notifications = await response.json();
-                if (!_notifications) {
+                if (_notifications) {
                     return setNotifications(_notifications);
                 }
             }

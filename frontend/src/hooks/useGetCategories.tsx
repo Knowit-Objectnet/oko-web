@@ -29,7 +29,7 @@ export const useGetCategories: () => Array<string> = () => {
             // If response is OK then extract result and update the state if it's not null
             if (response.ok && response.status === 200) {
                 const _categories = await response.json();
-                if (!_categories) {
+                if (_categories) {
                     return setCategories(_categories);
                 }
             }
