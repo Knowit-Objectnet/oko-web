@@ -12,7 +12,7 @@ const Nav = styled.nav`
 /**
  * Navigation bar for the header
  */
-export const Navigation: React.FC<unknown> = () => {
+export const Navigation: React.FC = () => {
     const history = useHistory();
 
     const onClick = (location: string) => {

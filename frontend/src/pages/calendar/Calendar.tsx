@@ -26,7 +26,7 @@ const ModuleCalendar = styled(Module)`
 /**
  * The page component for the calendar view
  */
-export const CalendarPage: React.FC<null> = () => (
+export const CalendarPage: React.FC = () => (
     <Wrapper>
         <Module>
             <h3>Varslinger</h3>

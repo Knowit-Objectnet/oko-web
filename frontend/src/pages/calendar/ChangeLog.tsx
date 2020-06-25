@@ -13,7 +13,7 @@ const Wrapper = styled.div`
  * A log that shows changes of events at the different locations.
  * Only visible for Oslo kommune
  */
-export const ChangeLog: React.FC<unknown> = () => {
+export const ChangeLog: React.FC = () => {
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
     const dummyChanges = ['A change was made'];

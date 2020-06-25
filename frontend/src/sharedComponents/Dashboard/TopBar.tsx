@@ -27,7 +27,7 @@ const Image = styled.img``;
 /**
  * Top bar for the header. Contains collapse button and image.
  */
-export const TopBar: React.FC<unknown> = () => {
+export const TopBar: React.FC = () => {
     return (
         <Bar>
             <StyledBars size="2em" />

@@ -11,7 +11,7 @@ const StyledHeader = styled.header`
 /**
  * Header component for the Dashboard
  */
-export const Header: React.FC<unknown> = () => {
+export const Header: React.FC = () => {
     return (
         <StyledHeader>
             <TopBar />

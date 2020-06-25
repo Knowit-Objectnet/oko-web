@@ -44,7 +44,7 @@ const Button = styled.button`
 /**
  * Component that handles the actualy calendar component from React Big Calendar
  */
-export const WeekCalendar: React.FC<unknown> = () => {
+export const WeekCalendar: React.FC = () => {
     // State for handling modal
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);

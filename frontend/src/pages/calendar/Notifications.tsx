@@ -12,7 +12,7 @@ const Wrapper = styled.div`
 /**
  * Notifications component that displays notifications for the Partners and ambassadors.
  */
-export const Notifications: React.FC<unknown> = () => {
+export const Notifications: React.FC = () => {
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
     const dummyNotifications = ['Notification'];
