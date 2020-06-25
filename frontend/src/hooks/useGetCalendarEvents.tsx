@@ -30,6 +30,11 @@ export const useGetCalendarEvents: (location: string) => Array<EventInfo> = (loc
             // If response is OK then extract result and update the state if it's not null
             if (response.ok && response.status === 200) {
                 const _events = await response.json();
+                _events.map((event: EventInfo) => {
+                    event.start = new Date(event.start);
+                    event.end = new Date(event.end);
+                    return event;
+                })
                 if (_events) {
                     return setEvents(_events);
                 }
