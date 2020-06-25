@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventInfo } from '../types';
 
-export const useGetCalendarEvents: () => Array<EventInfo> = () => {
+export const useGetCalendarEvents: (location: string) => Array<EventInfo> = (location: string) => {
     const [events, setEvents] = useState([]);
     const { keycloak } = useKeycloak();
 
     useEffect(() => {
         const init = async () => {
-            const apiUrl = '/api/calendar/events';
+            const apiUrl = `/api/calendar/events/${location}`;
 
             const response = await fetch(apiUrl, {
                 method: 'GET',
@@ -39,7 +39,7 @@ export const useGetCalendarEvents: () => Array<EventInfo> = () => {
             }
         };
         init();
-    }, []);
+    }, [location]);
 
     return events;
 };

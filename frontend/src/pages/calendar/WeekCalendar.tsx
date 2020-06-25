@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Plus } from '@styled-icons/boxicons-regular/Plus';
 import { Calendar, Culture, DateFormatFunction, DateLocalizer, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { WeekCalendarLocationPicker } from './WeekCalendarLocationPicker';
 import { EventInfo, SlotInfo } from '../../types';
 import { Event } from './Event';
 import { NewEvent } from './NewEvent';
@@ -11,6 +12,7 @@ import { ExtraEvent } from './ExtraEvent';
 import { Modal } from '../../sharedComponents/Modal';
 import { useGetCalendarEvents } from '../../hooks/useGetCalendarEvents';
 import moment from 'moment';
+import { useGetLocations } from '../../hooks/useGetLocations.jsx';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -23,12 +25,14 @@ const CalendarWrapper = styled.div`
     flex-direction: row;
 `;
 
-const ButtonWrapper = styled.div`
+const Sidebar = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-contents: center;
     align-items: center;
     margin-left: 20px;
+    justify-content: flex-start;
+    align-items: flex-start;
 `;
 
 const Button = styled.button`
@@ -38,26 +42,17 @@ const Button = styled.button`
 `;
 
 export const WeekCalendar: React.FC<unknown> = () => {
-    const localizer = momentLocalizer(moment);
-
-    const timeFormatfunction: DateFormatFunction = (
-        date: Date,
-        culture?: Culture,
-        localizer?: DateLocalizer,
-    ): string => {
-        let formatString = '';
-        if (localizer) {
-            formatString = culture ? localizer.format(date, 'HH:mm', culture) : localizer.format(date, 'HH:mm', 'nb');
-        }
-        return formatString;
-    };
-
-    const formats = {
-        timeGutterFormat: timeFormatfunction,
-    };
-
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
+
+    let locations = useGetLocations();
+    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
+
+    const [checkedLocation, setCheckedLocation] = useState(locations[0]);
+
+    const onLocationChange = (location: string) => {
+        setCheckedLocation(location);
+    };
 
     const dummyEvents: Array<EventInfo> = [
         {
@@ -86,8 +81,26 @@ export const WeekCalendar: React.FC<unknown> = () => {
             },
         },
     ];
-    let events = useGetCalendarEvents();
+    let events = useGetCalendarEvents(checkedLocation);
     events = events.length !== 0 ? events : dummyEvents;
+
+    const localizer = momentLocalizer(moment);
+
+    const timeFormatfunction: DateFormatFunction = (
+        date: Date,
+        culture?: Culture,
+        localizer?: DateLocalizer,
+    ): string => {
+        let formatString = '';
+        if (localizer) {
+            formatString = culture ? localizer.format(date, 'HH:mm', culture) : localizer.format(date, 'HH:mm', 'nb');
+        }
+        return formatString;
+    };
+
+    const formats = {
+        timeGutterFormat: timeFormatfunction,
+    };
 
     // eslint-disable-next-line
     const onSelectEvent = (event: Object, e: React.SyntheticEvent) => {
@@ -150,12 +163,17 @@ export const WeekCalendar: React.FC<unknown> = () => {
                         onSelectSlot={onSelectSlot}
                     />
                 </OverflowWrapper>
-                <ButtonWrapper>
+                <Sidebar>
+                    <WeekCalendarLocationPicker
+                        locations={locations}
+                        checkedLocation={checkedLocation}
+                        onChange={onLocationChange}
+                    />
                     <Button onClick={onNewEventButtonClick}>
                         <Plus size="1em" />
                         Legg til avtale
                     </Button>
-                </ButtonWrapper>
+                </Sidebar>
             </CalendarWrapper>
         </>
     );
