@@ -34,7 +34,7 @@ export const useGetCalendarEvents: (location: string) => Array<EventInfo> = (loc
                     event.start = new Date(event.start);
                     event.end = new Date(event.end);
                     return event;
-                })
+                });
                 if (_events) {
                     return setEvents(_events);
                 }
