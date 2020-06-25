@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 
-export const useGetFetchAPI: <T>(apiUrl: string, mapping?: (value: T, index: number, array: T[]) => T) => Array<T> = (apiUrl, mapping) => {
+export const useGetFetchAPI: <T>(apiUrl: string, mapping?: (value: T, index: number, array: T[]) => T) => Array<T> = (
+    apiUrl,
+    mapping,
+) => {
     // Set state for fetch result
     const [elements, setElements] = useState([]);
     // Extract keycloak instance for token
@@ -26,8 +29,8 @@ export const useGetFetchAPI: <T>(apiUrl: string, mapping?: (value: T, index: num
             // If response is OK then extract result and update the state if it's not null
             if (response.ok && response.status === 200) {
                 let _elements = await response.json();
-                if(mapping) {
-                    _elements = _elements.map(mapping)
+                if (mapping) {
+                    _elements = _elements.map(mapping);
                 }
                 if (_elements) {
                     return setElements(_elements);
