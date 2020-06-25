@@ -19,6 +19,9 @@ interface EventOptionDateRangeProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * Event option that allows the user to write choose the name of the driver.
+ */
 export const EventOptionDriver: React.FC<EventOptionDateRangeProps> = (props) => (
     <EventOption icon={Truck}>
         {props.isEditing ? (

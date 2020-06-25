@@ -24,6 +24,9 @@ const ImageWrapper = styled.div`
 
 const Image = styled.img``;
 
+/**
+ * Top bar for the header. Contains collapse button and image.
+ */
 export const TopBar: React.FC<unknown> = () => {
     return (
         <Bar>

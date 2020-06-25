@@ -24,7 +24,11 @@ interface WeekCalendarLocationPickerProps {
     onChange: (location: string) => void;
 }
 
+/**
+ * Component that lets a user choose which location (ombruksstasjon) they want to view events from
+ */
 export const WeekCalendarLocationPicker: React.FC<WeekCalendarLocationPickerProps> = (props) => {
+    // On change function for radio buttons
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         props.onChange(e.currentTarget.value);

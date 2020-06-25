@@ -22,18 +22,29 @@ interface newEventProps {
     onFinished: () => void;
 }
 
+/**
+ * Component shown when applying for an extra event (ekstra henting)
+ * Should only be visible for ambassadors (ombruksstasjon ambasadør).
+ */
 export const ExtraEvent: React.FC<newEventProps> = (props) => {
+    // Valid recycling stations (ombruksstasjon) locations fetched from api
+    // Dummy data until backend service is up and running
+    // TODO: Remove dummy data
     let locations = useGetLocations();
     locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
+    // Valid categories fetched from api
+    // Dummy data until backend service is up and running
+    // TODO: Remove dummy data
     let categories = useGetCategories();
     categories = categories.length === 0 ? ['Møbler', 'Bøker', 'Sportsutstyr'] : categories;
-
+    // State
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
     const [locationIndex, setLocationIndex] = useState(0);
     const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
 
+    // On change function for DateRange
     const onDateRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         switch (e.currentTarget.name) {
@@ -48,24 +59,29 @@ export const ExtraEvent: React.FC<newEventProps> = (props) => {
         }
     };
 
+    // On change function for Location
     const onLocationChange = (index: number) => {
         setLocationIndex(index);
     };
 
+    // On change function for Category
     const onCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.persist();
         setCategoryIndex(parseInt(e.currentTarget.value));
     };
 
+    // On change function for Description
     const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.persist();
         setDescription(e.currentTarget.value);
     };
 
+    // Function called on cancellation of new extra event
     const onCancel = () => {
         props.onFinished();
     };
 
+    // Function called on submission of new extra event
     const onSubmit = () => {
         //TODO: Submit to server
         props.onFinished();

@@ -23,6 +23,9 @@ interface EventTitleProps {
     onEditClick?: () => void;
 }
 
+/**
+ * Event title component with or without edit button.
+ */
 export const EventTitle: React.FC<EventTitleProps> = (props) => (
     <Title>
         <h2>{props.title}</h2>

@@ -22,17 +22,29 @@ interface newEventProps {
     onFinished: () => void;
 }
 
+/**
+ * Component shown when a range is selected in calendar or new event button clciked.
+ * Will only be rendered for Oslo Kommune.
+ */
 export const NewEvent: React.FC<newEventProps> = (props) => {
+    // Valid recycling stations (ombruksstasjon) locations fetched from api
+    // Dummy data until backend service is up and running
+    // TODO: Remove dummy data
     let locations = useGetLocations();
     locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
+    // Valid partners fetched from api
+    // Dummy data until backend service is up and running
+    // TODO: Remove dummy data
     let partners = useGetPartners();
     partners = partners.length === 0 ? ['Fretex', 'Sykkel gutta'] : partners;
+    // State
     const [selectedPartner, setSelectedPartner] = useState(-1);
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
     const [locationIndex, setLocationIndex] = useState(0);
     const [isRecurring, setIsRecurring] = useState(false);
 
+    // On change function for the Date Range
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         switch (e.currentTarget.name) {
@@ -51,19 +63,23 @@ export const NewEvent: React.FC<newEventProps> = (props) => {
         }
     };
 
+    // On change for Partner selection
     const onPartnerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.persist();
         setSelectedPartner(parseInt(e.currentTarget.value));
     };
 
+    // On change for Location selection
     const onLocationChange = (index: number) => {
         setLocationIndex(index);
     };
 
+    // Function called if edit was cancelled. Resets all values to the original event info
     const onCancel = () => {
         props.onFinished();
     };
 
+    // Function called on successful event edit.
     const onSubmit = () => {
         //TODO: Submit to server
         props.onFinished();

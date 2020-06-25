@@ -31,7 +31,11 @@ interface NavElementProps {
     onClick: (location: string) => void;
 }
 
+/**
+ * Navigation element for the Navigation bar.
+ */
 export const NavElement: React.FC<NavElementProps> = (props) => {
+    // Calls the onClick from props that changes the location.
     const onClick = (e: React.SyntheticEvent) => {
         props.onClick(props.location);
     };

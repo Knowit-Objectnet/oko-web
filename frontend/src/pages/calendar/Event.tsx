@@ -22,9 +22,17 @@ const Options = styled.div`
     flex: 1;
 `;
 
+/**
+ * Component shown when event in calendar is clicked.
+ * Will be rendered differently depending on user's role.
+ */
 export const Event: React.FC<EventInfo> = (props) => {
+    // Valid recycling stations (ombruksstasjon) locations fetched from api
+    // Dummy data until backend service is up and running
+    // TODO: Remove dummy data
     let locations = useGetLocations();
     locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
+    // State
     const [isEditing, setIsEditing] = useState(false);
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
@@ -32,6 +40,7 @@ export const Event: React.FC<EventInfo> = (props) => {
     const [driver, setDriver] = useState(props.resource?.driver);
     const [weight, setWeight] = useState(props.resource?.weight);
 
+    // On change function for the DateRange component
     const onDateRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         switch (e.currentTarget.name) {
@@ -46,28 +55,29 @@ export const Event: React.FC<EventInfo> = (props) => {
         }
     };
 
+    // On change function for the Location component
     const onLocationChange = (index: number) => {
         setLocationIndex(index);
     };
 
+    // On change function for the Driver component
     const onDriverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         setDriver(e.currentTarget.value || undefined);
     };
 
+    // On change function for the Weight component
     const onWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         setWeight(parseInt(e.currentTarget.value));
     };
 
+    // On change function for the Edit button
     const onEditClick = () => {
-        onEdit();
-    };
-
-    const onEdit = () => {
         setIsEditing(true);
     };
 
+    // Function called if edit was cancelled. Resets all values to the original event info
     const onCancel = () => {
         setIsEditing(false);
         setStartDate(props.start);
@@ -77,6 +87,7 @@ export const Event: React.FC<EventInfo> = (props) => {
         setWeight(props.resource?.weight);
     };
 
+    // Function called on successful event edit.
     const onSubmit = () => {
         //TODO: Submit to server
         setIsEditing(false);

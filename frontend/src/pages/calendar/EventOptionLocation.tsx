@@ -32,6 +32,9 @@ interface EventOptionDateRangeProps {
     onChange: (index: number) => void;
 }
 
+/**
+ * Event option that allows the user choose a location for the event.
+ */
 export const EventOptionLocation: React.FC<EventOptionDateRangeProps> = (props) => {
     const onClick = (e: React.SyntheticEvent) => {
         const index = e.currentTarget.getAttribute('data-index');

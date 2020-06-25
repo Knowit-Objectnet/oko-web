@@ -22,7 +22,12 @@ interface EventOptionDateRangeProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * Event option that allows the user to choose a start and end date for the event.
+ */
 export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props) => {
+    // Date object to Datetime-local string format
+    // Datetime-local string format: YYYY-MM-DDTHH:mm
     const DateToString = (date: Date): string => {
         let dateString = date.getFullYear() + '-';
         dateString += date.getMonth().toString().padStart(2, '0') + '-';

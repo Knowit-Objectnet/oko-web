@@ -14,6 +14,8 @@ export const RouterComponent: React.FC = () => (
     <Router history={historyObj}>
         <Switch>
             <Route path="/login" component={Login} />
+            {/* React-router v5 doesnt support nested switches
+               so this is the best solution until v6 is out. */}
             <Route
                 path="/"
                 render={(props) => (

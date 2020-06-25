@@ -29,6 +29,9 @@ interface EventSubmissionProps {
     onSubmit: () => void;
 }
 
+/**
+ * Event submission component, cancel and submit.
+ */
 export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
     const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.persist();

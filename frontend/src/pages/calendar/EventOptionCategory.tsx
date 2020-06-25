@@ -20,6 +20,9 @@ interface EventOptionDateRangeProps {
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
+/**
+ * Event option that allows the user to choose a category
+ */
 export const EventOptionCategory: React.FC<EventOptionDateRangeProps> = (props) => (
     <EventOption icon={Category}>
         {props.isEditing ? (

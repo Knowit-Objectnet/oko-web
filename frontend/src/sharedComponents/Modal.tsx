@@ -74,6 +74,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
         e.stopPropagation();
     };
 
+    // Calls the callback from props for when to exit the modal
     const onExitClick = () => {
         props.exitModalCallback();
     };

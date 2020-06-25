@@ -38,6 +38,9 @@ interface MessageInfo {
     text: string;
 }
 
+/**
+ * Message box shown in the event component to display a message from the partners.
+ */
 export const MessageBox: React.FC<MessageInfo> = (props) => (
     <Wrapper>
         <Title>

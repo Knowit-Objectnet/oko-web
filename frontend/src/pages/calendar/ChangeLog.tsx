@@ -9,7 +9,13 @@ const Wrapper = styled.div`
     min-height: 110px;
 `;
 
+/**
+ * A log that shows changes of events at the different locations.
+ * Only visible for Oslo kommune
+ */
 export const ChangeLog: React.FC<unknown> = () => {
+    // Dummy data until backend service is up and running
+    // TODO: Remove dummy data
     const dummyChanges = ['A change was made'];
     let changes = useGetChangeLog();
     changes = changes.length !== 0 ? changes : dummyChanges;

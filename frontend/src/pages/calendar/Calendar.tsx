@@ -23,6 +23,9 @@ const ModuleCalendar = styled(Module)`
     overflow: auto;
 `;
 
+/**
+ * The page component for the calendar view
+ */
 export const CalendarPage: React.FC<null> = () => (
     <Wrapper>
         <Module>

@@ -9,6 +9,9 @@ const Nav = styled.nav`
     background-color: #afafaf;
 `;
 
+/**
+ * Navigation bar for the header
+ */
 export const Navigation: React.FC<unknown> = () => {
     const history = useHistory();
 

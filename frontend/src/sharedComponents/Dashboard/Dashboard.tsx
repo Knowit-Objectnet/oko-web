@@ -17,6 +17,10 @@ interface DashboardProps {
     children: React.ReactNode;
 }
 
+/**
+ * Component that wraps around the page components.
+ * It's the general portal wrapper, with navigation and such.
+ */
 export const Dashboard: React.FC<DashboardProps> = (props) => {
     return (
         <Wrapper>

@@ -8,6 +8,9 @@ const StyledHeader = styled.header`
     height: 125px;
 `;
 
+/**
+ * Header component for the Dashboard
+ */
 export const Header: React.FC<unknown> = () => {
     return (
         <StyledHeader>

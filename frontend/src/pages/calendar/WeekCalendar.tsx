@@ -41,19 +41,31 @@ const Button = styled.button`
     justify-content: center;
 `;
 
+/**
+ * Component that handles the actualy calendar component from React Big Calendar
+ */
 export const WeekCalendar: React.FC<unknown> = () => {
+    // State for handling modal
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
 
+    // Valid recycling stations (ombruksstasjon) locations fetched from api
+    // Dummy data until backend service is up and running
+    // TODO: Remove dummy data
     let locations = useGetLocations();
     locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
 
+    // State
     const [checkedLocation, setCheckedLocation] = useState(locations[0]);
 
+    // On change for Location
     const onLocationChange = (location: string) => {
         setCheckedLocation(location);
     };
 
+    // Events fetched from api
+    // Dummy data until backend service is up and running
+    // TODO: Remove dummy data
     const dummyEvents: Array<EventInfo> = [
         {
             title: 'Test',
@@ -84,8 +96,10 @@ export const WeekCalendar: React.FC<unknown> = () => {
     let events = useGetCalendarEvents(checkedLocation);
     events = events.length !== 0 ? events : dummyEvents;
 
+    // Localizer needed for the calendar
     const localizer = momentLocalizer(moment);
 
+    // Function for changing timeslot from 12 hour clock to 24 hour clock.
     const timeFormatfunction: DateFormatFunction = (
         date: Date,
         culture?: Culture,
@@ -97,11 +111,11 @@ export const WeekCalendar: React.FC<unknown> = () => {
         }
         return formatString;
     };
-
     const formats = {
         timeGutterFormat: timeFormatfunction,
     };
 
+    // Function that handles an event click in the calendar. It displays the Event in a modal
     // eslint-disable-next-line
     const onSelectEvent = (event: Object, e: React.SyntheticEvent) => {
         const eventProps: EventInfo = event as EventInfo;
@@ -109,6 +123,9 @@ export const WeekCalendar: React.FC<unknown> = () => {
         setShowModal(true);
     };
 
+    // Function that handles time range selection in the calendar
+    // It displays either a new event, or extra event depending on user role.
+    // TODO: Make it show component depending on user role
     const onSelectSlot = (slotInfo: SlotInfo) => {
         setModalContent(
             <ExtraEvent
@@ -122,6 +139,7 @@ export const WeekCalendar: React.FC<unknown> = () => {
         setShowModal(true);
     };
 
+    // Function to display new event in modal on new event button click
     const onNewEventButtonClick = (e: React.SyntheticEvent) => {
         setModalContent(
             <ExtraEvent

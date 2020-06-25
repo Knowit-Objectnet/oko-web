@@ -19,6 +19,9 @@ interface EventOptionDateRangeProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * Event option that allows the user to choose a weight for the event.
+ */
 export const EventOptionWeight: React.FC<EventOptionDateRangeProps> = (props) => (
     <EventOption icon={WeightHanging}>
         {props.isEditing ? (

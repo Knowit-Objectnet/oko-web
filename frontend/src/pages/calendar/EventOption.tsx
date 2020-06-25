@@ -20,6 +20,9 @@ interface EventOptionProps {
     icon: React.ElementType;
 }
 
+/**
+ * A general Event option that can be specialized for a new event option
+ */
 export const EventOption: React.FC<EventOptionProps> = (props) => (
     <Option>
         <props.icon size="1.5em" />

@@ -17,6 +17,9 @@ interface EventTemplateProps {
     onEditClick?: () => void;
 }
 
+/**
+ * General event component template
+ */
 export const EventTemplate: React.FC<EventTemplateProps> = (props) => (
     <Wrapper>
         <EventTitle
