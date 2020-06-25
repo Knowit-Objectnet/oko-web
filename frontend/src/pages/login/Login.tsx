@@ -10,9 +10,12 @@ const Wrapper = styled.div`
     width: 100%;
 `;
 
-export const Login: React.FC<null> = () => {
-    // Using array destructuring
-    const [keycloak, initialized] = useKeycloak();
+/**
+ * Login component that redirects to keycloak for login
+ */
+export const Login: React.FC = () => {
+    // Getting Keycloak instance
+    const { keycloak } = useKeycloak();
 
     const onButtonClick = () => {
         keycloak.login();
