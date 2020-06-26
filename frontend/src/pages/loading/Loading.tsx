@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, {keyframes} from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -59,7 +59,7 @@ const Loader = styled.div`
     transform: translateZ(0);
     -webkit-animation: ${load6} 1.7s infinite ease, ${round} 1.7s infinite ease;
     animation: ${load6} 1.7s infinite ease, ${round} 1.7s infinite ease;
-`
+`;
 
 const LoadingText = styled.span`
     font-size: xxx-large;
