@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Route, Redirect, RouteProps } from 'react-router-dom';
+import { Route, RouteProps } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 
-interface AuthenticatedRouteProps {
+interface AuthenticatedRouteProps extends RouteProps {
     path: string;
     is: React.ReactNode;
     not: React.ReactNode;
@@ -13,22 +13,20 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (props) => 
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
-    const { path, is, not } = props;
+    const { is, not, ...rest } = props;
 
     return (
-        <>
-            <Route
-                path={path}
-                render={(props) => {
-                    return keycloak.authenticated
-                        ? is instanceof Function
-                            ? is()
-                            : is
-                        : not instanceof Function
-                        ? not()
-                        : not;
-                }}
-            />
-        </>
+        <Route
+            {...rest}
+            render={(props) => {
+                return keycloak.authenticated
+                    ? is instanceof Function
+                        ? is()
+                        : is
+                    : not instanceof Function
+                    ? not()
+                    : not;
+            }}
+        />
     );
 };
