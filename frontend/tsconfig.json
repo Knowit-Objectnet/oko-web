@@ -1,6 +1,7 @@
 {
   "include": [
-    "src/*"
+    "src/*",
+    "decs.d.ts"
   ],
   "compilerOptions": {
     "outDir": "./dist/",
@@ -11,6 +12,7 @@
     "target": "es6",
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true
   }
