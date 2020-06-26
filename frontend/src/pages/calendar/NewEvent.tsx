@@ -16,7 +16,7 @@ const Options = styled.div`
     flex: 1;
 `;
 
-interface newEventProps {
+interface NewEventProps {
     start: Date;
     end: Date;
     onFinished: () => void;
@@ -26,7 +26,7 @@ interface newEventProps {
  * Component shown when a range is selected in calendar or new event button clciked.
  * Will only be rendered for Oslo Kommune.
  */
-export const NewEvent: React.FC<newEventProps> = (props) => {
+export const NewEvent: React.FC<NewEventProps> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data

@@ -16,7 +16,7 @@ const Textarea = styled.textarea`
     resize: vertical;
 `;
 
-interface newEventProps {
+interface ExtraEventProps {
     start: Date;
     end: Date;
     onFinished: () => void;
@@ -26,7 +26,7 @@ interface newEventProps {
  * Component shown when applying for an extra event (ekstra henting)
  * Should only be visible for ambassadors (ombruksstasjon ambasadør).
  */
-export const ExtraEvent: React.FC<newEventProps> = (props) => {
+export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
