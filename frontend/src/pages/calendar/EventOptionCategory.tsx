@@ -28,7 +28,7 @@ export const EventOptionCategory: React.FC<EventOptionDateRangeProps> = (props) 
         {props.isEditing ? (
             <select value={props.selectedCategory} onChange={props.onChange}>
                 <option value={-1} disabled>
-                    Velg kategory
+                    Velg kategori
                 </option>
                 {props.categories.map((category, index) => (
                     <option key={category} value={index}>

@@ -53,7 +53,7 @@ export const WeekCalendar: React.FC = () => {
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
     let locations = useGetLocations();
-    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
+    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smestad'] : locations;
 
     // State
     const [checkedLocation, setCheckedLocation] = useState(locations[0]);

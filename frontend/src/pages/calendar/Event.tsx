@@ -31,7 +31,7 @@ export const Event: React.FC<EventInfo> = (props) => {
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
     let locations = useGetLocations();
-    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
+    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smestad'] : locations;
     // State
     const [isEditing, setIsEditing] = useState(false);
     const [startDate, setStartDate] = useState(props.start);

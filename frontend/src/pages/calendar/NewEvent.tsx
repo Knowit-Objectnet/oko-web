@@ -31,7 +31,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
     let locations = useGetLocations();
-    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smedstad'] : locations;
+    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smestad'] : locations;
     // Valid partners fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
