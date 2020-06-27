@@ -7,7 +7,7 @@ import { EventOptionDriver } from './EventOptionDriver';
 import { EventSubmission } from './EventSubmission';
 import { EventInfo } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
-import { useGetLocations } from '../../hooks/useGetLocations.jsx';
+import { useGetLocations } from '../../hooks/useGetLocations';
 import { EventOptionWeight } from './EventOptionWeight';
 import { EventTemplate } from './EventTemplate';
 
