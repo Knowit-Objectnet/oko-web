@@ -5,6 +5,7 @@
   "main": "index.tsx",
   "scripts": {
     "test": "jest",
+    "cypress": "cypress run",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix",
     "check-types": "tsc",
     "watch": "webpack --config webpack.config.js --watch",
