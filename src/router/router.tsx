@@ -13,6 +13,7 @@ import { Dashboard } from '../sharedComponents/Dashboard/Dashboard';
 import { Loading } from '../pages/loading/Loading';
 import { Login } from '../pages/login/Login';
 import { CalendarPage } from '../pages/calendar/Calendar';
+import {Roles} from "../types";
 
 export const RouterComponent: React.FC = () => {
     const [, initialized] = useKeycloak();
@@ -34,7 +35,7 @@ export const RouterComponent: React.FC = () => {
                             <AuthenticatedRoute
                                 exact={true}
                                 path={`${props.match.url}`}
-                                authenticatedRoles={['Oslo']}
+                                authenticatedRoles={[Roles.Oslo]}
                                 not={<Redirect to="/calendar" />}
                                 is={<CalendarPage />}
                             />
@@ -51,14 +52,14 @@ export const RouterComponent: React.FC = () => {
                             <AuthenticatedRoute
                                 exact={true}
                                 path={`${props.match.url}history`}
-                                authenticatedRoles={['Partner', 'Ambassador']}
+                                authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
                                 not={<Redirect to="/calendar" />}
                                 is={() => 'Hello history'}
                             />
                             <AuthenticatedRoute
                                 exact={true}
                                 path={`${props.match.url}info`}
-                                authenticatedRoles={['Partner', 'Ambassador']}
+                                authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
                                 not={<Redirect to="/calendar" />}
                                 is={() => 'Hello info'}
                             />

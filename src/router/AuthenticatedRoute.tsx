@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
+import {Roles} from "../types";
 
 interface AuthenticatedRouteProps extends RouteProps {
-    authenticatedRoles?: Array<string>;
+    authenticatedRoles?: Array<Roles>;
     is: React.ReactNode;
     not: React.ReactNode;
 }

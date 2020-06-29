@@ -4,6 +4,7 @@ import { Notifications } from './Notifications';
 import { ChangeLog } from './ChangeLog';
 import { WeekCalendar } from './WeekCalendar';
 import { useKeycloak } from '@react-keycloak/web';
+import {Roles} from "../../types";
 
 const Wrapper = styled.div`
     height: 100%;
@@ -32,7 +33,7 @@ export const CalendarPage: React.FC = () => {
 
     return (
         <Wrapper>
-            {keycloak.hasRealmRole('Partner') || keycloak.hasRealmRole('Ambassador') ? (
+            {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
                 <Module>
                     <h3>Varslinger</h3>
                     <Notifications />
@@ -42,7 +43,7 @@ export const CalendarPage: React.FC = () => {
                 <h3>Kalender</h3>
                 <WeekCalendar />
             </ModuleCalendar>
-            {keycloak.hasRealmRole('Oslo') ? (
+            {keycloak.hasRealmRole(Roles.Oslo) ? (
                 <Module>
                     <h3>Endringslogg</h3>
                     <ChangeLog />

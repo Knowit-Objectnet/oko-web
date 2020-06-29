@@ -5,7 +5,7 @@ import { Plus } from '@styled-icons/boxicons-regular/Plus';
 import { Calendar, Culture, DateFormatFunction, DateLocalizer, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { WeekCalendarLocationPicker } from './WeekCalendarLocationPicker';
-import { EventInfo, SlotInfo } from '../../types';
+import {EventInfo, Roles, SlotInfo} from '../../types';
 import { Event } from './Event';
 import { NewEvent } from './NewEvent';
 import { ExtraEvent } from './ExtraEvent';
@@ -131,8 +131,9 @@ export const WeekCalendar: React.FC = () => {
     // It displays either a new event, or extra event depending on user role.
     // TODO: Make it show component depending on user role
     const onSelectSlot = (slotInfo: SlotInfo) => {
+        const EventComponent = keycloak.hasRealmRole(Roles.Oslo) ? NewEvent : ExtraEvent;
         setModalContent(
-            <ExtraEvent
+            <EventComponent
                 start={new Date(slotInfo.start)}
                 end={new Date(slotInfo.end)}
                 onFinished={() => {
@@ -146,7 +147,7 @@ export const WeekCalendar: React.FC = () => {
     // Function to display new event in modal on new event button click
     const onNewEventButtonClick = (e: React.SyntheticEvent) => {
         setModalContent(
-            <ExtraEvent
+            <NewEvent
                 start={new Date()}
                 end={new Date(new Date().setHours(1))}
                 onFinished={() => {
@@ -176,7 +177,7 @@ export const WeekCalendar: React.FC = () => {
                         toolbar={false}
                         views={['month', 'work_week', 'day', 'agenda']}
                         defaultView="work_week"
-                        selectable={true}
+                        selectable={keycloak.authenticated}
                         step={15}
                         events={events}
                         startAccessor="start"
@@ -185,7 +186,7 @@ export const WeekCalendar: React.FC = () => {
                         onSelectSlot={onSelectSlot}
                     />
                 </OverflowWrapper>
-                {keycloak.hasRealmRole('Oslo') ? (
+                {keycloak.hasRealmRole(Roles.Oslo) ? (
                     <Sidebar>
                         <WeekCalendarLocationPicker
                             locations={locations}

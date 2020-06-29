@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { NavElement } from './NavElement';
 import { useKeycloak } from '@react-keycloak/web';
+import {Roles} from "../../types";
 
 const Nav = styled.nav`
     display: flex;
@@ -25,7 +26,7 @@ export const Navigation: React.FC = () => {
 
     return (
         <Nav>
-            {keycloak.hasRealmRole('Oslo') ? (
+            {keycloak.hasRealmRole(Roles.Oslo) ? (
                 <NavElement
                     text={'Oversikt'}
                     location={'/'}
@@ -57,7 +58,7 @@ export const Navigation: React.FC = () => {
                 selected={history.location.pathname.slice(1) === 'deviations'}
                 onClick={onClick}
             />
-            {keycloak.hasRealmRole('Partner') || keycloak.hasRealmRole('Ambassador') ? (
+            {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
                 <>
                     <NavElement
                         text={'Historikk'}

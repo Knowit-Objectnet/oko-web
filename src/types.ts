@@ -39,3 +39,9 @@ export interface SlotInfo {
         y: number;
     };
 }
+
+export enum Roles {
+    Oslo = 'Oslo-kommune',
+    Partner = 'samarbeidspartner',
+    Ambassador = 'ambassadør',
+}
