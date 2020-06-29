@@ -10,7 +10,7 @@ import { EventOptionLocation } from './EventOptionLocation';
 import { useGetLocations } from '../../hooks/useGetLocations';
 import { EventOptionWeight } from './EventOptionWeight';
 import { EventTemplate } from './EventTemplate';
-import {useKeycloak} from "@react-keycloak/web";
+import { useKeycloak } from '@react-keycloak/web';
 
 const Body = styled.div`
     display: flex;
@@ -97,7 +97,12 @@ export const Event: React.FC<EventInfo> = (props) => {
     };
 
     return (
-        <EventTemplate title={props.title} showEditSymbol={keycloak.authenticated} isEditing={isEditing} onEditClick={onEditClick}>
+        <EventTemplate
+            title={props.title}
+            showEditSymbol={keycloak.authenticated}
+            isEditing={isEditing}
+            onEditClick={onEditClick}
+        >
             {/* TODO: set 'showEditSymbol' depending on role*/}
             <Body>
                 <Options>

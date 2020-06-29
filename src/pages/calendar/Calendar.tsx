@@ -4,7 +4,7 @@ import { Notifications } from './Notifications';
 import { ChangeLog } from './ChangeLog';
 import { WeekCalendar } from './WeekCalendar';
 import { useKeycloak } from '@react-keycloak/web';
-import {Roles} from "../../types";
+import { Roles } from '../../types';
 
 const Wrapper = styled.div`
     height: 100%;

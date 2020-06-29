@@ -5,7 +5,7 @@ import { Plus } from '@styled-icons/boxicons-regular/Plus';
 import { Calendar, Culture, DateFormatFunction, DateLocalizer, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { WeekCalendarLocationPicker } from './WeekCalendarLocationPicker';
-import {EventInfo, Roles, SlotInfo} from '../../types';
+import { EventInfo, Roles, SlotInfo } from '../../types';
 import { Event } from './Event';
 import { NewEvent } from './NewEvent';
 import { ExtraEvent } from './ExtraEvent';

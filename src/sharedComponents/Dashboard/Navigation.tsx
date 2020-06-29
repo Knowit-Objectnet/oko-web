@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { NavElement } from './NavElement';
 import { useKeycloak } from '@react-keycloak/web';
-import {Roles} from "../../types";
+import { Roles } from '../../types';
 
 const Nav = styled.nav`
     display: flex;

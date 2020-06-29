@@ -13,7 +13,7 @@ import { Dashboard } from '../sharedComponents/Dashboard/Dashboard';
 import { Loading } from '../pages/loading/Loading';
 import { Login } from '../pages/login/Login';
 import { CalendarPage } from '../pages/calendar/Calendar';
-import {Roles} from "../types";
+import { Roles } from '../types';
 
 export const RouterComponent: React.FC = () => {
     const [, initialized] = useKeycloak();
