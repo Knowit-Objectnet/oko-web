@@ -4,7 +4,7 @@ import Keycloak from 'keycloak-js';
 // Pass initialization options as required or leave blank to load from 'keycloak.json'
 const keycloak = new Keycloak({
     realm: 'staging',
-    url: 'https://keycloak.oko.knowit.no:8443/',
+    url: 'https://keycloak.oko.knowit.no:8443/auth/',
     sslRequired: 'external',
     resource: 'react-app',
     clientId: 'react-app',
