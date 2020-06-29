@@ -12,7 +12,7 @@ import { ExtraEvent } from './ExtraEvent';
 import { Modal } from '../../sharedComponents/Modal';
 import { useGetCalendarEvents } from '../../hooks/useGetCalendarEvents';
 import moment from 'moment';
-import { useGetLocations } from '../../hooks/useGetLocations.jsx';
+import { useGetLocations } from '../../hooks/useGetLocations';
 
 const OverflowWrapper = styled.div`
     overflow: auto;

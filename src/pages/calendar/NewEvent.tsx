@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { EventOption } from './EventOption';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
-import { useGetLocations } from '../../hooks/useGetLocations.jsx';
+import { useGetLocations } from '../../hooks/useGetLocations';
 import { useGetPartners } from '../../hooks/useGetPartners';
 import { EventTemplate } from './EventTemplate';
 

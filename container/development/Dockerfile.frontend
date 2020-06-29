@@ -1,6 +1,6 @@
 FROM node:12
 
-COPY ./frontend /srv/ombruk-frontend
+COPY ./ /srv/ombruk-frontend
 
 WORKDIR /srv/ombruk-frontend
 

@@ -5,7 +5,7 @@ import { EventTemplate } from './EventTemplate';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventOptionCategory } from './EventOptionCategory';
-import { useGetLocations } from '../../hooks/useGetLocations.jsx';
+import { useGetLocations } from '../../hooks/useGetLocations';
 import { EventSubmission } from './EventSubmission';
 import { useGetCategories } from '../../hooks/useGetCategories';
 
