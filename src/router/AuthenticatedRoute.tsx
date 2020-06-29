@@ -19,7 +19,6 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (props) => 
             {...rest}
             render={(props) => {
                 return keycloak.authenticated &&
-                    authenticatedRoles &&
                     authenticatedRoles?.reduce((acc, cur) => keycloak.hasRealmRole(cur) || acc)
                     ? is instanceof Function
                         ? is()
