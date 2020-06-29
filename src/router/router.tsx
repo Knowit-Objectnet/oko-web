@@ -31,13 +31,14 @@ export const RouterComponent: React.FC = () => {
                     path="/"
                     render={(props) => (
                         <Dashboard>
-                            <Route exact path={`${props.match.url}`}>
-                                Hello World!
-                            </Route>
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}`}
+                                authenticatedRoles={['Oslo']}
+                                not={<Redirect to="/calendar" />}
+                                is={<CalendarPage />}
+                            />
                             <Route exact path={`${props.match.url}calendar`} component={CalendarPage} />
-                            <Route exact path={`${props.match.url}history`}>
-                                Hello history!
-                            </Route>
                             <Route exact path={`${props.match.url}partners`}>
                                 Hello partners!
                             </Route>
@@ -47,9 +48,20 @@ export const RouterComponent: React.FC = () => {
                             <Route exact path={`${props.match.url}deviations`}>
                                 Hello deviations!
                             </Route>
-                            <Route exact path={`${props.match.url}info`}>
-                                Hello info!
-                            </Route>
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}history`}
+                                authenticatedRoles={['Partner', 'Ambassador']}
+                                not={<Redirect to="/calendar" />}
+                                is={() => 'Hello history'}
+                            />
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}info`}
+                                authenticatedRoles={['Partner', 'Ambassador']}
+                                not={<Redirect to="/calendar" />}
+                                is={() => 'Hello info'}
+                            />
                         </Dashboard>
                     )}
                 />

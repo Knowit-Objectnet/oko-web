@@ -13,6 +13,7 @@ import { Modal } from '../../sharedComponents/Modal';
 import { useGetCalendarEvents } from '../../hooks/useGetCalendarEvents';
 import moment from 'moment';
 import { useGetLocations } from '../../hooks/useGetLocations';
+import { useKeycloak } from '@react-keycloak/web';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -45,6 +46,9 @@ const Button = styled.button`
  * Component that handles the actualy calendar component from React Big Calendar
  */
 export const WeekCalendar: React.FC = () => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
+
     // State for handling modal
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
@@ -181,17 +185,19 @@ export const WeekCalendar: React.FC = () => {
                         onSelectSlot={onSelectSlot}
                     />
                 </OverflowWrapper>
-                <Sidebar>
-                    <WeekCalendarLocationPicker
-                        locations={locations}
-                        checkedLocation={checkedLocation}
-                        onChange={onLocationChange}
-                    />
-                    <Button onClick={onNewEventButtonClick}>
-                        <Plus size="1em" />
-                        Legg til avtale
-                    </Button>
-                </Sidebar>
+                {keycloak.hasRealmRole('Oslo') ? (
+                    <Sidebar>
+                        <WeekCalendarLocationPicker
+                            locations={locations}
+                            checkedLocation={checkedLocation}
+                            onChange={onLocationChange}
+                        />
+                        <Button onClick={onNewEventButtonClick}>
+                            <Plus size="1em" />
+                            Legg til avtale
+                        </Button>
+                    </Sidebar>
+                ) : null}
             </CalendarWrapper>
         </>
     );

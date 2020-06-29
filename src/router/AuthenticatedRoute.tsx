@@ -3,7 +3,7 @@ import { Route, RouteProps } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 
 interface AuthenticatedRouteProps extends RouteProps {
-    path: string;
+    authenticatedRoles?: Array<string>;
     is: React.ReactNode;
     not: React.ReactNode;
 }
@@ -13,13 +13,14 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (props) => 
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
-    const { is, not, ...rest } = props;
-
+    const { authenticatedRoles, is, not, ...rest } = props;
     return (
         <Route
             {...rest}
             render={(props) => {
-                return keycloak.authenticated
+                return keycloak.authenticated &&
+                    authenticatedRoles &&
+                    authenticatedRoles?.reduce((acc, cur) => keycloak.hasRealmRole(cur) || acc)
                     ? is instanceof Function
                         ? is()
                         : is
