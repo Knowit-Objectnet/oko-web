@@ -41,7 +41,7 @@ export interface SlotInfo {
 }
 
 export enum Roles {
-    Oslo = 'Oslo-kommune',
-    Partner = 'samarbeidspartner',
-    Ambassador = 'ambassadør',
+    Oslo = 'reg_employee',
+    Partner = 'partner',
+    Ambassador = 'reuse_station',
 }
