@@ -55,6 +55,7 @@
   "dependencies": {
     "@react-keycloak/web": "^2.1.1",
     "@types/react-big-calendar": "^0.24.2",
+    "@types/react-datepicker": "^3.0.2",
     "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.0",
     "history": "^4.10.1",
