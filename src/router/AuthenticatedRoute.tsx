@@ -15,12 +15,14 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (props) => 
     const { keycloak } = useKeycloak();
 
     const { authenticatedRoles, is, not, ...rest } = props;
+    const roleAccess = authenticatedRoles
+        ? authenticatedRoles?.reduce((acc, cur) => keycloak.hasRealmRole(cur) || acc, false)
+        : true;
     return (
         <Route
             {...rest}
             render={(props) => {
-                return keycloak.authenticated &&
-                    authenticatedRoles?.reduce((acc, cur) => keycloak.hasRealmRole(cur) || acc)
+                return keycloak.authenticated && roleAccess
                     ? is instanceof Function
                         ? is()
                         : is

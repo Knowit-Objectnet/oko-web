@@ -5,7 +5,7 @@ import { MessageBox } from './MessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionDriver } from './EventOptionDriver';
 import { EventSubmission } from './EventSubmission';
-import { EventInfo } from '../../types';
+import { EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { useGetLocations } from '../../hooks/useGetLocations';
 import { EventOptionWeight } from './EventOptionWeight';
@@ -120,7 +120,9 @@ export const Event: React.FC<EventInfo> = (props) => {
                         onChange={onLocationChange}
                     />
                     <EventOptionDriver driver={driver} isEditing={isEditing} onChange={onDriverChange} />
-                    <EventOptionWeight weight={weight} isEditing={isEditing} onChange={onWeightChange} />
+                    {keycloak.hasRealmRole(Roles.Partner) ? (
+                        <EventOptionWeight weight={weight} isEditing={isEditing} onChange={onWeightChange} />
+                    ) : null}
                 </Options>
                 {props.resource && props.resource.message && !isEditing ? (
                     <MessageBox {...props.resource.message} />
