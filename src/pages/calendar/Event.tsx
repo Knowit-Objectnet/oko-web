@@ -40,19 +40,13 @@ export const Event: React.FC<EventInfo> = (props) => {
     const [driver, setDriver] = useState(props.resource?.driver);
     const [weight, setWeight] = useState(props.resource?.weight);
 
-    // On change function for the DateRange component
-    const onDateRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-        switch (e.currentTarget.name) {
-            case 'startDate': {
-                setStartDate(new Date(e.currentTarget.value));
-                break;
-            }
-            case 'endDate': {
-                setEndDate(new Date(e.currentTarget.value));
-                break;
-            }
-        }
+    // On change functions for DateRange
+    const onStartDateChange = (date: Date) => {
+        setStartDate(date);
+    };
+
+    const onEndDateChange = (date: Date) => {
+        setEndDate(date);
     };
 
     // On change function for the Location component
@@ -102,7 +96,8 @@ export const Event: React.FC<EventInfo> = (props) => {
                         end={endDate}
                         isRecurringEnabled={false}
                         isEditing={isEditing}
-                        onChange={onDateRangeChange}
+                        onStartDateChange={onStartDateChange}
+                        onEndDateChange={onEndDateChange}
                     />
                     <EventOptionLocation
                         isEditing={isEditing}

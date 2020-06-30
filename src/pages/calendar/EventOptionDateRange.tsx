@@ -2,6 +2,9 @@ import * as React from 'react';
 import { Clock } from '@styled-icons/fa-regular/Clock';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
+import DatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import nb from 'date-fns/locale/nb';
 
 const Label = styled.label`
     display: flex;
@@ -19,22 +22,38 @@ interface EventOptionDateRangeProps {
     isRecurringEnabled: boolean;
     isRecurring?: boolean;
     isEditing: boolean;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onStartDateChange: (date: Date) => void;
+    onEndDateChange: (date: Date) => void;
+    onRecurringChange?: () => void;
 }
 
 /**
  * Event option that allows the user to choose a start and end date for the event.
  */
 export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props) => {
-    // Date object to Datetime-local string format
-    // Datetime-local string format: YYYY-MM-DDTHH:mm
-    const DateToString = (date: Date): string => {
-        let dateString = date.getFullYear() + '-';
-        dateString += date.getMonth().toString().padStart(2, '0') + '-';
-        dateString += date.getDate().toString().padStart(2, '0') + 'T';
-        dateString += date.getHours().toString().padStart(2, '0') + ':';
-        dateString += date.getMinutes().toString().padStart(2, '0');
-        return dateString;
+    const date = new Date();
+    const minTime = new Date(date.setHours(7, 30));
+    const maxTime = new Date(date.setHours(21, 0));
+    const minDate = date;
+
+    registerLocale('nb', nb);
+    setDefaultLocale('nb');
+
+    const isWeekday = (date: Date) => {
+        return date.getDay() !== 0 && date.getDay() !== 6;
+    };
+
+    const onStartChange = (date: Date | null, event: React.SyntheticEvent<any, Event> | undefined) => {
+        if (date) props.onStartDateChange(date);
+    };
+
+    const onEndChange = (date: Date | null, event: React.SyntheticEvent<any, Event> | undefined) => {
+        if (date) props.onEndDateChange(date);
+    };
+
+    const onRecurringChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.persist();
+        if (props.onRecurringChange) props.onRecurringChange();
     };
 
     return (
@@ -42,20 +61,35 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
             {props.isEditing ? (
                 <>
                     <div>
-                        <input
-                            type="datetime-local"
-                            name="startDate"
-                            value={DateToString(props.start)}
-                            onChange={props.onChange}
-                            max={DateToString(props.end)}
+                        <DatePicker
+                            locale="nb"
+                            showTimeSelect
+                            timeIntervals={15}
+                            minTime={minTime}
+                            maxTime={props.end}
+                            minDate={minDate}
+                            maxDate={props.end}
+                            filterDate={isWeekday}
+                            timeFormat="HH:mm"
+                            dateFormat="MMMM d, yyyy HH:mm"
+                            timeCaption="Tid"
+                            selected={props.start}
+                            onChange={onStartChange}
                         />
                         {`  -  `}
-                        <input
-                            type="datetime-local"
-                            name="endDate"
-                            value={DateToString(props.end)}
-                            onChange={props.onChange}
-                            min={DateToString(props.start)}
+                        <DatePicker
+                            locale="nb"
+                            showTimeSelect
+                            timeIntervals={15}
+                            minTime={props.start}
+                            maxTime={maxTime}
+                            minDate={props.start}
+                            filterDate={isWeekday}
+                            timeFormat="HH:mm"
+                            dateFormat="MMMM d, yyyy HH:mm"
+                            timeCaption="Tid"
+                            selected={props.end}
+                            onChange={onEndChange}
                         />
                     </div>
                     {props.isRecurringEnabled ? (
@@ -65,7 +99,7 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                                 type="checkbox"
                                 name="recurring"
                                 checked={props.isRecurring}
-                                onChange={props.onChange}
+                                onChange={onRecurringChange}
                             />
                         </Label>
                     ) : null}
