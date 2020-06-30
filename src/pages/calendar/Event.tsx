@@ -103,7 +103,6 @@ export const Event: React.FC<EventInfo> = (props) => {
             isEditing={isEditing}
             onEditClick={onEditClick}
         >
-            {/* TODO: set 'showEditSymbol' depending on role*/}
             <Body>
                 <Options>
                     <EventOptionDateRange
