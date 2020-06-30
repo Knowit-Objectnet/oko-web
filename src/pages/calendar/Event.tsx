@@ -64,9 +64,8 @@ export const Event: React.FC<EventInfo> = (props) => {
     };
 
     // On change function for the Weight component
-    const onWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-        setWeight(parseInt(e.currentTarget.value));
+    const onWeightChange = (weight: number | undefined) => {
+        setWeight(weight);
     };
 
     // On change function for the Edit button
