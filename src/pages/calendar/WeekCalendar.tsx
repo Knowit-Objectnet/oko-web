@@ -173,6 +173,8 @@ export const WeekCalendar: React.FC = () => {
                         views={['month', 'work_week', 'day', 'agenda']}
                         defaultView="work_week"
                         selectable={true}
+                        min={new Date(new Date().setHours(7, 30))}
+                        max={new Date(new Date().setHours(21))}
                         step={15}
                         events={events}
                         startAccessor="start"
