@@ -26,4 +26,4 @@ export async function PostToAPI(url: string, data: Record<string, unknown>, toke
     } else {
         throw new Error('Unexpected error');
     }
-};
+}

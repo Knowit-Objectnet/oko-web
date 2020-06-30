@@ -4,7 +4,7 @@ import { WeightHanging } from '@styled-icons/fa-solid/WeightHanging';
 import { EventOption } from './EventOption';
 import { useState } from 'react';
 import { PostToAPI } from '../../utils/PostToAPi';
-import { useKeycloak } from "@react-keycloak/web";
+import { useKeycloak } from '@react-keycloak/web';
 
 const Suffix = styled.div`
     display: inline-block;
@@ -84,9 +84,18 @@ export const EventOptionWeight: React.FC<EventOptionDateRangeProps> = (props) =>
             {props.isEditing ? (
                 <>
                     <Suffix>
-                        <input type="number" name="weight" value={newWeight} min={0} onChange={onChange} onKeyPress={onKeyDown} />
+                        <input
+                            type="number"
+                            name="weight"
+                            value={newWeight}
+                            min={0}
+                            onChange={onChange}
+                            onKeyPress={onKeyDown}
+                        />
                     </Suffix>
-                    <button type="submit" onClick={onSubmit} disabled={newWeight === props.weight}>Bekreft</button>
+                    <button type="submit" onClick={onSubmit} disabled={newWeight === props.weight}>
+                        Bekreft
+                    </button>
                 </>
             ) : (
                 <GrayBox>{props.weight || 'n/a'}</GrayBox>
