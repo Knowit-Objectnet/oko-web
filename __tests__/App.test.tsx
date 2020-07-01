@@ -5,11 +5,9 @@ import '@testing-library/jest-dom';
 import App from '../src/App';
 
 test('renders Hello World!', () => {
-  const { getByText } = render(
-    <App />,
-  );
+    const { getByText } = render(<App />);
 
-  // hello world should be rendered
-  const text = getByText('Loading...');
-  expect(text).toBeInTheDocument();
+    // hello world should be rendered
+    const text = getByText('Loading...');
+    expect(text).toBeInTheDocument();
 });

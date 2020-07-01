@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "cypress": "cypress run",
-    "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix",
+    "lint": "eslint --fix --ignore-path .eslintignore --ext js,jsx,ts,tsx .",
     "check-types": "tsc",
     "watch": "webpack --config webpack.config.js --watch",
     "build": "webpack --config webpack.config.js",

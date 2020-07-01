@@ -1,7 +1,7 @@
-const { idText, createYield } = require("typescript")
+import { createYield, idText } from 'typescript';
 
-describe ('Site test', () => {
+describe('Site test', () => {
     it('successfully loads', () => {
-        cy.visit('/')
-    })
-})
+        cy.visit('/');
+    });
+});
