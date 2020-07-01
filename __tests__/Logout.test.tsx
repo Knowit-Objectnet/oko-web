@@ -46,7 +46,7 @@ describe('Provides a logout page', () => {
         const message = await findByText('Logger deg ut...');
         expect(message).toBeInTheDocument();
 
-        // Check that the logout function is called on logout button click.
+        // Check that the logout function is called on page load.
         expect(keycloak.logout.mock.calls.length).toBe(1);
     });
 });
