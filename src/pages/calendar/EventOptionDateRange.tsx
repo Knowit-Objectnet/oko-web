@@ -124,7 +124,7 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                 </>
             ) : (
                 `
-                    ${props.start.toLocaleString('no-NB', {month: 'long', day: 'numeric', year: 'numeric'})},
+                    ${props.start.toLocaleString('no-NB', { month: 'long', day: 'numeric', year: 'numeric' })},
                     ${props.start.getHours()}:${props.start.getMinutes()} - 
                     ${props.end.getHours()}:${props.end.getMinutes()}
                 `
