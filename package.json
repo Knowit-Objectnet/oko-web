@@ -5,6 +5,7 @@
   "main": "index.tsx",
   "scripts": {
     "test": "jest",
+    "cypress": "cypress run",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --fix",
     "check-types": "tsc",
     "watch": "webpack --config webpack.config.js --watch",
@@ -57,6 +58,7 @@
     "@types/react-big-calendar": "^0.24.2",
     "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.0",
+    "cypress": "^4.9.0",
     "history": "^4.10.1",
     "i18next": "^19.4.5",
     "keycloak-js": "^10.0.2",
