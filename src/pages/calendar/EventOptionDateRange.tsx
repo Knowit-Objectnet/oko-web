@@ -6,6 +6,19 @@ import DatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import nb from 'date-fns/locale/nb';
 
+const DatePickersWrapper = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+`;
+
+const Divider = styled.span`
+    margin: 0px 10px;
+    font-weight: bolder;
+    font-size: 1.5em;
+`;
+
 const Label = styled.label`
     display: flex;
     justify-content: center;
@@ -44,11 +57,17 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
     };
 
     const onStartChange = (date: Date | null, event: React.SyntheticEvent<any, Event> | undefined) => {
-        if (date) props.onStartDateChange(date);
+        if (date) {
+            props.onStartDateChange(date);
+            props.onEndDateChange(new Date(props.end.setDate(date.getDate())));
+        }
     };
 
     const onEndChange = (date: Date | null, event: React.SyntheticEvent<any, Event> | undefined) => {
-        if (date) props.onEndDateChange(date);
+        if (date) {
+            props.onEndDateChange(date);
+            props.onStartDateChange(new Date(props.start.setDate(date.getDate())));
+        }
     };
 
     const onRecurringChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +79,7 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
         <EventOption icon={Clock}>
             {props.isEditing ? (
                 <>
-                    <div>
+                    <DatePickersWrapper>
                         <DatePicker
                             locale="nb"
                             showTimeSelect
@@ -68,7 +87,6 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                             minTime={minTime}
                             maxTime={props.end}
                             minDate={minDate}
-                            maxDate={props.end}
                             filterDate={isWeekday}
                             timeFormat="HH:mm"
                             dateFormat="MMMM d, yyyy HH:mm"
@@ -76,14 +94,14 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                             selected={props.start}
                             onChange={onStartChange}
                         />
-                        {`  -  `}
+                        <Divider>-</Divider>
                         <DatePicker
                             locale="nb"
                             showTimeSelect
                             timeIntervals={15}
                             minTime={props.start}
                             maxTime={maxTime}
-                            minDate={props.start}
+                            minDate={minDate}
                             filterDate={isWeekday}
                             timeFormat="HH:mm"
                             dateFormat="MMMM d, yyyy HH:mm"
@@ -91,7 +109,7 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                             selected={props.end}
                             onChange={onEndChange}
                         />
-                    </div>
+                    </DatePickersWrapper>
                     {props.isRecurringEnabled ? (
                         <Label>
                             FAST OPPDRAG
@@ -106,9 +124,9 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                 </>
             ) : (
                 `
-                    ${props.start.toLocaleString('no-NB', { month: 'long', day: 'numeric', year: 'numeric' })},
-                    ${props.start.getHours()} - 
-                    ${props.end.getHours()}
+                    ${props.start.toLocaleString('no-NB', {month: 'long', day: 'numeric', year: 'numeric'})},
+                    ${props.start.getHours()}:${props.start.getMinutes()} - 
+                    ${props.end.getHours()}:${props.end.getMinutes()}
                 `
             )}
         </EventOption>

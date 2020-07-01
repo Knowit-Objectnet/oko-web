@@ -172,6 +172,7 @@ export const WeekCalendar: React.FC = () => {
                         toolbar={false}
                         views={['month', 'work_week', 'day', 'agenda']}
                         defaultView="work_week"
+                        drilldownView={null}
                         selectable={true}
                         min={new Date(new Date().setHours(7, 30))}
                         max={new Date(new Date().setHours(21))}
