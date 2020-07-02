@@ -82,6 +82,16 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     return (
         <EventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
             <Options>
+                <EventOptionDateRange
+                    start={startDate}
+                    end={endDate}
+                    isRecurringEnabled={true}
+                    isRecurring={isRecurring}
+                    isEditing={true}
+                    onStartDateChange={onStartDateChange}
+                    onEndDateChange={onEndDateChange}
+                    onRecurringChange={onRecurringChange}
+                />
                 <EventOption icon={Person}>
                     <select value={selectedPartner} onChange={onPartnerChange}>
                         <option value={-1} disabled>
@@ -94,16 +104,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                         ))}
                     </select>
                 </EventOption>
-                <EventOptionDateRange
-                    start={startDate}
-                    end={endDate}
-                    isRecurringEnabled={true}
-                    isRecurring={isRecurring}
-                    isEditing={true}
-                    onStartDateChange={onStartDateChange}
-                    onEndDateChange={onEndDateChange}
-                    onRecurringChange={onRecurringChange}
-                />
                 <EventOptionLocation
                     isEditing={true}
                     selectedLocation={locationIndex}
