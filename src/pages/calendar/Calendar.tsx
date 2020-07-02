@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Notifications } from './Notifications';
 import { ChangeLog } from './ChangeLog';
 import { WeekCalendar } from './WeekCalendar';
+import { useKeycloak } from '@react-keycloak/web';
+import { Roles } from '../../types';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -26,19 +28,27 @@ const ModuleCalendar = styled(Module)`
 /**
  * The page component for the calendar view
  */
-export const CalendarPage: React.FC = () => (
-    <Wrapper>
-        <Module>
-            <h3>Varslinger</h3>
-            <Notifications />
-        </Module>
-        <ModuleCalendar>
-            <h3>Kalender</h3>
-            <WeekCalendar />
-        </ModuleCalendar>
-        <Module>
-            <h3>Endringslogg</h3>
-            <ChangeLog />
-        </Module>
-    </Wrapper>
-);
+export const CalendarPage: React.FC = () => {
+    const { keycloak } = useKeycloak();
+
+    return (
+        <Wrapper>
+            {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
+                <Module>
+                    <h3>Varslinger</h3>
+                    <Notifications />
+                </Module>
+            ) : null}
+            <ModuleCalendar>
+                <h3>Kalender</h3>
+                <WeekCalendar />
+            </ModuleCalendar>
+            {keycloak.hasRealmRole(Roles.Oslo) ? (
+                <Module>
+                    <h3>Endringslogg</h3>
+                    <ChangeLog />
+                </Module>
+            ) : null}
+        </Wrapper>
+    );
+};
