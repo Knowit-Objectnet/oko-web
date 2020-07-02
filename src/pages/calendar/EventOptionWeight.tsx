@@ -51,12 +51,12 @@ export const EventOptionWeight: React.FC<EventOptionDateRangeProps> = (props) =>
         keycloak: { token },
     } = useKeycloak();
 
-    const [newWeight, setNewWeight] = useState(props.weight);
+    const [newWeight, setNewWeight] = useState(props.weight || 0);
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         const val = e.currentTarget.value;
-        setNewWeight(val === '' ? undefined : parseInt(e.currentTarget.value));
+        setNewWeight(val === '' ? 0 : parseInt(e.currentTarget.value));
     };
 
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -75,7 +75,7 @@ export const EventOptionWeight: React.FC<EventOptionDateRangeProps> = (props) =>
             props.onChange(newWeight);
         } catch (err) {
             console.log(err);
-            setNewWeight(props.weight);
+            setNewWeight(props.weight || 0);
         }
     };
 
