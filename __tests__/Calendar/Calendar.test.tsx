@@ -9,65 +9,14 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { CalendarPage } from '../../src/pages/calendar/Calendar';
 import { Roles } from '../../src/types';
-
-/* For some god forsaken reason this needs to be imported to replace the global promise
- * as multiple different libraries using their own version of promise makes everything
- * boil, explode, make my will to live disappear, and make the keycloak mock not work
- */
-global.Promise = jest.requireActual('promise');
+import { mockEvents } from '../../__mocks__/mockEvents';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
 
-// Keycloak mock to intercept function calls
-jest.mock('../../src/keycloak', () => ({
-    __esModule: true,
-    default: {
-        constructor: jest.fn(),
-        init: jest.fn(),
-        login: jest.fn(),
-        createLoginUrl: jest.fn(),
-        logout: jest.fn(),
-        createLogoutUrl: jest.fn(),
-        register: jest.fn(),
-        createRegisterUrl: jest.fn(),
-        createAccountUrl: jest.fn(),
-        accountManagement: jest.fn(),
-        hasRealmRole: jest.fn((role: string) => {
-            return role === Roles.Oslo;
-        }),
-        hasResourceRole: jest.fn(),
-        loadUserProfile: jest.fn(),
-        loadUserInfo: jest.fn(),
-        isTokenExpired: jest.fn(),
-        updateToken: jest.fn(),
-        clearToken: jest.fn(),
-    },
-}));
-
 describe('Provides a page to view the calendar in addition to change log and notifications', () => {
     // router history
     let history: MemoryHistory;
-    const d = new Date();
-    const monday = new Date(d.setDate(d.getDate() - d.getDay() + (d.getDay() == 0 ? -6 : 1)));
-    const mockEvents = [
-        {
-            title: 'Test',
-            start: new Date(new Date().setHours(10)),
-            end: new Date(new Date().setHours(12)),
-            allDay: false,
-            resource: {
-                location: 'grønmo',
-                driver: 'odd',
-                weight: 100,
-                message: {
-                    start: new Date(monday.setHours(12)),
-                    end: new Date(monday.setHours(13)),
-                    text: 'Tar ikke i mot barneleker ifm. Covid-19 tiltak.',
-                },
-            },
-        },
-    ];
 
     beforeEach(() => {
         fetch.resetMocks();
@@ -84,21 +33,6 @@ describe('Provides a page to view the calendar in addition to change log and not
 
     afterEach(() => {
         cleanup();
-    });
-
-    const originalError = console.error;
-
-    beforeAll(() => {
-        console.error = (...args: any[]) => {
-            if (/Warning.*not wrapped in act/.test(args[0])) {
-                return;
-            }
-            originalError.call(console, ...args);
-        };
-    });
-
-    afterAll(() => {
-        console.error = originalError;
     });
 
     it('Should render without errors', async () => {
@@ -140,7 +74,12 @@ describe('Provides a page to view the calendar in addition to change log and not
         expect(message).toBeInTheDocument();
     });
 
-    it('Should show NewEvent on new event button click', async () => {
+    it('Should show NewEvent on new event button click if role is Oslo', async () => {
+        // Set our role to Oslo
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Oslo;
+        });
+
         const { findByText } = render(
             <KeycloakProvider keycloak={keycloak}>
                 <Router history={history}>
@@ -163,6 +102,41 @@ describe('Provides a page to view the calendar in addition to change log and not
         });
 
         const title = await findByText('Opprett ny avtale');
+        expect(title).toBeInTheDocument();
+    });
+
+    it('Should show Notifications if role is Partner or Ambassador', async () => {
+        // Set our role to Partner and Ambassador
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Partner || role === Roles.Ambassador;
+        });
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const title = await findByText('Varslinger');
+        expect(title).toBeInTheDocument();
+    });
+
+    it('Should show ChangeLog if role is Oslo', async () => {
+        // Set our role to Oslo
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Oslo;
+        });
+
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const title = await findByText('Endringslogg');
         expect(title).toBeInTheDocument();
     });
 });

@@ -8,29 +8,12 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { Login } from '../src/pages/login/Login';
 
-jest.mock('../src/keycloak');
-
 describe('Provides a login page', () => {
     // router history
     let history: MemoryHistory;
 
     beforeEach(() => {
         history = createMemoryHistory();
-    });
-
-    const originalError = console.error;
-
-    beforeAll(() => {
-        console.error = (...args: any[]) => {
-            if (/Warning.*not wrapped in act/.test(args[0])) {
-                return;
-            }
-            originalError.call(console, ...args);
-        };
-    });
-
-    afterAll(() => {
-        console.error = originalError;
     });
 
     it('Should show login button and call login function when clicked', async () => {
