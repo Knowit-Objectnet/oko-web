@@ -44,6 +44,7 @@
     "jest": "^26.0.1",
     "jest-fetch-mock": "^3.0.3",
     "prettier": "^2.0.5",
+    "promise": "^8.1.0",
     "source-map-loader": "^1.0.0",
     "style-loader": "^1.2.1",
     "ts-jest": "^26.1.0",

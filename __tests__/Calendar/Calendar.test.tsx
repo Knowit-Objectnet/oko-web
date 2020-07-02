@@ -8,10 +8,42 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { CalendarPage } from '../../src/pages/calendar/Calendar';
+import { Roles } from '../../src/types';
 
+/* For some god forsaken reason this needs to be imported to replace the global promise
+ * as multiple different libraries using their own version of promise makes everything
+ * boil, explode, make my will to live disappear, and make the keycloak mock not work
+ */
+global.Promise = jest.requireActual('promise');
+
+// Fetch mock to intercept fetch requests.
 global.fetch = fetch;
 
-jest.mock('../../src/keycloak');
+// Keycloak mock to intercept function calls
+jest.mock('../../src/keycloak', () => ({
+    __esModule: true,
+    default: {
+        constructor: jest.fn(),
+        init: jest.fn(),
+        login: jest.fn(),
+        createLoginUrl: jest.fn(),
+        logout: jest.fn(),
+        createLogoutUrl: jest.fn(),
+        register: jest.fn(),
+        createRegisterUrl: jest.fn(),
+        createAccountUrl: jest.fn(),
+        accountManagement: jest.fn(),
+        hasRealmRole: jest.fn((role: string) => {
+            return role === Roles.Oslo;
+        }),
+        hasResourceRole: jest.fn(),
+        loadUserProfile: jest.fn(),
+        loadUserInfo: jest.fn(),
+        isTokenExpired: jest.fn(),
+        updateToken: jest.fn(),
+        clearToken: jest.fn(),
+    },
+}));
 
 describe('Provides a page to view the calendar in addition to change log and notifications', () => {
     // router history
@@ -40,13 +72,7 @@ describe('Provides a page to view the calendar in addition to change log and not
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async ({ url }) => {
-            if (url == 'keycloak.json') {
-                return JSON.stringify({
-                    url: '/auth',
-                    realm: 'myrealm',
-                    clientId: 'myapp',
-                });
-            } else if (url.startsWith('/api/calendar/events/')) {
+            if (url.startsWith('/api/calendar/events/')) {
                 return JSON.stringify(mockEvents);
             } else if (['/api/notifications', '/api/locations', '/api/log/changes', '/api/categories'].includes(url)) {
                 return JSON.stringify([]);
@@ -94,9 +120,11 @@ describe('Provides a page to view the calendar in addition to change log and not
             </KeycloakProvider>,
         );
 
+        // Find the event by it's title text
         const event = await findByText(mockEvents[0].title);
         expect(event).toBeInTheDocument();
 
+        // Click the event element
         await waitFor(() => {
             fireEvent(
                 event,
@@ -107,7 +135,34 @@ describe('Provides a page to view the calendar in addition to change log and not
             );
         });
 
+        // Find the message text inside the event and expect that it is in the document
         const message = await findByText(mockEvents[0].resource.message.text);
         expect(message).toBeInTheDocument();
+    });
+
+    it('Should show NewEvent on new event button click', async () => {
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const button = await findByText('Legg til avtale');
+        expect(button).toBeInTheDocument();
+
+        await waitFor(() => {
+            fireEvent(
+                button,
+                new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                }),
+            );
+        });
+
+        const title = await findByText('Opprett ny avtale');
+        expect(title).toBeInTheDocument();
     });
 });
