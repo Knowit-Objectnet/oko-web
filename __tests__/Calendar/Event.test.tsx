@@ -14,7 +14,7 @@ import fetch from 'jest-fetch-mock';
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
 
-describe('', () => {
+describe('Provides an interface to view and edit an Event', () => {
     // router history
     let history: MemoryHistory;
 
