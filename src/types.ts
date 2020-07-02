@@ -39,3 +39,9 @@ export interface SlotInfo {
         y: number;
     };
 }
+
+export enum Roles {
+    Oslo = 'reg_employee',
+    Partner = 'partner',
+    Ambassador = 'reuse_station',
+}

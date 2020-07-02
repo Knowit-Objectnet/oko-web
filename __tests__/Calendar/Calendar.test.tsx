@@ -110,34 +110,4 @@ describe('Provides a page to view the calendar in addition to change log and not
         const message = await findByText(mockEvents[0].resource.message.text);
         expect(message).toBeInTheDocument();
     });
-
-    it('Should show NewEvent on calendar click', async () => {
-        // TODO
-    });
-
-    it('Should show NewEvent on new event button click', async () => {
-        const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <CalendarPage />
-                </Router>
-            </KeycloakProvider>,
-        );
-
-        const button = await findByText('Legg til avtale');
-        expect(button).toBeInTheDocument();
-
-        await waitFor(() => {
-            fireEvent(
-                button,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
-
-        const title = await findByText('Søk om ekstrahenting');
-        expect(title).toBeInTheDocument();
-    });
 });

@@ -14,6 +14,7 @@ import { Loading } from '../pages/loading/Loading';
 import { Login } from '../pages/login/Login';
 import { Logout } from '../pages/logout/Logout';
 import { CalendarPage } from '../pages/calendar/Calendar';
+import { Roles } from '../types';
 
 export const RouterComponent: React.FC = () => {
     const [, initialized] = useKeycloak();
@@ -33,13 +34,14 @@ export const RouterComponent: React.FC = () => {
                     path="/"
                     render={(props) => (
                         <Dashboard>
-                            <Route exact path={`${props.match.url}`}>
-                                Hello World!
-                            </Route>
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}`}
+                                authenticatedRoles={[Roles.Oslo]}
+                                not={<Redirect to="/calendar" />}
+                                is={<CalendarPage />}
+                            />
                             <Route exact path={`${props.match.url}calendar`} component={CalendarPage} />
-                            <Route exact path={`${props.match.url}history`}>
-                                Hello history!
-                            </Route>
                             <Route exact path={`${props.match.url}partners`}>
                                 Hello partners!
                             </Route>
@@ -49,9 +51,20 @@ export const RouterComponent: React.FC = () => {
                             <Route exact path={`${props.match.url}deviations`}>
                                 Hello deviations!
                             </Route>
-                            <Route exact path={`${props.match.url}info`}>
-                                Hello info!
-                            </Route>
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}history`}
+                                authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
+                                not={<Redirect to="/calendar" />}
+                                is={() => 'Hello history'}
+                            />
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}info`}
+                                authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
+                                not={<Redirect to="/calendar" />}
+                                is={() => 'Hello info'}
+                            />
                         </Dashboard>
                     )}
                 />
