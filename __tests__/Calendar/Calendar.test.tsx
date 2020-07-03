@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { shallow, mount } from 'enzyme';
 import fetch from 'jest-fetch-mock';
 import { Router } from 'react-router-dom';
 import { KeycloakProvider } from '@react-keycloak/web';
@@ -72,6 +73,68 @@ describe('Provides a page to view the calendar in addition to change log and not
         // Find the message text inside the event and expect that it is in the document
         const message = await findByText(mockEvents[0].resource.message.text);
         expect(message).toBeInTheDocument();
+    });
+
+    it('Should show NewEvent on slot click if role is Oslo', async () => {
+        // Set our role to Oslo
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Oslo;
+        });
+        const wrapper = mount(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const slotInfo = {
+            start: new Date(),
+            end: new Date(),
+            slots: new Date(),
+            action: 'click',
+        };
+
+        // Get calendar
+        const calendar = wrapper.find('.rbc-calendar');
+        // call the onSelectSlot function (the function that gets called on calendar click)
+        calendar.children().props().onSelectSlot(slotInfo);
+        // Update the wrapper to render the modal
+        wrapper.update();
+        // Find the header of the modal and check that 1 and only 1 exists
+        const newEvent = wrapper.find('h2[children="Opprett ny avtale"]');
+        expect(newEvent.length).toBe(1);
+    });
+
+    it('Should show ExtraEvent on slot click if role is Partner or Ambassador', async () => {
+        // Set our role to Partner or Ambassador
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Partner || role === Roles.Ambassador;
+        });
+        const wrapper = mount(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const slotInfo = {
+            start: new Date(),
+            end: new Date(),
+            slots: new Date(),
+            action: 'click',
+        };
+
+        // Get calendar
+        const calendar = wrapper.find('.rbc-calendar');
+        // call the onSelectSlot function (the function that gets called on calendar click)
+        calendar.children().props().onSelectSlot(slotInfo);
+        // Update the wrapper to render the modal
+        wrapper.update();
+        // Find the header of the ExtraEvent modal and check that 1 and only 1 exists
+        const newEvent = wrapper.find('h2[children="Søk om ekstrahenting"]');
+        expect(newEvent.length).toBe(1);
     });
 
     it('Should show NewEvent on new event button click if role is Oslo', async () => {
