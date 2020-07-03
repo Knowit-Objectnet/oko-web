@@ -94,9 +94,7 @@ export const WeightReporting: React.FC = () => {
                     {withdrawalList.slice(0, 1)}
                 </Latest>
                 <h2>Tidligere uttak</h2>
-                <OverflowWrapper>
-                    {withdrawalList.slice(1)}
-                </OverflowWrapper>
+                <OverflowWrapper>{withdrawalList.slice(1)}</OverflowWrapper>
             </Content>
         </Wrapper>
     );
