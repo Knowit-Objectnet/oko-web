@@ -8,7 +8,6 @@ import { EventSubmission } from './EventSubmission';
 import { EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { useGetLocations } from '../../hooks/useGetLocations';
-import { EventOptionWeight } from './EventOptionWeight';
 import { EventTemplate } from './EventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
 
@@ -41,7 +40,6 @@ export const Event: React.FC<EventInfo> = (props) => {
     const [endDate, setEndDate] = useState(props.end);
     const [locationIndex, setLocationIndex] = useState(locations.indexOf(props.resource?.location || ''));
     const [driver, setDriver] = useState(props.resource?.driver);
-    const [weight, setWeight] = useState(props.resource?.weight);
 
     // On change functions for DateRange
     const onStartDateChange = (date: Date) => {
@@ -63,11 +61,6 @@ export const Event: React.FC<EventInfo> = (props) => {
         setDriver(e.currentTarget.value || undefined);
     };
 
-    // On change function for the Weight component
-    const onWeightChange = (weight: number | undefined) => {
-        setWeight(weight);
-    };
-
     // On change function for the Edit button
     const onEditClick = () => {
         setIsEditing(true);
@@ -80,7 +73,6 @@ export const Event: React.FC<EventInfo> = (props) => {
         setEndDate(props.end);
         setLocationIndex(locations.indexOf(props.resource?.location || ''));
         setDriver(props.resource?.driver);
-        setWeight(props.resource?.weight);
     };
 
     // Function called on successful event edit.
@@ -113,9 +105,6 @@ export const Event: React.FC<EventInfo> = (props) => {
                         onChange={onLocationChange}
                     />
                     <EventOptionDriver driver={driver} isEditing={isEditing} onChange={onDriverChange} />
-                    {keycloak.hasRealmRole(Roles.Partner) ? (
-                        <EventOptionWeight weight={weight} isEditing={isEditing} onChange={onWeightChange} />
-                    ) : null}
                 </Options>
                 {props.resource && props.resource.message && !isEditing ? (
                     <MessageBox {...props.resource.message} />
