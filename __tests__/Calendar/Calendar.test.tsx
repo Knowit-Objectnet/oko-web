@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { shallow, mount } from 'enzyme';
 import fetch from 'jest-fetch-mock';
 import { Router } from 'react-router-dom';
 import { KeycloakProvider } from '@react-keycloak/web';
@@ -8,45 +9,20 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { CalendarPage } from '../../src/pages/calendar/Calendar';
+import { Roles } from '../../src/types';
+import { mockEvents } from '../../__mocks__/mockEvents';
 
+// Fetch mock to intercept fetch requests.
 global.fetch = fetch;
-
-jest.mock('../../src/keycloak');
 
 describe('Provides a page to view the calendar in addition to change log and notifications', () => {
     // router history
     let history: MemoryHistory;
-    const d = new Date();
-    const monday = new Date(d.setDate(d.getDate() - d.getDay() + (d.getDay() == 0 ? -6 : 1)));
-    const mockEvents = [
-        {
-            title: 'Test',
-            start: new Date(new Date().setHours(10)),
-            end: new Date(new Date().setHours(12)),
-            allDay: false,
-            resource: {
-                location: 'grønmo',
-                driver: 'odd',
-                weight: 100,
-                message: {
-                    start: new Date(monday.setHours(12)),
-                    end: new Date(monday.setHours(13)),
-                    text: 'Tar ikke i mot barneleker ifm. Covid-19 tiltak.',
-                },
-            },
-        },
-    ];
 
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async ({ url }) => {
-            if (url == 'keycloak.json') {
-                return JSON.stringify({
-                    url: '/auth',
-                    realm: 'myrealm',
-                    clientId: 'myapp',
-                });
-            } else if (url.startsWith('/api/calendar/events/')) {
+            if (url.startsWith('/api/calendar/events/')) {
                 return JSON.stringify(mockEvents);
             } else if (['/api/notifications', '/api/locations', '/api/log/changes', '/api/categories'].includes(url)) {
                 return JSON.stringify([]);
@@ -58,21 +34,6 @@ describe('Provides a page to view the calendar in addition to change log and not
 
     afterEach(() => {
         cleanup();
-    });
-
-    const originalError = console.error;
-
-    beforeAll(() => {
-        console.error = (...args: any[]) => {
-            if (/Warning.*not wrapped in act/.test(args[0])) {
-                return;
-            }
-            originalError.call(console, ...args);
-        };
-    });
-
-    afterAll(() => {
-        console.error = originalError;
     });
 
     it('Should render without errors', async () => {
@@ -94,9 +55,11 @@ describe('Provides a page to view the calendar in addition to change log and not
             </KeycloakProvider>,
         );
 
+        // Find the event by it's title text
         const event = await findByText(mockEvents[0].title);
         expect(event).toBeInTheDocument();
 
+        // Click the event element
         await waitFor(() => {
             fireEvent(
                 event,
@@ -107,7 +70,136 @@ describe('Provides a page to view the calendar in addition to change log and not
             );
         });
 
+        // Find the message text inside the event and expect that it is in the document
         const message = await findByText(mockEvents[0].resource.message.text);
         expect(message).toBeInTheDocument();
+    });
+
+    it('Should show NewEvent on slot click if role is Oslo', async () => {
+        // Set our role to Oslo
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Oslo;
+        });
+        const wrapper = mount(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const slotInfo = {
+            start: new Date(),
+            end: new Date(),
+            slots: new Date(),
+            action: 'click',
+        };
+
+        // Get calendar
+        const calendar = wrapper.find('.rbc-calendar');
+        // call the onSelectSlot function (the function that gets called on calendar click)
+        calendar.children().props().onSelectSlot(slotInfo);
+        // Update the wrapper to render the modal
+        wrapper.update();
+        // Find the header of the modal and check that 1 and only 1 exists
+        const newEvent = wrapper.find('h2[children="Opprett ny avtale"]');
+        expect(newEvent.length).toBe(1);
+    });
+
+    it('Should show ExtraEvent on slot click if role is Partner or Ambassador', async () => {
+        // Set our role to Partner or Ambassador
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Partner || role === Roles.Ambassador;
+        });
+        const wrapper = mount(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const slotInfo = {
+            start: new Date(),
+            end: new Date(),
+            slots: new Date(),
+            action: 'click',
+        };
+
+        // Get calendar
+        const calendar = wrapper.find('.rbc-calendar');
+        // call the onSelectSlot function (the function that gets called on calendar click)
+        calendar.children().props().onSelectSlot(slotInfo);
+        // Update the wrapper to render the modal
+        wrapper.update();
+        // Find the header of the ExtraEvent modal and check that 1 and only 1 exists
+        const newEvent = wrapper.find('h2[children="Søk om ekstrahenting"]');
+        expect(newEvent.length).toBe(1);
+    });
+
+    it('Should show NewEvent on new event button click if role is Oslo', async () => {
+        // Set our role to Oslo
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Oslo;
+        });
+
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const button = await findByText('Legg til avtale');
+        expect(button).toBeInTheDocument();
+
+        await waitFor(() => {
+            fireEvent(
+                button,
+                new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                }),
+            );
+        });
+
+        const title = await findByText('Opprett ny avtale');
+        expect(title).toBeInTheDocument();
+    });
+
+    it('Should show Notifications if role is Partner or Ambassador', async () => {
+        // Set our role to Partner and Ambassador
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Partner || role === Roles.Ambassador;
+        });
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const title = await findByText('Varslinger');
+        expect(title).toBeInTheDocument();
+    });
+
+    it('Should show ChangeLog if role is Oslo', async () => {
+        // Set our role to Oslo
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Oslo;
+        });
+
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <Router history={history}>
+                    <CalendarPage />
+                </Router>
+            </KeycloakProvider>,
+        );
+
+        const title = await findByText('Endringslogg');
+        expect(title).toBeInTheDocument();
     });
 });

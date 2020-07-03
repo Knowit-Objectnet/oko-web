@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 
 import App from '../src/App';
 
-test('renders Hello World!', () => {
+test('renders loading screen', () => {
     const { getByText } = render(<App />);
 
     // hello world should be rendered

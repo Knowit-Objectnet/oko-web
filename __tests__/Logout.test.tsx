@@ -8,29 +8,12 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { Logout } from '../src/pages/logout/Logout';
 
-jest.mock('../src/keycloak');
-
 describe('Provides a logout page', () => {
     // router history
     let history: MemoryHistory;
 
     beforeEach(() => {
         history = createMemoryHistory();
-    });
-
-    const originalError = console.error;
-
-    beforeAll(() => {
-        console.error = (...args: any[]) => {
-            if (/Warning.*not wrapped in act/.test(args[0])) {
-                return;
-            }
-            originalError.call(console, ...args);
-        };
-    });
-
-    afterAll(() => {
-        console.error = originalError;
     });
 
     it('Should show logout text and call logout function', async () => {
