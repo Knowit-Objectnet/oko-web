@@ -1,3 +1,8 @@
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
+
 /* For some god forsaken reason this needs to be imported to replace the global promise
  * as multiple different libraries using their own version of promise makes everything
  * boil, explode, make my will to live disappear, and make the keycloak mock not work
