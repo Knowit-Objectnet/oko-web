@@ -44,19 +44,13 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
 
-    // On change function for DateRange
-    const onDateRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-        switch (e.currentTarget.name) {
-            case 'startDate': {
-                setStartDate(new Date(e.currentTarget.value));
-                break;
-            }
-            case 'endDate': {
-                setEndDate(new Date(e.currentTarget.value));
-                break;
-            }
-        }
+    // On change functions for DateRange
+    const onStartDateChange = (date: Date) => {
+        setStartDate(date);
+    };
+
+    const onEndDateChange = (date: Date) => {
+        setEndDate(date);
     };
 
     // On change function for Location
@@ -94,7 +88,8 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 end={endDate}
                 isRecurringEnabled={false}
                 isEditing={true}
-                onChange={onDateRangeChange}
+                onStartDateChange={onStartDateChange}
+                onEndDateChange={onEndDateChange}
             />
             <EventOptionLocation
                 isEditing={true}

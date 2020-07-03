@@ -44,23 +44,17 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     const [locationIndex, setLocationIndex] = useState(0);
     const [isRecurring, setIsRecurring] = useState(false);
 
-    // On change function for the Date Range
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-        switch (e.currentTarget.name) {
-            case 'startDate': {
-                setStartDate(new Date(e.currentTarget.value));
-                break;
-            }
-            case 'endDate': {
-                setEndDate(new Date(e.currentTarget.value));
-                break;
-            }
-            case 'recurring': {
-                setIsRecurring(!isRecurring);
-                break;
-            }
-        }
+    // On change functions for DateRange
+    const onStartDateChange = (date: Date) => {
+        setStartDate(date);
+    };
+
+    const onEndDateChange = (date: Date) => {
+        setEndDate(date);
+    };
+
+    const onRecurringChange = () => {
+        setIsRecurring(!isRecurring);
     };
 
     // On change for Partner selection
@@ -88,6 +82,16 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     return (
         <EventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
             <Options>
+                <EventOptionDateRange
+                    start={startDate}
+                    end={endDate}
+                    isRecurringEnabled={true}
+                    isRecurring={isRecurring}
+                    isEditing={true}
+                    onStartDateChange={onStartDateChange}
+                    onEndDateChange={onEndDateChange}
+                    onRecurringChange={onRecurringChange}
+                />
                 <EventOption icon={Person}>
                     <select value={selectedPartner} onChange={onPartnerChange}>
                         <option value={-1} disabled>
@@ -100,14 +104,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                         ))}
                     </select>
                 </EventOption>
-                <EventOptionDateRange
-                    start={startDate}
-                    end={endDate}
-                    isRecurringEnabled={true}
-                    isRecurring={isRecurring}
-                    isEditing={true}
-                    onChange={onChange}
-                />
                 <EventOptionLocation
                     isEditing={true}
                     selectedLocation={locationIndex}
