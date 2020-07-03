@@ -1,10 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PostToAPI } from '../../utils/PostToAPi';
 import { WithdrawalSubmission } from './Withdrawal';
 import { Colors } from '../../types';
+import mock = jest.mock;
 
 const Wrapper = styled.div`
     display: flex;
@@ -47,43 +48,80 @@ export const WeightReporting: React.FC = () => {
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
-    const mockWithdrawals: Array<Withdrawal> = [
+    const [mockWithdrawals, setMockWithdrawals] = useState([
         {
             id: '1',
             start: new Date(),
             end: new Date(),
         },
         {
-            id: '1',
+            id: '2',
             weight: 200,
             start: new Date(),
             end: new Date(),
         },
-    ];
+        {
+            id: '3',
+            weight: 200,
+            start: new Date(),
+            end: new Date(),
+        },
+        {
+            id: '4',
+            weight: 200,
+            start: new Date(),
+            end: new Date(),
+        },
+        {
+            id: '5',
+            weight: 200,
+            start: new Date(),
+            end: new Date(),
+        },
+    ]);
 
-    const onSubmit = async (weight: number) => {
+    const onSubmit = async (weight: number, id: string) => {
         try {
             const data = {
                 weight,
             };
-            await PostToAPI('/api/weight', data, keycloak.token);
+            //await PostToAPI('/api/weight', data, keycloak.token);
+
+            // Find the index of the updated withdrawal
+            const index = mockWithdrawals.findIndex((_withdrawal) => _withdrawal.id === id);
+
+            // Create shallow copy of withdrawals (this is fine because they arent deeply nested objects)
+            const newMockWithdrawals = Array.from(mockWithdrawals);
+
+            // Create a new object with the new weight
+            newMockWithdrawals[index] = {
+                ...newMockWithdrawals[index],
+                weight: weight,
+            };
+
+            // Update the withdrawals
+            setMockWithdrawals(newMockWithdrawals);
         } catch (err) {
             console.log(err);
         }
     };
 
-    const withdrawalList = useMemo(
-        () =>
-            mockWithdrawals.map((withdrawal) => (
+    // Create a list of memoized elements such that we don't need to rerender every list element
+    // when one gets updated
+    const withdrawalList = mockWithdrawals.map((withdrawal) =>
+        useMemo(
+            () => (
                 <WithdrawalSubmission
                     key={withdrawal.id}
+                    id={withdrawal.id}
                     weight={withdrawal.weight}
                     start={withdrawal.start}
                     end={withdrawal.end}
                     onSubmit={onSubmit}
                 />
-            )),
-        [mockWithdrawals],
+            ),
+            [withdrawal],
+        ),
     );
 
     return (

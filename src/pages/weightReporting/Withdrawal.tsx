@@ -80,10 +80,11 @@ const Box = styled.div`
 `;
 
 interface WithdrawalProps {
+    id: string;
     weight?: number;
     start: Date;
     end: Date;
-    onSubmit: (weight: number) => void;
+    onSubmit: (weight: number, id: string) => void;
 }
 
 /**
@@ -106,7 +107,7 @@ export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
 
     const onClick = () => {
         if (weight) {
-            props.onSubmit(weight);
+            props.onSubmit(weight, props.id);
         }
     };
 
