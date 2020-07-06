@@ -40,6 +40,13 @@ export interface SlotInfo {
     };
 }
 
+export interface Withdrawal {
+    id: string;
+    weight?: number;
+    start: Date;
+    end: Date;
+}
+
 export enum Roles {
     Oslo = 'reg_employee',
     Partner = 'partner',
