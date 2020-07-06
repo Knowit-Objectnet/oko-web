@@ -8,7 +8,7 @@ import { EventOptionCategory } from './EventOptionCategory';
 import { EventSubmission } from './EventSubmission';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
-import {useKeycloak} from "@react-keycloak/web";
+import { useKeycloak } from '@react-keycloak/web';
 
 const Textarea = styled.textarea`
     min-height: 54px;

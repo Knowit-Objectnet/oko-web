@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
-import {useKeycloak} from "@react-keycloak/web";
+import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     background-color: #f2f1f1;

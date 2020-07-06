@@ -27,4 +27,4 @@ export async function fetcher(url: string, token: string): Promise<any> {
     } else {
         throw new Error('Unexpected error');
     }
-};
+}

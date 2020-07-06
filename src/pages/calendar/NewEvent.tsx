@@ -9,7 +9,7 @@ import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplate } from './EventTemplate';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
-import {useKeycloak} from "@react-keycloak/web";
+import { useKeycloak } from '@react-keycloak/web';
 
 const Options = styled.div`
     display: flex;
