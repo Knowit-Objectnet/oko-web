@@ -65,40 +65,4 @@ describe('Provides an interface to view and edit an Event', () => {
         const title = await findByText(mockEvents[0].title);
         expect(title.parentElement?.children.length).toBe(1);
     });
-
-    it('Should show weight if role is Partner', async () => {
-        // Set our role to Partner
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Partner;
-        });
-
-        const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <Event {...mockEvents[0]} />
-                </Router>
-            </KeycloakProvider>,
-        );
-
-        // Find the weight text
-        const weight = await findByText(mockEvents[0].resource.weight.toString());
-        expect(weight).toBeInTheDocument();
-    });
-
-    it('Should not show weight if role is not Partner', async () => {
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return false;
-        });
-        const { queryByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <Event {...mockEvents[0]} />
-                </Router>
-            </KeycloakProvider>,
-        );
-
-        // Find the weight text
-        const weight = await queryByText(mockEvents[0].resource.weight.toString());
-        expect(weight).not.toBeInTheDocument();
-    });
 });

@@ -15,6 +15,7 @@ import { Login } from '../pages/login/Login';
 import { Logout } from '../pages/logout/Logout';
 import { CalendarPage } from '../pages/calendar/Calendar';
 import { Roles } from '../types';
+import { WeightReporting } from '../pages/weightReporting/WeightReporting';
 
 export const RouterComponent: React.FC = () => {
     const [, initialized] = useKeycloak();
@@ -45,9 +46,7 @@ export const RouterComponent: React.FC = () => {
                             <Route exact path={`${props.match.url}partners`}>
                                 Hello partners!
                             </Route>
-                            <Route exact path={`${props.match.url}reporting`}>
-                                Hello reporting!
-                            </Route>
+                            <Route exact path={`${props.match.url}reporting`} component={WeightReporting} />
                             <Route exact path={`${props.match.url}deviations`}>
                                 Hello deviations!
                             </Route>
