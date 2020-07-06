@@ -88,21 +88,26 @@ describe('Provides a page to view the calendar in addition to change log and not
             </KeycloakProvider>,
         );
 
+        const now = new Date();
+        const date = new Date();
+
         const slotInfo = {
-            start: new Date(),
-            end: new Date(),
-            slots: new Date(),
+            start: new Date(date.setHours(now.getHours() + 1, 0)),
+            end: new Date(date.setHours(now.getHours() + 2, 0)),
+            slots: date,
             action: 'click',
         };
 
         // Get calendar
         const calendar = wrapper.find('.rbc-calendar');
         // call the onSelectSlot function (the function that gets called on calendar click)
+        //console.log(calendar.children().props())
         calendar.children().props().onSelectSlot(slotInfo);
         // Update the wrapper to render the modal
         wrapper.update();
         // Find the header of the modal and check that 1 and only 1 exists
         const newEvent = wrapper.find('h2[children="Opprett ny avtale"]');
+        //console.log(wrapper.debug())
         expect(newEvent.length).toBe(1);
     });
 
@@ -119,10 +124,13 @@ describe('Provides a page to view the calendar in addition to change log and not
             </KeycloakProvider>,
         );
 
+        const now = new Date();
+        const date = new Date();
+
         const slotInfo = {
-            start: new Date(),
-            end: new Date(),
-            slots: new Date(),
+            start: new Date(date.setHours(now.getHours() + 1, 0)),
+            end: new Date(date.setHours(now.getHours() + 2, 0)),
+            slots: date,
             action: 'click',
         };
 
