@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import fetch from 'jest-fetch-mock';
 import { Router } from 'react-router-dom';
 import { KeycloakProvider } from '@react-keycloak/web';

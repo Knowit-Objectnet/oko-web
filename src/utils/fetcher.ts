@@ -1,5 +1,3 @@
-import { useKeycloak } from '@react-keycloak/web';
-
 export async function fetcher(url: string, token: string): Promise<any> {
     const response = await fetch(url, {
         method: 'GET',
