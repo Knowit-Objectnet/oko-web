@@ -125,7 +125,7 @@ export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
         <Wrapper>
             <WithdrawalDate weight={props.weight}>
                 <span>
-                    {props.start.toLocaleString('no-NB', {
+                    {props.start.toLocaleString('nb-NO', {
                         month: 'long',
                         day: 'numeric',
                         year: 'numeric',
