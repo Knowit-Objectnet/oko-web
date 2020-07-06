@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import { useEffect, useMemo, useState } from 'react';
 import { PostToAPI } from '../../utils/PostToAPi';
-import { WithdrawalSubmission } from './Withdrawal';
+import { WithdrawalSubmission } from './WithdrawalSubmission';
 import { Colors } from '../../types';
 import mock = jest.mock;
 import { useGetWithdrawals } from '../../hooks/useGetWithdrawals';
