@@ -5,9 +5,10 @@ import { EventTemplate } from './EventTemplate';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventOptionCategory } from './EventOptionCategory';
-import { useGetLocations } from '../../hooks/useGetLocations';
 import { EventSubmission } from './EventSubmission';
-import { useGetCategories } from '../../hooks/useGetCategories';
+import useSWR from 'swr';
+import { fetcher } from '../../utils/fetcher';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Textarea = styled.textarea`
     min-height: 54px;
@@ -27,16 +28,17 @@ interface ExtraEventProps {
  * Should only be visible for ambassadors (ombruksstasjon ambasadør).
  */
 export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
+    const { keycloak } = useKeycloak();
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let locations = useGetLocations();
-    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smestad'] : locations;
+    let { data: locations } = useSWR<string[]>(['/api/locations', keycloak.token], fetcher);
+    locations = locations && locations.length !== 0 ? locations : ['grønmo', 'haraldrud', 'smestad'];
     // Valid categories fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let categories = useGetCategories();
-    categories = categories.length === 0 ? ['Møbler', 'Bøker', 'Sportsutstyr'] : categories;
+    let { data: categories } = useSWR<string[]>(['/api/categories', keycloak.token], fetcher);
+    categories = categories && categories.length !== 0 ? categories : ['Møbler', 'Bøker', 'Sportsutstyr'];
     // State
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
