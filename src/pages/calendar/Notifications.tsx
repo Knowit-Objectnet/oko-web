@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useGetNotifications } from '../../hooks/useGetNotifications';
+import useSWR from 'swr';
+import { fetcher } from '../../utils/fetcher';
+import {useKeycloak} from "@react-keycloak/web";
 
 const Wrapper = styled.div`
     background-color: #f2f1f1;
@@ -13,11 +15,11 @@ const Wrapper = styled.div`
  * Notifications component that displays notifications for the Partners and ambassadors.
  */
 export const Notifications: React.FC = () => {
+    const { keycloak } = useKeycloak();
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    const dummyNotifications = ['Notification'];
-    let notifications = useGetNotifications();
-    notifications = notifications.length !== 0 ? notifications : dummyNotifications;
+    let { data: notifications } = useSWR(['/api/notifications', keycloak.token], fetcher);
+    notifications = notifications && notifications.length !== 0 ? notifications : ['Notification'];
 
     return <Wrapper></Wrapper>;
 };

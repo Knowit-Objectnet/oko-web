@@ -17,10 +17,10 @@ import { Event } from './Event';
 import { NewEvent } from './NewEvent';
 import { ExtraEvent } from './ExtraEvent';
 import { Modal } from '../../sharedComponents/Modal';
-import { useGetCalendarEvents } from '../../hooks/useGetCalendarEvents';
 import moment from 'moment';
-import { useGetLocations } from '../../hooks/useGetLocations';
 import { useKeycloak } from '@react-keycloak/web';
+import useSWR from 'swr';
+import { fetcher } from '../../utils/fetcher';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -76,8 +76,8 @@ export const WeekCalendar: React.FC = () => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let locations = useGetLocations();
-    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smestad'] : locations;
+    let { data: locations } = useSWR<string[]>(['/api/locations', keycloak.token], fetcher);
+    locations = locations && locations.length !== 0 ? locations : ['grønmo', 'haraldrud', 'smestad'];
 
     // State
     const [checkedLocation, setCheckedLocation] = useState(locations[0]);
@@ -90,35 +90,41 @@ export const WeekCalendar: React.FC = () => {
     // Events fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    const dummyEvents: Array<EventInfo> = [
-        {
-            title: 'Test',
-            start: new Date(new Date().setHours(10)),
-            end: new Date(new Date().setHours(12)),
-            allDay: false,
-            resource: {
-                location: 'grønmo',
-                driver: 'odd',
-                weight: 100,
-                message: {
-                    start: new Date(),
-                    end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-                    text: 'Tar ikke i mot barneleker ifm. Covid-19 tiltak.',
-                },
-            },
-        },
-        {
-            title: 'Test',
-            start: new Date(new Date().setHours(16)),
-            end: new Date(new Date().setHours(20)),
-            allDay: false,
-            resource: {
-                location: 'grønmo',
-            },
-        },
-    ];
-    let events = useGetCalendarEvents(checkedLocation);
-    events = events.length !== 0 ? events : dummyEvents;
+    let { data: events } = useSWR<EventInfo[]>([`/api/calendar/events/${checkedLocation}`, keycloak.token], fetcher);
+    events =
+        events && events.length !== 0
+            ? events.map((event: EventInfo) => {
+                  event.start = new Date(event.start);
+                  event.end = new Date(event.end);
+                  return event;
+              })
+            : [
+                  {
+                      title: 'Test',
+                      start: new Date(new Date().setHours(10)),
+                      end: new Date(new Date().setHours(12)),
+                      allDay: false,
+                      resource: {
+                          location: 'grønmo',
+                          driver: 'odd',
+                          weight: 100,
+                          message: {
+                              start: new Date(),
+                              end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+                              text: 'Tar ikke i mot barneleker ifm. Covid-19 tiltak.',
+                          },
+                      },
+                  },
+                  {
+                      title: 'Test',
+                      start: new Date(new Date().setHours(16)),
+                      end: new Date(new Date().setHours(20)),
+                      allDay: false,
+                      resource: {
+                          location: 'grønmo',
+                      },
+                  },
+              ];
 
     // Localizer needed for the calendar
     const localizer = momentLocalizer(moment);

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useGetChangeLog } from '../../hooks/useGetChangeLog';
+import useSWR from 'swr';
+import { fetcher } from '../../utils/fetcher';
+import {useKeycloak} from "@react-keycloak/web";
 
 const Wrapper = styled.div`
     background-color: #f2f1f1;
@@ -14,11 +16,11 @@ const Wrapper = styled.div`
  * Only visible for Oslo kommune
  */
 export const ChangeLog: React.FC = () => {
+    const { keycloak } = useKeycloak();
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    const dummyChanges = ['A change was made'];
-    let changes = useGetChangeLog();
-    changes = changes.length !== 0 ? changes : dummyChanges;
+    let { data: changes } = useSWR(['/api/log/changes', keycloak.token], fetcher);
+    changes = changes && changes.length !== 0 ? changes : ['A change was made'];
 
     return <Wrapper></Wrapper>;
 };

@@ -6,9 +6,10 @@ import { useState } from 'react';
 import { EventOption } from './EventOption';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
-import { useGetLocations } from '../../hooks/useGetLocations';
-import { useGetPartners } from '../../hooks/useGetPartners';
 import { EventTemplate } from './EventTemplate';
+import useSWR from 'swr';
+import { fetcher } from '../../utils/fetcher';
+import {useKeycloak} from "@react-keycloak/web";
 
 const Options = styled.div`
     display: flex;
@@ -27,16 +28,17 @@ interface NewEventProps {
  * Will only be rendered for Oslo Kommune.
  */
 export const NewEvent: React.FC<NewEventProps> = (props) => {
+    const { keycloak } = useKeycloak();
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let locations = useGetLocations();
-    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smestad'] : locations;
+    let { data: locations } = useSWR<string[]>(['/api/locations', keycloak.token], fetcher);
+    locations = locations && locations.length !== 0 ? locations : ['grønmo', 'haraldrud', 'smestad'];
     // Valid partners fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let partners = useGetPartners();
-    partners = partners.length === 0 ? ['Fretex', 'Sykkel gutta'] : partners;
+    let { data: partners } = useSWR<string[]>(['/api/partners', keycloak.token], fetcher);
+    partners = partners && partners.length !== 0 ? partners : ['Fretex', 'Sykkel gutta'];
     // State
     const [selectedPartner, setSelectedPartner] = useState(-1);
     const [startDate, setStartDate] = useState(props.start);
