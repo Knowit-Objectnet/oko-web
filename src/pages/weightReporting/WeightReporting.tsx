@@ -6,6 +6,7 @@ import { PostToAPI } from '../../utils/PostToAPi';
 import { WithdrawalSubmission } from './Withdrawal';
 import { Colors } from '../../types';
 import mock = jest.mock;
+import { useGetWithdrawals } from '../../hooks/useGetWithdrawals';
 
 const Wrapper = styled.div`
     display: flex;
@@ -34,13 +35,6 @@ const OverflowWrapper = styled.div`
     overflow: auto;
 `;
 
-interface Withdrawal {
-    id: string;
-    weight?: number;
-    start: Date;
-    end: Date;
-}
-
 /**
  * Weight reporting component for reporting weight from item withdrawals
  */
@@ -48,59 +42,59 @@ export const WeightReporting: React.FC = () => {
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
-    const [mockWithdrawals, setMockWithdrawals] = useState([
-        {
-            id: '1',
-            start: new Date(),
-            end: new Date(),
-        },
-        {
-            id: '2',
-            weight: 200,
-            start: new Date(),
-            end: new Date(),
-        },
-        {
-            id: '3',
-            weight: 200,
-            start: new Date(),
-            end: new Date(),
-        },
-        {
-            id: '4',
-            weight: 200,
-            start: new Date(),
-            end: new Date(),
-        },
-        {
-            id: '5',
-            weight: 200,
-            start: new Date(),
-            end: new Date(),
-        },
-    ]);
+    // List of withdrawals fetched from the server
+    let fetchedWithdrawals = useGetWithdrawals();
+    fetchedWithdrawals =
+        fetchedWithdrawals.length !== 0
+            ? fetchedWithdrawals
+            : [
+                  {
+                      id: '1',
+                      start: new Date(),
+                      end: new Date(),
+                  },
+                  {
+                      id: '2',
+                      weight: 200,
+                      start: new Date(),
+                      end: new Date(),
+                  },
+                  {
+                      id: '3',
+                      weight: 200,
+                      start: new Date(),
+                      end: new Date(),
+                  },
+                  {
+                      id: '4',
+                      start: new Date(),
+                      end: new Date(),
+                  },
+                  {
+                      id: '5',
+                      weight: 200,
+                      start: new Date(),
+                      end: new Date(),
+                  },
+              ];
+
+    const [withdrawals, setWithdrawals] = useState(fetchedWithdrawals);
 
     const onSubmit = async (weight: number, id: string) => {
         try {
+            // Post data
             const data = {
                 weight,
             };
-            //await PostToAPI('/api/weight', data, keycloak.token);
 
-            // Find the index of the updated withdrawal
-            const index = mockWithdrawals.findIndex((_withdrawal) => _withdrawal.id === id);
+            // Post update to API
+            await PostToAPI('/api/weight', data, keycloak.token);
 
-            // Create shallow copy of withdrawals (this is fine because they arent deeply nested objects)
-            const newMockWithdrawals = Array.from(mockWithdrawals);
-
-            // Create a new object with the new weight
-            newMockWithdrawals[index] = {
-                ...newMockWithdrawals[index],
-                weight: weight,
-            };
+            // Create new state with updated weight
+            const newWithdrawals = withdrawals.map((w) => (w.id === id ? { ...w, weight: weight } : w));
 
             // Update the withdrawals
-            setMockWithdrawals(newMockWithdrawals);
+            setWithdrawals(newWithdrawals);
         } catch (err) {
             console.log(err);
         }
@@ -108,7 +102,7 @@ export const WeightReporting: React.FC = () => {
 
     // Create a list of memoized elements such that we don't need to rerender every list element
     // when one gets updated
-    const withdrawalList = mockWithdrawals.map((withdrawal) =>
+    const withdrawalList = withdrawals.map((withdrawal) =>
         useMemo(
             () => (
                 <WithdrawalSubmission

@@ -60,6 +60,9 @@ const Suffix = styled.div`
 const Input = styled.input`
     flex: auto;
     border: none;
+    text-indent: 12px;
+    font-size: 20px;
+    line-height: 28px;
 `;
 
 const Button = styled.button`
@@ -77,6 +80,9 @@ const Box = styled.div`
     min-width: 300px;
     height: 50px;
     background-color: ${Colors.White};
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 28px;
 `;
 
 interface WithdrawalProps {
@@ -91,20 +97,24 @@ interface WithdrawalProps {
  * Event option that allows the user to choose a weight for the event.
  */
 export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
-    const [weight, setWeight] = useState<number | undefined>(undefined);
+    // State
+    const [weight, setWeight] = useState<number | ''>('');
 
+    // On change function for the input element
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         const val = e.currentTarget.value;
-        setWeight(val === '' ? undefined : parseInt(e.currentTarget.value));
+        setWeight(val === '' ? val : parseInt(e.currentTarget.value));
     };
 
+    // Prevent user from using negative numbers, punctuation, and other special characters
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         e.persist();
         const val = e.charCode;
         if ((val < 48 || val > 57) && val !== 44) e.preventDefault();
     };
 
+    // On click function for the OK button
     const onClick = () => {
         if (weight) {
             props.onSubmit(weight, props.id);
@@ -123,17 +133,27 @@ export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                     })}
                 </span>
                 <span>
-                    {`${props.start.getHours()}:${props.start.getMinutes()} - ${props.end.getHours()}:${props.end.getMinutes()}`}
+                    {`${props.start
+                        .getHours()
+                        .toString()
+                        .padStart(2, '0')}:${props.start
+                        .getMinutes()
+                        .toString()
+                        .padStart(2, '0')} - ${props.end
+                        .getHours()
+                        .toString()
+                        .padStart(2, '0')}:${props.end.getMinutes().toString().padStart(2, '0')}`}
                 </span>
             </WithdrawalDate>
             {props.weight ? (
-                <Box>{props.weight}</Box>
+                <Box>{props.weight} kg</Box>
             ) : (
                 <InputWrapper>
                     <Suffix>
                         <Input
                             type="number"
                             name="weight"
+                            placeholder="Skriv inn vektuttak"
                             value={weight}
                             min={0}
                             onChange={onChange}
@@ -141,7 +161,7 @@ export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                         />
                     </Suffix>
                     <Button type="submit" onClick={onClick} disabled={weight === undefined}>
-                        Bekreft
+                        OK
                     </Button>
                 </InputWrapper>
             )}
