@@ -1,31 +1,36 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { Colors } from '../../types';
 
 interface StyledElementProps {
     selected: boolean;
 }
 
 const Element = styled.div<StyledElementProps>`
-    width: 184px;
-    background-color: #ffffff;
-    border-radius: 10px 10px 0px 0px;
-    border-bottom: ${(props) => (props.selected ? null : 'solid 2px #AFAFAF')};
+    color: ${(props) => (props.selected ? Colors.Blue : Colors.White)};
+    border-bottom: solid 4px ${(props) => (props.selected ? Colors.Blue : 'transparent')};
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 31px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     user-select: none;
 
-    &:first-child {
-        margin-left: 137px;
-    }
-
     &:not(:last-child) {
-        margin-right: 27px;
+        margin-right: 80px;
     }
+`;
+
+const Center = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 interface NavElementProps {
     text: string;
+    icon: React.ElementType;
     selected: boolean;
     location: string;
     onClick: (location: string) => void;
@@ -40,9 +45,18 @@ export const NavElement: React.FC<NavElementProps> = (props) => {
         props.onClick(props.location);
     };
 
+    const Icon = styled(props.icon)`
+        margin-right: 10px;
+        height: 1em;
+        fill: ${(props) => (props.selected ? Colors.Blue : Colors.White)};
+    `;
+
     return (
         <Element selected={props.selected} onClick={onClick}>
-            {props.text}
+            <Center>
+                <Icon selected={props.selected} />
+                {props.text}
+            </Center>
         </Element>
     );
 };
