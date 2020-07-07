@@ -42,20 +42,14 @@ const DefaultProfilePicture = styled(Default)`
  * Side menu for quick-naviagtion and user icon
  */
 export const SideMenu: React.FC = () => {
-    const profilePicUrl = "";
+    const profilePicUrl = '';
     return (
         <Wrapper>
             <Menu>
                 <MenuText>Meny</MenuText>
                 <Hamburger height="1em" fill={Colors.White} />
             </Menu>
-            <Profile>
-                {
-                    profilePicUrl
-                        ? <ProfilePicture />
-                        : <DefaultProfilePicture />
-                }
-            </Profile>
+            <Profile>{profilePicUrl ? <ProfilePicture /> : <DefaultProfilePicture />}</Profile>
         </Wrapper>
     );
 };
