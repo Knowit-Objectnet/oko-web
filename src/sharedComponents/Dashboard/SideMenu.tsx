@@ -1,8 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Hamburger from '../../assets/Hamburger.svg';
+import Cross from '../../assets/Cross.svg';
 import Default from '../../assets/Default_profile_pic.svg';
 import { Colors } from '../../types';
+import { useKeycloak } from '@react-keycloak/web';
+import { useHistory } from 'react-router-dom';
 
 const Wrapper = styled.div`
     display: flex;
@@ -38,18 +41,39 @@ const DefaultProfilePicture = styled(Default)`
     fill: ${Colors.White};
 `;
 
+interface SideMenuProps {
+    isSidebarVisible: boolean;
+    toggleSidebar: () => void;
+}
+
 /**
  * Side menu for quick-naviagtion and user icon
  */
-export const SideMenu: React.FC = () => {
+export const SideMenu: React.FC<SideMenuProps> = (props) => {
+    const { keycloak } = useKeycloak();
+    const history = useHistory();
+
     const profilePicUrl = '';
+
+    const onButtonClick = () => {
+        history.push('login');
+    };
+
     return (
         <Wrapper>
             <Menu>
                 <MenuText>Meny</MenuText>
-                <Hamburger height="1em" fill={Colors.White} />
+                {props.isSidebarVisible ? (
+                    <Cross height="1em" fill={Colors.White} onClick={props.toggleSidebar} />
+                ) : (
+                    <Hamburger height="1em" fill={Colors.White} onClick={props.toggleSidebar} />
+                )}
             </Menu>
-            <Profile>{profilePicUrl ? <ProfilePicture /> : <DefaultProfilePicture />}</Profile>
+            {keycloak.authenticated ? (
+                <Profile>{profilePicUrl ? <ProfilePicture /> : <DefaultProfilePicture />}</Profile>
+            ) : (
+                <button onClick={onButtonClick}>Login</button>
+            )}
         </Wrapper>
     );
 };

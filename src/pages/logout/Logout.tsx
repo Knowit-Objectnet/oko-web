@@ -23,9 +23,5 @@ export const Logout: React.FC = () => {
         keycloak.logout();
     });
 
-    return (
-        <Wrapper>
-            <Wrapper>Logger deg ut...</Wrapper>
-        </Wrapper>
-    );
+    return <Wrapper>Logger deg ut...</Wrapper>;
 };

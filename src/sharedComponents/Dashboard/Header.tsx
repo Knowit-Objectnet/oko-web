@@ -4,6 +4,7 @@ import { Navigation } from './Navigation';
 import { SideMenu } from './SideMenu';
 import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
 import { Colors } from '../../types';
+import { useState } from 'react';
 
 const StyledHeader = styled.header`
     width: 100%;
@@ -22,17 +23,22 @@ const Logo = styled(OsloKommuneLogo)`
     height: 100%;
 `;
 
+interface HeaderProps {
+    isSidebarVisible: boolean;
+    toggleSidebar: () => void;
+}
+
 /**
  * Header component for the Dashboard
  */
-export const Header: React.FC = () => {
+export const Header: React.FC<HeaderProps> = (props) => {
     return (
         <StyledHeader>
             <LogoWrapper>
                 <Logo />
             </LogoWrapper>
             <Navigation />
-            <SideMenu />
+            <SideMenu isSidebarVisible={props.isSidebarVisible} toggleSidebar={props.toggleSidebar} />
         </StyledHeader>
     );
 };
