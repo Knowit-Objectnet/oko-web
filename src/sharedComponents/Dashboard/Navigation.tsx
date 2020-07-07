@@ -7,6 +7,7 @@ import List from '../../assets/List.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Weight from '../../assets/Weight.svg';
 import Bell from '../../assets/Bell.svg';
+import People from '../../assets/People.svg';
 import { Roles } from '../../types';
 
 const Nav = styled.nav`
@@ -60,7 +61,7 @@ export const Navigation: React.FC = () => {
                     />
                     <NavElement
                         text={'Samarbeidspartnere'}
-                        icon={Bell}
+                        icon={People}
                         location={'/partners'}
                         selected={history.location.pathname.slice(1) === 'partners'}
                         onClick={onClick}
