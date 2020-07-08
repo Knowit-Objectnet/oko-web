@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Notifications } from './Notifications';
 import { ChangeLog } from './ChangeLog';
 import { WeekCalendar } from './WeekCalendar';
+import { Calendar } from '../../sharedComponents/Calendar/Calendar';
 import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from '../../types';
 
@@ -41,7 +42,7 @@ export const CalendarPage: React.FC = () => {
             ) : null}
             <ModuleCalendar>
                 <h3>Kalender</h3>
-                <WeekCalendar />
+                <Calendar columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']} />
             </ModuleCalendar>
             {keycloak.hasRealmRole(Roles.Oslo) ? (
                 <Module>

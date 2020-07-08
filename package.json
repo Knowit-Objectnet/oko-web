@@ -70,6 +70,7 @@
     "@wojtekmaj/react-daterange-picker": "^3.0.0",
     "@wojtekmaj/react-timerange-picker": "^3.0.0",
     "cypress": "^4.9.0",
+    "date-fns": "^2.14.0",
     "history": "^4.10.1",
     "i18next": "^19.4.5",
     "keycloak-js": "^10.0.2",
