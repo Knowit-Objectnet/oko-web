@@ -62,7 +62,7 @@ export const RouterComponent: React.FC = () => {
                                 path={`${props.match.url}reporting`}
                                 authenticatedRoles={[Roles.Partner]}
                                 not={<Redirect to="/" />}
-                                is={WeightReporting}
+                                is={<WeightReporting />}
                             />
                             <AuthenticatedRoute
                                 exact={true}

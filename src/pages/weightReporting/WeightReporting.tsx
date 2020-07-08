@@ -1,11 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PostToAPI } from '../../utils/PostToAPi';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
 import { Colors } from '../../types';
-import mock = jest.mock;
 import { useGetWithdrawals } from '../../hooks/useGetWithdrawals';
 
 const Wrapper = styled.div`
@@ -15,7 +14,7 @@ const Wrapper = styled.div`
     align-items: center;
     height: 100%;
     width: 100%;
-    background-color: ${Colors.Yellow};
+    background-color: ${Colors.LightBeige};
 `;
 
 const Content = styled.div`
