@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
-import { PostToAPI } from '../../utils/PostToAPi';
-import { useKeycloak } from '@react-keycloak/web';
 import { Colors } from '../../types';
 
 const Wrapper = styled.div`
@@ -160,7 +158,7 @@ export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                             onKeyPress={onKeyDown}
                         />
                     </Suffix>
-                    <Button type="submit" onClick={onClick} disabled={weight === undefined}>
+                    <Button type="submit" onClick={onClick} disabled={weight === ''}>
                         OK
                     </Button>
                 </InputWrapper>

@@ -40,16 +40,30 @@ export const RouterComponent: React.FC = () => {
                                 path={`${props.match.url}`}
                                 authenticatedRoles={[Roles.Oslo]}
                                 not={<Redirect to="/calendar" />}
-                                is={<CalendarPage />}
+                                is={() => 'Hello overview'}
                             />
                             <Route exact path={`${props.match.url}calendar`} component={CalendarPage} />
-                            <Route exact path={`${props.match.url}partners`}>
-                                Hello partners!
-                            </Route>
-                            <Route exact path={`${props.match.url}reporting`} component={WeightReporting} />
-                            <Route exact path={`${props.match.url}deviations`}>
-                                Hello deviations!
-                            </Route>
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}statistics`}
+                                authenticatedRoles={[Roles.Oslo]}
+                                not={<Redirect to="/" />}
+                                is={() => 'Hello statistics'}
+                            />
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}partners`}
+                                authenticatedRoles={[Roles.Oslo]}
+                                not={<Redirect to="/" />}
+                                is={() => 'Hello partners'}
+                            />
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}reporting`}
+                                authenticatedRoles={[Roles.Partner]}
+                                not={<Redirect to="/" />}
+                                is={<WeightReporting />}
+                            />
                             <AuthenticatedRoute
                                 exact={true}
                                 path={`${props.match.url}history`}

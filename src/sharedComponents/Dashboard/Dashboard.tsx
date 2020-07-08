@@ -1,6 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Header } from './Header';
+import { SideBar } from './SideBar';
+import { useState } from 'react';
 
 const Wrapper = styled.div`
     display: flex;
@@ -11,6 +13,11 @@ const Wrapper = styled.div`
 
 const Body = styled.div`
     height: Calc(100% - 125px);
+    display: flex;
+`;
+
+const Page = styled.div`
+    flex: 1;
 `;
 
 interface DashboardProps {
@@ -22,10 +29,20 @@ interface DashboardProps {
  * It's the general portal wrapper, with navigation and such.
  */
 export const Dashboard: React.FC<DashboardProps> = (props) => {
+    // State for if the side navigation is visible
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+    // Function to toggle the side navigation
+    const toggleSidebar = () => {
+        setIsSidebarVisible(!isSidebarVisible);
+    };
+
     return (
         <Wrapper>
-            <Header />
-            <Body>{props.children}</Body>
+            <Header isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
+            <Body>
+                <Page>{props.children}</Page>
+                <SideBar isVisible={isSidebarVisible} />
+            </Body>
         </Wrapper>
     );
 };
