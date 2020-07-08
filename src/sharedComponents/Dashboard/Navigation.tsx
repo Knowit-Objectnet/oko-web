@@ -25,9 +25,9 @@ const Nav = styled.nav`
 export const Navigation: React.FC = () => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
-
+    // History instance
     const history = useHistory();
-
+    // On click function for the navigation elements to change location
     const onClick = (location: string) => {
         history.push(location);
     };
@@ -73,7 +73,7 @@ export const Navigation: React.FC = () => {
                     <NavElement
                         text={'Vektuttak'}
                         icon={Weight}
-                        location={'reporting'}
+                        location={'/reporting'}
                         selected={history.location.pathname.slice(1) === 'reporting'}
                         onClick={onClick}
                     />
@@ -87,7 +87,7 @@ export const Navigation: React.FC = () => {
                     <NavElement
                         text={'Info fra Oslo kommune'}
                         icon={Weight}
-                        location={'info'}
+                        location={'/info'}
                         selected={history.location.pathname.slice(1) === 'info'}
                         onClick={onClick}
                     />

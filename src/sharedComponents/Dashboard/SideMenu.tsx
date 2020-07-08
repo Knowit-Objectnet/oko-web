@@ -50,11 +50,13 @@ interface SideMenuProps {
  * Side menu for quick-naviagtion and user icon
  */
 export const SideMenu: React.FC<SideMenuProps> = (props) => {
+    // Keycloak instance
     const { keycloak } = useKeycloak();
+    // History instance
     const history = useHistory();
-
+    // Profile picture url. Empty for now as there is no way to get a profile picture
     const profilePicUrl = '';
-
+    // On click function for the login button
     const onButtonClick = () => {
         history.push('login');
     };
@@ -64,7 +66,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
             <Menu>
                 <MenuText>Meny</MenuText>
                 {props.isSidebarVisible ? (
-                    <Cross height="1em" fill={Colors.White} onClick={props.toggleSidebar} />
+                    <Cross height="1.5em" fill={Colors.White} onClick={props.toggleSidebar} />
                 ) : (
                     <Hamburger height="1em" fill={Colors.White} onClick={props.toggleSidebar} />
                 )}

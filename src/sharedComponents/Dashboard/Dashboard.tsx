@@ -29,8 +29,9 @@ interface DashboardProps {
  * It's the general portal wrapper, with navigation and such.
  */
 export const Dashboard: React.FC<DashboardProps> = (props) => {
+    // State for if the side navigation is visible
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-
+    // Function to toggle the side navigation
     const toggleSidebar = () => {
         setIsSidebarVisible(!isSidebarVisible);
     };
@@ -40,7 +41,7 @@ export const Dashboard: React.FC<DashboardProps> = (props) => {
             <Header isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
             <Body>
                 <Page>{props.children}</Page>
-                {isSidebarVisible ? <SideBar /> : null}
+                <SideBar isVisible={isSidebarVisible} />
             </Body>
         </Wrapper>
     );
