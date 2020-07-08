@@ -4,8 +4,9 @@ import { useKeycloak } from '@react-keycloak/web';
 import { useMemo, useState } from 'react';
 import { PostToAPI } from '../../utils/PostToAPi';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
-import { Colors } from '../../types';
-import { useGetWithdrawals } from '../../hooks/useGetWithdrawals';
+import { Colors, Withdrawal } from '../../types';
+import useSWR from 'swr';
+import { fetcher } from '../../utils/fetcher';
 
 const Wrapper = styled.div`
     display: flex;
@@ -42,10 +43,14 @@ export const WeightReporting: React.FC = () => {
     const { keycloak } = useKeycloak();
 
     // List of withdrawals fetched from the server
-    let fetchedWithdrawals = useGetWithdrawals();
+    let { data: fetchedWithdrawals } = useSWR<Withdrawal[]>(['/api/withdrawals', keycloak.token], fetcher);
     fetchedWithdrawals =
-        fetchedWithdrawals.length !== 0
-            ? fetchedWithdrawals
+        fetchedWithdrawals && fetchedWithdrawals.length !== 0
+            ? fetchedWithdrawals.map((withdrawal: Withdrawal) => {
+                  withdrawal.start = new Date(withdrawal.start);
+                  withdrawal.end = new Date(withdrawal.end);
+                  return withdrawal;
+              })
             : [
                   {
                       id: '1',

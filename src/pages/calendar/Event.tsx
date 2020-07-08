@@ -7,9 +7,10 @@ import { EventOptionDriver } from './EventOptionDriver';
 import { EventSubmission } from './EventSubmission';
 import { EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
-import { useGetLocations } from '../../hooks/useGetLocations';
 import { EventTemplate } from './EventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
+import useSWR from 'swr';
+import { fetcher } from '../../utils/fetcher';
 
 const Body = styled.div`
     display: flex;
@@ -32,8 +33,8 @@ export const Event: React.FC<EventInfo> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let locations = useGetLocations();
-    locations = locations.length === 0 ? ['grønmo', 'haraldrud', 'smestad'] : locations;
+    let { data: locations } = useSWR<string[]>(['/api/locations', keycloak.token], fetcher);
+    locations = locations && locations.length !== 0 ? locations : ['grønmo', 'haraldrud', 'smestad'];
     // State
     const [isEditing, setIsEditing] = useState(false);
     const [startDate, setStartDate] = useState(props.start);
@@ -71,7 +72,7 @@ export const Event: React.FC<EventInfo> = (props) => {
         setIsEditing(false);
         setStartDate(props.start);
         setEndDate(props.end);
-        setLocationIndex(locations.indexOf(props.resource?.location || ''));
+        setLocationIndex(locations ? locations.indexOf(props.resource?.location || '') : -1);
         setDriver(props.resource?.driver);
     };
 

@@ -1,4 +1,3 @@
-import { fireEvent, render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import fetch from 'jest-fetch-mock';
 

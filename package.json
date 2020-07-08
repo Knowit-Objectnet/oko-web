@@ -79,6 +79,7 @@
     "react-router-dom": "^5.2.0",
     "react-transition-group": "^4.4.1",
     "styled-components": "^5.1.1",
-    "styled-icons": "^10.2.1"
+    "styled-icons": "^10.2.1",
+    "swr": "^0.2.3"
   }
 }
