@@ -25,19 +25,9 @@ describe('Provides a login page', () => {
             </KeycloakProvider>,
         );
 
-        // Check that the login button should be displayed
-        const loginbutton = await findByText('Logg inn');
-        expect(loginbutton).toBeInTheDocument();
-
-        await waitFor(() => {
-            fireEvent(
-                loginbutton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        // Check that the login text is showing while waiting for keycloak to log the user in.
+        const message = await findByText('Logger deg inn...');
+        expect(message).toBeInTheDocument();
 
         // Check that the login function is called on login button click.
         expect(keycloak.login.mock.calls.length).toBe(1);
