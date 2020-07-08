@@ -28,6 +28,10 @@ const Center = styled.div`
     justify-content: center;
 `;
 
+const Text = styled.span`
+    margin-left: 10px;
+`;
+
 interface NavElementProps {
     text: string;
     icon: React.ElementType;
@@ -45,17 +49,11 @@ export const NavElement: React.FC<NavElementProps> = (props) => {
         props.onClick(props.location);
     };
 
-    const Icon = styled(props.icon)`
-        margin-right: 10px;
-        height: 1em;
-        fill: ${(props) => (props.selected ? Colors.Blue : Colors.White)};
-    `;
-
     return (
         <Element selected={props.selected} onClick={onClick}>
             <Center>
-                <Icon selected={props.selected} />
-                {props.text}
+                <props.icon fill={props.selected ? Colors.Blue : Colors.White} height="1em" />
+                <Text>{props.text}</Text>
             </Center>
         </Element>
     );

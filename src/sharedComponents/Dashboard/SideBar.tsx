@@ -59,6 +59,7 @@ const Link = styled(LocalLink)<LinkProps>`
     margin-bottom: 15px;
     border-bottom: solid 2px ${(props) => (props.to !== props.current ? Colors.White : Colors.Blue)};
     width: fit-content;
+    white-space: nowrap;
 `;
 
 interface SideBarProps {
