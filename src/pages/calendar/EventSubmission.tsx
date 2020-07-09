@@ -5,7 +5,7 @@ const Submission = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 `;
 
 const Button = styled.button`

@@ -3,7 +3,7 @@ export async function fetcher(url: string, token: string): Promise<any> {
         method: 'GET',
         mode: 'cors',
         cache: 'no-cache',
-        credentials: 'include',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,

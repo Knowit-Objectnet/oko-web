@@ -3,22 +3,23 @@ import { Clock } from '@styled-icons/fa-regular/Clock';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+import TimeRangePicker from '@wojtekmaj/react-timerange-picker'
+import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;
+    flex-direction: column;
 `;
 
 const DatePickersWrapper = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    flex-direction: row;
-`;
+    flex-direction: column;
 
-const Divider = styled.span`
-    margin: 0px 10px;
-    font-weight: bolder;
-    font-size: 1.5em;
+    &:not(:last-child) {
+        margin-bottom: 25px;
+    }
 `;
 
 const Label = styled.label`
@@ -26,17 +27,54 @@ const Label = styled.label`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    font-size: 10px;
-    line-height: 12px;
-    margin-left: 110px;
+    margin-bottom: 25px;
+`;
+
+const Span = styled.span`
+    width: 100%;
+    margin-bottom: 5px;
+`;
+
+const Select = styled.select`
+    width: 100%;
 `;
 
 const DaySelection = styled.div`
-
+    display: flex;
 `;
 
 const Day = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 50%;
+    border: 2px solid ${Colors.Blue};
+    user-select: none;
 
+    &:not(:last-child) {
+        margin-right: 10px;
+    }
+`;
+
+const StyledTimeRangePicker = styled(TimeRangePicker)`
+    width: 100%;
+
+    & .react-timerange-picker__range-divider {
+        flex: 1;
+    }
+`;
+
+const StyledDateRangePicker = styled(DateRangePicker)`
+    width: 100%;
+
+    & .react-daterange-picker__range-divider {
+        flex: 1;
+    }
 `;
 
 interface EventOptionDateRangeProps {
@@ -94,23 +132,27 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
     // Set the minimum date allowed to now/today
     const minDate = now;
 
-    const onRangeChange = (range: [Date, Date]) => {
+    const onTimeRangeChange = (range: [Date, Date]) => {
+        console.log(range);
+    };
+
+    const onDateRangeChange = (range: [Date, Date]) => {
         console.log(range);
     };
 
     return (
-        <EventOption icon={Clock}>
+        <EventOption>
             {props.isEditing ? (
                 <Wrapper>
                     <Label>
-                        <select>
+                        <Select>
                             <option>Gjentas ikke</option>
                             <option>Daglig</option>
                             <option>Ukentlig</option>
-                        </select>
+                        </Select>
                     </Label>
                     <Label>
-                        Velg ukedag(er)
+                        <Span>Velg ukedag(er)</Span>
                         <DaySelection>
                             <Day>M</Day>
                             <Day>Ti</Day>
@@ -120,10 +162,20 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                         </DaySelection>
                     </Label>
                     <DatePickersWrapper>
-
+                        <Span>Velg tidspunkt</Span>
+                        <StyledTimeRangePicker
+                            clearIcon={null}
+                            onChange={onTimeRangeChange}
+                            value={[new Date(), new Date()]}
+                        />
                     </DatePickersWrapper>
                     <DatePickersWrapper>
-
+                        <Span>Velg periode</Span>
+                        <StyledDateRangePicker
+                            clearIcon={null}
+                            onChange={onDateRangeChange}
+                            value={[new Date(), new Date()]}
+                        />
                     </DatePickersWrapper>
                 </Wrapper>
             ) : (

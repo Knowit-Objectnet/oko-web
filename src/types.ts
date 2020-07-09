@@ -35,7 +35,6 @@ interface EventInfoResource {
         id: number;
         name: string;
     };
-    driver?: string;
     weight?: number;
     message?: {
         start: Date;

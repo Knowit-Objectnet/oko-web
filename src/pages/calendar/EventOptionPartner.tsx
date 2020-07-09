@@ -5,6 +5,10 @@ import { LocationOn } from '@styled-icons/material/LocationOn';
 import { Person } from '@styled-icons/material/Person';
 import {ApiPartner} from "../../types";
 
+const Select = styled.select`
+    width: 100%;
+`;
+
 interface GrayBoxProps {
     selected?: boolean;
 }
@@ -46,8 +50,8 @@ export const EventOptionPartner: React.FC<EventOptionPartnerProps> = (props) => 
     };
 
     return (
-        <EventOption icon={Person}>
-            <select value={props.selectedPartner} onChange={onChange}>
+        <EventOption>
+            <Select value={props.selectedPartner} onChange={onChange}>
                 <option value={-1} disabled>
                     Velg samarbeidspartner
                 </option>
@@ -56,7 +60,7 @@ export const EventOptionPartner: React.FC<EventOptionPartnerProps> = (props) => 
                         {partner.name}
                     </option>
                 ))}
-            </select>
+            </Select>
         </EventOption>
     );
 };

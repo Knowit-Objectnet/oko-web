@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import { LocationOn } from '@styled-icons/material/LocationOn';
 import { ApiLocation } from '../../types';
 
+const Select = styled.select`
+    width: 100%;
+`;
+
 interface GrayBoxProps {
     selected?: boolean;
 }
@@ -46,9 +50,9 @@ export const EventOptionLocation: React.FC<EventOptionDateRangeProps> = (props) 
     };
 
     return (
-        <EventOption icon={LocationOn}>
+        <EventOption>
             {props.isEditing ? (
-                <select value={props.selectedLocation} onChange={onChange}>
+                <Select value={props.selectedLocation} onChange={onChange}>
                     <option value={-1} disabled>
                         Velg stasjon
                     </option>
@@ -57,7 +61,7 @@ export const EventOptionLocation: React.FC<EventOptionDateRangeProps> = (props) 
                             {location.name}
                         </option>
                     ))}
-                </select>
+                </Select>
             ) : (
                 <GrayBox>{props.locations.find((location) => location.id == props.selectedLocation)?.name}</GrayBox>
             )}

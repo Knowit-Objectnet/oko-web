@@ -3,7 +3,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { MessageBox } from './MessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventOptionDriver } from './EventOptionDriver';
 import { EventSubmission } from './EventSubmission';
 import { ApiLocation, EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
@@ -64,7 +63,6 @@ export const Event: React.FC<EventInfo> = (props) => {
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
     const [locationId, setLocationId] = useState(props.resource?.location ? props.resource?.location?.id : -1);
-    const [driver, setDriver] = useState(props.resource?.driver);
 
     // On change functions for DateRange
     const onStartDateChange = (date: Date) => {
@@ -80,12 +78,6 @@ export const Event: React.FC<EventInfo> = (props) => {
         setLocationId(locationId);
     };
 
-    // On change function for the Driver component
-    const onDriverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-        setDriver(e.currentTarget.value || undefined);
-    };
-
     // On change function for the Edit button
     const onEditClick = () => {
         setIsEditing(true);
@@ -99,7 +91,6 @@ export const Event: React.FC<EventInfo> = (props) => {
         if (locations) {
             setLocationId(props.resource?.location ? props.resource?.location?.id : -1);
         }
-        setDriver(props.resource?.driver);
     };
 
     // Function called on successful event edit.
@@ -131,7 +122,6 @@ export const Event: React.FC<EventInfo> = (props) => {
                         locations={locations}
                         onChange={onLocationChange}
                     />
-                    <EventOptionDriver driver={driver} isEditing={isEditing} onChange={onDriverChange} />
                 </Options>
                 {props.resource && props.resource.message && !isEditing ? (
                     <MessageBox {...props.resource.message} />

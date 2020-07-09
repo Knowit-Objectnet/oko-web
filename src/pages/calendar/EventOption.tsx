@@ -8,16 +8,21 @@ const Option = styled.div`
     margin-bottom: 42px;
 `;
 
-const OptionInfo = styled.div`
-    margin-left: 36px;
+interface OptionInfoProps {
+    icon?: React.ElementType;
+}
+
+const OptionInfo = styled.div<OptionInfoProps>`
+    margin-left: ${(props) => (props.icon ? '36px' : '0')};
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: 1;
 `;
 
 interface EventOptionProps {
     children: React.ReactNode;
-    icon: React.ElementType;
+    icon?: React.ElementType;
 }
 
 /**
@@ -25,7 +30,7 @@ interface EventOptionProps {
  */
 export const EventOption: React.FC<EventOptionProps> = (props) => (
     <Option>
-        <props.icon size="1.5em" />
-        <OptionInfo>{props.children}</OptionInfo>
+        {props.icon ? <props.icon size="1.5em" /> : null}
+        <OptionInfo icon={props.icon}>{props.children}</OptionInfo>
     </Option>
 );
