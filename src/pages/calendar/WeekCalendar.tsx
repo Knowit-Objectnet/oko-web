@@ -96,7 +96,6 @@ export const WeekCalendar: React.FC = () => {
           })
         : [];
 
-
     /*
     const onSelecting = (range: { start: stringOrDate; end: stringOrDate }) => {
         const startDate = new Date(range.start);

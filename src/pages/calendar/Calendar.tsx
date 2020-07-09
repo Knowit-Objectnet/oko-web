@@ -5,7 +5,7 @@ import { ChangeLog } from './ChangeLog';
 import { WeekCalendar } from './WeekCalendar';
 import { Calendar } from '../../sharedComponents/Calendar/Calendar';
 import { useKeycloak } from '@react-keycloak/web';
-import {Roles, SlotInfo} from '../../types';
+import { Roles, SlotInfo } from '../../types';
 
 const Wrapper = styled.div`
     height: 100%;
