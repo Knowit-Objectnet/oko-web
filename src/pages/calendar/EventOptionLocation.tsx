@@ -2,6 +2,7 @@ import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import { LocationOn } from '@styled-icons/material/LocationOn';
+import { ApiLocation } from '../../types';
 
 interface GrayBoxProps {
     selected?: boolean;
@@ -28,35 +29,37 @@ const GrayBox = styled.div<GrayBoxProps>`
 interface EventOptionDateRangeProps {
     isEditing: boolean;
     selectedLocation: number;
-    locations: Array<string>;
-    onChange: (index: number) => void;
+    locations: ApiLocation[];
+    onChange: (locationId: number) => void;
 }
 
 /**
  * Event option that allows the user choose a location for the event.
  */
 export const EventOptionLocation: React.FC<EventOptionDateRangeProps> = (props) => {
-    const onClick = (e: React.SyntheticEvent) => {
-        const index = e.currentTarget.getAttribute('data-index');
-        if (index) {
-            props.onChange(parseInt(index));
+    const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        e.persist();
+        const id = e.currentTarget.value;
+        if (id) {
+            props.onChange(parseInt(id));
         }
     };
+
     return (
         <EventOption icon={LocationOn}>
             {props.isEditing ? (
-                props.locations.map((location, index) => (
-                    <GrayBox
-                        key={location}
-                        data-index={index}
-                        selected={index === props.selectedLocation}
-                        onClick={onClick}
-                    >
-                        {location.toUpperCase()}
-                    </GrayBox>
-                ))
+                <select value={props.selectedLocation} onChange={onChange}>
+                    <option value={-1} disabled>
+                        Velg stasjon
+                    </option>
+                    {props.locations.map((location) => (
+                        <option value={location.id} key={location.id}>
+                            {location.name}
+                        </option>
+                    ))}
+                </select>
             ) : (
-                <GrayBox>{props.locations[props.selectedLocation].toUpperCase()}</GrayBox>
+                <GrayBox>{props.locations.find((location) => location.id == props.selectedLocation)?.name}</GrayBox>
             )}
         </EventOption>
     );

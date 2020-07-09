@@ -2,9 +2,11 @@ import * as React from 'react';
 import { Clock } from '@styled-icons/fa-regular/Clock';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import DatePicker, { registerLocale, setDefaultLocale } from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import nb from 'date-fns/locale/nb';
+import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+
+const Wrapper = styled.div`
+    display: flex;
+`;
 
 const DatePickersWrapper = styled.div`
     display: flex;
@@ -29,7 +31,16 @@ const Label = styled.label`
     margin-left: 110px;
 `;
 
+const DaySelection = styled.div`
+
+`;
+
+const Day = styled.div`
+
+`;
+
 interface EventOptionDateRangeProps {
+    range?: [Date, Date];
     start: Date;
     end: Date;
     isRecurringEnabled: boolean;
@@ -83,81 +94,38 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
     // Set the minimum date allowed to now/today
     const minDate = now;
 
-    // Register the norwegian bokmål local file and set it default to norwegian bokmål
-    registerLocale('nb', nb);
-    setDefaultLocale('nb');
-
-    // Filter away weekends
-    const isWeekday = (date: Date) => {
-        return date.getDay() !== 0 && date.getDay() !== 6;
-    };
-
-    const onStartChange = (date: Date | null, event: React.SyntheticEvent<any, Event> | undefined) => {
-        if (date) {
-            props.onStartDateChange(date);
-            props.onEndDateChange(new Date(props.end.setDate(date.getDate())));
-        }
-    };
-
-    const onEndChange = (date: Date | null, event: React.SyntheticEvent<any, Event> | undefined) => {
-        if (date) {
-            props.onEndDateChange(date);
-            props.onStartDateChange(new Date(props.start.setDate(date.getDate())));
-        }
-    };
-
-    const onRecurringChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-        if (props.onRecurringChange) props.onRecurringChange();
+    const onRangeChange = (range: [Date, Date]) => {
+        console.log(range);
     };
 
     return (
         <EventOption icon={Clock}>
             {props.isEditing ? (
-                <>
+                <Wrapper>
+                    <Label>
+                        <select>
+                            <option>Gjentas ikke</option>
+                            <option>Daglig</option>
+                            <option>Ukentlig</option>
+                        </select>
+                    </Label>
+                    <Label>
+                        Velg ukedag(er)
+                        <DaySelection>
+                            <Day>M</Day>
+                            <Day>Ti</Day>
+                            <Day>O</Day>
+                            <Day>To</Day>
+                            <Day>F</Day>
+                        </DaySelection>
+                    </Label>
                     <DatePickersWrapper>
-                        <DatePicker
-                            locale="nb"
-                            showTimeSelect
-                            timeIntervals={15}
-                            minTime={startMinTime}
-                            maxTime={startMaxTime}
-                            minDate={minDate}
-                            filterDate={isWeekday}
-                            timeFormat="HH:mm"
-                            dateFormat="MMMM d, yyyy HH:mm"
-                            timeCaption="Tid"
-                            selected={props.start}
-                            onChange={onStartChange}
-                        />
-                        <Divider>-</Divider>
-                        <DatePicker
-                            locale="nb"
-                            showTimeSelect
-                            timeIntervals={15}
-                            minTime={endMinTime}
-                            maxTime={endMaxTime}
-                            minDate={minDate}
-                            filterDate={isWeekday}
-                            timeFormat="HH:mm"
-                            dateFormat="MMMM d, yyyy HH:mm"
-                            timeCaption="Tid"
-                            selected={props.end}
-                            onChange={onEndChange}
-                        />
+
                     </DatePickersWrapper>
-                    {props.isRecurringEnabled ? (
-                        <Label>
-                            FAST OPPDRAG
-                            <input
-                                type="checkbox"
-                                name="recurring"
-                                checked={props.isRecurring}
-                                onChange={onRecurringChange}
-                            />
-                        </Label>
-                    ) : null}
-                </>
+                    <DatePickersWrapper>
+
+                    </DatePickersWrapper>
+                </Wrapper>
             ) : (
                 `
                     ${props.start.toLocaleString('no-NB', { month: 'long', day: 'numeric', year: 'numeric' })},

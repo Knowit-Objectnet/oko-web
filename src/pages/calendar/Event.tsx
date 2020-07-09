@@ -5,7 +5,7 @@ import { MessageBox } from './MessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionDriver } from './EventOptionDriver';
 import { EventSubmission } from './EventSubmission';
-import { EventInfo, Roles } from '../../types';
+import { ApiLocation, EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplate } from './EventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
@@ -33,13 +33,37 @@ export const Event: React.FC<EventInfo> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: locations } = useSWR<string[]>(['/api/locations', keycloak.token], fetcher);
-    locations = locations && locations.length !== 0 ? locations : ['grønmo', 'haraldrud', 'smestad'];
+    let { data: locations } = useSWR<ApiLocation[]>(['/api/locations', keycloak.token], fetcher);
+    locations =
+        locations && locations.length !== 0
+            ? locations
+            : [
+                  {
+                      id: 1,
+                      name: 'Haraldrud',
+                  },
+                  {
+                      id: 2,
+                      name: 'Smestad',
+                  },
+                  {
+                      id: 3,
+                      name: 'Grefsen',
+                  },
+                  {
+                      id: 4,
+                      name: 'Grønmo',
+                  },
+                  {
+                      id: 5,
+                      name: 'Ryen',
+                  },
+              ];
     // State
     const [isEditing, setIsEditing] = useState(false);
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
-    const [locationIndex, setLocationIndex] = useState(locations.indexOf(props.resource?.location || ''));
+    const [locationId, setLocationId] = useState(props.resource?.location ? props.resource?.location?.id : -1);
     const [driver, setDriver] = useState(props.resource?.driver);
 
     // On change functions for DateRange
@@ -52,8 +76,8 @@ export const Event: React.FC<EventInfo> = (props) => {
     };
 
     // On change function for the Location component
-    const onLocationChange = (index: number) => {
-        setLocationIndex(index);
+    const onLocationChange = (locationId: number) => {
+        setLocationId(locationId);
     };
 
     // On change function for the Driver component
@@ -72,7 +96,9 @@ export const Event: React.FC<EventInfo> = (props) => {
         setIsEditing(false);
         setStartDate(props.start);
         setEndDate(props.end);
-        setLocationIndex(locations ? locations.indexOf(props.resource?.location || '') : -1);
+        if (locations) {
+            setLocationId(props.resource?.location ? props.resource?.location?.id : -1);
+        }
         setDriver(props.resource?.driver);
     };
 
@@ -101,7 +127,7 @@ export const Event: React.FC<EventInfo> = (props) => {
                     />
                     <EventOptionLocation
                         isEditing={isEditing}
-                        selectedLocation={locationIndex}
+                        selectedLocation={locationId}
                         locations={locations}
                         onChange={onLocationChange}
                     />

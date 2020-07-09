@@ -67,6 +67,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-transition-group": "^4.4.0",
     "@types/styled-components": "^5.1.0",
+    "@wojtekmaj/react-daterange-picker": "^3.0.0",
     "cypress": "^4.9.0",
     "history": "^4.10.1",
     "i18next": "^19.4.5",

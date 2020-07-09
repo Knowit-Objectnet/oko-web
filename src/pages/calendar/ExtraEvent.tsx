@@ -9,6 +9,7 @@ import { EventSubmission } from './EventSubmission';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
+import { ApiLocation } from '../../types';
 
 const Textarea = styled.textarea`
     min-height: 54px;
@@ -32,8 +33,32 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: locations } = useSWR<string[]>(['/api/locations', keycloak.token], fetcher);
-    locations = locations && locations.length !== 0 ? locations : ['grønmo', 'haraldrud', 'smestad'];
+    let { data: locations } = useSWR<ApiLocation[]>(['/api/locations', keycloak.token], fetcher);
+    locations =
+        locations && locations.length !== 0
+            ? locations
+            : [
+                  {
+                      id: 1,
+                      name: 'Haraldrud',
+                  },
+                  {
+                      id: 2,
+                      name: 'Smestad',
+                  },
+                  {
+                      id: 3,
+                      name: 'Grefsen',
+                  },
+                  {
+                      id: 4,
+                      name: 'Grønmo',
+                  },
+                  {
+                      id: 5,
+                      name: 'Ryen',
+                  },
+              ];
     // Valid categories fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
@@ -42,7 +67,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     // State
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
-    const [locationIndex, setLocationIndex] = useState(0);
+    const [locationId, setLocationId] = useState(-1);
     const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
 
@@ -56,8 +81,8 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     };
 
     // On change function for Location
-    const onLocationChange = (index: number) => {
-        setLocationIndex(index);
+    const onLocationChange = (locationId: number) => {
+        setLocationId(locationId);
     };
 
     // On change function for Category
@@ -95,7 +120,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
             />
             <EventOptionLocation
                 isEditing={true}
-                selectedLocation={locationIndex}
+                selectedLocation={locationId}
                 locations={locations}
                 onChange={onLocationChange}
             />

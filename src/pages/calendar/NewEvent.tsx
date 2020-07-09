@@ -10,6 +10,8 @@ import { EventTemplate } from './EventTemplate';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
+import { EventOptionPartner } from './EventOptionPartner';
+import {ApiLocation, ApiPartner} from '../../types';
 
 const Options = styled.div`
     display: flex;
@@ -32,18 +34,58 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: locations } = useSWR<string[]>(['/api/locations', keycloak.token], fetcher);
-    locations = locations && locations.length !== 0 ? locations : ['grønmo', 'haraldrud', 'smestad'];
+    let { data: locations } = useSWR<ApiLocation[]>(['/api/locations', keycloak.token], fetcher);
+    locations =
+        locations && locations.length !== 0
+            ? locations
+            : [
+                  {
+                      id: 1,
+                      name: 'Haraldrud',
+                  },
+                  {
+                      id: 2,
+                      name: 'Smestad',
+                  },
+                  {
+                      id: 3,
+                      name: 'Grefsen',
+                  },
+                  {
+                      id: 4,
+                      name: 'Grønmo',
+                  },
+                  {
+                      id: 5,
+                      name: 'Ryen',
+                  },
+              ];
     // Valid partners fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: partners } = useSWR<string[]>(['/api/partners', keycloak.token], fetcher);
-    partners = partners && partners.length !== 0 ? partners : ['Fretex', 'Sykkel gutta'];
+    let { data: partners } = useSWR<ApiPartner[]>(['/api/partners', keycloak.token], fetcher);
+    partners =
+        partners && partners.length !== 0
+            ? partners
+            : [
+                  {
+                      id: 1,
+                      name: 'Fretex',
+                  },
+                  {
+                      id: 2,
+                      name: 'Maritastiftelsen',
+                  },
+                  {
+                      id: 3,
+                      name: 'Jobben',
+                  },
+              ];
     // State
-    const [selectedPartner, setSelectedPartner] = useState(-1);
+    const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
     const [startDate, setStartDate] = useState(props.start);
     const [endDate, setEndDate] = useState(props.end);
-    const [locationIndex, setLocationIndex] = useState(0);
+    const [locationId, setLocationId] = useState(-1);
     const [isRecurring, setIsRecurring] = useState(false);
 
     // On change functions for DateRange
@@ -60,14 +102,13 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     };
 
     // On change for Partner selection
-    const onPartnerChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        e.persist();
-        setSelectedPartner(parseInt(e.currentTarget.value));
+    const onPartnerChange = (partnerId: number) => {
+        setSelectedPartnerId(partnerId);
     };
 
     // On change for Location selection
-    const onLocationChange = (index: number) => {
-        setLocationIndex(index);
+    const onLocationChange = (_locationId: number) => {
+        setLocationId(_locationId);
     };
 
     // Function called if edit was cancelled. Resets all values to the original event info
@@ -84,6 +125,17 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     return (
         <EventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
             <Options>
+                <EventOptionPartner
+                    selectedPartner={selectedPartnerId}
+                    partners={partners}
+                    onChange={onPartnerChange}
+                />
+                <EventOptionLocation
+                    isEditing={true}
+                    selectedLocation={locationId}
+                    locations={locations}
+                    onChange={onLocationChange}
+                />
                 <EventOptionDateRange
                     start={startDate}
                     end={endDate}
@@ -93,24 +145,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                     onStartDateChange={onStartDateChange}
                     onEndDateChange={onEndDateChange}
                     onRecurringChange={onRecurringChange}
-                />
-                <EventOption icon={Person}>
-                    <select value={selectedPartner} onChange={onPartnerChange}>
-                        <option value={-1} disabled>
-                            Velg samarbeidspartner
-                        </option>
-                        {partners.map((partner, index) => (
-                            <option value={index} key={partner}>
-                                {partner}
-                            </option>
-                        ))}
-                    </select>
-                </EventOption>
-                <EventOptionLocation
-                    isEditing={true}
-                    selectedLocation={locationIndex}
-                    locations={locations}
-                    onChange={onLocationChange}
                 />
             </Options>
             <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />
