@@ -60,17 +60,27 @@ export const Event: React.FC<EventInfo> = (props) => {
               ];
     // State
     const [isEditing, setIsEditing] = useState(false);
-    const [startDate, setStartDate] = useState(props.start);
-    const [endDate, setEndDate] = useState(props.end);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
+    const [selectedDay, setSelectedDay] = useState(1);
     const [locationId, setLocationId] = useState(props.resource?.location ? props.resource?.location?.id : -1);
 
     // On change functions for DateRange
-    const onStartDateChange = (date: Date) => {
-        setStartDate(date);
+    const onDateRangeChange = (range: [Date, Date]) => {
+        setDateRange(range);
     };
 
-    const onEndDateChange = (date: Date) => {
-        setEndDate(date);
+    const onTimeRangeChange = (range: [Date, Date]) => {
+        setTimeRange(range);
+    };
+
+    const onRecurringChange = (value: 'None' | 'Daily' | 'Weekly') => {
+        setReccuring(value);
+    };
+
+    const onSelectedDayChange = (num: number) => {
+        setSelectedDay(num);
     };
 
     // On change function for the Location component
@@ -86,8 +96,8 @@ export const Event: React.FC<EventInfo> = (props) => {
     // Function called if edit was cancelled. Resets all values to the original event info
     const onCancel = () => {
         setIsEditing(false);
-        setStartDate(props.start);
-        setEndDate(props.end);
+        setDateRange([props.start, props.end]);
+        setTimeRange([props.start, props.end]);
         if (locations) {
             setLocationId(props.resource?.location ? props.resource?.location?.id : -1);
         }
@@ -109,12 +119,15 @@ export const Event: React.FC<EventInfo> = (props) => {
             <Body>
                 <Options>
                     <EventOptionDateRange
-                        start={startDate}
-                        end={endDate}
-                        isRecurringEnabled={false}
+                        dateRange={dateRange}
+                        timeRange={timeRange}
+                        recurring={recurring}
+                        selectedDay={selectedDay}
                         isEditing={isEditing}
-                        onStartDateChange={onStartDateChange}
-                        onEndDateChange={onEndDateChange}
+                        onDateRangeChange={onDateRangeChange}
+                        onTimeRangeChange={onTimeRangeChange}
+                        onRecurringChange={onRecurringChange}
+                        onSelectedDayChange={onSelectedDayChange}
                     />
                     <EventOptionLocation
                         isEditing={isEditing}

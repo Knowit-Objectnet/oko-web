@@ -3,7 +3,7 @@ import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import { LocationOn } from '@styled-icons/material/LocationOn';
 import { Person } from '@styled-icons/material/Person';
-import {ApiPartner} from "../../types";
+import { ApiPartner } from '../../types';
 
 const Select = styled.select`
     width: 100%;

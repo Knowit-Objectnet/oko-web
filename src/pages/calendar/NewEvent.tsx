@@ -11,7 +11,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import {ApiLocation, ApiPartner} from '../../types';
+import { ApiLocation, ApiPartner } from '../../types';
 
 const Options = styled.div`
     display: flex;
@@ -83,22 +83,27 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
               ];
     // State
     const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
-    const [startDate, setStartDate] = useState(props.start);
-    const [endDate, setEndDate] = useState(props.end);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
+    const [selectedDay, setSelectedDay] = useState(1);
     const [locationId, setLocationId] = useState(-1);
-    const [isRecurring, setIsRecurring] = useState(false);
 
     // On change functions for DateRange
-    const onStartDateChange = (date: Date) => {
-        setStartDate(date);
+    const onDateRangeChange = (range: [Date, Date]) => {
+        setDateRange(range);
     };
 
-    const onEndDateChange = (date: Date) => {
-        setEndDate(date);
+    const onTimeRangeChange = (range: [Date, Date]) => {
+        setTimeRange(range);
     };
 
-    const onRecurringChange = () => {
-        setIsRecurring(!isRecurring);
+    const onRecurringChange = (value: 'None' | 'Daily' | 'Weekly') => {
+        setReccuring(value);
+    };
+
+    const onSelectedDayChange = (num: number) => {
+        setSelectedDay(num);
     };
 
     // On change for Partner selection
@@ -137,14 +142,15 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                     onChange={onLocationChange}
                 />
                 <EventOptionDateRange
-                    start={startDate}
-                    end={endDate}
-                    isRecurringEnabled={true}
-                    isRecurring={isRecurring}
+                    dateRange={dateRange}
+                    timeRange={timeRange}
+                    recurring={recurring}
+                    selectedDay={selectedDay}
                     isEditing={true}
-                    onStartDateChange={onStartDateChange}
-                    onEndDateChange={onEndDateChange}
+                    onDateRangeChange={onDateRangeChange}
+                    onTimeRangeChange={onTimeRangeChange}
                     onRecurringChange={onRecurringChange}
+                    onSelectedDayChange={onSelectedDayChange}
                 />
             </Options>
             <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />

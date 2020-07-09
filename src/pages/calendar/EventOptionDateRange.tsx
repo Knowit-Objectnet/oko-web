@@ -3,7 +3,7 @@ import { Clock } from '@styled-icons/fa-regular/Clock';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
-import TimeRangePicker from '@wojtekmaj/react-timerange-picker'
+import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
 import { Colors } from '../../types';
 
 const Wrapper = styled.div`
@@ -11,7 +11,7 @@ const Wrapper = styled.div`
     flex-direction: column;
 `;
 
-const DatePickersWrapper = styled.div`
+const DateTimePickersWrapper = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -43,7 +43,11 @@ const DaySelection = styled.div`
     display: flex;
 `;
 
-const Day = styled.div`
+interface DayProps {
+    selected: boolean;
+}
+
+const Day = styled.div<DayProps>`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -54,6 +58,7 @@ const Day = styled.div`
     line-height: 25px;
     border-radius: 50%;
     border: 2px solid ${Colors.Blue};
+    background-color: ${(props) => (props.selected ? Colors.Blue : Colors.White)};
     user-select: none;
 
     &:not(:last-child) {
@@ -78,66 +83,46 @@ const StyledDateRangePicker = styled(DateRangePicker)`
 `;
 
 interface EventOptionDateRangeProps {
-    range?: [Date, Date];
-    start: Date;
-    end: Date;
-    isRecurringEnabled: boolean;
-    isRecurring?: boolean;
+    dateRange: [Date, Date];
+    timeRange: [Date, Date];
+    recurring: 'None' | 'Daily' | 'Weekly';
+    selectedDay: number;
     isEditing: boolean;
-    onStartDateChange: (date: Date) => void;
-    onEndDateChange: (date: Date) => void;
-    onRecurringChange?: () => void;
+    onDateRangeChange: (range: [Date, Date]) => void;
+    onTimeRangeChange: (range: [Date, Date]) => void;
+    onRecurringChange: (value: 'None' | 'Daily' | 'Weekly') => void;
+    onSelectedDayChange: (num: number) => void;
 }
 
 /**
  * Event option that allows the user to choose a start and end date for the event.
  */
 export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props) => {
-    // Date object to create new date objects
     const date = new Date();
-    // Date object to get datetime of now
-    const now = new Date();
-    // Date object with today's date and the event's start hours and minutes
-    const startTime = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        props.start.getHours(),
-        props.start.getMinutes(),
-    );
-    // Date object with today's date and the event's end hours and minutes
-    const endTime = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        props.end.getHours(),
-        props.end.getMinutes(),
-    );
-
-    // The allowed minimum time
-    let startMinTime = new Date(date.setHours(7, 30));
-    // If the event date is today and now is bigger than the minimum time then set the start's minimum time to now
-    if (props.start.getDate() == now.getDate() && now > startMinTime) {
-        // This is to make sure that you aren't allowed to select
-        // F.ex. 12:30 if the time now is 12:30:30
-        const _now = now.setMinutes(now.getMinutes() + 1);
-        startMinTime = now;
-    }
-    // The allowed maximum time
-    const endMaxTime = new Date(date.setHours(21, 0));
-    // Set the event's end-time minimum to either the start of the event or the allowed minimum time
-    const endMinTime = startTime < startMinTime ? startMinTime : startTime;
-    // Set the event's start-time maximum to either the end of the event or the allowed maximum time
-    const startMaxTime = endTime > endMaxTime ? endMaxTime : endTime;
-    // Set the minimum date allowed to now/today
-    const minDate = now;
+    const minTime = '07:00:00';
+    const maxTime = '20:00:00';
 
     const onTimeRangeChange = (range: [Date, Date]) => {
-        console.log(range);
+        props.onTimeRangeChange(range);
     };
 
     const onDateRangeChange = (range: [Date, Date]) => {
-        console.log(range);
+        props.onDateRangeChange(range);
+    };
+
+    const onRecurringChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        e.persist();
+        const value = e.currentTarget.value;
+        if (value !== 'None' && value !== 'Daily' && value !== 'Weekly') return;
+        props.onRecurringChange(value);
+    };
+
+    const onDayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.persist();
+        const stringValue = e.currentTarget.dataset['index'];
+        if (stringValue && parseInt(stringValue) > 0 && parseInt(stringValue) < 6) {
+            props.onSelectedDayChange(parseInt(stringValue));
+        }
     };
 
     return (
@@ -145,44 +130,53 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
             {props.isEditing ? (
                 <Wrapper>
                     <Label>
-                        <Select>
-                            <option>Gjentas ikke</option>
-                            <option>Daglig</option>
-                            <option>Ukentlig</option>
+                        <Select value={props.recurring} onChange={onRecurringChange}>
+                            <option value="None">Gjentas ikke</option>
+                            <option value="Daily">Daglig</option>
+                            <option value="Weekly">Ukentlig</option>
                         </Select>
                     </Label>
                     <Label>
                         <Span>Velg ukedag(er)</Span>
                         <DaySelection>
-                            <Day>M</Day>
-                            <Day>Ti</Day>
-                            <Day>O</Day>
-                            <Day>To</Day>
-                            <Day>F</Day>
+                            <Day data-index={1} selected={props.selectedDay === 1} onClick={onDayClick}>
+                                M
+                            </Day>
+                            <Day data-index={2} selected={props.selectedDay === 2} onClick={onDayClick}>
+                                Ti
+                            </Day>
+                            <Day data-index={3} selected={props.selectedDay === 3} onClick={onDayClick}>
+                                O
+                            </Day>
+                            <Day data-index={4} selected={props.selectedDay === 4} onClick={onDayClick}>
+                                To
+                            </Day>
+                            <Day data-index={5} selected={props.selectedDay === 5} onClick={onDayClick}>
+                                F
+                            </Day>
                         </DaySelection>
                     </Label>
-                    <DatePickersWrapper>
+                    <DateTimePickersWrapper>
                         <Span>Velg tidspunkt</Span>
                         <StyledTimeRangePicker
                             clearIcon={null}
+                            format="HH:mm"
+                            minTime={minTime}
+                            maxTime={maxTime}
                             onChange={onTimeRangeChange}
-                            value={[new Date(), new Date()]}
+                            value={props.timeRange}
                         />
-                    </DatePickersWrapper>
-                    <DatePickersWrapper>
+                    </DateTimePickersWrapper>
+                    <DateTimePickersWrapper>
                         <Span>Velg periode</Span>
-                        <StyledDateRangePicker
-                            clearIcon={null}
-                            onChange={onDateRangeChange}
-                            value={[new Date(), new Date()]}
-                        />
-                    </DatePickersWrapper>
+                        <StyledDateRangePicker clearIcon={null} onChange={onDateRangeChange} value={props.dateRange} />
+                    </DateTimePickersWrapper>
                 </Wrapper>
             ) : (
                 `
-                    ${props.start.toLocaleString('no-NB', { month: 'long', day: 'numeric', year: 'numeric' })},
-                    ${props.start.getHours()}:${props.start.getMinutes()} - 
-                    ${props.end.getHours()}:${props.end.getMinutes()}
+                    ${props.dateRange[0].toLocaleString('no-NB', { month: 'long', day: 'numeric', year: 'numeric' })},
+                    ${props.timeRange[0].getHours()}:${props.timeRange[0].getMinutes()} - 
+                    ${props.timeRange[1].getHours()}:${props.timeRange[1].getMinutes()}
                 `
             )}
         </EventOption>

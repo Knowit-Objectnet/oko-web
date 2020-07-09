@@ -65,19 +65,29 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     let { data: categories } = useSWR<string[]>(['/api/categories', keycloak.token], fetcher);
     categories = categories && categories.length !== 0 ? categories : ['Møbler', 'Bøker', 'Sportsutstyr'];
     // State
-    const [startDate, setStartDate] = useState(props.start);
-    const [endDate, setEndDate] = useState(props.end);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
+    const [selectedDay, setSelectedDay] = useState(1);
     const [locationId, setLocationId] = useState(-1);
     const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
 
     // On change functions for DateRange
-    const onStartDateChange = (date: Date) => {
-        setStartDate(date);
+    const onDateRangeChange = (range: [Date, Date]) => {
+        setDateRange(range);
     };
 
-    const onEndDateChange = (date: Date) => {
-        setEndDate(date);
+    const onTimeRangeChange = (range: [Date, Date]) => {
+        setTimeRange(range);
+    };
+
+    const onRecurringChange = (value: 'None' | 'Daily' | 'Weekly') => {
+        setReccuring(value);
+    };
+
+    const onSelectedDayChange = (num: number) => {
+        setSelectedDay(num);
     };
 
     // On change function for Location
@@ -111,12 +121,15 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     return (
         <EventTemplate title={'Søk om ekstrahenting'} showEditSymbol={false} isEditing={false}>
             <EventOptionDateRange
-                start={startDate}
-                end={endDate}
-                isRecurringEnabled={false}
+                dateRange={dateRange}
+                timeRange={timeRange}
+                recurring={recurring}
+                selectedDay={selectedDay}
                 isEditing={true}
-                onStartDateChange={onStartDateChange}
-                onEndDateChange={onEndDateChange}
+                onDateRangeChange={onDateRangeChange}
+                onTimeRangeChange={onTimeRangeChange}
+                onRecurringChange={onRecurringChange}
+                onSelectedDayChange={onSelectedDayChange}
             />
             <EventOptionLocation
                 isEditing={true}
