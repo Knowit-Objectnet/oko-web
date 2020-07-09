@@ -2,15 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Plus } from '@styled-icons/boxicons-regular/Plus';
-import {
-    Calendar,
-    Culture,
-    DateFormatFunction,
-    DateLocalizer,
-    momentLocalizer,
-    stringOrDate,
-} from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Calendar } from '../../sharedComponents/Calendar/Calendar';
 import { WeekCalendarLocationPicker } from './WeekCalendarLocationPicker';
 import { ApiEvent, EventInfo, Roles, SlotInfo, apiUrl } from '../../types';
 import { Event } from './Event';
@@ -104,25 +96,8 @@ export const WeekCalendar: React.FC = () => {
           })
         : [];
 
-    // Localizer needed for the calendar
-    const localizer = momentLocalizer(moment);
 
-    // Function for changing timeslot from 12 hour clock to 24 hour clock.
-    const timeFormatfunction: DateFormatFunction = (
-        date: Date,
-        culture?: Culture,
-        localizer?: DateLocalizer,
-    ): string => {
-        let formatString = '';
-        if (localizer) {
-            formatString = culture ? localizer.format(date, 'HH:mm', culture) : localizer.format(date, 'HH:mm', 'nb');
-        }
-        return formatString;
-    };
-    const formats = {
-        timeGutterFormat: timeFormatfunction,
-    };
-
+    /*
     const onSelecting = (range: { start: stringOrDate; end: stringOrDate }) => {
         const startDate = new Date(range.start);
 
@@ -132,7 +107,7 @@ export const WeekCalendar: React.FC = () => {
         } else {
             return true;
         }
-    };
+    };*/
 
     // Function that handles an event click in the calendar. It displays the Event in a modal
     // eslint-disable-next-line
@@ -243,23 +218,12 @@ export const WeekCalendar: React.FC = () => {
             <CalendarWrapper>
                 <OverflowWrapper>
                     <Calendar
-                        localizer={localizer}
-                        culture="nb"
-                        formats={formats}
-                        toolbar={false}
-                        views={['month', 'work_week', 'day', 'agenda']}
-                        defaultView="work_week"
-                        drilldownView={null}
-                        min={new Date(new Date().setHours(7, 30))}
-                        max={new Date(new Date().setHours(21, 0))}
+                        columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
+                        onSelectSlot={onSelectSlot}
                         selectable={keycloak.authenticated}
                         step={15}
-                        events={events}
-                        startAccessor="start"
-                        endAccessor="end"
-                        onSelectEvent={onSelectEvent}
-                        onSelectSlot={onSelectSlot}
-                        onSelecting={onSelecting}
+                        min={new Date(new Date().setHours(7, 0, 0, 0))}
+                        max={new Date(new Date().setHours(20, 0, 0, 0))}
                     />
                 </OverflowWrapper>
                 {keycloak.hasRealmRole(Roles.Oslo) ? (

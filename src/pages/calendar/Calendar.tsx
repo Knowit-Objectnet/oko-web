@@ -5,7 +5,7 @@ import { ChangeLog } from './ChangeLog';
 import { WeekCalendar } from './WeekCalendar';
 import { Calendar } from '../../sharedComponents/Calendar/Calendar';
 import { useKeycloak } from '@react-keycloak/web';
-import { Roles } from '../../types';
+import {Roles, SlotInfo} from '../../types';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -42,7 +42,7 @@ export const CalendarPage: React.FC = () => {
             ) : null}
             <ModuleCalendar>
                 <h3>Kalender</h3>
-                <Calendar columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']} />
+                <WeekCalendar />
             </ModuleCalendar>
             {keycloak.hasRealmRole(Roles.Oslo) ? (
                 <Module>

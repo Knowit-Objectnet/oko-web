@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {TimeSlot} from "./TimeSlot";
+import { TimeSlot } from "./TimeSlot";
 
 const Group = styled.div`
     border-bottom: 1px solid #ddd;
@@ -9,9 +9,13 @@ const Group = styled.div`
     flex-flow: column nowrap;
 `;
 
-export const TimeSlotGroup: React.FC = () => (
+interface TimeSlotGroupProps {
+    id: number;
+}
+
+export const TimeSlotGroup: React.FC<TimeSlotGroupProps> = (props) => (
     <Group>
-        <TimeSlot />
-        <TimeSlot />
+        <TimeSlot id={props.id - 1} />
+        <TimeSlot id={props.id} />
     </Group>
 );
