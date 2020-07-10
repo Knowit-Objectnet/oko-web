@@ -74,15 +74,28 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
             if (length > 0) {
                 ref.current.style.height = length + 'px';
             } else {
+                const reversedLength =
+                    selectedSlots[0].offsetTop -
+                    selectedSlots[selectedSlots.length - 1].offsetTop +
+                    selectedSlots[selectedSlots.length - 1].offsetHeight;
                 ref.current.style.top = selectedSlots[selectedSlots.length - 1].offsetTop + 'px';
-                ref.current.style.height = Math.abs(length) + 'px';
+                ref.current.style.height = Math.abs(reversedLength) + 'px';
             }
         }
     }, [selectedSlots]);
 
+    const isReverse = () => {
+        const length = selectedSlots[0].offsetTop - selectedSlots[selectedSlots.length - 1].offsetTop;
+        if (length > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+
     const getStart = () => {
         if (selectedSlots.length > 0) {
-            const relativeStartId = selectedSlots[0].dataset['id'];
+            const relativeStartId = selectedSlots[isReverse() ? 0 : selectedSlots.length - 1].dataset['id'];
             if (!relativeStartId) {
                 return null;
             }
@@ -94,7 +107,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
 
     const getEnd = () => {
         if (selectedSlots.length > 0) {
-            const relativeEndId = selectedSlots[selectedSlots.length - 1].dataset['id'];
+            const relativeEndId = selectedSlots[isReverse() ? selectedSlots.length - 1 : 0].dataset['id'];
             if (!relativeEndId) {
                 return null;
             }
