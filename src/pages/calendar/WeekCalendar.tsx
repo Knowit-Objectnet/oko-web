@@ -161,6 +161,15 @@ export const WeekCalendar: React.FC = () => {
         setShowModal(true);
     };
 
+    const onSelecting = (range: { start?: Date; end?: Date }) => {
+        // If the startDate-time of the select is less than now then disable select
+        if (!range.start || range.start < new Date()) {
+            return false;
+        } else {
+            return true;
+        }
+    };
+
     // Function to display new event in modal on new event button click
     const onNewEventButtonClick = (e: React.SyntheticEvent) => {
         // Date object for creating other date objects
@@ -219,6 +228,7 @@ export const WeekCalendar: React.FC = () => {
                     <Calendar
                         columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
                         onSelectSlot={onSelectSlot}
+                        onSelecting={onSelecting}
                         selectable={keycloak.authenticated}
                         step={15}
                         min={new Date(new Date().setHours(7, 0, 0, 0))}

@@ -44,6 +44,7 @@ interface TimeColumnProps {
     title: string;
     selectable: boolean;
     onSelectSlot?: (slotInfo: SlotInfo) => void;
+    onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
 }
 
 export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
@@ -84,8 +85,8 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         }
     }, [selectedSlots]);
 
-    const isReverse = () => {
-        const length = selectedSlots[0].offsetTop - selectedSlots[selectedSlots.length - 1].offsetTop;
+    const isReverse = (slots: HTMLDivElement[]) => {
+        const length = slots[0].offsetTop - slots[slots.length - 1].offsetTop;
         if (length > 0) {
             return false;
         } else {
@@ -93,28 +94,28 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         }
     };
 
-    const getStart = () => {
-        if (selectedSlots.length > 0) {
-            const relativeStartId = selectedSlots[isReverse() ? 0 : selectedSlots.length - 1].dataset['id'];
+    const getStart = (slots: HTMLDivElement[]) => {
+        if (slots.length > 0) {
+            const relativeStartId = slots[isReverse(slots) ? 0 : slots.length - 1].dataset['id'];
             if (!relativeStartId) {
-                return null;
+                return undefined;
             }
             const relativeStart = (parseInt(relativeStartId) - 1) * props.step;
             return setMinutes(props.min, relativeStart);
         }
-        return null;
+        return undefined;
     };
 
-    const getEnd = () => {
-        if (selectedSlots.length > 0) {
-            const relativeEndId = selectedSlots[isReverse() ? selectedSlots.length - 1 : 0].dataset['id'];
+    const getEnd = (slots: HTMLDivElement[]) => {
+        if (slots.length > 0) {
+            const relativeEndId = slots[isReverse(slots) ? slots.length - 1 : 0].dataset['id'];
             if (!relativeEndId) {
-                return null;
+                return undefined;
             }
             const relativeEnd = parseInt(relativeEndId) * props.step;
             return setMinutes(props.min, relativeEnd);
         }
-        return null;
+        return undefined;
     };
 
     const onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -123,6 +124,11 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         e.persist();
         const target = e.nativeEvent.target as HTMLDivElement;
         if (!target) return;
+
+        if (props.onSelecting) {
+            const res = props.onSelecting({ start: getStart([target]), end: getEnd([target]) });
+            if (!res) return;
+        }
 
         setIsSelectionActive(true);
         setSelectedSlots([target]);
@@ -133,8 +139,8 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
 
         e.persist();
         if (props.onSelectSlot) {
-            const start = getStart();
-            const end = getEnd();
+            const start = getStart(selectedSlots);
+            const end = getEnd(selectedSlots);
 
             if (!start || !end) return;
 
@@ -179,8 +185,8 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         : {};
 
     const getTimeString = () => {
-        const start = getStart();
-        const end = getEnd();
+        const start = getStart(selectedSlots);
+        const end = getEnd(selectedSlots);
 
         return (
             (start ? start.toLocaleString('no-NB', { hour: '2-digit', minute: '2-digit' }) : '') +

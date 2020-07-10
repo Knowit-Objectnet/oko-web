@@ -38,7 +38,7 @@ interface CalendarProps {
     events?: Array<EventInfo>;
     onSelectEvent?: () => void;
     onSelectSlot?: (slotInfo: SlotInfo) => void;
-    onSelecting?: () => void;
+    onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
 }
 
 const date = new Date();
@@ -69,6 +69,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                             step={step}
                             selectable={selectable}
                             onSelectSlot={props.onSelectSlot}
+                            onSelecting={props.onSelecting}
                         />
                     ))}
                 </Columns>
