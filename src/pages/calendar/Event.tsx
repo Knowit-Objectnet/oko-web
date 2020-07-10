@@ -63,7 +63,7 @@ export const Event: React.FC<EventInfo> = (props) => {
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
-    const [selectedDay, setSelectedDay] = useState(1);
+    const [selectedDays, setSelectedDays] = useState([1]);
     const [locationId, setLocationId] = useState(props.resource?.location ? props.resource?.location?.id : -1);
 
     // On change functions for DateRange
@@ -79,8 +79,8 @@ export const Event: React.FC<EventInfo> = (props) => {
         setReccuring(value);
     };
 
-    const onSelectedDayChange = (num: number) => {
-        setSelectedDay(num);
+    const onSelectedDaysChange = (num: Array<number>) => {
+        setSelectedDays(num);
     };
 
     // On change function for the Location component
@@ -122,12 +122,12 @@ export const Event: React.FC<EventInfo> = (props) => {
                         dateRange={dateRange}
                         timeRange={timeRange}
                         recurring={recurring}
-                        selectedDay={selectedDay}
+                        selectedDays={selectedDays}
                         isEditing={isEditing}
                         onDateRangeChange={onDateRangeChange}
                         onTimeRangeChange={onTimeRangeChange}
                         onRecurringChange={onRecurringChange}
-                        onSelectedDayChange={onSelectedDayChange}
+                        onSelectedDaysChange={onSelectedDaysChange}
                     />
                     <EventOptionLocation
                         isEditing={isEditing}

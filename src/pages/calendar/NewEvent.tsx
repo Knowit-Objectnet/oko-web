@@ -86,7 +86,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
-    const [selectedDay, setSelectedDay] = useState(1);
+    const [selectedDays, setSelectedDays] = useState([1]);
     const [locationId, setLocationId] = useState(-1);
 
     // On change functions for DateRange
@@ -102,8 +102,8 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         setReccuring(value);
     };
 
-    const onSelectedDayChange = (num: number) => {
-        setSelectedDay(num);
+    const onSelectedDaysChange = (num: Array<number>) => {
+        setSelectedDays(num);
     };
 
     // On change for Partner selection
@@ -145,12 +145,12 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                     dateRange={dateRange}
                     timeRange={timeRange}
                     recurring={recurring}
-                    selectedDay={selectedDay}
+                    selectedDays={selectedDays}
                     isEditing={true}
                     onDateRangeChange={onDateRangeChange}
                     onTimeRangeChange={onTimeRangeChange}
                     onRecurringChange={onRecurringChange}
-                    onSelectedDayChange={onSelectedDayChange}
+                    onSelectedDaysChange={onSelectedDaysChange}
                 />
             </Options>
             <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />

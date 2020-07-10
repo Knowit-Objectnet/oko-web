@@ -86,12 +86,12 @@ interface EventOptionDateRangeProps {
     dateRange: [Date, Date];
     timeRange: [Date, Date];
     recurring: 'None' | 'Daily' | 'Weekly';
-    selectedDay: number;
+    selectedDays: Array<number>;
     isEditing: boolean;
     onDateRangeChange: (range: [Date, Date]) => void;
     onTimeRangeChange: (range: [Date, Date]) => void;
     onRecurringChange: (value: 'None' | 'Daily' | 'Weekly') => void;
-    onSelectedDayChange: (num: number) => void;
+    onSelectedDaysChange: (num: Array<number>) => void;
 }
 
 /**
@@ -121,7 +121,12 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
         e.persist();
         const stringValue = e.currentTarget.dataset['index'];
         if (stringValue && parseInt(stringValue) > 0 && parseInt(stringValue) < 6) {
-            props.onSelectedDayChange(parseInt(stringValue));
+            if (props.selectedDays.includes(parseInt(stringValue))) {
+                const newSelection = props.selectedDays.filter((val) => val !== parseInt(stringValue));
+                props.onSelectedDaysChange(newSelection);
+            } else {
+                props.onSelectedDaysChange([...props.selectedDays, parseInt(stringValue)]);
+            }
         }
     };
 
@@ -139,19 +144,19 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                     <Label>
                         <Span>Velg ukedag(er)</Span>
                         <DaySelection>
-                            <Day data-index={1} selected={props.selectedDay === 1} onClick={onDayClick}>
+                            <Day data-index={1} selected={props.selectedDays.includes(1)} onClick={onDayClick}>
                                 M
                             </Day>
-                            <Day data-index={2} selected={props.selectedDay === 2} onClick={onDayClick}>
+                            <Day data-index={2} selected={props.selectedDays.includes(2)} onClick={onDayClick}>
                                 Ti
                             </Day>
-                            <Day data-index={3} selected={props.selectedDay === 3} onClick={onDayClick}>
+                            <Day data-index={3} selected={props.selectedDays.includes(3)} onClick={onDayClick}>
                                 O
                             </Day>
-                            <Day data-index={4} selected={props.selectedDay === 4} onClick={onDayClick}>
+                            <Day data-index={4} selected={props.selectedDays.includes(4)} onClick={onDayClick}>
                                 To
                             </Day>
-                            <Day data-index={5} selected={props.selectedDay === 5} onClick={onDayClick}>
+                            <Day data-index={5} selected={props.selectedDays.includes(5)} onClick={onDayClick}>
                                 F
                             </Day>
                         </DaySelection>

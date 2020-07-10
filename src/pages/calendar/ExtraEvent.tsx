@@ -68,7 +68,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
-    const [selectedDay, setSelectedDay] = useState(1);
+    const [selectedDays, setSelectedDays] = useState([1]);
     const [locationId, setLocationId] = useState(-1);
     const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
@@ -86,8 +86,8 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
         setReccuring(value);
     };
 
-    const onSelectedDayChange = (num: number) => {
-        setSelectedDay(num);
+    const onSelectedDaysChange = (num: Array<number>) => {
+        setSelectedDays(num);
     };
 
     // On change function for Location
@@ -124,12 +124,12 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 dateRange={dateRange}
                 timeRange={timeRange}
                 recurring={recurring}
-                selectedDay={selectedDay}
+                selectedDays={selectedDays}
                 isEditing={true}
                 onDateRangeChange={onDateRangeChange}
                 onTimeRangeChange={onTimeRangeChange}
                 onRecurringChange={onRecurringChange}
-                onSelectedDayChange={onSelectedDayChange}
+                onSelectedDaysChange={onSelectedDaysChange}
             />
             <EventOptionLocation
                 isEditing={true}
