@@ -23,12 +23,18 @@ const Wrapper = styled.div`
     background-color: ${Colors.LightBlue};
 `;
 
-const Div = styled.div`
+const Selection = styled.div`
     position: absolute;
     width: 80%;
     height: 0px;
     background-color: rgb(0, 0, 0, 0.2);
     pointer-events: none;
+    overflow: hidden;
+`;
+
+const SelectionText = styled.span`
+    flex-wrap: wrap;
+    font-size: small;
 `;
 
 interface TimeColumnProps {
@@ -74,6 +80,30 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         }
     }, [selectedSlots]);
 
+    const getStart = () => {
+        if (selectedSlots.length > 0) {
+            const relativeStartId = selectedSlots[0].dataset['id'];
+            if (!relativeStartId) {
+                return null;
+            }
+            const relativeStart = (parseInt(relativeStartId) - 1) * props.step;
+            return setMinutes(props.min, relativeStart);
+        }
+        return null;
+    };
+
+    const getEnd = () => {
+        if (selectedSlots.length > 0) {
+            const relativeEndId = selectedSlots[selectedSlots.length - 1].dataset['id'];
+            if (!relativeEndId) {
+                return null;
+            }
+            const relativeEnd = parseInt(relativeEndId) * props.step;
+            return setMinutes(props.min, relativeEnd);
+        }
+        return null;
+    };
+
     const onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if (isSelectionActive) return;
 
@@ -90,16 +120,10 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
 
         e.persist();
         if (props.onSelectSlot) {
-            const relativeStartId = selectedSlots[0].dataset['id'];
-            const relativeEndId = selectedSlots[selectedSlots.length - 1].dataset['id'];
+            const start = getStart();
+            const end = getEnd();
 
-            if (!relativeStartId || !relativeEndId) throw new Error('Unexpected error in time retrieval');
-
-            const relativeStart = (parseInt(relativeStartId) - 1) * props.step;
-            const relativeEnd = parseInt(relativeEndId) * props.step;
-
-            const start = setMinutes(props.min, relativeStart);
-            const end = setMinutes(props.min, relativeEnd);
+            if (!start || !end) return;
 
             const slotInfo: SlotInfo = {
                 start: start,
@@ -141,11 +165,24 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
           }
         : {};
 
+    const getTimeString = () => {
+        const start = getStart();
+        const end = getEnd();
+
+        return (
+            (start ? start.toLocaleString('no-NB', { hour: '2-digit', minute: '2-digit' }) : '') +
+            ' - ' +
+            (end ? end.toLocaleString('no-NB', { hour: '2-digit', minute: '2-digit' }) : '')
+        );
+    };
+
     return (
         <Wrapper {...wrapperFunctions}>
             <ColumnTitle title={props.title} />
             <Column {...columnFunctions}>{groups}</Column>
-            <Div ref={ref} onMouseUp={onMouseUp}></Div>
+            <Selection ref={ref} onMouseUp={onMouseUp}>
+                <SelectionText>{getTimeString()}</SelectionText>
+            </Selection>
         </Wrapper>
     );
 };
