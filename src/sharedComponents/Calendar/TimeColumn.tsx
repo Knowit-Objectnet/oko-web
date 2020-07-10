@@ -59,9 +59,12 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         } else if (selectedSlots.length === 1 && ref.current !== null) {
             ref.current.style.width = selectedSlots[0].style.width + 'px';
             ref.current.style.top = selectedSlots[0].offsetTop + 'px';
-            ref.current.style.height = selectedSlots[0].style.height;
+            ref.current.style.height = selectedSlots[0].offsetHeight + 'px';
         } else if (selectedSlots.length > 1 && ref.current !== null) {
-            const length = selectedSlots[selectedSlots.length - 1].offsetTop - selectedSlots[0].offsetTop;
+            const length =
+                selectedSlots[selectedSlots.length - 1].offsetTop -
+                selectedSlots[0].offsetTop +
+                selectedSlots[selectedSlots.length - 1].offsetHeight;
             if (length > 0) {
                 ref.current.style.height = length + 'px';
             } else {
@@ -86,7 +89,6 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         if (!isSelectionActive) return;
 
         e.persist();
-
         if (props.onSelectSlot) {
             const relativeStartId = selectedSlots[0].dataset['id'];
             const relativeEndId = selectedSlots[selectedSlots.length - 1].dataset['id'];
@@ -94,7 +96,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
             if (!relativeStartId || !relativeEndId) throw new Error('Unexpected error in time retrieval');
 
             const relativeStart = (parseInt(relativeStartId) - 1) * props.step;
-            const relativeEnd = (parseInt(relativeEndId) - 1) * props.step;
+            const relativeEnd = parseInt(relativeEndId) * props.step;
 
             const start = setMinutes(props.min, relativeStart);
             const end = setMinutes(props.min, relativeEnd);
