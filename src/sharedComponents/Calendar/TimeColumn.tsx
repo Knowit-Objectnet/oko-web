@@ -28,6 +28,7 @@ const Div = styled.div`
     width: 80%;
     height: 0px;
     background-color: rgb(0, 0, 0, 0.2);
+    pointer-events: none;
 `;
 
 interface TimeColumnProps {
