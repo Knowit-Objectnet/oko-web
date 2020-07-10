@@ -12,7 +12,7 @@ import {
 } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { WeekCalendarLocationPicker } from './WeekCalendarLocationPicker';
-import { EventInfo, Roles, SlotInfo } from '../../types';
+import { ApiEvent, EventInfo, Roles, SlotInfo, apiUrl } from '../../types';
 import { Event } from './Event';
 import { NewEvent } from './NewEvent';
 import { ExtraEvent } from './ExtraEvent';
@@ -88,43 +88,21 @@ export const WeekCalendar: React.FC = () => {
     };
 
     // Events fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
-    let { data: events } = useSWR<EventInfo[]>([`/api/calendar/events/${checkedLocation}`, keycloak.token], fetcher);
-    events =
-        events && events.length !== 0
-            ? events.map((event: EventInfo) => {
-                  event.start = new Date(event.start);
-                  event.end = new Date(event.end);
-                  return event;
-              })
-            : [
-                  {
-                      title: 'Test',
-                      start: new Date(new Date().setHours(10)),
-                      end: new Date(new Date().setHours(12)),
-                      allDay: false,
-                      resource: {
-                          location: 'grønmo',
-                          driver: 'odd',
-                          weight: 100,
-                          message: {
-                              start: new Date(),
-                              end: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-                              text: 'Tar ikke i mot barneleker ifm. Covid-19 tiltak.',
-                          },
-                      },
+    const { data: apiEvents } = useSWR<ApiEvent[]>([`${apiUrl}/calendar/events/`, keycloak.token], fetcher);
+    const events: EventInfo[] = apiEvents
+        ? apiEvents.map((event: ApiEvent) => {
+              const newEvent: EventInfo = {
+                  start: new Date(event.startDateTime),
+                  end: new Date(event.endDateTime),
+                  title: event.partner.name,
+                  allDay: false,
+                  resource: {
+                      location: event.station,
                   },
-                  {
-                      title: 'Test',
-                      start: new Date(new Date().setHours(16)),
-                      end: new Date(new Date().setHours(20)),
-                      allDay: false,
-                      resource: {
-                          location: 'grønmo',
-                      },
-                  },
-              ];
+              };
+              return newEvent;
+          })
+        : [];
 
     // Localizer needed for the calendar
     const localizer = momentLocalizer(moment);

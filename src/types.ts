@@ -1,5 +1,27 @@
 import { stringOrDate } from 'react-big-calendar';
 
+export interface ApiEvent {
+    id: number;
+    startDateTime: string;
+    endDateTime: string;
+    station: ApiLocation;
+    partner: ApiPartner;
+    recurrenceRule: {
+        id: number;
+        rule: string;
+    };
+}
+
+export interface ApiLocation {
+    id: number;
+    name: string;
+}
+
+export interface ApiPartner {
+    id: number;
+    name: string;
+}
+
 export interface EventInfo {
     title: string;
     start: Date;
@@ -9,8 +31,10 @@ export interface EventInfo {
 }
 
 interface EventInfoResource {
-    location: string;
-    driver?: string;
+    location: {
+        id: number;
+        name: string;
+    };
     weight?: number;
     message?: {
         start: Date;
@@ -67,3 +91,5 @@ export enum Colors {
     Black = '#2C2C2C',
     White = '#FFFFFF',
 }
+
+export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging';

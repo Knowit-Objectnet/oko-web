@@ -3,9 +3,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { MessageBox } from './MessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventOptionDriver } from './EventOptionDriver';
 import { EventSubmission } from './EventSubmission';
-import { EventInfo, Roles } from '../../types';
+import { ApiLocation, EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplate } from './EventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
@@ -33,33 +32,60 @@ export const Event: React.FC<EventInfo> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: locations } = useSWR<string[]>(['/api/locations', keycloak.token], fetcher);
-    locations = locations && locations.length !== 0 ? locations : ['grønmo', 'haraldrud', 'smestad'];
+    let { data: locations } = useSWR<ApiLocation[]>(['/api/locations', keycloak.token], fetcher);
+    locations =
+        locations && locations.length !== 0
+            ? locations
+            : [
+                  {
+                      id: 1,
+                      name: 'Haraldrud',
+                  },
+                  {
+                      id: 2,
+                      name: 'Smestad',
+                  },
+                  {
+                      id: 3,
+                      name: 'Grefsen',
+                  },
+                  {
+                      id: 4,
+                      name: 'Grønmo',
+                  },
+                  {
+                      id: 5,
+                      name: 'Ryen',
+                  },
+              ];
     // State
     const [isEditing, setIsEditing] = useState(false);
-    const [startDate, setStartDate] = useState(props.start);
-    const [endDate, setEndDate] = useState(props.end);
-    const [locationIndex, setLocationIndex] = useState(locations.indexOf(props.resource?.location || ''));
-    const [driver, setDriver] = useState(props.resource?.driver);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
+    const [selectedDays, setSelectedDays] = useState([1]);
+    const [locationId, setLocationId] = useState(props.resource?.location ? props.resource?.location?.id : -1);
 
     // On change functions for DateRange
-    const onStartDateChange = (date: Date) => {
-        setStartDate(date);
+    const onDateRangeChange = (range: [Date, Date]) => {
+        setDateRange(range);
     };
 
-    const onEndDateChange = (date: Date) => {
-        setEndDate(date);
+    const onTimeRangeChange = (range: [Date, Date]) => {
+        setTimeRange(range);
+    };
+
+    const onRecurringChange = (value: 'None' | 'Daily' | 'Weekly') => {
+        setReccuring(value);
+    };
+
+    const onSelectedDaysChange = (num: Array<number>) => {
+        setSelectedDays(num);
     };
 
     // On change function for the Location component
-    const onLocationChange = (index: number) => {
-        setLocationIndex(index);
-    };
-
-    // On change function for the Driver component
-    const onDriverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-        setDriver(e.currentTarget.value || undefined);
+    const onLocationChange = (locationId: number) => {
+        setLocationId(locationId);
     };
 
     // On change function for the Edit button
@@ -70,10 +96,11 @@ export const Event: React.FC<EventInfo> = (props) => {
     // Function called if edit was cancelled. Resets all values to the original event info
     const onCancel = () => {
         setIsEditing(false);
-        setStartDate(props.start);
-        setEndDate(props.end);
-        setLocationIndex(locations ? locations.indexOf(props.resource?.location || '') : -1);
-        setDriver(props.resource?.driver);
+        setDateRange([props.start, props.end]);
+        setTimeRange([props.start, props.end]);
+        if (locations) {
+            setLocationId(props.resource?.location ? props.resource?.location?.id : -1);
+        }
     };
 
     // Function called on successful event edit.
@@ -92,20 +119,22 @@ export const Event: React.FC<EventInfo> = (props) => {
             <Body>
                 <Options>
                     <EventOptionDateRange
-                        start={startDate}
-                        end={endDate}
-                        isRecurringEnabled={false}
+                        dateRange={dateRange}
+                        timeRange={timeRange}
+                        recurring={recurring}
+                        selectedDays={selectedDays}
                         isEditing={isEditing}
-                        onStartDateChange={onStartDateChange}
-                        onEndDateChange={onEndDateChange}
+                        onDateRangeChange={onDateRangeChange}
+                        onTimeRangeChange={onTimeRangeChange}
+                        onRecurringChange={onRecurringChange}
+                        onSelectedDaysChange={onSelectedDaysChange}
                     />
                     <EventOptionLocation
                         isEditing={isEditing}
-                        selectedLocation={locationIndex}
+                        selectedLocation={locationId}
                         locations={locations}
                         onChange={onLocationChange}
                     />
-                    <EventOptionDriver driver={driver} isEditing={isEditing} onChange={onDriverChange} />
                 </Options>
                 {props.resource && props.resource.message && !isEditing ? (
                     <MessageBox {...props.resource.message} />

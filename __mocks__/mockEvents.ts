@@ -1,20 +1,26 @@
 import {EventInfo} from "../src/types";
 
 const d = new Date();
-const monday = new Date(d.setDate(d.getDate() - d.getDay() + (d.getDay() == 0 ? -6 : 1)));
+const start = new Date(d.setDate(d.getDate() - d.getDay() + (d.getDay() == 0 ? -6 : 1)));
+const end = new Date(d.setDate(d.getDate() - d.getDay() + (d.getDay() == 0 ? -6 : 1)));
+start.setHours(10);
+end.setHours(12)
+
 export const mockEvents = [
     {
         title: 'Test',
-        start: new Date(new Date().setHours(10)),
-        end: new Date(new Date().setHours(12)),
+        start: start,
+        end: end,
         allDay: false,
         resource: {
-            location: 'grønmo',
-            driver: 'odd',
+            location: {
+                id: 1,
+                name: 'grønmo'
+            },
             weight: 100,
             message: {
-                start: new Date(monday.setHours(12)),
-                end: new Date(monday.setHours(13)),
+                start: start,
+                end: end,
                 text: 'Tar ikke i mot barneleker ifm. Covid-19 tiltak.',
             },
         },

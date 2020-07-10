@@ -46,35 +46,6 @@ describe('Provides a page to view the calendar in addition to change log and not
         );
     });
 
-    it('Should show Event on event click', async () => {
-        const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <CalendarPage />
-                </Router>
-            </KeycloakProvider>,
-        );
-
-        // Find the event by it's title text
-        const event = await findByText(mockEvents[0].title);
-        expect(event).toBeInTheDocument();
-
-        // Click the event element
-        await waitFor(() => {
-            fireEvent(
-                event,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
-
-        // Find the message text inside the event and expect that it is in the document
-        const message = await findByText(mockEvents[0].resource.message.text);
-        expect(message).toBeInTheDocument();
-    });
-
     it('Should show NewEvent on slot click if role is Oslo', async () => {
         // Set our role to Oslo
         keycloak.hasRealmRole = jest.fn((role: string) => {
