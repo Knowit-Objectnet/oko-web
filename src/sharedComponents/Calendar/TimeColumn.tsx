@@ -12,9 +12,7 @@ const EventsSlotsWrapper = styled.div`
     position: relative;
 `;
 
-const Column = styled.div`
-    
-`;
+const Column = styled.div``;
 
 const Wrapper = styled.div`
     position: relative;
@@ -107,6 +105,11 @@ const Event = styled.div<EventProps>`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const EventText = styled.span`
+    text-overflow: ellipsis;
+    overflow: hidden;
 `;
 
 interface TimeColumnProps {
@@ -322,18 +325,15 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
 
         // Step 3
         const widthEvents = events.map((event, i) => {
+            const start = (event.start.getTime() - props.min.getTime()) / 60000;
+            const end = (event.end.getTime() - props.min.getTime()) / 60000;
+            const timeslotRange = timeslots.slice(start, end);
+            const max = Math.max(...timeslotRange);
+            const width = 1 / max;
             return {
                 ...event,
                 index: i,
-                width:
-                    (1 /
-                        Math.max(
-                            ...timeslots.slice(
-                                (event.start.getTime() - props.min.getTime()) / 60000,
-                                event.end.getTime() / 60000,
-                            ),
-                        )) *
-                    100,
+                width: width * 100,
             };
         });
 
@@ -341,15 +341,17 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         const matrix = timeslots.map((timeslot) => Array(timeslot ? timeslot : 1).fill(0));
 
         // Step 5
-        widthEvents.sort((eventA, eventB) => eventB.start.getTime() - eventA.start.getTime());
+        widthEvents.sort((eventA, eventB) => eventA.start.getTime() - eventB.start.getTime());
 
         const orderedEvents = widthEvents.map((event) => {
             const startPos = Math.ceil((event.start.getTime() - props.min.getTime()) / 60000);
             const length = (event.end.getTime() - event.start.getTime()) / 60000;
             let wPos = -1;
-            matrix[startPos].some((val, index) => {
+            let wLen = 1;
+            matrix[startPos].some((val, index, arr) => {
                 if (val === 0) {
                     wPos = index;
+                    wLen = arr.length;
                     return true;
                 }
             });
@@ -359,6 +361,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
             return {
                 ...event,
                 wPos: wPos,
+                wLen: wLen,
                 length: length,
             };
         });
@@ -398,14 +401,14 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
                 temp.push(
                     <Event
                         top={start * pxPerMin}
-                        left={event.wPos * event.width}
+                        left={event.wPos / event.wLen * 100}
                         width={event.width}
                         height={event.length * pxPerMin}
                         key={event.title}
                         data-index={event.index}
                         onClick={onEventClick}
                     >
-                        {event.title}
+                        <EventText>{event.title}</EventText>
                     </Event>,
                 );
             });
@@ -417,9 +420,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         <Wrapper {...wrapperFunctions}>
             <ColumnTitle title={props.title} />
             <EventsSlotsWrapper>
-                <Column {...columnFunctions}>
-                    {groups}
-                </Column>
+                <Column {...columnFunctions}>{groups}</Column>
                 <Events ref={eventsRef}>{renderedEvents}</Events>
             </EventsSlotsWrapper>
             <Selection ref={ref} onMouseUp={onMouseUp}>

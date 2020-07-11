@@ -32,11 +32,11 @@ const Columns = styled.div`
 
 interface CalendarProps {
     columns: Array<string>;
+    events?: Array<Array<EventInfo>>;
     min?: Date;
     max?: Date;
     selectable?: boolean;
     step?: number;
-    events?: Array<EventInfo>;
     onSelectEvent?: (eventInfo: EventInfo) => void;
     onSelectSlot?: (slotInfo: SlotInfo) => void;
     onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
@@ -55,33 +55,35 @@ export const Calendar: React.FC<CalendarProps> = ({
     if (min >= max) {
         throw new Error('min has to be less than max');
     }
-
+    date.setSeconds(0);
     const eventEnd = add(date, { minutes: 20 });
     const eventEnd2 = add(date, { minutes: 30 });
     const eventstart3 = add(date, { minutes: 31 });
     const eventEnd3 = add(date, { minutes: 60 });
 
     events = [
-        {
-            title: 'Frigo',
-            start: date,
-            end: eventEnd,
-        },
-        {
-            title: 'Test',
-            start: date,
-            end: eventEnd,
-        },
-        {
-            title: 'Fretex',
-            start: date,
-            end: eventEnd2,
-        },
-        {
-            title: 'Jobben',
-            start: eventstart3,
-            end: eventEnd3,
-        },
+        [
+            {
+                title: 'Frigo',
+                start: date,
+                end: eventEnd,
+            },
+            {
+                title: 'Test',
+                start: eventEnd,
+                end: eventEnd3,
+            },
+            {
+                title: 'Fretex',
+                start: date,
+                end: eventEnd2,
+            },
+            {
+                title: 'Jobben',
+                start: eventstart3,
+                end: eventEnd3,
+            },
+        ],
     ];
 
     return (
@@ -89,11 +91,11 @@ export const Calendar: React.FC<CalendarProps> = ({
             <Content>
                 <Gutter start={min} step={step} end={max} />
                 <Columns>
-                    {props.columns.map((column) => (
+                    {props.columns.map((column, index) => (
                         <TimeColumn
                             key={column}
                             title={column}
-                            events={events}
+                            events={events[index]}
                             min={min}
                             max={max}
                             step={step}
