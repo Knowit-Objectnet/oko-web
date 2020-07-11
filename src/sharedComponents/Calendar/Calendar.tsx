@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { EventInfo, SlotInfo } from '../../types';
 import { Gutter } from './Gutter';
 import { TimeColumn } from './TimeColumn';
+import add from 'date-fns/add';
 
 const Wrapper = styled.div`
     box-sizing: border-box;
@@ -36,7 +37,7 @@ interface CalendarProps {
     selectable?: boolean;
     step?: number;
     events?: Array<EventInfo>;
-    onSelectEvent?: () => void;
+    onSelectEvent?: (eventInfo: EventInfo) => void;
     onSelectSlot?: (slotInfo: SlotInfo) => void;
     onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
 }
@@ -55,6 +56,34 @@ export const Calendar: React.FC<CalendarProps> = ({
         throw new Error('min has to be less than max');
     }
 
+    const eventEnd = add(date, { minutes: 20 });
+    const eventEnd2 = add(date, { minutes: 30 });
+    const eventstart3 = add(date, { minutes: 31 });
+    const eventEnd3 = add(date, { minutes: 60 });
+
+    events = [
+        {
+            title: 'Frigo',
+            start: date,
+            end: eventEnd,
+        },
+        {
+            title: 'Test',
+            start: date,
+            end: eventEnd,
+        },
+        {
+            title: 'Fretex',
+            start: date,
+            end: eventEnd2,
+        },
+        {
+            title: 'Jobben',
+            start: eventstart3,
+            end: eventEnd3,
+        },
+    ];
+
     return (
         <Wrapper>
             <Content>
@@ -64,12 +93,14 @@ export const Calendar: React.FC<CalendarProps> = ({
                         <TimeColumn
                             key={column}
                             title={column}
+                            events={events}
                             min={min}
                             max={max}
                             step={step}
                             selectable={selectable}
                             onSelectSlot={props.onSelectSlot}
                             onSelecting={props.onSelecting}
+                            onSelectEvent={props.onSelectEvent}
                         />
                     ))}
                 </Columns>

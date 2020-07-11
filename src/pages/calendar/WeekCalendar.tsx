@@ -109,8 +109,7 @@ export const WeekCalendar: React.FC = () => {
     };*/
 
     // Function that handles an event click in the calendar. It displays the Event in a modal
-    // eslint-disable-next-line
-    const onSelectEvent = (event: Object, e: React.SyntheticEvent) => {
+    const onSelectEvent = (event: EventInfo) => {
         const eventProps: EventInfo = event as EventInfo;
         setModalContent(<Event {...eventProps} />);
         setShowModal(true);
@@ -229,6 +228,7 @@ export const WeekCalendar: React.FC = () => {
                         columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
                         onSelectSlot={onSelectSlot}
                         onSelecting={onSelecting}
+                        onSelectEvent={onSelectEvent}
                         selectable={keycloak.authenticated}
                         step={15}
                         min={new Date(new Date().setHours(7, 0, 0, 0))}
