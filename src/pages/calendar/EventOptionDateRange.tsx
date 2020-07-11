@@ -180,8 +180,14 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
             ) : (
                 `
                     ${props.dateRange[0].toLocaleString('no-NB', { month: 'long', day: 'numeric', year: 'numeric' })},
-                    ${props.timeRange[0].getHours()}:${props.timeRange[0].getMinutes()} - 
-                    ${props.timeRange[1].getHours()}:${props.timeRange[1].getMinutes()}
+                    ${props.timeRange[0]
+                        .getHours()
+                        .toString()
+                        .padStart(2, '0')}:${props.timeRange[0].getMinutes().toString().padStart(2, '0')} - 
+                    ${props.timeRange[1]
+                        .getHours()
+                        .toString()
+                        .padStart(2, '0')}:${props.timeRange[1].getMinutes().toString().padStart(2, '0')}
                 `
             )}
         </EventOption>
