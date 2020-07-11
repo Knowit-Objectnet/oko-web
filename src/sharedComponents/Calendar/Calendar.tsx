@@ -55,7 +55,7 @@ export const Calendar: React.FC<CalendarProps> = ({
     if (min >= max) {
         throw new Error('min has to be less than max');
     }
-    date.setSeconds(0);
+    date.setHours(16, 0, 0, 0);
     const eventEnd = add(date, { minutes: 20 });
     const eventEnd2 = add(date, { minutes: 30 });
     const eventstart3 = add(date, { minutes: 31 });

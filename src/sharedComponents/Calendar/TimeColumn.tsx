@@ -1,12 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { TimeSlotGroup } from './TimeSlotGroup';
-import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Colors, EventInfo, SlotInfo } from '../../types';
 import { ColumnTitle } from './ColumnTitle';
 import setMinutes from 'date-fns/setMinutes';
-import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
-import add from 'date-fns/add';
 import { EventsColumn } from './EventsColumn';
 
 const EventsSlotsWrapper = styled.div`

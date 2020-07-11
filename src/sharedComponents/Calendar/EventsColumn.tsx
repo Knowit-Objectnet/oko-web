@@ -169,7 +169,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
     };
 
     useEffect(() => {
-        if (eventsRef.current && props.events) {
+        if (eventsRef.current && eventsRef.current.clientHeight > 0 && props.events) {
             const height = eventsRef.current.clientHeight;
             const pxPerMin = height / props.numberOfMinutes;
             const tempDate = new Date();
@@ -198,7 +198,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
             });
             setRenderedEvents(temp);
         }
-    }, [eventsRef]);
+    }, [eventsRef.current]);
 
     return <Events ref={eventsRef}>{renderedEvents}</Events>;
 };
