@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled, { StyledComponent } from 'styled-components';
+import styled from 'styled-components';
 import { TimeSlotGroup } from './TimeSlotGroup';
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { Colors, EventInfo, SlotInfo } from '../../types';
@@ -7,6 +7,7 @@ import { ColumnTitle } from './ColumnTitle';
 import setMinutes from 'date-fns/setMinutes';
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import add from 'date-fns/add';
+import { EventsColumn } from './EventsColumn';
 
 const EventsSlotsWrapper = styled.div`
     position: relative;
@@ -44,74 +45,6 @@ const SelectionText = styled.span`
     font-size: small;
 `;
 
-const Events = styled.div`
-    top: 0;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    pointer-events: none;
-`;
-
-interface EventProps {
-    top: number;
-    left: number;
-    height: number;
-    width: number;
-}
-
-const Event = styled.div<EventProps>`
-    position: absolute;
-    pointer-events: auto;
-    top: ${(props) => props.top}px;
-    left: ${(props) => props.left}%;
-    height: ${(props) => props.height}px;
-    width: ${(props) => props.width}%;
-    &:nth-child(n + 1) {
-        background-color: ${Colors.DarkBlue};
-        color: ${Colors.White};
-    }
-    &:nth-child(n + 2) {
-        background-color: ${Colors.DarkGreen};
-        color: ${Colors.White};
-    }
-    &:nth-child(n + 3) {
-        background-color: ${Colors.LightBlue};
-        color: ${Colors.Black};
-    }
-    &:nth-child(n + 4) {
-        background-color: ${Colors.Green};
-        color: ${Colors.Black};
-    }
-    &:nth-child(n + 5) {
-        background-color: ${Colors.Red};
-        color: ${Colors.Black};
-    }
-    &:nth-child(n + 6) {
-        background-color: ${Colors.LightGreen};
-        color: ${Colors.Black};
-    }
-    &:nth-child(n + 7) {
-        background-color: ${Colors.DarkBegie};
-        color: ${Colors.White};
-    }
-    &:nth-child(n + 8) {
-        background-color: ${Colors.Yellow};
-        color: ${Colors.Black};
-    }
-    &:nth-child(n + 9) {
-        background-color: ${Colors.LightBeige};
-        color: ${Colors.Black};
-    }
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-const EventText = styled.span`
-    text-overflow: ellipsis;
-    overflow: hidden;
-`;
-
 interface TimeColumnProps {
     min: Date;
     max: Date;
@@ -128,15 +61,18 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
     const numberOfMinutes = (props.max.getTime() - props.min.getTime()) / 60000;
     const numberOfSlots = numberOfMinutes / props.step;
 
-    const groups = [];
-
-    for (let i = 0; i < Math.ceil(numberOfSlots / 2); i++) {
-        groups.push(<TimeSlotGroup key={props.title + i} id={(i + 1) * 2} />);
-    }
-
     const [isSelectionActive, setIsSelectionActive] = useState(false);
     const [selectedSlots, setSelectedSlots] = useState<Array<HTMLDivElement>>([]);
+    const [groups, setGroups] = useState<Array<JSX.Element>>([]);
     const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const temp: Array<JSX.Element> = [];
+        for (let i = 0; i < Math.ceil(numberOfSlots / 2); i++) {
+            temp.push(<TimeSlotGroup key={props.title + i} id={(i + 1) * 2} />);
+        }
+        setGroups(temp);
+    }, []);
 
     useEffect(() => {
         if (selectedSlots.length === 0 && ref.current !== null) {
@@ -273,155 +209,23 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
         );
     };
 
-    /*
-     *   Problem: We have 0-infinity events that can be placed anywhere in the calendar
-     *      and 0-infinity of them can be partially or fully parallel (meaning that
-     *      they can start and end at different times, but at some point they are
-     *      parallel). The width of an event should be 1/n where n is the
-     *      highest amount of events that are parallel at once during the events
-     *      time range. This applies to all events
-     *
-     *   Algorithm:
-     *   Step 1: compute timesteps if applicable
-     *       (simple enough to compute those, essentially the "All-Unique"-
-     *       problem which has a provable worst-case of n*logn)
-     *
-     *   Step 2: for each timestep , find the amount of the events that are covered by it (O(n))
-     *
-     *   Step 3: for each event, compute the maximum breadth they can have (O(n) after the former step)
-     *
-     *   Step 4: Create a matrix for the timeslots to keep track of each height*width (this is O(n²))
-     *
-     *   Step 5: For each event (ordered by start time = O(n*logn)),
-     *       assign it to the earliest available slot (O(n) to find the slot for each of the O(n) events => O(n²))
-     *
-     *   Step 6: When assigning, also assign it to the cells below as to avoid overlap when reassigning
-     *
-     *   Step 7: Assign a property to the event signifying where it starts -
-     *       to avoid redoing all this computation when rendering
-     */
-    const generateEventsPlacement = (events: Array<EventInfo>) => {
-        // Step 1
-        const timeslots: Array<number> = Array(numberOfMinutes).fill(0);
-
-        // Step 2
-        timeslots.forEach((val, i) => {
-            events.forEach((event, j) => {
-                const slotStart = add(props.min, { minutes: i });
-                const slotEnd = add(props.min, { minutes: i + 1 });
-                const overlap = areIntervalsOverlapping(
-                    {
-                        start: slotStart,
-                        end: slotEnd,
-                    },
-                    {
-                        start: event.start,
-                        end: event.end,
-                    },
-                );
-                if (overlap) timeslots[i] += 1;
-            });
-        });
-
-        // Step 3
-        const widthEvents = events.map((event, i) => {
-            const start = (event.start.getTime() - props.min.getTime()) / 60000;
-            const end = (event.end.getTime() - props.min.getTime()) / 60000;
-            const timeslotRange = timeslots.slice(start, end);
-            const max = Math.max(...timeslotRange);
-            const width = 1 / max;
-            return {
-                ...event,
-                index: i,
-                width: width * 100,
-            };
-        });
-
-        // Step 4
-        const matrix = timeslots.map((timeslot) => Array(timeslot ? timeslot : 1).fill(0));
-
-        // Step 5
-        widthEvents.sort((eventA, eventB) => eventA.start.getTime() - eventB.start.getTime());
-
-        const orderedEvents = widthEvents.map((event) => {
-            const startPos = Math.ceil((event.start.getTime() - props.min.getTime()) / 60000);
-            const length = (event.end.getTime() - event.start.getTime()) / 60000;
-            let wPos = -1;
-            let wLen = 1;
-            matrix[startPos].some((val, index, arr) => {
-                if (val === 0) {
-                    wPos = index;
-                    wLen = arr.length;
-                    return true;
-                }
-            });
-            for (let i = startPos; i < startPos + length; i++) {
-                matrix[i][wPos] = 1;
-            }
-            return {
-                ...event,
-                wPos: wPos,
-                wLen: wLen,
-                length: length,
-            };
-        });
-
-        return orderedEvents;
-        // Step 6
-
-        // Step 7
-    };
-    if (props.events) {
-        generateEventsPlacement(props.events);
-    }
-
-    const eventsRef = useRef<HTMLDivElement>(null);
-    const [renderedEvents, setRenderedEvents] = useState<Array<JSX.Element>>([]);
-
-    const onEventClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const onClick = (event: EventInfo) => {
         if (props.onSelectEvent) {
-            e.persist();
-            const index = e.currentTarget.dataset['index'];
-            if (props.events && index) {
-                const event = props.events[parseInt(index)];
-                if (event) props.onSelectEvent(event);
-            }
+            props.onSelectEvent(event);
         }
     };
-
-    useEffect(() => {
-        if (eventsRef.current && props.events) {
-            const height = eventsRef.current.clientHeight;
-            const pxPerMin = height / numberOfMinutes;
-            const toBeRenderedEvents = generateEventsPlacement(props.events);
-
-            const temp: Array<JSX.Element> = [];
-            toBeRenderedEvents.forEach((event) => {
-                const start = Math.ceil((event.start.getTime() - props.min.getTime()) / 60000);
-                temp.push(
-                    <Event
-                        top={start * pxPerMin}
-                        left={event.wPos / event.wLen * 100}
-                        width={event.width}
-                        height={event.length * pxPerMin}
-                        key={event.title}
-                        data-index={event.index}
-                        onClick={onEventClick}
-                    >
-                        <EventText>{event.title}</EventText>
-                    </Event>,
-                );
-            });
-            setRenderedEvents(temp);
-        }
-    }, [eventsRef]);
 
     return (
         <Wrapper {...wrapperFunctions}>
             <ColumnTitle title={props.title} />
             <EventsSlotsWrapper>
                 <Column {...columnFunctions}>{groups}</Column>
-                <Events ref={eventsRef}>{renderedEvents}</Events>
+                <EventsColumn
+                    events={props.events}
+                    numberOfMinutes={numberOfMinutes}
+                    deltaStart={props.min}
+                    onClick={onClick}
+                />
             </EventsSlotsWrapper>
             <Selection ref={ref} onMouseUp={onMouseUp}>
                 <SelectionText>{getTimeString()}</SelectionText>

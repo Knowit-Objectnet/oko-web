@@ -60,6 +60,8 @@ export const Calendar: React.FC<CalendarProps> = ({
     const eventEnd2 = add(date, { minutes: 30 });
     const eventstart3 = add(date, { minutes: 31 });
     const eventEnd3 = add(date, { minutes: 60 });
+    const eventStart4 = add(date, { minutes: 70 });
+    const eventEnd4 = add(date, { minutes: 120 });
 
     events = [
         [
@@ -82,6 +84,11 @@ export const Calendar: React.FC<CalendarProps> = ({
                 title: 'Jobben',
                 start: eventstart3,
                 end: eventEnd3,
+            },
+            {
+                title: 'Test 2',
+                start: eventStart4,
+                end: eventEnd4,
             },
         ],
     ];

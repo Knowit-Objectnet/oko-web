@@ -11,7 +11,6 @@ const Group = styled.div`
 const Slot = styled.div`
     flex: 1 0 0;
     display: flex;
-    align-items: center;
     justify-content: center;
     padding: 0px 5px 0px 0px;
 `;

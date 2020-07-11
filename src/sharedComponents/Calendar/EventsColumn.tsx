@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {Colors, EventInfo} from "../../types";
-import {useEffect, useRef, useState} from "react";
+import { Colors, EventInfo } from '../../types';
+import { useEffect, useRef, useState } from 'react';
 import setMinutes from 'date-fns/setMinutes';
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import add from 'date-fns/add';
@@ -172,7 +172,12 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
         if (eventsRef.current && props.events) {
             const height = eventsRef.current.clientHeight;
             const pxPerMin = height / props.numberOfMinutes;
-            const toBeRenderedEvents = generateEventsPlacement(props.events);
+            const tempDate = new Date();
+            const validEvents = props.events.filter(
+                (event) =>
+                    event.start > new Date(tempDate.setHours(7, 0)) && event.end < new Date(tempDate.setHours(20, 0)),
+            );
+            const toBeRenderedEvents = generateEventsPlacement(validEvents);
 
             const temp: Array<JSX.Element> = [];
             toBeRenderedEvents.forEach((event) => {
@@ -196,4 +201,4 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
     }, [eventsRef]);
 
     return <Events ref={eventsRef}>{renderedEvents}</Events>;
-}
+};
