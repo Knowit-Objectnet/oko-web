@@ -9,7 +9,6 @@ import { Event } from './Event';
 import { NewEvent } from './NewEvent';
 import { ExtraEvent } from './ExtraEvent';
 import { Modal } from '../../sharedComponents/Modal';
-import moment from 'moment';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
@@ -170,7 +169,7 @@ export const WeekCalendar: React.FC = () => {
     };
 
     // Function to display new event in modal on new event button click
-    const onNewEventButtonClick = (e: React.SyntheticEvent) => {
+    const onNewEventButtonClick = () => {
         // Date object for creating other date objects
         const date = new Date();
         // Date object for getting time and date now

@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Person } from '@styled-icons/material/Person';
 import { EventSubmission } from './EventSubmission';
 import { useState } from 'react';
-import { EventOption } from './EventOption';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplate } from './EventTemplate';

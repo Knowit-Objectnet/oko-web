@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Clock } from '@styled-icons/fa-regular/Clock';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
@@ -98,7 +97,6 @@ interface EventOptionDateRangeProps {
  * Event option that allows the user to choose a start and end date for the event.
  */
 export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props) => {
-    const date = new Date();
     const minTime = '07:00:00';
     const maxTime = '20:00:00';
 

@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Colors, EventInfo } from '../../types';
 import { useEffect, useRef, useState } from 'react';
-import setMinutes from 'date-fns/setMinutes';
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import add from 'date-fns/add';
 
@@ -94,7 +93,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
 
         // Step 2: for each timestep , find the amount of the events that are covered by it (O(n))
         timeslots.forEach((val, i) => {
-            events.forEach((event, j) => {
+            events.forEach((event) => {
                 const slotStart = add(props.deltaStart, { minutes: i });
                 const slotEnd = add(props.deltaStart, { minutes: i + 1 });
                 const overlap = areIntervalsOverlapping(

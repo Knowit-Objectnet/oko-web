@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import { Notifications } from './Notifications';
 import { ChangeLog } from './ChangeLog';
 import { WeekCalendar } from './WeekCalendar';
-import { Calendar } from '../../sharedComponents/Calendar/Calendar';
 import { useKeycloak } from '@react-keycloak/web';
-import { Roles, SlotInfo } from '../../types';
+import { Roles } from '../../types';
 
 const Wrapper = styled.div`
     height: 100%;
