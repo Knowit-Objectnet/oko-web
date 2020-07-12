@@ -36,7 +36,7 @@ interface AgendaProps {
 }
 
 export const Agenda: React.FC<AgendaProps> = (props) => {
-    props.events.forEach((arr) => arr.sort((a, b) => b.start.getTime() - a.start.getTime()));
+    props.events.forEach((arr) => arr.sort((a, b) => a.start.getTime() - b.start.getTime()));
 
     const maxLength = Math.max(...props.events.map((eventArray) => eventArray.length));
 
