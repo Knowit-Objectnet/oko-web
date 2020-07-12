@@ -12,6 +12,7 @@ import { Modal } from '../../sharedComponents/Modal';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
+import { Agenda } from '../../sharedComponents/Agenda/Agenda';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -221,6 +222,7 @@ export const WeekCalendar: React.FC = () => {
                     content={modalContent}
                 />
             ) : null}
+            <Agenda columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']} events={[events]} />
             <CalendarWrapper>
                 <OverflowWrapper>
                     <Calendar
