@@ -60,10 +60,14 @@ const Button = styled.button`
     justify-content: center;
 `;
 
+interface WeekCalendarProps {
+    date: Date;
+}
+
 /**
  * Component that handles the actualy calendar component from React Big Calendar
  */
-export const WeekCalendar: React.FC = () => {
+export const WeekCalendar: React.FC<WeekCalendarProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
@@ -167,7 +171,7 @@ export const WeekCalendar: React.FC = () => {
         }
     };
 
-    const day1 = new Date();
+    const day1 = props.date;
     const day2 = addDays(day1, 1);
     const day3 = addDays(day1, 2);
     const day4 = addDays(day1, 3);
