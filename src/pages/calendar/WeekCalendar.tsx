@@ -122,8 +122,8 @@ export const WeekCalendar: React.FC = () => {
         const now = new Date();
 
         // Max and min of opening time range
-        const min = new Date(date.setHours(7, 30));
-        const max = new Date(date.setHours(21, 0));
+        const min = new Date(date.setHours(7, 0));
+        const max = new Date(date.setHours(20, 0));
 
         // Round up to the closest quarter of an hour
         const startMinutes = (Math.ceil((now.getMinutes() + 1) / 15) * 15) % 60;
