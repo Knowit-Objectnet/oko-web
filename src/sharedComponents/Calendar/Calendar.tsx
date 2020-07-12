@@ -4,6 +4,7 @@ import { EventInfo, SlotInfo } from '../../types';
 import { Gutter } from './Gutter';
 import { TimeColumn } from './TimeColumn';
 import add from 'date-fns/add';
+import { useMemo } from 'react';
 
 const Wrapper = styled.div`
     box-sizing: border-box;
@@ -98,20 +99,25 @@ export const Calendar: React.FC<CalendarProps> = ({
             <Content>
                 <Gutter start={min} step={step} end={max} />
                 <Columns>
-                    {props.columns.map((column, index) => (
-                        <TimeColumn
-                            key={column}
-                            title={column}
-                            events={events[index]}
-                            min={min}
-                            max={max}
-                            step={step}
-                            selectable={selectable}
-                            onSelectSlot={props.onSelectSlot}
-                            onSelecting={props.onSelecting}
-                            onSelectEvent={props.onSelectEvent}
-                        />
-                    ))}
+                    {props.columns.map((column, index) =>
+                        useMemo(
+                            () => (
+                                <TimeColumn
+                                    key={column}
+                                    title={column}
+                                    events={events[index]}
+                                    min={min}
+                                    max={max}
+                                    step={step}
+                                    selectable={selectable}
+                                    onSelectSlot={props.onSelectSlot}
+                                    onSelecting={props.onSelecting}
+                                    onSelectEvent={props.onSelectEvent}
+                                />
+                            ),
+                            [events[index]],
+                        ),
+                    )}
                 </Columns>
             </Content>
         </Wrapper>

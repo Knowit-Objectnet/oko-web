@@ -225,6 +225,7 @@ export const WeekCalendar: React.FC = () => {
                 <OverflowWrapper>
                     <Calendar
                         columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
+                        events={[events]}
                         onSelectSlot={onSelectSlot}
                         onSelecting={onSelecting}
                         onSelectEvent={onSelectEvent}

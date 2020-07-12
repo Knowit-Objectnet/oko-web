@@ -25,7 +25,6 @@ const Wrapper = styled.div`
     &:last-child {
         border-right: none;
     }
-    background-color: ${Colors.LightBlue};
 `;
 
 const Selection = styled.div`

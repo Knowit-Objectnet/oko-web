@@ -1,11 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import {Colors} from "../../types";
 
 const Group = styled.div`
     min-height: 40px;
     display: flex;
     flex-flow: column nowrap;
     border-bottom: solid 1px transparent;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: ${Colors.LightBlue};
 `;
 
 const Slot = styled.div`
