@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Plus } from '@styled-icons/boxicons-regular/Plus';
-import { WeekCalendarLocationPicker } from './WeekCalendarLocationPicker';
+import { SideMenu } from './SideMenu';
 import { ApiEvent, EventInfo, Roles, SlotInfo, apiUrl } from '../../types';
 import { Event } from './events/Event';
 import { NewEvent } from './events/NewEvent';
@@ -68,23 +67,10 @@ export const WeekCalendar: React.FC = () => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
+    const [isToggled, setIsToggled] = useState(false);
     // State for handling modal
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
-
-    // Valid recycling stations (ombruksstasjon) locations fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
-    let { data: locations } = useSWR<string[]>(['/api/locations', keycloak.token], fetcher);
-    locations = locations && locations.length !== 0 ? locations : ['grønmo', 'haraldrud', 'smestad'];
-
-    // State
-    const [checkedLocation, setCheckedLocation] = useState(locations[0]);
-
-    // On change for Location
-    const onLocationChange = (location: string) => {
-        setCheckedLocation(location);
-    };
 
     // Events fetched from api
     const { data: apiEvents } = useSWR<ApiEvent[]>([`${apiUrl}/calendar/events/`, keycloak.token], fetcher);
@@ -129,7 +115,7 @@ export const WeekCalendar: React.FC = () => {
     };
 
     // Function to display new event in modal on new event button click
-    const onNewEventButtonClick = () => {
+    const newEvent = () => {
         // Date object for creating other date objects
         const date = new Date();
         // Date object for getting time and date now
@@ -169,6 +155,16 @@ export const WeekCalendar: React.FC = () => {
             />,
         );
         setShowModal(true);
+    };
+
+    const toggleCalendarClick = () => {
+        setIsToggled(!isToggled);
+    };
+
+    const onNewEventClick = () => {
+        if (keycloak.hasRealmRole(Roles.Oslo)) {
+            newEvent();
+        }
     };
 
     const day1 = new Date();
@@ -241,19 +237,18 @@ export const WeekCalendar: React.FC = () => {
                         />
                     </AgendaWrapper>
                 </OverflowWrapper>
-                {keycloak.hasRealmRole(Roles.Oslo) ? (
-                    <Sidebar>
-                        <WeekCalendarLocationPicker
-                            locations={locations}
-                            checkedLocation={checkedLocation}
-                            onChange={onLocationChange}
-                        />
-                        <Button onClick={onNewEventButtonClick}>
-                            <Plus size="1em" />
-                            Legg til avtale
-                        </Button>
-                    </Sidebar>
-                ) : null}
+                <Sidebar>
+                    <SideMenu
+                        onCalendarToggleClick={toggleCalendarClick}
+                        onNewEventClick={onNewEventClick}
+                        showCalendarToggle={
+                            keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador)
+                        }
+                        showNewEventButton={
+                            keycloak.hasRealmRole(Roles.Oslo) || keycloak.hasRealmRole(Roles.Ambassador)
+                        }
+                    />
+                </Sidebar>
             </CalendarWrapper>
         </>
     );
