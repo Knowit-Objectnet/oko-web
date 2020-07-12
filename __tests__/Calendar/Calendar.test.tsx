@@ -76,39 +76,4 @@ describe('Provides a page to view the calendar in addition to change log and not
         const title = await findByText('Opprett ny avtale');
         expect(title).toBeInTheDocument();
     });
-
-    it('Should show Notifications if role is Partner or Ambassador', async () => {
-        // Set our role to Partner and Ambassador
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Partner || role === Roles.Ambassador;
-        });
-        const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <CalendarPage />
-                </Router>
-            </KeycloakProvider>,
-        );
-
-        const title = await findByText('Varslinger');
-        expect(title).toBeInTheDocument();
-    });
-
-    it('Should show ChangeLog if role is Oslo', async () => {
-        // Set our role to Oslo
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Oslo;
-        });
-
-        const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <CalendarPage />
-                </Router>
-            </KeycloakProvider>,
-        );
-
-        const title = await findByText('Endringslogg');
-        expect(title).toBeInTheDocument();
-    });
 });

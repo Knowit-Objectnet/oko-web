@@ -13,7 +13,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { ExpandableAgenda } from '../../sharedComponents/ExpandableAgenda';
 import addDays from 'date-fns/addDays';
-import isSameDay from 'date-fns/isSameDay'
+import isSameDay from 'date-fns/isSameDay';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
