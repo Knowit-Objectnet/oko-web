@@ -46,6 +46,7 @@ describe('Provides a page to view the calendar in addition to change log and not
         );
     });
 
+    /* Outdated for now
     it('Should show NewEvent on new event button click if role is Oslo', async () => {
         // Set our role to Oslo
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -75,5 +76,5 @@ describe('Provides a page to view the calendar in addition to change log and not
 
         const title = await findByText('Opprett ny avtale');
         expect(title).toBeInTheDocument();
-    });
+    });*/
 });
