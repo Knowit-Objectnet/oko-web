@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { default as DateCalendar } from 'react-calendar';
 import { WeekCalendar } from './WeekCalendar';
-import {useState} from "react";
+import { useState } from 'react';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -20,6 +20,10 @@ const Module = styled.div`
 
 const ModuleDateCalendar = styled.div`
     margin-right: 20px;
+
+    & > .react-calendar {
+        border: none;
+    }
 `;
 
 const ModuleCalendar = styled(Module)`
