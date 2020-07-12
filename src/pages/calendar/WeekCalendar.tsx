@@ -13,7 +13,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Agenda } from '../../sharedComponents/Agenda/Agenda';
-import {ExpandableAgenda} from "../../sharedComponents/ExpandableAgenda";
+import { ExpandableAgenda } from '../../sharedComponents/ExpandableAgenda';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
