@@ -39,7 +39,6 @@ export const CalendarPage: React.FC = () => {
                 </Module>
             ) : null}
             <ModuleCalendar>
-                <h3>Kalender</h3>
                 <WeekCalendar />
             </ModuleCalendar>
         </Wrapper>
