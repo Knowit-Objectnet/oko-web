@@ -136,12 +136,12 @@ export const WeekCalendar: React.FC = () => {
         // if the time now is less than the allowed minimum then set the start to minimum
         if (now < min) {
             start = min;
-            // If the time now is more than the allowed maximum then set the end to maximum
-        } else if (now > max) {
-            min.setDate(min.getDate() + 1);
-            start = min;
             // If the time now is less than one hour behind max then set end to max
         } else if (now.getHours() === max.getHours() - 1) {
+            end = max;
+            // If the time now is more than the allowed maximum then set the end to maximum
+        } else if (now > max) {
+            start = min;
             end = max;
         }
 
