@@ -16,7 +16,7 @@ const Header = styled.div`
     line-height: 21px;
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 `;
 
 const DateText = styled.span`
@@ -37,6 +37,10 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
 
     const [expanded, setExpanded] = useState(false);
 
+    const setDate = (date: Date) => {
+        return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
+    };
+
     // Function that handles an event click in the calendar. It displays the Event in a modal
     const onSelectEvent = (event: EventInfo) => {
         const eventProps: EventInfo = event as EventInfo;
@@ -47,16 +51,16 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     // It displays either a new event, or extra event depending on user role.
     // TODO: Make it show component depending on user role
     const onSelectSlot = (slotInfo: SlotInfo) => {
-        // Turn the slotInfo dateString to a Date
-        const startDate = new Date(slotInfo.start);
         // If the start date is less than now then don't show the popup modal
-        if (startDate < new Date()) {
+        const nowTime = new Date();
+        setDate(nowTime);
+        if (slotInfo.start < nowTime) {
             return;
         }
 
         // Create max and min times on the slotInfo date
-        const minTime = new Date(startDate.setHours(7, 30));
-        const maxTime = new Date(startDate.setHours(21, 0));
+        const minTime = new Date(slotInfo.start.setHours(7, 0));
+        const maxTime = new Date(slotInfo.start.setHours(20, 0));
 
         // If the start is less than the allowed minimum then set the start to minimum
         if (slotInfo.start < minTime) {
@@ -77,8 +81,11 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     };
 
     const onSelecting = (range: { start?: Date; end?: Date }) => {
+        const nowTime = new Date();
+        setDate(nowTime);
+
         // If the startDate-time of the select is less than now then disable select
-        if (!range.start || range.start < new Date()) {
+        if (!range.start || range.start < nowTime) {
             return false;
         } else {
             return true;
@@ -88,6 +95,9 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     const onExpandClick = () => {
         setExpanded(!expanded);
     };
+
+    const min = new Date(props.date.setHours(7, 0, 0, 0));
+    const max = new Date(props.date.setHours(20, 0, 0, 0));
 
     return (
         <Wrapper>
@@ -110,8 +120,9 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     onSelectEvent={onSelectEvent}
                     selectable={keycloak.authenticated}
                     step={15}
-                    min={new Date(new Date().setHours(7, 0, 0, 0))}
-                    max={new Date(new Date().setHours(20, 0, 0, 0))}
+                    min={min}
+                    max={max}
+                    date={props.date}
                 />
             ) : (
                 <Agenda columns={props.columns} events={props.events} />

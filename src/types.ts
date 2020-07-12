@@ -44,8 +44,8 @@ interface EventInfoResource {
 }
 
 export interface SlotInfo {
-    start: stringOrDate;
-    end: stringOrDate;
+    start: Date;
+    end: Date;
 }
 
 export interface Withdrawal {

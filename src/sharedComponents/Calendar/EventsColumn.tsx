@@ -74,6 +74,7 @@ const EventText = styled.span`
 `;
 
 interface EventsColumnProps {
+    date: Date;
     events?: Array<EventInfo>;
     numberOfMinutes: number;
     deltaStart: Date;
@@ -171,7 +172,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
         if (eventsRef.current && eventsRef.current.clientHeight > 0 && props.events) {
             const height = eventsRef.current.clientHeight;
             const pxPerMin = height / props.numberOfMinutes;
-            const tempDate = new Date();
+            const tempDate = new Date(props.date);
             const validEvents = props.events.filter(
                 (event) =>
                     event.start > new Date(tempDate.setHours(7, 0)) && event.end < new Date(tempDate.setHours(20, 0)),

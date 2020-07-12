@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Plus } from '@styled-icons/boxicons-regular/Plus';
-import { Calendar } from '../../sharedComponents/Calendar/Calendar';
 import { WeekCalendarLocationPicker } from './WeekCalendarLocationPicker';
 import { ApiEvent, EventInfo, Roles, SlotInfo, apiUrl } from '../../types';
 import { Event } from './events/Event';
@@ -12,8 +11,9 @@ import { Modal } from '../../sharedComponents/Modal';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
-import { Agenda } from '../../sharedComponents/Agenda/Agenda';
 import { ExpandableAgenda } from '../../sharedComponents/ExpandableAgenda';
+import addDays from 'date-fns/addDays';
+import isSameDay from 'date-fns/isSameDay'
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -36,6 +36,12 @@ const CalendarWrapper = styled.div`
 
     & .rbc-header {
         border-bottom: none;
+    }
+`;
+
+const AgendaWrapper = styled.div`
+    &:not(last-child) {
+        margin-bottom: 20px;
     }
 `;
 
@@ -165,6 +171,18 @@ export const WeekCalendar: React.FC = () => {
         setShowModal(true);
     };
 
+    const day1 = new Date();
+    const day2 = addDays(day1, 1);
+    const day3 = addDays(day1, 2);
+    const day4 = addDays(day1, 3);
+    const day5 = addDays(day1, 4);
+
+    const day1Events = events.filter((event) => isSameDay(event.start, day1));
+    const day2Events = events.filter((event) => isSameDay(event.start, day2));
+    const day3Events = events.filter((event) => isSameDay(event.start, day3));
+    const day4Events = events.filter((event) => isSameDay(event.start, day4));
+    const day5Events = events.filter((event) => isSameDay(event.start, day5));
+
     return (
         <>
             {showModal ? (
@@ -177,13 +195,51 @@ export const WeekCalendar: React.FC = () => {
             ) : null}
             <CalendarWrapper>
                 <OverflowWrapper>
-                    <ExpandableAgenda
-                        date={new Date()}
-                        columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
-                        events={[events]}
-                        onSelectSlot={onSelectSlot}
-                        onSelectEvent={onSelectEvent}
-                    />
+                    <AgendaWrapper>
+                        <ExpandableAgenda
+                            date={day1}
+                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
+                            events={[day1Events]}
+                            onSelectSlot={onSelectSlot}
+                            onSelectEvent={onSelectEvent}
+                        />
+                    </AgendaWrapper>
+                    <AgendaWrapper>
+                        <ExpandableAgenda
+                            date={day2}
+                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
+                            events={[day2Events]}
+                            onSelectSlot={onSelectSlot}
+                            onSelectEvent={onSelectEvent}
+                        />
+                    </AgendaWrapper>
+                    <AgendaWrapper>
+                        <ExpandableAgenda
+                            date={day3}
+                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
+                            events={[day3Events]}
+                            onSelectSlot={onSelectSlot}
+                            onSelectEvent={onSelectEvent}
+                        />
+                    </AgendaWrapper>
+                    <AgendaWrapper>
+                        <ExpandableAgenda
+                            date={day4}
+                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
+                            events={[day4Events]}
+                            onSelectSlot={onSelectSlot}
+                            onSelectEvent={onSelectEvent}
+                        />
+                    </AgendaWrapper>
+                    <AgendaWrapper>
+                        <ExpandableAgenda
+                            date={day5}
+                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
+                            events={[day5Events]}
+                            onSelectSlot={onSelectSlot}
+                            onSelectEvent={onSelectEvent}
+                        />
+                    </AgendaWrapper>
                 </OverflowWrapper>
                 {keycloak.hasRealmRole(Roles.Oslo) ? (
                     <Sidebar>

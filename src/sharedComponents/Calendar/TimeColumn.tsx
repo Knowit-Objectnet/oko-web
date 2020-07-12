@@ -43,6 +43,7 @@ const SelectionText = styled.span`
 `;
 
 interface TimeColumnProps {
+    date: Date;
     min: Date;
     max: Date;
     step: number;
@@ -218,6 +219,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
             <EventsSlotsWrapper>
                 <Column {...columnFunctions}>{groups}</Column>
                 <EventsColumn
+                    date={props.date}
                     events={props.events}
                     numberOfMinutes={numberOfMinutes}
                     deltaStart={props.min}

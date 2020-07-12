@@ -32,10 +32,11 @@ const Columns = styled.div`
 `;
 
 interface CalendarProps {
+    date: Date;
     columns: Array<string>;
     events?: Array<Array<EventInfo>>;
-    min?: Date;
-    max?: Date;
+    min: Date;
+    max: Date;
     selectable?: boolean;
     step?: number;
     onSelectEvent?: (eventInfo: EventInfo) => void;
@@ -43,28 +44,27 @@ interface CalendarProps {
     onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
 }
 
-const date = new Date();
+export const Calendar: React.FC<CalendarProps> = ({ selectable = false, step = 15, events = [], ...props }) => {
+    const setDate = (date: Date) => {
+        return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
+    };
 
-export const Calendar: React.FC<CalendarProps> = ({
-    selectable = false,
-    step = 15,
-    events = [],
-    min = new Date(date.setHours(0, 0, 0, 0)),
-    max = new Date(date.setHours(24, 0, 0, 0)),
-    ...props
-}) => {
-    if (min >= max) {
+    setDate(props.min);
+    setDate(props.max);
+
+    if (props.min >= props.max) {
         throw new Error('min has to be less than max');
     }
-    date.setHours(16, 0, 0, 0);
-    const eventEnd = add(date, { minutes: 20 });
-    const eventEnd2 = add(date, { minutes: 30 });
-    const eventstart3 = add(date, { minutes: 31 });
-    const eventEnd3 = add(date, { minutes: 60 });
-    const eventStart4 = add(date, { minutes: 70 });
-    const eventEnd4 = add(date, { minutes: 120 });
 
-    events = [
+    props.date.setHours(16, 0, 0, 0);
+    const eventEnd = add(props.date, { minutes: 20 });
+    const eventEnd2 = add(props.date, { minutes: 30 });
+    const eventstart3 = add(props.date, { minutes: 31 });
+    const eventEnd3 = add(props.date, { minutes: 60 });
+    const eventStart4 = add(props.date, { minutes: 70 });
+    const eventEnd4 = add(props.date, { minutes: 120 });
+
+    /*events = [
         [
             {
                 title: 'Frigo',
@@ -92,22 +92,23 @@ export const Calendar: React.FC<CalendarProps> = ({
                 end: eventEnd4,
             },
         ],
-    ];
+    ];*/
 
     return (
         <Wrapper>
             <Content>
-                <Gutter start={min} step={step} end={max} />
+                <Gutter start={props.min} step={step} end={props.max} />
                 <Columns>
                     {props.columns.map((column, index) =>
                         useMemo(
                             () => (
                                 <TimeColumn
                                     key={column}
+                                    date={props.date}
                                     title={column}
                                     events={events[index]}
-                                    min={min}
-                                    max={max}
+                                    min={props.min}
+                                    max={props.max}
                                     step={step}
                                     selectable={selectable}
                                     onSelectSlot={props.onSelectSlot}
