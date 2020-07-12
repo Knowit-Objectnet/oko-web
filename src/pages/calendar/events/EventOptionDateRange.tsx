@@ -3,7 +3,7 @@ import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
-import { Colors } from '../../types';
+import { Colors } from '../../../types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -177,7 +177,7 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                 </Wrapper>
             ) : (
                 `
-                    ${props.dateRange[0].toLocaleString('no-NB', { month: 'long', day: 'numeric', year: 'numeric' })},
+                    ${props.dateRange[0].toLocaleString('nb-NO', { month: 'long', day: 'numeric', year: 'numeric' })},
                     ${props.timeRange[0]
                         .getHours()
                         .toString()

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {Colors, EventInfo} from '../../types';
+import { Colors, EventInfo } from '../../types';
 
 const Table = styled.table`
     table-layout: fixed;
@@ -36,6 +36,8 @@ interface AgendaProps {
 }
 
 export const Agenda: React.FC<AgendaProps> = (props) => {
+    props.events.forEach((arr) => arr.sort((a, b) => b.start.getTime() - a.start.getTime()));
+
     const maxLength = Math.max(...props.events.map((eventArray) => eventArray.length));
 
     const getTimeString = (start: Date, end: Date) => {
@@ -59,7 +61,7 @@ export const Agenda: React.FC<AgendaProps> = (props) => {
             <tbody>
                 {[...Array(maxLength)].map((_, i) => {
                     return (
-                        <tr key={'R' + i}>
+                        <tr key={'Row' + i}>
                             {props.columns.map((column, j) => {
                                 if (j >= props.events.length) {
                                     return <TD key={column + j}></TD>;
@@ -69,12 +71,14 @@ export const Agenda: React.FC<AgendaProps> = (props) => {
                                     <TD key={column + j}>
                                         {props.events[j].length < i ? null : (
                                             <Cell>
-                                                <Time>{getTimeString(props.events[j][i].start, props.events[j][i].end)}</Time>
+                                                <Time>
+                                                    {getTimeString(props.events[j][i].start, props.events[j][i].end)}
+                                                </Time>
                                                 <span>{props.events[j][i].title}</span>
                                             </Cell>
                                         )}
                                     </TD>
-                                )
+                                );
                             })}
                         </tr>
                     );

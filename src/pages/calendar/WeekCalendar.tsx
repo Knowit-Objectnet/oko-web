@@ -5,14 +5,15 @@ import { Plus } from '@styled-icons/boxicons-regular/Plus';
 import { Calendar } from '../../sharedComponents/Calendar/Calendar';
 import { WeekCalendarLocationPicker } from './WeekCalendarLocationPicker';
 import { ApiEvent, EventInfo, Roles, SlotInfo, apiUrl } from '../../types';
-import { Event } from './Event';
-import { NewEvent } from './NewEvent';
-import { ExtraEvent } from './ExtraEvent';
+import { Event } from './events/Event';
+import { NewEvent } from './events/NewEvent';
+import { ExtraEvent } from './events/ExtraEvent';
 import { Modal } from '../../sharedComponents/Modal';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Agenda } from '../../sharedComponents/Agenda/Agenda';
+import {ExpandableAgenda} from "../../sharedComponents/ExpandableAgenda";
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -96,22 +97,9 @@ export const WeekCalendar: React.FC = () => {
           })
         : [];
 
-    /*
-    const onSelecting = (range: { start: stringOrDate; end: stringOrDate }) => {
-        const startDate = new Date(range.start);
-
-        // If the startDate-time of the select is less than now then disable select
-        if (startDate < new Date()) {
-            return false;
-        } else {
-            return true;
-        }
-    };*/
-
     // Function that handles an event click in the calendar. It displays the Event in a modal
     const onSelectEvent = (event: EventInfo) => {
-        const eventProps: EventInfo = event as EventInfo;
-        setModalContent(<Event {...eventProps} />);
+        setModalContent(<Event {...event} />);
         setShowModal(true);
     };
 
@@ -119,32 +107,6 @@ export const WeekCalendar: React.FC = () => {
     // It displays either a new event, or extra event depending on user role.
     // TODO: Make it show component depending on user role
     const onSelectSlot = (slotInfo: SlotInfo) => {
-        // Turn the slotInfo dateString to a Date
-        const startDate = new Date(slotInfo.start);
-        // If the start date is less than now then don't show the popup modal
-        if (startDate < new Date()) {
-            return;
-        }
-
-        // Create max and min times on the slotInfo date
-        const minTime = new Date(startDate.setHours(7, 30));
-        const maxTime = new Date(startDate.setHours(21, 0));
-
-        // If the start is less than the allowed minimum then set the start to minimum
-        if (slotInfo.start < minTime) {
-            slotInfo.start = minTime;
-            // If the start is more than the allowed maximum then set the start to maximum
-        } else if (slotInfo.start > maxTime) {
-            slotInfo.start = maxTime;
-        }
-        // If the end is less than the start time then set it to the start time
-        if (slotInfo.end < slotInfo.start) {
-            slotInfo.end = slotInfo.start;
-            // If the end is more than the allowed maximum then set the end to maximum
-        } else if (slotInfo.end > maxTime) {
-            slotInfo.end = maxTime;
-        }
-
         // Set modal component depending on role
         const EventComponent = keycloak.hasRealmRole(Roles.Oslo) ? NewEvent : ExtraEvent;
 
@@ -158,15 +120,6 @@ export const WeekCalendar: React.FC = () => {
             />,
         );
         setShowModal(true);
-    };
-
-    const onSelecting = (range: { start?: Date; end?: Date }) => {
-        // If the startDate-time of the select is less than now then disable select
-        if (!range.start || range.start < new Date()) {
-            return false;
-        } else {
-            return true;
-        }
     };
 
     // Function to display new event in modal on new event button click
@@ -222,19 +175,14 @@ export const WeekCalendar: React.FC = () => {
                     content={modalContent}
                 />
             ) : null}
-            <Agenda columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']} events={[events]} />
             <CalendarWrapper>
                 <OverflowWrapper>
-                    <Calendar
+                    <ExpandableAgenda
+                        date={new Date()}
                         columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
                         events={[events]}
                         onSelectSlot={onSelectSlot}
-                        onSelecting={onSelecting}
                         onSelectEvent={onSelectEvent}
-                        selectable={keycloak.authenticated}
-                        step={15}
-                        min={new Date(new Date().setHours(7, 0, 0, 0))}
-                        max={new Date(new Date().setHours(20, 0, 0, 0))}
                     />
                 </OverflowWrapper>
                 {keycloak.hasRealmRole(Roles.Oslo) ? (

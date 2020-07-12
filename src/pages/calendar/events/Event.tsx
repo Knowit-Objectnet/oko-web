@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { MessageBox } from './MessageBox';
+import { MessageBox } from '../MessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { ApiLocation, EventInfo } from '../../types';
+import { ApiLocation, EventInfo } from '../../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplate } from './EventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
+import { fetcher } from '../../../utils/fetcher';
 
 const Body = styled.div`
     display: flex;
