@@ -135,21 +135,19 @@ export const CalendarPage: React.FC = () => {
     };
 
     const getCalendar = () => {
-        if (keycloak.hasRealmRole(Roles.Oslo)) {
-            return (
-                <RegCalendar
-                    onSelectEvent={onSelectEvent}
-                    onSelectSlot={onSelectSlot}
-                    newEvent={newEvent}
-                    date={selectedDate}
-                />
-            );
-        } else if (keycloak.hasRealmRole(Roles.Partner)) {
+        if (keycloak.hasRealmRole(Roles.Partner)) {
             return <PartnerCalendar onSelectEvent={onSelectEvent} date={selectedDate} isToggled={isToggled} />;
         } else if (keycloak.hasRealmRole(Roles.Ambassador)) {
             return <AmbassadorCalendar date={selectedDate} isToggled={isToggled} />;
         }
-        return null;
+        return (
+            <RegCalendar
+                onSelectEvent={onSelectEvent}
+                onSelectSlot={onSelectSlot}
+                newEvent={newEvent}
+                date={selectedDate}
+            />
+        );
     };
 
     return (

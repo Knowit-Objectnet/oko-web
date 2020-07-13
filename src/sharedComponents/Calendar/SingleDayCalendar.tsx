@@ -107,7 +107,7 @@ export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({
                     start={props.min}
                     step={step}
                     end={props.max}
-                    showTitleGroup={props.columns.every((col) => !col) === undefined}
+                    showTitleGroup={props.columns.every((col) => col)}
                 />
                 <Columns>
                     {props.columns.map((column, index) =>
