@@ -76,7 +76,10 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({ step =
                                 <TimeColumn
                                     key={date.toString()}
                                     date={props.date}
-                                    title={date.toString()}
+                                    title={date.toLocaleString('nb-NO', {
+                                        weekday: 'long',
+                                        day: 'numeric',
+                                    })}
                                     colNum={index}
                                     events={events[index]}
                                     min={props.min}
