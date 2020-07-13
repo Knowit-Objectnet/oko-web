@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Agenda } from './Agenda/Agenda';
-import { SingleDayCalendar } from './Calendar/SingleDayCalendar';
+import { Agenda } from '../../../sharedComponents/Agenda/Agenda';
+import { SingleDayCalendar } from '../../../sharedComponents/Calendar/SingleDayCalendar';
 import { useKeycloak } from '@react-keycloak/web';
-import { EventInfo, Roles, SlotInfo } from '../types';
-import ArrowUp from '../assets/ArrowUp.svg';
-import ArrowDown from '../assets/ArrowDown.svg';
+import { EventInfo, Roles, SlotInfo } from '../../../types';
+import ArrowUp from '../../../assets/ArrowUp.svg';
+import ArrowDown from '../../../assets/ArrowDown.svg';
 
 const Wrapper = styled.div``;
 

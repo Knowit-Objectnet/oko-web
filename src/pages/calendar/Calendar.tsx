@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { default as DateCalendar } from 'react-calendar';
-import { RegCalendar } from './RegCalendar';
+import { RegCalendar } from './RegCalendar/RegCalendar';
 import { useState } from 'react';
 import { Modal } from '../../sharedComponents/Modal';
 import { Event } from './events/Event';
@@ -9,6 +9,9 @@ import { ExtraEvent } from './events/ExtraEvent';
 import { NewEvent } from './events/NewEvent';
 import { SideMenu } from './SideMenu';
 import { Roles } from '../../types';
+import keycloak from '../../keycloak';
+import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
+import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -131,6 +134,24 @@ export const CalendarPage: React.FC = () => {
         setIsToggled(!isToggled);
     };
 
+    const getCalendar = () => {
+        if (keycloak.hasRealmRole(Roles.Oslo)) {
+            return (
+                <RegCalendar
+                    onSelectEvent={onSelectEvent}
+                    onSelectSlot={onSelectSlot}
+                    newEvent={newEvent}
+                    date={selectedDate}
+                />
+            );
+        } else if (keycloak.hasRealmRole(Roles.Partner)) {
+            return <PartnerCalendar date={selectedDate} isToggled={isToggled} />;
+        } else if (keycloak.hasRealmRole(Roles.Ambassador)) {
+            return <AmbassadorCalendar date={selectedDate} isToggled={isToggled} />;
+        }
+        return null;
+    };
+
     return (
         <>
             {showModal ? (
@@ -145,14 +166,7 @@ export const CalendarPage: React.FC = () => {
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
                 </ModuleDateCalendar>
-                <ModuleCalendar>
-                    <RegCalendar
-                        onSelectEvent={onSelectEvent}
-                        onSelectSlot={onSelectSlot}
-                        newEvent={newEvent}
-                        date={selectedDate}
-                    />
-                </ModuleCalendar>
+                <ModuleCalendar>{getCalendar()}</ModuleCalendar>
                 <Sidebar>
                     <SideMenu onCalendarToggleClick={toggleCalendarClick} onNewEventClick={newEvent} />
                 </Sidebar>

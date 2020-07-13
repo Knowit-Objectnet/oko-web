@@ -47,7 +47,8 @@ interface TimeColumnProps {
     min: Date;
     max: Date;
     step: number;
-    title: string;
+    title?: string;
+    colNum: number;
     events?: Array<EventInfo>;
     selectable: boolean;
     onSelectEvent?: (eventInfo: EventInfo) => void;
@@ -67,7 +68,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
     useEffect(() => {
         const temp: Array<JSX.Element> = [];
         for (let i = 0; i < Math.ceil(numberOfSlots / 2); i++) {
-            temp.push(<TimeSlotGroup key={props.title + i} id={(i + 1) * 2} />);
+            temp.push(<TimeSlotGroup key={'group' + props.colNum + i} id={(i + 1) * 2} />);
         }
         setGroups(temp);
     }, []);
@@ -215,7 +216,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
 
     return (
         <Wrapper {...wrapperFunctions}>
-            <ColumnTitle title={props.title} />
+            {props.title ? <ColumnTitle title={props.title} /> : null}
             <EventsSlotsWrapper>
                 <Column {...columnFunctions}>{groups}</Column>
                 <EventsColumn

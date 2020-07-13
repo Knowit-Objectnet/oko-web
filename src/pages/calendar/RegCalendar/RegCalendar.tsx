@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiEvent, EventInfo, Roles, SlotInfo, apiUrl } from '../../types';
+import { ApiEvent, EventInfo, Roles, SlotInfo, apiUrl } from '../../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
-import { ExpandableAgenda } from '../../sharedComponents/ExpandableAgenda';
+import { fetcher } from '../../../utils/fetcher';
+import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 
@@ -33,7 +33,7 @@ const CalendarWrapper = styled.div`
 `;
 
 const AgendaWrapper = styled.div`
-    &:not(last-child) {
+    &:not(:last-child) {
         margin-bottom: 20px;
     }
 `;
@@ -53,7 +53,7 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     const { keycloak } = useKeycloak();
 
     // Events fetched from api
-    const { data: apiEvents } = useSWR<ApiEvent[]>([`${apiUrl}/events/`, keycloak.token], fetcher);
+    const { data: apiEvents } = useSWR<ApiEvent[]>([`${apiUrl}/calendar/events/`, keycloak.token], fetcher);
     const events: EventInfo[] = apiEvents
         ? apiEvents.map((event: ApiEvent) => {
               const newEvent: EventInfo = {

@@ -17,6 +17,7 @@ interface GutterProps {
     start: Date;
     step: number;
     end: Date;
+    showTitleGroup: boolean;
 }
 
 export const Gutter: React.FC<GutterProps> = (props) => {
@@ -33,7 +34,7 @@ export const Gutter: React.FC<GutterProps> = (props) => {
 
     return (
         <Column>
-            <GutterGroup />
+            {props.showTitleGroup ? <GutterGroup /> : null}
             {groups}
         </Column>
     );

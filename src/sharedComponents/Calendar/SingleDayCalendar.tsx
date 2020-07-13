@@ -11,6 +11,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    flex: 1;
 `;
 
 const Content = styled.div`
@@ -33,7 +34,7 @@ const Columns = styled.div`
 
 interface SingleDayCalendarProps {
     date: Date;
-    columns: Array<string>;
+    columns: Array<string | undefined>;
     events?: Array<Array<EventInfo>>;
     min: Date;
     max: Date;
@@ -102,15 +103,21 @@ export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({
     return (
         <Wrapper>
             <Content>
-                <Gutter start={props.min} step={step} end={props.max} />
+                <Gutter
+                    start={props.min}
+                    step={step}
+                    end={props.max}
+                    showTitleGroup={props.columns.every((col) => !col) === undefined}
+                />
                 <Columns>
                     {props.columns.map((column, index) =>
                         useMemo(
                             () => (
                                 <TimeColumn
-                                    key={column}
+                                    key={column ? column : 'col' + index}
                                     date={props.date}
                                     title={column}
+                                    colNum={index}
                                     events={events[index]}
                                     min={props.min}
                                     max={props.max}

@@ -19,7 +19,7 @@ const Button = styled.div`
     border-radius: 50%;
     box-sizing: border-box;
 
-    &:not(last-child) {
+    &:not(:last-child) {
         margin-bottom: 30px;
     }
 `;
