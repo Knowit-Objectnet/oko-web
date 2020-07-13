@@ -10,11 +10,17 @@ const Wrapper = styled.div``;
 interface PartnerCalendarProps {
     date: Date;
     isToggled: boolean;
+    onSelectEvent: (start: Date, end: Date, title: string) => void;
 }
 
 export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
+
+    // Function that handles an event click in the calendar. It displays the Event in a modal
+    const onSelectEvent = (event: EventInfo) => {
+        props.onSelectEvent(event.start, event.end, event.title);
+    };
 
     const date = new Date();
     date.setHours(16, 0, 0, 0);
@@ -110,7 +116,12 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
 
     return (
         <Wrapper>
-            <ExpandableAgenda date={props.date} isToggled={props.isToggled} events={events} />
+            <ExpandableAgenda
+                date={props.date}
+                isToggled={props.isToggled}
+                onSelectEvent={onSelectEvent}
+                events={events}
+            />
         </Wrapper>
     );
 };

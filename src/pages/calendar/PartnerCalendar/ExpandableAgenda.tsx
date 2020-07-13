@@ -10,6 +10,7 @@ interface ExpandableAgendaProps {
     date: Date;
     isToggled: boolean;
     events: Array<EventInfo>;
+    onSelectEvent: (event: EventInfo) => void;
 }
 
 export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
@@ -20,7 +21,13 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     return (
         <Wrapper>
             {props.isToggled ? (
-                <WorkingWeekCalendar date={props.date} events={props.events} min={min} max={max} />
+                <WorkingWeekCalendar
+                    date={props.date}
+                    onSelectEvent={props.onSelectEvent}
+                    events={props.events}
+                    min={min}
+                    max={max}
+                />
             ) : (
                 <ListView date={props.date} events={props.events} />
             )}

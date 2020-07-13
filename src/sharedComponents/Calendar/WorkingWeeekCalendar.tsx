@@ -5,7 +5,7 @@ import { Gutter } from './Gutter';
 import { TimeColumn } from './TimeColumn';
 import add from 'date-fns/add';
 import { useMemo } from 'react';
-import isSameDay from "date-fns/isSameDay";
+import isSameDay from 'date-fns/isSameDay';
 
 const Wrapper = styled.div`
     box-sizing: border-box;
@@ -38,9 +38,16 @@ interface WorkingWeekCalendarProps {
     min: Date;
     max: Date;
     step?: number;
+    selectable?: boolean;
+    onSelectEvent?: (eventInfo: EventInfo) => void;
 }
 
-export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({ step = 15, events = [], ...props }) => {
+export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
+    step = 15,
+    events = [],
+    selectable = false,
+    ...props
+}) => {
     const setDate = (date: Date) => {
         return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
     };
@@ -93,7 +100,8 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({ step =
                                     min={props.min}
                                     max={props.max}
                                     step={step}
-                                    selectable={false}
+                                    selectable={selectable}
+                                    onSelectEvent={props.onSelectEvent}
                                 />
                             ),
                             [events[index], props.date],
