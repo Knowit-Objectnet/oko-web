@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Agenda } from './Agenda/Agenda';
-import { Calendar } from './Calendar/Calendar';
+import { SingleDayCalendar } from './Calendar/SingleDayCalendar';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventInfo, Roles, SlotInfo } from '../types';
 import ArrowUp from '../assets/ArrowUp.svg';
@@ -112,7 +112,7 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                 )}
             </Header>
             {expanded ? (
-                <Calendar
+                <SingleDayCalendar
                     columns={props.columns}
                     events={props.events}
                     onSelectSlot={onSelectSlot}

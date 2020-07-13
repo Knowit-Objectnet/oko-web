@@ -2,7 +2,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Calendar from '../../assets/Calendar.svg';
 import Plus from '../../assets/Plus.svg';
-import { Colors } from '../../types';
+import { Colors, Roles } from '../../types';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     display: flex;
@@ -26,27 +27,23 @@ const Button = styled.div`
 interface SideMenuProps {
     onCalendarToggleClick: () => void;
     onNewEventClick: () => void;
-    showCalendarToggle?: boolean;
-    showNewEventButton?: boolean;
 }
 
 /**
  * Component that lets a user choose which location (ombruksstasjon) they want to view events from
  */
 export const SideMenu: React.FC<SideMenuProps> = (props) => {
-    // On change function for radio buttons
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-    };
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
 
     return (
         <Wrapper>
-            {props.showCalendarToggle ? (
+            {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
                 <Button onClick={props.onCalendarToggleClick}>
                     <Calendar height="100%" />
                 </Button>
             ) : null}
-            {props.showNewEventButton ? (
+            {keycloak.hasRealmRole(Roles.Oslo) || keycloak.hasRealmRole(Roles.Ambassador) ? (
                 <Button onClick={props.onNewEventClick}>
                     <Plus height="100%" />
                 </Button>

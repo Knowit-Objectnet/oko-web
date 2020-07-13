@@ -31,7 +31,7 @@ const Columns = styled.div`
     box-sizing: border-box;
 `;
 
-interface CalendarProps {
+interface SingleDayCalendarProps {
     date: Date;
     columns: Array<string>;
     events?: Array<Array<EventInfo>>;
@@ -44,7 +44,12 @@ interface CalendarProps {
     onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
 }
 
-export const Calendar: React.FC<CalendarProps> = ({ selectable = false, step = 15, events = [], ...props }) => {
+export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({
+    selectable = false,
+    step = 15,
+    events = [],
+    ...props
+}) => {
     const setDate = (date: Date) => {
         return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
     };
