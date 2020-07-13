@@ -16,18 +16,19 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
-    props.date.setHours(16, 0, 0, 0);
-    const eventEnd = add(props.date, { minutes: 120 });
-    const eventEnd2 = add(props.date, { minutes: 30 });
-    const eventstart3 = add(props.date, { minutes: 31 });
-    const eventEnd3 = add(props.date, { minutes: 200 });
-    const eventStart4 = add(props.date, { minutes: 70 });
-    const eventEnd4 = add(props.date, { minutes: 120 });
+    const date = new Date();
+    date.setHours(16, 0, 0, 0);
+    const eventEnd = add(date, { minutes: 120 });
+    const eventEnd2 = add(date, { minutes: 30 });
+    const eventstart3 = add(date, { minutes: 31 });
+    const eventEnd3 = add(date, { minutes: 200 });
+    const eventStart4 = add(date, { minutes: 70 });
+    const eventEnd4 = add(date, { minutes: 120 });
 
     const events: Array<EventInfo> = [
         {
             title: 'Frigo',
-            start: props.date,
+            start: date,
             end: eventEnd,
             resource: {
                 location: {
@@ -35,8 +36,8 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
                     name: 'test1',
                 },
                 message: {
-                    start: props.date,
-                    end: props.date,
+                    start: date,
+                    end: date,
                     text: 'test',
                 },
             },
@@ -51,15 +52,15 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
                     name: 'test2',
                 },
                 message: {
-                    start: props.date,
-                    end: props.date,
+                    start: date,
+                    end: date,
                     text: 'test',
                 },
             },
         },
         {
             title: 'Fretex',
-            start: props.date,
+            start: date,
             end: eventEnd2,
             resource: {
                 location: {
@@ -67,8 +68,8 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
                     name: 'test1',
                 },
                 message: {
-                    start: props.date,
-                    end: props.date,
+                    start: date,
+                    end: date,
                     text: 'test',
                 },
             },
@@ -83,8 +84,8 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
                     name: 'test2',
                 },
                 message: {
-                    start: props.date,
-                    end: props.date,
+                    start: date,
+                    end: date,
                     text: 'test',
                 },
             },
@@ -99,8 +100,8 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
                     name: 'test3',
                 },
                 message: {
-                    start: props.date,
-                    end: props.date,
+                    start: date,
+                    end: date,
                     text: 'test',
                 },
             },

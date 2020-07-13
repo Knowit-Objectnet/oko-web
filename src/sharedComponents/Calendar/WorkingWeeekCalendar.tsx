@@ -5,6 +5,7 @@ import { Gutter } from './Gutter';
 import { TimeColumn } from './TimeColumn';
 import add from 'date-fns/add';
 import { useMemo } from 'react';
+import isSameDay from "date-fns/isSameDay";
 
 const Wrapper = styled.div`
     box-sizing: border-box;
@@ -33,7 +34,7 @@ const Columns = styled.div`
 
 interface WorkingWeekCalendarProps {
     date: Date;
-    events?: Array<Array<EventInfo>>;
+    events?: Array<EventInfo>;
     min: Date;
     max: Date;
     step?: number;
@@ -65,6 +66,13 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({ step =
     const date5 = add(date1, { days: 4 });
     const dates = [date1, date2, date3, date4, date5];
 
+    const day1Events = events.filter((event) => isSameDay(event.start, date1));
+    const day2Events = events.filter((event) => isSameDay(event.start, date2));
+    const day3Events = events.filter((event) => isSameDay(event.start, date3));
+    const day4Events = events.filter((event) => isSameDay(event.start, date4));
+    const day5Events = events.filter((event) => isSameDay(event.start, date5));
+    const daysSortedEvents = [day1Events, day2Events, day3Events, day4Events, day5Events];
+
     return (
         <Wrapper>
             <Content>
@@ -81,7 +89,7 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({ step =
                                         day: 'numeric',
                                     })}
                                     colNum={index}
-                                    events={events[index]}
+                                    events={daysSortedEvents[index]}
                                     min={props.min}
                                     max={props.max}
                                     step={step}
