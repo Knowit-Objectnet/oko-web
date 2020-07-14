@@ -27,22 +27,11 @@ const Items = styled.div``;
 interface ListGroupProps {
     date: Date;
     events: Array<EventInfo>;
+    sorting: (events: Array<EventInfo>) => Map<string, Array<EventInfo>>;
 }
 
 export const ListGroup: React.FC<ListGroupProps> = (props) => {
-    const locationSortedEvents = new Map<string, Array<EventInfo>>();
-    props.events.forEach((event) => {
-        if (event.resource?.location) {
-            if (locationSortedEvents.has(event.resource.location.name)) {
-                const _events = locationSortedEvents.get(event.resource.location.name);
-                if (_events) {
-                    _events.push(event);
-                }
-            } else {
-                locationSortedEvents.set(event.resource.location.name, [event]);
-            }
-        }
-    });
+    const sortedEvents = props.sorting(props.events);
 
     return (
         <Wrapper>
@@ -52,10 +41,10 @@ export const ListGroup: React.FC<ListGroupProps> = (props) => {
                 </DateText>
             </Header>
             <Items>
-                {[...locationSortedEvents.keys()].map((location) => {
-                    const _events = locationSortedEvents.get(location);
+                {[...sortedEvents.keys()].map((text) => {
+                    const _events = sortedEvents.get(text);
                     return (
-                        <ListItem key={location} date={props.date} title={location} events={_events ? _events : []} />
+                        <ListItem key={text} date={props.date} title={text} events={_events ? _events : []} />
                     );
                 })}
             </Items>
