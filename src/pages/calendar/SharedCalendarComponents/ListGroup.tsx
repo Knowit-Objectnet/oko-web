@@ -1,11 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import addDays from 'date-fns/addDays';
-import isSameDay from 'date-fns/isSameDay';
 import { EventInfo } from '../../../types';
 import { ListItem } from './ListItem';
-import ArrowDown from '../../../assets/ArrowDown.svg';
-import ArrowUp from '../../../assets/ArrowUp.svg';
 
 const Wrapper = styled.div``;
 
@@ -43,9 +39,7 @@ export const ListGroup: React.FC<ListGroupProps> = (props) => {
             <Items>
                 {[...sortedEvents.keys()].map((text) => {
                     const _events = sortedEvents.get(text);
-                    return (
-                        <ListItem key={text} date={props.date} title={text} events={_events ? _events : []} />
-                    );
+                    return <ListItem key={text} date={props.date} title={text} events={_events ? _events : []} />;
                 })}
             </Items>
         </Wrapper>

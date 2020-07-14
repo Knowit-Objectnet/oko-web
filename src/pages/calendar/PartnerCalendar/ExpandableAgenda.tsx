@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeeekCalendar';
 import { ListView } from '../SharedCalendarComponents/ListView';
 import { EventInfo } from '../../../types';
-import addDays from "date-fns/addDays";
-import isSameDay from "date-fns/isSameDay";
+import addDays from 'date-fns/addDays';
+import isSameDay from 'date-fns/isSameDay';
 
 const Wrapper = styled.div``;
 

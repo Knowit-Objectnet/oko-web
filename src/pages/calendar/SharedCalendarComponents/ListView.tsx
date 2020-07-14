@@ -1,7 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import addDays from 'date-fns/addDays';
-import isSameDay from 'date-fns/isSameDay';
 import { EventInfo } from '../../../types';
 import { ListGroup } from './ListGroup';
 
