@@ -5,6 +5,7 @@ import { ListView } from '../SharedCalendarComponents/ListView';
 import { Colors, EventInfo } from '../../../types';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
+import {WeekMenu} from "../WeekMenu";
 
 const Wrapper = styled.div``;
 
@@ -13,6 +14,7 @@ interface ExpandableAgendaProps {
     isToggled: boolean;
     events: Array<EventInfo>;
     onSelectEvent: (event: EventInfo) => void;
+    onWeekChange: (delta: -1 | 1) => void;
 }
 
 export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
@@ -60,13 +62,16 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     return (
         <Wrapper>
             {props.isToggled ? (
-                <WorkingWeekCalendar
-                    date={props.date}
-                    onSelectEvent={props.onSelectEvent}
-                    events={props.events}
-                    min={min}
-                    max={max}
-                />
+                <>
+                    <WeekMenu date={props.date} changeWeek={props.onWeekChange} />
+                    <WorkingWeekCalendar
+                        date={props.date}
+                        onSelectEvent={props.onSelectEvent}
+                        events={props.events}
+                        min={min}
+                        max={max}
+                    />
+                </>
             ) : (
                 <ListView
                     date={props.date}

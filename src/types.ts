@@ -1,5 +1,3 @@
-import { stringOrDate } from 'react-big-calendar';
-
 export interface ApiEvent {
     id: number;
     startDateTime: string;

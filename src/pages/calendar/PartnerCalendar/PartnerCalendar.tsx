@@ -11,6 +11,7 @@ interface PartnerCalendarProps {
     date: Date;
     isToggled: boolean;
     onSelectEvent: (start: Date, end: Date, title: string) => void;
+    onWeekChange: (delta: -1 | 1) => void;
 }
 
 export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
@@ -121,6 +122,7 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
                 isToggled={props.isToggled}
                 onSelectEvent={onSelectEvent}
                 events={events}
+                onWeekChange={props.onWeekChange}
             />
         </Wrapper>
     );

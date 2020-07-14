@@ -11,6 +11,7 @@ interface AmbassadorCalendarProps {
     date: Date;
     isToggled: boolean;
     onSelectEvent: (start: Date, end: Date, title: string) => void;
+    onWeekChange: (delta: -1 | 1) => void;
 }
 
 export const AmbassadorCalendar: React.FC<AmbassadorCalendarProps> = (props) => {
@@ -121,6 +122,7 @@ export const AmbassadorCalendar: React.FC<AmbassadorCalendarProps> = (props) => 
                 isToggled={props.isToggled}
                 onSelectEvent={onSelectEvent}
                 events={events}
+                onWeekChange={props.onWeekChange}
             />
         </Wrapper>
     );
