@@ -20,8 +20,12 @@ const Wrapper = styled.div<WrapperProps>`
     }
 `;
 
-const Time = styled.div`
-    background-color: ${Colors.LightBlue};
+interface Color {
+    color: Colors;
+}
+
+const Time = styled.div<Color>`
+    background-color: ${(props) => props.color};
     margin-right: 2px;
     justify-content: center;
     align-items: center;
@@ -34,7 +38,7 @@ const Info = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${Colors.LightBlue};
+    background-color: ${(props) => props.color};
     padding: 0px 15px;
 `;
 
@@ -61,6 +65,7 @@ interface ListItemProps {
     title: string;
     events: Array<EventInfo>;
     date: Date;
+    color: Colors;
 }
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
@@ -85,8 +90,8 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     return (
         <div>
             <Wrapper expanded={expanded}>
-                {expanded ? null : <Time>{getTimeString(minTime, maxTime)}</Time>}
-                <Info>
+                {expanded ? null : <Time color={props.color}>{getTimeString(minTime, maxTime)}</Time>}
+                <Info color={props.color}>
                     <Name>{props.title}</Name>
                     <Toggle>
                         {expanded ? 'Se mindre' : 'Se stasjonskalender'}
@@ -98,7 +103,15 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
                     </Toggle>
                 </Info>
             </Wrapper>
-            {expanded ? <ListItemDropdown date={props.date} min={minTime} max={maxTime} events={props.events} /> : null}
+            {expanded ? (
+                <ListItemDropdown
+                    date={props.date}
+                    min={minTime}
+                    max={maxTime}
+                    events={props.events}
+                    color={props.color}
+                />
+            ) : null}
         </div>
     );
 };

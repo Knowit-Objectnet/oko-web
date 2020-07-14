@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo } from '../../../types';
+import { Colors, EventInfo } from '../../../types';
 import { ListItem } from './ListItem';
 
 const Wrapper = styled.div``;
@@ -24,10 +24,13 @@ interface ListGroupProps {
     date: Date;
     events: Array<EventInfo>;
     sorting: (events: Array<EventInfo>) => Map<string, Array<EventInfo>>;
+    specificColor?: Colors;
 }
 
 export const ListGroup: React.FC<ListGroupProps> = (props) => {
     const sortedEvents = props.sorting(props.events);
+
+    const colors = Object.values(Colors);
 
     return (
         <Wrapper>
@@ -37,9 +40,17 @@ export const ListGroup: React.FC<ListGroupProps> = (props) => {
                 </DateText>
             </Header>
             <Items>
-                {[...sortedEvents.keys()].map((text) => {
+                {[...sortedEvents.keys()].map((text, i) => {
                     const _events = sortedEvents.get(text);
-                    return <ListItem key={text} date={props.date} title={text} events={_events ? _events : []} />;
+                    return (
+                        <ListItem
+                            key={text}
+                            date={props.date}
+                            title={text}
+                            events={_events ? _events : []}
+                            color={props.specificColor ? props.specificColor : colors[i % (colors.length - 1)]}
+                        />
+                    );
                 })}
             </Items>
         </Wrapper>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeeekCalendar';
 import { ListView } from '../SharedCalendarComponents/ListView';
-import { EventInfo } from '../../../types';
+import { Colors, EventInfo } from '../../../types';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 
@@ -68,7 +68,12 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     max={max}
                 />
             ) : (
-                <ListView date={props.date} dayAndEvents={daysAndSortedEvents} sorting={sorting} />
+                <ListView
+                    date={props.date}
+                    dayAndEvents={daysAndSortedEvents}
+                    sorting={sorting}
+                    specificColor={Colors.LightBlue}
+                />
             )}
         </Wrapper>
     );

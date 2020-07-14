@@ -8,10 +8,14 @@ import ClickIcon from '../../../assets/Clock.svg';
 import LocationIcon from '../../../assets/Location.svg';
 import add from 'date-fns/add';
 
-const Wrapper = styled.div`
+interface WrapperProps {
+    color: Colors;
+}
+
+const Wrapper = styled.div<WrapperProps>`
     width: 100%;
     display: flex;
-    border: solid 2px ${Colors.LightBlue};
+    border: solid 2px ${(props) => props.color};
     border-top: none;
     box-sizing: border-box;
 
@@ -134,6 +138,7 @@ interface ListItemDropdownProps {
     date: Date;
     min: Date;
     max: Date;
+    color: Colors;
 }
 
 export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
@@ -150,7 +155,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
     newMax = add(newMax, { hours: 1 });
 
     return (
-        <Wrapper>
+        <Wrapper color={props.color}>
             <Calendar isEventSelected={selectedEvent !== null}>
                 <SingleDayCalendar
                     date={props.date}
