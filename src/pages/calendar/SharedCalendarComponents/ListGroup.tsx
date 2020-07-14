@@ -30,7 +30,7 @@ interface ListGroupProps {
 export const ListGroup: React.FC<ListGroupProps> = (props) => {
     const sortedEvents = props.sorting(props.events);
 
-    const colors = Object.values(Colors);
+    const colors = Object.values(Colors).filter((color) => color !== Colors.Black && color !== Colors.White);
 
     return (
         <Wrapper>
