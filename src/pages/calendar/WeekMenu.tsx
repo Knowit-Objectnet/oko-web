@@ -38,5 +38,5 @@ export const WeekMenu: React.FC<WeekMenuProps> = (props) => {
             <WeekText>Uke {getISOWeek(props.date)}</WeekText>
             <ArrowRight height="2em" onClick={onNextWeek} />
         </Wrapper>
-    )
+    );
 };

@@ -12,7 +12,7 @@ import { Roles } from '../../types';
 import keycloak from '../../keycloak';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
-import add from "date-fns/add";
+import add from 'date-fns/add';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -157,7 +157,7 @@ export const CalendarPage: React.FC = () => {
     const onWeekChange = (delta: -1 | 1) => {
         const dayOfDeltaWeek = add(selectedDate, { weeks: delta });
         setSelectedDate(dayOfDeltaWeek);
-    }
+    };
 
     const getCalendar = () => {
         if (keycloak.hasRealmRole(Roles.Partner)) {
@@ -201,7 +201,7 @@ export const CalendarPage: React.FC = () => {
             ) : null}
             <Wrapper>
                 <ModuleDateCalendar>
-                    <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange}  />
+                    <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
                 </ModuleDateCalendar>
                 <ModuleCalendar>{getCalendar()}</ModuleCalendar>
                 <Sidebar>
