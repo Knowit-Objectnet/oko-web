@@ -24,8 +24,17 @@ interface Color {
     color: Colors;
 }
 
+const getTextColor = (color: Colors) => {
+    if (color === Colors.DarkBlue || color === Colors.DarkBegie || color === Colors.DarkGreen) {
+        return Colors.White;
+    } else {
+        return Colors.Black;
+    }
+};
+
 const Time = styled.div<Color>`
     background-color: ${(props) => props.color};
+    color: ${(props) => getTextColor(props.color)};
     margin-right: 2px;
     justify-content: center;
     align-items: center;
@@ -33,12 +42,13 @@ const Time = styled.div<Color>`
     padding: 0px 20px;
 `;
 
-const Info = styled.div`
+const Info = styled.div<Color>`
+    background-color: ${(props) => props.color};
+    color: ${(props) => getTextColor(props.color)};
     flex 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${(props) => props.color};
     padding: 0px 15px;
 `;
 
@@ -51,14 +61,16 @@ const Toggle = styled.div`
     align-items: center;
 `;
 
-const StyledArrowDown = styled(ArrowDown)`
+const StyledArrowDown = styled(ArrowDown)<Color>`
     height: 2em;
     margin-left: 5px;
+    fill: ${(props) => getTextColor(props.color)};
 `;
 
-const StyledArrowUp = styled(ArrowUp)`
+const StyledArrowUp = styled(ArrowUp)<Color>`
     height: 2em;
     margin-left: 5px;
+    fill: ${(props) => getTextColor(props.color)};
 `;
 
 interface ListItemProps {
@@ -96,9 +108,9 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
                     <Toggle>
                         {expanded ? 'Se mindre' : 'Se stasjonskalender'}
                         {expanded ? (
-                            <StyledArrowDown onClick={onExpandClick} />
+                            <StyledArrowDown color={props.color} onClick={onExpandClick} />
                         ) : (
-                            <StyledArrowUp onClick={onExpandClick} />
+                            <StyledArrowUp color={props.color} onClick={onExpandClick} />
                         )}
                     </Toggle>
                 </Info>
