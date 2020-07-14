@@ -39,7 +39,6 @@ const Event = styled.div`
 `;
 
 const Info = styled.div`
-    flex: 1;
     display: flex;
 `;
 
@@ -139,6 +138,7 @@ interface ListItemDropdownProps {
     min: Date;
     max: Date;
     color: Colors;
+    allowDeletionOfEvent?: boolean;
 }
 
 export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
@@ -227,9 +227,11 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
                             </MessageBox>
                         ) : null}
                     </Info>
-                    <Submission>
-                        <Button>Avlys</Button>
-                    </Submission>
+                    {props.allowDeletionOfEvent ? (
+                        <Submission>
+                            <Button>Avlys</Button>
+                        </Submission>
+                    ) : null}
                 </Event>
             ) : null}
         </Wrapper>

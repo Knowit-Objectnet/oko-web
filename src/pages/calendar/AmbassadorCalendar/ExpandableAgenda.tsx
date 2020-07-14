@@ -66,7 +66,7 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     max={max}
                 />
             ) : (
-                <ListView date={props.date} dayAndEvents={daysAndSortedEvents} sorting={sorting} />
+                <ListView date={props.date} dayAndEvents={daysAndSortedEvents} sorting={sorting} allowDeletionOfEvent={false} />
             )}
         </Wrapper>
     );

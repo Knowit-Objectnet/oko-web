@@ -27,6 +27,7 @@ const Button = styled.div`
 interface SideMenuProps {
     onCalendarToggleClick: () => void;
     onNewEventClick: () => void;
+    onExtraEventClick: () => void;
 }
 
 /**
@@ -36,6 +37,14 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
+    const onNewOrExtraEventClick = () => {
+        if (keycloak.hasRealmRole(Roles.Ambassador)) {
+            props.onExtraEventClick();
+        } else {
+            props.onNewEventClick();
+        }
+    };
+
     return (
         <Wrapper>
             {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
@@ -44,7 +53,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
                 </Button>
             ) : null}
             {keycloak.hasRealmRole(Roles.Oslo) || keycloak.hasRealmRole(Roles.Ambassador) ? (
-                <Button onClick={props.onNewEventClick}>
+                <Button onClick={onNewOrExtraEventClick}>
                     <Plus height="100%" />
                 </Button>
             ) : null}

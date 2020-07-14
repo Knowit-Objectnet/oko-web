@@ -25,6 +25,7 @@ interface ListGroupProps {
     events: Array<EventInfo>;
     sorting: (events: Array<EventInfo>) => Map<string, Array<EventInfo>>;
     specificColor?: Colors;
+    allowDeletionOfEvent?: boolean;
 }
 
 export const ListGroup: React.FC<ListGroupProps> = (props) => {
@@ -49,6 +50,7 @@ export const ListGroup: React.FC<ListGroupProps> = (props) => {
                             title={text}
                             events={_events ? _events : []}
                             color={props.specificColor ? props.specificColor : colors[i % (colors.length - 1)]}
+                            allowDeletionOfEvent={props.allowDeletionOfEvent}
                         />
                     );
                 })}

@@ -68,7 +68,7 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const newEvent = () => {
+    const getStartAndEnd = () => {
         // Date object for creating other date objects
         const date = new Date();
         // Date object for getting time and date now
@@ -98,8 +98,27 @@ export const CalendarPage: React.FC = () => {
             end = max;
         }
 
+        return { start, end };
+    };
+
+    const newEvent = () => {
+        const { start, end } = getStartAndEnd();
         setModalContent(
             <NewEvent
+                start={start}
+                end={end}
+                onFinished={() => {
+                    setShowModal(false);
+                }}
+            />,
+        );
+        setShowModal(true);
+    };
+
+    const extraEvent = () => {
+        const { start, end } = getStartAndEnd();
+        setModalContent(
+            <ExtraEvent
                 start={start}
                 end={end}
                 onFinished={() => {
@@ -166,7 +185,11 @@ export const CalendarPage: React.FC = () => {
                 </ModuleDateCalendar>
                 <ModuleCalendar>{getCalendar()}</ModuleCalendar>
                 <Sidebar>
-                    <SideMenu onCalendarToggleClick={toggleCalendarClick} onNewEventClick={newEvent} />
+                    <SideMenu
+                        onCalendarToggleClick={toggleCalendarClick}
+                        onNewEventClick={newEvent}
+                        onExtraEventClick={extraEvent}
+                    />
                 </Sidebar>
             </Wrapper>
         </>

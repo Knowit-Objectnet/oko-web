@@ -78,6 +78,7 @@ interface ListItemProps {
     events: Array<EventInfo>;
     date: Date;
     color: Colors;
+    allowDeletionOfEvent?: boolean;
 }
 
 export const ListItem: React.FC<ListItemProps> = (props) => {
@@ -122,6 +123,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
                     max={maxTime}
                     events={props.events}
                     color={props.color}
+                    allowDeletionOfEvent={props.allowDeletionOfEvent}
                 />
             ) : null}
         </div>

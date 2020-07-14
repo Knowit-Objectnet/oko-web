@@ -73,6 +73,7 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     dayAndEvents={daysAndSortedEvents}
                     sorting={sorting}
                     specificColor={Colors.LightBlue}
+                    allowDeletionOfEvent={true}
                 />
             )}
         </Wrapper>
