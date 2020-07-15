@@ -20,6 +20,10 @@ const Button = styled.button`
     font-size: 11px;
     line-height: 13px;
     color: #000000;
+
+    &:first-child {
+        margin-right: 95px;
+    }
 `;
 
 interface EventSubmissionProps {

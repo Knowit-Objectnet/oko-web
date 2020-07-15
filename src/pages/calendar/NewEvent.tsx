@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Person } from '@styled-icons/material/Person';
 import { EventSubmission } from './EventSubmission';
 import { useState } from 'react';
-import { EventOption } from './EventOption';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplate } from './EventTemplate';
@@ -11,7 +9,9 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner } from '../../types';
+import { ApiLocation, ApiPartner, apiUrl } from '../../types';
+import { PostToAPI } from '../../utils/PostToAPI';
+import add from 'date-fns/add';
 
 const Options = styled.div`
     display: flex;
@@ -122,8 +122,78 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     };
 
     // Function called on successful event edit.
-    const onSubmit = () => {
-        //TODO: Submit to server
+    const onSubmit = async () => {
+        if (!keycloak?.token) return;
+
+        // Add 2 hours to dates as we don't support timezones. Hopefully this code doesnt go outside of Norway
+        //const startTime = add(timeRange[0], { hours: 2 });
+        //const endTime = add(timeRange[1], { hours: 2 });
+        //const until = add(dateRange[1], { hours: 2 });
+        // Dates has to be written as strings as we need to remove the Z, as ISO 8601 is not fully supported
+        const data: {
+            startDateTime: string;
+            endDateTime: string;
+            station: { id: number };
+            partner: { id: number };
+            recurrenceRule?: {
+                until: string;
+                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+                count?: number;
+                interval?: number;
+            };
+        } = {
+            startDateTime: timeRange[0].toISOString().slice(0, -2),
+            endDateTime: timeRange[1].toISOString().slice(0, -2),
+            station: {
+                id: locationId,
+            },
+            partner: {
+                id: selectedPartnerId,
+            },
+        };
+
+        if (recurring === 'Daily') {
+            data.recurrenceRule = {
+                until: dateRange[1].toISOString().slice(0, -2),
+                days: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
+            };
+        } else if (recurring === 'Weekly') {
+            data.recurrenceRule = {
+                until: dateRange[1].toISOString().slice(0, -2),
+            };
+
+            const days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'> = [];
+
+            for (const day of selectedDays) {
+                switch (day) {
+                    case 1:
+                        days.push('MONDAY');
+                        break;
+                    case 2:
+                        days.push('TUESDAY');
+                        break;
+                    case 3:
+                        days.push('WEDNESDAY');
+                        break;
+                    case 4:
+                        days.push('THURSDAY');
+                        break;
+                    case 5:
+                        days.push('FRIDAY');
+                        break;
+                }
+            }
+
+            if (days) {
+                data.recurrenceRule.days = days;
+            }
+        }
+        try {
+            const res = await PostToAPI(apiUrl + '/calendar/events', data, keycloak.token);
+        } catch (err) {
+            console.log(err);
+        }
+
         props.onFinished();
     };
 

@@ -56,7 +56,7 @@ export const EventOptionPartner: React.FC<EventOptionPartnerProps> = (props) => 
                     Velg samarbeidspartner
                 </option>
                 {props.partners.map((partner, index) => (
-                    <option value={index} key={partner.id}>
+                    <option value={partner.id} key={partner.id}>
                         {partner.name}
                     </option>
                 ))}
