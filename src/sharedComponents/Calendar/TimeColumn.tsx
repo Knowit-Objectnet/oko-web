@@ -57,7 +57,7 @@ interface TimeColumnProps {
 }
 
 export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
-    const numberOfMinutes = (props.max.getTime() - props.min.getTime()) / 60000;
+    const numberOfMinutes = Math.round((props.max.getTime() - props.min.getTime()) / 60000);
     const numberOfSlots = numberOfMinutes / props.step;
 
     const [isSelectionActive, setIsSelectionActive] = useState(false);
