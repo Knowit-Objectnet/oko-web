@@ -7,7 +7,7 @@ import { fetcher } from '../../../utils/fetcher';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
-import add from "date-fns/add";
+import add from 'date-fns/add';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
