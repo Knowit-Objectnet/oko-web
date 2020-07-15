@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Agenda } from '../../../sharedComponents/Agenda/Agenda';
+import { Agenda } from './Agenda';
 import { SingleDayCalendar } from '../../../sharedComponents/Calendar/SingleDayCalendar';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventInfo, Roles, SlotInfo } from '../../../types';

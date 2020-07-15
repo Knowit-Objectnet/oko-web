@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors, EventInfo } from '../../types';
+import { Colors, EventInfo } from '../../../types';
 
 const Table = styled.table`
     table-layout: fixed;
