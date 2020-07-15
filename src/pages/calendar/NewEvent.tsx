@@ -123,7 +123,18 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
 
     // Function called on successful event edit.
     const onSubmit = async () => {
+        // Cancel submission if token doesn't exist as they are not logged in
         if (!keycloak?.token) return;
+        // Cancel submission if start time is bigger than end time
+        if (timeRange[0] > timeRange[1]) return;
+        // Cancel submission if the start time is less than the min time
+        const min = new Date(timeRange[0]);
+        min.setHours(8, 0, 0, 0);
+        if (timeRange[0] < min) return;
+        // Cancel submission if the end time is less than the min time
+        const max = new Date(timeRange[1]);
+        max.setHours(20, 0, 0, 0);
+        if (timeRange[1] > max) return;
 
         // Add 2 hours to dates as we don't support timezones. Hopefully this code doesnt go outside of Norway
         //const startTime = add(timeRange[0], { hours: 2 });
@@ -188,6 +199,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 data.recurrenceRule.days = days;
             }
         }
+
         try {
             const res = await PostToAPI(apiUrl + '/calendar/events', data, keycloak.token);
         } catch (err) {
