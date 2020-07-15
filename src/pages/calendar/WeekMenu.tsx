@@ -23,11 +23,16 @@ interface WeekMenuProps {
     changeWeek: (delta: -1 | 1) => void;
 }
 
+/*
+ * Component for selecting weeks
+ */
 export const WeekMenu: React.FC<WeekMenuProps> = (props) => {
+    // Next week button
     const onNextWeek = () => {
         props.changeWeek(1);
     };
 
+    // Previous week button
     const onPreviousWeek = () => {
         props.changeWeek(-1);
     };

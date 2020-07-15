@@ -25,6 +25,9 @@ interface ColumnTitleProps {
     title?: string;
 }
 
+/*
+ * Title component for a column in the calendar
+ */
 export const ColumnTitle: React.FC<ColumnTitleProps> = (props) => (
     <Group>
         <Slot>{props.title}</Slot>

@@ -47,18 +47,22 @@ interface WeekCalendarProps {
 }
 
 /**
- * Component that handles the actualy calendar component from React Big Calendar
+ * Calendar component for REG employees
  */
 export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
+    // from and to date for event fetching
+    // The from date is the last monday from props.date and the to date is 1 week into the future
+    // This is such that the week-calendar always has it's 5 days of events
     const fromDate = add(props.date, { days: props.date.getDay() === 0 ? -6 : -props.date.getDay() + 1 });
     fromDate.setHours(7, 0, 0, 0);
     const toDate = add(props.date, { weeks: 1 });
     toDate.setHours(20, 0, 0, 0);
 
-    // Events fetched from api
+    // Events fetched from the api
+    // Contains parameters to only get events in date range specified above
     const { data: apiEvents } = useSWR<ApiEvent[]>(
         [
             `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}`,
@@ -87,12 +91,11 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     };
 
     // Function that handles time range selection in the calendar
-    // It displays either a new event, or extra event depending on user role.
-    // TODO: Make it show component depending on user role
     const onSelectSlot = (slotInfo: SlotInfo) => {
         props.onSelectSlot(slotInfo.start, slotInfo.end, keycloak.hasRealmRole(Roles.Oslo));
     };
 
+    // Function to order events by the locations 'Haralrud' 'Smestad' 'Grønmo' 'Grefsen' 'Ryen'
     const getOrderedEvents = (events: Array<EventInfo>) => {
         const orderedEvents = new Map<string, Array<EventInfo>>([
             ['Haralrud', []],
@@ -118,12 +121,14 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
         return orderedEvents;
     };
 
+    // The five days to display in the agenda
     const day1 = props.date;
     const day2 = addDays(day1, 1);
     const day3 = addDays(day1, 2);
     const day4 = addDays(day1, 3);
     const day5 = addDays(day1, 4);
 
+    // Sorting the events according to the five days above
     const day1Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day1)));
     const day2Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day2)));
     const day3Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day3)));

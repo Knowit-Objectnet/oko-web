@@ -51,54 +51,19 @@ export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({
     events = [],
     ...props
 }) => {
+    // Function to set a date to the props.date's year, month, date
     const setDate = (date: Date) => {
         return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
     };
 
+    // Set min and max to the prop.date
     setDate(props.min);
     setDate(props.max);
 
+    // If min is bigger or equal to max then throw error
     if (props.min >= props.max) {
         throw new Error('min has to be less than max');
     }
-
-    props.date.setHours(16, 0, 0, 0);
-    const eventEnd = add(props.date, { minutes: 20 });
-    const eventEnd2 = add(props.date, { minutes: 30 });
-    const eventstart3 = add(props.date, { minutes: 31 });
-    const eventEnd3 = add(props.date, { minutes: 60 });
-    const eventStart4 = add(props.date, { minutes: 70 });
-    const eventEnd4 = add(props.date, { minutes: 120 });
-
-    /*events = [
-        [
-            {
-                title: 'Frigo',
-                start: date,
-                end: eventEnd,
-            },
-            {
-                title: 'Test',
-                start: eventEnd,
-                end: eventEnd3,
-            },
-            {
-                title: 'Fretex',
-                start: date,
-                end: eventEnd2,
-            },
-            {
-                title: 'Jobben',
-                start: eventstart3,
-                end: eventEnd3,
-            },
-            {
-                title: 'Test 2',
-                start: eventStart4,
-                end: eventEnd4,
-            },
-        ],
-    ];*/
 
     return (
         <Wrapper>

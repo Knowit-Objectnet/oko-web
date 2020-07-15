@@ -20,13 +20,20 @@ interface GutterProps {
     showTitleGroup: boolean;
 }
 
+/*
+ * Gutter for displaying time in the interval given by step from start to end
+ */
 export const Gutter: React.FC<GutterProps> = (props) => {
+    // The number of slots in the gutter
     const numberOfSlots = (props.end.getTime() - props.start.getTime()) / 60000 / props.step;
 
+    // The groups to render
     const groups = [];
 
-    let time = props.start;
+    // The current time to render
+    let time = new Date(props.start);
 
+    // Render the gutter groups and increment the time by 2 steps
     for (let i = 0; i < Math.ceil(numberOfSlots / 2); i++) {
         groups.push(<GutterGroup key={'Gutter' + i} text={format(time, 'kk:mm')} />);
         time = add(time, { minutes: props.step * 2 });

@@ -63,12 +63,14 @@ export const CalendarPage: React.FC = () => {
     // State for side menu
     const [isToggled, setIsToggled] = useState(false);
 
+    // on date change function for the react date selector
     const onDateChange = (date: Date | Date[]) => {
         if (date instanceof Date) {
             setSelectedDate(date);
         }
     };
 
+    // Function to get start and end times/dates for new events
     const getStartAndEnd = () => {
         // Date object for creating other date objects
         const date = new Date();
@@ -102,6 +104,7 @@ export const CalendarPage: React.FC = () => {
         return { start, end };
     };
 
+    // New event display function
     const newEvent = () => {
         const { start, end } = getStartAndEnd();
         setModalContent(
@@ -116,6 +119,7 @@ export const CalendarPage: React.FC = () => {
         setShowModal(true);
     };
 
+    // Extra event display function
     const extraEvent = () => {
         const { start, end } = getStartAndEnd();
         setModalContent(
@@ -130,11 +134,13 @@ export const CalendarPage: React.FC = () => {
         setShowModal(true);
     };
 
+    // On event selection function to display an event
     const onSelectEvent = (start: Date, end: Date, title: string) => {
         setModalContent(<Event start={start} end={end} title={title} />);
         setShowModal(true);
     };
 
+    // On slot selection function to display new or extra event
     const onSelectSlot = (start: Date, end: Date, isOslo: boolean) => {
         const EventComponent = isOslo ? NewEvent : ExtraEvent;
 
@@ -150,15 +156,18 @@ export const CalendarPage: React.FC = () => {
         setShowModal(true);
     };
 
+    // Click function for agenda/calendar toggle button
     const toggleCalendarClick = () => {
         setIsToggled(!isToggled);
     };
 
+    // On week change selector function
     const onWeekChange = (delta: -1 | 1) => {
         const dayOfDeltaWeek = add(selectedDate, { weeks: delta });
         setSelectedDate(dayOfDeltaWeek);
     };
 
+    // Function to decide which calendar to render depending on role
     const getCalendar = () => {
         if (keycloak.hasRealmRole(Roles.Partner)) {
             return (

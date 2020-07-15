@@ -31,12 +31,15 @@ interface SideMenuProps {
 }
 
 /**
- * Component that lets a user choose which location (ombruksstasjon) they want to view events from
+ * Component that lets a user either create a new event (if REG) or toggle between agenda and calendar (if
+ * ambassador or partner)
  */
 export const SideMenu: React.FC<SideMenuProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
+    // On NewEvent or ExtraEvent button click
+    // Fire prop function depending on role
     const onNewOrExtraEventClick = () => {
         if (keycloak.hasRealmRole(Roles.Ambassador)) {
             props.onExtraEventClick();

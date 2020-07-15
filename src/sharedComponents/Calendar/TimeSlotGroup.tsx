@@ -13,6 +13,9 @@ interface TimeSlotGroupProps {
     id: number;
 }
 
+/*
+ * Timeslot group component
+ */
 export const TimeSlotGroup: React.FC<TimeSlotGroupProps> = (props) => (
     <Group>
         <TimeSlot id={props.id - 1} />

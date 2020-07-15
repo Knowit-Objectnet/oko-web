@@ -81,8 +81,13 @@ interface EventsColumnProps {
     onClick: (event: EventInfo) => void;
 }
 
+/*
+ * Events column component to render events in the calendar
+ */
 export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
+    // Ref to the events column (used to get the height of the calendar)
     const eventsRef = useRef<HTMLDivElement>(null);
+    // List of the rendered events
     const [renderedEvents, setRenderedEvents] = useState<Array<JSX.Element>>([]);
 
     /*
@@ -92,11 +97,13 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
         // Step 1: compute timesteps if applicable
         const timeslots: Array<number> = Array(props.numberOfMinutes).fill(0);
 
-        // Step 2: for each timestep , find the amount of the events that are covered by it (O(n))
+        // Step 2: for each timestep , find the amount of the events that are covered by it
         timeslots.forEach((val, i) => {
             events.forEach((event) => {
+                // Get the start and end time for the slot (1 minute)
                 const slotStart = add(props.deltaStart, { minutes: i });
                 const slotEnd = add(props.deltaStart, { minutes: i + 1 });
+                // Check if theres overlap between the event and the slot
                 const overlap = areIntervalsOverlapping(
                     {
                         start: slotStart,
@@ -111,12 +118,16 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
             });
         });
 
-        // Step 3: for each event, compute the maximum breadth they can have (O(n) after the former step)
+        // Step 3: for each event, compute the maximum breadth they can have
         const widthEvents = events.map((event, i) => {
+            // Get the start and end in minutes
             const start = (event.start.getTime() - props.deltaStart.getTime()) / 60000;
             const end = (event.end.getTime() - props.deltaStart.getTime()) / 60000;
+            // Get the tiemslots range
             const timeslotRange = timeslots.slice(start, end);
+            // Get the highest number of parallell events in the timeslot range
             const max = Math.max(...timeslotRange);
+            // Set the width
             const width = 1 / max;
             return {
                 ...event,
@@ -125,18 +136,24 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
             };
         });
 
-        // Step 4: Create a matrix for the timeslots to keep track of each height*width (this is O(n²))
+        // Step 4: Create a matrix for the timeslots to keep track of each height*width
         const matrix = timeslots.map((timeslot) => Array(timeslot ? timeslot : 1).fill(0));
 
-        // Step 5: For each event (ordered by start time = O(n*logn)),
+        // Step 5: Sort the events by their starting time
         widthEvents.sort((eventA, eventB) => eventA.start.getTime() - eventB.start.getTime());
 
-        // Step 6: Assign Events to the earliest available slot (O(n) to find the slot for each of the O(n) events => O(n²))
+        // Step 6: Assign Events to the earliest available slot ( to find the slot for each of the events)
         const orderedEvents = widthEvents.map((event) => {
+            // Get the start of the event
             const startPos = Math.ceil((event.start.getTime() - props.deltaStart.getTime()) / 60000);
+            // Get the length of the event
             const length = (event.end.getTime() - event.start.getTime()) / 60000;
+            // The width position in the slot
             let wPos = -1;
+            // The width length
             let wLen = 1;
+            // If one of the positions in the slot is free then set wPos and WLen and set the position to 1
+            // to indicate its now taken
             matrix[startPos].some((val, index, arr) => {
                 if (val === 0) {
                     wPos = index;
@@ -148,6 +165,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
             for (let i = startPos; i < startPos + length; i++) {
                 matrix[i][wPos] = 1;
             }
+            // Return the event with it's wPos, wLen and length
             return {
                 ...event,
                 wPos: wPos,
@@ -159,29 +177,44 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
         return orderedEvents;
     };
 
+    // On event click function
     const onEventClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.persist();
+        // Get the index of the event
         const index = e.currentTarget.dataset['index'];
         if (props.events && index) {
+            // Find the correct event and call the prop function
             const event = props.events[parseInt(index)];
             if (event) props.onClick(event);
         }
     };
 
+    // Startup function to call when the column is finished rendered such that the
+    // height is correct
     useEffect(() => {
+        // If the ref and clientHeight exists, and there's events
         if (eventsRef.current && eventsRef.current.clientHeight > 0 && props.events) {
+            // Get the height of the eveent column
             const height = eventsRef.current.clientHeight;
+            // Get the pixel per min
             const pxPerMin = height / props.numberOfMinutes;
+            // Get a temp date object
             const tempDate = new Date(props.date);
+            // Only get valid events between 07:00-20:00
             const validEvents = props.events.filter(
                 (event) =>
                     event.start > new Date(tempDate.setHours(7, 0)) && event.end < new Date(tempDate.setHours(20, 0)),
             );
+            // Generated the event placements
             const toBeRenderedEvents = generateEventsPlacement(validEvents);
 
+            // temp array for the events
             const temp: Array<JSX.Element> = [];
+            // loop over the events and create them
             toBeRenderedEvents.forEach((event) => {
+                // Get the start time
                 const start = Math.ceil((event.start.getTime() - props.deltaStart.getTime()) / 60000);
+                // add the newly created event to the list
                 temp.push(
                     <Event
                         top={start * pxPerMin}
@@ -196,6 +229,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
                     </Event>,
                 );
             });
+            // Add the events to the state
             setRenderedEvents(temp);
         }
     }, [eventsRef.current]);

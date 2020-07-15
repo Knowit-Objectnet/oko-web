@@ -12,4 +12,8 @@ interface TimeSlotProps {
     id: number;
 }
 
+/*
+ * Slot component for the calendar.
+ * Has a date-id to keep track of which time it is associated with
+ */
 export const TimeSlot: React.FC<TimeSlotProps> = (props) => <Slot data-id={props.id}></Slot>;

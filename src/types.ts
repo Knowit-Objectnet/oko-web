@@ -53,12 +53,14 @@ export interface Withdrawal {
     end: Date;
 }
 
+// Roles
 export enum Roles {
     Oslo = 'reg_employee',
     Partner = 'partner',
     Ambassador = 'reuse_station',
 }
 
+// Oslo's color scheme
 export enum Colors {
     DarkBlue = '#2A2859',
     Blue = '#6FE9FF',
@@ -74,4 +76,5 @@ export enum Colors {
     White = '#FFFFFF',
 }
 
+// Url to API
 export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging';

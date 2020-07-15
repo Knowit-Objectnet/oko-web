@@ -19,6 +19,9 @@ interface GutterGroupProps {
     text?: string;
 }
 
+/*
+ * Gutter group for displaying the time at each given step
+ */
 export const GutterGroup: React.FC<GutterGroupProps> = (props) => (
     <Group>
         <Slot>{props.text}</Slot>

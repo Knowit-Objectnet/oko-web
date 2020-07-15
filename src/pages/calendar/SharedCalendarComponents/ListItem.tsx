@@ -81,12 +81,19 @@ interface ListItemProps {
     allowDeletionOfEvent?: boolean;
 }
 
+/*
+ * List item component for list groups
+ */
 export const ListItem: React.FC<ListItemProps> = (props) => {
+    // State to keep track of if the item is expanded into its dropdown
     const [expanded, setExpanded] = useState(false);
 
+    // Get the earliest start time from all events
     const minTime = new Date(Math.min(...props.events.map((event) => event.start.getTime())));
+    // Get the latest end time from all events
     const maxTime = new Date(Math.max(...props.events.map((event) => event.end.getTime())));
 
+    // Get a pretty time string on the format HH:mm - HH:mm
     const getTimeString = (start: Date, end: Date) => {
         const startString =
             start.getHours().toString().padStart(2, '0') + ':' + start.getMinutes().toString().padStart(2, '0');
@@ -96,6 +103,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
         return startString + ' - ' + endString;
     };
 
+    // On expansion button click
     const onExpandClick = () => {
         setExpanded(!expanded);
     };

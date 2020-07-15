@@ -28,9 +28,14 @@ interface ListGroupProps {
     allowDeletionOfEvent?: boolean;
 }
 
+/*
+ * Group component for the Listview
+ */
 export const ListGroup: React.FC<ListGroupProps> = (props) => {
+    // sorting events according to provided sorting function
     const sortedEvents = props.sorting(props.events);
 
+    // Get all Oslo colors excpet black and white
     const colors = Object.values(Colors).filter((color) => color !== Colors.Black && color !== Colors.White);
 
     return (

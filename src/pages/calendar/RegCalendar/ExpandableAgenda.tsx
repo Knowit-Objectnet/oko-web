@@ -31,12 +31,17 @@ interface ExpandableAgendaProps {
     onSelectEvent: (event: EventInfo) => void;
 }
 
+/*
+ * Agenda component that expands into a week calendar
+ */
 export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
+    // State for handling expansion of the agenda/calendar
     const [expanded, setExpanded] = useState(false);
 
+    // Function to set a date to the props.date's year, month, date
     const setDate = (date: Date) => {
         return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
     };
@@ -48,8 +53,6 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     };
 
     // Function that handles time range selection in the calendar
-    // It displays either a new event, or extra event depending on user role.
-    // TODO: Make it show component depending on user role
     const onSelectSlot = (slotInfo: SlotInfo) => {
         // If the start date is less than now then don't show the popup modal
         const nowTime = new Date();
@@ -80,6 +83,8 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
         props.onSelectSlot(slotInfo);
     };
 
+    // Function that handles whether or not selection in the calendar should happen
+    // If the selected time is before now then dont allow selection
     const onSelecting = (range: { start?: Date; end?: Date }) => {
         const nowTime = new Date();
         setDate(nowTime);
@@ -92,12 +97,16 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
         }
     };
 
+    // On expansion button click
     const onExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    const min = new Date(props.date.setHours(7, 0, 0, 0));
-    const max = new Date(props.date.setHours(20, 0, 0, 0));
+    // Min and max dates for the calendar
+    const min = new Date(props.date);
+    min.setHours(7, 0, 0, 0);
+    const max = new Date(props.date);
+    max.setHours(20, 0, 0, 0);
 
     return (
         <Wrapper>

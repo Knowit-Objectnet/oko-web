@@ -42,23 +42,31 @@ interface WorkingWeekCalendarProps {
     onSelectEvent?: (eventInfo: EventInfo) => void;
 }
 
+/*
+ * Calendar component that displays a working week monday-friday
+ * Step size defaults to 15 and selectable defaults to false
+ */
 export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
     step = 15,
     events = [],
     selectable = false,
     ...props
 }) => {
+    // Function to set a date to the props.date's year, month, date
     const setDate = (date: Date) => {
         return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
     };
 
+    // Set min and max to the prop.date
     setDate(props.min);
     setDate(props.max);
 
+    // If min is bigger or equal to max then throw error
     if (props.min >= props.max) {
         throw new Error('min has to be less than max');
     }
 
+    // Function to get the date of the monday of the week
     function getMonday(d: Date) {
         d = new Date(d);
         const day = d.getDay(),
@@ -66,6 +74,7 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
         return new Date(d.setDate(diff));
     }
 
+    // Get date objects and array of monday-friday of this week
     const date1 = getMonday(props.date);
     const date2 = add(date1, { days: 1 });
     const date3 = add(date1, { days: 2 });
@@ -73,6 +82,7 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
     const date5 = add(date1, { days: 4 });
     const dates = [date1, date2, date3, date4, date5];
 
+    // Sort the events according to the days above
     const day1Events = events.filter((event) => isSameDay(event.start, date1));
     const day2Events = events.filter((event) => isSameDay(event.start, date2));
     const day3Events = events.filter((event) => isSameDay(event.start, date3));

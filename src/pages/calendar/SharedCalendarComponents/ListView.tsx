@@ -13,19 +13,20 @@ interface ListViewProps {
     allowDeletionOfEvent?: boolean;
 }
 
-export const ListView: React.FC<ListViewProps> = (props) => {
-    return (
-        <Wrapper>
-            {props.dayAndEvents.map((dayAndEvent, i) => (
-                <ListGroup
-                    key={'day' + i}
-                    events={dayAndEvent[1]}
-                    sorting={props.sorting}
-                    date={dayAndEvent[0]}
-                    specificColor={props.specificColor}
-                    allowDeletionOfEvent={props.allowDeletionOfEvent}
-                />
-            ))}
-        </Wrapper>
-    );
-};
+/*
+ * Agenda list view component
+ */
+export const ListView: React.FC<ListViewProps> = (props) => (
+    <Wrapper>
+        {props.dayAndEvents.map((dayAndEvent, i) => (
+            <ListGroup
+                key={'day' + i}
+                events={dayAndEvent[1]}
+                sorting={props.sorting}
+                date={dayAndEvent[0]}
+                specificColor={props.specificColor}
+                allowDeletionOfEvent={props.allowDeletionOfEvent}
+            />
+        ))}
+    </Wrapper>
+);

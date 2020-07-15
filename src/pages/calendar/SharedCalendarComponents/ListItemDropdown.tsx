@@ -141,14 +141,20 @@ interface ListItemDropdownProps {
     allowDeletionOfEvent?: boolean;
 }
 
+/*
+ * Dropdown component for list items container a singleday calendar and event info view
+ */
 export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
+    // State for handling the selected event to view info of
     const [selectedEvent, setSelectedEvent] = useState<EventInfo | null>(null);
     const selectedEventResource = selectedEvent && selectedEvent.resource;
 
+    // On event click function
     const onSelectEvent = (event: EventInfo) => {
         setSelectedEvent(event);
     };
 
+    // new min and mix which is set to 1 hour before and after event to give a cleaner look
     let newMin = new Date(props.min);
     newMin = add(newMin, { hours: -1 });
     let newMax = new Date(props.max);

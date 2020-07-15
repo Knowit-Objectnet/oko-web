@@ -16,6 +16,9 @@ interface PartnerCalendarProps {
     onWeekChange: (delta: -1 | 1) => void;
 }
 
+/*
+ * Calendar and Agenda for partners
+ */
 export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
@@ -25,12 +28,17 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
         props.onSelectEvent(event.start, event.end, event.title);
     };
 
+    // from and to date for event fetching
+    // The from date is the last monday from props.date and the to date is 1 week into the future
+    // This is such that the week-calendar always has it's 5 days of events
     const fromDate = add(props.date, { days: props.date.getDay() === 0 ? -6 : -props.date.getDay() + 1 });
     fromDate.setHours(7, 0, 0, 0);
     const toDate = add(props.date, { weeks: 1 });
     toDate.setHours(20, 0, 0, 0);
 
-    // Events fetched from api
+    // Events fetched from the api
+    // Contains parameters to only get events in date range specified above and only from the accounts
+    // station location
     const { data: apiEvents } = useSWR<ApiEvent[]>(
         [
             `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&partner-id=${
