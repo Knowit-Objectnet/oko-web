@@ -25,16 +25,17 @@ export const AmbassadorCalendar: React.FC<AmbassadorCalendarProps> = (props) => 
         props.onSelectEvent(event.start, event.end, event.title);
     };
 
-    const fromDate = new Date(props.date);
-    fromDate.setHours(0, 0, 0, 0);
-    const toDate = add(fromDate, { weeks: 1 });
-    toDate.setHours(0, 0, 0, 0);
-    const locationId = 1;
+    const fromDate = add(props.date, { days: props.date.getDay() === 0 ? -6 : -props.date.getDay() + 1 });
+    fromDate.setHours(7, 0, 0, 0);
+    const toDate = add(props.date, { weeks: 1 });
+    toDate.setHours(20, 0, 0, 0);
 
     // Events fetched from api
     const { data: apiEvents } = useSWR<ApiEvent[]>(
         [
-            `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&station-id=${locationId}`,
+            `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&station-id=${
+                keycloak.tokenParsed.GroupID
+            }`,
             keycloak.token,
         ],
         fetcher,
