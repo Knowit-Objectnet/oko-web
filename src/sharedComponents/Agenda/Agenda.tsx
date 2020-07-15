@@ -69,7 +69,7 @@ export const Agenda: React.FC<AgendaProps> = (props) => {
 
                                 return (
                                     <TD key={column + j}>
-                                        {props.events[j].length < i ? null : (
+                                        {props.events[j].length <= i ? null : (
                                             <Cell>
                                                 <Time>
                                                     {getTimeString(props.events[j][i].start, props.events[j][i].end)}

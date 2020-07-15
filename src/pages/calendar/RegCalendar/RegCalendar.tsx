@@ -81,17 +81,42 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
         props.onSelectSlot(slotInfo.start, slotInfo.end, keycloak.hasRealmRole(Roles.Oslo));
     };
 
+    const getOrderedEvents = (events: Array<EventInfo>) => {
+        const orderedEvents = new Map<string, Array<EventInfo>>([
+            ['Haralrud', []],
+            ['Smestad', []],
+            ['Grønmo', []],
+            ['Grefsen', []],
+            ['Ryen', []],
+        ]);
+
+        events.forEach((event) => {
+            if (event.resource?.location) {
+                if (orderedEvents.has(event.resource.location.name)) {
+                    const _events = orderedEvents.get(event.resource.location.name);
+                    if (_events) {
+                        _events.push(event);
+                    }
+                } else {
+                    orderedEvents.set(event.resource.location.name, [event]);
+                }
+            }
+        });
+
+        return orderedEvents;
+    };
+
     const day1 = props.date;
     const day2 = addDays(day1, 1);
     const day3 = addDays(day1, 2);
     const day4 = addDays(day1, 3);
     const day5 = addDays(day1, 4);
 
-    const day1Events = events.filter((event) => isSameDay(event.start, day1));
-    const day2Events = events.filter((event) => isSameDay(event.start, day2));
-    const day3Events = events.filter((event) => isSameDay(event.start, day3));
-    const day4Events = events.filter((event) => isSameDay(event.start, day4));
-    const day5Events = events.filter((event) => isSameDay(event.start, day5));
+    const day1Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day1)));
+    const day2Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day2)));
+    const day3Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day3)));
+    const day4Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day4)));
+    const day5Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day5)));
 
     return (
         <>
@@ -100,8 +125,8 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
                     <AgendaWrapper>
                         <ExpandableAgenda
                             date={day1}
-                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
-                            events={[day1Events]}
+                            columns={[...day1Events.keys()]}
+                            events={[...day1Events.values()]}
                             onSelectSlot={onSelectSlot}
                             onSelectEvent={onSelectEvent}
                         />
@@ -109,8 +134,8 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
                     <AgendaWrapper>
                         <ExpandableAgenda
                             date={day2}
-                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
-                            events={[day2Events]}
+                            columns={[...day2Events.keys()]}
+                            events={[...day2Events.values()]}
                             onSelectSlot={onSelectSlot}
                             onSelectEvent={onSelectEvent}
                         />
@@ -118,8 +143,8 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
                     <AgendaWrapper>
                         <ExpandableAgenda
                             date={day3}
-                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
-                            events={[day3Events]}
+                            columns={[...day3Events.keys()]}
+                            events={[...day3Events.values()]}
                             onSelectSlot={onSelectSlot}
                             onSelectEvent={onSelectEvent}
                         />
@@ -127,8 +152,8 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
                     <AgendaWrapper>
                         <ExpandableAgenda
                             date={day4}
-                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
-                            events={[day4Events]}
+                            columns={[...day4Events.keys()]}
+                            events={[...day4Events.values()]}
                             onSelectSlot={onSelectSlot}
                             onSelectEvent={onSelectEvent}
                         />
@@ -136,8 +161,8 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
                     <AgendaWrapper>
                         <ExpandableAgenda
                             date={day5}
-                            columns={['Haralrud', 'Smestad', 'Grønmo', 'Grefsen', 'Ryen']}
-                            events={[day5Events]}
+                            columns={[...day5Events.keys()]}
+                            events={[...day5Events.values()]}
                             onSelectSlot={onSelectSlot}
                             onSelectEvent={onSelectEvent}
                         />
