@@ -90,7 +90,7 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
                             () => (
                                 <TimeColumn
                                     key={date.toString()}
-                                    date={props.date}
+                                    date={dates[index]}
                                     title={date.toLocaleString('nb-NO', {
                                         weekday: 'long',
                                         day: 'numeric',

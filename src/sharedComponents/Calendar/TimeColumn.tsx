@@ -57,7 +57,12 @@ interface TimeColumnProps {
 }
 
 export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
-    const numberOfMinutes = Math.round((props.max.getTime() - props.min.getTime()) / 60000);
+    const min = new Date(props.min);
+    min.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
+    const max = new Date(props.max);
+    max.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
+
+    const numberOfMinutes = Math.round((max.getTime() - min.getTime()) / 60000);
     const numberOfSlots = numberOfMinutes / props.step;
 
     const [isSelectionActive, setIsSelectionActive] = useState(false);
@@ -114,7 +119,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
                 return undefined;
             }
             const relativeStart = (parseInt(relativeStartId) - 1) * props.step;
-            return setMinutes(props.min, relativeStart);
+            return setMinutes(min, relativeStart);
         }
         return undefined;
     };
@@ -126,7 +131,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
                 return undefined;
             }
             const relativeEnd = parseInt(relativeEndId) * props.step;
-            return setMinutes(props.min, relativeEnd);
+            return setMinutes(min, relativeEnd);
         }
         return undefined;
     };
@@ -223,7 +228,7 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
                     date={props.date}
                     events={props.events}
                     numberOfMinutes={numberOfMinutes}
-                    deltaStart={props.min}
+                    deltaStart={min}
                     onClick={onClick}
                 />
             </EventsSlotsWrapper>
