@@ -25,13 +25,16 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
         props.onSelectEvent(event.start, event.end, event.title);
     };
 
-    const untilDate = add(props.date, { weeks: 1 });
+    const fromDate = new Date(props.date);
+    fromDate.setHours(0, 0, 0, 0);
+    const toDate = add(fromDate, { weeks: 1 });
+    toDate.setHours(0, 0, 0, 0);
     const partnerId = 1;
 
     // Events fetched from api
     const { data: apiEvents } = useSWR<ApiEvent[]>(
         [
-            `${apiUrl}/calendar/events/?from-date=${props.date.toISOString()}&to-date=${untilDate.toISOString()}&partner-id=${partnerId}`,
+            `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&partner-id=${partnerId}`,
             keycloak.token,
         ],
         fetcher,

@@ -53,12 +53,15 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
-    const untilDate = add(props.date, { weeks: 1 });
+    const fromDate = new Date(props.date);
+    fromDate.setHours(0, 0, 0, 0);
+    const toDate = add(fromDate, { weeks: 1 });
+    toDate.setHours(0, 0, 0, 0);
 
     // Events fetched from api
     const { data: apiEvents } = useSWR<ApiEvent[]>(
         [
-            `${apiUrl}/calendar/events/?from-date=${props.date.toISOString()}&to-date=${untilDate.toISOString()}`,
+            `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}`,
             keycloak.token,
         ],
         fetcher,
