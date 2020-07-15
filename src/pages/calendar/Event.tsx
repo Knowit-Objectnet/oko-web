@@ -128,6 +128,7 @@ export const Event: React.FC<EventInfo> = (props) => {
                         onTimeRangeChange={onTimeRangeChange}
                         onRecurringChange={onRecurringChange}
                         onSelectedDaysChange={onSelectedDaysChange}
+                        recurrenceEnabled={true}
                     />
                     <EventOptionLocation
                         isEditing={isEditing}

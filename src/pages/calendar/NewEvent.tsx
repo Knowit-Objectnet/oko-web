@@ -221,6 +221,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                     onTimeRangeChange={onTimeRangeChange}
                     onRecurringChange={onRecurringChange}
                     onSelectedDaysChange={onSelectedDaysChange}
+                    recurrenceEnabled={true}
                 />
             </Options>
             <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />

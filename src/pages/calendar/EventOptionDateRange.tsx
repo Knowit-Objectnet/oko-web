@@ -88,6 +88,7 @@ const StyledDateRangePicker = styled(DateRangePicker)`
 interface EventOptionDateRangeProps {
     dateRange: [Date, Date];
     timeRange: [Date, Date];
+    recurrenceEnabled: boolean;
     recurring: 'None' | 'Daily' | 'Weekly';
     selectedDays: Array<number>;
     isEditing: boolean;
@@ -171,13 +172,15 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
         <EventOption>
             {props.isEditing ? (
                 <Wrapper>
-                    <Label>
-                        <Select value={props.recurring} onChange={onRecurringChange}>
-                            <option value="None">Gjentas ikke</option>
-                            <option value="Daily">Daglig</option>
-                            <option value="Weekly">Ukentlig</option>
-                        </Select>
-                    </Label>
+                    {props.recurrenceEnabled ? (
+                        <Label>
+                            <Select value={props.recurring} onChange={onRecurringChange}>
+                                <option value="None">Gjentas ikke</option>
+                                <option value="Daily">Daglig</option>
+                                <option value="Weekly">Ukentlig</option>
+                            </Select>
+                        </Label>
+                    ) : null}
                     {props.recurring === 'Weekly' ? (
                         <Label>
                             <Span>Velg ukedag(er)</Span>
