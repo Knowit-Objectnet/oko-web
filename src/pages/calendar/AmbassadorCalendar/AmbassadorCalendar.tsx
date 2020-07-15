@@ -25,8 +25,17 @@ export const AmbassadorCalendar: React.FC<AmbassadorCalendarProps> = (props) => 
         props.onSelectEvent(event.start, event.end, event.title);
     };
 
+    const untilDate = add(props.date, { weeks: 1 });
+    const locationId = 1;
+
     // Events fetched from api
-    const { data: apiEvents } = useSWR<ApiEvent[]>([`${apiUrl}/calendar/events/`, keycloak.token], fetcher);
+    const { data: apiEvents } = useSWR<ApiEvent[]>(
+        [
+            `${apiUrl}/calendar/events/?from-date=${props.date.toISOString()}&to-date=${untilDate.toISOString()}&station-id=${locationId}`,
+            keycloak.token,
+        ],
+        fetcher,
+    );
     const events: EventInfo[] = apiEvents
         ? apiEvents.map((event: ApiEvent) => {
               const newEvent: EventInfo = {

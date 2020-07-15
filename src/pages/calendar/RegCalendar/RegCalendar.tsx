@@ -7,6 +7,7 @@ import { fetcher } from '../../../utils/fetcher';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
+import add from "date-fns/add";
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -52,8 +53,16 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
+    const untilDate = add(props.date, { weeks: 1 });
+
     // Events fetched from api
-    const { data: apiEvents } = useSWR<ApiEvent[]>([`${apiUrl}/calendar/events/`, keycloak.token], fetcher);
+    const { data: apiEvents } = useSWR<ApiEvent[]>(
+        [
+            `${apiUrl}/calendar/events/?from-date=${props.date.toISOString()}&to-date=${untilDate.toISOString()}`,
+            keycloak.token,
+        ],
+        fetcher,
+    );
     const events: EventInfo[] = apiEvents
         ? apiEvents.map((event: ApiEvent) => {
               const newEvent: EventInfo = {
