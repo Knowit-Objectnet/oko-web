@@ -6,6 +6,7 @@ import add from 'date-fns/add';
 import { ExpandableAgenda } from '../AmbassadorCalendar/ExpandableAgenda';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
+import { Loading } from '../../loading/Loading';
 
 const Wrapper = styled.div``;
 
@@ -39,7 +40,7 @@ export const AmbassadorCalendar: React.FC<AmbassadorCalendarProps> = (props) => 
     // Events fetched from the api
     // Contains parameters to only get events in date range specified above and only from the accounts
     // station location
-    const { data: apiEvents } = useSWR<ApiEvent[]>(
+    const { data: apiEvents, isValidating } = useSWR<ApiEvent[]>(
         [
             `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&station-id=${
                 keycloak.tokenParsed.GroupID
@@ -62,6 +63,13 @@ export const AmbassadorCalendar: React.FC<AmbassadorCalendarProps> = (props) => 
               return newEvent;
           })
         : [];
+
+    // If swr is validating (a fetch is loading) and there are no events then show load component
+    // As that means it is the first time its fetching data. This allows us to still
+    // get the snappy feeling from the stale data while it's validating in the background
+    if ((!events || events.length <= 0) && isValidating) {
+        return <Loading text="Laster inn data..." />;
+    }
 
     return (
         <Wrapper>

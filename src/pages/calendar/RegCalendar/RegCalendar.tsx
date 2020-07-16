@@ -8,6 +8,7 @@ import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 import add from 'date-fns/add';
+import { Loading } from '../../loading/Loading';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -63,7 +64,7 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
 
     // Events fetched from the api
     // Contains parameters to only get events in date range specified above
-    const { data: apiEvents } = useSWR<ApiEvent[]>(
+    const { data: apiEvents, isValidating } = useSWR<ApiEvent[]>(
         [
             `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}`,
             keycloak.token,
@@ -134,6 +135,13 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     const day3Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day3)));
     const day4Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day4)));
     const day5Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day5)));
+
+    // If swr is validating (a fetch is loading) and there are no events then show load component
+    // As that means it is the first time its fetching data. This allows us to still
+    // get the snappy feeling from the stale data while it's validating in the background
+    if ((!events || events.length <= 0) && isValidating) {
+        return <Loading text="Laster inn data..." />;
+    }
 
     return (
         <>

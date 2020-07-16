@@ -40,6 +40,7 @@ const Time = styled.div<Color>`
     align-items: center;
     display: flex;
     padding: 0px 20px;
+    min-width: fit-content;
 `;
 
 const Info = styled.div<Color>`
@@ -50,6 +51,7 @@ const Info = styled.div<Color>`
     justify-content: center;
     align-items: center;
     padding: 0px 15px;
+    min-width: fit-content;
 `;
 
 const Name = styled.div`

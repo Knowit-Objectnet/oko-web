@@ -65,9 +65,13 @@ const LoadingText = styled.span`
     font-size: xxx-large;
 `;
 
-export const Loading: React.FC = () => (
+interface LoadingProps {
+    text?: string;
+}
+
+export const Loading: React.FC<LoadingProps> = (props) => (
     <Wrapper>
         <Loader />
-        <LoadingText>Loading...</LoadingText>
+        <LoadingText>{props.text || 'Loading...'}</LoadingText>
     </Wrapper>
 );
