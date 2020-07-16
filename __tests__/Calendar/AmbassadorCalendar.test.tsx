@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import fetch from 'jest-fetch-mock';
 import { KeycloakProvider } from '@react-keycloak/web';
@@ -36,7 +36,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
             if (location) {
                 events = events.filter((event) => event.station.id === parseInt(location));
             }
-            if (pathname.startsWith('/calendar/events/')) {
+            if (pathname.endsWith('/calendar/events/')) {
                 return JSON.stringify(events);
             }
             return '';
@@ -47,7 +47,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
             return role === Roles.Ambassador;
         });
 
-        // Set the groupID to 1 (Haralrud)
+        // Set the groupID to 1 (Haraldrud)
         keycloak.tokenParsed.GroupID = 1;
     });
 
@@ -61,7 +61,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         const onWeekCahngeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
-        date.setFullYear(2020, 7, 13);
+        date.setFullYear(2020, 6, 13);
         date.setHours(7, 0, 0, 0);
 
         render(
@@ -76,13 +76,55 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         );
     });
 
-    it('Should render all the partner groups for 7.13.2020-7.18.2020', async () => {});
+    it('Should render all the partner groups for 7.13.2020-7.18.2020 at Haraldrud', async () => {
+        // set up props for the calendar
+        const onSelectEventMock = jest.fn();
+        const onWeekCahngeMock = jest.fn();
+        const isToggled = false;
+        const date = new Date();
+        date.setFullYear(2020, 6, 13);
+        date.setHours(7, 0, 0, 0);
 
-    it('Should change which partner groups are rendered when the date changes', async () => {});
+        const { findAllByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <AmbassadorCalendar
+                    date={date}
+                    isToggled={isToggled}
+                    onSelectEvent={onSelectEventMock}
+                    onWeekChange={onWeekCahngeMock}
+                />
+            </KeycloakProvider>,
+        );
 
-    it('Should render the dropdown on a partner group list item when toggled', async () => {});
+        // Find all the agenda groups with fretex which should be 5 as there's 5 days and
+        // events by fretex on all days
+        const fretexGroups = await findAllByText('Fretex');
+        expect(fretexGroups.length).toBe(5);
+    });
 
-    it('Should render the event info when event is clicked', async () => {});
+    it('Should change which partner groups are rendered when the date changes', async () => {
+        // set up props for the calendar
+        const onSelectEventMock = jest.fn();
+        const onWeekCahngeMock = jest.fn();
+        const isToggled = false;
+        const date = new Date();
+        date.setFullYear(2020, 6, 15);
+        date.setHours(7, 0, 0, 0);
 
-    it('Should render all the events in the weekcalendar for 7.13.2020-7.18.2020 when toggled', async () => {});
+        const { findAllByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <AmbassadorCalendar
+                    date={date}
+                    isToggled={isToggled}
+                    onSelectEvent={onSelectEventMock}
+                    onWeekChange={onWeekCahngeMock}
+                />
+            </KeycloakProvider>,
+        );
+
+        // Find all the agenda groups with fretex which should be 3 as there's 3 days and
+        // events by fretex on all days
+        const fretexGroups = await findAllByText('Fretex');
+        expect(fretexGroups.length).toBe(3);
+    });
 });

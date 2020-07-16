@@ -33,12 +33,12 @@ export const mockApiEvents = [
         startDateTime: "2020-07-13T11:45:20.57Z",
         endDateTime: "2020-07-13T12:45:20.57Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 2,
+            name: "Smestad"
         },
         partner: {
-            id: 1,
-            name: "Fretex"
+            id: 2,
+            name: "Maritastiftelsen"
         },
         recurrenceRule: {
             id: 15,
@@ -59,12 +59,12 @@ export const mockApiEvents = [
         startDateTime: "2020-07-14T11:45:20.57Z",
         endDateTime: "2020-07-14T12:45:20.57Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 2,
+            name: "Smestad"
         },
         partner: {
-            id: 1,
-            name: "Fretex"
+            id: 2,
+            name: "Maritastiftelsen"
         },
         recurrenceRule: {
             id: 15,
@@ -85,12 +85,12 @@ export const mockApiEvents = [
         startDateTime: "2020-07-15T11:45:20.57Z",
         endDateTime: "2020-07-15T12:45:20.57Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 2,
+            name: "Smestad"
         },
         partner: {
-            id: 1,
-            name: "Fretex"
+            id: 2,
+            name: "Maritastiftelsen"
         },
         recurrenceRule: {
             id: 15,
@@ -111,12 +111,12 @@ export const mockApiEvents = [
         startDateTime: "2020-07-16T11:45:20.57Z",
         endDateTime: "2020-07-16T12:45:20.57Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 2,
+            name: "Smestad"
         },
         partner: {
-            id: 1,
-            name: "Fretex"
+            id: 2,
+            name: "Maritastiftelsen"
         },
         recurrenceRule: {
             id: 15,
@@ -137,12 +137,12 @@ export const mockApiEvents = [
         startDateTime: "2020-07-17T11:45:20.57Z",
         endDateTime: "2020-07-17T12:45:20.57Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 2,
+            name: "Smestad"
         },
         partner: {
-            id: 1,
-            name: "Fretex"
+            id: 2,
+            name: "Maritastiftelsen"
         },
         recurrenceRule: {
             id: 15,
@@ -287,5 +287,18 @@ export const mockApiEvents = [
             interval: 1,
             count: null
         }
+    },
+    {
+        id: 106,
+        startDateTime: "2020-07-16T11:45:36.89Z",
+        endDateTime: "2020-07-16T12:45:36.89Z",
+        station: {
+            id: 2,
+            name: "Smestad"
+        },
+        partner: {
+            id: 1,
+            name: "Fretex"
+        },
     }
 ]

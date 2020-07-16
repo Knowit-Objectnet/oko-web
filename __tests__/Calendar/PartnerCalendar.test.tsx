@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import fetch from 'jest-fetch-mock';
 import { KeycloakProvider } from '@react-keycloak/web';
@@ -36,7 +36,7 @@ describe('Provides a page for partners to view the calendar', () => {
             if (partner) {
                 events = events.filter((event) => event.partner.id === parseInt(partner));
             }
-            if (pathname.startsWith('/calendar/events/')) {
+            if (pathname.endsWith('/calendar/events/')) {
                 return JSON.stringify(events);
             }
             return '';
@@ -61,7 +61,7 @@ describe('Provides a page for partners to view the calendar', () => {
         const onWeekCahngeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
-        date.setFullYear(2020, 7, 13);
+        date.setFullYear(2020, 6, 13);
         date.setHours(7, 0, 0, 0);
 
         render(
@@ -76,15 +76,56 @@ describe('Provides a page for partners to view the calendar', () => {
         );
     });
 
-    it('Should render all the station location groups for 7.13.2020-7.18.2020', async () => {});
+    it('Should render all the station/locatiion groups for 7.13.2020-7.18.2020 for Fretex', async () => {
+        // set up props for the calendar
+        const onSelectEventMock = jest.fn();
+        const onWeekCahngeMock = jest.fn();
+        const isToggled = false;
+        const date = new Date();
+        date.setFullYear(2020, 6, 13);
+        date.setHours(7, 0, 0, 0);
 
-    it('Should change which station location groups are rendered when the date changes', async () => {});
+        const { findAllByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <PartnerCalendar
+                    date={date}
+                    isToggled={isToggled}
+                    onSelectEvent={onSelectEventMock}
+                    onWeekChange={onWeekCahngeMock}
+                />
+            </KeycloakProvider>,
+        );
 
-    it('Should render the dropdown on a station location groups list item when toggled', async () => {});
+        const haraldrudGroups = await findAllByText('Haraldrud');
+        expect(haraldrudGroups.length).toBe(5);
+        const smestadGroups = await findAllByText('Smestad');
+        expect(smestadGroups.length).toBe(1);
+    });
 
-    it('Should render the event info when event is clicked', async () => {});
+    it('Should change which station/location groups are rendered when the date changes', async () => {
+        // set up props for the calendar
+        const onSelectEventMock = jest.fn();
+        const onWeekCahngeMock = jest.fn();
+        const isToggled = false;
+        const date = new Date();
+        date.setFullYear(2020, 6, 15);
+        date.setHours(7, 0, 0, 0);
 
-    it('Should delete event when delete button is pressed', async () => {});
+        const { findAllByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <PartnerCalendar
+                    date={date}
+                    isToggled={isToggled}
+                    onSelectEvent={onSelectEventMock}
+                    onWeekChange={onWeekCahngeMock}
+                />
+            </KeycloakProvider>,
+        );
 
-    it('Should render all the events in the weekcalendar for 7.13.2020-7.18.2020 when toggled', async () => {});
+
+        const haraldrudGroups = await findAllByText('Haraldrud');
+        expect(haraldrudGroups.length).toBe(3);
+        const smestadGroups = await findAllByText('Smestad');
+        expect(smestadGroups.length).toBe(1);
+    });
 });

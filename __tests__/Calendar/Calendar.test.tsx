@@ -45,36 +45,4 @@ describe('Provides a page to view the calendar in addition to change log and not
             </KeycloakProvider>,
         );
     });
-
-    /* Outdated for now
-    it('Should show NewEvent on new event button click if role is Oslo', async () => {
-        // Set our role to Oslo
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Oslo;
-        });
-
-        const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <CalendarPage />
-                </Router>
-            </KeycloakProvider>,
-        );
-
-        const button = await findByText('Legg til avtale');
-        expect(button).toBeInTheDocument();
-
-        await waitFor(() => {
-            fireEvent(
-                button,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
-
-        const title = await findByText('Opprett ny avtale');
-        expect(title).toBeInTheDocument();
-    });*/
 });
