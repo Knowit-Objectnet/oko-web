@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo, SlotInfo } from '../../types';
+import { EventInfo } from '../../types';
 import { Gutter } from './Gutter';
 import { TimeColumn } from './TimeColumn';
 import add from 'date-fns/add';

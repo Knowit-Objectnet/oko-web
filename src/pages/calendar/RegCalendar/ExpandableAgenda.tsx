@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Agenda } from './Agenda';
 import { SingleDayCalendar } from '../../../sharedComponents/Calendar/SingleDayCalendar';
 import { useKeycloak } from '@react-keycloak/web';
-import { EventInfo, Roles, SlotInfo } from '../../../types';
+import { EventInfo, SlotInfo } from '../../../types';
 import ArrowUp from '../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../assets/ArrowDown.svg';
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { TimeSlotGroup } from './TimeSlotGroup';
 import { useEffect, useRef, useState } from 'react';
-import { Colors, EventInfo, SlotInfo } from '../../types';
+import { EventInfo, SlotInfo } from '../../types';
 import { ColumnTitle } from './ColumnTitle';
 import setMinutes from 'date-fns/setMinutes';
 import { EventsColumn } from './EventsColumn';

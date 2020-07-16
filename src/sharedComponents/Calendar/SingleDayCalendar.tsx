@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { EventInfo, SlotInfo } from '../../types';
 import { Gutter } from './Gutter';
 import { TimeColumn } from './TimeColumn';
-import add from 'date-fns/add';
 import { useMemo } from 'react';
 
 const Wrapper = styled.div`
