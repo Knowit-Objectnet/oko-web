@@ -11,6 +11,7 @@ interface ListViewProps {
     sorting: (events: Array<EventInfo>) => Map<string, Array<EventInfo>>;
     specificColor?: Colors;
     allowDeletionOfEvent?: boolean;
+    deleteEvent?: (event: EventInfo) => void;
 }
 
 /*
@@ -26,6 +27,7 @@ export const ListView: React.FC<ListViewProps> = (props) => (
                 date={dayAndEvent[0]}
                 specificColor={props.specificColor}
                 allowDeletionOfEvent={props.allowDeletionOfEvent}
+                deleteEvent={props.deleteEvent}
             />
         ))}
     </Wrapper>

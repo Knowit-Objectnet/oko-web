@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import fetch from 'jest-fetch-mock';
 
-import { PostToAPI } from '../../src/utils/PostToAPi';
+import { PostToAPI } from '../../src/utils/PostToAPI';
 
 global.fetch = fetch;
 

@@ -6,7 +6,10 @@ export interface ApiEvent {
     partner: ApiPartner;
     recurrenceRule: {
         id: number;
-        rule: string;
+        until: string;
+        days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+        interval: number;
+        count: number | null;
     };
 }
 
@@ -24,14 +27,25 @@ export interface EventInfo {
     title: string;
     start: Date;
     end: Date;
-    allDay?: boolean;
-    resource?: EventInfoResource;
+    resource: EventInfoResource;
 }
 
 interface EventInfoResource {
+    eventId: number;
     location: {
         id: number;
         name: string;
+    };
+    partner: {
+        id: number;
+        name: string;
+    };
+    recurrenceRule?: {
+        id: number;
+        until: string;
+        days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+        interval?: number;
+        count?: number | null;
     };
     weight?: number;
     message?: {

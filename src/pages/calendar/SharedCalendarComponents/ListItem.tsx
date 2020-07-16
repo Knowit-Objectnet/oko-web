@@ -81,6 +81,7 @@ interface ListItemProps {
     date: Date;
     color: Colors;
     allowDeletionOfEvent?: boolean;
+    deleteEvent?: (event: EventInfo) => void;
 }
 
 /*
@@ -134,6 +135,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
                     events={props.events}
                     color={props.color}
                     allowDeletionOfEvent={props.allowDeletionOfEvent}
+                    deleteEvent={props.deleteEvent}
                 />
             ) : null}
         </div>

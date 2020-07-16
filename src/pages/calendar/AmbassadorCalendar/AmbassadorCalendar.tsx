@@ -4,16 +4,17 @@ import { useKeycloak } from '@react-keycloak/web';
 import { ApiEvent, apiUrl, EventInfo } from '../../../types';
 import add from 'date-fns/add';
 import { ExpandableAgenda } from '../AmbassadorCalendar/ExpandableAgenda';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { Loading } from '../../loading/Loading';
+import { DeleteToAPI } from '../../../utils/DeleteToAPI';
 
 const Wrapper = styled.div``;
 
 interface AmbassadorCalendarProps {
     date: Date;
     isToggled: boolean;
-    onSelectEvent: (start: Date, end: Date, title: string) => void;
+    onSelectEvent: (Event: EventInfo) => void;
     onWeekChange: (delta: -1 | 1) => void;
 }
 
@@ -26,7 +27,7 @@ export const AmbassadorCalendar: React.FC<AmbassadorCalendarProps> = (props) => 
 
     // Function that handles an event click in the calendar. It displays the Event in a modal
     const onSelectEvent = (event: EventInfo) => {
-        props.onSelectEvent(event.start, event.end, event.title);
+        props.onSelectEvent(event);
     };
 
     // from and to date for event fetching
@@ -37,27 +38,26 @@ export const AmbassadorCalendar: React.FC<AmbassadorCalendarProps> = (props) => 
     const toDate = add(props.date, { weeks: 1 });
     toDate.setHours(20, 0, 0, 0);
 
+    // Api url
+    const url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&station-id=${
+        keycloak.tokenParsed.GroupID
+    }`;
+
     // Events fetched from the api
     // Contains parameters to only get events in date range specified above and only from the accounts
     // station location
-    const { data: apiEvents, isValidating } = useSWR<ApiEvent[]>(
-        [
-            `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&station-id=${
-                keycloak.tokenParsed.GroupID
-            }`,
-            keycloak.token,
-        ],
-        fetcher,
-    );
+    const { data: apiEvents, isValidating } = useSWR<ApiEvent[]>([url, keycloak.token], fetcher);
     const events: EventInfo[] = apiEvents
         ? apiEvents.map((event: ApiEvent) => {
               const newEvent: EventInfo = {
                   start: new Date(event.startDateTime),
                   end: new Date(event.endDateTime),
                   title: event.partner.name,
-                  allDay: false,
                   resource: {
+                      eventId: event.id,
+                      partner: event.partner,
                       location: event.station,
+                      recurrenceRule: event.recurrenceRule,
                   },
               };
               return newEvent;

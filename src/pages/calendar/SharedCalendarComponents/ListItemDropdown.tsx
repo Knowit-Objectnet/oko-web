@@ -139,6 +139,7 @@ interface ListItemDropdownProps {
     max: Date;
     color: Colors;
     allowDeletionOfEvent?: boolean;
+    deleteEvent?: (event: EventInfo) => void;
 }
 
 /*
@@ -152,6 +153,10 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
     // On event click function
     const onSelectEvent = (event: EventInfo) => {
         setSelectedEvent(event);
+    };
+
+    const onDeleteEvent = () => {
+        if (selectedEvent && props.deleteEvent) props.deleteEvent(selectedEvent);
     };
 
     // new min and mix which is set to 1 hour before and after event to give a cleaner look
@@ -235,7 +240,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
                     </Info>
                     {props.allowDeletionOfEvent ? (
                         <Submission>
-                            <Button>Avlys</Button>
+                            <Button onClick={onDeleteEvent}>Avlys</Button>
                         </Submission>
                     ) : null}
                 </Event>

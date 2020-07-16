@@ -8,7 +8,7 @@ import { Event } from './events/Event';
 import { ExtraEvent } from './events/ExtraEvent';
 import { NewEvent } from './events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { Roles } from '../../types';
+import { EventInfo, Roles } from '../../types';
 import keycloak from '../../keycloak';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
@@ -135,8 +135,8 @@ export const CalendarPage: React.FC = () => {
     };
 
     // On event selection function to display an event
-    const onSelectEvent = (start: Date, end: Date, title: string) => {
-        setModalContent(<Event start={start} end={end} title={title} />);
+    const onSelectEvent = (event: EventInfo) => {
+        setModalContent(<Event {...event} />);
         setShowModal(true);
     };
 

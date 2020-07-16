@@ -3,7 +3,7 @@ export async function PostToAPI(url: string, data: Record<string, unknown>, toke
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
-        credentials: 'same-origin',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -14,7 +14,7 @@ export async function PostToAPI(url: string, data: Record<string, unknown>, toke
     });
 
     // If response is OK then return result
-    if (response.ok && response.status === 200) {
+    if (response.ok && response.status === 201) {
         return await response.json();
     }
 

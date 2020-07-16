@@ -43,7 +43,7 @@ const AgendaWrapper = styled.div`
 interface WeekCalendarProps {
     date: Date;
     newEvent: (start: Date, end: Date) => void;
-    onSelectEvent: (start: Date, end: Date, title: string) => void;
+    onSelectEvent: (Event: EventInfo) => void;
     onSelectSlot: (start: Date, end: Date, isOslo: boolean) => void;
 }
 
@@ -77,9 +77,11 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
                   start: new Date(event.startDateTime),
                   end: new Date(event.endDateTime),
                   title: event.partner.name,
-                  allDay: false,
                   resource: {
+                      eventId: event.id,
+                      partner: event.partner,
                       location: event.station,
+                      recurrenceRule: event.recurrenceRule,
                   },
               };
               return newEvent;
@@ -88,7 +90,7 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
 
     // Function that handles an event click in the calendar. It displays the Event in a modal
     const onSelectEvent = (event: EventInfo) => {
-        props.onSelectEvent(event.start, event.end, event.title);
+        props.onSelectEvent(event);
     };
 
     // Function that handles time range selection in the calendar
