@@ -232,7 +232,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
             // Add the events to the state
             setRenderedEvents(temp);
         }
-    }, [eventsRef.current]);
+    }, [eventsRef.current, props.events]);
 
     return <Events ref={eventsRef}>{renderedEvents}</Events>;
 };

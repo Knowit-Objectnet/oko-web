@@ -4,10 +4,11 @@ import { useKeycloak } from '@react-keycloak/web';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import { ApiEvent, apiUrl, EventInfo } from '../../../types';
 import add from 'date-fns/add';
-import useSWR, {mutate} from 'swr';
+import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { Loading } from '../../loading/Loading';
-import {DeleteToAPI} from "../../../utils/DeleteToAPI";
+import { DeleteToAPI } from '../../../utils/DeleteToAPI';
+import { useEffect, useState } from 'react';
 
 const Wrapper = styled.div``;
 
@@ -46,37 +47,40 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
     // Events fetched from the api
     // Contains parameters to only get events in date range specified above and only from the accounts
     // station location
-    const { data: apiEvents, isValidating } = useSWR<ApiEvent[]>([url, keycloak.token], fetcher);
-    const events: EventInfo[] = apiEvents
-        ? apiEvents.map((event: ApiEvent) => {
-              const newEvent: EventInfo = {
-                  start: new Date(event.startDateTime),
-                  end: new Date(event.endDateTime),
-                  title: event.partner.name,
-                  resource: {
-                      eventId: event.id,
-                      partner: event.partner,
-                      location: event.station,
-                      recurrenceRule: event.recurrenceRule,
-                  },
-              };
-              return newEvent;
-          })
-        : [];
+    const { data: apiEvents, isValidating, mutate } = useSWR<ApiEvent[]>([url, keycloak.token], fetcher);
+    const [events, setEvents] = useState<Array<EventInfo>>([]);
+
+    useEffect(() => {
+        const _events: EventInfo[] = apiEvents
+            ? apiEvents.map((event: ApiEvent) => {
+                  const newEvent: EventInfo = {
+                      start: new Date(event.startDateTime),
+                      end: new Date(event.endDateTime),
+                      title: event.partner.name,
+                      resource: {
+                          eventId: event.id,
+                          partner: event.partner,
+                          location: event.station,
+                          recurrenceRule: event.recurrenceRule,
+                      },
+                  };
+                  return newEvent;
+              })
+            : [];
+        setEvents(_events);
+    }, [apiEvents]);
 
     const deleteEvent = async (event: EventInfo) => {
         if (apiEvents) {
             // update the local data immediately, but disable the revalidation
             const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
-            console.log(newEvents)
-            console.log(event)
-            mutate([url, keycloak.token], newEvents, false);
+            mutate(newEvents, false);
 
             // send a request to the API to update the source
             await DeleteToAPI(`${apiUrl}/calendar/events/?event-id=${event.resource.eventId}`, keycloak.token);
 
             // trigger a revalidation (refetch) to make sure our local data is correct
-            mutate([url, keycloak.token]);
+            mutate();
         }
     };
 
