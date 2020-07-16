@@ -122,7 +122,6 @@ describe('Provides a page for partners to view the calendar', () => {
             </KeycloakProvider>,
         );
 
-
         const haraldrudGroups = await findAllByText('Haraldrud');
         expect(haraldrudGroups.length).toBe(3);
         const smestadGroups = await findAllByText('Smestad');

@@ -21,6 +21,11 @@ const Wrapper = styled.div`
     flex-direction: row;
     padding: 40px;
     box-sizing: border-box;
+
+    @media screen and (max-width: 900px) {
+        flex-direction: column;
+        overflow: auto;
+    }
 `;
 
 const Module = styled.div`
@@ -34,11 +39,21 @@ const ModuleDateCalendar = styled.div`
     & > .react-calendar {
         border: none;
     }
+
+    @media screen and (max-width: 900px) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
 `;
 
 const ModuleCalendar = styled(Module)`
     flex: 1;
-    overflow: auto;
+
+    @media screen and (min-width: 900px) {
+        overflow: auto;
+    }
 `;
 
 const Sidebar = styled.div`
@@ -46,9 +61,16 @@ const Sidebar = styled.div`
     flex-direction: column;
     justify-contents: center;
     align-items: center;
-    margin-left: 20px;
+    margin-left: 40px;
     justify-content: flex-start;
     align-items: flex-start;
+
+    @media screen and (max-width: 900px) {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        margin-left: 0;
+    }
 `;
 
 /**
