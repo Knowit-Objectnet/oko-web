@@ -54,16 +54,11 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
 
     // Function that handles time range selection in the calendar
     const onSelectSlot = (slotInfo: SlotInfo) => {
-        // If the start date is less than now then don't show the popup modal
-        const nowTime = new Date();
-        setDate(nowTime);
-        if (slotInfo.start < nowTime) {
-            return;
-        }
-
         // Create max and min times on the slotInfo date
-        const minTime = new Date(slotInfo.start.setHours(7, 0));
-        const maxTime = new Date(slotInfo.start.setHours(20, 0));
+        const minTime = new Date(slotInfo.start);
+        minTime.setHours(7, 0);
+        const maxTime = new Date(slotInfo.end);
+        maxTime.setHours(20, 0);
 
         // If the start is less than the allowed minimum then set the start to minimum
         if (slotInfo.start < minTime) {
@@ -81,20 +76,6 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
         }
 
         props.onSelectSlot(slotInfo);
-    };
-
-    // Function that handles whether or not selection in the calendar should happen
-    // If the selected time is before now then dont allow selection
-    const onSelecting = (range: { start?: Date; end?: Date }) => {
-        const nowTime = new Date();
-        setDate(nowTime);
-
-        // If the startDate-time of the select is less than now then disable select
-        if (!range.start || range.start < nowTime) {
-            return false;
-        } else {
-            return true;
-        }
     };
 
     // On expansion button click
@@ -125,7 +106,6 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     columns={props.columns}
                     events={props.events}
                     onSelectSlot={onSelectSlot}
-                    onSelecting={onSelecting}
                     onSelectEvent={onSelectEvent}
                     selectable={keycloak.authenticated}
                     step={15}
