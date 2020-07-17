@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { EventTemplate } from './EventTemplate';
+import { VerticalEventTemplate } from './VerticalEventTemplate';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionCategory } from './EventOptionCategory';
 import { EventSubmission } from './EventSubmission';
@@ -113,7 +113,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     };
 
     return (
-        <EventTemplate title={'Utlys ekstrauttak'} showEditSymbol={false} isEditing={false}>
+        <VerticalEventTemplate title={'Utlys ekstrauttak'} showEditSymbol={false} isEditing={false}>
             <EventOptionDateRange
                 dateRange={dateRange}
                 timeRange={timeRange}
@@ -140,6 +140,6 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 onChange={onDescriptionChange}
             />
             <EventSubmission onCancel={onCancel} onSubmit={onSubmit} submitText="Send søknad" />
-        </EventTemplate>
+        </VerticalEventTemplate>
     );
 };

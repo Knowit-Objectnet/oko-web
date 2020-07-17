@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import { ApiLocation } from '../../../types';
+import {ApiLocation, Colors} from '../../../types';
 
 const Select = styled.select`
     width: 100%;
@@ -11,22 +11,14 @@ interface GrayBoxProps {
     selected?: boolean;
 }
 
-const GrayBox = styled.div<GrayBoxProps>`
+const Box = styled.div<GrayBoxProps>`
+    background-color: ${Colors.LightBeige};
+    padding: 0px 40px;
+    height: 45px;
+    flex: 1;
     display: flex;
-    justify-content: center;
     align-items: center;
-    width: 128px;
-    height: 40px;
-    background: #f2f2f2;
-    border-radius: 5px;
-    border: ${(props) => (props.selected ? 'solid 1px black' : null)};
-    box-sizing: border-box;
-
-    &:nth-child(2) {
-        margin: 0px 15px;
-    }
-
-    user-select: none;
+    justify-content: center;
 `;
 
 interface EventOptionDateRangeProps {
@@ -62,7 +54,7 @@ export const EventOptionLocation: React.FC<EventOptionDateRangeProps> = (props) 
                     ))}
                 </Select>
             ) : (
-                <GrayBox>{props.locations.find((location) => location.id == props.selectedLocation)?.name}</GrayBox>
+                <Box>{props.locations.find((location) => location.id == props.selectedLocation)?.name}</Box>
             )}
         </EventOption>
     );

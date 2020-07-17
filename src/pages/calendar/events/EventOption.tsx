@@ -5,7 +5,10 @@ const Option = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 42px;
+
+    &:not(:last-child) {
+        margin-bottom: 10px;
+    }
 `;
 
 interface OptionInfoProps {

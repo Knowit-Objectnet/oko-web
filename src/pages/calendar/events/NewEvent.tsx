@@ -4,7 +4,7 @@ import { EventSubmission } from './EventSubmission';
 import { useState } from 'react';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
-import { EventTemplate } from './EventTemplate';
+import { VerticalEventTemplate } from './VerticalEventTemplate';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
@@ -209,7 +209,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     };
 
     return (
-        <EventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
+        <VerticalEventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
             <Options>
                 <EventOptionPartner
                     selectedPartner={selectedPartnerId}
@@ -236,6 +236,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 />
             </Options>
             <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />
-        </EventTemplate>
+        </VerticalEventTemplate>
     );
 };

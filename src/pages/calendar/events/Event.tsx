@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import { MessageBox } from './MessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { ApiLocation, EventInfo } from '../../../types';
+import { ApiLocation, Colors, EventInfo } from '../../../types';
 import { EventOptionLocation } from './EventOptionLocation';
-import { EventTemplate } from './EventTemplate';
+import { HorizontalEventTemplate } from './HorizontalEventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
@@ -16,10 +16,26 @@ const Body = styled.div`
     flex-direction: row;
 `;
 
+const Section = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    &:first-child {
+        margin-right: 10px;
+    }
+`;
+
 const Options = styled.div`
     display: flex;
     flex-direction: column;
     flex: 1;
+`;
+
+const DeleteButton = styled.button`
+    background-color: ${Colors.Red};
+    height: 45px;
+    border: none;
 `;
 
 /**
@@ -110,38 +126,43 @@ export const Event: React.FC<EventInfo> = (props) => {
     };
 
     return (
-        <EventTemplate
+        <HorizontalEventTemplate
             title={props.title}
             showEditSymbol={keycloak.authenticated}
             isEditing={isEditing}
             onEditClick={onEditClick}
         >
             <Body>
-                <Options>
-                    <EventOptionDateRange
-                        dateRange={dateRange}
-                        timeRange={timeRange}
-                        recurring={recurring}
-                        selectedDays={selectedDays}
-                        isEditing={isEditing}
-                        onDateRangeChange={onDateRangeChange}
-                        onTimeRangeChange={onTimeRangeChange}
-                        onRecurringChange={onRecurringChange}
-                        onSelectedDaysChange={onSelectedDaysChange}
-                        recurrenceEnabled={true}
-                    />
-                    <EventOptionLocation
-                        isEditing={isEditing}
-                        selectedLocation={locationId}
-                        locations={locations}
-                        onChange={onLocationChange}
-                    />
-                </Options>
-                {props.resource && props.resource.message && !isEditing ? (
-                    <MessageBox {...props.resource.message} />
+                <Section>
+                    <Options>
+                        <EventOptionDateRange
+                            dateRange={dateRange}
+                            timeRange={timeRange}
+                            recurring={recurring}
+                            selectedDays={selectedDays}
+                            isEditing={isEditing}
+                            onDateRangeChange={onDateRangeChange}
+                            onTimeRangeChange={onTimeRangeChange}
+                            onRecurringChange={onRecurringChange}
+                            onSelectedDaysChange={onSelectedDaysChange}
+                            recurrenceEnabled={false}
+                        />
+                        <EventOptionLocation
+                            isEditing={isEditing}
+                            selectedLocation={locationId}
+                            locations={locations}
+                            onChange={onLocationChange}
+                        />
+                    </Options>
+                </Section>
+                {!isEditing ? (
+                    <Section>
+                        <MessageBox {...props.resource.message} />
+                        <DeleteButton>Avlys uttak</DeleteButton>
+                    </Section>
                 ) : null}
             </Body>
             {isEditing ? <EventSubmission onSubmit={onSubmit} onCancel={onCancel} /> : null}
-        </EventTemplate>
+        </HorizontalEventTemplate>
     );
 };

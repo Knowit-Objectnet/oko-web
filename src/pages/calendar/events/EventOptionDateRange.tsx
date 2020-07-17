@@ -70,6 +70,7 @@ const Day = styled.div<DayProps>`
 
 const StyledTimeRangePicker = styled(TimeRangePicker)`
     width: 100%;
+    background-color: ${Colors.White};
 
     & .react-timerange-picker__range-divider {
         flex: auto;
@@ -78,9 +79,51 @@ const StyledTimeRangePicker = styled(TimeRangePicker)`
 
 const StyledDateRangePicker = styled(DateRangePicker)`
     width: 100%;
+    background-color: ${Colors.White};
 
     & .react-daterange-picker__range-divider {
         flex: auto;
+    }
+`;
+
+const StyledDatePicker = styled(DatePicker)`
+    background-color: ${Colors.White};
+`;
+
+const BoxWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+`;
+
+const TimeWrapper = styled.div`
+    display: flex;
+`;
+
+const TimeBox = styled.div`
+    background-color: ${Colors.LightBeige};
+    flex: 1;
+    padding: 0px 5px;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    &:first-child {
+        margin-right: 20px;
+    }
+`;
+
+const Box = styled.div`
+    background-color: ${Colors.LightBeige};
+    padding: 0px 40px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:not(:last-child) {
+        margin-bottom: 10px;
     }
 `;
 
@@ -224,21 +267,25 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                         </DateTimePickersWrapper>
                     ) : null}
                     {props.recurring === 'None' ? (
-                        <DatePicker onChange={onNonRecurringDateChange} value={nonRecurringDate} />
+                        <StyledDatePicker onChange={onNonRecurringDateChange} value={nonRecurringDate} />
                     ) : null}
                 </Wrapper>
             ) : (
-                `
-                    ${props.dateRange[0].toLocaleString('nb-NO', { month: 'long', day: 'numeric', year: 'numeric' })},
-                    ${props.timeRange[0]
-                        .getHours()
-                        .toString()
-                        .padStart(2, '0')}:${props.timeRange[0].getMinutes().toString().padStart(2, '0')} - 
-                    ${props.timeRange[1]
-                        .getHours()
-                        .toString()
-                        .padStart(2, '0')}:${props.timeRange[1].getMinutes().toString().padStart(2, '0')}
-                `
+                <BoxWrapper>
+                    <Box>
+                        {props.dateRange[0].toLocaleString('nb-NO', { month: 'long', day: 'numeric', year: 'numeric' })}
+                    </Box>
+                    <TimeWrapper>
+                        <TimeBox>
+                            {props.timeRange[0].getHours().toString().padStart(2, '0')}:
+                            {props.timeRange[0].getMinutes().toString().padStart(2, '0')}
+                        </TimeBox>
+                        <TimeBox>
+                            {props.timeRange[1].getHours().toString().padStart(2, '0')}:
+                            {props.timeRange[1].getMinutes().toString().padStart(2, '0')}
+                        </TimeBox>
+                    </TimeWrapper>
+                </BoxWrapper>
             )}
         </EventOption>
     );
