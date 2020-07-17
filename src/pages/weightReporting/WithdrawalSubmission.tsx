@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
+import {PropsWithChildren, useState} from 'react';
 import { Colors } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
 
@@ -114,7 +114,7 @@ interface WithdrawalProps {
 /**
  * Event option that allows the user to choose a weight for the event.
  */
-export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
+export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
     // State
     const [weight, setWeight] = useState<number | ''>(props.weight || '');
     const [editing, setEditing] = useState(props.weight === undefined);
@@ -194,12 +194,24 @@ export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                 </InputWrapper>
             ) : (
                 <Box>
-                    <BoxText>
-                        {props.weight} kg
-                    </BoxText>
+                    <BoxText>{props.weight} kg</BoxText>
                     <EditIcon onClick={onEditButtonClick} />
                 </Box>
             )}
         </Wrapper>
     );
 };
+
+const areEqual = (
+    prevProps: Readonly<PropsWithChildren<WithdrawalProps>>,
+    nextProps: Readonly<PropsWithChildren<WithdrawalProps>>,
+) => {
+    return (
+        prevProps.weight === nextProps.weight &&
+        prevProps.id === nextProps.id &&
+        prevProps.start.getTime() === nextProps.start.getTime() &&
+        prevProps.end.getTime() === nextProps.end.getTime()
+    );
+};
+
+export const WithdrawalSubmission = React.memo(MemoWithdrawalSubmission, areEqual);

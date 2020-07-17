@@ -52,9 +52,7 @@ export const WeightReporting: React.FC = () => {
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
-    // Withdrawal objects
-    //const [withdrawals, setWithdrawals] = useState<Array<Withdrawal>>([]);
-
+    const date = new Date("2020-07-17T14:12:40.665Z");
     // List of withdrawals fetched from the server
     const { data: apiWithdrawals, isValidating, mutate } = useSWR<Array<Withdrawal>>(
         ['/api/withdrawals', keycloak.token],
@@ -70,76 +68,29 @@ export const WeightReporting: React.FC = () => {
             : [
                   {
                       id: '1',
-                      start: new Date(),
-                      end: new Date(),
+                      start: date,
+                      end: date,
                   },
                   {
                       id: '2',
                       weight: 200,
-                      start: new Date(),
-                      end: new Date(),
+                      start: date,
+                      end: date,
                   },
                   {
                       id: '3',
                       weight: 200,
-                      start: new Date(),
-                      end: new Date(),
+                      start: date,
+                      end: date,
                   },
                   {
                       id: '4',
-                      start: new Date(),
-                      end: new Date(),
-                  },
-                  {
-                      id: '5',
-                      weight: 200,
-                      start: new Date(),
-                      end: new Date(),
-                  },
-                  {
-                      id: '6',
-                      weight: 200,
-                      start: new Date(),
-                      end: new Date(),
-                  },
-                  {
-                      id: '7',
-                      weight: 200,
-                      start: new Date(),
-                      end: new Date(),
-                  },
-                  {
-                      id: '8',
-                      weight: 200,
-                      start: new Date(),
-                      end: new Date(),
-                  },
-                  {
-                      id: '9',
-                      weight: 200,
-                      start: new Date(),
-                      end: new Date(),
-                  },
-                  {
-                      id: '10',
-                      weight: 200,
-                      start: new Date(),
-                      end: new Date(),
-                  },
-                  {
-                      id: '11',
-                      weight: 200,
-                      start: new Date(),
-                      end: new Date(),
+                      start: date,
+                      end: date,
                   },
               ];
 
-    /*useEffect(() => {
-
-        setWithdrawals(withdrawals);
-    }, [apiWithdrawals]);*/
-
-    const onSubmit = async (weight: number, id: string) => {
+    const onSubmit = React.useCallback(async (weight: number, id: string) => {
         try {
             // update the local data immediately, but disable the revalidation
             const newWithdrawal = withdrawals.find((withdrawal) => withdrawal.id === id);
@@ -156,7 +107,7 @@ export const WeightReporting: React.FC = () => {
         } catch (err) {
             console.log(err);
         }
-    };
+    }, []);
 
     // Create a list of memoized elements such that we don't need to rerender every list element
     // when one gets updated
