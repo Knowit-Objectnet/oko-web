@@ -173,7 +173,7 @@ export const Event: React.FC<EventProps> = (props) => {
                             recurrenceEnabled={false}
                         />
                         <EventOptionLocation
-                            isEditing={isEditing}
+                            isEditing={false}
                             selectedLocation={locationId}
                             locations={locations}
                             onChange={onLocationChange}

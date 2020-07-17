@@ -144,7 +144,7 @@ interface EventOptionDateRangeProps {
  * Event option that allows the user to choose a start and end date for the event.
  */
 export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props) => {
-    const [nonRecurringDate, setNonRecurringDate] = useState(new Date());
+    const [nonRecurringDate, setNonRecurringDate] = useState(new Date(props.dateRange[0]));
     const minTime = '07:00:00';
     const maxTime = '20:00:00';
 
