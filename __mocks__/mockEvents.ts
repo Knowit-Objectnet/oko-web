@@ -27,6 +27,7 @@ export const mockEvents: Array<EventInfo> = [
                 end: end,
                 text: 'Tar ikke i mot barneleker ifm. Covid-19 tiltak.',
             },
+            recurrenceRule: null,
         },
     },
 ];
