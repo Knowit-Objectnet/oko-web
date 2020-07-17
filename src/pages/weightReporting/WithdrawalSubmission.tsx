@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {PropsWithChildren, useState} from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { Colors } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
 

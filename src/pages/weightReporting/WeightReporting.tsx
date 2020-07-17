@@ -52,7 +52,7 @@ export const WeightReporting: React.FC = () => {
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
-    const date = new Date("2020-07-17T14:12:40.665Z");
+    const date = new Date('2020-07-17T14:12:40.665Z');
     // List of withdrawals fetched from the server
     const { data: apiWithdrawals, isValidating, mutate } = useSWR<Array<Withdrawal>>(
         ['/api/withdrawals', keycloak.token],
