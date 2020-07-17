@@ -9,7 +9,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, apiUrl } from '../../../types';
+import { ApiLocation, ApiPartner } from '../../../types';
 
 const Options = styled.div`
     display: flex;

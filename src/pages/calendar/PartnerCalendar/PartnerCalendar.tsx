@@ -1,15 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useKeycloak } from '@react-keycloak/web';
 import { ExpandableAgenda } from './ExpandableAgenda';
-import { ApiEvent, apiUrl, EventInfo } from '../../../types';
-import add from 'date-fns/add';
-import useSWR from 'swr';
-import { fetcher } from '../../../utils/fetcher';
-import { Loading } from '../../loading/Loading';
-import { DeleteToAPI } from '../../../utils/DeleteToAPI';
-import { useEffect, useState } from 'react';
-
+import { EventInfo } from '../../../types';
 const Wrapper = styled.div``;
 
 interface PartnerCalendarProps {

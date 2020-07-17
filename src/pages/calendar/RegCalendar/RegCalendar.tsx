@@ -1,14 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiEvent, EventInfo, Roles, SlotInfo, apiUrl } from '../../../types';
+import { EventInfo, Roles, SlotInfo } from '../../../types';
 import { useKeycloak } from '@react-keycloak/web';
-import useSWR from 'swr';
-import { fetcher } from '../../../utils/fetcher';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
-import add from 'date-fns/add';
-import { Loading } from '../../loading/Loading';
 
 const OverflowWrapper = styled.div`
     overflow: auto;

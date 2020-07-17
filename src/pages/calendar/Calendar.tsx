@@ -9,7 +9,6 @@ import { ExtraEvent } from './events/ExtraEvent';
 import { NewEvent } from './events/NewEvent';
 import { SideMenu } from './SideMenu';
 import { ApiEvent, apiUrl, EventInfo, Roles } from '../../types';
-import keycloak from '../../keycloak';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
@@ -19,6 +18,7 @@ import { Loading } from '../loading/Loading';
 import { DeleteToAPI } from '../../utils/DeleteToAPI';
 import { PostToAPI } from '../../utils/PostToAPI';
 import { PatchToAPI } from '../../utils/PatchToAPI';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -83,6 +83,7 @@ const Sidebar = styled.div`
  * The page component for the calendar view
  */
 export const CalendarPage: React.FC = () => {
+    const { keycloak } = useKeycloak();
     // State for handling modal
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
