@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { Colors } from '../../../types';
 
 const Submission = styled.div`
     display: flex;
@@ -53,10 +54,10 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
 
     return (
         <Submission>
-            <Button color="#EC7070" name="cancelButton" onClick={onClick}>
+            <Button color={Colors.Red} name="cancelButton" onClick={onClick}>
                 {props.cancelText || 'Avbryt'}
             </Button>
-            <Button color="#52CC91" name="submitButton" onClick={onClick}>
+            <Button color={Colors.Green} name="submitButton" onClick={onClick}>
                 {props.submitText || 'Godkjenn'}
             </Button>
         </Submission>

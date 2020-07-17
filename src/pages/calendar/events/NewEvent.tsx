@@ -10,7 +10,6 @@ import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
 import { ApiLocation, ApiPartner, apiUrl } from '../../../types';
-import { PostToAPI } from '../../../utils/PostToAPI';
 
 const Options = styled.div`
     display: flex;
@@ -22,6 +21,22 @@ interface NewEventProps {
     start: Date;
     end: Date;
     onFinished: () => void;
+    addEvent: (
+        data: {
+            startDateTime: string;
+            endDateTime: string;
+            station: { id: number };
+            partner: { id: number };
+            recurrenceRule?: {
+                until: string;
+                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+                count?: number;
+                interval?: number;
+            };
+        },
+        stationName: string,
+        partnerName: string,
+    ) => void;
 }
 
 /**
@@ -135,10 +150,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         max.setHours(20, 0, 0, 0);
         if (timeRange[1] > max) return;
 
-        // Add 2 hours to dates as we don't support timezones. Hopefully this code doesnt go outside of Norway
-        //const startTime = add(timeRange[0], { hours: 2 });
-        //const endTime = add(timeRange[1], { hours: 2 });
-        //const until = add(dateRange[1], { hours: 2 });
         // Dates has to be written as strings as we need to remove the Z, as ISO 8601 is not fully supported
         const data: {
             startDateTime: string;
@@ -152,8 +163,8 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 interval?: number;
             };
         } = {
-            startDateTime: timeRange[0].toISOString().slice(0, -2),
-            endDateTime: timeRange[1].toISOString().slice(0, -2),
+            startDateTime: timeRange[0].toISOString(),
+            endDateTime: timeRange[1].toISOString(),
             station: {
                 id: locationId,
             },
@@ -164,12 +175,12 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
 
         if (recurring === 'Daily') {
             data.recurrenceRule = {
-                until: dateRange[1].toISOString().slice(0, -2),
+                until: dateRange[1].toISOString(),
                 days: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
             };
         } else if (recurring === 'Weekly') {
             data.recurrenceRule = {
-                until: dateRange[1].toISOString().slice(0, -2),
+                until: dateRange[1].toISOString(),
             };
 
             const days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'> = [];
@@ -199,13 +210,11 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             }
         }
 
-        try {
-            const res = await PostToAPI(apiUrl + '/calendar/events', data, keycloak.token);
-        } catch (err) {
-            console.log(err);
+        const location = locations?.find((_location) => _location.id === locationId);
+        const partner = partners?.find((_partner) => _partner.id === selectedPartnerId);
+        if (location && partner) {
+            props.addEvent(data, location.name, partner.name);
         }
-
-        props.onFinished();
     };
 
     return (

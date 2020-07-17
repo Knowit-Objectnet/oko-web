@@ -2,17 +2,23 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { default as DateCalendar } from 'react-calendar';
 import { RegCalendar } from './RegCalendar/RegCalendar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal } from '../../sharedComponents/Modal';
 import { Event } from './events/Event';
 import { ExtraEvent } from './events/ExtraEvent';
 import { NewEvent } from './events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { EventInfo, Roles } from '../../types';
+import { ApiEvent, apiUrl, EventInfo, Roles } from '../../types';
 import keycloak from '../../keycloak';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
+import useSWR from 'swr';
+import { fetcher } from '../../utils/fetcher';
+import { Loading } from '../loading/Loading';
+import { DeleteToAPI } from '../../utils/DeleteToAPI';
+import { PostToAPI } from '../../utils/PostToAPI';
+import { PatchToAPI } from '../../utils/PatchToAPI';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -85,6 +91,53 @@ export const CalendarPage: React.FC = () => {
     // State for side menu
     const [isToggled, setIsToggled] = useState(false);
 
+    // from and to date for event fetching
+    // The from date is the last monday from props.date and the to date is 1 week into the future
+    // This is such that the week-calendar always has it's 5 days of events
+    const fromDate = add(selectedDate, { days: selectedDate.getDay() === 0 ? -6 : -selectedDate.getDay() + 1 });
+    fromDate.setHours(7, 0, 0, 0);
+    const toDate = add(selectedDate, { weeks: 1 });
+    toDate.setHours(20, 0, 0, 0);
+
+    let url = '';
+    if (keycloak.hasRealmRole(Roles.Ambassador)) {
+        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&station-id=${
+            keycloak.tokenParsed.GroupID
+        }`;
+    } else if (keycloak.hasRealmRole(Roles.Partner)) {
+        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&partner-id=${
+            keycloak.tokenParsed.GroupID
+        }`;
+    } else {
+        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}`;
+    }
+
+    // Events fetched from the api
+    // Contains parameters to only get events in date range specified above and only from the accounts
+    // station location
+    const { data: apiEvents, isValidating, mutate } = useSWR<ApiEvent[]>([url, keycloak.token], fetcher);
+    const [events, setEvents] = useState<Array<EventInfo>>([]);
+
+    useEffect(() => {
+        const _events: EventInfo[] = apiEvents
+            ? apiEvents.map((event: ApiEvent) => {
+                  const newEvent: EventInfo = {
+                      start: new Date(event.startDateTime),
+                      end: new Date(event.endDateTime),
+                      title: event.partner.name,
+                      resource: {
+                          eventId: event.id,
+                          partner: event.partner,
+                          location: event.station,
+                          recurrenceRule: event.recurrenceRule,
+                      },
+                  };
+                  return newEvent;
+              })
+            : [];
+        setEvents(_events);
+    }, [apiEvents]);
+
     // on date change function for the react date selector
     const onDateChange = (date: Date | Date[]) => {
         if (date instanceof Date) {
@@ -133,6 +186,7 @@ export const CalendarPage: React.FC = () => {
             <NewEvent
                 start={start}
                 end={end}
+                addEvent={addEvent}
                 onFinished={() => {
                     setShowModal(false);
                 }}
@@ -158,23 +212,34 @@ export const CalendarPage: React.FC = () => {
 
     // On event selection function to display an event
     const onSelectEvent = (event: EventInfo) => {
-        setModalContent(<Event {...event} />);
+        setModalContent(<Event {...event} deleteEvent={deleteEvent} updateEvent={updateEvent} />);
         setShowModal(true);
     };
 
     // On slot selection function to display new or extra event
     const onSelectSlot = (start: Date, end: Date, isOslo: boolean) => {
-        const EventComponent = isOslo ? NewEvent : ExtraEvent;
-
-        setModalContent(
-            <EventComponent
-                start={start}
-                end={end}
-                onFinished={() => {
-                    setShowModal(false);
-                }}
-            />,
-        );
+        if (isOslo) {
+            setModalContent(
+                <NewEvent
+                    start={start}
+                    end={end}
+                    addEvent={addEvent}
+                    onFinished={() => {
+                        setShowModal(false);
+                    }}
+                />,
+            );
+        } else {
+            setModalContent(
+                <ExtraEvent
+                    start={start}
+                    end={end}
+                    onFinished={() => {
+                        setShowModal(false);
+                    }}
+                />,
+            );
+        }
         setShowModal(true);
     };
 
@@ -189,6 +254,103 @@ export const CalendarPage: React.FC = () => {
         setSelectedDate(dayOfDeltaWeek);
     };
 
+    const addEvent = async (
+        data: {
+            startDateTime: string;
+            endDateTime: string;
+            station: { id: number };
+            partner: { id: number };
+            recurrenceRule?: {
+                until: string;
+                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+                count?: number;
+                interval?: number;
+            };
+        },
+        stationName: string,
+        partnerName: string,
+    ) => {
+        try {
+            if (apiEvents) {
+                const newEvent: ApiEvent = {
+                    startDateTime: data.startDateTime.slice(0, -2),
+                    endDateTime: data.endDateTime.slice(0, -2),
+                    id: -1,
+                    partner: {
+                        id: data.station.id,
+                        name: partnerName,
+                    },
+                    station: {
+                        id: data.partner.id,
+                        name: stationName,
+                    },
+                    recurrenceRule: data.recurrenceRule
+                        ? {
+                              id: -1,
+                              until: data.recurrenceRule.until.slice(0, -2),
+                              days: data.recurrenceRule.days || [],
+                              count: data.recurrenceRule.count || 0,
+                              interval: data.recurrenceRule.interval || 0,
+                          }
+                        : null,
+                };
+                await mutate([...apiEvents, newEvent], false);
+                setShowModal(false);
+
+                await PostToAPI(url, data, keycloak.token);
+
+                // trigger a revalidation (refetch) to make sure our local data is correct
+                mutate();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const deleteEvent = async (event: EventInfo) => {
+        try {
+            if (apiEvents) {
+                // update the local data immediately, but disable the revalidation
+                const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
+                await mutate(newEvents, false);
+                setShowModal(false);
+
+                // send a request to the API to update the source
+                await DeleteToAPI(`${apiUrl}/calendar/events/?event-id=${event.resource.eventId}`, keycloak.token);
+
+                // trigger a revalidation (refetch) to make sure our local data is correct
+                mutate();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const updateEvent = async (eventId: number, start: string, end: string) => {
+        try {
+            const newEvent = apiEvents?.find((event) => event.id === eventId);
+            if (apiEvents && newEvent) {
+                // update the local data immediately, but disable the revalidation
+                newEvent.startDateTime = start;
+                newEvent.endDateTime = end;
+                await mutate([...apiEvents, newEvent], false);
+                setShowModal(false);
+
+                // send a request to the API to update the source
+                await PatchToAPI(
+                    `${apiUrl}/calendar/events/`,
+                    { id: eventId, startDateTime: start.slice(0, -2), endDateTime: end.slice(0, -2) },
+                    keycloak.token,
+                );
+
+                // trigger a revalidation (refetch) to make sure our local data is correct
+                mutate();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     // Function to decide which calendar to render depending on role
     const getCalendar = () => {
         if (keycloak.hasRealmRole(Roles.Partner)) {
@@ -198,6 +360,8 @@ export const CalendarPage: React.FC = () => {
                     date={selectedDate}
                     isToggled={isToggled}
                     onWeekChange={onWeekChange}
+                    events={events}
+                    deleteEvent={deleteEvent}
                 />
             );
         } else if (keycloak.hasRealmRole(Roles.Ambassador)) {
@@ -207,6 +371,7 @@ export const CalendarPage: React.FC = () => {
                     date={selectedDate}
                     isToggled={isToggled}
                     onWeekChange={onWeekChange}
+                    events={events}
                 />
             );
         }
@@ -216,6 +381,7 @@ export const CalendarPage: React.FC = () => {
                 onSelectSlot={onSelectSlot}
                 newEvent={newEvent}
                 date={selectedDate}
+                events={events}
             />
         );
     };
@@ -234,7 +400,11 @@ export const CalendarPage: React.FC = () => {
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
                 </ModuleDateCalendar>
-                <ModuleCalendar>{getCalendar()}</ModuleCalendar>
+                {(!events || events.length <= 0) && isValidating ? (
+                    <Loading text="Laster inn data..." />
+                ) : (
+                    <ModuleCalendar>{getCalendar()}</ModuleCalendar>
+                )}
                 <Sidebar>
                     <SideMenu
                         onCalendarToggleClick={toggleCalendarClick}

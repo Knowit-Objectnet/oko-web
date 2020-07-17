@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Colors } from '../../../types';
-import {Edit} from "@styled-icons/material/Edit";
+import { Edit } from '@styled-icons/material/Edit';
 
 const Wrapper = styled.div`
     display: flex;
@@ -50,8 +50,6 @@ export const HorizontalEventTemplate: React.FC<HorizontalEventTemplateProps> = (
                 </EditTitle>
             )}
         </Title>
-        <Body>
-            {props.children}
-        </Body>
+        <Body>{props.children}</Body>
     </Wrapper>
 );

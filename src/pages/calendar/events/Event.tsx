@@ -21,8 +21,8 @@ const Section = styled.div`
     flex-direction: column;
     flex: 1;
 
-    &:first-child {
-        margin-right: 10px;
+    &:nth-child(2) {
+        margin-left: 10px;
     }
 `;
 
@@ -38,11 +38,16 @@ const DeleteButton = styled.button`
     border: none;
 `;
 
+interface EventProps extends EventInfo {
+    deleteEvent: (event: EventInfo) => void;
+    updateEvent: (eventId: number, start: string, end: string) => void;
+}
+
 /**
  * Component shown when event in calendar is clicked.
  * Will be rendered differently depending on user's role.
  */
-export const Event: React.FC<EventInfo> = (props) => {
+export const Event: React.FC<EventProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
     // Valid recycling stations (ombruksstasjon) locations fetched from api
@@ -109,6 +114,11 @@ export const Event: React.FC<EventInfo> = (props) => {
         setIsEditing(true);
     };
 
+    const onDelete = () => {
+        const { deleteEvent, ...rest } = props;
+        deleteEvent(rest);
+    };
+
     // Function called if edit was cancelled. Resets all values to the original event info
     const onCancel = () => {
         setIsEditing(false);
@@ -121,7 +131,7 @@ export const Event: React.FC<EventInfo> = (props) => {
 
     // Function called on successful event edit.
     const onSubmit = () => {
-        //TODO: Submit to server
+        props.updateEvent(props.resource.eventId, props.start.toISOString(), props.end.toISOString());
         setIsEditing(false);
     };
 
@@ -158,7 +168,7 @@ export const Event: React.FC<EventInfo> = (props) => {
                 {!isEditing ? (
                     <Section>
                         <MessageBox {...props.resource.message} />
-                        <DeleteButton>Avlys uttak</DeleteButton>
+                        <DeleteButton onClick={onDelete}>Avlys uttak</DeleteButton>
                     </Section>
                 ) : null}
             </Body>
