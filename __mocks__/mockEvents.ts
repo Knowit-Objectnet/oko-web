@@ -1,4 +1,4 @@
-import {EventInfo} from "../src/types";
+import {ApiEvent, EventInfo} from "../src/types";
 
 const d = new Date();
 const start = new Date(d.setDate(d.getDate() - d.getDay() + (d.getDay() == 0 ? -6 : 1)));
@@ -6,16 +6,20 @@ const end = new Date(d.setDate(d.getDate() - d.getDay() + (d.getDay() == 0 ? -6 
 start.setHours(10);
 end.setHours(12)
 
-export const mockEvents = [
+export const mockEvents: Array<EventInfo> = [
     {
         title: 'Test',
         start: start,
         end: end,
-        allDay: false,
         resource: {
+            eventId: 1,
             location: {
                 id: 1,
-                name: 'grønmo'
+                name: 'Grønmo',
+            },
+            partner: {
+                id: 1,
+                name: 'Fretex',
             },
             weight: 100,
             message: {
@@ -27,7 +31,7 @@ export const mockEvents = [
     },
 ];
 
-export const mockApiEvents = [
+export const mockApiEvents: Array<ApiEvent> = [
     {
         id: 91,
         startDateTime: "2020-07-13T11:45:20.57Z",
@@ -300,5 +304,6 @@ export const mockApiEvents = [
             id: 1,
             name: "Fretex"
         },
+        recurrenceRule: null
     }
 ]

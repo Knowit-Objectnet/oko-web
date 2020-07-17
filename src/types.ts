@@ -10,7 +10,7 @@ export interface ApiEvent {
         days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
         interval: number;
         count: number | null;
-    };
+    } | null;
 }
 
 export interface ApiLocation {
@@ -40,13 +40,13 @@ interface EventInfoResource {
         id: number;
         name: string;
     };
-    recurrenceRule?: {
+    recurrenceRule: {
         id: number;
         until: string;
         days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
         interval?: number;
         count?: number | null;
-    };
+    } | null;
     weight?: number;
     message?: {
         start: Date;
