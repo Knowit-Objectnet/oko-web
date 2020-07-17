@@ -6,12 +6,11 @@ import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplate } from './EventTemplate';
 import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
+import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, apiUrl } from '../../types';
-import { PostToAPI } from '../../utils/PostToAPI';
-import add from 'date-fns/add';
+import { ApiLocation, ApiPartner, apiUrl } from '../../../types';
+import { PostToAPI } from '../../../utils/PostToAPI';
 
 const Options = styled.div`
     display: flex;

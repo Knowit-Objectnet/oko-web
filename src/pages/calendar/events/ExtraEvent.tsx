@@ -3,14 +3,13 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplate } from './EventTemplate';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventOptionLocation } from './EventOptionLocation';
 import { EventOptionCategory } from './EventOptionCategory';
 import { EventSubmission } from './EventSubmission';
 import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
+import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
-import { ApiLocation, ApiPartner } from '../../types';
 import { EventOptionPartner } from './EventOptionPartner';
+import { ApiPartner } from '../../../types';
 
 const Textarea = styled.textarea`
     min-height: 54px;

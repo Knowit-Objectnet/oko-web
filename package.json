@@ -63,7 +63,6 @@
   },
   "dependencies": {
     "@react-keycloak/web": "^2.1.1",
-    "@types/react-big-calendar": "^0.24.2",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-transition-group": "^4.4.0",
     "@types/styled-components": "^5.1.0",
@@ -76,8 +75,8 @@
     "keycloak-js": "^10.0.2",
     "moment": "^2.27.0",
     "react": "^16.13.1",
-    "react-big-calendar": "^0.25.0",
     "react-date-picker": "^8.0.1",
+    "react-calendar": "^3.1.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-transition-group": "^4.4.1",

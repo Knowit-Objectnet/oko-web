@@ -1,5 +1,3 @@
-import { stringOrDate } from 'react-big-calendar';
-
 export interface ApiEvent {
     id: number;
     startDateTime: string;
@@ -8,7 +6,10 @@ export interface ApiEvent {
     partner: ApiPartner;
     recurrenceRule: {
         id: number;
-        rule: string;
+        until: string;
+        days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+        interval: number;
+        count: number | null;
     };
 }
 
@@ -26,14 +27,25 @@ export interface EventInfo {
     title: string;
     start: Date;
     end: Date;
-    allDay?: boolean;
-    resource?: EventInfoResource;
+    resource: EventInfoResource;
 }
 
 interface EventInfoResource {
+    eventId: number;
     location: {
         id: number;
         name: string;
+    };
+    partner: {
+        id: number;
+        name: string;
+    };
+    recurrenceRule?: {
+        id: number;
+        until: string;
+        days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+        interval?: number;
+        count?: number | null;
     };
     weight?: number;
     message?: {
@@ -44,24 +56,8 @@ interface EventInfoResource {
 }
 
 export interface SlotInfo {
-    start: stringOrDate;
-    end: stringOrDate;
-    slots: Date[] | string[];
-    action: 'select' | 'click' | 'doubleClick';
-    bounds?: {
-        x: number;
-        y: number;
-        top: number;
-        right: number;
-        left: number;
-        bottom: number;
-    };
-    box?: {
-        clientX: number;
-        clientY: number;
-        x: number;
-        y: number;
-    };
+    start: Date;
+    end: Date;
 }
 
 export interface Withdrawal {
@@ -71,12 +67,14 @@ export interface Withdrawal {
     end: Date;
 }
 
+// Roles
 export enum Roles {
     Oslo = 'reg_employee',
     Partner = 'partner',
     Ambassador = 'reuse_station',
 }
 
+// Oslo's color scheme
 export enum Colors {
     DarkBlue = '#2A2859',
     Blue = '#6FE9FF',
@@ -92,4 +90,5 @@ export enum Colors {
     White = '#FFFFFF',
 }
 
+// Url to API
 export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging';
