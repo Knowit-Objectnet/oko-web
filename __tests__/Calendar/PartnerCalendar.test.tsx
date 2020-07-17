@@ -5,7 +5,7 @@ import fetch from 'jest-fetch-mock';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
-import { Roles } from '../../src/types';
+import { ApiEvent, EventInfo, Roles } from '../../src/types';
 
 // Component to test
 import { PartnerCalendar } from '../../src/pages/calendar/PartnerCalendar/PartnerCalendar';
@@ -14,34 +14,24 @@ import { PartnerCalendar } from '../../src/pages/calendar/PartnerCalendar/Partne
 global.fetch = fetch;
 
 describe('Provides a page for partners to view the calendar', () => {
-    beforeEach(() => {
-        // Reset the mocks
-        fetch.resetMocks();
-        // Set the mock responses to mock the API
-        fetch.mockResponse(async (req) => {
-            const url = new URL(req.url);
-            const pathname = url.pathname;
-            const fromDate = url.searchParams.get('from-date');
-            const toDate = url.searchParams.get('to-date');
-            const partner = url.searchParams.get('partner-id');
-            let events = mockApiEvents;
-            if (fromDate) {
-                const from = new Date(fromDate);
-                events = events.filter((event) => new Date(event.startDateTime) > from);
-            }
-            if (toDate) {
-                const to = new Date(toDate);
-                events = events.filter((event) => new Date(event.startDateTime) < to);
-            }
-            if (partner) {
-                events = events.filter((event) => event.partner.id === parseInt(partner));
-            }
-            if (pathname.endsWith('/calendar/events/')) {
-                return JSON.stringify(events);
-            }
-            return '';
-        });
+    const events: EventInfo[] = mockApiEvents
+        .map((event: ApiEvent) => {
+            const newEvent: EventInfo = {
+                start: new Date(event.startDateTime),
+                end: new Date(event.endDateTime),
+                title: event.partner.name,
+                resource: {
+                    eventId: event.id,
+                    partner: event.partner,
+                    location: event.station,
+                    recurrenceRule: event.recurrenceRule,
+                },
+            };
+            return newEvent;
+        })
+        .filter((event) => event.resource.partner.id === 1);
 
+    beforeEach(() => {
         // Set the role to ambassador
         keycloak.hasRealmRole = jest.fn((role: string) => {
             return role === Roles.Partner;
@@ -59,6 +49,7 @@ describe('Provides a page for partners to view the calendar', () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
         const onWeekCahngeMock = jest.fn();
+        const deleteEventMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 13);
@@ -71,6 +62,8 @@ describe('Provides a page for partners to view the calendar', () => {
                     isToggled={isToggled}
                     onSelectEvent={onSelectEventMock}
                     onWeekChange={onWeekCahngeMock}
+                    events={events}
+                    deleteEvent={deleteEventMock}
                 />
             </KeycloakProvider>,
         );
@@ -80,6 +73,7 @@ describe('Provides a page for partners to view the calendar', () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
         const onWeekCahngeMock = jest.fn();
+        const deleteEventMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 13);
@@ -92,6 +86,8 @@ describe('Provides a page for partners to view the calendar', () => {
                     isToggled={isToggled}
                     onSelectEvent={onSelectEventMock}
                     onWeekChange={onWeekCahngeMock}
+                    events={events}
+                    deleteEvent={deleteEventMock}
                 />
             </KeycloakProvider>,
         );
@@ -106,6 +102,7 @@ describe('Provides a page for partners to view the calendar', () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
         const onWeekCahngeMock = jest.fn();
+        const deleteEventMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 15);
@@ -118,6 +115,8 @@ describe('Provides a page for partners to view the calendar', () => {
                     isToggled={isToggled}
                     onSelectEvent={onSelectEventMock}
                     onWeekChange={onWeekCahngeMock}
+                    events={events}
+                    deleteEvent={deleteEventMock}
                 />
             </KeycloakProvider>,
         );
