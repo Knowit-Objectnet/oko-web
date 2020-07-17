@@ -1,12 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PostToAPI } from '../../utils/PostToAPi';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
 import { Colors, Withdrawal } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
+import { Loading } from '../loading/Loading';
 
 const Wrapper = styled.div`
     display: flex;
@@ -15,19 +16,28 @@ const Wrapper = styled.div`
     align-items: center;
     height: 100%;
     width: 100%;
-    background-color: ${Colors.LightBeige};
+    background-color: ${Colors.White};
 `;
 
 const Content = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     height: 100%;
-    min-width: 400px;
+    min-width: 500px;
+    width: 65%;
 `;
 
 const Latest = styled.div`
     margin-top: 65px;
+    width: 100%;
+`;
+
+const Older = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
 `;
 
 const OverflowWrapper = styled.div`
@@ -42,11 +52,17 @@ export const WeightReporting: React.FC = () => {
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
+    // Withdrawal objects
+    //const [withdrawals, setWithdrawals] = useState<Array<Withdrawal>>([]);
+
     // List of withdrawals fetched from the server
-    let { data: fetchedWithdrawals } = useSWR<Withdrawal[]>(['/api/withdrawals', keycloak.token], fetcher);
-    fetchedWithdrawals =
-        fetchedWithdrawals && fetchedWithdrawals.length !== 0
-            ? fetchedWithdrawals.map((withdrawal: Withdrawal) => {
+    const { data: apiWithdrawals, isValidating, mutate } = useSWR<Array<Withdrawal>>(
+        ['/api/withdrawals', keycloak.token],
+        fetcher,
+    );
+    const withdrawals =
+        apiWithdrawals && apiWithdrawals.length !== 0
+            ? apiWithdrawals.map((withdrawal: Withdrawal) => {
                   withdrawal.start = new Date(withdrawal.start);
                   withdrawal.end = new Date(withdrawal.end);
                   return withdrawal;
@@ -80,25 +96,63 @@ export const WeightReporting: React.FC = () => {
                       start: new Date(),
                       end: new Date(),
                   },
+                  {
+                      id: '6',
+                      weight: 200,
+                      start: new Date(),
+                      end: new Date(),
+                  },
+                  {
+                      id: '7',
+                      weight: 200,
+                      start: new Date(),
+                      end: new Date(),
+                  },
+                  {
+                      id: '8',
+                      weight: 200,
+                      start: new Date(),
+                      end: new Date(),
+                  },
+                  {
+                      id: '9',
+                      weight: 200,
+                      start: new Date(),
+                      end: new Date(),
+                  },
+                  {
+                      id: '10',
+                      weight: 200,
+                      start: new Date(),
+                      end: new Date(),
+                  },
+                  {
+                      id: '11',
+                      weight: 200,
+                      start: new Date(),
+                      end: new Date(),
+                  },
               ];
 
-    const [withdrawals, setWithdrawals] = useState(fetchedWithdrawals);
+    /*useEffect(() => {
+
+        setWithdrawals(withdrawals);
+    }, [apiWithdrawals]);*/
 
     const onSubmit = async (weight: number, id: string) => {
         try {
-            // Post data
-            const data = {
-                weight,
-            };
+            // update the local data immediately, but disable the revalidation
+            const newWithdrawal = withdrawals.find((withdrawal) => withdrawal.id === id);
+            if (newWithdrawal) {
+                newWithdrawal.weight = weight;
+                mutate([...withdrawals, newWithdrawal], false);
 
-            // Post update to API
-            await PostToAPI('/api/weight', data, keycloak.token);
+                // Post update to API
+                await PostToAPI('/api/weight', { weight }, keycloak.token);
 
-            // Create new state with updated weight
-            const newWithdrawals = withdrawals.map((w) => (w.id === id ? { ...w, weight: weight } : w));
-
-            // Update the withdrawals
-            setWithdrawals(newWithdrawals);
+                // trigger a revalidation (refetch) to make sure our local data is correct
+                mutate();
+            }
         } catch (err) {
             console.log(err);
         }
@@ -106,32 +160,33 @@ export const WeightReporting: React.FC = () => {
 
     // Create a list of memoized elements such that we don't need to rerender every list element
     // when one gets updated
-    const withdrawalList = withdrawals.map((withdrawal) =>
-        useMemo(
-            () => (
-                <WithdrawalSubmission
-                    key={withdrawal.id}
-                    id={withdrawal.id}
-                    weight={withdrawal.weight}
-                    start={withdrawal.start}
-                    end={withdrawal.end}
-                    onSubmit={onSubmit}
-                />
-            ),
-            [withdrawal],
-        ),
-    );
+    const withdrawalList = withdrawals.map((withdrawal) => (
+        <WithdrawalSubmission
+            key={withdrawal.id}
+            id={withdrawal.id}
+            weight={withdrawal.weight}
+            start={withdrawal.start}
+            end={withdrawal.end}
+            onSubmit={onSubmit}
+        />
+    ));
 
     return (
         <Wrapper>
-            <Content>
-                <Latest>
-                    <h2>Siste uttak</h2>
-                    {withdrawalList.slice(0, 1)}
-                </Latest>
-                <h2>Tidligere uttak</h2>
-                <OverflowWrapper>{withdrawalList.slice(1)}</OverflowWrapper>
-            </Content>
+            {(!withdrawals || withdrawals.length <= 0) && isValidating ? (
+                <Loading text="Laster inn data..." />
+            ) : (
+                <Content>
+                    <Latest>
+                        <h2>Siste uttak</h2>
+                        {withdrawalList.slice(0, 1)}
+                    </Latest>
+                    <Older>
+                        <h2>Tidligere uttak</h2>
+                        <OverflowWrapper>{withdrawalList.slice(1)}</OverflowWrapper>
+                    </Older>
+                </Content>
+            )}
         </Wrapper>
     );
 };

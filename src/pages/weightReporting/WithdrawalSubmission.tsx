@@ -2,10 +2,11 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { Colors } from '../../types';
+import Pencil from '../../assets/Pencil.svg';
 
 const Wrapper = styled.div`
     display: flex;
-    margin-bottom: 32px;
+    margin-bottom: 2px;
 `;
 
 interface WithdrawalDateProps {
@@ -17,10 +18,12 @@ const WithdrawalDate = styled.div<WithdrawalDateProps>`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: ${(props) => (props.weight ? Colors.Green : Colors.Red)};
-    min-width: 150px;
+    background-color: ${(props) => (props.weight ? Colors.LightGreen : Colors.Red)};
+    min-width: 170px;
     height: 50px;
-    margin-right: 40px;
+    margin-right: 2px;
+    padding: 5px;
+    box-sizing: border-box;
 `;
 
 const InputWrapper = styled.div`
@@ -29,6 +32,7 @@ const InputWrapper = styled.div`
     justify-content: center;
     height: 50px;
     min-width: 300px;
+    flex: 1;
 `;
 
 const Suffix = styled.div`
@@ -36,6 +40,8 @@ const Suffix = styled.div`
     flex: 1;
     display: flex;
     position: relative;
+    border: solid 2px ${Colors.Red};
+    box-sizing: border-box;
 
     &::after {
         position: absolute;
@@ -65,8 +71,8 @@ const Input = styled.input`
 
 const Button = styled.button`
     border: none;
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background-color: ${Colors.Red};
 `;
@@ -75,12 +81,26 @@ const Box = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: auto;
     min-width: 300px;
     height: 50px;
-    background-color: ${Colors.White};
+    background-color: ${Colors.LightBeige};
     font-weight: bold;
     font-size: 20px;
     line-height: 28px;
+`;
+
+const BoxText = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+`;
+
+const EditIcon = styled(Pencil)`
+    height: 1em;
+    fill: ${Colors.Black};
+    margin-right: 20px;
 `;
 
 interface WithdrawalProps {
@@ -96,7 +116,8 @@ interface WithdrawalProps {
  */
 export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
     // State
-    const [weight, setWeight] = useState<number | ''>('');
+    const [weight, setWeight] = useState<number | ''>(props.weight || '');
+    const [editing, setEditing] = useState(props.weight === undefined);
 
     // On change function for the input element
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,10 +134,21 @@ export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
     };
 
     // On click function for the OK button
-    const onClick = () => {
-        if (weight) {
+    const onSubmitClick = () => {
+        // If the new weight is the same as the old weight then turn off editing
+        // without sending an api request as nothing is changed
+        if (weight === props.weight) {
+            setEditing(false);
+            // If the weight isnt an empty string or the old weight then send an
+            // api request as the weight has changed
+        } else if (weight) {
             props.onSubmit(weight, props.id);
         }
+    };
+
+    // Button function to start edit mode
+    const onEditButtonClick = () => {
+        setEditing(true);
     };
 
     return (
@@ -143,9 +175,7 @@ export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                         .padStart(2, '0')}:${props.end.getMinutes().toString().padStart(2, '0')}`}
                 </span>
             </WithdrawalDate>
-            {props.weight ? (
-                <Box>{props.weight} kg</Box>
-            ) : (
+            {editing ? (
                 <InputWrapper>
                     <Suffix>
                         <Input
@@ -158,10 +188,17 @@ export const WithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                             onKeyPress={onKeyDown}
                         />
                     </Suffix>
-                    <Button type="submit" onClick={onClick} disabled={weight === ''}>
+                    <Button type="submit" onClick={onSubmitClick} disabled={weight === ''}>
                         OK
                     </Button>
                 </InputWrapper>
+            ) : (
+                <Box>
+                    <BoxText>
+                        {props.weight} kg
+                    </BoxText>
+                    <EditIcon onClick={onEditButtonClick} />
+                </Box>
             )}
         </Wrapper>
     );
