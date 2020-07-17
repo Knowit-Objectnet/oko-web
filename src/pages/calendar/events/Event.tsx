@@ -131,7 +131,22 @@ export const Event: React.FC<EventProps> = (props) => {
 
     // Function called on successful event edit.
     const onSubmit = () => {
-        props.updateEvent(props.resource.eventId, props.start.toISOString(), props.end.toISOString());
+        const start = dateRange[0];
+        const end = dateRange[1];
+        start.setHours(
+            timeRange[0].getHours(),
+            timeRange[0].getMinutes(),
+            timeRange[0].getSeconds(),
+            timeRange[0].getMilliseconds(),
+        );
+        end.setHours(
+            timeRange[1].getHours(),
+            timeRange[1].getMinutes(),
+            timeRange[1].getSeconds(),
+            timeRange[1].getMilliseconds(),
+        );
+
+        props.updateEvent(props.resource.eventId, start.toISOString(), end.toISOString());
         setIsEditing(false);
     };
 
