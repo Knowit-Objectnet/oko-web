@@ -329,24 +329,33 @@ export const CalendarPage: React.FC = () => {
 
     const updateEvent = async (eventId: number, start: string, end: string) => {
         try {
-            const newEvent = apiEvents?.find((event) => event.id === eventId);
-            if (apiEvents && newEvent) {
-                // update the local data immediately, but disable the revalidation
-                newEvent.startDateTime = start;
-                newEvent.endDateTime = end;
-                await mutate([...apiEvents, newEvent], false);
-                setShowModal(false);
+            // Exit if there arent any events to update
+            if (!apiEvents) return;
 
-                // send a request to the API to update the source
-                await PatchToAPI(
-                    `${apiUrl}/calendar/events/`,
-                    { id: eventId, startDateTime: start.slice(0, -2), endDateTime: end.slice(0, -2) },
-                    keycloak.token,
-                );
+            // Create a new array of events to not directly mutate state
+            const newEvents = [...apiEvents];
+            // Find the event we want to update
+            const newEvent = newEvents.find((event) => event.id === eventId);
 
-                // trigger a revalidation (refetch) to make sure our local data is correct
-                mutate();
-            }
+            // Exit if we cant find the event we want to update
+            if (!newEvent) return;
+
+            // Update the event
+            newEvent.startDateTime = start;
+            newEvent.endDateTime = end;
+            // update the local data immediately, but disable the revalidation
+            await mutate(newEvents, false);
+            setShowModal(false);
+
+            // send a request to the API to update the source
+            await PatchToAPI(
+                `${apiUrl}/calendar/events/`,
+                { id: eventId, startDateTime: start.slice(0, -2), endDateTime: end.slice(0, -2) },
+                keycloak.token,
+            );
+
+            // trigger a revalidation (refetch) to make sure our local data is correct
+            mutate();
         } catch (err) {
             console.log(err);
         }
