@@ -268,7 +268,11 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                         </DateTimePickersWrapper>
                     ) : null}
                     {props.recurring === 'None' ? (
-                        <StyledDatePicker onChange={onNonRecurringDateChange} value={nonRecurringDate} />
+                        <StyledDatePicker
+                            clearIcon={null}
+                            onChange={onNonRecurringDateChange}
+                            value={nonRecurringDate}
+                        />
                     ) : null}
                 </Wrapper>
             ) : (

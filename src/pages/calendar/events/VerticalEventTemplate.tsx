@@ -53,8 +53,6 @@ export const VerticalEventTemplate: React.FC<VerticalEventTemplateProps> = (prop
                 </EditTitle>
             )}
         </Title>
-        <Content>
-            {props.children}
-        </Content>
+        <Content>{props.children}</Content>
     </Wrapper>
 );
