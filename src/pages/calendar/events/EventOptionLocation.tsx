@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import { LocationOn } from '@styled-icons/material/LocationOn';
-import { ApiLocation } from '../../types';
+import { ApiLocation } from '../../../types';
 
 const Select = styled.select`
     width: 100%;

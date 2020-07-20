@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import { useMemo, useState } from 'react';
-import { PostToAPI } from '../../utils/PostToAPi';
+import { PostToAPI } from '../../utils/PostToAPI';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
 import { Colors, Withdrawal } from '../../types';
 import useSWR from 'swr';

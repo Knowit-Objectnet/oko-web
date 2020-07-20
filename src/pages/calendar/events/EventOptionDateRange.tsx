@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Clock } from '@styled-icons/fa-regular/Clock';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
-import { Colors } from '../../types';
+import { Colors } from '../../../types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -98,7 +97,6 @@ interface EventOptionDateRangeProps {
  * Event option that allows the user to choose a start and end date for the event.
  */
 export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props) => {
-    const date = new Date();
     const minTime = '07:00:00';
     const maxTime = '20:00:00';
 
@@ -179,9 +177,15 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                 </Wrapper>
             ) : (
                 `
-                    ${props.dateRange[0].toLocaleString('no-NB', { month: 'long', day: 'numeric', year: 'numeric' })},
-                    ${props.timeRange[0].getHours()}:${props.timeRange[0].getMinutes()} - 
-                    ${props.timeRange[1].getHours()}:${props.timeRange[1].getMinutes()}
+                    ${props.dateRange[0].toLocaleString('nb-NO', { month: 'long', day: 'numeric', year: 'numeric' })},
+                    ${props.timeRange[0]
+                        .getHours()
+                        .toString()
+                        .padStart(2, '0')}:${props.timeRange[0].getMinutes().toString().padStart(2, '0')} - 
+                    ${props.timeRange[1]
+                        .getHours()
+                        .toString()
+                        .padStart(2, '0')}:${props.timeRange[1].getMinutes().toString().padStart(2, '0')}
                 `
             )}
         </EventOption>

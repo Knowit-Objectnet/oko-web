@@ -31,6 +31,7 @@ jest.mock('./src/keycloak', () => ({
         updateToken: jest.fn(),
         clearToken: jest.fn(),
         authenticated: true,
+        tokenParsed: {},
     },
 }));
 

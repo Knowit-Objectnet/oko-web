@@ -6,7 +6,7 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
-import { Event } from '../../src/pages/calendar/Event';
+import { Event } from '../../src/pages/calendar/events/Event';
 import { mockEvents } from '../../__mocks__/mockEvents';
 import fetch from 'jest-fetch-mock';
 
