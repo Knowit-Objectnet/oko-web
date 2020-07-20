@@ -16,9 +16,10 @@ const Title = styled.div`
     align-items: center;
     padding: 10px 20px;
     box-sizing: border-box;
+    margin-bottom: 15px;
 `;
 
-const H2 = styled.h2`
+const H2 = styled.div`
     margin-top: 0px;
 `;
 
