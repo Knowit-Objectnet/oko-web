@@ -6,7 +6,6 @@ import { Edit } from '@styled-icons/material/Edit';
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 50px;
     box-sizing: border-box;
     background-color: ${Colors.LightBeige};
 `;
@@ -15,8 +14,16 @@ const Title = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
-    border-bottom: solid 1px black;
-    margin-bottom: 32px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+`;
+
+const H2 = styled.h2`
+    margin-top: 0px;
+`;
+
+const Content = styled.div`
+    padding: 0px 50px 50px;
 `;
 
 const EditTitle = styled.div`
@@ -39,13 +46,15 @@ interface VerticalEventTemplateProps {
 export const VerticalEventTemplate: React.FC<VerticalEventTemplateProps> = (props) => (
     <Wrapper>
         <Title>
-            <h2>{props.title}</h2>
+            <H2>{props.title}</H2>
             {props.isEditing || !props.showEditSymbol ? null : (
                 <EditTitle>
                     <Edit size="1em" onClick={props.onEditClick} />
                 </EditTitle>
             )}
         </Title>
-        {props.children}
+        <Content>
+            {props.children}
+        </Content>
     </Wrapper>
 );

@@ -20,7 +20,7 @@ const DateTimePickersWrapper = styled.div`
     flex-direction: column;
 
     &:not(:last-child) {
-        margin-bottom: 25px;
+        margin-bottom: 10px;
     }
 `;
 
@@ -29,7 +29,7 @@ const Label = styled.label`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
 `;
 
 const Span = styled.span`
@@ -39,6 +39,7 @@ const Span = styled.span`
 
 const Select = styled.select`
     width: 100%;
+    height: 30px;
 `;
 
 const DaySelection = styled.div`
