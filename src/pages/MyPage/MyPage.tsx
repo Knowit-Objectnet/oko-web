@@ -6,6 +6,10 @@ import { Colors } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
+import { Modal } from '../../sharedComponents/Modal';
+import { useState } from 'react';
+import { NewPartner } from './NewPartner';
+import { NewLocation } from './NewLocation';
 
 const Wrapper = styled.div`
     display: flex;
@@ -51,23 +55,48 @@ const LogoutButton = styled.button`
  * Profile component to view your information
  */
 export const MyPage: React.FC = () => {
+    // State for handling modal
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
+
+    // History
     const history = useHistory();
 
     const onLogoutClick = () => {
         history.push('/logout');
     };
 
+    const showNewPartner = () => {
+        setModalContent(<NewPartner />);
+        setShowModal(true);
+    };
+
+    const showNewLocation = () => {
+        setModalContent(<NewLocation />);
+        setShowModal(true);
+    };
+
     return (
-        <Wrapper>
-            <Content>
-                <Header>
-                    <DefaultProfilePicture />
-                    <h2>Min side</h2>
-                    <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
-                </Header>
-                <ContactInfo contacts={[]} />
-            </Content>
-            <SideMenu />
-        </Wrapper>
+        <>
+            {showModal ? (
+                <Modal
+                    exitModalCallback={() => {
+                        setShowModal(false);
+                    }}
+                    content={modalContent}
+                />
+            ) : null}
+            <Wrapper>
+                <Content>
+                    <Header>
+                        <DefaultProfilePicture />
+                        <h2>Min side</h2>
+                        <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
+                    </Header>
+                    <ContactInfo contacts={[]} />
+                </Content>
+                <SideMenu newPartnerClick={showNewPartner} newLocationClick={showNewLocation} />
+            </Wrapper>
+        </>
     );
 };

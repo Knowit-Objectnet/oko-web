@@ -38,29 +38,29 @@ const Button = styled.div`
         margin-bottom: 30px;
     }
 `;
+
+interface SideMenuProps {
+    newPartnerClick: () => void;
+    newLocationClick: () => void;
+}
+
 /**
  * Component that lets a user either create a new event (if REG) or toggle between agenda and calendar (if
  * ambassador or partner)
  */
-export const SideMenu: React.FC = () => {
-    const onNewPartnerClick = () => {};
-
-    const onNewLocationClick = () => {};
-
-    return (
-        <Wrapper>
-            <Item>
-                <Description>Ny sam.parter</Description>
-                <Button onClick={onNewPartnerClick}>
-                    <Plus height="100%" />
-                </Button>
-            </Item>
-            <Item>
-                <Description>Ny stasjon</Description>
-                <Button onClick={onNewLocationClick}>
-                    <Plus height="100%" />
-                </Button>
-            </Item>
-        </Wrapper>
-    );
-};
+export const SideMenu: React.FC<SideMenuProps> = (props) => (
+    <Wrapper>
+        <Item>
+            <Description>Ny sam.parter</Description>
+            <Button onClick={props.newPartnerClick}>
+                <Plus height="100%" />
+            </Button>
+        </Item>
+        <Item>
+            <Description>Ny stasjon</Description>
+            <Button onClick={props.newLocationClick}>
+                <Plus height="100%" />
+            </Button>
+        </Item>
+    </Wrapper>
+);
