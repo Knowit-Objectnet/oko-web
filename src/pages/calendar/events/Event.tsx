@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { MessageBox } from './MessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { ApiLocation, Colors, EventInfo } from '../../../types';
+import { ApiLocation, Colors, EventInfo, Roles } from '../../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { HorizontalEventTemplate } from './HorizontalEventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
@@ -36,6 +36,7 @@ const DeleteButton = styled.button`
     background-color: ${Colors.Red};
     height: 45px;
     border: none;
+    margin-top: 10px;
 `;
 
 interface EventProps extends EventInfo {
@@ -183,7 +184,11 @@ export const Event: React.FC<EventProps> = (props) => {
                 {!isEditing ? (
                     <Section>
                         <MessageBox {...props.resource.message} />
-                        <DeleteButton onClick={onDelete}>Avlys uttak</DeleteButton>
+                        {keycloak.hasRealmRole(Roles.Oslo) ||
+                        (keycloak.hasRealmRole(Roles.Partner) &&
+                            keycloak.tokenParsed.GroupID === props.resource.partner.id) ? (
+                            <DeleteButton onClick={onDelete}>Avlys uttak</DeleteButton>
+                        ) : null}
                     </Section>
                 ) : null}
             </Body>

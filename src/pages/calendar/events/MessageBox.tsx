@@ -10,7 +10,6 @@ const Wrapper = styled.div`
     background-color: ${Colors.Yellow};
     width: 300px;
     padding: 10px;
-    margin-bottom: 10px;
 `;
 
 const Info = styled(InfoCircle)`
