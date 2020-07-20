@@ -5,7 +5,7 @@ import fetch from 'jest-fetch-mock';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
-import { Roles } from '../../src/types';
+import { ApiEvent, EventInfo, Roles } from '../../src/types';
 
 // Component to test
 import { RegCalendar } from '../../src/pages/calendar/RegCalendar/RegCalendar';
@@ -14,30 +14,22 @@ import { RegCalendar } from '../../src/pages/calendar/RegCalendar/RegCalendar';
 global.fetch = fetch;
 
 describe('Provides a page for REG to view the calendar', () => {
-    beforeEach(() => {
-        // Reset the mocks
-        fetch.resetMocks();
-        // Set the mock responses to mock the API
-        fetch.mockResponse(async (req) => {
-            const url = new URL(req.url);
-            const pathname = url.pathname;
-            const fromDate = url.searchParams.get('from-date');
-            const toDate = url.searchParams.get('to-date');
-            let events = mockApiEvents;
-            if (fromDate) {
-                const from = new Date(fromDate);
-                events = events.filter((event) => new Date(event.startDateTime) > from);
-            }
-            if (toDate) {
-                const to = new Date(toDate);
-                events = events.filter((event) => new Date(event.startDateTime) < to);
-            }
-            if (pathname.endsWith('/calendar/events/')) {
-                return JSON.stringify(events);
-            }
-            return '';
-        });
+    const events: EventInfo[] = mockApiEvents.map((event: ApiEvent) => {
+        const newEvent: EventInfo = {
+            start: new Date(event.startDateTime),
+            end: new Date(event.endDateTime),
+            title: event.partner.name,
+            resource: {
+                eventId: event.id,
+                partner: event.partner,
+                location: event.station,
+                recurrenceRule: event.recurrenceRule,
+            },
+        };
+        return newEvent;
+    });
 
+    beforeEach(() => {
         // Set the role to ambassador
         keycloak.hasRealmRole = jest.fn((role: string) => {
             return role === Roles.Oslo;
@@ -64,6 +56,7 @@ describe('Provides a page for REG to view the calendar', () => {
                     onSelectEvent={onSelectEventMock}
                     newEvent={newEvent}
                     onSelectSlot={onSelectSlot}
+                    events={events}
                 />
             </KeycloakProvider>,
         );
@@ -85,6 +78,7 @@ describe('Provides a page for REG to view the calendar', () => {
                     onSelectEvent={onSelectEventMock}
                     newEvent={newEvent}
                     onSelectSlot={onSelectSlot}
+                    events={events}
                 />
             </KeycloakProvider>,
         );
@@ -111,6 +105,7 @@ describe('Provides a page for REG to view the calendar', () => {
                     onSelectEvent={onSelectEventMock}
                     newEvent={newEvent}
                     onSelectSlot={onSelectSlot}
+                    events={events}
                 />
             </KeycloakProvider>,
         );

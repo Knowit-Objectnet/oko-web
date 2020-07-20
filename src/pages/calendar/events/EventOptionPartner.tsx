@@ -35,8 +35,8 @@ export const EventOptionPartner: React.FC<EventOptionPartnerProps> = (props) => 
                 <option value={-1} disabled>
                     Velg samarbeidspartner
                 </option>
-                {props.partners.map((partner, index) => (
-                    <option value={index} key={partner.id}>
+                {props.partners.map((partner) => (
+                    <option value={partner.id} key={partner.id}>
                         {partner.name}
                     </option>
                 ))}

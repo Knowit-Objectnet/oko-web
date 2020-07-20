@@ -3,11 +3,14 @@ import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
+import DatePicker from 'react-date-picker';
+import { useState } from 'react';
 import { Colors } from '../../../types';
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
+    flex: 1;
 `;
 
 const DateTimePickersWrapper = styled.div`
@@ -67,23 +70,67 @@ const Day = styled.div<DayProps>`
 
 const StyledTimeRangePicker = styled(TimeRangePicker)`
     width: 100%;
+    background-color: ${Colors.White};
 
     & .react-timerange-picker__range-divider {
-        flex: 1;
+        flex: auto;
     }
 `;
 
 const StyledDateRangePicker = styled(DateRangePicker)`
     width: 100%;
+    background-color: ${Colors.White};
 
     & .react-daterange-picker__range-divider {
-        flex: 1;
+        flex: auto;
+    }
+`;
+
+const StyledDatePicker = styled(DatePicker)`
+    background-color: ${Colors.White};
+`;
+
+const BoxWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+`;
+
+const TimeWrapper = styled.div`
+    display: flex;
+`;
+
+const TimeBox = styled.div`
+    background-color: ${Colors.LightBeige};
+    flex: 1;
+    padding: 0px 5px;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+
+    &:first-child {
+        margin-right: 20px;
+    }
+`;
+
+const Box = styled.div`
+    background-color: ${Colors.LightBeige};
+    padding: 0px 40px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:not(:last-child) {
+        margin-bottom: 10px;
     }
 `;
 
 interface EventOptionDateRangeProps {
     dateRange: [Date, Date];
     timeRange: [Date, Date];
+    recurrenceEnabled: boolean;
     recurring: 'None' | 'Daily' | 'Weekly';
     selectedDays: Array<number>;
     isEditing: boolean;
@@ -97,14 +144,38 @@ interface EventOptionDateRangeProps {
  * Event option that allows the user to choose a start and end date for the event.
  */
 export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props) => {
+    const [nonRecurringDate, setNonRecurringDate] = useState(new Date(props.dateRange[0]));
     const minTime = '07:00:00';
     const maxTime = '20:00:00';
 
-    const onTimeRangeChange = (range: [Date, Date]) => {
-        props.onTimeRangeChange(range);
+    const onTimeRangeChange = (range: [string | Date, string | Date]) => {
+        const date = new Date(nonRecurringDate);
+
+        let start = range[0] instanceof Date ? range[0] : null;
+        let end = range[1] instanceof Date ? range[1] : null;
+
+        if (typeof range[0] == 'string') {
+            const startStrings = range[0].split(':');
+            start = new Date(date.setHours(parseInt(startStrings[0]), parseInt(startStrings[1])));
+        }
+        if (typeof range[1] == 'string') {
+            const endStrings = range[1].split(':');
+            end = new Date(date.setHours(parseInt(endStrings[0]), parseInt(endStrings[1])));
+        }
+
+        if (start && end) {
+            props.onTimeRangeChange([start, end]);
+        } else {
+            throw new Error('Something went horribly wrong because of typescript');
+        }
     };
 
     const onDateRangeChange = (range: [Date, Date]) => {
+        const newTimeStart = new Date(props.timeRange[0]);
+        const newTimeEnd = new Date(props.timeRange[1]);
+        newTimeStart.setFullYear(range[0].getFullYear(), range[0].getMonth(), range[0].getDate());
+        newTimeEnd.setFullYear(range[0].getFullYear(), range[0].getMonth(), range[0].getDate());
+        props.onTimeRangeChange([newTimeStart, newTimeEnd]);
         props.onDateRangeChange(range);
     };
 
@@ -113,6 +184,17 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
         const value = e.currentTarget.value;
         if (value !== 'None' && value !== 'Daily' && value !== 'Weekly') return;
         props.onRecurringChange(value);
+    };
+
+    const onNonRecurringDateChange = (date: Date | Date[]) => {
+        if (date instanceof Date) {
+            const start = props.timeRange[0];
+            const end = props.timeRange[1];
+            start.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+            end.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+            setNonRecurringDate(date);
+            props.onTimeRangeChange([start, end]);
+        }
     };
 
     const onDayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -132,33 +214,37 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
         <EventOption>
             {props.isEditing ? (
                 <Wrapper>
-                    <Label>
-                        <Select value={props.recurring} onChange={onRecurringChange}>
-                            <option value="None">Gjentas ikke</option>
-                            <option value="Daily">Daglig</option>
-                            <option value="Weekly">Ukentlig</option>
-                        </Select>
-                    </Label>
-                    <Label>
-                        <Span>Velg ukedag(er)</Span>
-                        <DaySelection>
-                            <Day data-index={1} selected={props.selectedDays.includes(1)} onClick={onDayClick}>
-                                M
-                            </Day>
-                            <Day data-index={2} selected={props.selectedDays.includes(2)} onClick={onDayClick}>
-                                Ti
-                            </Day>
-                            <Day data-index={3} selected={props.selectedDays.includes(3)} onClick={onDayClick}>
-                                O
-                            </Day>
-                            <Day data-index={4} selected={props.selectedDays.includes(4)} onClick={onDayClick}>
-                                To
-                            </Day>
-                            <Day data-index={5} selected={props.selectedDays.includes(5)} onClick={onDayClick}>
-                                F
-                            </Day>
-                        </DaySelection>
-                    </Label>
+                    {props.recurrenceEnabled ? (
+                        <Label>
+                            <Select value={props.recurring} onChange={onRecurringChange}>
+                                <option value="None">Gjentas ikke</option>
+                                <option value="Daily">Daglig</option>
+                                <option value="Weekly">Ukentlig</option>
+                            </Select>
+                        </Label>
+                    ) : null}
+                    {props.recurring === 'Weekly' ? (
+                        <Label>
+                            <Span>Velg ukedag(er)</Span>
+                            <DaySelection>
+                                <Day data-index={1} selected={props.selectedDays.includes(1)} onClick={onDayClick}>
+                                    M
+                                </Day>
+                                <Day data-index={2} selected={props.selectedDays.includes(2)} onClick={onDayClick}>
+                                    Ti
+                                </Day>
+                                <Day data-index={3} selected={props.selectedDays.includes(3)} onClick={onDayClick}>
+                                    O
+                                </Day>
+                                <Day data-index={4} selected={props.selectedDays.includes(4)} onClick={onDayClick}>
+                                    To
+                                </Day>
+                                <Day data-index={5} selected={props.selectedDays.includes(5)} onClick={onDayClick}>
+                                    F
+                                </Day>
+                            </DaySelection>
+                        </Label>
+                    ) : null}
                     <DateTimePickersWrapper>
                         <Span>Velg tidspunkt</Span>
                         <StyledTimeRangePicker
@@ -170,23 +256,36 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                             value={props.timeRange}
                         />
                     </DateTimePickersWrapper>
-                    <DateTimePickersWrapper>
-                        <Span>Velg periode</Span>
-                        <StyledDateRangePicker clearIcon={null} onChange={onDateRangeChange} value={props.dateRange} />
-                    </DateTimePickersWrapper>
+                    {props.recurring !== 'None' ? (
+                        <DateTimePickersWrapper>
+                            <Span>Velg periode</Span>
+                            <StyledDateRangePicker
+                                clearIcon={null}
+                                onChange={onDateRangeChange}
+                                value={props.dateRange}
+                            />
+                        </DateTimePickersWrapper>
+                    ) : null}
+                    {props.recurring === 'None' ? (
+                        <StyledDatePicker onChange={onNonRecurringDateChange} value={nonRecurringDate} />
+                    ) : null}
                 </Wrapper>
             ) : (
-                `
-                    ${props.dateRange[0].toLocaleString('nb-NO', { month: 'long', day: 'numeric', year: 'numeric' })},
-                    ${props.timeRange[0]
-                        .getHours()
-                        .toString()
-                        .padStart(2, '0')}:${props.timeRange[0].getMinutes().toString().padStart(2, '0')} - 
-                    ${props.timeRange[1]
-                        .getHours()
-                        .toString()
-                        .padStart(2, '0')}:${props.timeRange[1].getMinutes().toString().padStart(2, '0')}
-                `
+                <BoxWrapper>
+                    <Box>
+                        {props.dateRange[0].toLocaleString('nb-NO', { month: 'long', day: 'numeric', year: 'numeric' })}
+                    </Box>
+                    <TimeWrapper>
+                        <TimeBox>
+                            {props.timeRange[0].getHours().toString().padStart(2, '0')}:
+                            {props.timeRange[0].getMinutes().toString().padStart(2, '0')}
+                        </TimeBox>
+                        <TimeBox>
+                            {props.timeRange[1].getHours().toString().padStart(2, '0')}:
+                            {props.timeRange[1].getMinutes().toString().padStart(2, '0')}
+                        </TimeBox>
+                    </TimeWrapper>
+                </BoxWrapper>
             )}
         </EventOption>
     );

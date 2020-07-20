@@ -4,7 +4,7 @@ import { EventSubmission } from './EventSubmission';
 import { useState } from 'react';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
-import { EventTemplate } from './EventTemplate';
+import { VerticalEventTemplate } from './VerticalEventTemplate';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
@@ -21,6 +21,22 @@ interface NewEventProps {
     start: Date;
     end: Date;
     onFinished: () => void;
+    addEvent: (
+        data: {
+            startDateTime: string;
+            endDateTime: string;
+            station: { id: number };
+            partner: { id: number };
+            recurrenceRule?: {
+                until: string;
+                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+                count?: number;
+                interval?: number;
+            };
+        },
+        stationName: string,
+        partnerName: string,
+    ) => void;
 }
 
 /**
@@ -120,13 +136,89 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     };
 
     // Function called on successful event edit.
-    const onSubmit = () => {
-        //TODO: Submit to server
-        props.onFinished();
+    const onSubmit = async () => {
+        // Cancel submission if token doesn't exist as they are not logged in
+        if (!keycloak?.token) return;
+        // Cancel submission if start time is bigger than end time
+        if (timeRange[0] > timeRange[1]) return;
+        // Cancel submission if the start time is less than the min time
+        const min = new Date(timeRange[0]);
+        min.setHours(8, 0, 0, 0);
+        if (timeRange[0] < min) return;
+        // Cancel submission if the end time is less than the min time
+        const max = new Date(timeRange[1]);
+        max.setHours(20, 0, 0, 0);
+        if (timeRange[1] > max) return;
+
+        // Dates has to be written as strings as we need to remove the Z, as ISO 8601 is not fully supported
+        const data: {
+            startDateTime: string;
+            endDateTime: string;
+            station: { id: number };
+            partner: { id: number };
+            recurrenceRule?: {
+                until: string;
+                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+                count?: number;
+                interval?: number;
+            };
+        } = {
+            startDateTime: timeRange[0].toISOString(),
+            endDateTime: timeRange[1].toISOString(),
+            station: {
+                id: locationId,
+            },
+            partner: {
+                id: selectedPartnerId,
+            },
+        };
+
+        if (recurring === 'Daily') {
+            data.recurrenceRule = {
+                until: dateRange[1].toISOString(),
+                days: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
+            };
+        } else if (recurring === 'Weekly') {
+            data.recurrenceRule = {
+                until: dateRange[1].toISOString(),
+            };
+
+            const days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'> = [];
+
+            for (const day of selectedDays) {
+                switch (day) {
+                    case 1:
+                        days.push('MONDAY');
+                        break;
+                    case 2:
+                        days.push('TUESDAY');
+                        break;
+                    case 3:
+                        days.push('WEDNESDAY');
+                        break;
+                    case 4:
+                        days.push('THURSDAY');
+                        break;
+                    case 5:
+                        days.push('FRIDAY');
+                        break;
+                }
+            }
+
+            if (days) {
+                data.recurrenceRule.days = days;
+            }
+        }
+
+        const location = locations?.find((_location) => _location.id === locationId);
+        const partner = partners?.find((_partner) => _partner.id === selectedPartnerId);
+        if (location && partner) {
+            props.addEvent(data, location.name, partner.name);
+        }
     };
 
     return (
-        <EventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
+        <VerticalEventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
             <Options>
                 <EventOptionPartner
                     selectedPartner={selectedPartnerId}
@@ -149,9 +241,10 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                     onTimeRangeChange={onTimeRangeChange}
                     onRecurringChange={onRecurringChange}
                     onSelectedDaysChange={onSelectedDaysChange}
+                    recurrenceEnabled={true}
                 />
             </Options>
             <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />
-        </EventTemplate>
+        </VerticalEventTemplate>
     );
 };

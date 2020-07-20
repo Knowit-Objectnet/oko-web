@@ -15,7 +15,7 @@ export const mockEvents: Array<EventInfo> = [
             eventId: 1,
             location: {
                 id: 1,
-                name: 'Grønmo'
+                name: 'Grønmo',
             },
             partner: {
                 id: 1,

@@ -1,14 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiEvent, EventInfo, Roles, SlotInfo, apiUrl } from '../../../types';
+import { EventInfo, Roles, SlotInfo } from '../../../types';
 import { useKeycloak } from '@react-keycloak/web';
-import useSWR from 'swr';
-import { fetcher } from '../../../utils/fetcher';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
-import add from 'date-fns/add';
-import { Loading } from '../../loading/Loading';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -45,6 +41,7 @@ interface WeekCalendarProps {
     newEvent: (start: Date, end: Date) => void;
     onSelectEvent: (Event: EventInfo) => void;
     onSelectSlot: (start: Date, end: Date, isOslo: boolean) => void;
+    events: Array<EventInfo>;
 }
 
 /**
@@ -53,40 +50,6 @@ interface WeekCalendarProps {
 export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
-
-    // from and to date for event fetching
-    // The from date is the last monday from props.date and the to date is 1 week into the future
-    // This is such that the week-calendar always has it's 5 days of events
-    const fromDate = add(props.date, { days: props.date.getDay() === 0 ? -6 : -props.date.getDay() + 1 });
-    fromDate.setHours(7, 0, 0, 0);
-    const toDate = add(props.date, { weeks: 1 });
-    toDate.setHours(20, 0, 0, 0);
-
-    // Events fetched from the api
-    // Contains parameters to only get events in date range specified above
-    const { data: apiEvents, isValidating } = useSWR<ApiEvent[]>(
-        [
-            `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}`,
-            keycloak.token,
-        ],
-        fetcher,
-    );
-    const events: EventInfo[] = apiEvents
-        ? apiEvents.map((event: ApiEvent) => {
-              const newEvent: EventInfo = {
-                  start: new Date(event.startDateTime),
-                  end: new Date(event.endDateTime),
-                  title: event.partner.name,
-                  resource: {
-                      eventId: event.id,
-                      partner: event.partner,
-                      location: event.station,
-                      recurrenceRule: event.recurrenceRule,
-                  },
-              };
-              return newEvent;
-          })
-        : [];
 
     // Function that handles an event click in the calendar. It displays the Event in a modal
     const onSelectEvent = (event: EventInfo) => {
@@ -101,7 +64,7 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     // Function to order events by the locations 'Haralrud' 'Smestad' 'Grønmo' 'Grefsen' 'Ryen'
     const getOrderedEvents = (events: Array<EventInfo>) => {
         const orderedEvents = new Map<string, Array<EventInfo>>([
-            ['Haralrud', []],
+            ['Haraldrud', []],
             ['Smestad', []],
             ['Grønmo', []],
             ['Grefsen', []],
@@ -115,8 +78,6 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
                     if (_events) {
                         _events.push(event);
                     }
-                } else {
-                    orderedEvents.set(event.resource.location.name, [event]);
                 }
             }
         });
@@ -132,18 +93,11 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     const day5 = addDays(day1, 4);
 
     // Sorting the events according to the five days above
-    const day1Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day1)));
-    const day2Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day2)));
-    const day3Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day3)));
-    const day4Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day4)));
-    const day5Events = getOrderedEvents(events.filter((event) => isSameDay(event.start, day5)));
-
-    // If swr is validating (a fetch is loading) and there are no events then show load component
-    // As that means it is the first time its fetching data. This allows us to still
-    // get the snappy feeling from the stale data while it's validating in the background
-    if ((!events || events.length <= 0) && isValidating) {
-        return <Loading text="Laster inn data..." />;
-    }
+    const day1Events = getOrderedEvents(props.events.filter((event) => isSameDay(event.start, day1)));
+    const day2Events = getOrderedEvents(props.events.filter((event) => isSameDay(event.start, day2)));
+    const day3Events = getOrderedEvents(props.events.filter((event) => isSameDay(event.start, day3)));
+    const day4Events = getOrderedEvents(props.events.filter((event) => isSameDay(event.start, day4)));
+    const day5Events = getOrderedEvents(props.events.filter((event) => isSameDay(event.start, day5)));
 
     return (
         <>

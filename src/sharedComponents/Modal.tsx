@@ -34,7 +34,7 @@ const Content = styled.div<styledContentProps>`
     height: ${(props) => props.height};
     max-height: ${(props) => props.maxHeight};
     min-height: ${(props) => props.minHeight};
-    border-radius: 6px;
+    border-radius: 0px 0px 6px 6px;
     overflow: auto;
     display: flex;
     justify-content: center;

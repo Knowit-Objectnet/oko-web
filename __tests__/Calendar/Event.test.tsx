@@ -35,10 +35,12 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should only show edit symbol on Event if user is logged in', async () => {
+        const deleteEvent = jest.fn();
+        const updatevent = jest.fn();
         const { findByText } = render(
             <KeycloakProvider keycloak={keycloak}>
                 <Router history={history}>
-                    <Event {...mockEvents[0]} />
+                    <Event {...mockEvents[0]} deleteEvent={deleteEvent} updateEvent={updatevent} />
                 </Router>
             </KeycloakProvider>,
         );
@@ -49,13 +51,16 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should not show edit symbol on Event if user is not logged in', async () => {
+        const deleteEvent = jest.fn();
+        const updatevent = jest.fn();
+
         // Change the keycloak instance to be logged out
         keycloak.authenticated = false;
 
         const { findByText } = render(
             <KeycloakProvider keycloak={keycloak}>
                 <Router history={history}>
-                    <Event {...mockEvents[0]} />
+                    <Event {...mockEvents[0]} deleteEvent={deleteEvent} updateEvent={updatevent} />
                 </Router>
             </KeycloakProvider>,
         );

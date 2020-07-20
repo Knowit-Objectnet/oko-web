@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { EventTemplate } from './EventTemplate';
+import { VerticalEventTemplate } from './VerticalEventTemplate';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventOptionLocation } from './EventOptionLocation';
 import { EventOptionCategory } from './EventOptionCategory';
 import { EventSubmission } from './EventSubmission';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
-import { ApiLocation } from '../../../types';
+import { EventOptionPartner } from './EventOptionPartner';
+import { ApiPartner } from '../../../types';
 
 const Textarea = styled.textarea`
     min-height: 54px;
@@ -30,35 +30,29 @@ interface ExtraEventProps {
  */
 export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     const { keycloak } = useKeycloak();
-    // Valid recycling stations (ombruksstasjon) locations fetched from api
+
+    // Valid partners fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: locations } = useSWR<ApiLocation[]>(['/api/locations', keycloak.token], fetcher);
-    locations =
-        locations && locations.length !== 0
-            ? locations
+    let { data: partners } = useSWR<ApiPartner[]>(['/api/partners', keycloak.token], fetcher);
+    partners =
+        partners && partners.length !== 0
+            ? partners
             : [
                   {
                       id: 1,
-                      name: 'Haraldrud',
+                      name: 'Fretex',
                   },
                   {
                       id: 2,
-                      name: 'Smestad',
+                      name: 'Maritastiftelsen',
                   },
                   {
                       id: 3,
-                      name: 'Grefsen',
-                  },
-                  {
-                      id: 4,
-                      name: 'Grønmo',
-                  },
-                  {
-                      id: 5,
-                      name: 'Ryen',
+                      name: 'Jobben',
                   },
               ];
+
     // Valid categories fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
@@ -69,7 +63,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
-    const [locationId, setLocationId] = useState(-1);
+    const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
     const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
 
@@ -90,9 +84,9 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
         setSelectedDays(num);
     };
 
-    // On change function for Location
-    const onLocationChange = (locationId: number) => {
-        setLocationId(locationId);
+    // On change for Partner selection
+    const onPartnerChange = (partnerId: number) => {
+        setSelectedPartnerId(partnerId);
     };
 
     // On change function for Category
@@ -119,7 +113,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     };
 
     return (
-        <EventTemplate title={'Søk om ekstrahenting'} showEditSymbol={false} isEditing={false}>
+        <VerticalEventTemplate title={'Utlys ekstrauttak'} showEditSymbol={false} isEditing={false}>
             <EventOptionDateRange
                 dateRange={dateRange}
                 timeRange={timeRange}
@@ -130,12 +124,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 onTimeRangeChange={onTimeRangeChange}
                 onRecurringChange={onRecurringChange}
                 onSelectedDaysChange={onSelectedDaysChange}
-            />
-            <EventOptionLocation
-                isEditing={true}
-                selectedLocation={locationId}
-                locations={locations}
-                onChange={onLocationChange}
+                recurrenceEnabled={false}
             />
             <EventOptionCategory
                 selectedCategory={categoryIndex}
@@ -143,12 +132,14 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 isEditing={true}
                 onChange={onCategoryChange}
             />
+            Eller
+            <EventOptionPartner selectedPartner={selectedPartnerId} partners={partners} onChange={onPartnerChange} />
             <Textarea
                 placeholder="Legg til beskrivelse av ønskede varer"
                 value={description}
                 onChange={onDescriptionChange}
             />
             <EventSubmission onCancel={onCancel} onSubmit={onSubmit} submitText="Send søknad" />
-        </EventTemplate>
+        </VerticalEventTemplate>
     );
 };
