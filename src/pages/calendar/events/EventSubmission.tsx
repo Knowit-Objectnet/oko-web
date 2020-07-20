@@ -1,11 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { Colors } from '../../../types';
 
 const Submission = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-top: 10px;
 `;
 
 const Button = styled.button`
@@ -20,6 +22,10 @@ const Button = styled.button`
     font-size: 11px;
     line-height: 13px;
     color: #000000;
+
+    &:first-child {
+        margin-right: 95px;
+    }
 `;
 
 interface EventSubmissionProps {
@@ -49,10 +55,10 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
 
     return (
         <Submission>
-            <Button color="#EC7070" name="cancelButton" onClick={onClick}>
+            <Button color={Colors.Red} name="cancelButton" onClick={onClick}>
                 {props.cancelText || 'Avbryt'}
             </Button>
-            <Button color="#52CC91" name="submitButton" onClick={onClick}>
+            <Button color={Colors.Green} name="submitButton" onClick={onClick}>
                 {props.submitText || 'Godkjenn'}
             </Button>
         </Submission>

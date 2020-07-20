@@ -15,6 +15,7 @@ const Wrapper = styled.div`
 const Body = styled.div`
     height: Calc(100% - 125px);
     display: flex;
+    position: relative;
 `;
 
 const Page = styled.div`

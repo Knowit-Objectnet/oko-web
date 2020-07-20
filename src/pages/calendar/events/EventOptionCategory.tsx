@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Category } from '@styled-icons/material/Category';
 import { EventOption } from './EventOption';
 
 const GrayBox = styled.div`
@@ -11,6 +10,10 @@ const GrayBox = styled.div`
     height: 40px;
     background: #f2f2f2;
     border-radius: 5px;
+`;
+
+const Select = styled.select`
+    width: 100%;
 `;
 
 interface EventOptionDateRangeProps {
@@ -24,9 +27,9 @@ interface EventOptionDateRangeProps {
  * Event option that allows the user to choose a category
  */
 export const EventOptionCategory: React.FC<EventOptionDateRangeProps> = (props) => (
-    <EventOption icon={Category}>
+    <EventOption>
         {props.isEditing ? (
-            <select value={props.selectedCategory} onChange={props.onChange}>
+            <Select value={props.selectedCategory} onChange={props.onChange}>
                 <option value={-1} disabled>
                     Velg kategori
                 </option>
@@ -35,7 +38,7 @@ export const EventOptionCategory: React.FC<EventOptionDateRangeProps> = (props) 
                         {category}
                     </option>
                 ))}
-            </select>
+            </Select>
         ) : (
             <GrayBox>{props.selectedCategory ? props.categories[props.selectedCategory].toUpperCase() : 'n/a'}</GrayBox>
         )}

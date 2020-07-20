@@ -1,9 +1,9 @@
-export async function PostToAPI(url: string, data: Record<string, unknown>, token: string): Promise<any> {
+export async function PatchToAPI(url: string, data: Record<string, unknown>, token: string): Promise<any> {
     const response = await fetch(url, {
-        method: 'POST',
+        method: 'PATCH',
         mode: 'cors',
         cache: 'no-cache',
-        credentials: 'same-origin',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -15,7 +15,7 @@ export async function PostToAPI(url: string, data: Record<string, unknown>, toke
 
     // If response is OK then return result
     if (response.ok && response.status === 200) {
-        return await response.json();
+        return await new Promise((resolve) => resolve('Update successful'));
     }
 
     // Throw appropriate error if the post was not successful
@@ -23,6 +23,8 @@ export async function PostToAPI(url: string, data: Record<string, unknown>, toke
         throw new Error('Internal Server Error');
     } else if (response.status === 401 || response.status === 403) {
         throw new Error('Invalid token');
+    } else if (response.status === 404) {
+        throw new Error('Event not found');
     } else {
         throw new Error('Unexpected error');
     }

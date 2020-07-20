@@ -53,6 +53,7 @@ const GlobalStyle = createGlobalStyle`
     #root {
         height: inherit;
         min-height: inherit;
+        overflow: hidden;
     }
 `;
 

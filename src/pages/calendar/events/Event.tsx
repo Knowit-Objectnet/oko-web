@@ -4,16 +4,26 @@ import styled from 'styled-components';
 import { MessageBox } from './MessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { ApiLocation, EventInfo, Roles } from '../../types';
+import { ApiLocation, Colors, EventInfo, Roles } from '../../../types';
 import { EventOptionLocation } from './EventOptionLocation';
-import { EventTemplate } from './EventTemplate';
+import { HorizontalEventTemplate } from './HorizontalEventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
+import { fetcher } from '../../../utils/fetcher';
 
 const Body = styled.div`
     display: flex;
     flex-direction: row;
+`;
+
+const Section = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    &:nth-child(2) {
+        margin-left: 10px;
+    }
 `;
 
 const Options = styled.div`
@@ -22,11 +32,23 @@ const Options = styled.div`
     flex: 1;
 `;
 
+const DeleteButton = styled.button`
+    background-color: ${Colors.Red};
+    height: 45px;
+    border: none;
+    margin-top: 10px;
+`;
+
+interface EventProps extends EventInfo {
+    deleteEvent: (event: EventInfo) => void;
+    updateEvent: (eventId: number, start: string, end: string) => void;
+}
+
 /**
  * Component shown when event in calendar is clicked.
  * Will be rendered differently depending on user's role.
  */
-export const Event: React.FC<EventInfo> = (props) => {
+export const Event: React.FC<EventProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
     // Valid recycling stations (ombruksstasjon) locations fetched from api
@@ -93,6 +115,11 @@ export const Event: React.FC<EventInfo> = (props) => {
         setIsEditing(true);
     };
 
+    const onDelete = () => {
+        const { deleteEvent, ...rest } = props;
+        deleteEvent(rest);
+    };
+
     // Function called if edit was cancelled. Resets all values to the original event info
     const onCancel = () => {
         setIsEditing(false);
@@ -105,42 +132,67 @@ export const Event: React.FC<EventInfo> = (props) => {
 
     // Function called on successful event edit.
     const onSubmit = () => {
-        //TODO: Submit to server
+        const start = dateRange[0];
+        const end = dateRange[1];
+        start.setHours(
+            timeRange[0].getHours(),
+            timeRange[0].getMinutes(),
+            timeRange[0].getSeconds(),
+            timeRange[0].getMilliseconds(),
+        );
+        end.setHours(
+            timeRange[1].getHours(),
+            timeRange[1].getMinutes(),
+            timeRange[1].getSeconds(),
+            timeRange[1].getMilliseconds(),
+        );
+
+        props.updateEvent(props.resource.eventId, start.toISOString(), end.toISOString());
         setIsEditing(false);
     };
 
     return (
-        <EventTemplate
+        <HorizontalEventTemplate
             title={props.title}
             showEditSymbol={keycloak.authenticated}
             isEditing={isEditing}
             onEditClick={onEditClick}
         >
             <Body>
-                <Options>
-                    <EventOptionDateRange
-                        dateRange={dateRange}
-                        timeRange={timeRange}
-                        recurring={recurring}
-                        selectedDays={selectedDays}
-                        isEditing={isEditing}
-                        onDateRangeChange={onDateRangeChange}
-                        onTimeRangeChange={onTimeRangeChange}
-                        onRecurringChange={onRecurringChange}
-                        onSelectedDaysChange={onSelectedDaysChange}
-                    />
-                    <EventOptionLocation
-                        isEditing={isEditing}
-                        selectedLocation={locationId}
-                        locations={locations}
-                        onChange={onLocationChange}
-                    />
-                </Options>
-                {props.resource && props.resource.message && !isEditing ? (
-                    <MessageBox {...props.resource.message} />
+                <Section>
+                    <Options>
+                        <EventOptionDateRange
+                            dateRange={dateRange}
+                            timeRange={timeRange}
+                            recurring={recurring}
+                            selectedDays={selectedDays}
+                            isEditing={isEditing}
+                            onDateRangeChange={onDateRangeChange}
+                            onTimeRangeChange={onTimeRangeChange}
+                            onRecurringChange={onRecurringChange}
+                            onSelectedDaysChange={onSelectedDaysChange}
+                            recurrenceEnabled={false}
+                        />
+                        <EventOptionLocation
+                            isEditing={false}
+                            selectedLocation={locationId}
+                            locations={locations}
+                            onChange={onLocationChange}
+                        />
+                    </Options>
+                </Section>
+                {!isEditing ? (
+                    <Section>
+                        <MessageBox {...props.resource.message} />
+                        {keycloak.hasRealmRole(Roles.Oslo) ||
+                        (keycloak.hasRealmRole(Roles.Partner) &&
+                            keycloak.tokenParsed.GroupID === props.resource.partner.id) ? (
+                            <DeleteButton onClick={onDelete}>Avlys uttak</DeleteButton>
+                        ) : null}
+                    </Section>
                 ) : null}
             </Body>
             {isEditing ? <EventSubmission onSubmit={onSubmit} onCancel={onCancel} /> : null}
-        </EventTemplate>
+        </HorizontalEventTemplate>
     );
 };
