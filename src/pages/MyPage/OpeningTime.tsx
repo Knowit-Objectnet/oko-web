@@ -81,8 +81,16 @@ export const OpeningTime: React.FC<OpeningTimeProps> = (props) => {
                     format="HH:mm"
                     value={props.range}
                     onChange={onRangeChange}
-                    minTime={props.min}
-                    maxTime={props.max}
+                    minTime={
+                        props.min.getHours().toString().padStart(2, '0') +
+                        ':' +
+                        props.min.getMinutes().toString().padStart(2, '0')
+                    }
+                    maxTime={
+                        props.max.getHours().toString().padStart(2, '0') +
+                        ':' +
+                        props.max.getMinutes().toString().padStart(2, '0')
+                    }
                 />
             )}
             <ClosedInput type="checkbox" checked={props.closed} onChange={onClosedChange} />
