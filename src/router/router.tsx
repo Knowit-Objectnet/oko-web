@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route, Router, Redirect } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
+import { Roles } from '../types';
 
 // History
 import { historyObj } from './historyObj';
@@ -14,8 +15,8 @@ import { Loading } from '../pages/loading/Loading';
 import { Login } from '../pages/login/Login';
 import { Logout } from '../pages/logout/Logout';
 import { CalendarPage } from '../pages/calendar/Calendar';
-import { Roles } from '../types';
 import { WeightReporting } from '../pages/weightReporting/WeightReporting';
+import { MyPage } from '../pages/MyPage/MyPage';
 
 export const RouterComponent: React.FC = () => {
     const [, initialized] = useKeycloak();
@@ -77,6 +78,12 @@ export const RouterComponent: React.FC = () => {
                                 authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
                                 not={<Redirect to="/calendar" />}
                                 is={() => 'Hello info'}
+                            />
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}profile`}
+                                not={<Redirect to="/" />}
+                                is={<MyPage />}
                             />
                         </Dashboard>
                     )}
