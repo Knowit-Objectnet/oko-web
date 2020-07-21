@@ -8,6 +8,7 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { WeightReporting } from '../../src/pages/weightReporting/WeightReporting';
+import {Roles} from "../../src/types";
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -19,35 +20,54 @@ describe('Provides a page to view the calendar in addition to change log and not
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async ({ url }) => {
-            if (url === '/api/withdrawals') {
+            if (url.endsWith('weight-reporting/reports/?partner-id=1')) {
                 return JSON.stringify([
                     {
                         id: '1',
                         start: new Date(),
                         end: new Date(),
+                        partner: {
+                            id: 1,
+                        },
                     },
                     {
                         id: '2',
                         start: new Date(),
                         end: new Date(),
+                        partner: {
+                            id: 1,
+                        },
                     },
                     {
                         id: '3',
                         weight: 200,
                         start: new Date(),
                         end: new Date(),
+                        partner: {
+                            id: 1,
+                        },
                     },
                     {
                         id: '4',
                         weight: 200,
                         start: new Date(),
                         end: new Date(),
+                        partner: {
+                            id: 1,
+                        },
                     },
                 ]);
             }
             return '';
         });
         history = createMemoryHistory();
+
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Ambassador;
+        });
+
+        // Set the groupID to 1 (Fretex)
+        keycloak.tokenParsed.GroupID = 1;
     });
 
     afterEach(() => {

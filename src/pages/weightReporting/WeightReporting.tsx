@@ -8,7 +8,7 @@ import { apiUrl, Colors, Withdrawal } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../loading/Loading';
-import {PatchToAPI} from "../../utils/PatchToAPI";
+import { PatchToAPI } from '../../utils/PatchToAPI';
 
 const Wrapper = styled.div`
     display: flex;
