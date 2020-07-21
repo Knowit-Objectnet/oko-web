@@ -29,7 +29,7 @@ const Label = styled.label`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 `;
 
 const Span = styled.span`

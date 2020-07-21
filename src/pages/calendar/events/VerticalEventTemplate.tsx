@@ -17,6 +17,9 @@ const Title = styled.div`
     padding: 10px 20px;
     box-sizing: border-box;
     margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
 `;
 
 const H2 = styled.div`
