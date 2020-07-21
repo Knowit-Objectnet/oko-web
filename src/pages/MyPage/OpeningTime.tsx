@@ -45,11 +45,15 @@ interface OpeningTimeProps {
 
 export const OpeningTime: React.FC<OpeningTimeProps> = (props) => {
     const onRangeChange = (range: [string | Date, string | Date]) => {
+        // Create date object
         const date = new Date();
 
+        // check if the range dates are of type date or not
         let start = range[0] instanceof Date ? range[0] : null;
         let end = range[1] instanceof Date ? range[1] : null;
 
+        // if the range dates are not of type date then they are of type string
+        // Parse the strings into a date object and set the start and end variables
         if (typeof range[0] == 'string') {
             const startStrings = range[0].split(':');
             start = new Date(date.setHours(parseInt(startStrings[0]), parseInt(startStrings[1])));
@@ -59,13 +63,17 @@ export const OpeningTime: React.FC<OpeningTimeProps> = (props) => {
             end = new Date(date.setHours(parseInt(endStrings[0]), parseInt(endStrings[1])));
         }
 
+        // If the start and end variables are not null (thus they are date)
+        // then update the range
         if (start && end) {
             props.setRange([start, end]);
+            // This error is just to please typescript. In reality it should never bee able to reach it.
         } else {
             throw new Error('Something went horribly wrong because of typescript');
         }
     };
 
+    // On closed checkbox click function
     const onClosedChange = () => {
         props.setClosed(!props.closed);
     };

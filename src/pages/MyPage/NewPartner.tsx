@@ -67,28 +67,34 @@ const Button = styled.button`
 `;
 
 export const NewPartner: React.FC = () => {
-    // General info
+    // General info state
     const [name, setName] = useState('');
     const [contract, setContract] = useState<FileList | null>(null);
+    // Ref to get access to the click function on the element
     const ref = useRef<HTMLInputElement>(null);
 
+    // Name input onchange function
     const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         setName(e.currentTarget.value);
     };
 
+    // onclick function for the fake file input button
     const onFakeFileButtonClick = () => {
         if (ref.current) {
             ref.current.click();
         }
     };
 
+    // The actually on change function for the file input
     const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
+        // Add the files to the state
         const files = e.currentTarget.files;
         setContract(files);
     };
 
+    // Submit function for when the new partner is to be submitted to the backend
     const onSubmit = () => {
         const data = {
             name: name,

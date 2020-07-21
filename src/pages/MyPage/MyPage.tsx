@@ -62,15 +62,18 @@ export const MyPage: React.FC = () => {
     // History
     const history = useHistory();
 
+    // Logout function for the logout button click
     const onLogoutClick = () => {
         history.push('/logout');
     };
 
+    // Function to show new partner ui modal
     const showNewPartner = () => {
         setModalContent(<NewPartner />);
         setShowModal(true);
     };
 
+    // Function to show new location ui modal
     const showNewLocation = () => {
         setModalContent(<NewLocation />);
         setShowModal(true);

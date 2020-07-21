@@ -123,6 +123,7 @@ export const NewLocation: React.FC = () => {
     const [saturdayClosed, setSaturdayClosed] = useState(false);
     const [sundayClosed, setSundayClosed] = useState(false);
 
+    // Changee function for the inputs. Uses the name tag to figure out which input is calling it
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
 
@@ -153,6 +154,7 @@ export const NewLocation: React.FC = () => {
         }
     };
 
+    // Submit function for when the location is to be submitted to the backend
     const onSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
         e.persist();

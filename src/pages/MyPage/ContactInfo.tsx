@@ -46,43 +46,41 @@ interface ContactInfoProps {
 /**
  * Contact info component
  */
-export const ContactInfo: React.FC<ContactInfoProps> = (props) => {
-    return (
-        <Wrapper>
-            <h3>Kontaktinfo</h3>
-            <Table>
-                <TableHead>
-                    <tr>
-                        <th>
-                            <Span>
-                                <StyledPerson height="1em" /> Navn
-                            </Span>
-                        </th>
-                        <th>
-                            <Span>
-                                <StyledPhone height="1em" /> Telefonnummer
-                            </Span>
-                        </th>
-                        <th>
-                            <Span>
-                                <StyledMail height="1em" /> E-Mail
-                            </Span>
-                        </th>
-                        <th></th>
-                    </tr>
-                </TableHead>
-                <tbody>
-                    {props.contacts &&
-                        props.contacts.map((contact) => (
-                            <tr key={contact.mail}>
-                                <td>{contact.name}</td>
-                                <td>{contact.phone}</td>
-                                <td>{contact.mail}</td>
-                                <td></td>
-                            </tr>
-                        ))}
-                </tbody>
-            </Table>
-        </Wrapper>
-    );
-};
+export const ContactInfo: React.FC<ContactInfoProps> = (props) => (
+    <Wrapper>
+        <h3>Kontaktinfo</h3>
+        <Table>
+            <TableHead>
+                <tr>
+                    <th>
+                        <Span>
+                            <StyledPerson height="1em" /> Navn
+                        </Span>
+                    </th>
+                    <th>
+                        <Span>
+                            <StyledPhone height="1em" /> Telefonnummer
+                        </Span>
+                    </th>
+                    <th>
+                        <Span>
+                            <StyledMail height="1em" /> E-Mail
+                        </Span>
+                    </th>
+                    <th></th>
+                </tr>
+            </TableHead>
+            <tbody>
+                {props.contacts &&
+                    props.contacts.map((contact) => (
+                        <tr key={contact.mail}>
+                            <td>{contact.name}</td>
+                            <td>{contact.phone}</td>
+                            <td>{contact.mail}</td>
+                            <td></td>
+                        </tr>
+                    ))}
+            </tbody>
+        </Table>
+    </Wrapper>
+);
