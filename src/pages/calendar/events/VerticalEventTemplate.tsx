@@ -28,6 +28,8 @@ const H2 = styled.div`
 
 const Content = styled.div`
     padding: 0px 50px 50px;
+    display: flex;
+    flex-direction: column;
 `;
 
 const EditTitle = styled.div`
