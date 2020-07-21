@@ -337,19 +337,23 @@ export const CalendarPage: React.FC = () => {
     const deleteRangeEvents = async (event: EventInfo, range: [Date, Date]) => {
         try {
             if (apiEvents) {
+                // Set range date times to low and high times to make sure all events in the range gets deleeted
+                const start = range[0];
+                const end = range[0];
+                start.setHours(2, 0, 0, 0);
+                end.setHours(22, 0, 0, 0);
                 // update the local data immediately, but disable the revalidation
                 const newEvents = apiEvents.filter(
-                    (apiEvent) =>
-                        new Date(apiEvent.startDateTime) < range[0] || new Date(apiEvent.startDateTime) > range[0],
+                    (apiEvent) => new Date(apiEvent.startDateTime) < start || new Date(apiEvent.startDateTime) > end,
                 );
                 await mutate(newEvents, false);
                 setShowModal(false);
 
                 // send a request to the API to update the source
                 await DeleteToAPI(
-                    `${apiUrl}/calendar/events/?from-date=${range[0]
+                    `${apiUrl}/calendar/events/?from-date=${start
                         .toISOString()
-                        .slice(0, -2)}&to-date=${range[1].toISOString().slice(0, -2)}`,
+                        .slice(0, -2)}&to-date=${end.toISOString().slice(0, -2)}`,
                     keycloak.token,
                 );
 

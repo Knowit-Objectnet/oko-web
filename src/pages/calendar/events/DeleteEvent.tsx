@@ -84,13 +84,17 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
 
     const setIsRangeDeletionClick = () => {
         setIsSingleDeletion(false);
-    }
+    };
 
     return (
         <Wrapper>
             <RangeSelection>
-                <Selection selected={isSingleDeletion} onClick={setIsSingleDeletionClick}>Engangstilfelle</Selection>
-                <Selection selected={!isSingleDeletion} onClick={setIsRangeDeletionClick}>Over en periode</Selection>
+                <Selection selected={isSingleDeletion} onClick={setIsSingleDeletionClick}>
+                    Engangstilfelle
+                </Selection>
+                <Selection selected={!isSingleDeletion} onClick={setIsRangeDeletionClick}>
+                    Over en periode
+                </Selection>
             </RangeSelection>
             {!isSingleDeletion ? (
                 <StyledDateRangePicker clearIcon={null} onChange={onDateRangeChange} value={range} />
