@@ -14,7 +14,7 @@ const Nav = styled.nav`
     display: flex;
     flex: 1;
 
-    @media screen and (max-width: 1100px) {
+    @media screen and (max-width: 1400px) {
         display: none;
     }
 `;
