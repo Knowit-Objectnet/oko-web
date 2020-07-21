@@ -8,7 +8,7 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { WeightReporting } from '../../src/pages/weightReporting/WeightReporting';
-import {Roles} from "../../src/types";
+import { Roles } from '../../src/types';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
