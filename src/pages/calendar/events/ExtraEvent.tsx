@@ -4,18 +4,37 @@ import styled from 'styled-components';
 import { VerticalEventTemplate } from './VerticalEventTemplate';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionCategory } from './EventOptionCategory';
-import { EventSubmission } from './EventSubmission';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiPartner } from '../../../types';
+import { ApiPartner, Colors } from '../../../types';
+
+const Specifier = styled.div`
+    margin: 20px 0px;
+`;
+
+const OR = styled.div`
+    margin-bottom: 10px;
+`;
 
 const Textarea = styled.textarea`
     min-height: 54px;
+    width: 100%;
+    box-sizing: border-box;
     padding: 5px;
-    margin-bottom: 42px;
     resize: vertical;
+`;
+
+const Submitbutton = styled.button`
+    height: 35px;
+    width: 350px;
+    background-color: ${Colors.Green};
+    border: none;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    margin-top: 40px;
 `;
 
 interface ExtraEventProps {
@@ -126,20 +145,27 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 onSelectedDaysChange={onSelectedDaysChange}
                 recurrenceEnabled={false}
             />
-            <EventOptionCategory
-                selectedCategory={categoryIndex}
-                categories={categories}
-                isEditing={true}
-                onChange={onCategoryChange}
-            />
-            Eller
-            <EventOptionPartner selectedPartner={selectedPartnerId} partners={partners} onChange={onPartnerChange} />
+            <Specifier>
+                <EventOptionCategory
+                    selectedCategory={categoryIndex}
+                    categories={categories}
+                    isEditing={true}
+                    onChange={onCategoryChange}
+                />
+                <OR>Eller</OR>
+                <EventOptionPartner
+                    selectedPartner={selectedPartnerId}
+                    partners={partners}
+                    onChange={onPartnerChange}
+                />
+            </Specifier>
             <Textarea
-                placeholder="Legg til beskrivelse av ønskede varer"
+                maxLength={200}
+                placeholder="Meldingstekst (maks 200 tegn)"
                 value={description}
                 onChange={onDescriptionChange}
             />
-            <EventSubmission onCancel={onCancel} onSubmit={onSubmit} submitText="Send søknad" />
+            <Submitbutton onClick={onSubmit}>Send</Submitbutton>
         </VerticalEventTemplate>
     );
 };
