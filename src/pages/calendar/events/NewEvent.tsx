@@ -9,12 +9,23 @@ import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner } from '../../../types';
+import { ApiLocation, ApiPartner, Colors } from '../../../types';
 
 const Options = styled.div`
     display: flex;
     flex-direction: column;
     flex: 1;
+`;
+
+const Submitbutton = styled.button`
+    height: 35px;
+    width: 350px;
+    background-color: ${Colors.Green};
+    border: none;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 20px;
+    margin-top: 40px;
 `;
 
 interface NewEventProps {
@@ -244,7 +255,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                     recurrenceEnabled={true}
                 />
             </Options>
-            <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />
+            <Submitbutton onClick={onSubmit}>Fullfør</Submitbutton>
         </VerticalEventTemplate>
     );
 };

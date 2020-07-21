@@ -5,7 +5,7 @@ import Cross from '../../assets/Cross.svg';
 import Default from '../../assets/Default_profile_pic.svg';
 import { Colors } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
     display: flex;
@@ -31,7 +31,18 @@ const MenuText = styled.span`
     margin-right: 23px;
 `;
 
-const Profile = styled.div``;
+const Profile = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const MyLink = styled(Link)`
+    font-size: 22px;
+    line-height: 31px;
+    margin-right: 10px;
+    color: ${Colors.White};
+`;
 
 const ProfilePicture = styled.img``;
 
@@ -72,7 +83,10 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
                 )}
             </Menu>
             {keycloak.authenticated ? (
-                <Profile>{profilePicUrl ? <ProfilePicture /> : <DefaultProfilePicture />}</Profile>
+                <Profile>
+                    <MyLink to="/profile">Min side</MyLink>
+                    {profilePicUrl ? <ProfilePicture /> : <DefaultProfilePicture />}
+                </Profile>
             ) : (
                 <button onClick={onButtonClick}>Login</button>
             )}
