@@ -213,7 +213,14 @@ export const CalendarPage: React.FC = () => {
 
     // On event selection function to display an event
     const onSelectEvent = (event: EventInfo) => {
-        setModalContent(<Event {...event} deleteEvent={deleteEvent} updateEvent={updateEvent} />);
+        setModalContent(
+            <Event
+                {...event}
+                deleteSingleEvent={deleteSingleEvent}
+                deleteRangeEvents={deleteRangeEvents}
+                updateEvent={updateEvent}
+            />,
+        );
         setShowModal(true);
     };
 
@@ -308,7 +315,7 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const deleteEvent = async (event: EventInfo) => {
+    const deleteSingleEvent = async (event: EventInfo) => {
         try {
             if (apiEvents) {
                 // update the local data immediately, but disable the revalidation
@@ -318,6 +325,33 @@ export const CalendarPage: React.FC = () => {
 
                 // send a request to the API to update the source
                 await DeleteToAPI(`${apiUrl}/calendar/events/?event-id=${event.resource.eventId}`, keycloak.token);
+
+                // trigger a revalidation (refetch) to make sure our local data is correct
+                mutate();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const deleteRangeEvents = async (event: EventInfo, range: [Date, Date]) => {
+        try {
+            if (apiEvents) {
+                // update the local data immediately, but disable the revalidation
+                const newEvents = apiEvents.filter(
+                    (apiEvent) =>
+                        new Date(apiEvent.startDateTime) < range[0] || new Date(apiEvent.startDateTime) > range[0],
+                );
+                await mutate(newEvents, false);
+                setShowModal(false);
+
+                // send a request to the API to update the source
+                await DeleteToAPI(
+                    `${apiUrl}/calendar/events/?from-date=${range[0]
+                        .toISOString()
+                        .slice(0, -2)}&to-date=${range[1].toISOString().slice(0, -2)}`,
+                    keycloak.token,
+                );
 
                 // trigger a revalidation (refetch) to make sure our local data is correct
                 mutate();
@@ -371,7 +405,7 @@ export const CalendarPage: React.FC = () => {
                     isToggled={isToggled}
                     onWeekChange={onWeekChange}
                     events={events}
-                    deleteEvent={deleteEvent}
+                    deleteEvent={deleteSingleEvent}
                 />
             );
         } else if (keycloak.hasRealmRole(Roles.Ambassador)) {

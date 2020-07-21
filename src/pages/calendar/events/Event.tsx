@@ -10,6 +10,7 @@ import { HorizontalEventTemplate } from './HorizontalEventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
+import { DeleteEvent } from './DeleteEvent';
 
 const Body = styled.div`
     display: flex;
@@ -17,6 +18,7 @@ const Body = styled.div`
 `;
 
 const Section = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -40,7 +42,8 @@ const DeleteButton = styled.button`
 `;
 
 interface EventProps extends EventInfo {
-    deleteEvent: (event: EventInfo) => void;
+    deleteSingleEvent: (event: EventInfo) => void;
+    deleteRangeEvents: (event: EventInfo, range: [Date, Date]) => void;
     updateEvent: (eventId: number, start: string, end: string) => void;
 }
 
@@ -87,6 +90,7 @@ export const Event: React.FC<EventProps> = (props) => {
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
     const [locationId, setLocationId] = useState(props.resource?.location ? props.resource?.location?.id : -1);
+    const [isDeletionConfirmationVisible, setIsDeletionConfirmationVisible] = useState(false);
 
     // On change functions for DateRange
     const onDateRangeChange = (range: [Date, Date]) => {
@@ -115,9 +119,17 @@ export const Event: React.FC<EventProps> = (props) => {
         setIsEditing(true);
     };
 
-    const onDelete = () => {
-        const { deleteEvent, ...rest } = props;
-        deleteEvent(rest);
+    const onDeleteConfirmationClick = () => {
+        setIsDeletionConfirmationVisible(!isDeletionConfirmationVisible);
+    };
+
+    const onDelete = (range: [Date, Date], isSingleDeletion: boolean) => {
+        const { deleteSingleEvent, deleteRangeEvents, updateEvent, ...rest } = props;
+        if (isSingleDeletion) {
+            deleteSingleEvent(rest);
+        } else {
+            deleteRangeEvents(rest, range);
+        }
     };
 
     // Function called if edit was cancelled. Resets all values to the original event info
@@ -187,7 +199,10 @@ export const Event: React.FC<EventProps> = (props) => {
                         {keycloak.hasRealmRole(Roles.Oslo) ||
                         (keycloak.hasRealmRole(Roles.Partner) &&
                             keycloak.tokenParsed.GroupID === props.resource.partner.id) ? (
-                            <DeleteButton onClick={onDelete}>Avlys uttak</DeleteButton>
+                            <>
+                                <DeleteButton onClick={onDeleteConfirmationClick}>Avlys uttak</DeleteButton>
+                                {isDeletionConfirmationVisible ? <DeleteEvent onSubmit={onDelete} /> : null}
+                            </>
                         ) : null}
                     </Section>
                 ) : null}
