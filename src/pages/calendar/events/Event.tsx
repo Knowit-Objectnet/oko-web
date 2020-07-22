@@ -166,7 +166,10 @@ export const Event: React.FC<EventProps> = (props) => {
     return (
         <HorizontalEventTemplate
             title={props.title}
-            showEditSymbol={keycloak.authenticated}
+            showEditSymbol={
+                keycloak.hasRealmRole(Roles.Oslo) ||
+                (keycloak.hasRealmRole(Roles.Partner) && keycloak.tokenParsed.GroupID === props.resource.partner.id)
+            }
             isEditing={isEditing}
             onEditClick={onEditClick}
         >
