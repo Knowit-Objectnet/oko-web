@@ -105,7 +105,9 @@ export const NewPartner: React.FC<NewPartnerProps> = (props) => {
 
     // Submit function for when the new partner is to be submitted to the backend
     const onSubmit = async () => {
-        props.onSubmit(name, contract);
+        if (name) {
+            props.onSubmit(name, contract);
+        }
     };
 
     return (
