@@ -110,7 +110,12 @@ export const NewPartner: React.FC<NewPartnerProps> = (props) => {
             <Title>Legg til ny samarbeidspartner</Title>
             <Content>
                 <Input type="text" placeholder="Navn på organisasjonen" value={name} onChange={onNameChange} />
-                <FileInput ref={ref} type="file" onChange={onFileChange} />
+                <FileInput
+                    ref={ref}
+                    type="file"
+                    accept=".pdf, .doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    onChange={onFileChange}
+                />
                 <File>
                     <span>{contract ? contract.name : 'Last opp kontrakt'}</span>
                     <FileButton onClick={onFakeFileButtonClick}>Bla gjennom filer</FileButton>
