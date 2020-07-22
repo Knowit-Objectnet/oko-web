@@ -339,7 +339,7 @@ export const CalendarPage: React.FC = () => {
             if (apiEvents) {
                 // Set range date times to low and high times to make sure all events in the range gets deleeted
                 const start = range[0];
-                const end = range[0];
+                const end = range[1];
                 start.setHours(2, 0, 0, 0);
                 end.setHours(22, 0, 0, 0);
                 // update the local data immediately, but disable the revalidation
