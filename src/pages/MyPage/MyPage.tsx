@@ -116,7 +116,7 @@ export const MyPage: React.FC = () => {
                         <h2>Min side</h2>
                         <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
                     </Header>
-                    <ContactInfo contacts={[]} />
+                    <ContactInfo contacts={[{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }]} />
                 </Content>
                 <SideMenu newPartnerClick={showNewPartner} newLocationClick={showNewLocation} />
             </Wrapper>
