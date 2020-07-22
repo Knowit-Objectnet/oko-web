@@ -351,6 +351,8 @@ export const CalendarPage: React.FC = () => {
                         additionalEvent.endDateTime = newEnd.toISOString();
                         newEvents.push(additionalEvent);
                     }
+                } else {
+                    newEvents.push(newEvent);
                 }
 
                 await mutate(newEvents, false);
@@ -502,7 +504,7 @@ export const CalendarPage: React.FC = () => {
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
                 </ModuleDateCalendar>
-                {(!events || events.length <= 0) && isValidating ? (
+                {!apiEvents && (!events || events.length <= 0) && isValidating ? (
                     <Loading text="Laster inn data..." />
                 ) : (
                     <ModuleCalendar>{getCalendar()}</ModuleCalendar>
