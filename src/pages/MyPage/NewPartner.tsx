@@ -124,7 +124,7 @@ export const NewPartner: React.FC<NewPartnerProps> = (props) => {
                     <FileButton onClick={onFakeFileButtonClick}>Bla gjennom filer</FileButton>
                 </File>
                 <Button type="submit" onClick={onSubmit}>
-                    Legg til stasjon
+                    Legg til samarbeidspartner
                 </Button>
             </Content>
         </Wrapper>
