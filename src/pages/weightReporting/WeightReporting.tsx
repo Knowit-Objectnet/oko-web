@@ -7,6 +7,7 @@ import { WithdrawalSubmission } from './WithdrawalSubmission';
 import { Colors, Withdrawal } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
+import { useAlert, types } from 'react-alert';
 
 const Wrapper = styled.div`
     display: flex;
@@ -39,6 +40,8 @@ const OverflowWrapper = styled.div`
  * Weight reporting component for reporting weight from item withdrawals
  */
 export const WeightReporting: React.FC = () => {
+    // Alert dispatcher
+    const alert = useAlert();
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
@@ -100,7 +103,7 @@ export const WeightReporting: React.FC = () => {
             // Update the withdrawals
             setWithdrawals(newWithdrawals);
         } catch (err) {
-            console.log(err);
+            alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
         }
     };
 
