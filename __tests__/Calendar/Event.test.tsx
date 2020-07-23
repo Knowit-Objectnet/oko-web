@@ -9,8 +9,8 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import { Event } from '../../src/pages/calendar/events/Event';
 import { mockEvents } from '../../__mocks__/mockEvents';
 import fetch from 'jest-fetch-mock';
-import AlertTemplate from "react-alert-template-basic";
-import {positions, Provider as AlertProvider, transitions} from "react-alert";
+import AlertTemplate from 'react-alert-template-basic';
+import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;

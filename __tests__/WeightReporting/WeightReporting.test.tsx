@@ -8,8 +8,8 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { WeightReporting } from '../../src/pages/weightReporting/WeightReporting';
-import {positions, Provider as AlertProvider, transitions} from "react-alert";
-import AlertTemplate from "react-alert-template-basic";
+import { positions, Provider as AlertProvider, transitions } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
