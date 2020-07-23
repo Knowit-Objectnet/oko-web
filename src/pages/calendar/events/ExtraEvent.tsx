@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import {ApiPartner, apiUrl, Colors} from '../../../types';
+import { ApiPartner, apiUrl, Colors } from '../../../types';
 
 const Specifier = styled.div`
     margin: 20px 0px;
