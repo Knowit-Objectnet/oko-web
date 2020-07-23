@@ -12,6 +12,7 @@ import { ApiEvent, apiUrl, EventInfo, Roles } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
+import differenceInDays from 'date-fns/differenceInDays';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../loading/Loading';
@@ -213,7 +214,14 @@ export const CalendarPage: React.FC = () => {
 
     // On event selection function to display an event
     const onSelectEvent = (event: EventInfo) => {
-        setModalContent(<Event {...event} deleteEvent={deleteEvent} updateEvent={updateEvent} />);
+        setModalContent(
+            <Event
+                {...event}
+                deleteSingleEvent={deleteSingleEvent}
+                deleteRangeEvents={deleteRangeEvents}
+                updateEvent={updateEvent}
+            />,
+        );
         setShowModal(true);
     };
 
@@ -274,8 +282,8 @@ export const CalendarPage: React.FC = () => {
         try {
             if (apiEvents) {
                 const newEvent: ApiEvent = {
-                    startDateTime: data.startDateTime.slice(0, -2),
-                    endDateTime: data.endDateTime.slice(0, -2),
+                    startDateTime: data.startDateTime,
+                    endDateTime: data.endDateTime,
                     id: -1,
                     partner: {
                         id: data.station.id,
@@ -288,14 +296,66 @@ export const CalendarPage: React.FC = () => {
                     recurrenceRule: data.recurrenceRule
                         ? {
                               id: -1,
-                              until: data.recurrenceRule.until.slice(0, -2),
+                              until: data.recurrenceRule.until,
                               days: data.recurrenceRule.days || [],
                               count: data.recurrenceRule.count || 0,
                               interval: data.recurrenceRule.interval || 0,
                           }
                         : null,
                 };
-                await mutate([...apiEvents, newEvent], false);
+                // Create the new event(s) locally for the local state
+                const newEvents = [...apiEvents];
+                if (data.recurrenceRule && data.recurrenceRule.days) {
+                    const days: Array<number> = data.recurrenceRule.days.map((day) => {
+                        switch (day) {
+                            case 'MONDAY':
+                                return 1;
+                            case 'TUESDAY':
+                                return 2;
+                            case 'WEDNESDAY':
+                                return 3;
+                            case 'THURSDAY':
+                                return 4;
+                            case 'FRIDAY':
+                                return 5;
+                        }
+                    });
+
+                    // Make the minimum of 5 (the days we show in the calendar at once) and the dayes in the new event range
+                    const min = Math.min(
+                        5,
+                        differenceInDays(new Date(data.recurrenceRule.until), new Date(data.startDateTime)) + 1,
+                    );
+                    for (let i = 0; i < min; i++) {
+                        // create a copy of the start and end time
+                        const newStart = new Date(data.startDateTime);
+                        const newEnd = new Date(data.endDateTime);
+
+                        // Copy the new event
+                        const additionalEvent = { ...newEvent };
+                        // Update the id to get an unique id
+                        additionalEvent.id -= i + 1;
+
+                        // Get the next day
+                        const newDate = add(newStart, { days: i });
+
+                        // Check if the next day is included in the days
+                        const day = newDate.getDay();
+                        if (!days.includes(day)) continue;
+
+                        // Set the date to the weekday of this week
+                        newStart.setDate(newDate.getDate());
+                        newEnd.setDate(newDate.getDate());
+                        // Update the event with the new dates
+                        additionalEvent.startDateTime = newStart.toISOString();
+                        additionalEvent.endDateTime = newEnd.toISOString();
+                        newEvents.push(additionalEvent);
+                    }
+                } else {
+                    newEvents.push(newEvent);
+                }
+
+                await mutate(newEvents, false);
                 setShowModal(false);
 
                 await PostToAPI(url, data, keycloak.token);
@@ -308,7 +368,7 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const deleteEvent = async (event: EventInfo) => {
+    const deleteSingleEvent = async (event: EventInfo) => {
         try {
             if (apiEvents) {
                 // update the local data immediately, but disable the revalidation
@@ -318,6 +378,40 @@ export const CalendarPage: React.FC = () => {
 
                 // send a request to the API to update the source
                 await DeleteToAPI(`${apiUrl}/calendar/events/?event-id=${event.resource.eventId}`, keycloak.token);
+
+                // trigger a revalidation (refetch) to make sure our local data is correct
+                mutate();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const deleteRangeEvents = async (event: EventInfo, range: [Date, Date]) => {
+        try {
+            if (apiEvents) {
+                // Set range date times to low and high times to make sure all events in the range gets deleeted
+                const start = range[0];
+                const end = range[1];
+                start.setHours(2, 0, 0, 0);
+                end.setHours(22, 0, 0, 0);
+                // update the local data immediately, but disable the revalidation
+                const newEvents = apiEvents.filter(
+                    (apiEvent) =>
+                        apiEvent.recurrenceRule?.id === event.resource.recurrenceRule?.id &&
+                        (new Date(apiEvent.startDateTime) < start || new Date(apiEvent.startDateTime) > end),
+                );
+                await mutate(newEvents, false);
+                setShowModal(false);
+
+                // send a request to the API to update the source
+                console.log(event.resource.eventId);
+                await DeleteToAPI(
+                    `${apiUrl}/calendar/events/?recurrence-rule-id=${
+                        event.resource.recurrenceRule?.id
+                    }&from-date=${start.toISOString().slice(0, -2)}&to-date=${end.toISOString().slice(0, -2)}`,
+                    keycloak.token,
+                );
 
                 // trigger a revalidation (refetch) to make sure our local data is correct
                 mutate();
@@ -371,7 +465,7 @@ export const CalendarPage: React.FC = () => {
                     isToggled={isToggled}
                     onWeekChange={onWeekChange}
                     events={events}
-                    deleteEvent={deleteEvent}
+                    deleteEvent={deleteSingleEvent}
                 />
             );
         } else if (keycloak.hasRealmRole(Roles.Ambassador)) {
@@ -410,7 +504,7 @@ export const CalendarPage: React.FC = () => {
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
                 </ModuleDateCalendar>
-                {(!events || events.length <= 0) && isValidating ? (
+                {!apiEvents && (!events || events.length <= 0) && isValidating ? (
                     <Loading text="Laster inn data..." />
                 ) : (
                     <ModuleCalendar>{getCalendar()}</ModuleCalendar>

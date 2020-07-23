@@ -8,6 +8,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     box-sizing: border-box;
     background-color: ${Colors.White};
+    overflow: visible;
 `;
 
 const Title = styled.div`
@@ -17,6 +18,7 @@ const Title = styled.div`
     background-color: ${Colors.LightBeige};
     padding: 0px 20px;
     margin-bottom: 25px;
+    box-sizing: border-box;
 `;
 
 const EditTitle = styled.div`
