@@ -3,5 +3,20 @@ import ReactDOM from 'react-dom';
 
 import App from './App';
 import { injectFont } from './font-injection';
+import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
 
-ReactDOM.render(<App />, document.getElementById('root'), injectFont);
+const options = {
+    position: positions.TOP_CENTER,
+    timeout: 5000,
+    offset: '30px',
+    transition: transitions.SCALE,
+};
+
+ReactDOM.render(
+    <AlertProvider template={AlertTemplate} {...options}>
+        <App />
+    </AlertProvider>,
+    document.getElementById('root'),
+    injectFont,
+);

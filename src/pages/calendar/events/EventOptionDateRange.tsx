@@ -146,8 +146,6 @@ interface EventOptionDateRangeProps {
  */
 export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props) => {
     const [nonRecurringDate, setNonRecurringDate] = useState(new Date(props.dateRange[0]));
-    const minTime = '07:00:00';
-    const maxTime = '20:00:00';
 
     const onTimeRangeChange = (range: [string | Date, string | Date]) => {
         const date = new Date(nonRecurringDate);
@@ -251,8 +249,6 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                         <StyledTimeRangePicker
                             clearIcon={null}
                             format="HH:mm"
-                            minTime={minTime}
-                            maxTime={maxTime}
                             onChange={onTimeRangeChange}
                             value={props.timeRange}
                         />

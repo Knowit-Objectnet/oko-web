@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Cross } from '@styled-icons/icomoon/Cross';
 
 const Background = styled.div`
-    z-index: 1000;
+    z-index: 60;
     width: 100%;
     height: 100%;
     position: fixed;
@@ -26,7 +26,7 @@ interface styledContentProps {
 
 const Content = styled.div<styledContentProps>`
     position: relative;
-    z-index: 1001;
+    z-index: 50;
     background-color: white;
     width: ${(props) => props.width};
     max-width: ${(props) => props.maxWidth};

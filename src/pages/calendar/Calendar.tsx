@@ -19,6 +19,7 @@ import { DeleteToAPI } from '../../utils/DeleteToAPI';
 import { PostToAPI } from '../../utils/PostToAPI';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useKeycloak } from '@react-keycloak/web';
+import { useAlert, types } from 'react-alert';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -83,6 +84,9 @@ const Sidebar = styled.div`
  * The page component for the calendar view
  */
 export const CalendarPage: React.FC = () => {
+    // Alert dispatcher
+    const alert = useAlert();
+    // Keycloak instance
     const { keycloak } = useKeycloak();
     // State for handling modal
     const [showModal, setShowModal] = useState(false);
@@ -273,6 +277,7 @@ export const CalendarPage: React.FC = () => {
     ) => {
         try {
             if (apiEvents) {
+                // Mutate local data
                 const newEvent: ApiEvent = {
                     startDateTime: data.startDateTime.slice(0, -2),
                     endDateTime: data.endDateTime.slice(0, -2),
@@ -297,14 +302,18 @@ export const CalendarPage: React.FC = () => {
                 };
                 await mutate([...apiEvents, newEvent], false);
                 setShowModal(false);
-
-                await PostToAPI(url, data, keycloak.token);
-
-                // trigger a revalidation (refetch) to make sure our local data is correct
-                mutate();
             }
+
+            // Post the event to the backend
+            await PostToAPI(url, data, keycloak.token);
+
+            // Give user feedback
+            alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
+
+            // trigger a revalidation (refetch) to make sure our local data is correct
+            mutate();
         } catch (err) {
-            console.log(err);
+            alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
         }
     };
 
@@ -315,37 +324,40 @@ export const CalendarPage: React.FC = () => {
                 const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
                 await mutate(newEvents, false);
                 setShowModal(false);
-
-                // send a request to the API to update the source
-                await DeleteToAPI(`${apiUrl}/calendar/events/?event-id=${event.resource.eventId}`, keycloak.token);
-
-                // trigger a revalidation (refetch) to make sure our local data is correct
-                mutate();
             }
+
+            // send a request to the API to update the source
+            await DeleteToAPI(`${apiUrl}/calendar/events/?event-id=${event.resource.eventId}`, keycloak.token);
+
+            // Give user feedback
+            alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
+
+            // trigger a revalidation (refetch) to make sure our local data is correct
+            mutate();
         } catch (err) {
-            console.log(err);
+            alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
         }
     };
 
     const updateEvent = async (eventId: number, start: string, end: string) => {
         try {
-            // Exit if there arent any events to update
-            if (!apiEvents) return;
+            // Update the local state if the apiEvents exist
+            if (apiEvents) {
+                // Create a new array of events to not directly mutate state
+                const newEvents = [...apiEvents];
+                // Find the event we want to update
+                const newEvent = newEvents.find((event) => event.id === eventId);
 
-            // Create a new array of events to not directly mutate state
-            const newEvents = [...apiEvents];
-            // Find the event we want to update
-            const newEvent = newEvents.find((event) => event.id === eventId);
+                // Exit if we cant find the event we want to update
+                if (!newEvent) return;
 
-            // Exit if we cant find the event we want to update
-            if (!newEvent) return;
-
-            // Update the event
-            newEvent.startDateTime = start;
-            newEvent.endDateTime = end;
-            // update the local data immediately, but disable the revalidation
-            await mutate(newEvents, false);
-            setShowModal(false);
+                // Update the event
+                newEvent.startDateTime = start;
+                newEvent.endDateTime = end;
+                // update the local data immediately, but disable the revalidation
+                await mutate(newEvents, false);
+                setShowModal(false);
+            }
 
             // send a request to the API to update the source
             await PatchToAPI(
@@ -354,10 +366,13 @@ export const CalendarPage: React.FC = () => {
                 keycloak.token,
             );
 
+            // Give user feedback
+            alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
+
             // trigger a revalidation (refetch) to make sure our local data is correct
             mutate();
         } catch (err) {
-            console.log(err);
+            alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
         }
     };
 
