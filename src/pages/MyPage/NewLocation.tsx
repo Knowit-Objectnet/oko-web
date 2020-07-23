@@ -22,6 +22,9 @@ const Title = styled.div`
     background-color: ${Colors.LightBeige};
     padding: 10px 20px;
     margin-bottom: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
 `;
 
 const Content = styled.div`

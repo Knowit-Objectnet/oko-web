@@ -17,30 +17,38 @@ const Table = styled.table`
     width: 100%;
 `;
 
-const TableHead = styled.thead`
+const TableBody = styled.tbody`
     background-color: ${Colors.LightBlue};
 `;
 
-const Span = styled.span`
+const Cell = styled.div`
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     display: flex;
+    width: 100%;
+`;
+
+const CellText = styled.div`
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const StyledPerson = styled(Person)`
-    margin-right: 5px;
+    margin: 0px 5px;
 `;
 
 const StyledPhone = styled(Phone)`
-    margin-right: 5px;
+    margin: 0px 5px;
 `;
 
 const StyledMail = styled(Mail)`
-    margin-right: 5px;
+    margin: 0px 5px;
 `;
 
 interface ContactInfoProps {
-    contacts: Array<{ name: string; phone: string; mail: string }>;
+    info: { name: string; phone?: string; mail: string };
 }
 
 /**
@@ -50,37 +58,29 @@ export const ContactInfo: React.FC<ContactInfoProps> = (props) => (
     <Wrapper>
         <h3>Kontaktinfo</h3>
         <Table>
-            <TableHead>
+            <TableBody>
                 <tr>
-                    <th>
-                        <Span>
-                            <StyledPerson height="1em" /> Navn
-                        </Span>
-                    </th>
-                    <th>
-                        <Span>
-                            <StyledPhone height="1em" /> Telefonnummer
-                        </Span>
-                    </th>
-                    <th>
-                        <Span>
-                            <StyledMail height="1em" /> E-Mail
-                        </Span>
-                    </th>
-                    <th></th>
+                    <td>
+                        <Cell>
+                            <StyledPerson height="1em" />
+                            <CellText>{props.info.name}</CellText>
+                        </Cell>
+                    </td>
+                    <td>
+                        <Cell>
+                            <StyledPhone height="1em" />
+                            <CellText>{props.info.phone || 'N/A'}</CellText>
+                        </Cell>
+                    </td>
+                    <td>
+                        <Cell>
+                            <StyledMail height="1em" />
+                            <CellText>{props.info.mail}</CellText>
+                        </Cell>
+                    </td>
+                    <td></td>
                 </tr>
-            </TableHead>
-            <tbody>
-                {props.contacts &&
-                    props.contacts.map((contact) => (
-                        <tr key={contact.mail}>
-                            <td>{contact.name}</td>
-                            <td>{contact.phone}</td>
-                            <td>{contact.mail}</td>
-                            <td></td>
-                        </tr>
-                    ))}
-            </tbody>
+            </TableBody>
         </Table>
     </Wrapper>
 );
