@@ -9,6 +9,8 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import { Event } from '../../src/pages/calendar/events/Event';
 import { mockEvents } from '../../__mocks__/mockEvents';
 import fetch from 'jest-fetch-mock';
+import AlertTemplate from "react-alert-template-basic";
+import {positions, Provider as AlertProvider, transitions} from "react-alert";
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -16,6 +18,14 @@ global.fetch = fetch;
 describe('Provides an interface to view and edit an Event', () => {
     // router history
     let history: MemoryHistory;
+
+    // Alert options
+    const options = {
+        position: positions.TOP_CENTER,
+        timeout: 5000,
+        offset: '30px',
+        transition: transitions.SCALE,
+    };
 
     beforeEach(() => {
         fetch.resetMocks();
@@ -37,12 +47,15 @@ describe('Provides an interface to view and edit an Event', () => {
     it('Should only show edit symbol on Event if user is logged in', async () => {
         const deleteEvent = jest.fn();
         const updatevent = jest.fn();
+
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <Event {...mockEvents[0]} deleteEvent={deleteEvent} updateEvent={updatevent} />
-                </Router>
-            </KeycloakProvider>,
+            <AlertProvider template={AlertTemplate} {...options}>
+                <KeycloakProvider keycloak={keycloak}>
+                    <Router history={history}>
+                        <Event {...mockEvents[0]} deleteEvent={deleteEvent} updateEvent={updatevent} />
+                    </Router>
+                </KeycloakProvider>
+            </AlertProvider>,
         );
 
         // Find the title of the event
@@ -58,11 +71,13 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.authenticated = false;
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <Event {...mockEvents[0]} deleteEvent={deleteEvent} updateEvent={updatevent} />
-                </Router>
-            </KeycloakProvider>,
+            <AlertProvider template={AlertTemplate} {...options}>
+                <KeycloakProvider keycloak={keycloak}>
+                    <Router history={history}>
+                        <Event {...mockEvents[0]} deleteEvent={deleteEvent} updateEvent={updatevent} />
+                    </Router>
+                </KeycloakProvider>
+            </AlertProvider>,
         );
 
         // Find the title of the event
