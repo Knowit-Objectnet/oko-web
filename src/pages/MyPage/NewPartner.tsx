@@ -17,6 +17,9 @@ const Title = styled.div`
     background-color: ${Colors.LightBeige};
     padding: 10px 20px;
     margin-bottom: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
 `;
 
 const Content = styled.div`
@@ -66,10 +69,14 @@ const Button = styled.button`
     line-height: 20px;
 `;
 
-export const NewPartner: React.FC = () => {
+interface NewPartnerProps {
+    onSubmit: (name: string, contract: File | null) => void;
+}
+
+export const NewPartner: React.FC<NewPartnerProps> = (props) => {
     // General info state
     const [name, setName] = useState('');
-    const [contract, setContract] = useState<FileList | null>(null);
+    const [contract, setContract] = useState<File | null>(null);
     // Ref to get access to the click function on the element
     const ref = useRef<HTMLInputElement>(null);
 
@@ -91,15 +98,16 @@ export const NewPartner: React.FC = () => {
         e.persist();
         // Add the files to the state
         const files = e.currentTarget.files;
-        setContract(files);
+        if (files && files.length > 0) {
+            setContract(files[0]);
+        }
     };
 
     // Submit function for when the new partner is to be submitted to the backend
-    const onSubmit = () => {
-        const data = {
-            name: name,
-            contract: contract,
-        };
+    const onSubmit = async () => {
+        if (name) {
+            props.onSubmit(name, contract);
+        }
     };
 
     return (
@@ -107,13 +115,18 @@ export const NewPartner: React.FC = () => {
             <Title>Legg til ny samarbeidspartner</Title>
             <Content>
                 <Input type="text" placeholder="Navn på organisasjonen" value={name} onChange={onNameChange} />
-                <FileInput ref={ref} type="file" onChange={onFileChange} />
+                <FileInput
+                    ref={ref}
+                    type="file"
+                    accept=".pdf, .doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    onChange={onFileChange}
+                />
                 <File>
-                    <span>{contract ? contract[0].name : 'Last opp kontrakt'}</span>
+                    <span>{contract ? contract.name : 'Last opp kontrakt'}</span>
                     <FileButton onClick={onFakeFileButtonClick}>Bla gjennom filer</FileButton>
                 </File>
                 <Button type="submit" onClick={onSubmit}>
-                    Legg til stasjon
+                    Legg til samarbeidspartner
                 </Button>
             </Content>
         </Wrapper>
