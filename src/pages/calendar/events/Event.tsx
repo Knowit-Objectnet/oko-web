@@ -10,6 +10,7 @@ import { HorizontalEventTemplate } from './HorizontalEventTemplate';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
+import { useAlert, types } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 
 const Body = styled.div`
@@ -52,6 +53,8 @@ interface EventProps extends EventInfo {
  * Will be rendered differently depending on user's role.
  */
 export const Event: React.FC<EventProps> = (props) => {
+    // Alert dispatcher
+    const alert = useAlert();
     // Keycloak instance
     const { keycloak } = useKeycloak();
     // Valid recycling stations (ombruksstasjon) locations fetched from api
@@ -144,8 +147,8 @@ export const Event: React.FC<EventProps> = (props) => {
 
     // Function called on successful event edit.
     const onSubmit = () => {
-        const start = dateRange[0];
-        const end = dateRange[1];
+        const start = new Date(dateRange[0]);
+        const end = new Date(dateRange[1]);
         start.setHours(
             timeRange[0].getHours(),
             timeRange[0].getMinutes(),
@@ -158,6 +161,26 @@ export const Event: React.FC<EventProps> = (props) => {
             timeRange[1].getSeconds(),
             timeRange[1].getMilliseconds(),
         );
+
+        const min = new Date(start);
+        min.setHours(8, 0, 0, 0);
+        const max = new Date(end);
+        max.setHours(20, 0, 0, 0);
+
+        if (start > end) {
+            alert.show('Start tiden kan ikke vøre etter slutt tiden.', { type: types.ERROR });
+            return;
+        }
+
+        if (start < min) {
+            alert.show('Starttiden kan ikke være før 08:00', { type: types.ERROR });
+            return;
+        }
+
+        if (end > max) {
+            alert.show('Sluttiden kan ikke være etter 20:00', { type: types.ERROR });
+            return;
+        }
 
         props.updateEvent(props.resource.eventId, start.toISOString(), end.toISOString());
         setIsEditing(false);

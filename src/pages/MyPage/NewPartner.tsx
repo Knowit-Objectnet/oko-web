@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Colors } from '../../types';
 import { useRef, useState } from 'react';
+import { useAlert, types } from 'react-alert';
 
 const Wrapper = styled.div`
     display: flex;
@@ -75,6 +76,7 @@ interface NewPartnerProps {
 }
 
 export const NewPartner: React.FC<NewPartnerProps> = (props) => {
+    const alert = useAlert();
     // General info state
     const [name, setName] = useState('');
     const [contract, setContract] = useState<File | null>(null);
@@ -106,9 +108,11 @@ export const NewPartner: React.FC<NewPartnerProps> = (props) => {
 
     // Submit function for when the new partner is to be submitted to the backend
     const onSubmit = async () => {
-        if (name) {
-            props.onSubmit(name, contract);
+        if (!name) {
+            alert.show('Navnet kan ikke være tomt.', { type: types.ERROR });
+            return;
         }
+        props.onSubmit(name, contract);
     };
 
     return (

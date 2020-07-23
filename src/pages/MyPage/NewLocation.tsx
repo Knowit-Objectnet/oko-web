@@ -6,6 +6,7 @@ import { OpeningTime } from './OpeningTime';
 import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
+import { useAlert, types } from 'react-alert';
 
 const Wrapper = styled.div`
     display: flex;
@@ -98,6 +99,8 @@ const Button = styled.button`
 `;
 
 export const NewLocation: React.FC = () => {
+    // Alert dispatcher
+    const alert = useAlert();
     // General info
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
@@ -164,15 +167,43 @@ export const NewLocation: React.FC = () => {
         e.persist();
 
         // If any of the values are nullable then return as its not valid
-        if (name || address || ambassadorName || ambassadorPhone || ambassadorEmail) return;
+        if (!name || !address) {
+            alert.show('Stasjon navn og adresse kan ikke være tomme.', { type: types.ERROR });
+            return;
+        }
+        if (!ambassadorName || !ambassadorPhone || !ambassadorEmail) {
+            alert.show('Kontaktinformasjon til ombruksambassadør kan ikke være tom.', { type: types.ERROR });
+            return;
+        }
         // If any of the start times are less than the end times then return as its not valid
-        if (mondayRange[0] > mondayRange[1]) return;
-        if (tuesdayRange[0] > tuesdayRange[1]) return;
-        if (wednesdayRange[0] > wednesdayRange[1]) return;
-        if (thursdayRange[0] > thursdayRange[1]) return;
-        if (fridayRange[0] > fridayRange[1]) return;
-        if (saturdayRange[0] > saturdayRange[1]) return;
-        if (sundayRange[0] > sundayRange[1]) return;
+        if (mondayRange[0] > mondayRange[1]) {
+            alert.show('Sluttiden kan ikke være før starttiden på mandager.', { type: types.ERROR });
+            return;
+        }
+        if (tuesdayRange[0] > tuesdayRange[1]) {
+            alert.show('Sluttiden kan ikke være før starttiden på tirsdager.', { type: types.ERROR });
+            return;
+        }
+        if (wednesdayRange[0] > wednesdayRange[1]) {
+            alert.show('Sluttiden kan ikke være før starttiden på ondager.', { type: types.ERROR });
+            return;
+        }
+        if (thursdayRange[0] > thursdayRange[1]) {
+            alert.show('Sluttiden kan ikke være før starttiden på torsdager.', { type: types.ERROR });
+            return;
+        }
+        if (fridayRange[0] > fridayRange[1]) {
+            alert.show('Sluttiden kan ikke være før starttiden på fredager.', { type: types.ERROR });
+            return;
+        }
+        if (saturdayRange[0] > saturdayRange[1]) {
+            alert.show('Sluttiden kan ikke være før starttiden på lørdager.', { type: types.ERROR });
+            return;
+        }
+        if (sundayRange[0] > sundayRange[1]) {
+            alert.show('Sluttiden kan ikke være før starttiden på søndager.', { type: types.ERROR });
+            return;
+        }
 
         // TODO: Submit to backend
     };

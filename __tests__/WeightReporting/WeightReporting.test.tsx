@@ -8,13 +8,23 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { WeightReporting } from '../../src/pages/weightReporting/WeightReporting';
+import { positions, Provider as AlertProvider, transitions } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
 
-describe('Provides a page to view the calendar in addition to change log and notifications', () => {
+describe('Provides a page provide and update weight of withdrawals', () => {
     // router history
     let history: MemoryHistory;
+
+    // Alert options
+    const options = {
+        position: positions.TOP_CENTER,
+        timeout: 5000,
+        offset: '30px',
+        transition: transitions.SCALE,
+    };
 
     beforeEach(() => {
         fetch.resetMocks();
@@ -56,11 +66,13 @@ describe('Provides a page to view the calendar in addition to change log and not
 
     it('Should render all withdrawals', async () => {
         const { findAllByText, findAllByPlaceholderText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <WeightReporting />
-                </Router>
-            </KeycloakProvider>,
+            <AlertProvider template={AlertTemplate} {...options}>
+                <KeycloakProvider keycloak={keycloak}>
+                    <Router history={history}>
+                        <WeightReporting />
+                    </Router>
+                </KeycloakProvider>
+            </AlertProvider>,
         );
 
         const withdrawalsWithWeight = await findAllByText('200 kg');

@@ -9,6 +9,8 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { CalendarPage } from '../../src/pages/calendar/Calendar';
 import { mockEvents } from '../../__mocks__/mockEvents';
+import { positions, Provider as AlertProvider, transitions } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -16,6 +18,14 @@ global.fetch = fetch;
 describe('Provides a page to view the calendar in addition to change log and notifications', () => {
     // router history
     let history: MemoryHistory;
+
+    // Alert options
+    const options = {
+        position: positions.TOP_CENTER,
+        timeout: 5000,
+        offset: '30px',
+        transition: transitions.SCALE,
+    };
 
     beforeEach(() => {
         fetch.resetMocks();
@@ -36,11 +46,13 @@ describe('Provides a page to view the calendar in addition to change log and not
 
     it('Should render without errors', async () => {
         render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <CalendarPage />
-                </Router>
-            </KeycloakProvider>,
+            <AlertProvider template={AlertTemplate} {...options}>
+                <KeycloakProvider keycloak={keycloak}>
+                    <Router history={history}>
+                        <CalendarPage />
+                    </Router>
+                </KeycloakProvider>
+            </AlertProvider>,
         );
     });
 });
