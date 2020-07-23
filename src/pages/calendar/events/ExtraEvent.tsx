@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiPartner, Colors } from '../../../types';
+import { ApiPartner, apiUrl, Colors } from '../../../types';
 
 const Specifier = styled.div`
     margin: 20px 0px;
@@ -51,26 +51,8 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     const { keycloak } = useKeycloak();
 
     // Valid partners fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
-    let { data: partners } = useSWR<ApiPartner[]>(['/api/partners', keycloak.token], fetcher);
-    partners =
-        partners && partners.length !== 0
-            ? partners
-            : [
-                  {
-                      id: 1,
-                      name: 'Fretex',
-                  },
-                  {
-                      id: 2,
-                      name: 'Maritastiftelsen',
-                  },
-                  {
-                      id: 3,
-                      name: 'Jobben',
-                  },
-              ];
+    let { data: partners } = useSWR<ApiPartner[]>([`${apiUrl}/partner/partners/`, keycloak.token], fetcher);
+    partners = partners || [];
 
     // Valid categories fetched from api
     // Dummy data until backend service is up and running

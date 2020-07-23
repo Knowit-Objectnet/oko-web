@@ -9,7 +9,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, Colors } from '../../../types';
+import { ApiLocation, ApiPartner, apiUrl, Colors } from '../../../types';
 
 const Options = styled.div`
     display: flex;
@@ -86,26 +86,9 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                   },
               ];
     // Valid partners fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
-    let { data: partners } = useSWR<ApiPartner[]>(['/api/partners', keycloak.token], fetcher);
-    partners =
-        partners && partners.length !== 0
-            ? partners
-            : [
-                  {
-                      id: 1,
-                      name: 'Fretex',
-                  },
-                  {
-                      id: 2,
-                      name: 'Maritastiftelsen',
-                  },
-                  {
-                      id: 3,
-                      name: 'Jobben',
-                  },
-              ];
+    let { data: partners } = useSWR<ApiPartner[]>([`${apiUrl}/partner/partners/`, keycloak.token], fetcher);
+    partners = partners || [];
+
     // State
     const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
