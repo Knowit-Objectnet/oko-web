@@ -25,6 +25,7 @@ const Title = styled.div`
     font-weight: bold;
     font-size: 16px;
     line-height: 22px;
+    box-sizing: border-box;
 `;
 
 const Content = styled.div`
