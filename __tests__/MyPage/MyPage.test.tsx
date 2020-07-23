@@ -8,10 +8,20 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { MyPage } from '../../src/pages/MyPage/MyPage';
+import {positions, Provider as AlertProvider, transitions} from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
 
 describe('Provides a page to view the calendar in addition to change log and notifications', () => {
     // router history
     let history: MemoryHistory;
+
+    // Alert options
+    const options = {
+        position: positions.TOP_CENTER,
+        timeout: 5000,
+        offset: '30px',
+        transition: transitions.SCALE,
+    };
 
     beforeEach(() => {
         history = createMemoryHistory();
@@ -27,11 +37,13 @@ describe('Provides a page to view the calendar in addition to change log and not
 
     it('Should render working logout button', async () => {
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <MyPage />
-                </Router>
-            </KeycloakProvider>,
+            <AlertProvider template={AlertTemplate} {...options}>
+                <KeycloakProvider keycloak={keycloak}>
+                    <Router history={history}>
+                        <MyPage />
+                    </Router>
+                </KeycloakProvider>
+            </AlertProvider>,
         );
 
         // Find logout button
@@ -55,11 +67,13 @@ describe('Provides a page to view the calendar in addition to change log and not
 
     it("Should render the user's contact info ", async () => {
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <Router history={history}>
-                    <MyPage />
-                </Router>
-            </KeycloakProvider>,
+            <AlertProvider template={AlertTemplate} {...options}>
+                <KeycloakProvider keycloak={keycloak}>
+                    <Router history={history}>
+                        <MyPage />
+                    </Router>
+                </KeycloakProvider>
+            </AlertProvider>,
         );
 
         // Find thee name, email and placeholder text for phone number as non is set in the users credentials
