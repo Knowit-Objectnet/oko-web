@@ -8,8 +8,8 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { NewPartner } from '../../src/pages/MyPage/NewPartner';
-import {positions, Provider as AlertProvider, transitions} from "react-alert";
-import AlertTemplate from "react-alert-template-basic";
+import { positions, Provider as AlertProvider, transitions } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
 
 describe('Provides a page to view the calendar in addition to change log and notifications', () => {
     // Alert options

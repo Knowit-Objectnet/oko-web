@@ -12,6 +12,7 @@ import { NewPartner } from './NewPartner';
 import { NewLocation } from './NewLocation';
 import { PostToAPI } from '../../utils/PostToAPI';
 import keycloak from '../../keycloak';
+import { useAlert, types } from 'react-alert';
 
 const Wrapper = styled.div`
     display: flex;
@@ -57,6 +58,8 @@ const LogoutButton = styled.button`
  * Profile component to view your information
  */
 export const MyPage: React.FC = () => {
+    // Alert dispatcher
+    const alert = useAlert();
     // State for handling modal
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
@@ -80,10 +83,11 @@ export const MyPage: React.FC = () => {
 
         try {
             await PostToAPI(`${apiUrl}/partner/partners/`, data, keycloak.token);
+            alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
 
             setShowModal(false);
         } catch (err) {
-            console.log(err);
+            alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
         }
     };
 
