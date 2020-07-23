@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Colors } from '../../types';
 import { useRef, useState } from 'react';
+import { useAlert, types } from 'react-alert';
 
 const Wrapper = styled.div`
     display: flex;
@@ -67,6 +68,8 @@ const Button = styled.button`
 `;
 
 export const NewPartner: React.FC = () => {
+    // Alert dispatcher
+    const alert = useAlert();
     // General info state
     const [name, setName] = useState('');
     const [contract, setContract] = useState<FileList | null>(null);
@@ -96,6 +99,11 @@ export const NewPartner: React.FC = () => {
 
     // Submit function for when the new partner is to be submitted to the backend
     const onSubmit = () => {
+        if (!name) {
+            alert.show('Navnet kan ikke være tomt.', { type: types.ERROR });
+            return;
+        }
+
         const data = {
             name: name,
             contract: contract,

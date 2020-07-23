@@ -102,6 +102,9 @@ export const WeightReporting: React.FC = () => {
 
             // Update the withdrawals
             setWithdrawals(newWithdrawals);
+
+            // Give user feedback
+            alert.show('Uttaket ble oppdatert suksessfullt.', { type: types.SUCCESS });
         } catch (err) {
             alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
         }
