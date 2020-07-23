@@ -400,6 +400,11 @@ export const CalendarPage: React.FC = () => {
     };
 
     const deleteRangeEvents = async (event: EventInfo, range: [Date, Date]) => {
+        if (!event.resource.recurrenceRule) {
+            await deleteSingleEvent(event);
+            return;
+        }
+
         try {
             if (apiEvents) {
                 // Set range date times to low and high times to make sure all events in the range gets deleeted
@@ -417,7 +422,6 @@ export const CalendarPage: React.FC = () => {
                 setShowModal(false);
 
                 // send a request to the API to update the source
-                console.log(event.resource.eventId);
                 await DeleteToAPI(
                     `${apiUrl}/calendar/events/?recurrence-rule-id=${
                         event.resource.recurrenceRule?.id
@@ -425,11 +429,14 @@ export const CalendarPage: React.FC = () => {
                     keycloak.token,
                 );
 
+                // Give user feedback
+                alert.show('Avtalen(e) ble slettet suksessfullt.', { type: types.SUCCESS });
+
                 // trigger a revalidation (refetch) to make sure our local data is correct
                 mutate();
             }
         } catch (err) {
-            console.log(err);
+            alert.show('Noe gikk kalt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
         }
     };
 
