@@ -444,20 +444,28 @@ export const CalendarPage: React.FC = () => {
         try {
             // Update the local state if the apiEvents exist
             if (apiEvents) {
-                // Create a new array of events to not directly mutate state
-                const newEvents = [...apiEvents];
                 // Find the event we want to update
-                const newEvent = newEvents.find((event) => event.id === eventId);
+                const newEvent = apiEvents.find((event) => event.id === eventId);
 
-                // Exit if we cant find the event we want to update
-                if (!newEvent) return;
+                // Tell the user that we were unable to update local data if we cant find the event
+                // , and hope that it works to update the api
+                if (!newEvent) {
+                    alert.show('Klarte ikke å oppdatere lokal data, vennligst vent.', { type: types.INFO });
+                } else {
+                    // Update the event
+                    newEvent.startDateTime = start;
+                    newEvent.endDateTime = end;
 
-                // Update the event
-                newEvent.startDateTime = start;
-                newEvent.endDateTime = end;
-                // update the local data immediately, but disable the revalidation
-                await mutate(newEvents, false);
-                setShowModal(false);
+                    // Create a new array of events to not directly mutate state
+                    const newEvents = apiEvents.filter((event) => event.id !== eventId);
+
+                    // Add the updated event to the new Events
+                    newEvents.push(newEvent);
+
+                    // update the local data immediately, but disable the revalidation
+                    await mutate(newEvents, false);
+                    setShowModal(false);
+                }
             }
 
             // send a request to the API to update the source
