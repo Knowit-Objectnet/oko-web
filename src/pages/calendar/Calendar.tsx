@@ -430,7 +430,7 @@ export const CalendarPage: React.FC = () => {
                 );
 
                 // Give user feedback
-                alert.show('Avtalen(e) ble slettet suksessfullt.', { type: types.SUCCESS });
+                alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
 
                 // trigger a revalidation (refetch) to make sure our local data is correct
                 mutate();
