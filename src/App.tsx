@@ -4,11 +4,18 @@ import keycloak from './keycloak';
 import { RouterComponent } from './router/router';
 import { GlobalStyle } from './global-styles';
 import { SWRConfig } from 'swr';
+import { preFetch } from './pre-fetch';
+
+const onKeycloakTokens = (tokens: { idToken: string; refreshToken: string; token: string }) => {
+    if (tokens.token) {
+        preFetch(tokens.token);
+    }
+};
 
 export const App: React.FC = () => {
     return (
         <>
-            <KeycloakProvider keycloak={keycloak}>
+            <KeycloakProvider keycloak={keycloak} onTokens={onKeycloakTokens}>
                 <SWRConfig
                     value={{
                         refreshInterval: 0,

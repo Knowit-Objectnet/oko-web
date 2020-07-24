@@ -1,4 +1,4 @@
-export async function fetcher(url: string, token: string): Promise<any> {
+export async function fetcher(url: string, token?: string): Promise<any> {
     const response = await fetch(url, {
         method: 'GET',
         mode: 'cors',
