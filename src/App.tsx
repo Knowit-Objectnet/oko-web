@@ -6,6 +6,7 @@ import { GlobalStyle } from './global-styles';
 import { SWRConfig } from 'swr';
 import { preFetch } from './pre-fetch';
 
+// Pre-fetch data with a token if the user is logged in
 const onKeycloakTokens = (tokens: { idToken: string; refreshToken: string; token: string }) => {
     if (tokens.token) {
         preFetch(tokens.token);
