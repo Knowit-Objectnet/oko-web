@@ -443,7 +443,7 @@ export const CalendarPage: React.FC = () => {
                 // Tell the user that we were unable to update local data if we cant find the event
                 // , and hope that it works to update the api
                 if (!newEvent) {
-                    alert.show('Klarte ikke å oppdatere lokal data, venligst vent.', { type: types.INFO });
+                    alert.show('Klarte ikke å oppdatere lokal data, vennligst vent.', { type: types.INFO });
                 } else {
                     // Update the event
                     newEvent.startDateTime = start;
