@@ -436,7 +436,7 @@ export const CalendarPage: React.FC = () => {
                 mutate();
             }
         } catch (err) {
-            alert.show('Noe gikk kalt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
+            alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
         }
     };
 
