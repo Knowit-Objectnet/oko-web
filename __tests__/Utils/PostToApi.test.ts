@@ -18,7 +18,7 @@ describe('Provides utility functions', () => {
         fetch.mockResponse(async (req) => {
             if (req.url == apiUrl) {
                 const json = await req.json();
-                return { status: 201, body: JSON.stringify(json) };
+                return { status: 200, body: JSON.stringify(json) };
             }
             return { status: 200, body: '' };
         });
