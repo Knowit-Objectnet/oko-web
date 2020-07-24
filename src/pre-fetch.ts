@@ -19,11 +19,11 @@ export const preFetch = async (token?: string) => {
                 // parse data
                 cachedData = JSON.parse(cachedData);
                 // Update the swr-cache
-                cache.set(`arg@"${url}"@${token}`, cachedData, true);
+                cache.set(`arg@"${url}"@"${token}"`, cachedData, true);
             } else {
                 // If the data doesnt exist then get it and update the swr-cache
                 const res = await fetcher(url, token);
-                cache.set(`arg@"${url}"@${token}`, res, true);
+                cache.set(`arg@"${url}"@"${token}"`, res, true);
             }
         }
 
