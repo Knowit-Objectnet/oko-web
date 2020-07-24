@@ -10,12 +10,14 @@ export const preFetch = async (token?: string) => {
     // Loop through all urls
     for (const url of list) {
         // Get the cached data
-        const cachedData = localStorage.getItem(`arg@"${url}"`);
+        let cachedData = localStorage.getItem(`arg@"${url}"`);
 
         // If the user is logged in
         if (token) {
             // If the data has been cached from earlier
             if (cachedData) {
+                // parse data
+                cachedData = JSON.parse(cachedData);
                 // Update the swr-cache
                 cache.set(`arg@"${url}"@${token}`, cachedData, true);
             } else {
@@ -28,7 +30,8 @@ export const preFetch = async (token?: string) => {
         // Try to update the cache to not end up with very outdated data
         try {
             const res = await fetcher(url, '');
-            localStorage.setItem(`arg@"${url}"`, res);
+            // stringify and save data
+            localStorage.setItem(`arg@"${url}"`, JSON.stringify(res));
         } catch {
             // If we fail to fetch data then remove the cached data as it probably either means the data doesnt exist
             // Or that we dont have access to it anymore without being logged in
