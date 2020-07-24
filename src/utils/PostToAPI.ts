@@ -14,7 +14,7 @@ export async function PostToAPI(url: string, data: Record<string, unknown>, toke
     });
 
     // If response is OK then return result
-    if (response.ok && response.status === 201) {
+    if (response.ok && response.status === 200) {
         return await response.json();
     }
 
