@@ -21,7 +21,7 @@ import { PostToAPI } from '../../utils/PostToAPI';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useKeycloak } from '@react-keycloak/web';
 import { useAlert, types } from 'react-alert';
-import {LocationSelector} from "./LocationSelector";
+import { LocationSelector } from './LocationSelector';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -51,8 +51,8 @@ const ModuleDateCalendar = styled.div`
 
     @media screen and (max-width: 900px) {
         display: flex;
-        align-items: center;
-        justify-content: center;
+        align-items: flex-start;
+        justify-content: space-around;
         margin-bottom: 20px;
     }
 `;

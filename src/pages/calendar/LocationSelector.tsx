@@ -14,6 +14,11 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     margin-top: 50px;
+
+    @media screen and (max-width: 900px) {
+        margin-top: 0px;
+        margin-left: 15px;
+    }
 `;
 
 const Header = styled.div`
