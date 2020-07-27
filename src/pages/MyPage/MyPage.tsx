@@ -13,7 +13,7 @@ import { NewLocation } from './NewLocation';
 import { PostToAPI } from '../../utils/PostToAPI';
 import keycloak from '../../keycloak';
 import { useAlert, types } from 'react-alert';
-import {FetchError} from "../../utils/FetchError";
+import { FetchError } from '../../utils/FetchError';
 
 const Wrapper = styled.div`
     display: flex;
