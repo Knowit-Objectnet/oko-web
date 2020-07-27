@@ -57,6 +57,7 @@ describe('Provides a page for REG to view the calendar', () => {
                     newEvent={newEvent}
                     onSelectSlot={onSelectSlot}
                     events={events}
+                    isToggled={false}
                 />
             </KeycloakProvider>,
         );
@@ -79,6 +80,7 @@ describe('Provides a page for REG to view the calendar', () => {
                     newEvent={newEvent}
                     onSelectSlot={onSelectSlot}
                     events={events}
+                    isToggled={false}
                 />
             </KeycloakProvider>,
         );
@@ -89,7 +91,7 @@ describe('Provides a page for REG to view the calendar', () => {
         expect(maritastiftelsenGroups.length).toBe(5);
     });
 
-    it('', async () => {
+    it('Should render the events in an agenda table form for 7.15.2020-7.18.2020', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
         const newEvent = jest.fn();
@@ -106,6 +108,7 @@ describe('Provides a page for REG to view the calendar', () => {
                     newEvent={newEvent}
                     onSelectSlot={onSelectSlot}
                     events={events}
+                    isToggled={false}
                 />
             </KeycloakProvider>,
         );
