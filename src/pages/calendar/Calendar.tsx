@@ -21,6 +21,7 @@ import { PostToAPI } from '../../utils/PostToAPI';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useKeycloak } from '@react-keycloak/web';
 import { useAlert, types } from 'react-alert';
+import {LocationSelector} from "./LocationSelector";
 
 const Wrapper = styled.div`
     height: 100%;
@@ -96,6 +97,8 @@ export const CalendarPage: React.FC = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     // State for side menu
     const [isToggled, setIsToggled] = useState(false);
+    // State for location filtering
+    const [selectedLocation, setSelectedLocation] = useState(-1);
 
     // from and to date for event fetching
     // The from date is the last monday from props.date and the to date is 1 week into the future
@@ -265,6 +268,11 @@ export const CalendarPage: React.FC = () => {
     const onWeekChange = (delta: -1 | 1) => {
         const dayOfDeltaWeek = add(selectedDate, { weeks: delta });
         setSelectedDate(dayOfDeltaWeek);
+    };
+
+    // On location change selector function
+    const onSelectedLocationChange = (index: number) => {
+        setSelectedLocation(index);
     };
 
     const addEvent = async (
@@ -533,6 +541,12 @@ export const CalendarPage: React.FC = () => {
             <Wrapper>
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
+                    {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Oslo) ? (
+                        <LocationSelector
+                            selectedLocation={selectedLocation}
+                            onSelectedLocationChange={onSelectedLocationChange}
+                        />
+                    ) : null}
                 </ModuleDateCalendar>
                 {!apiEvents && (!events || events.length <= 0) && isValidating ? (
                     <Loading text="Laster inn data..." />
