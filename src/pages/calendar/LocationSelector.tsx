@@ -55,6 +55,10 @@ const Label = styled.label`
     }
 `;
 
+const Input = styled.input`
+    margin-right: 15px;
+`;
+
 interface LocationSelectorProps {
     selectedLocation: number;
     onSelectedLocationChange: (index: number) => void;
@@ -122,7 +126,7 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
                 <Locations>
                     {locations.map((location) => (
                         <Label key={location.name + location.id}>
-                            <input
+                            <Input
                                 type="radio"
                                 name="location-selector"
                                 value={location.id}
