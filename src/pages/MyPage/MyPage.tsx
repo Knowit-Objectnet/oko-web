@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
-import {apiUrl, Colors, Roles} from '../../types';
+import { apiUrl, Colors, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
@@ -12,8 +12,8 @@ import { NewPartner } from './NewPartner';
 import { NewLocation } from './NewLocation';
 import { PostToAPI } from '../../utils/PostToAPI';
 import { useAlert, types } from 'react-alert';
-import {ShareContactInfo} from "./ShareContactInfo";
-import {AboutPartner} from "./AboutPartner";
+import { ShareContactInfo } from './ShareContactInfo';
+import { AboutPartner } from './AboutPartner';
 
 const Wrapper = styled.div`
     display: flex;
@@ -129,7 +129,7 @@ export const MyPage: React.FC = () => {
                         <h2>Min side</h2>
                         <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
                     </Header>
-                    {keycloak.hasRealmRole(Roles.Partner) ? <AboutPartner name='' description='' /> : null}
+                    {keycloak.hasRealmRole(Roles.Partner) ? <AboutPartner name="" description="" /> : null}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
                     {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
                 </Content>

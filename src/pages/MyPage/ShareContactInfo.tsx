@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Switch from 'react-switch';
 import { useState } from 'react';
-import {Colors} from "../../types";
+import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;
