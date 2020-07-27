@@ -82,7 +82,6 @@ export const RouterComponent: React.FC = () => {
                             <AuthenticatedRoute
                                 exact={true}
                                 path={`${props.match.url}profile`}
-                                authenticatedRoles={[Roles.Oslo]}
                                 not={<Redirect to="/" />}
                                 is={<MyPage />}
                             />

@@ -4,12 +4,19 @@ import { Colors } from '../../types';
 import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
+import Pencil from '../../assets/Pencil.svg';
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
+`;
+
+const TableTitle = styled.h3`
+    display: flex;
+    align-items: center;
+    margin-top: 0px;
 `;
 
 const Table = styled.table`
@@ -47,6 +54,21 @@ const StyledMail = styled(Mail)`
     margin: 0px 5px;
 `;
 
+const StyledPencil = styled(Pencil)`
+    height: 1em;
+`;
+
+const EditIcon = styled.div`
+    margin-left: 10px;
+    background-color: ${Colors.Blue};
+    border-radius: 50%;
+    height: 27px;
+    width: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
 interface ContactInfoProps {
     info: { name: string; phone?: string; mail: string };
 }
@@ -56,7 +78,12 @@ interface ContactInfoProps {
  */
 export const ContactInfo: React.FC<ContactInfoProps> = (props) => (
     <Wrapper>
-        <h3>Kontaktinfo</h3>
+        <TableTitle>
+            Kontaktinfo
+            <EditIcon>
+                <StyledPencil />
+            </EditIcon>
+        </TableTitle>
         <Table>
             <TableBody>
                 <tr>
