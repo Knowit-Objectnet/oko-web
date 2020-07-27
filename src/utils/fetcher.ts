@@ -1,3 +1,5 @@
+import { FetchError } from './FetchError';
+
 export async function fetcher(url: string, token?: string): Promise<any> {
     const response = await fetch(url, {
         method: 'GET',
@@ -19,9 +21,11 @@ export async function fetcher(url: string, token?: string): Promise<any> {
 
     // Throw appropriate error if fetch was not successful
     if (response.status === 500) {
-        throw new Error('Internal Server Error');
-    } else if (response.status === 401 || response.status === 403) {
-        throw new Error('Invalid token');
+        throw new FetchError('Internal Server Error', 500);
+    } else if (response.status === 401) {
+        throw new FetchError('Invalid token', 401);
+    } else if (response.status === 403) {
+        throw new FetchError('Invalid token', 403);
     } else {
         throw new Error('Unexpected error');
     }

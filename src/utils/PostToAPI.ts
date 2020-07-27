@@ -1,3 +1,5 @@
+import { FetchError } from './FetchError';
+
 export async function PostToAPI(url: string, data: Record<string, unknown>, token: string): Promise<any> {
     const response = await fetch(url, {
         method: 'POST',
@@ -20,9 +22,13 @@ export async function PostToAPI(url: string, data: Record<string, unknown>, toke
 
     // Throw appropriate error if the post was not successful
     if (response.status === 500) {
-        throw new Error('Internal Server Error');
-    } else if (response.status === 401 || response.status === 403) {
-        throw new Error('Invalid token');
+        throw new FetchError('Internal Server Error', 500);
+    } else if (response.status === 401) {
+        throw new FetchError('Invalid token', 401);
+    } else if (response.status === 403) {
+        throw new FetchError('Invalid token', 403);
+    } else if (response.status === 409) {
+        throw new FetchError('Data already exists in the database', 409);
     } else {
         throw new Error('Unexpected error');
     }
