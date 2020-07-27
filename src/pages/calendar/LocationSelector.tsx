@@ -67,7 +67,7 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
     // State
-    const [toggled, setToggled] = useState(false);
+    const [toggled, setToggled] = useState(true);
 
     let { data: locations } = useSWR<ApiLocation[]>(['/api/locations', keycloak.token], fetcher);
     locations =

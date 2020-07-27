@@ -114,11 +114,15 @@ export const CalendarPage: React.FC = () => {
             keycloak.tokenParsed.GroupID
         }`;
     } else if (keycloak.hasRealmRole(Roles.Partner)) {
-        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&partner-id=${
-            keycloak.tokenParsed.GroupID
+        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&${
+            selectedLocation === -1 || !isToggled
+                ? 'partner-id=' + keycloak.tokenParsed.GroupID
+                : 'station-id=' + selectedLocation
         }`;
     } else {
-        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}`;
+        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}${
+            selectedLocation === -1 ? '' : '&station-id=' + selectedLocation
+        }`;
     }
 
     // Events fetched from the api
@@ -523,6 +527,7 @@ export const CalendarPage: React.FC = () => {
                 onSelectSlot={onSelectSlot}
                 newEvent={newEvent}
                 date={selectedDate}
+                isToggled={selectedLocation !== -1}
                 events={events}
             />
         );
@@ -541,7 +546,7 @@ export const CalendarPage: React.FC = () => {
             <Wrapper>
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
-                    {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Oslo) ? (
+                    {(keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo) ? (
                         <LocationSelector
                             selectedLocation={selectedLocation}
                             onSelectedLocationChange={onSelectedLocationChange}
