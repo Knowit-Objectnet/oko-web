@@ -69,6 +69,7 @@ const Event = styled.div<EventProps>`
 `;
 
 const EventText = styled.span`
+    text-align: center;
     text-overflow: ellipsis;
     overflow: hidden;
 `;
@@ -143,7 +144,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
         widthEvents.sort((eventA, eventB) => eventA.start.getTime() - eventB.start.getTime());
 
         // Step 6: Assign Events to the earliest available slot ( to find the slot for each of the events)
-        const orderedEvents = widthEvents.map((event) => {
+        const assignedEvents = widthEvents.map((event) => {
             // Get the start of the event
             const startPos = Math.ceil((event.start.getTime() - props.deltaStart.getTime()) / 60000);
             // Get the length of the event
@@ -165,6 +166,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
             for (let i = startPos; i < startPos + length; i++) {
                 matrix[i][wPos] = 1;
             }
+
             // Return the event with it's wPos, wLen and length
             return {
                 ...event,
@@ -174,7 +176,26 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
             };
         });
 
-        return orderedEvents;
+        // Step 7: Assign a new width if needed as we now know how the events are positioned in slots
+        return assignedEvents.map((event) => {
+            // Get the start of the event
+            const startPos = Math.ceil((event.start.getTime() - props.deltaStart.getTime()) / 60000);
+
+            // Loop over the elements and give it the wLen of the longest filled row
+            for (let i = startPos; i < startPos + event.length; i++) {
+                const t1 = matrix[i].every((el) => el === 1);
+                const t2 = matrix[i].length > event.wLen;
+                if (t1 && t2) {
+                    event.wLen = matrix[i].length;
+                }
+            }
+
+            // Return the event with it's updated width
+            return {
+                ...event,
+                width: (1 / event.wLen) * 100,
+            };
+        });
     };
 
     // On event click function
