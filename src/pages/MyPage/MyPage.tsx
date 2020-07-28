@@ -136,7 +136,9 @@ export const MyPage: React.FC = () => {
                             Logg ut
                         </LogoutButton>
                     </Header>
-                    {keycloak.hasRealmRole(Roles.Partner) ? <AboutPartner name="<partner>" description="<description>" /> : null}
+                    {keycloak.hasRealmRole(Roles.Partner) ? (
+                        <AboutPartner name="<partner>" description="<description>" />
+                    ) : null}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
                     {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
                 </Content>
