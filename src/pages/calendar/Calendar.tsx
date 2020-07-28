@@ -528,6 +528,7 @@ export const CalendarPage: React.FC = () => {
                 newEvent={newEvent}
                 date={selectedDate}
                 isToggled={selectedLocation !== -1}
+                onWeekChange={onWeekChange}
                 events={events}
             />
         );

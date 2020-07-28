@@ -6,6 +6,7 @@ import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeeekCalendar';
+import {WeekMenu} from "../WeekMenu";
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -43,6 +44,7 @@ interface WeekCalendarProps {
     newEvent: (start: Date, end: Date) => void;
     onSelectEvent: (Event: EventInfo) => void;
     onSelectSlot: (start: Date, end: Date, isOslo: boolean) => void;
+    onWeekChange: (delta: -1 | 1) => void;
     events: Array<EventInfo>;
 }
 
@@ -109,13 +111,16 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     return (
         <>
             {props.isToggled ? (
-                <WorkingWeekCalendar
-                    date={props.date}
-                    min={min}
-                    max={max}
-                    events={props.events}
-                    onSelectEvent={props.onSelectEvent}
-                />
+                <>
+                    <WeekMenu date={props.date} changeWeek={props.onWeekChange} />
+                    <WorkingWeekCalendar
+                        date={props.date}
+                        min={min}
+                        max={max}
+                        events={props.events}
+                        onSelectEvent={props.onSelectEvent}
+                    />
+                </>
             ) : (
                 <CalendarWrapper>
                     <OverflowWrapper>
