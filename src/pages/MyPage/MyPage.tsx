@@ -41,9 +41,10 @@ const Content = styled.div<ContentProps>`
 const Header = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 45px;
+    width: 100%;
 `;
 
 const DefaultProfilePicture = styled(Default)`
@@ -52,8 +53,12 @@ const DefaultProfilePicture = styled(Default)`
     margin-right: 15px;
 `;
 
-const LogoutButton = styled.button`
-    margin-left: 35px;
+interface LogoutButtonProps {
+    isReg: boolean;
+}
+
+const LogoutButton = styled.button<LogoutButtonProps>`
+    margin-left: ${(props) => (props.isReg ? '43px' : 'auto')};
     height: 45px;
     width: 100px;
     border: none;
@@ -127,9 +132,11 @@ export const MyPage: React.FC = () => {
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>
-                        <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
+                        <LogoutButton isReg={keycloak.hasRealmRole(Roles.Oslo)} onClick={onLogoutClick}>
+                            Logg ut
+                        </LogoutButton>
                     </Header>
-                    {keycloak.hasRealmRole(Roles.Partner) ? <AboutPartner name="" description="" /> : null}
+                    {keycloak.hasRealmRole(Roles.Partner) ? <AboutPartner name="<partner>" description="<description>" /> : null}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
                     {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
                 </Content>
