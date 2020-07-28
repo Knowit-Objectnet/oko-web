@@ -183,9 +183,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
 
             // Loop over the elements and give it the wLen of the longest filled row
             for (let i = startPos; i < startPos + event.length; i++) {
-                const t1 = matrix[i].every((el) => el === 1);
-                const t2 = matrix[i].length > event.wLen;
-                if (t1 && t2) {
+                if (matrix[i].every((el) => el === 1) && matrix[i].length > event.wLen) {
                     event.wLen = matrix[i].length;
                 }
             }
