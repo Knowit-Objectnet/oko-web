@@ -17,6 +17,14 @@ describe('Provides a page to view the calendar in addition to change log and not
             start: new Date(),
             end: new Date(),
             onSubmit: jest.fn(),
+            partner: {
+                id: 1,
+                name: 'fretex',
+            },
+            location: {
+                id: 1,
+                name: 'haraldrud',
+            },
         };
 
         // Render component
