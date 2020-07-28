@@ -6,7 +6,7 @@ import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeeekCalendar';
-import {WeekMenu} from "../WeekMenu";
+import { WeekMenu } from '../WeekMenu';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
