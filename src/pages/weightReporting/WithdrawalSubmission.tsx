@@ -9,17 +9,38 @@ const Wrapper = styled.div`
     margin-bottom: 2px;
 `;
 
-interface WithdrawalDateProps {
+interface WithdrawalWeightProps {
     weight?: number;
 }
 
-const WithdrawalDate = styled.div<WithdrawalDateProps>`
+const WithdrawalDate = styled.div<WithdrawalWeightProps>`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: ${(props) => (props.weight ? Colors.LightGreen : Colors.Red)};
+    min-width: 170px;
+    height: 50px;
+    margin-right: 2px;
+    padding: 5px;
+    box-sizing: border-box;
+`;
+
+const DateTime = styled.span`
+    white-space: nowrap;
+
+    &:first-child {
+        margin-right: 10px;
+    }
+`;
+
+const WithdrawalLocation = styled.div<WithdrawalWeightProps>`
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: ${(props) => (props.weight ? Colors.LightGreen : Colors.Red)};
-    min-width: 170px;
+    min-width: 150px;
     height: 50px;
     margin-right: 2px;
     padding: 5px;
@@ -35,12 +56,13 @@ const InputWrapper = styled.div`
     flex: 1;
 `;
 
-const Suffix = styled.div`
+const Suffix = styled.label`
     height: 100%;
     flex: 1;
     display: flex;
     position: relative;
     border: solid 2px ${Colors.Red};
+    border-right: none;
     box-sizing: border-box;
 
     &::after {
@@ -56,6 +78,13 @@ const Suffix = styled.div`
         top: 25%;
     }
 
+    &:focus-within {
+        outline: none;
+        border: 2px solid ${Colors.Red};
+        -webkit-box-shadow: 0px 0px 5px ${Colors.Red};
+        box-shadow: 0px 0px 5px ${Colors.Red};
+    }
+
     &::after {
         content: 'Kg';
     }
@@ -67,6 +96,37 @@ const Input = styled.input`
     text-indent: 12px;
     font-size: 20px;
     line-height: 28px;
+    outline: none;
+`;
+
+const ButtonWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+    width: 50px;
+    height: 50px;
+
+    &:after {
+        content: '';
+        background: ${Colors.Red};
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 50%;
+    }
+
+    &:before {
+        content: '';
+        background: ${Colors.Red};
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 2px;
+        width: 50%;
+    }
 `;
 
 const Button = styled.button`
@@ -108,6 +168,10 @@ interface WithdrawalProps {
     weight?: number;
     start: Date;
     end: Date;
+    location: {
+        id: number;
+        name: string;
+    };
     onSubmit: (weight: number, id: string) => void;
 }
 
@@ -154,15 +218,17 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
     return (
         <Wrapper>
             <WithdrawalDate weight={props.weight}>
-                <span>
+                <DateTime>
+                    <b>Dato: </b>
                     {props.start.toLocaleString('nb-NO', {
                         month: 'long',
                         day: 'numeric',
                         year: 'numeric',
                         weekday: 'long',
                     })}
-                </span>
-                <span>
+                </DateTime>
+                <DateTime>
+                    <b>Klokken: </b>
                     {`${props.start
                         .getHours()
                         .toString()
@@ -173,8 +239,9 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                         .getHours()
                         .toString()
                         .padStart(2, '0')}:${props.end.getMinutes().toString().padStart(2, '0')}`}
-                </span>
+                </DateTime>
             </WithdrawalDate>
+            <WithdrawalLocation weight={props.weight}>{props.location && props.location.name}</WithdrawalLocation>
             {editing ? (
                 <InputWrapper>
                     <Suffix>
@@ -188,9 +255,11 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                             onKeyPress={onKeyDown}
                         />
                     </Suffix>
-                    <Button type="submit" onClick={onSubmitClick} disabled={weight === ''}>
-                        OK
-                    </Button>
+                    <ButtonWrapper>
+                        <Button type="submit" onClick={onSubmitClick} disabled={weight === ''}>
+                            OK
+                        </Button>
+                    </ButtonWrapper>
                 </InputWrapper>
             ) : (
                 <Box>

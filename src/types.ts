@@ -65,6 +65,14 @@ export interface Withdrawal {
     weight?: number;
     start: Date;
     end: Date;
+    location: {
+        id: number;
+        name: string;
+    };
+    partner: {
+        id: number;
+        name: string;
+    };
 }
 
 // Roles

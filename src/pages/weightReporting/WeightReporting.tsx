@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
 import { apiUrl, Colors, Withdrawal } from '../../types';
 import useSWR from 'swr';
@@ -25,8 +25,6 @@ const Content = styled.div`
     flex-direction: column;
     align-items: center;
     height: 100%;
-    min-width: 500px;
-    width: 65%;
 `;
 
 const Latest = styled.div`
@@ -112,6 +110,7 @@ export const WeightReporting: React.FC = () => {
                 weight={withdrawal.weight}
                 start={withdrawal.start}
                 end={withdrawal.end}
+                location={withdrawal.location}
                 onSubmit={onSubmit}
             />
         ));
