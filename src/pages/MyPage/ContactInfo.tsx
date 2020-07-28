@@ -31,11 +31,22 @@ const TableBody = styled.tbody`
     background-color: ${Colors.LightBlue};
 `;
 
+const Tr = styled.tr`
+    height: 35px;
+`;
+
+const Td = styled.td`
+    height: 35px;
+`;
+
 const Cell = styled.div`
     align-items: center;
     justify-content: flex-start;
     display: flex;
     width: 100%;
+    height: 100%;
+    padding: 2px;
+    box-sizing: border-box;
 `;
 
 const CellText = styled.div`
@@ -88,6 +99,13 @@ const EditOptions = styled.div`
     display: flex;
 `;
 
+const Input = styled.input`
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: none;
+`;
+
 interface ContactInfoProps {
     info: { name: string; phone?: string; mail: string };
 }
@@ -97,9 +115,49 @@ interface ContactInfoProps {
  */
 export const ContactInfo: React.FC<ContactInfoProps> = (props) => {
     const [editing, setEditing] = useState(false);
+    const [name, setName] = useState(props.info.name);
+    const [phone, setPhone] = useState(props.info.phone);
+    const [mail, setMail] = useState(props.info.mail);
+    const [description, setDescription] = useState('');
 
     const onEditButtonClick = () => {
         setEditing(!editing);
+    };
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.persist();
+        const val = e.currentTarget.value;
+        switch (e.currentTarget.name) {
+            case 'name': {
+                setName(val);
+                break;
+            }
+            case 'phone': {
+                setPhone(val);
+                break;
+            }
+            case 'mail': {
+                setMail(val);
+                break;
+            }
+            case 'description': {
+                setDescription(val);
+                break;
+            }
+        }
+    };
+
+    const onCancel = () => {
+        setName(props.info.name);
+        setPhone(props.info.phone);
+        setMail(props.info.mail);
+        setDescription('');
+        setEditing(false);
+    };
+
+    const onSubmit = () => {
+        // TODO: Submit to server
+        onCancel();
     };
 
     return (
@@ -108,10 +166,10 @@ export const ContactInfo: React.FC<ContactInfoProps> = (props) => {
                 Kontaktinfo
                 {editing ? (
                     <EditOptions>
-                        <Icon color={Colors.Red} onClick={onEditButtonClick}>
+                        <Icon color={Colors.Red} onClick={onCancel}>
                             <StyledCross />
                         </Icon>
-                        <Icon color={Colors.Green} onClick={onEditButtonClick}>
+                        <Icon color={Colors.Green} onClick={onSubmit}>
                             <StyledCheck />
                         </Icon>
                     </EditOptions>
@@ -123,27 +181,45 @@ export const ContactInfo: React.FC<ContactInfoProps> = (props) => {
             </TableTitle>
             <Table>
                 <TableBody>
-                    <tr>
-                        <td>
+                    <Tr>
+                        <Td>
                             <Cell>
                                 <StyledPerson height="1em" />
-                                <CellText>{props.info.name}</CellText>
+                                {editing ? (
+                                    <Input type="text" name="name" value={name} onChange={onChange} />
+                                ) : (
+                                    <CellText>{props.info.name}</CellText>
+                                )}
                             </Cell>
-                        </td>
-                        <td>
+                        </Td>
+                        <Td>
                             <Cell>
                                 <StyledPhone height="1em" />
-                                <CellText>{props.info.phone || 'N/A'}</CellText>
+                                {editing ? (
+                                    <Input type="text" name="phone" value={phone} onChange={onChange} />
+                                ) : (
+                                    <CellText>{props.info.phone || 'N/A'}</CellText>
+                                )}
                             </Cell>
-                        </td>
-                        <td>
+                        </Td>
+                        <Td>
                             <Cell>
                                 <StyledMail height="1em" />
-                                <CellText>{props.info.mail}</CellText>
+                                {editing ? (
+                                    <Input type="text" name="mail" value={mail} onChange={onChange} />
+                                ) : (
+                                    <CellText>{props.info.mail}</CellText>
+                                )}
                             </Cell>
-                        </td>
-                        <td></td>
-                    </tr>
+                        </Td>
+                        <Td>
+                            <Cell>
+                                {editing ? (
+                                    <Input type="text" name="description" value={description} onChange={onChange} />
+                                ) : null}
+                            </Cell>
+                        </Td>
+                    </Tr>
                 </TableBody>
             </Table>
         </Wrapper>
