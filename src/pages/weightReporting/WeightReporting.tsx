@@ -2,13 +2,13 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import { useEffect, useMemo, useState } from 'react';
-import { PostToAPI } from '../../utils/PostToAPI';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
 import { apiUrl, Colors, Withdrawal } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../loading/Loading';
 import { PatchToAPI } from '../../utils/PatchToAPI';
+import { useAlert, types } from 'react-alert';
 
 const Wrapper = styled.div`
     display: flex;
@@ -50,6 +50,8 @@ const OverflowWrapper = styled.div`
  * Weight reporting component for reporting weight from item withdrawals
  */
 export const WeightReporting: React.FC = () => {
+    // Alert dispatcher
+    const alert = useAlert();
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
@@ -87,12 +89,15 @@ export const WeightReporting: React.FC = () => {
                     // Post update to API
                     await PatchToAPI(`${apiUrl}/weight-reporting/reports/`, { id, weight }, keycloak.token);
 
+                    // Give user feedback
+                    alert.show('Uttaket ble oppdatert suksessfullt.', { type: types.SUCCESS });
+
                     // trigger a revalidation (refetch) to make sure our local data is correct
                     mutate();
                 }
             }
         } catch (err) {
-            console.log(err);
+            alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
         }
     }, []);
 
