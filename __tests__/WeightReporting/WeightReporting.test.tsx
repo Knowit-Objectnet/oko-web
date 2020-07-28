@@ -38,6 +38,11 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         end: new Date(),
                         partner: {
                             id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
                         },
                     },
                     {
@@ -46,6 +51,11 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         end: new Date(),
                         partner: {
                             id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
                         },
                     },
                     {
@@ -55,6 +65,11 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         end: new Date(),
                         partner: {
                             id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
                         },
                     },
                     {
@@ -64,6 +79,11 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         end: new Date(),
                         partner: {
                             id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
                         },
                     },
                 ]);
