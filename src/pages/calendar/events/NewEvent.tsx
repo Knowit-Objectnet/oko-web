@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
-import { VerticalEventTemplate } from './VerticalEventTemplate';
+import { EventTemplateVertical } from './EventTemplateVertical';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
@@ -245,7 +245,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     };
 
     return (
-        <VerticalEventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
+        <EventTemplateVertical title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
             <Options>
                 <EventOptionPartner
                     selectedPartner={selectedPartnerId}
@@ -272,6 +272,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 />
             </Options>
             <Submitbutton onClick={onSubmit}>Fullfør</Submitbutton>
-        </VerticalEventTemplate>
+        </EventTemplateVertical>
     );
 };

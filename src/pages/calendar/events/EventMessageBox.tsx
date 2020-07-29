@@ -47,7 +47,7 @@ interface MessageInfo {
 /**
  * Message box shown in the event component to display a message from the partners.
  */
-export const MessageBox: React.FC<MessageInfo> = (props) => {
+export const EventMessageBox: React.FC<MessageInfo> = (props) => {
     const getDateTimeString = (start?: Date, end?: Date) => {
         if (start && end) {
             const startString = props.start?.toLocaleString('no-NB', {

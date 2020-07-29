@@ -42,7 +42,7 @@ interface HorizontalEventTemplateProps {
 /**
  * General event component template
  */
-export const HorizontalEventTemplate: React.FC<HorizontalEventTemplateProps> = (props) => (
+export const EventTemplateHorizontal: React.FC<HorizontalEventTemplateProps> = (props) => (
     <Wrapper>
         <Title>
             <h2>{props.title}</h2>

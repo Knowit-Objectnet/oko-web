@@ -49,7 +49,7 @@ interface VerticalEventTemplateProps {
 /**
  * General event component template
  */
-export const VerticalEventTemplate: React.FC<VerticalEventTemplateProps> = (props) => (
+export const EventTemplateVertical: React.FC<VerticalEventTemplateProps> = (props) => (
     <Wrapper>
         <Title>
             <H2>{props.title}</H2>

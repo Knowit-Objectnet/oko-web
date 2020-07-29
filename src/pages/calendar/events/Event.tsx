@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { MessageBox } from './MessageBox';
+import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
 import { ApiLocation, Colors, EventInfo, Roles } from '../../../types';
 import { EventOptionLocation } from './EventOptionLocation';
-import { HorizontalEventTemplate } from './HorizontalEventTemplate';
+import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
@@ -187,7 +187,7 @@ export const Event: React.FC<EventProps> = (props) => {
     };
 
     return (
-        <HorizontalEventTemplate
+        <EventTemplateHorizontal
             title={props.title}
             showEditSymbol={
                 keycloak.hasRealmRole(Roles.Oslo) ||
@@ -221,7 +221,7 @@ export const Event: React.FC<EventProps> = (props) => {
                 </Section>
                 {!isEditing ? (
                     <Section>
-                        <MessageBox {...props.resource.message} />
+                        <EventMessageBox {...props.resource.message} />
                         {keycloak.hasRealmRole(Roles.Oslo) ||
                         (keycloak.hasRealmRole(Roles.Partner) &&
                             keycloak.tokenParsed.GroupID === props.resource.partner.id) ? (
@@ -234,6 +234,6 @@ export const Event: React.FC<EventProps> = (props) => {
                 ) : null}
             </Body>
             {isEditing ? <EventSubmission onSubmit={onSubmit} onCancel={onCancel} /> : null}
-        </HorizontalEventTemplate>
+        </EventTemplateHorizontal>
     );
 };
