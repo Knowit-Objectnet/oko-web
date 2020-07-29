@@ -1,0 +1,39 @@
+---
+name: Modal
+---
+
+import { Playground, Props } from 'docz';
+import { Modal } from '../src/sharedComponents/Modal';
+
+# Modal
+
+<Props of={Modal} />
+
+## Basic usage
+
+<Playground>
+    {() => {
+        const [showModal, setShowModal] = React.useState(false);
+        return (
+            <>
+                {showModal ? (
+                    <Modal
+                        exitModalCallback={() => {
+                            setShowModal(false);
+                        }}
+                        content="Hello world"
+                        width="200px"
+                        height="200px"
+                    />
+                ) : null}
+                <button
+                    onClick={() => {
+                        setShowModal(true);
+                    }}
+                >
+                    Test
+                </button>
+            </>
+        );
+    }}
+</Playground>
