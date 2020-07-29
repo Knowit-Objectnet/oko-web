@@ -415,8 +415,13 @@ export const CalendarPage: React.FC = () => {
                 // update the local data immediately, but disable the revalidation
                 const newEvents = apiEvents.filter(
                     (apiEvent) =>
-                        apiEvent.recurrenceRule?.id === event.resource.recurrenceRule?.id &&
-                        (new Date(apiEvent.startDateTime) < start || new Date(apiEvent.startDateTime) > end),
+                        !(
+                            apiEvent.recurrenceRule &&
+                            event.resource.recurrenceRule &&
+                            apiEvent.recurrenceRule.id === event.resource.recurrenceRule.id &&
+                            new Date(apiEvent.startDateTime) >= start &&
+                            new Date(apiEvent.startDateTime) <= end
+                        ),
                 );
                 await mutate(newEvents, false);
                 setShowModal(false);
