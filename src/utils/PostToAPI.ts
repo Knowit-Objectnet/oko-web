@@ -26,7 +26,7 @@ export async function PostToAPI(url: string, data: Record<string, unknown>, toke
     } else if (response.status === 401) {
         throw new FetchError('Invalid token', 401);
     } else if (response.status === 403) {
-        throw new FetchError('Invalid token', 403);
+        throw new FetchError('Forbidden, insufficient permissions', 403);
     } else if (response.status === 409) {
         throw new FetchError('Data already exists in the database', 409);
     } else {

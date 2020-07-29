@@ -25,7 +25,7 @@ export async function fetcher(url: string, token?: string): Promise<any> {
     } else if (response.status === 401) {
         throw new FetchError('Invalid token', 401);
     } else if (response.status === 403) {
-        throw new FetchError('Invalid token', 403);
+        throw new FetchError('Forbidden, insufficient permissions', 403);
     } else {
         throw new Error('Unexpected error');
     }

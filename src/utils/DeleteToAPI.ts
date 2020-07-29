@@ -25,7 +25,7 @@ export async function DeleteToAPI(url: string, token: string): Promise<any> {
     } else if (response.status === 401) {
         throw new FetchError('Invalid token', 401);
     } else if (response.status === 403) {
-        throw new FetchError('Invalid token', 403);
+        throw new FetchError('Forbidden, insufficient permissions', 403);
     } else if (response.status === 404) {
         throw new FetchError('Data not found', 404);
     } else {
