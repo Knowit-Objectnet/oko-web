@@ -8,7 +8,7 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 `;
 
 const WeekText = styled.div`

@@ -45,6 +45,7 @@ describe('Provides a page for REG to view the calendar', () => {
         const onSelectEventMock = jest.fn();
         const newEvent = jest.fn();
         const onSelectSlot = jest.fn();
+        const onWeekChange = jest.fn();
         const date = new Date();
         date.setFullYear(2020, 6, 13);
         date.setHours(7, 0, 0, 0);
@@ -57,6 +58,8 @@ describe('Provides a page for REG to view the calendar', () => {
                     newEvent={newEvent}
                     onSelectSlot={onSelectSlot}
                     events={events}
+                    isToggled={false}
+                    onWeekChange={onWeekChange}
                 />
             </KeycloakProvider>,
         );
@@ -68,6 +71,7 @@ describe('Provides a page for REG to view the calendar', () => {
         const newEvent = jest.fn();
         const onSelectSlot = jest.fn();
         const date = new Date();
+        const onWeekChange = jest.fn();
         date.setFullYear(2020, 6, 13);
         date.setHours(7, 0, 0, 0);
 
@@ -79,6 +83,8 @@ describe('Provides a page for REG to view the calendar', () => {
                     newEvent={newEvent}
                     onSelectSlot={onSelectSlot}
                     events={events}
+                    isToggled={false}
+                    onWeekChange={onWeekChange}
                 />
             </KeycloakProvider>,
         );
@@ -89,12 +95,13 @@ describe('Provides a page for REG to view the calendar', () => {
         expect(maritastiftelsenGroups.length).toBe(5);
     });
 
-    it('', async () => {
+    it('Should render the events in an agenda table form for 7.15.2020-7.18.2020', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
         const newEvent = jest.fn();
         const onSelectSlot = jest.fn();
         const date = new Date();
+        const onWeekChange = jest.fn();
         date.setFullYear(2020, 6, 15);
         date.setHours(7, 0, 0, 0);
 
@@ -106,6 +113,8 @@ describe('Provides a page for REG to view the calendar', () => {
                     newEvent={newEvent}
                     onSelectSlot={onSelectSlot}
                     events={events}
+                    isToggled={false}
+                    onWeekChange={onWeekChange}
                 />
             </KeycloakProvider>,
         );
