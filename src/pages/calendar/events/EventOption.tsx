@@ -7,7 +7,7 @@ const Option = styled.div`
     align-items: center;
 
     &:not(:last-child) {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 `;
 
