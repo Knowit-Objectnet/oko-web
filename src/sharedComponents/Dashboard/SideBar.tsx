@@ -57,7 +57,6 @@ interface LinkProps {
 const Link = styled(LocalLink)<LinkProps>`
     color: ${(props) => (props.to !== props.current ? Colors.White : Colors.Blue)};
     margin-bottom: 15px;
-    border-bottom: solid 2px ${(props) => (props.to !== props.current ? Colors.White : Colors.Blue)};
     width: fit-content;
     white-space: nowrap;
 `;
@@ -88,37 +87,41 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                         ...linkTransitionStyles[state],
                                     }}
                                 >
-                                    {keycloak.hasRealmRole(Roles.Oslo) ? (
-                                        <Link current={history.location.pathname} to="/">
-                                            Oversikt
-                                        </Link>
-                                    ) : null}
-                                    <Link current={history.location.pathname} to="/calendar">
-                                        Kalender
+                                    <Link current={history.location.pathname} to="/partners">
+                                        Sam.partnere
+                                    </Link>
+                                    <Link current={history.location.pathname} to="/stations">
+                                        Stasjonene
                                     </Link>
                                     {keycloak.hasRealmRole(Roles.Oslo) ? (
-                                        <>
-                                            <Link current={history.location.pathname} to="/statistics">
-                                                Statistikk
-                                            </Link>
-                                            <Link current={history.location.pathname} to="/partners">
-                                                Samarbeidspartnere
-                                            </Link>
-                                        </>
+                                        <Link current={history.location.pathname} to="/">
+                                            Opprett hendelse
+                                        </Link>
                                     ) : null}
-                                    {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
-                                        <>
-                                            <Link current={history.location.pathname} to="/reporting">
-                                                Vektuttak
-                                            </Link>
-                                            <Link current={history.location.pathname} to="/history">
-                                                Historikk
-                                            </Link>
-                                            <Link current={history.location.pathname} to="/info">
-                                                Info fra Oslo kommune
-                                            </Link>
-                                        </>
+                                    {keycloak.hasRealmRole(Roles.Partner) ? (
+                                        <Link current={history.location.pathname} to="/">
+                                            Søk ekstrauttak
+                                        </Link>
                                     ) : null}
+                                    {keycloak.hasRealmRole(Roles.Ambassador) ? (
+                                        <Link current={history.location.pathname} to="/">
+                                            Utlys ekstrauttak
+                                        </Link>
+                                    ) : null}
+                                    {keycloak.hasRealmRole(Roles.Partner) ? (
+                                        <Link current={history.location.pathname} to="/reporting">
+                                            Vektuttak
+                                        </Link>
+                                    ) : null}
+                                    <Link current={history.location.pathname} to="/">
+                                        Skriv beskjed
+                                    </Link>
+                                    <Link current={history.location.pathname} to="/profile">
+                                        Min side
+                                    </Link>
+                                    <Link current={history.location.pathname} to="/settings">
+                                        Innstillinger
+                                    </Link>
                                 </Links>
                             )}
                         </Transition>
