@@ -75,9 +75,7 @@
     "cypress": "^4.11.0",
     "date-fns": "^2.14.0",
     "history": "^4.10.1",
-    "i18next": "^19.4.5",
     "keycloak-js": "^10.0.2",
-    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-alert": "^7.0.2",
     "react-alert-template-basic": "^1.0.0",
@@ -87,7 +85,6 @@
     "react-router-dom": "^5.2.0",
     "react-transition-group": "^4.4.1",
     "styled-components": "^5.1.1",
-    "styled-icons": "^10.2.1",
     "swr": "^0.2.3"
   }
 }
