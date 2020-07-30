@@ -5,6 +5,13 @@ import { Link as LocalLink } from 'react-router-dom';
 import { Colors, Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import { useHistory } from 'react-router-dom';
+import People from '../../assets/People.svg';
+import Location from '../../assets/Location.svg';
+import Plus from '../../assets/Plus.svg';
+import Weight from '../../assets/Weight.svg';
+import PencilRec from '../../assets/PencilRec.svg';
+import User from '../../assets/Default_profile_pic.svg';
+import Cog from '../../assets/Cog.svg';
 
 const duration = 500;
 
@@ -18,8 +25,8 @@ interface IIndexable {
 
 const sidebarTransitionStyles: IIndexable = {
     entering: { width: 0 },
-    entered: { width: '200px' },
-    exiting: { width: '200px' },
+    entered: { width: '220px' },
+    exiting: { width: '220px' },
     exited: { width: 0 },
 };
 
@@ -55,10 +62,56 @@ interface LinkProps {
 }
 
 const Link = styled(LocalLink)<LinkProps>`
+    display: flex;
+    align-items: center;
     color: ${(props) => (props.to !== props.current ? Colors.White : Colors.Blue)};
+    fill: ${(props) => (props.to !== props.current ? Colors.White : Colors.Blue)};
     margin-bottom: 15px;
     width: fit-content;
     white-space: nowrap;
+    font-weight: bold;
+`;
+
+const StyledPeople = styled(People)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
+const StyledLocation = styled(Location)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
+const StyledPlus = styled(Plus)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
+const StyledWeight = styled(Weight)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
+const StyledPencilRec = styled(PencilRec)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
+const StyledUser = styled(User)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
+const StyledCog = styled(Cog)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
 `;
 
 interface SideBarProps {
@@ -88,39 +141,39 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                     }}
                                 >
                                     <Link current={history.location.pathname} to="/partners">
-                                        Sam.partnere
+                                        <StyledPeople /> Sam.partnere
                                     </Link>
                                     <Link current={history.location.pathname} to="/stations">
-                                        Stasjonene
+                                        <StyledLocation /> Stasjonene
                                     </Link>
                                     {keycloak.hasRealmRole(Roles.Oslo) ? (
                                         <Link current={history.location.pathname} to="/">
-                                            Opprett hendelse
+                                            <StyledPlus /> Opprett hendelse
                                         </Link>
                                     ) : null}
                                     {keycloak.hasRealmRole(Roles.Partner) ? (
                                         <Link current={history.location.pathname} to="/">
-                                            Søk ekstrauttak
+                                            <StyledPlus /> Søk ekstrauttak
                                         </Link>
                                     ) : null}
                                     {keycloak.hasRealmRole(Roles.Ambassador) ? (
                                         <Link current={history.location.pathname} to="/">
-                                            Utlys ekstrauttak
+                                            <StyledPlus /> Utlys ekstrauttak
                                         </Link>
                                     ) : null}
                                     {keycloak.hasRealmRole(Roles.Partner) ? (
                                         <Link current={history.location.pathname} to="/reporting">
-                                            Vektuttak
+                                            <StyledWeight /> Vektuttak
                                         </Link>
                                     ) : null}
                                     <Link current={history.location.pathname} to="/">
-                                        Skriv beskjed
+                                        <StyledPencilRec /> Skriv beskjed
                                     </Link>
                                     <Link current={history.location.pathname} to="/profile">
-                                        Min side
+                                        <StyledUser /> Min side
                                     </Link>
                                     <Link current={history.location.pathname} to="/settings">
-                                        Innstillinger
+                                        <StyledCog /> Innstillinger
                                     </Link>
                                 </Links>
                             )}
