@@ -4,7 +4,7 @@ import { Navigation } from './Navigation';
 import { SideMenu } from './SideMenu';
 import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
 import { Colors } from '../../types';
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const StyledHeader = styled.header`
     width: 100%;
@@ -14,7 +14,7 @@ const StyledHeader = styled.header`
     background-color: ${Colors.DarkBlue};
 `;
 
-const LogoWrapper = styled.div`
+const LogoWrapper = styled(Link)`
     height: 100%;
     margin-right: 115px;
 `;
@@ -34,7 +34,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = (props) => {
     return (
         <StyledHeader>
-            <LogoWrapper>
+            <LogoWrapper to="/">
                 <Logo />
             </LogoWrapper>
             <Navigation />
