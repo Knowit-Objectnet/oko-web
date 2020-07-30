@@ -53,12 +53,8 @@ const DefaultProfilePicture = styled(Default)`
     margin-right: 15px;
 `;
 
-interface LogoutButtonProps {
-    isReg: boolean;
-}
-
-const LogoutButton = styled.button<LogoutButtonProps>`
-    margin-left: ${(props) => (props.isReg ? '43px' : 'auto')};
+const LogoutButton = styled.button`
+    margin-left: auto;
     height: 45px;
     width: 100px;
     border: none;
@@ -132,9 +128,7 @@ export const MyPage: React.FC = () => {
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>
-                        <LogoutButton isReg={keycloak.hasRealmRole(Roles.Oslo)} onClick={onLogoutClick}>
-                            Logg ut
-                        </LogoutButton>
+                        <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
                     </Header>
                     {keycloak.hasRealmRole(Roles.Partner) ? (
                         <AboutPartner name="<partner>" description="<description>" />
