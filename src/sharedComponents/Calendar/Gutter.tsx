@@ -21,7 +21,7 @@ const TitleGutterGroup = styled.div<customTitleComponentGroupProps>`
     display: flex;
     flex-flow: column nowrap;
     border-bottom: solid 1px transparent;
-    min-height: ${(props) => props.height + 'px' || null};
+    min-height: ${(props) => (props.height ? props.height : 40)}px;
 `;
 
 interface GutterProps {
