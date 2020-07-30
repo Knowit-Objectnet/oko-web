@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeeekCalendar';
+import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
 import { ListView } from '../SharedCalendarComponents/ListView';
 import { Colors, EventInfo } from '../../../types';
 import addDays from 'date-fns/addDays';

@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { EventInfo } from '../../types';
 import { Gutter } from './Gutter';
-import { TimeColumn } from './TimeColumn';
+import { TimeSlotColumn } from './TimeSlotColumn';
 import add from 'date-fns/add';
 import { useMemo } from 'react';
 import isSameDay from 'date-fns/isSameDay';
@@ -98,7 +98,7 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
                     {dates.map((date, index) =>
                         useMemo(
                             () => (
-                                <TimeColumn
+                                <TimeSlotColumn
                                     key={date.toString()}
                                     date={dates[index]}
                                     title={date.toLocaleString('nb-NO', {

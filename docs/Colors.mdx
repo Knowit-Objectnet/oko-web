@@ -1,0 +1,228 @@
+---
+name: Colors
+---
+
+import { Playground, Props } from 'docz';
+import styled from 'styled-components';
+import { Colors } from '../src/types';
+
+# Colors
+
+These are the colors from the oslo color scheme that the designers use.
+
+NB: Do not use the hex codes directly in the code, use the enum 'Colors' (found in the types file) instead, so f.ex. Colors.Red.
+
+## Hex codes
+<Playground>
+  {() => {
+    Colors = {
+      DarkBlue: '#2A2859',
+      Blue: '#6FE9FF',
+      LightBlue: '#B3F5FF',
+      DarkGreen: '#034B45',
+      Green: '#43F8B6',
+      LightGreen: '#C7F6C9',
+      Red: '#FF8274',
+      Yellow: '#F9C66B',
+      LightBeige: '#F8F0DD',
+      DarkBegie: '#D0BFAE',
+      Black: '#2C2C2C',
+      White: '#FFFFFF',
+    }
+    return null;
+  }}
+</Playground>
+
+## Visual
+
+### Dark Blue
+
+<Playground>
+  {() => {
+    const DarkBlue = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.DarkBlue};
+    `;
+    return (
+      <DarkBlue />
+    )
+  }}
+</Playground>
+
+### Blue
+
+<Playground>
+  {() => {
+    const Blue = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.Blue};
+    `;
+    return (
+      <Blue />
+    )
+  }}
+</Playground>
+
+### Light Blue
+
+<Playground>
+  {() => {
+    const LightBlue = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.LightBlue};
+    `;
+    return (
+      <LightBlue />
+    )
+  }}
+</Playground>
+
+### Dark Green
+
+<Playground>
+  {() => {
+    const DarkGreen = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.DarkGreen};
+    `;
+    return (
+      <DarkGreen />
+    )
+  }}
+</Playground>
+
+### Green
+
+<Playground>
+  {() => {
+    const Green = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.Green};
+    `;
+    return (
+      <Green />
+    )
+  }}
+</Playground>
+
+### Light Green
+
+<Playground>
+  {() => {
+    const LightGreen = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.LightGreen};
+    `;
+    return (
+      <LightGreen />
+    )
+  }}
+</Playground>
+
+### Red
+
+<Playground>
+  {() => {
+    const Red = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.Red};
+    `;
+    return (
+      <Red />
+    )
+  }}
+</Playground>
+
+### Yellow
+
+<Playground>
+  {() => {
+    const Yellow = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.Yellow};
+    `;
+    return (
+      <Yellow />
+    )
+  }}
+</Playground>
+
+### Light Beige
+
+<Playground>
+  {() => {
+    const LightBeige = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.LightBeige};
+    `;
+    return (
+      <LightBeige />
+    )
+  }}
+</Playground>
+
+### Dark Begie
+
+<Playground>
+  {() => {
+    const DarkBegie = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.DarkBegie};
+    `;
+    return (
+      <DarkBegie />
+    )
+  }}
+</Playground>
+
+### Black
+
+<Playground>
+  {() => {
+    const Black = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.Black};
+    `;
+    return (
+      <Black />
+    )
+  }}
+</Playground>
+
+### White
+
+<Playground>
+  {() => {
+    const White = styled.div`
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: ${Colors.White};
+    `;
+    return (
+      <White />
+    )
+  }}
+</Playground>
