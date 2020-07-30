@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { EventInfo } from '../../types';
 import { Gutter } from './Gutter';
 import { TimeColumn } from './TimeColumn';
-import { WorkingWeekCalendarTitle } from './WorkingWeekCalendarTitle';
+import { WorkingWeekCalendarTitle } from './WorkingWeekCalendarTitle';
 import add from 'date-fns/add';
 import { useMemo } from 'react';
 import isSameDay from 'date-fns/isSameDay';

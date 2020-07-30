@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Colors } from '../../types';
-import isSameDay from 'date-fns/isSameDay'
+import isSameDay from 'date-fns/isSameDay';
 
 const Group = styled.div`
     min-height: 70px;
@@ -50,7 +50,7 @@ export const WorkingWeekCalendarTitle: React.FC<WorkingWeekCalendarTitleProps> =
                 {props.date.toLocaleString('no-NB', { weekday: 'short' }).slice(0, 1).toUpperCase() +
                     props.date.toLocaleString('no-NB', { weekday: 'short' }).slice(1)}
             </div>
-          <DateText isToday={isSameDay(new Date(), props.date)}>{props.date.getDate()}</DateText>
+            <DateText isToday={isSameDay(new Date(), props.date)}>{props.date.getDate()}</DateText>
         </Slot>
     </Group>
 );
