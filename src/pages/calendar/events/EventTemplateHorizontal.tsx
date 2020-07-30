@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Colors } from '../../../types';
-import { Edit } from '@styled-icons/material/Edit';
+import Pencil from '../../../assets/Pencil.svg';
 
 const Wrapper = styled.div`
     display: flex;
@@ -48,7 +48,7 @@ export const EventTemplateHorizontal: React.FC<HorizontalEventTemplateProps> = (
             <h2>{props.title}</h2>
             {props.isEditing || !props.showEditSymbol ? null : (
                 <EditTitle>
-                    <Edit size="1em" onClick={props.onEditClick} />
+                    <Pencil height="1em" onClick={props.onEditClick} />
                 </EditTitle>
             )}
         </Title>

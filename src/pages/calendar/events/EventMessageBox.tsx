@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { InfoCircle } from '@styled-icons/boxicons-solid/InfoCircle';
+import Warning from '../../../assets/Warning.svg';
 import { Colors } from '../../../types';
 
 const Wrapper = styled.div`
@@ -12,8 +12,9 @@ const Wrapper = styled.div`
     padding: 10px;
 `;
 
-const Info = styled(InfoCircle)`
+const StyledWarning = styled(Warning)`
     margin-right: 5px;
+    height: 1em;
 `;
 
 const Title = styled.span`
@@ -64,7 +65,7 @@ export const EventMessageBox: React.FC<MessageInfo> = (props) => {
     return (
         <Wrapper>
             <Title>
-                <Info size="1em" />
+                <StyledWarning />
                 NB
             </Title>
             <Text>{props.text || 'Ingen melding'}</Text>
