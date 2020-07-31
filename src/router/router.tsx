@@ -54,9 +54,14 @@ export const RouterComponent: React.FC = () => {
                             <AuthenticatedRoute
                                 exact={true}
                                 path={`${props.match.url}partners`}
-                                authenticatedRoles={[Roles.Oslo]}
                                 not={<Redirect to="/" />}
                                 is={() => 'Hello partners'}
+                            />
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}stations`}
+                                not={<Redirect to="/" />}
+                                is={() => 'Hello stations'}
                             />
                             <AuthenticatedRoute
                                 exact={true}
@@ -67,24 +72,22 @@ export const RouterComponent: React.FC = () => {
                             />
                             <AuthenticatedRoute
                                 exact={true}
-                                path={`${props.match.url}history`}
-                                authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
-                                not={<Redirect to="/calendar" />}
-                                is={() => 'Hello history'}
-                            />
-                            <AuthenticatedRoute
-                                exact={true}
-                                path={`${props.match.url}info`}
-                                authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
-                                not={<Redirect to="/calendar" />}
-                                is={() => 'Hello info'}
-                            />
-                            <AuthenticatedRoute
-                                exact={true}
                                 path={`${props.match.url}profile`}
-                                authenticatedRoles={[Roles.Oslo]}
                                 not={<Redirect to="/" />}
                                 is={<MyPage />}
+                            />
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}notifications`}
+                                authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
+                                not={<Redirect to="/" />}
+                                is={() => 'Hello notifications'}
+                            />
+                            <AuthenticatedRoute
+                                exact={true}
+                                path={`${props.match.url}settings`}
+                                not={<Redirect to="/" />}
+                                is={() => 'Hello settings'}
                             />
                         </Dashboard>
                     )}
