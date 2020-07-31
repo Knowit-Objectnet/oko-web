@@ -5,10 +5,14 @@ import { Link as LocalLink } from 'react-router-dom';
 import { Colors, Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import { useHistory } from 'react-router-dom';
+import List from '../../assets/List.svg';
+import Calendar from '../../assets/Calendar.svg';
+import Chart from '../../assets/Chart.svg';
 import People from '../../assets/People.svg';
 import Location from '../../assets/Location.svg';
 import Plus from '../../assets/Plus.svg';
 import Weight from '../../assets/Weight.svg';
+import Bell from '../../assets/Bell.svg';
 import PencilRec from '../../assets/PencilRec.svg';
 import User from '../../assets/Default_profile_pic.svg';
 import Cog from '../../assets/Cog.svg';
@@ -72,6 +76,24 @@ const Link = styled(LocalLink)<LinkProps>`
     font-weight: bold;
 `;
 
+const StyledList = styled(List)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
+const StyledCalendar = styled(Calendar)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
+const StyledChart = styled(Chart)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
 const StyledPeople = styled(People)`
     fill: inherit;
     width: 1.5em;
@@ -91,6 +113,12 @@ const StyledPlus = styled(Plus)`
 `;
 
 const StyledWeight = styled(Weight)`
+    fill: inherit;
+    width: 1.5em;
+    margin-right: 10px;
+`;
+
+const StyledBell = styled(Bell)`
     fill: inherit;
     width: 1.5em;
     margin-right: 10px;
@@ -140,6 +168,19 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                         ...linkTransitionStyles[state],
                                     }}
                                 >
+                                    {keycloak.hasRealmRole(Roles.Oslo) ? (
+                                        <Link current={history.location.pathname} to="/">
+                                            <StyledList /> Oversikt
+                                        </Link>
+                                    ) : null}
+                                    <Link current={history.location.pathname} to="/calendar">
+                                        <StyledCalendar /> Kalender
+                                    </Link>
+                                    {keycloak.hasRealmRole(Roles.Oslo) ? (
+                                        <Link current={history.location.pathname} to="/statistics">
+                                            <StyledChart /> Statistikk
+                                        </Link>
+                                    ) : null}
                                     <Link current={history.location.pathname} to="/partners">
                                         <StyledPeople /> Sam.partnere
                                     </Link>
@@ -164,6 +205,11 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                     {keycloak.hasRealmRole(Roles.Partner) ? (
                                         <Link current={history.location.pathname} to="/reporting">
                                             <StyledWeight /> Vektuttak
+                                        </Link>
+                                    ) : null}
+                                    {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
+                                        <Link current={history.location.pathname} to="/notifications">
+                                            <StyledBell /> Varsler
                                         </Link>
                                     ) : null}
                                     <Link current={history.location.pathname} to="/">
