@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {ApiLocation, apiUrl, EventInfo, Roles, SlotInfo} from '../../../types';
+import { ApiLocation, apiUrl, EventInfo, Roles, SlotInfo } from '../../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
 import { WeekMenu } from '../WeekMenu';
-import useSWR from "swr";
-import {fetcher} from "../../../utils/fetcher";
+import useSWR from 'swr';
+import { fetcher } from '../../../utils/fetcher';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
