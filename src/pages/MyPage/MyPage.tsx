@@ -98,6 +98,54 @@ export const MyPage: React.FC = () => {
         }
     };
 
+    // TODO: Update to support opening/closing & closed on individual days
+    const submitNewLocation = async (
+        name: string,
+        monday: [Date, Date, boolean],
+        tuesday: [Date, Date, boolean],
+        wednesday: [Date, Date, boolean],
+        thursday: [Date, Date, boolean],
+        friday: [Date, Date, boolean],
+        saturday: [Date, Date, boolean],
+        sunday: [Date, Date, boolean],
+    ) => {
+        try {
+            // Turn the data into the correct format for the API
+            const data = {
+                name: name,
+                openingTime: `${monday[0]
+                    .getHours()
+                    .toString()
+                    .padStart(2, '0')}:${monday[0]
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, '0')}:${monday[0].getSeconds().toString().padStart(2, '0')}Z`,
+                closingTime: `${monday[1]
+                    .getHours()
+                    .toString()
+                    .padStart(2, '0')}:${monday[1]
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, '0')}:${monday[1].getSeconds().toString().padStart(2, '0')}Z`,
+            };
+
+            // Post to the api, show alert that it was successful if it was and close the modal
+            await PostToAPI(`${apiUrl}/stations`, data, keycloak.token);
+            alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
+
+            setShowModal(false);
+        } catch (err) {
+            // Show appropriate error alert if something went wrong.
+            if (err instanceof FetchError && err.code === 409) {
+                alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
+                    type: types.ERROR,
+                });
+            } else {
+                alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
+            }
+        }
+    };
+
     // Function to show new partner ui modal
     const showNewPartner = () => {
         setModalContent(<NewPartner onSubmit={submitNewPartner} />);
@@ -106,7 +154,7 @@ export const MyPage: React.FC = () => {
 
     // Function to show new location ui modal
     const showNewLocation = () => {
-        setModalContent(<NewLocation />);
+        setModalContent(<NewLocation onSubmit={submitNewLocation} />);
         setShowModal(true);
     };
 
