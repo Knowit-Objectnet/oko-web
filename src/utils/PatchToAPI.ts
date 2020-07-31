@@ -1,3 +1,5 @@
+import { FetchError } from './FetchError';
+
 export async function PatchToAPI(url: string, data: Record<string, unknown>, token: string): Promise<any> {
     const response = await fetch(url, {
         method: 'PATCH',
@@ -20,11 +22,13 @@ export async function PatchToAPI(url: string, data: Record<string, unknown>, tok
 
     // Throw appropriate error if the post was not successful
     if (response.status === 500) {
-        throw new Error('Internal Server Error');
-    } else if (response.status === 401 || response.status === 403) {
-        throw new Error('Invalid token');
+        throw new FetchError('Internal Server Error', 500);
+    } else if (response.status === 401) {
+        throw new FetchError('Invalid token', 401);
+    } else if (response.status === 403) {
+        throw new FetchError('Forbidden, insufficient permissions', 403);
     } else if (response.status === 404) {
-        throw new Error('Event not found');
+        throw new FetchError('Data not found', 404);
     } else {
         throw new Error('Unexpected error');
     }

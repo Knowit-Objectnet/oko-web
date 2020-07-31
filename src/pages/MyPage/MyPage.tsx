@@ -14,6 +14,7 @@ import { PostToAPI } from '../../utils/PostToAPI';
 import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
+import { FetchError } from '../../utils/FetchError';
 
 const Wrapper = styled.div`
     display: flex;
@@ -97,7 +98,13 @@ export const MyPage: React.FC = () => {
 
             setShowModal(false);
         } catch (err) {
-            alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
+            if (err instanceof FetchError && err.code === 409) {
+                alert.show('En partner med det navnet eksisterer allerede, vennligst velg et annet navn', {
+                    type: types.ERROR,
+                });
+            } else {
+                alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
+            }
         }
     };
 

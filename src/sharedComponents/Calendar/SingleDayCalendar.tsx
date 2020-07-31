@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { EventInfo, SlotInfo } from '../../types';
 import { Gutter } from './Gutter';
-import { TimeColumn } from './TimeColumn';
+import { TimeSlotColumn } from './TimeSlotColumn';
 import { useMemo } from 'react';
 
 const Wrapper = styled.div`
@@ -77,7 +77,7 @@ export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({
                     {props.columns.map((column, index) =>
                         useMemo(
                             () => (
-                                <TimeColumn
+                                <TimeSlotColumn
                                     key={column ? column : 'col' + index}
                                     date={props.date}
                                     title={column}

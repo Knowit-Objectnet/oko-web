@@ -69,6 +69,7 @@ const Event = styled.div<EventProps>`
 `;
 
 const EventText = styled.span`
+    text-align: center;
     text-overflow: ellipsis;
     overflow: hidden;
 `;
@@ -143,7 +144,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
         widthEvents.sort((eventA, eventB) => eventA.start.getTime() - eventB.start.getTime());
 
         // Step 6: Assign Events to the earliest available slot ( to find the slot for each of the events)
-        const orderedEvents = widthEvents.map((event) => {
+        const assignedEvents = widthEvents.map((event) => {
             // Get the start of the event
             const startPos = Math.ceil((event.start.getTime() - props.deltaStart.getTime()) / 60000);
             // Get the length of the event
@@ -163,8 +164,12 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
             });
             // Step 6.5: When assigning, also assign it to the cells below as to avoid overlap when reassigning
             for (let i = startPos; i < startPos + length; i++) {
+                if (matrix[i].length < wLen) {
+                    matrix[i] = [...Array(matrix[i].length).fill(1), ...Array(wLen - matrix[i].length).fill(0)];
+                }
                 matrix[i][wPos] = 1;
             }
+
             // Return the event with it's wPos, wLen and length
             return {
                 ...event,
@@ -174,7 +179,31 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
             };
         });
 
-        return orderedEvents;
+        // Step 7: Assign a new width if needed as we now know how the events are positioned in slots
+        return assignedEvents.map((event) => {
+            // Get the start of the event
+            const startPos = Math.ceil((event.start.getTime() - props.deltaStart.getTime()) / 60000);
+
+            // Save a old value of the wLen to check if its updated later
+            const oldWLen = event.wLen.valueOf();
+
+            // Loop over the elements and give it the wLen of the longest filled row
+            for (let i = startPos; i < startPos + event.length; i++) {
+                if (matrix[i].every((el) => el === 1) && matrix[i].length > event.wLen) {
+                    event.wLen = matrix[i].length;
+                }
+            }
+
+            // If the wLen is not updated then we keep the old width, as there is no reason to change,
+            // but if it's changed then we need to update the width to make it fit into the new length
+            const newWidth = oldWLen === event.wLen ? event.width : (1 / event.wLen) * 100;
+
+            // Return the event with it's updated width
+            return {
+                ...event,
+                width: newWidth,
+            };
+        });
     };
 
     // On event click function

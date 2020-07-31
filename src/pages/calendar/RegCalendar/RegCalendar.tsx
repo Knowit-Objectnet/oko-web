@@ -5,6 +5,8 @@ import { useKeycloak } from '@react-keycloak/web';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
+import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
+import { WeekMenu } from '../WeekMenu';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -38,9 +40,11 @@ const AgendaWrapper = styled.div`
 
 interface WeekCalendarProps {
     date: Date;
+    isToggled: boolean;
     newEvent: (start: Date, end: Date) => void;
     onSelectEvent: (Event: EventInfo) => void;
     onSelectSlot: (start: Date, end: Date, isOslo: boolean) => void;
+    onWeekChange: (delta: -1 | 1) => void;
     events: Array<EventInfo>;
 }
 
@@ -50,6 +54,11 @@ interface WeekCalendarProps {
 export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
+
+    // min and max times for the calendar
+    const date = new Date(props.date);
+    const min = new Date(date.setHours(7, 0, 0, 0));
+    const max = new Date(date.setHours(20, 0, 0, 0));
 
     // Function that handles an event click in the calendar. It displays the Event in a modal
     const onSelectEvent = (event: EventInfo) => {
@@ -101,55 +110,68 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
 
     return (
         <>
-            <CalendarWrapper>
-                <OverflowWrapper>
-                    <AgendaWrapper>
-                        <ExpandableAgenda
-                            date={day1}
-                            columns={[...day1Events.keys()]}
-                            events={[...day1Events.values()]}
-                            onSelectSlot={onSelectSlot}
-                            onSelectEvent={onSelectEvent}
-                        />
-                    </AgendaWrapper>
-                    <AgendaWrapper>
-                        <ExpandableAgenda
-                            date={day2}
-                            columns={[...day2Events.keys()]}
-                            events={[...day2Events.values()]}
-                            onSelectSlot={onSelectSlot}
-                            onSelectEvent={onSelectEvent}
-                        />
-                    </AgendaWrapper>
-                    <AgendaWrapper>
-                        <ExpandableAgenda
-                            date={day3}
-                            columns={[...day3Events.keys()]}
-                            events={[...day3Events.values()]}
-                            onSelectSlot={onSelectSlot}
-                            onSelectEvent={onSelectEvent}
-                        />
-                    </AgendaWrapper>
-                    <AgendaWrapper>
-                        <ExpandableAgenda
-                            date={day4}
-                            columns={[...day4Events.keys()]}
-                            events={[...day4Events.values()]}
-                            onSelectSlot={onSelectSlot}
-                            onSelectEvent={onSelectEvent}
-                        />
-                    </AgendaWrapper>
-                    <AgendaWrapper>
-                        <ExpandableAgenda
-                            date={day5}
-                            columns={[...day5Events.keys()]}
-                            events={[...day5Events.values()]}
-                            onSelectSlot={onSelectSlot}
-                            onSelectEvent={onSelectEvent}
-                        />
-                    </AgendaWrapper>
-                </OverflowWrapper>
-            </CalendarWrapper>
+            {props.isToggled ? (
+                <>
+                    <WeekMenu date={props.date} changeWeek={props.onWeekChange} />
+                    <WorkingWeekCalendar
+                        date={props.date}
+                        min={min}
+                        max={max}
+                        events={props.events}
+                        onSelectEvent={props.onSelectEvent}
+                    />
+                </>
+            ) : (
+                <CalendarWrapper>
+                    <OverflowWrapper>
+                        <AgendaWrapper>
+                            <ExpandableAgenda
+                                date={day1}
+                                columns={[...day1Events.keys()]}
+                                events={[...day1Events.values()]}
+                                onSelectSlot={onSelectSlot}
+                                onSelectEvent={onSelectEvent}
+                            />
+                        </AgendaWrapper>
+                        <AgendaWrapper>
+                            <ExpandableAgenda
+                                date={day2}
+                                columns={[...day2Events.keys()]}
+                                events={[...day2Events.values()]}
+                                onSelectSlot={onSelectSlot}
+                                onSelectEvent={onSelectEvent}
+                            />
+                        </AgendaWrapper>
+                        <AgendaWrapper>
+                            <ExpandableAgenda
+                                date={day3}
+                                columns={[...day3Events.keys()]}
+                                events={[...day3Events.values()]}
+                                onSelectSlot={onSelectSlot}
+                                onSelectEvent={onSelectEvent}
+                            />
+                        </AgendaWrapper>
+                        <AgendaWrapper>
+                            <ExpandableAgenda
+                                date={day4}
+                                columns={[...day4Events.keys()]}
+                                events={[...day4Events.values()]}
+                                onSelectSlot={onSelectSlot}
+                                onSelectEvent={onSelectEvent}
+                            />
+                        </AgendaWrapper>
+                        <AgendaWrapper>
+                            <ExpandableAgenda
+                                date={day5}
+                                columns={[...day5Events.keys()]}
+                                events={[...day5Events.values()]}
+                                onSelectSlot={onSelectSlot}
+                                onSelectEvent={onSelectEvent}
+                            />
+                        </AgendaWrapper>
+                    </OverflowWrapper>
+                </CalendarWrapper>
+            )}
         </>
     );
 };

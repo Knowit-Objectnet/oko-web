@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Cross } from '@styled-icons/icomoon/Cross';
+import Cross from '../assets/Cross.svg';
 
 const Background = styled.div`
     z-index: 60;
@@ -50,6 +50,7 @@ const StyledCross = styled(Cross)`
     position: absolute;
     top: 15px;
     right: 15px;
+    height: 1em;
 `;
 
 interface ModalProps {
@@ -89,7 +90,7 @@ export const Modal: React.FC<ModalProps> = (props) => {
                 maxHeight={props.maxHeight}
                 onClick={stopBackgroundCall}
             >
-                <StyledCross size="1em" onClick={onExitClick} />
+                <StyledCross onClick={onExitClick} />
                 {props.content ? props.content instanceof String ? <p>{props.content}</p> : props.content : null}
             </Content>
         </Background>

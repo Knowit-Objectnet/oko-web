@@ -1,0 +1,35 @@
+---
+name: Submission
+menu: Events
+---
+
+import { Playground, Props } from 'docz';
+import { EventSubmission } from '../../src/pages/calendar/events/EventSubmission';
+
+# Submission
+
+## Props
+
+<Props of={EventSubmission} />
+
+## Basic usage
+
+<Playground>
+  {() => {
+    const nop = () => {/* Do something */};
+    return (
+      <EventSubmission onCancel={nop} onSubmit={nop} />
+    )
+  }}
+</Playground>
+
+## Custom text
+
+<Playground>
+  {() => {
+    const nop = () => {/* Do something */};
+    return (
+      <EventSubmission cancelText="🐰" submitText="🎤"  onCancel={nop} onSubmit={nop} />
+    )
+  }}
+</Playground>

@@ -1,0 +1,62 @@
+---
+name: Templates
+menu: Events
+---
+
+import { Playground, Props } from 'docz';
+import { EventTemplateHorizontal } from '../../src/pages/calendar/events/EventTemplateHorizontal';
+import { EventTemplateVertical } from '../../src/pages/calendar/events/EventTemplateVertical';
+
+# Templates
+
+## Horizontal template
+
+### Props
+
+<Props of={EventTemplateHorizontal} />
+
+### Without edit button
+
+<Playground>
+  {() => {
+    return (
+      <EventTemplateHorizontal title="This is a test title and korone is best">Hello world</EventTemplateHorizontal>
+    )
+  }}
+</Playground>
+
+### With edit button
+
+<Playground>
+  {() => {
+    return (
+      <EventTemplateHorizontal title="This is a test title and korone is best" showEditSymbol={true}>Hello world</EventTemplateHorizontal>
+    )
+  }}
+</Playground>
+
+## Vertical template
+
+### Props
+
+<Props of={EventTemplateVertical} />
+
+### Without edit button
+
+<Playground>
+  {() => {
+    return (
+      <EventTemplateVertical title="This is a test title and korone is best">Hello world</EventTemplateVertical>
+    )
+  }}
+</Playground>
+
+### With edit button
+
+<Playground>
+  {() => {
+    return (
+      <EventTemplateVertical title="This is a test title and korone is best" showEditSymbol={true}>Hello world</EventTemplateVertical>
+    )
+  }}
+</Playground>

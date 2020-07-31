@@ -44,6 +44,8 @@ const Select = styled.select`
 
 const DaySelection = styled.div`
     display: flex;
+    width: 100%;
+    justify-content: space-between;
 `;
 
 interface DayProps {
@@ -63,10 +65,6 @@ const Day = styled.div<DayProps>`
     border: 2px solid ${Colors.Blue};
     background-color: ${(props) => (props.selected ? Colors.Blue : Colors.White)};
     user-select: none;
-
-    &:not(:last-child) {
-        margin-right: 10px;
-    }
 `;
 
 const StyledTimeRangePicker = styled(TimeRangePicker)`

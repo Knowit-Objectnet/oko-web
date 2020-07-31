@@ -48,6 +48,7 @@ interface TimeColumnProps {
     max: Date;
     step: number;
     title?: string;
+    titleComponent?: React.ElementType;
     colNum: number;
     events?: Array<EventInfo>;
     selectable: boolean;
@@ -56,7 +57,7 @@ interface TimeColumnProps {
     onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
 }
 
-export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
+export const TimeSlotColumn: React.FC<TimeColumnProps> = (props) => {
     // Get min and max that is tuned to the props.date's date
     const min = new Date(props.min);
     min.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
@@ -273,7 +274,11 @@ export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
 
     return (
         <Wrapper {...wrapperFunctions}>
-            {props.title ? <ColumnTitle title={props.title} /> : null}
+            {props.titleComponent ? (
+                <props.titleComponent date={props.date} />
+            ) : props.title ? (
+                <ColumnTitle title={props.title} />
+            ) : null}
             <EventsSlotsWrapper>
                 <Column {...columnFunctions}>{groups}</Column>
                 <EventsColumn

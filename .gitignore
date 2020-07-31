@@ -12,6 +12,7 @@ cypress/screenshots
 public/bundle.js
 build
 dist
+.docz
 
 # misc
 .idea
