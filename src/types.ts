@@ -91,4 +91,4 @@ export enum Colors {
 }
 
 // Url to API
-export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging';
+export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging/backend';
