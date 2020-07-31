@@ -83,7 +83,7 @@ export const MyPage: React.FC = () => {
         }
 
         try {
-            await PostToAPI(`${apiUrl}/partner/partners/`, data, keycloak.token);
+            await PostToAPI(`${apiUrl}/partners/`, data, keycloak.token);
             alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
 
             setShowModal(false);
