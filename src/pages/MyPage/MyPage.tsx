@@ -2,12 +2,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
-import {ApiLocation, ApiPartner, apiUrl, Colors, Roles} from '../../types';
+import { ApiLocation, ApiPartner, apiUrl, Colors, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
 import { Modal } from '../../sharedComponents/Modal';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { NewPartner } from './NewPartner';
 import { NewLocation } from './NewLocation';
 import { PostToAPI } from '../../utils/PostToAPI';
@@ -15,8 +15,8 @@ import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
-import useSWR from "swr";
-import {fetcher} from "../../utils/fetcher";
+import useSWR from 'swr';
+import { fetcher } from '../../utils/fetcher';
 
 const Wrapper = styled.div`
     display: flex;
@@ -202,8 +202,8 @@ export const MyPage: React.FC = () => {
                     </Header>
                     {keycloak.hasRealmRole(Roles.Partner) ? (
                         <AboutPartner
-                            name={partnerInfo ? partnerInfo.name : '<laster inn...>'}
-                            description={partnerInfo ? partnerInfo.description : ''}
+                            name={partnerInfo ? partnerInfo.name : keycloak.tokenParsed.groups[0] || '<laster inn...>'}
+                            description={partnerInfo ? partnerInfo.description : 'Laster inn...'}
                         />
                     ) : null}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
