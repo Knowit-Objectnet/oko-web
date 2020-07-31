@@ -2,12 +2,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
-import { apiUrl, Colors, Roles } from '../../types';
+import {ApiLocation, ApiPartner, apiUrl, Colors, Roles} from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
 import { Modal } from '../../sharedComponents/Modal';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { NewPartner } from './NewPartner';
 import { NewLocation } from './NewLocation';
 import { PostToAPI } from '../../utils/PostToAPI';
@@ -15,6 +15,8 @@ import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
+import useSWR from "swr";
+import {fetcher} from "../../utils/fetcher";
 
 const Wrapper = styled.div`
     display: flex;
@@ -74,9 +76,22 @@ export const MyPage: React.FC = () => {
     // State for handling modal
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
+    const [partnerInfo, setPartnerInfo] = useState<ApiPartner | undefined>(undefined);
 
     // History
     const history = useHistory();
+
+    // If the user is a partner, get their info
+    if (keycloak.tokenParsed.GroupID && keycloak.hasRealmRole(Roles.Partner)) {
+        const { data: apiPartnerInfo } = useSWR<ApiPartner>(
+            `${apiUrl}/partners/${keycloak.tokenParsed.GroupID}`,
+            fetcher,
+        );
+
+        useEffect(() => {
+            setPartnerInfo(apiPartnerInfo);
+        }, [apiPartnerInfo]);
+    }
 
     // Logout function for the logout button click
     const onLogoutClick = () => {
@@ -186,7 +201,10 @@ export const MyPage: React.FC = () => {
                         <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
                     </Header>
                     {keycloak.hasRealmRole(Roles.Partner) ? (
-                        <AboutPartner name="<partner>" description="<description>" />
+                        <AboutPartner
+                            name={partnerInfo ? partnerInfo.name : '<laster inn...>'}
+                            description={partnerInfo ? partnerInfo.description : ''}
+                        />
                     ) : null}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
                     {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
