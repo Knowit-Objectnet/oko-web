@@ -128,7 +128,7 @@ export const CalendarPage: React.FC = () => {
     // Events fetched from the api
     // Contains parameters to only get events in date range specified above and only from the accounts
     // station location
-    const { data: apiEvents, isValidating, mutate } = useSWR<ApiEvent[]>([url, keycloak.token], fetcher);
+    const { data: apiEvents, isValidating, mutate } = useSWR<ApiEvent[]>(url, fetcher);
     const [events, setEvents] = useState<Array<EventInfo>>([]);
 
     useEffect(() => {

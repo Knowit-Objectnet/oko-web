@@ -68,12 +68,10 @@ interface LocationSelectorProps {
  * Component for selecting location
  */
 export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
     // State
     const [toggled, setToggled] = useState(true);
 
-    let { data: locations } = useSWR<ApiLocation[]>([`${apiUrl}/stations`, keycloak.token], fetcher);
+    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
     locations = locations && locations.length !== 0 ? locations : [];
 
     const onToggleClick = () => {

@@ -62,10 +62,10 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: locations } = useSWR<ApiLocation[]>([`${apiUrl}/stations`, keycloak.token], fetcher);
+    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
     locations = locations && locations.length !== 0 ? locations : [];
     // Valid partners fetched from api
-    let { data: partners } = useSWR<ApiPartner[]>([`${apiUrl}/partners/`, keycloak.token], fetcher);
+    let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
     partners = partners || [];
 
     // State
