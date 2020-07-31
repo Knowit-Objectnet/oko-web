@@ -10,4 +10,7 @@ module.exports = {
     "<rootDir>/jest.setup.ts",
     'jest-canvas-mock'
   ],
+  testPathIgnorePatterns: [
+    "<rootDir>/.docz",
+  ]
 };

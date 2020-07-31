@@ -57,7 +57,7 @@ interface TimeColumnProps {
     onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
 }
 
-export const TimeColumn: React.FC<TimeColumnProps> = (props) => {
+export const TimeSlotColumn: React.FC<TimeColumnProps> = (props) => {
     // Get min and max that is tuned to the props.date's date
     const min = new Date(props.min);
     min.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());

@@ -1,0 +1,32 @@
+---
+name: Option - Category
+menu: Events
+---
+
+import { Playground, Props } from 'docz';
+import { EventOptionCategory } from '../../src/pages/calendar/events/EventOptionCategory';
+
+# Option - Category
+
+## Props
+
+<Props of={EventOptionCategory} />
+
+## Basic usage
+
+<Playground>
+  {() => {
+    const [selectedCategory, setSelectedCategory] = React.useState(0);
+    const categories = ['Møbler', 'tekstil', 'elekrontikk'];
+    const [isEditing, setIsEditing] = React.useState(false);
+    const onChange = (e) => {
+      setSelectedCategory(e.currentTarget.value);
+    };
+    return (
+      <>
+        <button onClick={() => {setIsEditing(!isEditing)}}>Edit</button>
+        <EventOptionCategory onChange={onChange} selectedCategory={selectedCategory} categories={categories} isEditing={isEditing} />
+      </>
+    )
+  }}
+</Playground>

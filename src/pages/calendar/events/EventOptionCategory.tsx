@@ -41,7 +41,9 @@ export const EventOptionCategory: React.FC<EventOptionDateRangeProps> = (props) 
                 ))}
             </Select>
         ) : (
-            <GrayBox>{props.selectedCategory ? props.categories[props.selectedCategory].toUpperCase() : 'n/a'}</GrayBox>
+            <GrayBox>
+                {props.selectedCategory !== undefined ? props.categories[props.selectedCategory].toUpperCase() : 'n/a'}
+            </GrayBox>
         )}
     </EventOption>
 );

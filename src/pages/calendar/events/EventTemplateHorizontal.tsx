@@ -1,35 +1,24 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Colors } from '../../../types';
-import { Edit } from '@styled-icons/material/Edit';
+import Pencil from '../../../assets/Pencil.svg';
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background-color: ${Colors.LightBeige};
+    background-color: ${Colors.White};
+    overflow: visible;
 `;
 
 const Title = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
-    padding: 10px 20px;
+    background-color: ${Colors.LightBeige};
+    padding: 0px 20px;
+    margin-bottom: 25px;
     box-sizing: border-box;
-    margin-bottom: 15px;
-    font-weight: bold;
-    font-size: 16px;
-    line-height: 22px;
-`;
-
-const H2 = styled.div`
-    margin-top: 0px;
-`;
-
-const Content = styled.div`
-    padding: 0px 35px 35px;
-    display: flex;
-    flex-direction: column;
 `;
 
 const EditTitle = styled.div`
@@ -38,7 +27,11 @@ const EditTitle = styled.div`
     margin-left: 20px;
 `;
 
-interface VerticalEventTemplateProps {
+const Body = styled.div`
+    padding: 0px 25px 25px 25px;
+`;
+
+interface HorizontalEventTemplateProps {
     children: React.ReactNode;
     title: string;
     showEditSymbol: boolean;
@@ -49,16 +42,16 @@ interface VerticalEventTemplateProps {
 /**
  * General event component template
  */
-export const VerticalEventTemplate: React.FC<VerticalEventTemplateProps> = (props) => (
+export const EventTemplateHorizontal: React.FC<HorizontalEventTemplateProps> = (props) => (
     <Wrapper>
         <Title>
-            <H2>{props.title}</H2>
+            <h2>{props.title}</h2>
             {props.isEditing || !props.showEditSymbol ? null : (
                 <EditTitle>
-                    <Edit size="1em" onClick={props.onEditClick} />
+                    <Pencil height="1em" onClick={props.onEditClick} />
                 </EditTitle>
             )}
         </Title>
-        <Content>{props.children}</Content>
+        <Body>{props.children}</Body>
     </Wrapper>
 );
