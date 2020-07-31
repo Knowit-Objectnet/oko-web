@@ -45,8 +45,8 @@ interface NewEventProps {
                 interval?: number;
             };
         },
-        stationName: string,
-        partnerName: string,
+        station: ApiLocation,
+        partner: ApiPartner,
     ) => void;
 }
 
@@ -208,7 +208,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             }
         }
 
-        props.addEvent(data, location.name, partner.name);
+        props.addEvent(data, location, partner);
     };
 
     return (

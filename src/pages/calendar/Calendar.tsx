@@ -8,7 +8,7 @@ import { Event } from './events/Event';
 import { ExtraEvent } from './events/ExtraEvent';
 import { NewEvent } from './events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { ApiEvent, apiUrl, EventInfo, Roles } from '../../types';
+import { ApiEvent, ApiLocation, ApiPartner, apiUrl, EventInfo, Roles } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
@@ -292,8 +292,8 @@ export const CalendarPage: React.FC = () => {
                 interval?: number;
             };
         },
-        stationName: string,
-        partnerName: string,
+        station: ApiLocation,
+        partner: ApiPartner,
     ) => {
         try {
             if (apiEvents) {
@@ -302,14 +302,8 @@ export const CalendarPage: React.FC = () => {
                     startDateTime: data.startDateTime,
                     endDateTime: data.endDateTime,
                     id: -1,
-                    partner: {
-                        id: data.partnerId,
-                        name: partnerName,
-                    },
-                    station: {
-                        id: data.stationId,
-                        name: stationName,
-                    },
+                    partner: partner,
+                    station: station,
                     recurrenceRule: data.recurrenceRule
                         ? {
                               id: -1,
