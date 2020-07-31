@@ -62,26 +62,22 @@ export const Navigation: React.FC = () => {
                 </>
             ) : null}
             {keycloak.hasRealmRole(Roles.Partner) ? (
-                <>
-                    <NavElement
-                        text={'Vektuttak'}
-                        icon={Weight}
-                        location={'/reporting'}
-                        selected={history.location.pathname.slice(1) === 'reporting'}
-                        onClick={onClick}
-                    />
-                </>
+                <NavElement
+                    text={'Vektuttak'}
+                    icon={Weight}
+                    location={'/reporting'}
+                    selected={history.location.pathname.slice(1) === 'reporting'}
+                    onClick={onClick}
+                />
             ) : null}
             {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
-                <>
-                    <NavElement
-                        text={'Varsler'}
-                        icon={Bell}
-                        location={'/notifications'}
-                        selected={history.location.pathname.slice(1) === 'notifications'}
-                        onClick={onClick}
-                    />
-                </>
+                <NavElement
+                    text={'Varsler'}
+                    icon={Bell}
+                    location={'/notifications'}
+                    selected={history.location.pathname.slice(1) === 'notifications'}
+                    onClick={onClick}
+                />
             ) : null}
         </Nav>
     );

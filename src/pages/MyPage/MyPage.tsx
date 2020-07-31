@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
-import { apiUrl, Colors } from '../../types';
+import { apiUrl, Colors, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
@@ -11,8 +11,9 @@ import { useState } from 'react';
 import { NewPartner } from './NewPartner';
 import { NewLocation } from './NewLocation';
 import { PostToAPI } from '../../utils/PostToAPI';
-import keycloak from '../../keycloak';
 import { useAlert, types } from 'react-alert';
+import { ShareContactInfo } from './ShareContactInfo';
+import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
 
 const Wrapper = styled.div`
@@ -26,18 +27,25 @@ const Wrapper = styled.div`
     box-sizing: border-box;
 `;
 
-const Content = styled.div`
+interface ContentProps {
+    sideMenuVisible: boolean;
+}
+
+const Content = styled.div<ContentProps>`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    width: ${(props) => (props.sideMenuVisible ? '100%' : '80%')};
 `;
 
 const Header = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    margin-bottom: 45px;
+    width: 100%;
 `;
 
 const DefaultProfilePicture = styled(Default)`
@@ -47,7 +55,7 @@ const DefaultProfilePicture = styled(Default)`
 `;
 
 const LogoutButton = styled.button`
-    margin-left: 35px;
+    margin-left: auto;
     height: 45px;
     width: 100px;
     border: none;
@@ -59,6 +67,8 @@ const LogoutButton = styled.button`
  * Profile component to view your information
  */
 export const MyPage: React.FC = () => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
     // Alert dispatcher
     const alert = useAlert();
     // State for handling modal
@@ -121,15 +131,21 @@ export const MyPage: React.FC = () => {
                 />
             ) : null}
             <Wrapper>
-                <Content>
+                <Content sideMenuVisible={keycloak.hasRealmRole(Roles.Oslo)}>
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>
                         <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
                     </Header>
+                    {keycloak.hasRealmRole(Roles.Partner) ? (
+                        <AboutPartner name="<partner>" description="<description>" />
+                    ) : null}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
+                    {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
                 </Content>
-                <SideMenu newPartnerClick={showNewPartner} newLocationClick={showNewLocation} />
+                {keycloak.hasRealmRole(Roles.Oslo) ? (
+                    <SideMenu newPartnerClick={showNewPartner} newLocationClick={showNewLocation} />
+                ) : null}
             </Wrapper>
         </>
     );
