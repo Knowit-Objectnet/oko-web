@@ -110,18 +110,18 @@ export const CalendarPage: React.FC = () => {
 
     let url = '';
     if (keycloak.hasRealmRole(Roles.Ambassador)) {
-        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&station-id=${
+        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&stationId=${
             keycloak.tokenParsed.GroupID
         }`;
     } else if (keycloak.hasRealmRole(Roles.Partner)) {
-        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}&${
+        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&${
             selectedLocation === -1 || !isToggled
-                ? 'partner-id=' + keycloak.tokenParsed.GroupID
-                : 'station-id=' + selectedLocation
+                ? 'partnerId=' + keycloak.tokenParsed.GroupID
+                : 'stationId=' + selectedLocation
         }`;
     } else {
-        url = `${apiUrl}/calendar/events/?from-date=${fromDate.toISOString()}&to-date=${toDate.toISOString()}${
-            selectedLocation === -1 ? '' : '&station-id=' + selectedLocation
+        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}${
+            selectedLocation === -1 ? '' : '&stationId=' + selectedLocation
         }`;
     }
 
@@ -283,8 +283,8 @@ export const CalendarPage: React.FC = () => {
         data: {
             startDateTime: string;
             endDateTime: string;
-            station: { id: number };
-            partner: { id: number };
+            stationId: number;
+            partnerId: number;
             recurrenceRule?: {
                 until: string;
                 days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
@@ -303,11 +303,11 @@ export const CalendarPage: React.FC = () => {
                     endDateTime: data.endDateTime,
                     id: -1,
                     partner: {
-                        id: data.station.id,
+                        id: data.partnerId,
                         name: partnerName,
                     },
                     station: {
-                        id: data.partner.id,
+                        id: data.stationId,
                         name: stationName,
                     },
                     recurrenceRule: data.recurrenceRule
@@ -377,7 +377,7 @@ export const CalendarPage: React.FC = () => {
             }
 
             // Post the event to the backend
-            await PostToAPI(url, data, keycloak.token);
+            await PostToAPI(`${apiUrl}/events`, data, keycloak.token);
 
             // Give user feedback
             alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
@@ -399,7 +399,7 @@ export const CalendarPage: React.FC = () => {
             }
 
             // send a request to the API to update the source
-            await DeleteToAPI(`${apiUrl}/calendar/events/?event-id=${event.resource.eventId}`, keycloak.token);
+            await DeleteToAPI(`${apiUrl}/events?eventId=${event.resource.eventId}`, keycloak.token);
 
             // Give user feedback
             alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
@@ -440,9 +440,9 @@ export const CalendarPage: React.FC = () => {
 
                 // send a request to the API to update the source
                 await DeleteToAPI(
-                    `${apiUrl}/calendar/events/?recurrence-rule-id=${
+                    `${apiUrl}/events?recurrenceRuleId=${
                         event.resource.recurrenceRule?.id
-                    }&from-date=${start.toISOString().slice(0, -2)}&to-date=${end.toISOString().slice(0, -2)}`,
+                    }&fromDate=${start.toISOString().slice(0, -2)}&toDate=${end.toISOString().slice(0, -2)}`,
                     keycloak.token,
                 );
 
@@ -487,7 +487,7 @@ export const CalendarPage: React.FC = () => {
 
             // send a request to the API to update the source
             await PatchToAPI(
-                `${apiUrl}/calendar/events/`,
+                `${apiUrl}/events`,
                 { id: eventId, startDateTime: start.slice(0, -2), endDateTime: end.slice(0, -2) },
                 keycloak.token,
             );

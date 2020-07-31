@@ -51,13 +51,13 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     const { keycloak } = useKeycloak();
 
     // Valid partners fetched from api
-    let { data: partners } = useSWR<ApiPartner[]>([`${apiUrl}/partner/partners/`, keycloak.token], fetcher);
+    let { data: partners } = useSWR<ApiPartner[]>([`${apiUrl}/partners/`, keycloak.token], fetcher);
     partners = partners || [];
 
     // Valid categories fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: categories } = useSWR<string[]>(['/api/categories', keycloak.token], fetcher);
+    let { data: categories } = useSWR<string[]>([`${apiUrl}/categories`, keycloak.token], fetcher);
     categories = categories && categories.length !== 0 ? categories : ['Møbler', 'Bøker', 'Sportsutstyr'];
     // State
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
