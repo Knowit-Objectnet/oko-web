@@ -48,6 +48,7 @@ interface TimeColumnProps {
     max: Date;
     step: number;
     title?: string;
+    titleComponent?: React.ElementType;
     colNum: number;
     events?: Array<EventInfo>;
     selectable: boolean;
@@ -273,7 +274,11 @@ export const TimeSlotColumn: React.FC<TimeColumnProps> = (props) => {
 
     return (
         <Wrapper {...wrapperFunctions}>
-            {props.title ? <ColumnTitle title={props.title} /> : null}
+            {props.titleComponent ? (
+                <props.titleComponent date={props.date} />
+            ) : props.title ? (
+                <ColumnTitle title={props.title} />
+            ) : null}
             <EventsSlotsWrapper>
                 <Column {...columnFunctions}>{groups}</Column>
                 <EventsColumn

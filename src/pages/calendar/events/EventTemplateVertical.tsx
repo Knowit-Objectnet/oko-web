@@ -27,7 +27,7 @@ const H2 = styled.div`
 `;
 
 const Content = styled.div`
-    padding: 0px 50px 50px;
+    padding: 0px 35px 35px;
     display: flex;
     flex-direction: column;
 `;

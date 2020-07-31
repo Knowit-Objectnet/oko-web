@@ -14,8 +14,13 @@ const TH = styled.th`
     background-color: ${Colors.LightBlue};
 `;
 
-const TD = styled.td`
-    background-color: ${Colors.LightBeige};
+interface TDProps {
+    isEmpty: boolean;
+}
+
+const TD = styled.td<TDProps>`
+    background-color: ${(props) => (props.isEmpty ? Colors.White : Colors.LightBeige)};
+    border: ${(props) => (props.isEmpty ? `2px solid ${Colors.LightBeige}` : null)};
     overflow: hidden;
     text-overflow: ellipsis;
 `;
@@ -70,11 +75,11 @@ export const Agenda: React.FC<AgendaProps> = (props) => {
                         <tr key={'Row' + i}>
                             {props.columns.map((column, j) => {
                                 if (j >= props.events.length) {
-                                    return <TD key={column + j}></TD>;
+                                    return <TD isEmpty={true} key={column + j}></TD>;
                                 }
 
                                 return (
-                                    <TD key={column + j}>
+                                    <TD isEmpty={props.events[j].length <= i} key={column + j}>
                                         {props.events[j].length <= i ? null : (
                                             <Cell>
                                                 <Time>
