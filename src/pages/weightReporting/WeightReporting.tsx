@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import { useEffect, useState } from 'react';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
-import { apiUrl, Colors, Withdrawal } from '../../types';
+import { apiUrl, Colors, Withdrawal, ApiLocation } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../loading/Loading';
@@ -54,20 +54,27 @@ export const WeightReporting: React.FC = () => {
     const { keycloak } = useKeycloak();
 
     // List of withdrawals fetched from the server
-    const { data: apiWithdrawals, isValidating, mutate } = useSWR<Array<Withdrawal>>(
-        [`${apiUrl}/weight-reporting/reports/?partner-id=${keycloak.tokenParsed.GroupID}`, keycloak.token],
+    const { data: apiWithdrawals, isValidating: isValidatingWithdrawals, mutate } = useSWR<Array<Withdrawal>>(
+        [`${apiUrl}/reports/?partner-id=${keycloak.tokenParsed.GroupID}`, keycloak.token],
         fetcher,
     );
     // List of withdrawals transformed from the Api fetch
     const [withdrawals, setWithdrawals] = useState<Array<Withdrawal> | null>(null);
+
+    // List of stations fetched from the server
+    const { data: locations, isValidating: isValidatingLocations } = useSWR<Array<ApiLocation>>(
+        [`${apiUrl}/stations`, keycloak.token],
+        fetcher,
+    );
 
     useEffect(() => {
         // If the api was successful and returned an array then transform it and update state
         if (apiWithdrawals) {
             // Transform the array from the api into a proper withdrawals list
             const _withdrawals = apiWithdrawals.map((withdrawal: Withdrawal) => {
-                withdrawal.start = new Date(withdrawal.start);
-                withdrawal.end = new Date(withdrawal.end);
+                withdrawal.startDateTime = new Date(withdrawal.startDateTime);
+                withdrawal.endDateTime = new Date(withdrawal.endDateTime);
+                withdrawal.reportedDateTime = new Date(withdrawal.reportedDateTime);
                 return withdrawal;
             });
             // Update the state
@@ -75,17 +82,17 @@ export const WeightReporting: React.FC = () => {
         }
     }, [apiWithdrawals]);
 
-    const onSubmit = React.useCallback(async (weight: number, id: string) => {
+    const onSubmit = React.useCallback(async (weight: number, id: number) => {
         try {
             if (withdrawals) {
                 // update the local data immediately, but disable the revalidation
-                const newWithdrawal = withdrawals.find((withdrawal) => withdrawal.id === id);
+                const newWithdrawal = withdrawals.find((withdrawal) => withdrawal.reportID === id);
                 if (newWithdrawal) {
                     newWithdrawal.weight = weight;
                     mutate([...withdrawals, newWithdrawal], false);
 
                     // Post update to API
-                    await PatchToAPI(`${apiUrl}/weight-reporting/reports/`, { id, weight }, keycloak.token);
+                    await PatchToAPI(`${apiUrl}/reports/`, { id, weight }, keycloak.token);
 
                     // Give user feedback
                     alert.show('Uttaket ble oppdatert suksessfullt.', { type: types.SUCCESS });
@@ -105,19 +112,20 @@ export const WeightReporting: React.FC = () => {
         withdrawals &&
         withdrawals.map((withdrawal) => (
             <WithdrawalSubmission
-                key={withdrawal.id}
-                id={withdrawal.id}
+                key={withdrawal.reportID}
+                id={withdrawal.reportID}
                 weight={withdrawal.weight}
-                start={withdrawal.start}
-                end={withdrawal.end}
-                location={withdrawal.location}
+                start={withdrawal.startDateTime}
+                end={withdrawal.endDateTime}
+                location={withdrawal.stationID}
+                locations={locations}
                 onSubmit={onSubmit}
             />
         ));
 
     return (
         <Wrapper>
-            {!withdrawals && isValidating ? (
+            {!withdrawals && locations && isValidatingWithdrawals && isValidatingLocations ? (
                 <Loading text="Laster inn data..." />
             ) : (
                 <Content>

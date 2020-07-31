@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { PropsWithChildren, useState } from 'react';
-import { Colors } from '../../types';
+import { Colors, ApiLocation } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
 
 const Wrapper = styled.div`
@@ -164,15 +164,13 @@ const EditIcon = styled(Pencil)`
 `;
 
 interface WithdrawalProps {
-    id: string;
+    id: number;
     weight?: number;
     start: Date;
     end: Date;
-    location: {
-        id: number;
-        name: string;
-    };
-    onSubmit: (weight: number, id: string) => void;
+    location: number;
+    locations?: Array<ApiLocation>;
+    onSubmit: (weight: number, id: number) => void;
 }
 
 /**
@@ -241,7 +239,9 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                         .padStart(2, '0')}:${props.end.getMinutes().toString().padStart(2, '0')}`}
                 </DateTime>
             </WithdrawalDate>
-            <WithdrawalLocation weight={props.weight}>{props.location && props.location.name}</WithdrawalLocation>
+            <WithdrawalLocation weight={props.weight}>
+                {props.locations && props.locations.find((location) => location.id === props.location)}
+            </WithdrawalLocation>
             {editing ? (
                 <InputWrapper>
                     <Suffix>

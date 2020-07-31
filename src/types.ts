@@ -61,18 +61,14 @@ export interface SlotInfo {
 }
 
 export interface Withdrawal {
-    id: string;
-    weight?: number;
-    start: Date;
-    end: Date;
-    location: {
-        id: number;
-        name: string;
-    };
-    partner: {
-        id: number;
-        name: string;
-    };
+    reportID: number;
+    eventID: number;
+    partnerID: number;
+    stationID: number;
+    startDateTime: Date;
+    endDateTime: Date;
+    weight: number;
+    reportedDateTime: Date;
 }
 
 // Roles
@@ -99,4 +95,4 @@ export enum Colors {
 }
 
 // Url to API
-export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging';
+export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging/backend';
