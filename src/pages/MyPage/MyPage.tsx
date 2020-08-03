@@ -15,8 +15,8 @@ import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
-import {DeletePartner} from "./DeletePartner";
-import {DeleteLocation} from "./DeleteLocation";
+import { DeletePartner } from './DeletePartner';
+import { DeleteLocation } from './DeleteLocation';
 
 const Wrapper = styled.div`
     display: flex;
