@@ -114,11 +114,9 @@ export const CalendarPage: React.FC = () => {
             keycloak.tokenParsed.GroupID
         }`;
     } else if (keycloak.hasRealmRole(Roles.Partner)) {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&${
-            selectedLocation === -1 || !isToggled
-                ? 'partnerId=' + keycloak.tokenParsed.GroupID
-                : 'stationId=' + selectedLocation
-        }`;
+        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&partnerId=${
+            keycloak.tokenParsed.GroupID
+        }${selectedLocation === -1 || !isToggled ? '' : '&stationId=' + selectedLocation}`;
     } else {
         url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}${
             selectedLocation === -1 ? '' : '&stationId=' + selectedLocation
