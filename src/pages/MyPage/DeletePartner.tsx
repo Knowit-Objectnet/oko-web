@@ -34,6 +34,7 @@ const Content = styled.div`
 
 const Select = styled.select`
     width: 100%;
+    min-width: 250px;
     height: 30px;
     margin-bottom: 10px;
 `;
@@ -70,7 +71,7 @@ export const DeletePartner: React.FC<NewPartnerProps> = (props) => {
 
     return (
         <Wrapper>
-            <Title>Legg til ny samarbeidspartner</Title>
+            <Title>Fjern samarbeidspartner</Title>
             <Content>
                 <Select value={selectedPartner} onChange={onChange}>
                     <option value={-1} disabled>
@@ -83,7 +84,7 @@ export const DeletePartner: React.FC<NewPartnerProps> = (props) => {
                     ))}
                 </Select>
                 <Button type="submit" onClick={onSubmit}>
-                    Fjern samarbeidspartner
+                    Slett
                 </Button>
             </Content>
         </Wrapper>
