@@ -169,14 +169,6 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                     }}
                                 >
                                     {keycloak.hasRealmRole(Roles.Oslo) ? (
-                                        <Link current={history.location.pathname} to="/">
-                                            <StyledList /> Oversikt
-                                        </Link>
-                                    ) : null}
-                                    <Link current={history.location.pathname} to="/calendar">
-                                        <StyledCalendar /> Kalender
-                                    </Link>
-                                    {keycloak.hasRealmRole(Roles.Oslo) ? (
                                         <Link current={history.location.pathname} to="/statistics">
                                             <StyledChart /> Statistikk
                                         </Link>
@@ -214,9 +206,6 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                     ) : null}
                                     <Link current={history.location.pathname} to="/">
                                         <StyledPencilRec /> Skriv beskjed
-                                    </Link>
-                                    <Link current={history.location.pathname} to="/profile">
-                                        <StyledUser /> Min side
                                     </Link>
                                     <Link current={history.location.pathname} to="/settings">
                                         <StyledCog /> Innstillinger
