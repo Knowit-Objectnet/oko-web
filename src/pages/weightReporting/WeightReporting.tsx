@@ -82,60 +82,82 @@ export const WeightReporting: React.FC = () => {
         }
     }, [apiWithdrawals]);
 
-    const onSubmit = React.useCallback(async (weight: number, id: number) => {
-        try {
-            if (withdrawals) {
-                // update the local data immediately, but disable the revalidation
-                const newWithdrawal = withdrawals.find((withdrawal) => withdrawal.reportID === id);
-                if (newWithdrawal) {
-                    newWithdrawal.weight = weight;
-                    mutate([...withdrawals, newWithdrawal], false);
+    const onSubmit = React.useCallback(
+        async (weight: number, id: number) => {
+            try {
+                if (withdrawals) {
+                    // update the local data immediately, but disable the revalidation
+                    const newWithdrawal = withdrawals.find((withdrawal) => withdrawal.reportID === id);
+                    if (newWithdrawal) {
+                        newWithdrawal.weight = weight;
+                        mutate([...withdrawals], false);
 
-                    // Post update to API
-                    await PatchToAPI(`${apiUrl}/reports/`, { id, weight }, keycloak.token);
+                        // Post update to API
+                        await PatchToAPI(`${apiUrl}/reports/`, { id, weight }, keycloak.token);
 
-                    // Give user feedback
-                    alert.show('Uttaket ble oppdatert suksessfullt.', { type: types.SUCCESS });
+                        // Give user feedback
+                        alert.show('Uttaket ble oppdatert suksessfullt.', { type: types.SUCCESS });
 
-                    // trigger a revalidation (refetch) to make sure our local data is correct
-                    mutate();
+                        // trigger a revalidation (refetch) to make sure our local data is correct
+                        mutate();
+                    }
                 }
+            } catch (err) {
+                alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
             }
-        } catch (err) {
-            alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
-        }
-    }, []);
+        },
+        [withdrawals],
+    );
 
     // Create a list of memoized elements such that we don't need to rerender every list element
     // when one gets updated
     const withdrawalList =
         withdrawals &&
-        withdrawals.map((withdrawal) => (
-            <WithdrawalSubmission
-                key={withdrawal.reportID}
-                id={withdrawal.reportID}
-                weight={withdrawal.weight}
-                start={withdrawal.startDateTime}
-                end={withdrawal.endDateTime}
-                location={withdrawal.stationID}
-                locations={locations}
-                onSubmit={onSubmit}
-            />
-        ));
+        withdrawals
+            .filter((withdrawal) => withdrawal.weight)
+            .map((withdrawal) => (
+                <WithdrawalSubmission
+                    key={withdrawal.reportID}
+                    id={withdrawal.reportID}
+                    weight={withdrawal.weight}
+                    start={withdrawal.startDateTime}
+                    end={withdrawal.endDateTime}
+                    location={withdrawal.stationID}
+                    locations={locations}
+                    onSubmit={onSubmit}
+                />
+            ));
+
+    const notReportedList =
+        withdrawals &&
+        withdrawals
+            .filter((withdrawal) => !withdrawal.weight)
+            .map((withdrawal) => (
+                <WithdrawalSubmission
+                    key={withdrawal.reportID}
+                    id={withdrawal.reportID}
+                    weight={withdrawal.weight}
+                    start={withdrawal.startDateTime}
+                    end={withdrawal.endDateTime}
+                    location={withdrawal.stationID}
+                    locations={locations}
+                    onSubmit={onSubmit}
+                />
+            ));
 
     return (
         <Wrapper>
-            {!withdrawals && locations && isValidatingWithdrawals && isValidatingLocations ? (
+            {!withdrawals && !locations && isValidatingWithdrawals && isValidatingLocations ? (
                 <Loading text="Laster inn data..." />
             ) : (
                 <Content>
                     <Latest>
-                        <h2>Siste uttak</h2>
-                        {withdrawalList && withdrawalList.slice(0, 1)}
+                        <h2>Ikke rapportert</h2>
+                        {notReportedList}
                     </Latest>
                     <Older>
                         <h2>Tidligere uttak</h2>
-                        <OverflowWrapper>{withdrawalList && withdrawalList.slice(1)}</OverflowWrapper>
+                        <OverflowWrapper>{withdrawalList}</OverflowWrapper>
                     </Older>
                 </Content>
             )}

@@ -17,12 +17,12 @@ const WithdrawalDate = styled.div<WithdrawalWeightProps>`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     background-color: ${(props) => (props.weight ? Colors.LightGreen : Colors.Red)};
-    min-width: 170px;
+    min-width: 470px;
     height: 50px;
     margin-right: 2px;
-    padding: 5px;
+    padding: 5px 14px;
     box-sizing: border-box;
 `;
 
@@ -179,7 +179,7 @@ interface WithdrawalProps {
 export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
     // State
     const [weight, setWeight] = useState<number | ''>(props.weight || '');
-    const [editing, setEditing] = useState(props.weight === undefined);
+    const [editing, setEditing] = useState(props.weight === null);
 
     // On change function for the input element
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,7 +196,7 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
     };
 
     // On click function for the OK button
-    const onSubmitClick = () => {
+    const onSubmitClick = async () => {
         // If the new weight is the same as the old weight then turn off editing
         // without sending an api request as nothing is changed
         if (weight === props.weight) {
@@ -205,6 +205,7 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
             // api request as the weight has changed
         } else if (weight) {
             props.onSubmit(weight, props.id);
+            setEditing(false);
         }
     };
 
@@ -218,12 +219,23 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
             <WithdrawalDate weight={props.weight}>
                 <DateTime>
                     <b>Dato: </b>
-                    {props.start.toLocaleString('nb-NO', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                        weekday: 'long',
-                    })}
+                    {props.start
+                        .toLocaleString('nb-NO', {
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric',
+                            weekday: 'short',
+                        })
+                        .slice(0, 1)
+                        .toUpperCase() +
+                        props.start
+                            .toLocaleString('nb-NO', {
+                                month: 'long',
+                                day: 'numeric',
+                                year: 'numeric',
+                                weekday: 'short',
+                            })
+                            .slice(1)}
                 </DateTime>
                 <DateTime>
                     <b>Klokken: </b>
@@ -240,7 +252,7 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                 </DateTime>
             </WithdrawalDate>
             <WithdrawalLocation weight={props.weight}>
-                {props.locations && props.locations.find((location) => location.id === props.location)}
+                {props.locations && props.locations.find((location) => location.id === props.location)?.name}
             </WithdrawalLocation>
             {editing ? (
                 <InputWrapper>
@@ -279,7 +291,8 @@ const areEqual = (
         prevProps.weight === nextProps.weight &&
         prevProps.id === nextProps.id &&
         prevProps.start.getTime() === nextProps.start.getTime() &&
-        prevProps.end.getTime() === nextProps.end.getTime()
+        prevProps.end.getTime() === nextProps.end.getTime() &&
+        prevProps.locations === nextProps.locations
     );
 };
 
