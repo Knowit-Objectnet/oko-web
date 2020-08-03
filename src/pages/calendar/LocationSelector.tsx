@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
-import { ApiLocation } from '../../types';
+import { ApiLocation, apiUrl } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import Filter from '../../assets/Filter.svg';
@@ -68,37 +68,11 @@ interface LocationSelectorProps {
  * Component for selecting location
  */
 export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
     // State
     const [toggled, setToggled] = useState(true);
 
-    let { data: locations } = useSWR<ApiLocation[]>(['/api/locations', keycloak.token], fetcher);
-    locations =
-        locations && locations.length !== 0
-            ? locations
-            : [
-                  {
-                      id: 1,
-                      name: 'Haraldrud',
-                  },
-                  {
-                      id: 2,
-                      name: 'Smestad',
-                  },
-                  {
-                      id: 3,
-                      name: 'Grefsen',
-                  },
-                  {
-                      id: 4,
-                      name: 'Grønmo',
-                  },
-                  {
-                      id: 5,
-                      name: 'Ryen',
-                  },
-              ];
+    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
+    locations = locations && locations.length !== 0 ? locations : [];
 
     const onToggleClick = () => {
         setToggled(!toggled);

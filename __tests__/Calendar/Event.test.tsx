@@ -7,11 +7,11 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { Event } from '../../src/pages/calendar/events/Event';
-import { mockEvents } from '../../__mocks__/mockEvents';
+import { mockApiEvents, mockEvents } from '../../__mocks__/mockEvents';
 import fetch from 'jest-fetch-mock';
 import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import { Roles } from '../../src/types';
+import { apiUrl, Roles } from '../../src/types';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -31,12 +31,11 @@ describe('Provides an interface to view and edit an Event', () => {
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async ({ url }) => {
-            if (url.startsWith('/api/calendar/events/')) {
-                return JSON.stringify(mockEvents);
-            } else if (['/api/notifications', '/api/locations', '/api/log/changes', '/api/categories'].includes(url)) {
+            if (url.startsWith(`${apiUrl}/events`)) {
+                return JSON.stringify(mockApiEvents);
+            } else {
                 return JSON.stringify([]);
             }
-            return '';
         });
         history = createMemoryHistory();
     });

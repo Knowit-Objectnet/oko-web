@@ -5,10 +5,11 @@ import fetch from 'jest-fetch-mock';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
-import { ApiEvent, EventInfo, Roles } from '../../src/types';
+import { ApiEvent, apiUrl, EventInfo, Roles } from '../../src/types';
 
 // Component to test
 import { RegCalendar } from '../../src/pages/calendar/RegCalendar/RegCalendar';
+import { mockLocations } from '../../__mocks__/mockLocations';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -30,6 +31,15 @@ describe('Provides a page for REG to view the calendar', () => {
     });
 
     beforeEach(() => {
+        fetch.resetMocks();
+        fetch.mockResponse(async ({ url }) => {
+            if (url.startsWith(`${apiUrl}/events`)) {
+                return JSON.stringify(mockApiEvents);
+            } else if (url.startsWith(`${apiUrl}/stations`)) {
+                return JSON.stringify(mockLocations);
+            }
+            return '';
+        });
         // Set the role to ambassador
         keycloak.hasRealmRole = jest.fn((role: string) => {
             return role === Roles.Oslo;

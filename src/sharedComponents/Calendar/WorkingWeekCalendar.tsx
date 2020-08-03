@@ -115,7 +115,7 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
                                     onSelectEvent={props.onSelectEvent}
                                 />
                             ),
-                            [events[index], props.date],
+                            [daysSortedEvents[index], props.date],
                         ),
                     )}
                 </Columns>

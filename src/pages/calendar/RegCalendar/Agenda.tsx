@@ -48,7 +48,7 @@ export const Agenda: React.FC<AgendaProps> = (props) => {
     props.events.forEach((arr) => arr.sort((a, b) => a.start.getTime() - b.start.getTime()));
 
     // Find the length of the column with the most events
-    const maxLength = Math.max(...props.events.map((eventArray) => eventArray.length));
+    const maxLength = Math.max(...props.events.map((eventArray) => eventArray.length), 0);
 
     // Function to get nice time strongs on the form HH:mm - HH:mm
     const getTimeString = (start: Date, end: Date) => {

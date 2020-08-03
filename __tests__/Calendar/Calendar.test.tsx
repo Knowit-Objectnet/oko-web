@@ -8,14 +8,16 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { CalendarPage } from '../../src/pages/calendar/Calendar';
-import { mockEvents } from '../../__mocks__/mockEvents';
+import { mockApiEvents } from '../../__mocks__/mockEvents';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
+import { apiUrl } from '../../src/types';
+import { mockLocations } from '../../__mocks__/mockLocations';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
 
-describe('Provides a page to view the calendar in addition to change log and notifications', () => {
+describe('Provides a page to view the calendar', () => {
     // router history
     let history: MemoryHistory;
 
@@ -30,12 +32,13 @@ describe('Provides a page to view the calendar in addition to change log and not
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async ({ url }) => {
-            if (url.startsWith('/api/calendar/events/')) {
-                return JSON.stringify(mockEvents);
-            } else if (['/api/notifications', '/api/locations', '/api/log/changes', '/api/categories'].includes(url)) {
+            if (url.startsWith(`${apiUrl}/events`)) {
+                return JSON.stringify(mockApiEvents);
+            } else if (url.startsWith(`${apiUrl}/locations`)) {
+                return JSON.stringify(mockLocations);
+            } else {
                 return JSON.stringify([]);
             }
-            return '';
         });
         history = createMemoryHistory();
     });

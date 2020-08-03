@@ -16,11 +16,27 @@ export interface ApiEvent {
 export interface ApiLocation {
     id: number;
     name: string;
+    openingTime: string;
+    closingTime: string;
 }
 
 export interface ApiPartner {
     id: number;
     name: string;
+    description: string;
+    phone: string;
+    email: string;
+}
+
+export interface ApiWithdrawal {
+    reportID: number;
+    eventID: number;
+    partnerID: number;
+    stationID: number;
+    startDateTime: string;
+    endDateTime: string;
+    weight: number;
+    reportedDateTime: string;
 }
 
 export interface EventInfo {
@@ -32,14 +48,8 @@ export interface EventInfo {
 
 interface EventInfoResource {
     eventId: number;
-    location: {
-        id: number;
-        name: string;
-    };
-    partner: {
-        id: number;
-        name: string;
-    };
+    location: ApiLocation;
+    partner: ApiPartner;
     recurrenceRule: {
         id: number;
         until: string;
@@ -91,4 +101,4 @@ export enum Colors {
 }
 
 // Url to API
-export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging';
+export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging/backend';
