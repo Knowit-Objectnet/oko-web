@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
-import { ApiLocation, ApiPartner, apiUrl, Colors, Roles } from '../../types';
+import { ApiPartner, apiUrl, Colors, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
@@ -19,6 +19,7 @@ import { DeletePartner } from './DeletePartner';
 import { DeleteLocation } from './DeleteLocation';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
+import { DeleteToAPI } from '../../utils/DeleteToAPI';
 
 const Wrapper = styled.div`
     display: flex;
@@ -173,6 +174,28 @@ export const MyPage: React.FC = () => {
         }
     };
 
+    const deletePartner = async (id: number) => {
+        try {
+            await DeleteToAPI(`${apiUrl}/partners/${id}`, keycloak.token);
+            alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
+
+            setShowModal(false);
+        } catch (err) {
+            alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
+        }
+    };
+
+    const deleteLocation = async (id: number) => {
+        try {
+            await DeleteToAPI(`${apiUrl}/stations/${id}`, keycloak.token);
+            alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
+
+            setShowModal(false);
+        } catch (err) {
+            alert.show('Noe gikk galt, stasjoneen ble ikke slettet.', { type: types.ERROR });
+        }
+    };
+
     // Function to show new partner ui modal
     const showNewPartner = () => {
         setModalContent(<NewPartner onSubmit={submitNewPartner} />);
@@ -187,13 +210,13 @@ export const MyPage: React.FC = () => {
 
     // Function to show delete partner ui modal
     const showDeletePartner = () => {
-        setModalContent(<DeletePartner onSubmit={() => {}} />);
+        setModalContent(<DeletePartner onSubmit={deletePartner} />);
         setShowModal(true);
     };
 
     // Function to show delete location ui modal
     const showDeleteLocation = () => {
-        setModalContent(<DeleteLocation onSubmit={() => {}} />);
+        setModalContent(<DeleteLocation onSubmit={deleteLocation} />);
         setShowModal(true);
     };
 

@@ -23,7 +23,7 @@ const Description = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 140px;
+    width: 150px;
     background-color: ${Colors.LightBeige};
 `;
 
@@ -58,7 +58,7 @@ interface SideMenuProps {
 export const SideMenu: React.FC<SideMenuProps> = (props) => (
     <Wrapper>
         <Item>
-            <Description>Ny sam.parter</Description>
+            <Description>Ny sam.partner</Description>
             <Button onClick={props.newPartnerClick}>
                 <Plus height="100%" />
             </Button>
