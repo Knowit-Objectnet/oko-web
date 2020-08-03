@@ -15,6 +15,8 @@ import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
+import {DeletePartner} from "./DeletePartner";
+import {DeleteLocation} from "./DeleteLocation";
 
 const Wrapper = styled.div`
     display: flex;
@@ -120,6 +122,18 @@ export const MyPage: React.FC = () => {
         setShowModal(true);
     };
 
+    // Function to show delete partner ui modal
+    const showDeletePartner = () => {
+        setModalContent(<DeletePartner onSubmit={() => {}} />);
+        setShowModal(true);
+    };
+
+    // Function to show delete location ui modal
+    const showDeleteLocation = () => {
+        setModalContent(<DeleteLocation onSubmit={() => {}} />);
+        setShowModal(true);
+    };
+
     return (
         <>
             {showModal ? (
@@ -144,7 +158,12 @@ export const MyPage: React.FC = () => {
                     {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
                 </Content>
                 {keycloak.hasRealmRole(Roles.Oslo) ? (
-                    <SideMenu newPartnerClick={showNewPartner} newLocationClick={showNewLocation} />
+                    <SideMenu
+                        newPartnerClick={showNewPartner}
+                        newLocationClick={showNewLocation}
+                        deletePartnerClick={showDeletePartner}
+                        deleteLocationClick={showDeleteLocation}
+                    />
                 ) : null}
             </Wrapper>
         </>

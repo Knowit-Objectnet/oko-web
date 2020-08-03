@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Plus from '../../assets/Plus.svg';
+import Minus from '../../assets/Minus.svg';
 import { Colors, Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
 
@@ -22,15 +23,19 @@ const Description = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 120px;
+    width: 140px;
     background-color: ${Colors.LightBeige};
 `;
 
-const Button = styled.div`
+interface ButtonProps {
+    deletion?: boolean;
+}
+
+const Button = styled.div<ButtonProps>`
     width: 50px;
     height: 50px;
     padding: 10px;
-    background-color: ${Colors.Green};
+    background-color: ${(props) => (props.deletion ? Colors.Red : Colors.Green)};
     border-radius: 50%;
     box-sizing: border-box;
 
@@ -42,6 +47,8 @@ const Button = styled.div`
 interface SideMenuProps {
     newPartnerClick: () => void;
     newLocationClick: () => void;
+    deletePartnerClick: () => void;
+    deleteLocationClick: () => void;
 }
 
 /**
@@ -60,6 +67,18 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => (
             <Description>Ny stasjon</Description>
             <Button onClick={props.newLocationClick}>
                 <Plus height="100%" />
+            </Button>
+        </Item>
+        <Item>
+            <Description>Slett sam.partner</Description>
+            <Button deletion={true} onClick={props.deletePartnerClick}>
+                <Minus height="100%" />
+            </Button>
+        </Item>
+        <Item>
+            <Description>Slett stasjon</Description>
+            <Button deletion={true} onClick={props.deleteLocationClick}>
+                <Minus height="100%" />
             </Button>
         </Item>
     </Wrapper>
