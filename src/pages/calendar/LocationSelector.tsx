@@ -93,16 +93,6 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
             </Header>
             {toggled ? (
                 <Locations>
-                    <Label key="AllRadioButton">
-                        <Input
-                            type="radio"
-                            name="location-selector"
-                            value={-1}
-                            checked={-1 === props.selectedLocation}
-                            onChange={onChange}
-                        />
-                        Alle
-                    </Label>
                     {locations.map((location) => (
                         <Label key={location.name + location.id}>
                             <Input
@@ -115,6 +105,16 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
                             {location.name}
                         </Label>
                     ))}
+                    <Label key="AllRadioButton">
+                        <Input
+                            type="radio"
+                            name="location-selector"
+                            value={-1}
+                            checked={-1 === props.selectedLocation}
+                            onChange={onChange}
+                        />
+                        Alle
+                    </Label>
                 </Locations>
             ) : null}
         </Wrapper>
