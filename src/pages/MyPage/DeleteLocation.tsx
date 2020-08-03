@@ -67,7 +67,13 @@ export const DeleteLocation: React.FC<NewPartnerProps> = (props) => {
         setSelectedLocation(parseInt(e.currentTarget.value));
     };
 
-    const onSubmit = () => {};
+    const onSubmit = () => {
+        if (selectedLocation === -1) {
+            alert.show('Vennligst  velg en stasjon.', { type: types.ERROR });
+            return;
+        }
+        props.onSubmit(selectedLocation);
+    };
 
     return (
         <Wrapper>

@@ -67,7 +67,13 @@ export const DeletePartner: React.FC<NewPartnerProps> = (props) => {
         setSelectedPartner(parseInt(e.currentTarget.value));
     };
 
-    const onSubmit = () => {};
+    const onSubmit = () => {
+        if (selectedPartner === -1) {
+            alert.show('Vennligst  velg en samarbeidspartner.', { type: types.ERROR });
+            return;
+        }
+        props.onSubmit(selectedPartner);
+    };
 
     return (
         <Wrapper>
