@@ -25,12 +25,13 @@ const Slot = styled.div`
 
 interface DateTextProps {
     isToday: boolean;
+    isSingleDigit: boolean;
 }
 
 const DateText = styled.div<DateTextProps>`
     font-size: x-large;
     border-radius: 50%;
-    padding: 5px;
+    padding: ${(props) => (props.isSingleDigit ? '5px 13px' : '5px')};
     color: ${(props) => (props.isToday ? Colors.White : Colors.Black)};
     background-color: ${(props) => (props.isToday ? Colors.DarkBlue : null)};
 `;
@@ -50,7 +51,9 @@ export const WorkingWeekCalendarTitle: React.FC<WorkingWeekCalendarTitleProps> =
                 {props.date.toLocaleString('no-NB', { weekday: 'short' }).slice(0, 1).toUpperCase() +
                     props.date.toLocaleString('no-NB', { weekday: 'short' }).slice(1)}
             </div>
-            <DateText isToday={isSameDay(new Date(), props.date)}>{props.date.getDate()}</DateText>
+            <DateText isToday={isSameDay(new Date(), props.date)} isSingleDigit={props.date.getDate() < 10}>
+                {props.date.getDate()}
+            </DateText>
         </Slot>
     </Group>
 );
