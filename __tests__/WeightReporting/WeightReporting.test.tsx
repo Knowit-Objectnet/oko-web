@@ -30,36 +30,10 @@ describe('Provides a page provide and update weight of withdrawals', () => {
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async ({ url }) => {
-            if (url.endsWith('weight-reporting/reports/?partner-id=1')) {
+            if (url.endsWith('/reports/?partnerId=1')) {
                 return JSON.stringify([
                     {
-                        id: '1',
-                        start: new Date(),
-                        end: new Date(),
-                        partner: {
-                            id: 1,
-                            name: 'fretex',
-                        },
-                        location: {
-                            id: 1,
-                            name: 'haraldrud',
-                        },
-                    },
-                    {
-                        id: '2',
-                        start: new Date(),
-                        end: new Date(),
-                        partner: {
-                            id: 1,
-                            name: 'fretex',
-                        },
-                        location: {
-                            id: 1,
-                            name: 'haraldrud',
-                        },
-                    },
-                    {
-                        id: '3',
+                        id: 1,
                         weight: 200,
                         start: new Date(),
                         end: new Date(),
@@ -73,7 +47,35 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         },
                     },
                     {
-                        id: '4',
+                        id: 2,
+                        weight: null,
+                        start: new Date(),
+                        end: new Date(),
+                        partner: {
+                            id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
+                        },
+                    },
+                    {
+                        id: 3,
+                        weight: null,
+                        start: new Date(),
+                        end: new Date(),
+                        partner: {
+                            id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
+                        },
+                    },
+                    {
+                        id: 4,
                         weight: 200,
                         start: new Date(),
                         end: new Date(),

@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 interface WithdrawalWeightProps {
-    weight?: number;
+    weight: number | null;
 }
 
 const WithdrawalDate = styled.div<WithdrawalWeightProps>`
@@ -165,7 +165,7 @@ const EditIcon = styled(Pencil)`
 
 interface WithdrawalProps {
     id: number;
-    weight?: number;
+    weight: number | null;
     start: Date;
     end: Date;
     location: number;

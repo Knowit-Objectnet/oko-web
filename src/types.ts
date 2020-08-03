@@ -77,7 +77,7 @@ export interface Withdrawal {
     stationID: number;
     startDateTime: Date;
     endDateTime: Date;
-    weight: number;
+    weight: number | null;
     reportedDateTime: Date;
 }
 
