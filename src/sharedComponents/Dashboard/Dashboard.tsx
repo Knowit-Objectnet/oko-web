@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Header } from './Header';
 import { SideBar } from './SideBar';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const Wrapper = styled.div`
     display: flex;
@@ -38,12 +39,16 @@ export const Dashboard: React.FC<DashboardProps> = (props) => {
         setIsSidebarVisible(!isSidebarVisible);
     };
 
+    const closeSideBar = () => {
+        setIsSidebarVisible(false);
+    };
+
     return (
         <Wrapper>
             <Header isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
             <Body>
                 <Page>{props.children}</Page>
-                <SideBar isVisible={isSidebarVisible} />
+                <SideBar isVisible={isSidebarVisible} onClick={closeSideBar} />
             </Body>
         </Wrapper>
     );

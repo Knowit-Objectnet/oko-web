@@ -144,6 +144,7 @@ const StyledCog = styled(Cog)`
 
 interface SideBarProps {
     isVisible: boolean;
+    onClick: () => void;
 }
 
 /**
@@ -169,45 +170,57 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                     }}
                                 >
                                     {keycloak.hasRealmRole(Roles.Oslo) ? (
-                                        <Link current={history.location.pathname} to="/statistics">
+                                        <Link
+                                            current={history.location.pathname}
+                                            to="/statistics"
+                                            onClick={props.onClick}
+                                        >
                                             <StyledChart /> Statistikk
                                         </Link>
                                     ) : null}
-                                    <Link current={history.location.pathname} to="/partners">
+                                    <Link current={history.location.pathname} to="/partners" onClick={props.onClick}>
                                         <StyledPeople /> Sam.partnere
                                     </Link>
-                                    <Link current={history.location.pathname} to="/stations">
+                                    <Link current={history.location.pathname} to="/stations" onClick={props.onClick}>
                                         <StyledLocation /> Stasjonene
                                     </Link>
                                     {keycloak.hasRealmRole(Roles.Oslo) ? (
-                                        <Link current={history.location.pathname} to="/">
+                                        <Link current={history.location.pathname} to="/" onClick={props.onClick}>
                                             <StyledPlus /> Opprett hendelse
                                         </Link>
                                     ) : null}
                                     {keycloak.hasRealmRole(Roles.Partner) ? (
-                                        <Link current={history.location.pathname} to="/">
+                                        <Link current={history.location.pathname} to="/" onClick={props.onClick}>
                                             <StyledPlus /> Søk ekstrauttak
                                         </Link>
                                     ) : null}
                                     {keycloak.hasRealmRole(Roles.Ambassador) ? (
-                                        <Link current={history.location.pathname} to="/">
+                                        <Link current={history.location.pathname} to="/" onClick={props.onClick}>
                                             <StyledPlus /> Utlys ekstrauttak
                                         </Link>
                                     ) : null}
                                     {keycloak.hasRealmRole(Roles.Partner) ? (
-                                        <Link current={history.location.pathname} to="/reporting">
+                                        <Link
+                                            current={history.location.pathname}
+                                            to="/reporting"
+                                            onClick={props.onClick}
+                                        >
                                             <StyledWeight /> Vektuttak
                                         </Link>
                                     ) : null}
                                     {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
-                                        <Link current={history.location.pathname} to="/notifications">
+                                        <Link
+                                            current={history.location.pathname}
+                                            to="/notifications"
+                                            onClick={props.onClick}
+                                        >
                                             <StyledBell /> Varsler
                                         </Link>
                                     ) : null}
-                                    <Link current={history.location.pathname} to="/">
+                                    <Link current={history.location.pathname} to="/" onClick={props.onClick}>
                                         <StyledPencilRec /> Skriv beskjed
                                     </Link>
-                                    <Link current={history.location.pathname} to="/settings">
+                                    <Link current={history.location.pathname} to="/settings" onClick={props.onClick}>
                                         <StyledCog /> Innstillinger
                                     </Link>
                                 </Links>
