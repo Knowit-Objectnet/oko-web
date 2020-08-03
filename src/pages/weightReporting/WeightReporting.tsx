@@ -27,9 +27,14 @@ const Content = styled.div`
     height: 100%;
 `;
 
-const Latest = styled.div`
+interface LatestProps {
+    isEmpty: boolean;
+}
+
+const Latest = styled.div<LatestProps>`
     margin-top: 65px;
     width: 100%;
+    min-height: ${(props) => (props.isEmpty ? '50px' : '150px')};
     display: flex;
     flex-direction: column;
     overflow: auto;
@@ -155,7 +160,7 @@ export const WeightReporting: React.FC = () => {
                 <Loading text="Laster inn data..." />
             ) : (
                 <Content>
-                    <Latest>
+                    <Latest isEmpty={notReportedList === undefined || notReportedList?.length === 0}>
                         <h2>Ikke rapportert</h2>
                         <OverflowWrapper>{notReportedList}</OverflowWrapper>
                     </Latest>

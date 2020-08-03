@@ -204,7 +204,7 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
             // If the weight isnt an empty string or the old weight then send an
             // api request as the weight has changed
         } else if (weight) {
-            props.onSubmit(weight, props.id);
+            await props.onSubmit(weight, props.id);
             setEditing(false);
         }
     };
