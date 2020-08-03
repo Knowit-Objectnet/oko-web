@@ -1,0 +1,46 @@
+---
+name: Option - Date range
+menu: Events
+---
+
+import { Playground, Props } from 'docz';
+import { EventOptionDateRange } from '../../src/pages/calendar/events/EventOptionDateRange';
+
+# Option - Date range
+
+## Props
+
+<Props of={EventOptionDateRange} />
+
+## Basic usage
+
+<Playground>
+    {() => {
+        const [dateRange, setDateRange] = React.useState([new Date(), new Date()]);
+        const [timeRange, setTimeRange] = React.useState([new Date(), new Date()]);
+        const [recurring, setRecurring] = React.useState('None');
+        const [selectedDays, setSelectedDays] = React.useState([]);
+        const [isEditing, setIsEditing] = React.useState(false);
+        const onDateRangeChange = (range) => {setDateRange(range);};
+        const onTimeRangeChange = (range) => {setTimeRange(range);};
+        const onRecurringChange = (value) => {setRecurring(value);};
+        const onSelectedDaysChange = (num) => {setSelectedDays(num);};
+        return (
+            <>
+                <button onClick={() => {setIsEditing(!isEditing)}}>Edit</button>
+                <EventOptionDateRange 
+                dateRange={dateRange} 
+                timeRange={timeRange} 
+                recurrenceEnabled={true} 
+                recurring={recurring} 
+                selectedDays={selectedDays} 
+                isEditing={isEditing} 
+                onDateRangeChange={onDateRangeChange} 
+                onTimeRangeChange={onTimeRangeChange} 
+                onRecurringChange={onRecurringChange} 
+                onSelectedDaysChange={onSelectedDaysChange} 
+                />
+            </>
+        )
+    }}
+</Playground>

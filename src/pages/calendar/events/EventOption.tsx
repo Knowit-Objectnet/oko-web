@@ -7,7 +7,7 @@ const Option = styled.div`
     align-items: center;
 
     &:not(:last-child) {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 `;
 
@@ -33,7 +33,7 @@ interface EventOptionProps {
  */
 export const EventOption: React.FC<EventOptionProps> = (props) => (
     <Option>
-        {props.icon ? <props.icon size="1.5em" /> : null}
+        {props.icon ? <props.icon height="1.5em" /> : null}
         <OptionInfo icon={props.icon}>{props.children}</OptionInfo>
     </Option>
 );

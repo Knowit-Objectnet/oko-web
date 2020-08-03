@@ -2,7 +2,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { EventInfo } from '../../types';
 import { Gutter } from './Gutter';
-import { TimeColumn } from './TimeColumn';
+import { TimeSlotColumn } from './TimeSlotColumn';
+import { WorkingWeekCalendarTitle } from './WorkingWeekCalendarTitle';
 import add from 'date-fns/add';
 import { useMemo } from 'react';
 import isSameDay from 'date-fns/isSameDay';
@@ -27,7 +28,6 @@ const Columns = styled.div`
     display: flex;
     flex-direction: row;
     min-height: 100%;
-    border-top: 1px solid #ddd;
     border-right: 1px solid #ddd;
     box-sizing: border-box;
 `;
@@ -93,18 +93,19 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
     return (
         <Wrapper>
             <Content>
-                <Gutter start={props.min} step={step} end={props.max} showTitleGroup={true} />
+                <Gutter start={props.min} step={step} end={props.max} showTitleGroup={true} titleComponentHeight={70} />
                 <Columns>
                     {dates.map((date, index) =>
                         useMemo(
                             () => (
-                                <TimeColumn
+                                <TimeSlotColumn
                                     key={date.toString()}
                                     date={dates[index]}
                                     title={date.toLocaleString('nb-NO', {
                                         weekday: 'long',
                                         day: 'numeric',
                                     })}
+                                    titleComponent={WorkingWeekCalendarTitle}
                                     colNum={index}
                                     events={daysSortedEvents[index]}
                                     min={props.min}
@@ -114,7 +115,7 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
                                     onSelectEvent={props.onSelectEvent}
                                 />
                             ),
-                            [events[index], props.date],
+                            [daysSortedEvents[index], props.date],
                         ),
                     )}
                 </Columns>

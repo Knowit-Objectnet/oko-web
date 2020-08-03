@@ -1,0 +1,32 @@
+---
+name: Option - Location
+menu: Events
+---
+
+import { Playground, Props } from 'docz';
+import { EventOptionLocation } from '../../src/pages/calendar/events/EventOptionLocation';
+
+# Option - Location
+
+## Props
+
+<Props of={EventOptionLocation} />
+
+## Basic usage
+
+<Playground>
+    {() => {
+        const [isEditing, setIsEditing] = React.useState(false);
+        const [selectedLocation, setSelectedLocation] = React.useState(1);
+        const [locations, setLocations] = React.useState([{id: 1, name: 'Grønmo'}, {id: 2, name: 'Ryen'}]);
+        const onChange = (loc) => {
+            setSelectedLocation(loc);
+        };
+        return (
+            <>
+                <button onClick={() => {setIsEditing(!isEditing)}}>Edit</button>
+                <EventOptionLocation onChange={onChange} isEditing={isEditing} selectedLocation={selectedLocation} locations={locations} />
+            </>
+        )
+    }}
+</Playground>

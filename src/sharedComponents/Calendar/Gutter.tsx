@@ -13,11 +13,23 @@ const Column = styled.div`
     border-right: 1px solid #ddd;
 `;
 
+interface customTitleComponentGroupProps {
+    height?: number;
+}
+
+const TitleGutterGroup = styled.div<customTitleComponentGroupProps>`
+    display: flex;
+    flex-flow: column nowrap;
+    border-bottom: solid 1px transparent;
+    min-height: ${(props) => (props.height ? props.height : 40)}px;
+`;
+
 interface GutterProps {
     start: Date;
     step: number;
     end: Date;
     showTitleGroup: boolean;
+    titleComponentHeight?: number;
 }
 
 /*
@@ -41,7 +53,7 @@ export const Gutter: React.FC<GutterProps> = (props) => {
 
     return (
         <Column>
-            {props.showTitleGroup ? <GutterGroup /> : null}
+            {props.showTitleGroup ? <TitleGutterGroup height={props.titleComponentHeight} /> : null}
             {groups}
         </Column>
     );

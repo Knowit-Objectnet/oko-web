@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
-import { VerticalEventTemplate } from './VerticalEventTemplate';
+import { EventTemplateVertical } from './EventTemplateVertical';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
@@ -36,8 +36,8 @@ interface NewEventProps {
         data: {
             startDateTime: string;
             endDateTime: string;
-            station: { id: number };
-            partner: { id: number };
+            stationId: number;
+            partnerId: number;
             recurrenceRule?: {
                 until: string;
                 days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
@@ -45,8 +45,8 @@ interface NewEventProps {
                 interval?: number;
             };
         },
-        stationName: string,
-        partnerName: string,
+        station: ApiLocation,
+        partner: ApiPartner,
     ) => void;
 }
 
@@ -62,34 +62,10 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: locations } = useSWR<ApiLocation[]>(['/api/locations', keycloak.token], fetcher);
-    locations =
-        locations && locations.length !== 0
-            ? locations
-            : [
-                  {
-                      id: 1,
-                      name: 'Haraldrud',
-                  },
-                  {
-                      id: 2,
-                      name: 'Smestad',
-                  },
-                  {
-                      id: 3,
-                      name: 'Grefsen',
-                  },
-                  {
-                      id: 4,
-                      name: 'Grønmo',
-                  },
-                  {
-                      id: 5,
-                      name: 'Ryen',
-                  },
-              ];
+    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
+    locations = locations && locations.length !== 0 ? locations : [];
     // Valid partners fetched from api
-    let { data: partners } = useSWR<ApiPartner[]>([`${apiUrl}/partner/partners/`, keycloak.token], fetcher);
+    let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
     partners = partners || [];
 
     // State
@@ -125,11 +101,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     // On change for Location selection
     const onLocationChange = (_locationId: number) => {
         setLocationId(_locationId);
-    };
-
-    // Function called if edit was cancelled. Resets all values to the original event info
-    const onCancel = () => {
-        props.onFinished();
     };
 
     // Function called on successful event edit.
@@ -185,8 +156,8 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         const data: {
             startDateTime: string;
             endDateTime: string;
-            station: { id: number };
-            partner: { id: number };
+            stationId: number;
+            partnerId: number;
             recurrenceRule?: {
                 until: string;
                 days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
@@ -196,12 +167,8 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         } = {
             startDateTime: timeRange[0].toISOString(),
             endDateTime: timeRange[1].toISOString(),
-            station: {
-                id: locationId,
-            },
-            partner: {
-                id: selectedPartnerId,
-            },
+            stationId: locationId,
+            partnerId: selectedPartnerId,
         };
 
         if (recurring === 'Daily') {
@@ -241,11 +208,11 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             }
         }
 
-        props.addEvent(data, location.name, partner.name);
+        props.addEvent(data, location, partner);
     };
 
     return (
-        <VerticalEventTemplate title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
+        <EventTemplateVertical title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
             <Options>
                 <EventOptionPartner
                     selectedPartner={selectedPartnerId}
@@ -272,6 +239,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 />
             </Options>
             <Submitbutton onClick={onSubmit}>Fullfør</Submitbutton>
-        </VerticalEventTemplate>
+        </EventTemplateVertical>
     );
 };

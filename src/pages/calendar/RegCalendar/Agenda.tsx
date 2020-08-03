@@ -14,8 +14,13 @@ const TH = styled.th`
     background-color: ${Colors.LightBlue};
 `;
 
-const TD = styled.td`
-    background-color: ${Colors.LightBeige};
+interface TDProps {
+    isEmpty: boolean;
+}
+
+const TD = styled.td<TDProps>`
+    background-color: ${(props) => (props.isEmpty ? Colors.White : Colors.LightBeige)};
+    border: ${(props) => (props.isEmpty ? `2px solid ${Colors.LightBeige}` : null)};
     overflow: hidden;
     text-overflow: ellipsis;
 `;
@@ -43,7 +48,7 @@ export const Agenda: React.FC<AgendaProps> = (props) => {
     props.events.forEach((arr) => arr.sort((a, b) => a.start.getTime() - b.start.getTime()));
 
     // Find the length of the column with the most events
-    const maxLength = Math.max(...props.events.map((eventArray) => eventArray.length));
+    const maxLength = Math.max(...props.events.map((eventArray) => eventArray.length), 0);
 
     // Function to get nice time strongs on the form HH:mm - HH:mm
     const getTimeString = (start: Date, end: Date) => {
@@ -70,11 +75,11 @@ export const Agenda: React.FC<AgendaProps> = (props) => {
                         <tr key={'Row' + i}>
                             {props.columns.map((column, j) => {
                                 if (j >= props.events.length) {
-                                    return <TD key={column + j}></TD>;
+                                    return <TD isEmpty={true} key={column + j}></TD>;
                                 }
 
                                 return (
-                                    <TD key={column + j}>
+                                    <TD isEmpty={props.events[j].length <= i} key={column + j}>
                                         {props.events[j].length <= i ? null : (
                                             <Cell>
                                                 <Time>

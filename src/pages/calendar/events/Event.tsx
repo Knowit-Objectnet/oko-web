@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { MessageBox } from './MessageBox';
+import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
 import { ApiLocation, Colors, EventInfo, Roles } from '../../../types';
 import { EventOptionLocation } from './EventOptionLocation';
-import { HorizontalEventTemplate } from './HorizontalEventTemplate';
+import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
@@ -57,42 +57,12 @@ export const Event: React.FC<EventProps> = (props) => {
     const alert = useAlert();
     // Keycloak instance
     const { keycloak } = useKeycloak();
-    // Valid recycling stations (ombruksstasjon) locations fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
-    let { data: locations } = useSWR<ApiLocation[]>(['/api/locations', keycloak.token], fetcher);
-    locations =
-        locations && locations.length !== 0
-            ? locations
-            : [
-                  {
-                      id: 1,
-                      name: 'Haraldrud',
-                  },
-                  {
-                      id: 2,
-                      name: 'Smestad',
-                  },
-                  {
-                      id: 3,
-                      name: 'Grefsen',
-                  },
-                  {
-                      id: 4,
-                      name: 'Grønmo',
-                  },
-                  {
-                      id: 5,
-                      name: 'Ryen',
-                  },
-              ];
     // State
     const [isEditing, setIsEditing] = useState(false);
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
-    const [locationId, setLocationId] = useState(props.resource?.location ? props.resource?.location?.id : -1);
     const [isDeletionConfirmationVisible, setIsDeletionConfirmationVisible] = useState(false);
 
     // On change functions for DateRange
@@ -110,11 +80,6 @@ export const Event: React.FC<EventProps> = (props) => {
 
     const onSelectedDaysChange = (num: Array<number>) => {
         setSelectedDays(num);
-    };
-
-    // On change function for the Location component
-    const onLocationChange = (locationId: number) => {
-        setLocationId(locationId);
     };
 
     // On change function for the Edit button
@@ -140,9 +105,6 @@ export const Event: React.FC<EventProps> = (props) => {
         setIsEditing(false);
         setDateRange([props.start, props.end]);
         setTimeRange([props.start, props.end]);
-        if (locations) {
-            setLocationId(props.resource?.location ? props.resource?.location?.id : -1);
-        }
     };
 
     // Function called on successful event edit.
@@ -187,7 +149,7 @@ export const Event: React.FC<EventProps> = (props) => {
     };
 
     return (
-        <HorizontalEventTemplate
+        <EventTemplateHorizontal
             title={props.title}
             showEditSymbol={
                 keycloak.hasRealmRole(Roles.Oslo) ||
@@ -213,15 +175,17 @@ export const Event: React.FC<EventProps> = (props) => {
                         />
                         <EventOptionLocation
                             isEditing={false}
-                            selectedLocation={locationId}
-                            locations={locations}
-                            onChange={onLocationChange}
+                            selectedLocation={props.resource.location.id}
+                            locations={[props.resource.location]}
+                            onChange={() => {
+                                /* TODO: make it so that we don't need this nop func */
+                            }}
                         />
                     </Options>
                 </Section>
                 {!isEditing ? (
                     <Section>
-                        <MessageBox {...props.resource.message} />
+                        <EventMessageBox {...props.resource.message} />
                         {keycloak.hasRealmRole(Roles.Oslo) ||
                         (keycloak.hasRealmRole(Roles.Partner) &&
                             keycloak.tokenParsed.GroupID === props.resource.partner.id) ? (
@@ -234,6 +198,6 @@ export const Event: React.FC<EventProps> = (props) => {
                 ) : null}
             </Body>
             {isEditing ? <EventSubmission onSubmit={onSubmit} onCancel={onCancel} /> : null}
-        </HorizontalEventTemplate>
+        </EventTemplateHorizontal>
     );
 };

@@ -1,0 +1,28 @@
+---
+name: Option - Partner
+menu: Events
+---
+
+import { Playground, Props } from 'docz';
+import { EventOptionPartner } from '../../src/pages/calendar/events/EventOptionPartner';
+
+# Option - Partner
+
+## Props
+
+<Props of={EventOptionPartner} />
+
+## Basic usage
+
+<Playground>
+    {() => {
+        const [selectedPartner, setSelectedPartner] = React.useState(-1);
+        const [partners, setPartners] = React.useState([{id: 1, name: 'Fretex'}, {id: 2, name: 'Hololive'}]);
+        const onChange = (partnerId) => {
+            setSelectedPartner(partnerId);
+        };
+        return (
+            <EventOptionPartner onChange={onChange} selectedPartner={selectedPartner} partners={partners} />
+        )
+    }}
+</Playground>

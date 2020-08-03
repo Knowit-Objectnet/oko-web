@@ -7,7 +7,7 @@ import List from '../../assets/List.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Weight from '../../assets/Weight.svg';
 import Bell from '../../assets/Bell.svg';
-import People from '../../assets/People.svg';
+import Chart from '../../assets/Chart.svg';
 import { Roles } from '../../types';
 
 const Nav = styled.nav`
@@ -54,44 +54,30 @@ export const Navigation: React.FC = () => {
                 <>
                     <NavElement
                         text={'Statistikk'}
-                        icon={Bell}
+                        icon={Chart}
                         location={'/statistics'}
                         selected={history.location.pathname.slice(1) === 'statistics'}
                         onClick={onClick}
                     />
-                    <NavElement
-                        text={'Samarbeidspartnere'}
-                        icon={People}
-                        location={'/partners'}
-                        selected={history.location.pathname.slice(1) === 'partners'}
-                        onClick={onClick}
-                    />
                 </>
             ) : null}
+            {keycloak.hasRealmRole(Roles.Partner) ? (
+                <NavElement
+                    text={'Vektuttak'}
+                    icon={Weight}
+                    location={'/reporting'}
+                    selected={history.location.pathname.slice(1) === 'reporting'}
+                    onClick={onClick}
+                />
+            ) : null}
             {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
-                <>
-                    <NavElement
-                        text={'Vektuttak'}
-                        icon={Weight}
-                        location={'/reporting'}
-                        selected={history.location.pathname.slice(1) === 'reporting'}
-                        onClick={onClick}
-                    />
-                    <NavElement
-                        text={'Historikk'}
-                        icon={Weight}
-                        location={'/history'}
-                        selected={history.location.pathname.slice(1) === 'history'}
-                        onClick={onClick}
-                    />
-                    <NavElement
-                        text={'Info fra Oslo kommune'}
-                        icon={Weight}
-                        location={'/info'}
-                        selected={history.location.pathname.slice(1) === 'info'}
-                        onClick={onClick}
-                    />
-                </>
+                <NavElement
+                    text={'Varsler'}
+                    icon={Bell}
+                    location={'/notifications'}
+                    selected={history.location.pathname.slice(1) === 'notifications'}
+                    onClick={onClick}
+                />
             ) : null}
         </Nav>
     );
