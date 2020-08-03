@@ -30,6 +30,9 @@ const Content = styled.div`
 const Latest = styled.div`
     margin-top: 65px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
 `;
 
 const Older = styled.div`
@@ -37,6 +40,7 @@ const Older = styled.div`
     display: flex;
     flex-direction: column;
     overflow: auto;
+    margin-bottom: 20px;
 `;
 
 const OverflowWrapper = styled.div`
@@ -55,7 +59,7 @@ export const WeightReporting: React.FC = () => {
 
     // List of withdrawals fetched from the server
     const { data: apiWithdrawals, isValidating: isValidatingWithdrawals, mutate } = useSWR<Array<Withdrawal>>(
-        [`${apiUrl}/reports/?partner-id=${keycloak.tokenParsed.GroupID}`, keycloak.token],
+        [`${apiUrl}/reports/?partnerId=${keycloak.tokenParsed.GroupID}`, keycloak.token],
         fetcher,
     );
     // List of withdrawals transformed from the Api fetch
@@ -153,7 +157,7 @@ export const WeightReporting: React.FC = () => {
                 <Content>
                     <Latest>
                         <h2>Ikke rapportert</h2>
-                        {notReportedList}
+                        <OverflowWrapper>{notReportedList}</OverflowWrapper>
                     </Latest>
                     <Older>
                         <h2>Tidligere uttak</h2>
