@@ -98,7 +98,20 @@ const Button = styled.button`
     line-height: 20px;
 `;
 
-export const NewLocation: React.FC = () => {
+interface NewLocationProps {
+    onSubmit: (
+        name: string,
+        monday: [Date, Date, boolean],
+        tuesday: [Date, Date, boolean],
+        wednesday: [Date, Date, boolean],
+        thursday: [Date, Date, boolean],
+        friday: [Date, Date, boolean],
+        saturday: [Date, Date, boolean],
+        sunday: [Date, Date, boolean],
+    ) => void;
+}
+
+export const NewLocation: React.FC<NewLocationProps> = (props) => {
     // Alert dispatcher
     const alert = useAlert();
     // General info
@@ -205,7 +218,16 @@ export const NewLocation: React.FC = () => {
             return;
         }
 
-        // TODO: Submit to backend
+        props.onSubmit(
+            name,
+            [...mondayRange, mondayClosed],
+            [...tuesdayRange, tuesdayClosed],
+            [...wednesdayRange, wednesdayClosed],
+            [...thursdayRange, thursdayClosed],
+            [...fridayRange, fridayClosed],
+            [...saturdayRange, saturdayClosed],
+            [...sundayRange, sundayClosed],
+        );
     };
 
     return (

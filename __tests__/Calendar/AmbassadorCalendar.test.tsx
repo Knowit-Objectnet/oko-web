@@ -29,7 +29,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
             };
             return newEvent;
         })
-        .filter((event) => event.resource.location.id === 1);
+        .filter((event) => event.resource.location.id === 0);
 
     beforeEach(() => {
         // Set the role to ambassador
@@ -37,8 +37,8 @@ describe('Provides a page for ambassadors to view the calendar', () => {
             return role === Roles.Ambassador;
         });
 
-        // Set the groupID to 1 (Haraldrud)
-        keycloak.tokenParsed.GroupID = 1;
+        // Set the groupID to 0 (Haraldrud)
+        keycloak.tokenParsed.GroupID = 0;
     });
 
     afterEach(() => {

@@ -14,12 +14,17 @@ export const mockEvents: Array<EventInfo> = [
         resource: {
             eventId: 1,
             location: {
-                id: 1,
-                name: 'Grønmo',
+                id: 2,
+                name: "Grønmo",
+                openingTime: "09:00:00Z",
+                closingTime: "20:00:00Z"
             },
             partner: {
                 id: 1,
                 name: 'Fretex',
+                description: "...",
+                phone: "40400040",
+                email: "test@knowit.no",
             },
             weight: 100,
             message: {
@@ -38,12 +43,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-13T11:45:20.57Z",
         endDateTime: "2020-07-13T12:45:20.57Z",
         station: {
-            id: 2,
-            name: "Smestad"
+            id: 1,
+            name: "Smestad",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 2,
-            name: "Maritastiftelsen"
+            name: "Maritastiftelsen",
+            description: "...",
+            phone: "40400041",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 15,
@@ -64,12 +74,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-14T11:45:20.57Z",
         endDateTime: "2020-07-14T12:45:20.57Z",
         station: {
-            id: 2,
-            name: "Smestad"
+            id: 1,
+            name: "Smestad",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 2,
-            name: "Maritastiftelsen"
+            name: "Maritastiftelsen",
+            description: "...",
+            phone: "40400041",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 15,
@@ -90,12 +105,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-15T11:45:20.57Z",
         endDateTime: "2020-07-15T12:45:20.57Z",
         station: {
-            id: 2,
-            name: "Smestad"
+            id: 1,
+            name: "Smestad",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 2,
-            name: "Maritastiftelsen"
+            name: "Maritastiftelsen",
+            description: "...",
+            phone: "40400041",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 15,
@@ -116,12 +136,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-16T11:45:20.57Z",
         endDateTime: "2020-07-16T12:45:20.57Z",
         station: {
-            id: 2,
-            name: "Smestad"
+            id: 1,
+            name: "Smestad",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 2,
-            name: "Maritastiftelsen"
+            name: "Maritastiftelsen",
+            description: "...",
+            phone: "40400041",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 15,
@@ -142,12 +167,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-17T11:45:20.57Z",
         endDateTime: "2020-07-17T12:45:20.57Z",
         station: {
-            id: 2,
-            name: "Smestad"
+            id: 1,
+            name: "Smestad",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 2,
-            name: "Maritastiftelsen"
+            name: "Maritastiftelsen",
+            description: "...",
+            phone: "40400041",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 15,
@@ -168,12 +198,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-13T11:45:36.89Z",
         endDateTime: "2020-07-13T12:45:36.89Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 0,
+            name: "Haraldrud",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 1,
-            name: "Fretex"
+            name: 'Fretex',
+            description: "...",
+            phone: "40400040",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 17,
@@ -194,12 +229,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-14T11:45:36.89Z",
         endDateTime: "2020-07-14T12:45:36.89Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 0,
+            name: "Haraldrud",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 1,
-            name: "Fretex"
+            name: 'Fretex',
+            description: "...",
+            phone: "40400040",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 17,
@@ -220,12 +260,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-15T11:45:36.89Z",
         endDateTime: "2020-07-15T12:45:36.89Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 0,
+            name: "Haraldrud",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 1,
-            name: "Fretex"
+            name: 'Fretex',
+            description: "...",
+            phone: "40400040",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 17,
@@ -246,12 +291,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-16T11:45:36.89Z",
         endDateTime: "2020-07-16T12:45:36.89Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 0,
+            name: "Haraldrud",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 1,
-            name: "Fretex"
+            name: 'Fretex',
+            description: "...",
+            phone: "40400040",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 17,
@@ -272,12 +322,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-17T11:45:36.89Z",
         endDateTime: "2020-07-17T12:45:36.89Z",
         station: {
-            id: 1,
-            name: "Haraldrud"
+            id: 0,
+            name: "Haraldrud",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 1,
-            name: "Fretex"
+            name: 'Fretex',
+            description: "...",
+            phone: "40400040",
+            email: "test@knowit.no",
         },
         recurrenceRule: {
             id: 17,
@@ -298,12 +353,17 @@ export const mockApiEvents: Array<ApiEvent> = [
         startDateTime: "2020-07-16T11:45:36.89Z",
         endDateTime: "2020-07-16T12:45:36.89Z",
         station: {
-            id: 2,
-            name: "Smestad"
+            id: 1,
+            name: "Smestad",
+            openingTime: "09:00:00Z",
+            closingTime: "20:00:00Z"
         },
         partner: {
             id: 1,
-            name: "Fretex"
+            name: 'Fretex',
+            description: "...",
+            phone: "40400040",
+            email: "test@knowit.no",
         },
         recurrenceRule: null
     }
