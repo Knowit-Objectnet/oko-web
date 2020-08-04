@@ -25,6 +25,7 @@ const Wrapper = styled.button<WrapperProps>`
     color: ${(props) => (props.color === 'DarkBlue' ? Colors.White : null)};
     height: ${(props) => (props.height ? props.height + 'px' : '45px')};
     width: ${(props) => (props.width ? props.width + 'px' : null)};
+    font-weight: bold;
     border: none;
     ${(props) => props.styling}
 `;
