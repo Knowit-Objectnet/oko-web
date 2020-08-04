@@ -17,6 +17,10 @@ const StyledHeader = styled.header`
 const LogoWrapper = styled(Link)`
     height: 100%;
     margin-right: 115px;
+
+    @media screen and (max-width: 1200px) {
+        display: none;
+    }
 `;
 
 const Logo = styled(OsloKommuneLogo)`

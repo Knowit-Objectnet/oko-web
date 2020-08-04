@@ -20,6 +20,24 @@ const Element = styled.div<StyledElementProps>`
     &:not(:last-child) {
         margin-right: 80px;
     }
+
+    @media screen and (max-width: 1100px) {
+        &:not(:last-child) {
+            margin-right: 40px;
+        }
+
+        margin-right: 40px;
+    }
+
+    @media screen and (max-width: 800px) {
+        font-size: 16px;
+
+        &:not(:last-child) {
+            margin-right: 15px;
+        }
+
+        margin-right: 15px;
+    }
 `;
 
 const Center = styled.div`
