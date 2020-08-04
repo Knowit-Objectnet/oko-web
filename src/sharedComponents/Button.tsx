@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Colors } from '../types';
 
 interface WrapperProps {
-    color: 'Red' | 'Green' | 'DarkBlue';
+    color?: 'Red' | 'Green' | 'DarkBlue';
     width?: number;
     height?: number;
     styling?: string;
@@ -32,7 +32,7 @@ const Wrapper = styled.button<WrapperProps>`
 
 interface ButtonProps {
     text: string;
-    color: 'Red' | 'Green' | 'DarkBlue';
+    color?: 'Red' | 'Green' | 'DarkBlue';
     onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     name?: string;
     width?: number;
