@@ -77,7 +77,7 @@ export const DeleteLocation: React.FC<NewPartnerProps> = (props) => {
 
     return (
         <Wrapper>
-            <Title>Fjern stasjonn</Title>
+            <Title>Fjern stasjon</Title>
             <Content>
                 <Select value={selectedLocation} onChange={onChange}>
                     <option value={-1} disabled>
