@@ -250,7 +250,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
                         left={(event.wPos / event.wLen) * 100}
                         width={event.width}
                         height={event.length * pxPerMin}
-                        key={event.title + event.wPos}
+                        key={event.title + event.wPos + event.start.getTime()}
                         data-index={event.index}
                         onClick={onEventClick}
                     >
