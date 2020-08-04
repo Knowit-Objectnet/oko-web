@@ -177,10 +177,18 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                                 <StyledChart /> Statistikk
                                             </Link>
                                         ) : null}
-                                        <Link current={history.location.pathname} to="/partners" onClick={props.onClick}>
+                                        <Link
+                                            current={history.location.pathname}
+                                            to="/partners"
+                                            onClick={props.onClick}
+                                        >
                                             <StyledPeople /> Sam.partnere
                                         </Link>
-                                        <Link current={history.location.pathname} to="/stations" onClick={props.onClick}>
+                                        <Link
+                                            current={history.location.pathname}
+                                            to="/stations"
+                                            onClick={props.onClick}
+                                        >
                                             <StyledLocation /> Stasjonene
                                         </Link>
                                         {keycloak.hasRealmRole(Roles.Oslo) ? (
@@ -207,7 +215,8 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                                 <StyledWeight /> Vektuttak
                                             </Link>
                                         ) : null}
-                                        {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
+                                        {keycloak.hasRealmRole(Roles.Partner) ||
+                                        keycloak.hasRealmRole(Roles.Ambassador) ? (
                                             <Link
                                                 current={history.location.pathname}
                                                 to="/notifications"
@@ -219,7 +228,11 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                         <Link current={history.location.pathname} to="/" onClick={props.onClick}>
                                             <StyledPencilRec /> Skriv beskjed
                                         </Link>
-                                        <Link current={history.location.pathname} to="/settings" onClick={props.onClick}>
+                                        <Link
+                                            current={history.location.pathname}
+                                            to="/settings"
+                                            onClick={props.onClick}
+                                        >
                                             <StyledCog /> Innstillinger
                                         </Link>
                                     </Links>

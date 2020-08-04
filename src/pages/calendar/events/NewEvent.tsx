@@ -8,24 +8,14 @@ import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, apiUrl, Colors } from '../../../types';
+import { ApiLocation, ApiPartner, apiUrl } from '../../../types';
 import { useAlert, types } from 'react-alert';
+import { Button } from '../../../sharedComponents/Button';
 
 const Options = styled.div`
     display: flex;
     flex-direction: column;
     flex: 1;
-`;
-
-const Submitbutton = styled.button`
-    height: 35px;
-    width: 350px;
-    background-color: ${Colors.Green};
-    border: none;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 20px;
-    margin-top: 40px;
 `;
 
 interface NewEventProps {
@@ -238,7 +228,14 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                     recurrenceEnabled={true}
                 />
             </Options>
-            <Submitbutton onClick={onSubmit}>Fullfør</Submitbutton>
+            <Button
+                onClick={onSubmit}
+                text="Fullfør"
+                color="Green"
+                height={35}
+                width={350}
+                styling="margin-top: 40px;"
+            />
         </EventTemplateVertical>
     );
 };

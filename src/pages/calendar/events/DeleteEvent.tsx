@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { Colors } from '../../../types';
 import { useState } from 'react';
+import {Button} from "../../../sharedComponents/Button";
 
 const Wrapper = styled.div`
     position: absolute;
@@ -49,17 +50,6 @@ const StyledDateRangePicker = styled(DateRangePicker)`
     }
 `;
 
-const Submitbutton = styled.button`
-    height: 35px;
-    width: 100%;
-    background-color: ${Colors.Green};
-    border: none;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 20px;
-    margin-top: 15px;
-`;
-
 interface DeleteEventProps {
     onSubmit: (range: [Date, Date], isSingleDeletion: boolean) => void;
 }
@@ -99,7 +89,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
             {!isSingleDeletion ? (
                 <StyledDateRangePicker clearIcon={null} onChange={onDateRangeChange} value={range} />
             ) : null}
-            <Submitbutton onClick={onSubmit}>Bekreft</Submitbutton>
+            <Button onClick={onSubmit} text="Bekreft" color="Green" height={35} />
         </Wrapper>
     );
 };

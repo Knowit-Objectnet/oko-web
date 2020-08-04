@@ -11,7 +11,7 @@ import { AuthenticatedRoute } from './AuthenticatedRoute';
 import { Dashboard } from '../sharedComponents/Dashboard/Dashboard';
 
 // Pages
-import { Loading } from '../pages/loading/Loading';
+import { Loading } from '../sharedComponents/Loading';
 import { Login } from '../pages/login/Login';
 import { Logout } from '../pages/logout/Logout';
 import { CalendarPage } from '../pages/calendar/Calendar';

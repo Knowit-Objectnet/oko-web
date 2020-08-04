@@ -17,6 +17,7 @@ import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
+import {Button} from "../../sharedComponents/Button";
 
 const Wrapper = styled.div`
     display: flex;
@@ -54,15 +55,6 @@ const DefaultProfilePicture = styled(Default)`
     width: 50px;
     height: 50px;
     margin-right: 15px;
-`;
-
-const LogoutButton = styled.button`
-    margin-left: auto;
-    height: 45px;
-    width: 100px;
-    border: none;
-    color: ${Colors.White};
-    background-color: ${Colors.DarkBlue};
 `;
 
 /**
@@ -198,7 +190,13 @@ export const MyPage: React.FC = () => {
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>
-                        <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
+                        <Button
+                            onClick={onLogoutClick}
+                            text="Logg ut"
+                            color="DarkBlue"
+                            width={100}
+                            styling="margin-left: auto;"
+                        />
                     </Header>
                     {keycloak.hasRealmRole(Roles.Partner) ? (
                         <AboutPartner

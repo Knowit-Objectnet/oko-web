@@ -96,9 +96,9 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     {props.date.toLocaleString('nb-NO', { weekday: 'long', month: 'long', day: 'numeric' })}
                 </DateText>
                 {expanded ? (
-                    <ArrowDown height="1em" onClick={onExpandClick} />
+                    <ArrowDown height="1.4em" onClick={onExpandClick} />
                 ) : (
-                    <ArrowUp height="1em" onClick={onExpandClick} />
+                    <ArrowUp height="1.4em" onClick={onExpandClick} />
                 )}
             </Header>
             {expanded ? (

@@ -15,7 +15,7 @@ import add from 'date-fns/add';
 import differenceInDays from 'date-fns/differenceInDays';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
-import { Loading } from '../loading/Loading';
+import { Loading } from '../../sharedComponents/Loading';
 import { DeleteToAPI } from '../../utils/DeleteToAPI';
 import { PostToAPI } from '../../utils/PostToAPI';
 import { PatchToAPI } from '../../utils/PatchToAPI';

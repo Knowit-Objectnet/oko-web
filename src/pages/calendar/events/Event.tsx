@@ -12,6 +12,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { useAlert, types } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
+import {Button} from "../../../sharedComponents/Button";
 
 const Body = styled.div`
     display: flex;
@@ -33,13 +34,6 @@ const Options = styled.div`
     display: flex;
     flex-direction: column;
     flex: 1;
-`;
-
-const DeleteButton = styled.button`
-    background-color: ${Colors.Red};
-    height: 45px;
-    border: none;
-    margin-top: 10px;
 `;
 
 interface EventProps extends EventInfo {
@@ -190,7 +184,12 @@ export const Event: React.FC<EventProps> = (props) => {
                         (keycloak.hasRealmRole(Roles.Partner) &&
                             keycloak.tokenParsed.GroupID === props.resource.partner.id) ? (
                             <>
-                                <DeleteButton onClick={onDeleteConfirmationClick}>Avlys uttak</DeleteButton>
+                                <Button
+                                    text="Avlys uttak"
+                                    onClick={onDeleteConfirmationClick}
+                                    color="Red"
+                                    styling="margin-top: 10px;"
+                                />
                                 {isDeletionConfirmationVisible ? <DeleteEvent onSubmit={onDelete} /> : null}
                             </>
                         ) : null}
