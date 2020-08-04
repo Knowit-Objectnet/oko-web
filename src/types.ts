@@ -71,10 +71,14 @@ export interface SlotInfo {
 }
 
 export interface Withdrawal {
-    id: string;
-    weight?: number;
-    start: Date;
-    end: Date;
+    reportID: number;
+    eventID: number;
+    partnerID: number;
+    stationID: number;
+    startDateTime: Date;
+    endDateTime: Date;
+    weight: number | null;
+    reportedDateTime: Date;
 }
 
 // Roles

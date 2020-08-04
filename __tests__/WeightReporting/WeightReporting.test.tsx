@@ -8,6 +8,7 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { WeightReporting } from '../../src/pages/weightReporting/WeightReporting';
+import { Roles } from '../../src/types';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 
@@ -29,35 +30,76 @@ describe('Provides a page provide and update weight of withdrawals', () => {
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async ({ url }) => {
-            if (url === '/api/withdrawals') {
+            if (url.endsWith('/reports/?partnerId=1')) {
                 return JSON.stringify([
                     {
-                        id: '1',
-                        start: new Date(),
-                        end: new Date(),
-                    },
-                    {
-                        id: '2',
-                        start: new Date(),
-                        end: new Date(),
-                    },
-                    {
-                        id: '3',
+                        id: 1,
                         weight: 200,
                         start: new Date(),
                         end: new Date(),
+                        partner: {
+                            id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
+                        },
                     },
                     {
-                        id: '4',
+                        id: 2,
+                        weight: null,
+                        start: new Date(),
+                        end: new Date(),
+                        partner: {
+                            id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
+                        },
+                    },
+                    {
+                        id: 3,
+                        weight: null,
+                        start: new Date(),
+                        end: new Date(),
+                        partner: {
+                            id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
+                        },
+                    },
+                    {
+                        id: 4,
                         weight: 200,
                         start: new Date(),
                         end: new Date(),
+                        partner: {
+                            id: 1,
+                            name: 'fretex',
+                        },
+                        location: {
+                            id: 1,
+                            name: 'haraldrud',
+                        },
                     },
                 ]);
             }
             return '';
         });
         history = createMemoryHistory();
+
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Ambassador;
+        });
+
+        // Set the groupID to 1 (Fretex)
+        keycloak.tokenParsed.GroupID = 1;
     });
 
     afterEach(() => {

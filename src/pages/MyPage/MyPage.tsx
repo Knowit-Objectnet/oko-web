@@ -15,9 +15,12 @@ import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
+import { DeletePartner } from './DeletePartner';
+import { DeleteLocation } from './DeleteLocation';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
+import { DeleteToAPI } from '../../utils/DeleteToAPI';
 
 const Wrapper = styled.div`
     display: flex;
@@ -163,6 +166,28 @@ export const MyPage: React.FC = () => {
         }
     };
 
+    const deletePartner = async (id: number) => {
+        try {
+            await DeleteToAPI(`${apiUrl}/partners/${id}`, keycloak.token);
+            alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
+
+            setShowModal(false);
+        } catch (err) {
+            alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
+        }
+    };
+
+    const deleteLocation = async (id: number) => {
+        try {
+            await DeleteToAPI(`${apiUrl}/stations/${id}`, keycloak.token);
+            alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
+
+            setShowModal(false);
+        } catch (err) {
+            alert.show('Noe gikk galt, stasjoneen ble ikke slettet.', { type: types.ERROR });
+        }
+    };
+
     // Function to show new partner ui modal
     const showNewPartner = () => {
         setModalContent(<NewPartner onSubmit={submitNewPartner} />);
@@ -172,6 +197,18 @@ export const MyPage: React.FC = () => {
     // Function to show new location ui modal
     const showNewLocation = () => {
         setModalContent(<NewLocation onSubmit={submitNewLocation} />);
+        setShowModal(true);
+    };
+
+    // Function to show delete partner ui modal
+    const showDeletePartner = () => {
+        setModalContent(<DeletePartner onSubmit={deletePartner} />);
+        setShowModal(true);
+    };
+
+    // Function to show delete location ui modal
+    const showDeleteLocation = () => {
+        setModalContent(<DeleteLocation onSubmit={deleteLocation} />);
         setShowModal(true);
     };
 
@@ -208,7 +245,12 @@ export const MyPage: React.FC = () => {
                     {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
                 </Content>
                 {keycloak.hasRealmRole(Roles.Oslo) ? (
-                    <SideMenu newPartnerClick={showNewPartner} newLocationClick={showNewLocation} />
+                    <SideMenu
+                        newPartnerClick={showNewPartner}
+                        newLocationClick={showNewLocation}
+                        deletePartnerClick={showDeletePartner}
+                        deleteLocationClick={showDeleteLocation}
+                    />
                 ) : null}
             </Wrapper>
         </>

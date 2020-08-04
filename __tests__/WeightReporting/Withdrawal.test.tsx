@@ -12,11 +12,16 @@ describe('Provides a page to view the calendar in addition to change log and not
     it('Should display the weight from the withdrawal which contains weight', async () => {
         // Props for the component
         const props = {
-            id: 'test',
+            id: 1,
             weight: 100,
             start: new Date(),
             end: new Date(),
             onSubmit: jest.fn(),
+            partner: {
+                id: 1,
+                name: 'fretex',
+            },
+            location: 1,
         };
 
         // Render component
@@ -30,10 +35,16 @@ describe('Provides a page to view the calendar in addition to change log and not
     it('Should allow us to input a value and submit it on a withdrawal without weight', async () => {
         // Props for the component
         const props = {
-            id: 'test',
+            id: 1,
+            weight: null,
             start: new Date(),
             end: new Date(),
             onSubmit: jest.fn(),
+            partner: {
+                id: 1,
+                name: 'fretex',
+            },
+            location: 1,
         };
 
         // Render component
