@@ -21,7 +21,12 @@ describe('Provides a page to view the calendar in addition to change log and not
                 id: 1,
                 name: 'fretex',
             },
-            location: 1,
+            location: {
+                id: 1,
+                name: 'Haraldrud',
+                openingTime: '08:00:00Z',
+                closingTime: '20:00:00Z',
+            },
         };
 
         // Render component
@@ -44,7 +49,12 @@ describe('Provides a page to view the calendar in addition to change log and not
                 id: 1,
                 name: 'fretex',
             },
-            location: 1,
+            location: {
+                id: 1,
+                name: 'Haraldrud',
+                openingTime: '08:00:00Z',
+                closingTime: '20:00:00Z',
+            },
         };
 
         // Render component
