@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
-import { ApiPartner, apiUrl, Colors, Roles } from '../../types';
+import { ApiPartner, apiUrl, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
@@ -19,6 +19,7 @@ import { DeletePartner } from './DeletePartner';
 import { DeleteLocation } from './DeleteLocation';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
+import { Button } from '../../sharedComponents/Button';
 import { DeleteToAPI } from '../../utils/DeleteToAPI';
 
 const Wrapper = styled.div`
@@ -57,15 +58,6 @@ const DefaultProfilePicture = styled(Default)`
     width: 50px;
     height: 50px;
     margin-right: 15px;
-`;
-
-const LogoutButton = styled.button`
-    margin-left: auto;
-    height: 45px;
-    width: 100px;
-    border: none;
-    color: ${Colors.White};
-    background-color: ${Colors.DarkBlue};
 `;
 
 /**
@@ -235,7 +227,13 @@ export const MyPage: React.FC = () => {
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>
-                        <LogoutButton onClick={onLogoutClick}>Logg ut</LogoutButton>
+                        <Button
+                            onClick={onLogoutClick}
+                            text="Logg ut"
+                            color="DarkBlue"
+                            width={100}
+                            styling="margin-left: auto;"
+                        />
                     </Header>
                     {keycloak.hasRealmRole(Roles.Partner) ? (
                         <AboutPartner

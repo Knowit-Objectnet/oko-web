@@ -5,8 +5,6 @@ import { Link as LocalLink } from 'react-router-dom';
 import { Colors, Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import { useHistory } from 'react-router-dom';
-import List from '../../assets/List.svg';
-import Calendar from '../../assets/Calendar.svg';
 import Chart from '../../assets/Chart.svg';
 import People from '../../assets/People.svg';
 import Location from '../../assets/Location.svg';
@@ -14,8 +12,8 @@ import Plus from '../../assets/Plus.svg';
 import Weight from '../../assets/Weight.svg';
 import Bell from '../../assets/Bell.svg';
 import PencilRec from '../../assets/PencilRec.svg';
-import User from '../../assets/Default_profile_pic.svg';
 import Cog from '../../assets/Cog.svg';
+import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
 
 const duration = 500;
 
@@ -52,6 +50,9 @@ const Wrapper = styled.div`
 `;
 
 const Padding = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 20px;
 `;
 
@@ -74,18 +75,6 @@ const Link = styled(LocalLink)<LinkProps>`
     width: fit-content;
     white-space: nowrap;
     font-weight: bold;
-`;
-
-const StyledList = styled(List)`
-    fill: inherit;
-    width: 1.5em;
-    margin-right: 10px;
-`;
-
-const StyledCalendar = styled(Calendar)`
-    fill: inherit;
-    width: 1.5em;
-    margin-right: 10px;
 `;
 
 const StyledChart = styled(Chart)`
@@ -130,20 +119,27 @@ const StyledPencilRec = styled(PencilRec)`
     margin-right: 10px;
 `;
 
-const StyledUser = styled(User)`
-    fill: inherit;
-    width: 1.5em;
-    margin-right: 10px;
-`;
-
 const StyledCog = styled(Cog)`
     fill: inherit;
     width: 1.5em;
     margin-right: 10px;
 `;
 
+const LogoWrapper = styled.div`
+    width: 100%;
+
+    @media screen and (min-width: 1100px) {
+        display: none;
+    }
+`;
+
+const Logo = styled(OsloKommuneLogo)`
+    width: 100%;
+`;
+
 interface SideBarProps {
     isVisible: boolean;
+    onClick: () => void;
 }
 
 /**
@@ -162,55 +158,85 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                     <Padding>
                         <Transition in={props.isVisible} timeout={0}>
                             {(state) => (
-                                <Links
-                                    style={{
-                                        ...linkStyle,
-                                        ...linkTransitionStyles[state],
-                                    }}
-                                >
-                                    {keycloak.hasRealmRole(Roles.Oslo) ? (
-                                        <Link current={history.location.pathname} to="/statistics">
-                                            <StyledChart /> Statistikk
+                                <>
+                                    <Links
+                                        style={{
+                                            ...linkStyle,
+                                            ...linkTransitionStyles[state],
+                                        }}
+                                    >
+                                        {keycloak.hasRealmRole(Roles.Oslo) ? (
+                                            <Link
+                                                current={history.location.pathname}
+                                                to="/statistics"
+                                                onClick={props.onClick}
+                                            >
+                                                <StyledChart /> Statistikk
+                                            </Link>
+                                        ) : null}
+                                        <Link
+                                            current={history.location.pathname}
+                                            to="/partners"
+                                            onClick={props.onClick}
+                                        >
+                                            <StyledPeople /> Sam.partnere
                                         </Link>
-                                    ) : null}
-                                    <Link current={history.location.pathname} to="/partners">
-                                        <StyledPeople /> Sam.partnere
-                                    </Link>
-                                    <Link current={history.location.pathname} to="/stations">
-                                        <StyledLocation /> Stasjonene
-                                    </Link>
-                                    {keycloak.hasRealmRole(Roles.Oslo) ? (
-                                        <Link current={history.location.pathname} to="/">
-                                            <StyledPlus /> Opprett hendelse
+                                        <Link
+                                            current={history.location.pathname}
+                                            to="/stations"
+                                            onClick={props.onClick}
+                                        >
+                                            <StyledLocation /> Stasjonene
                                         </Link>
-                                    ) : null}
-                                    {keycloak.hasRealmRole(Roles.Partner) ? (
-                                        <Link current={history.location.pathname} to="/">
-                                            <StyledPlus /> Søk ekstrauttak
+                                        {keycloak.hasRealmRole(Roles.Oslo) ? (
+                                            <Link current={history.location.pathname} to="/" onClick={props.onClick}>
+                                                <StyledPlus /> Opprett hendelse
+                                            </Link>
+                                        ) : null}
+                                        {keycloak.hasRealmRole(Roles.Partner) ? (
+                                            <Link current={history.location.pathname} to="/" onClick={props.onClick}>
+                                                <StyledPlus /> Søk ekstrauttak
+                                            </Link>
+                                        ) : null}
+                                        {keycloak.hasRealmRole(Roles.Ambassador) ? (
+                                            <Link current={history.location.pathname} to="/" onClick={props.onClick}>
+                                                <StyledPlus /> Utlys ekstrauttak
+                                            </Link>
+                                        ) : null}
+                                        {keycloak.hasRealmRole(Roles.Partner) ? (
+                                            <Link
+                                                current={history.location.pathname}
+                                                to="/reporting"
+                                                onClick={props.onClick}
+                                            >
+                                                <StyledWeight /> Vektuttak
+                                            </Link>
+                                        ) : null}
+                                        {keycloak.hasRealmRole(Roles.Partner) ||
+                                        keycloak.hasRealmRole(Roles.Ambassador) ? (
+                                            <Link
+                                                current={history.location.pathname}
+                                                to="/notifications"
+                                                onClick={props.onClick}
+                                            >
+                                                <StyledBell /> Varsler
+                                            </Link>
+                                        ) : null}
+                                        <Link current={history.location.pathname} to="/" onClick={props.onClick}>
+                                            <StyledPencilRec /> Skriv beskjed
                                         </Link>
-                                    ) : null}
-                                    {keycloak.hasRealmRole(Roles.Ambassador) ? (
-                                        <Link current={history.location.pathname} to="/">
-                                            <StyledPlus /> Utlys ekstrauttak
+                                        <Link
+                                            current={history.location.pathname}
+                                            to="/settings"
+                                            onClick={props.onClick}
+                                        >
+                                            <StyledCog /> Innstillinger
                                         </Link>
-                                    ) : null}
-                                    {keycloak.hasRealmRole(Roles.Partner) ? (
-                                        <Link current={history.location.pathname} to="/reporting">
-                                            <StyledWeight /> Vektuttak
-                                        </Link>
-                                    ) : null}
-                                    {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
-                                        <Link current={history.location.pathname} to="/notifications">
-                                            <StyledBell /> Varsler
-                                        </Link>
-                                    ) : null}
-                                    <Link current={history.location.pathname} to="/">
-                                        <StyledPencilRec /> Skriv beskjed
-                                    </Link>
-                                    <Link current={history.location.pathname} to="/settings">
-                                        <StyledCog /> Innstillinger
-                                    </Link>
-                                </Links>
+                                    </Links>
+                                    <LogoWrapper>
+                                        <Logo />
+                                    </LogoWrapper>
+                                </>
                             )}
                         </Transition>
                     </Padding>

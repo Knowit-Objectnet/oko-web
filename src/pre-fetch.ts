@@ -3,7 +3,7 @@ import { apiUrl } from './types';
 import { fetcher } from './utils/fetcher';
 
 // function to pre-fetch data for a better user experience
-export const preFetch = async (token?: string) => {
+export const preFetch: (token?: string) => void = async (token?: string) => {
     // List if urls to prefetch from
     const list: Array<[string, boolean]> = [
         [`${apiUrl}/partners`, false],

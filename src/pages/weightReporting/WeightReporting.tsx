@@ -6,7 +6,7 @@ import { WithdrawalSubmission } from './WithdrawalSubmission';
 import { apiUrl, Colors, Withdrawal, ApiLocation } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
-import { Loading } from '../loading/Loading';
+import { Loading } from '../../sharedComponents/Loading';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useAlert, types } from 'react-alert';
 

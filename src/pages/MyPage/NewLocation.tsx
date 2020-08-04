@@ -7,6 +7,7 @@ import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
+import { Button } from '../../sharedComponents/Button';
 
 const Wrapper = styled.div`
     display: flex;
@@ -87,15 +88,6 @@ const StyledPhone = styled(Phone)`
 const StyledMail = styled(Mail)`
     width: 40px;
     margin-right: 5px;
-`;
-
-const Button = styled.button`
-    height: 35px;
-    background-color: ${Colors.Green};
-    border: none;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 20px;
 `;
 
 interface NewLocationProps {
@@ -344,9 +336,7 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                         />
                     </ContactWrapper>
                 </AmbassadorContactInfo>
-                <Button type="submit" onClick={onSubmit}>
-                    Legg til stasjon
-                </Button>
+                <Button text="Legg til stasjon" onClick={onSubmit} color="Green" height={35} />
             </Content>
         </Wrapper>
     );

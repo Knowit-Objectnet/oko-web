@@ -15,7 +15,7 @@ import add from 'date-fns/add';
 import differenceInDays from 'date-fns/differenceInDays';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
-import { Loading } from '../loading/Loading';
+import { Loading } from '../../sharedComponents/Loading';
 import { DeleteToAPI } from '../../utils/DeleteToAPI';
 import { PostToAPI } from '../../utils/PostToAPI';
 import { PatchToAPI } from '../../utils/PatchToAPI';
@@ -114,11 +114,9 @@ export const CalendarPage: React.FC = () => {
             keycloak.tokenParsed.GroupID
         }`;
     } else if (keycloak.hasRealmRole(Roles.Partner)) {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&${
-            selectedLocation === -1 || !isToggled
-                ? 'partnerId=' + keycloak.tokenParsed.GroupID
-                : 'stationId=' + selectedLocation
-        }`;
+        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&partnerId=${
+            keycloak.tokenParsed.GroupID
+        }${selectedLocation === -1 || !isToggled ? '' : '&stationId=' + selectedLocation}`;
     } else {
         url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}${
             selectedLocation === -1 ? '' : '&stationId=' + selectedLocation

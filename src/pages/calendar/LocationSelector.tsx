@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import useSWR from 'swr';
 import { ApiLocation, apiUrl } from '../../types';
 import { fetcher } from '../../utils/fetcher';
-import { useKeycloak } from '@react-keycloak/web';
 import Filter from '../../assets/Filter.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
 import ArrowUp from '../../assets/ArrowUp.svg';
@@ -78,16 +77,11 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
         setToggled(!toggled);
     };
 
-    const onClick = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         const val = parseInt(e.currentTarget.value);
-        props.onSelectedLocationChange(val === props.selectedLocation ? -1 : val);
+        props.onSelectedLocationChange(val);
     };
-
-    // React complains about not having an onChange function, so this is a noop function to stop the complaining
-    // as we use the onClick function instead (this is because we want to be able to unselect a radio button)
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const onChange = () => {};
 
     return (
         <Wrapper>
@@ -105,12 +99,21 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
                                 name="location-selector"
                                 value={location.id}
                                 checked={location.id === props.selectedLocation}
-                                onClick={onClick}
                                 onChange={onChange}
                             />
                             {location.name}
                         </Label>
                     ))}
+                    <Label key="AllRadioButton">
+                        <Input
+                            type="radio"
+                            name="location-selector"
+                            value={-1}
+                            checked={-1 === props.selectedLocation}
+                            onChange={onChange}
+                        />
+                        Alle
+                    </Label>
                 </Locations>
             ) : null}
         </Wrapper>

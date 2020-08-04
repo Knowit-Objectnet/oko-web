@@ -6,9 +6,9 @@ import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionCategory } from './EventOptionCategory';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
-import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiPartner, apiUrl, Colors } from '../../../types';
+import { ApiPartner, apiUrl } from '../../../types';
+import { Button } from '../../../sharedComponents/Button';
 
 const Specifier = styled.div`
     margin: 20px 0px;
@@ -24,17 +24,6 @@ const Textarea = styled.textarea`
     box-sizing: border-box;
     padding: 5px;
     resize: vertical;
-`;
-
-const Submitbutton = styled.button`
-    height: 35px;
-    width: 350px;
-    background-color: ${Colors.Green};
-    border: none;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 20px;
-    margin-top: 40px;
 `;
 
 interface ExtraEventProps {
@@ -100,11 +89,6 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
         setDescription(e.currentTarget.value);
     };
 
-    // Function called on cancellation of new extra event
-    const onCancel = () => {
-        props.onFinished();
-    };
-
     // Function called on submission of new extra event
     const onSubmit = () => {
         //TODO: Submit to server
@@ -145,7 +129,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 value={description}
                 onChange={onDescriptionChange}
             />
-            <Submitbutton onClick={onSubmit}>Send</Submitbutton>
+            <Button onClick={onSubmit} text="Send" color="Green" height={35} width={350} styling="margin-top: 40px;" />
         </EventTemplateVertical>
     );
 };

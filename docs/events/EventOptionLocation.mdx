@@ -18,7 +18,7 @@ import { EventOptionLocation } from '../../src/pages/calendar/events/EventOption
     {() => {
         const [isEditing, setIsEditing] = React.useState(false);
         const [selectedLocation, setSelectedLocation] = React.useState(1);
-        const [locations, setLocations] = React.useState([{id: 1, name: 'Grønmo'}, {id: 2, name: 'Ryen'}]);
+        const locations = [{id: 1, name: 'Grønmo'}, {id: 2, name: 'Ryen'}];
         const onChange = (loc) => {
             setSelectedLocation(loc);
         };

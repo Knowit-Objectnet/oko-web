@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Colors } from '../../types';
 import { useRef, useState } from 'react';
 import { useAlert, types } from 'react-alert';
+import { Button } from '../../sharedComponents/Button';
 
 const Wrapper = styled.div`
     display: flex;
@@ -60,15 +61,6 @@ const FileButton = styled.div`
 
 const FileInput = styled.input`
     display: none;
-`;
-
-const Button = styled.button`
-    height: 35px;
-    background-color: ${Colors.Green};
-    border: none;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 20px;
 `;
 
 interface NewPartnerProps {
@@ -130,9 +122,7 @@ export const NewPartner: React.FC<NewPartnerProps> = (props) => {
                     <span>{contract ? contract.name : 'Last opp kontrakt'}</span>
                     <FileButton onClick={onFakeFileButtonClick}>Bla gjennom filer</FileButton>
                 </File>
-                <Button type="submit" onClick={onSubmit}>
-                    Legg til samarbeidspartner
-                </Button>
+                <Button text="Legg til samarbeidspartner" onClick={onSubmit} color="Green" height={35} />
             </Content>
         </Wrapper>
     );

@@ -1,11 +1,8 @@
 import React from 'react';
 import { render, cleanup, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import fetch from 'jest-fetch-mock';
-import { Router } from 'react-router-dom';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
-import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { NewPartner } from '../../src/pages/MyPage/NewPartner';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
