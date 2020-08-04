@@ -268,7 +268,8 @@ const areEqual = (
         prevProps.id === nextProps.id &&
         prevProps.start.getTime() === nextProps.start.getTime() &&
         prevProps.end.getTime() === nextProps.end.getTime() &&
-        prevProps.location.id === nextProps.location.id
+        prevProps.location.id === nextProps.location.id &&
+        prevProps.onSubmit === nextProps.onSubmit
     );
 };
 

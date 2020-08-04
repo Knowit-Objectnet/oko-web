@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
 import { apiUrl, Colors, Withdrawal } from '../../types';
 import useSWR from 'swr';
@@ -88,15 +88,19 @@ export const WeightReporting: React.FC = () => {
         }
     }, [apiWithdrawals]);
 
-    const onSubmit = React.useCallback(
+    const onSubmit = useCallback(
         async (weight: number, id: number) => {
             try {
-                if (withdrawals) {
+                if (apiWithdrawals) {
                     // update the local data immediately, but disable the revalidation
-                    const newWithdrawal = withdrawals.find((withdrawal) => withdrawal.reportID === id);
-                    if (newWithdrawal) {
-                        newWithdrawal.weight = weight;
-                        mutate([...withdrawals], false);
+                    const updatedWithdrawal = apiWithdrawals.find((withdrawal) => withdrawal.reportID === id);
+                    if (updatedWithdrawal) {
+                        const newWithdrawal = {
+                            ...updatedWithdrawal,
+                            weight,
+                        };
+                        const newWithdrawals = apiWithdrawals.filter((withdrawal) => withdrawal.reportID !== id);
+                        mutate([...newWithdrawals, newWithdrawal], false);
 
                         // Post update to API
                         await PatchToAPI(`${apiUrl}/reports/`, { id, weight }, keycloak.token);
@@ -112,42 +116,8 @@ export const WeightReporting: React.FC = () => {
                 alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
             }
         },
-        [withdrawals],
+        [apiWithdrawals, mutate],
     );
-
-    // Create a list of memoized elements such that we don't need to rerender every list element
-    // when one gets updated
-    const withdrawalList =
-        withdrawals &&
-        withdrawals
-            .filter((withdrawal) => withdrawal.weight)
-            .map((withdrawal) => (
-                <WithdrawalSubmission
-                    key={withdrawal.reportID}
-                    id={withdrawal.reportID}
-                    weight={withdrawal.weight}
-                    start={withdrawal.startDateTime}
-                    end={withdrawal.endDateTime}
-                    location={withdrawal.station}
-                    onSubmit={onSubmit}
-                />
-            ));
-
-    const notReportedList =
-        withdrawals &&
-        withdrawals
-            .filter((withdrawal) => !withdrawal.weight)
-            .map((withdrawal) => (
-                <WithdrawalSubmission
-                    key={withdrawal.reportID}
-                    id={withdrawal.reportID}
-                    weight={withdrawal.weight}
-                    start={withdrawal.startDateTime}
-                    end={withdrawal.endDateTime}
-                    location={withdrawal.station}
-                    onSubmit={onSubmit}
-                />
-            ));
 
     return (
         <Wrapper>
@@ -157,11 +127,41 @@ export const WeightReporting: React.FC = () => {
                 <Content>
                     <Latest>
                         <h2>Ikke rapportert</h2>
-                        <OverflowWrapper>{notReportedList}</OverflowWrapper>
+                        <OverflowWrapper>
+                            {withdrawals &&
+                                withdrawals
+                                    .filter((withdrawal) => !withdrawal.weight)
+                                    .map((withdrawal) => (
+                                        <WithdrawalSubmission
+                                            key={withdrawal.reportID}
+                                            id={withdrawal.reportID}
+                                            weight={withdrawal.weight}
+                                            start={withdrawal.startDateTime}
+                                            end={withdrawal.endDateTime}
+                                            location={withdrawal.station}
+                                            onSubmit={onSubmit}
+                                        />
+                                    ))}
+                        </OverflowWrapper>
                     </Latest>
                     <Older>
                         <h2>Tidligere uttak</h2>
-                        <OverflowWrapper>{withdrawalList}</OverflowWrapper>
+                        <OverflowWrapper>
+                            {withdrawals &&
+                                withdrawals
+                                    .filter((withdrawal) => withdrawal.weight)
+                                    .map((withdrawal) => (
+                                        <WithdrawalSubmission
+                                            key={withdrawal.reportID + 'weight'}
+                                            id={withdrawal.reportID}
+                                            weight={withdrawal.weight}
+                                            start={withdrawal.startDateTime}
+                                            end={withdrawal.endDateTime}
+                                            location={withdrawal.station}
+                                            onSubmit={onSubmit}
+                                        />
+                                    ))}
+                        </OverflowWrapper>
                     </Older>
                 </Content>
             )}
