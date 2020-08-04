@@ -69,7 +69,7 @@ export const DeleteLocation: React.FC<NewPartnerProps> = (props) => {
 
     const onSubmit = () => {
         if (selectedLocation === -1) {
-            alert.show('Vennligst  velg en stasjon.', { type: types.ERROR });
+            alert.show('Vennligst velg en stasjon.', { type: types.ERROR });
             return;
         }
         props.onSubmit(selectedLocation);
