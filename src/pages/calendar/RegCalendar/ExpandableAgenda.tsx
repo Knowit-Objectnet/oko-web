@@ -41,11 +41,6 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     // State for handling expansion of the agenda/calendar
     const [expanded, setExpanded] = useState(false);
 
-    // Function to set a date to the props.date's year, month, date
-    const setDate = (date: Date) => {
-        return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
-    };
-
     // Function that handles an event click in the calendar. It displays the Event in a modal
     const onSelectEvent = (event: EventInfo) => {
         const eventProps: EventInfo = event as EventInfo;

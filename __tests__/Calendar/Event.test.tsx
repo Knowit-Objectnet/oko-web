@@ -113,7 +113,7 @@ describe('Provides an interface to view and edit an Event', () => {
         const updatevent = jest.fn();
 
         // Change the keycloak instance to be nothing
-        keycloak.hasRealmRole = jest.fn((role: string) => {
+        keycloak.hasRealmRole = jest.fn(() => {
             return false;
         });
 

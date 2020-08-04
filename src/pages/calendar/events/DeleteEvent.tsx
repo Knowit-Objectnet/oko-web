@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { Colors } from '../../../types';
 import { useState } from 'react';
-import {Button} from "../../../sharedComponents/Button";
+import { Button } from '../../../sharedComponents/Button';
 
 const Wrapper = styled.div`
     position: absolute;

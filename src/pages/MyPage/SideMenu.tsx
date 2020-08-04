@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Plus from '../../assets/Plus.svg';
-import { Colors, Roles } from '../../types';
-import { useKeycloak } from '@react-keycloak/web';
+import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;

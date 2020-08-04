@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Header } from './Header';
 import { SideBar } from './SideBar';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 const Wrapper = styled.div`
     display: flex;

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import useSWR from 'swr';
 import { ApiLocation, apiUrl } from '../../types';
 import { fetcher } from '../../utils/fetcher';
-import { useKeycloak } from '@react-keycloak/web';
 import Filter from '../../assets/Filter.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
 import ArrowUp from '../../assets/ArrowUp.svg';

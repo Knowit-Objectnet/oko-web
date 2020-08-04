@@ -63,7 +63,7 @@ interface NavElementProps {
  */
 export const NavElement: React.FC<NavElementProps> = (props) => {
     // Calls the onClick from props that changes the location.
-    const onClick = (e: React.SyntheticEvent) => {
+    const onClick = () => {
         props.onClick(props.location);
     };
 

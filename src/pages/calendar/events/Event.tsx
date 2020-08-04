@@ -4,15 +4,13 @@ import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { ApiLocation, Colors, EventInfo, Roles } from '../../../types';
+import { EventInfo, Roles } from '../../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
-import useSWR from 'swr';
-import { fetcher } from '../../../utils/fetcher';
 import { useAlert, types } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
-import {Button} from "../../../sharedComponents/Button";
+import { Button } from '../../../sharedComponents/Button';
 
 const Body = styled.div`
     display: flex;

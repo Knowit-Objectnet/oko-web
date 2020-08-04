@@ -17,7 +17,7 @@ import { EventOptionPartner } from '../../src/pages/calendar/events/EventOptionP
 <Playground>
     {() => {
         const [selectedPartner, setSelectedPartner] = React.useState(-1);
-        const [partners, setPartners] = React.useState([{id: 1, name: 'Fretex'}, {id: 2, name: 'Hololive'}]);
+        const partners = [{id: 1, name: 'Fretex'}, {id: 2, name: 'Hololive'}];
         const onChange = (partnerId) => {
             setSelectedPartner(partnerId);
         };

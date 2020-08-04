@@ -7,7 +7,7 @@ import { EventOptionCategory } from './EventOptionCategory';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiPartner, apiUrl, Colors } from '../../../types';
+import { ApiPartner, apiUrl } from '../../../types';
 import { Button } from '../../../sharedComponents/Button';
 
 const Specifier = styled.div`

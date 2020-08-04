@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
-import { ApiLocation, ApiPartner, apiUrl, Colors, Roles } from '../../types';
+import { ApiPartner, apiUrl, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
@@ -17,7 +17,7 @@ import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
-import {Button} from "../../sharedComponents/Button";
+import { Button } from '../../sharedComponents/Button';
 
 const Wrapper = styled.div`
     display: flex;
