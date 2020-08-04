@@ -21,26 +21,29 @@ const Wrapper = styled.div`
 `;
 
 const Content = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     height: 100%;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto auto;
 `;
 
-interface LatestProps {
-    isEmpty: boolean;
-}
-
-const Latest = styled.div<LatestProps>`
+const Latest = styled.div`
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
     margin-top: 65px;
     width: 100%;
-    min-height: ${(props) => (props.isEmpty ? '50px' : '150px')};
     display: flex;
     flex-direction: column;
     overflow: auto;
 `;
 
 const Older = styled.div`
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -160,7 +163,7 @@ export const WeightReporting: React.FC = () => {
                 <Loading text="Laster inn data..." />
             ) : (
                 <Content>
-                    <Latest isEmpty={notReportedList === undefined || notReportedList?.length === 0}>
+                    <Latest>
                         <h2>Ikke rapportert</h2>
                         <OverflowWrapper>{notReportedList}</OverflowWrapper>
                     </Latest>
