@@ -62,7 +62,6 @@ const Suffix = styled.label`
     display: flex;
     position: relative;
     border: solid 2px ${Colors.Red};
-    border-right: none;
     box-sizing: border-box;
 
     &::after {
@@ -107,26 +106,6 @@ const ButtonWrapper = styled.div`
     box-sizing: border-box;
     width: 50px;
     height: 50px;
-
-    &:after {
-        content: '';
-        background: ${Colors.Red};
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        height: 2px;
-        width: 50%;
-    }
-
-    &:before {
-        content: '';
-        background: ${Colors.Red};
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 2px;
-        width: 50%;
-    }
 `;
 
 const Button = styled.button`
