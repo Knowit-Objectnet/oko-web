@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
-import { apiUrl, Colors, Withdrawal, ApiLocation } from '../../types';
+import { apiUrl, Colors, Withdrawal } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
@@ -21,26 +21,29 @@ const Wrapper = styled.div`
 `;
 
 const Content = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     height: 100%;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto auto;
 `;
 
-interface LatestProps {
-    isEmpty: boolean;
-}
-
-const Latest = styled.div<LatestProps>`
+const Latest = styled.div`
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
     margin-top: 65px;
     width: 100%;
-    min-height: ${(props) => (props.isEmpty ? '50px' : '150px')};
     display: flex;
     flex-direction: column;
     overflow: auto;
 `;
 
 const Older = styled.div`
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -63,18 +66,12 @@ export const WeightReporting: React.FC = () => {
     const { keycloak } = useKeycloak();
 
     // List of withdrawals fetched from the server
-    const { data: apiWithdrawals, isValidating: isValidatingWithdrawals, mutate } = useSWR<Array<Withdrawal>>(
+    const { data: apiWithdrawals, isValidating, mutate } = useSWR<Array<Withdrawal>>(
         [`${apiUrl}/reports/?partnerId=${keycloak.tokenParsed.GroupID}`, keycloak.token],
         fetcher,
     );
     // List of withdrawals transformed from the Api fetch
     const [withdrawals, setWithdrawals] = useState<Array<Withdrawal> | null>(null);
-
-    // List of stations fetched from the server
-    const { data: locations, isValidating: isValidatingLocations } = useSWR<Array<ApiLocation>>(
-        [`${apiUrl}/stations`, keycloak.token],
-        fetcher,
-    );
 
     useEffect(() => {
         // If the api was successful and returned an array then transform it and update state
@@ -91,15 +88,19 @@ export const WeightReporting: React.FC = () => {
         }
     }, [apiWithdrawals]);
 
-    const onSubmit = React.useCallback(
+    const onSubmit = useCallback(
         async (weight: number, id: number) => {
             try {
-                if (withdrawals) {
+                if (apiWithdrawals) {
                     // update the local data immediately, but disable the revalidation
-                    const newWithdrawal = withdrawals.find((withdrawal) => withdrawal.reportID === id);
-                    if (newWithdrawal) {
-                        newWithdrawal.weight = weight;
-                        mutate([...withdrawals], false);
+                    const updatedWithdrawal = apiWithdrawals.find((withdrawal) => withdrawal.reportID === id);
+                    if (updatedWithdrawal) {
+                        const newWithdrawal = {
+                            ...updatedWithdrawal,
+                            weight,
+                        };
+                        const newWithdrawals = apiWithdrawals.filter((withdrawal) => withdrawal.reportID !== id);
+                        mutate([...newWithdrawals, newWithdrawal], false);
 
                         // Post update to API
                         await PatchToAPI(`${apiUrl}/reports/`, { id, weight }, keycloak.token);
@@ -115,58 +116,52 @@ export const WeightReporting: React.FC = () => {
                 alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
             }
         },
-        [withdrawals],
+        [apiWithdrawals, mutate],
     );
-
-    // Create a list of memoized elements such that we don't need to rerender every list element
-    // when one gets updated
-    const withdrawalList =
-        withdrawals &&
-        withdrawals
-            .filter((withdrawal) => withdrawal.weight)
-            .map((withdrawal) => (
-                <WithdrawalSubmission
-                    key={withdrawal.reportID}
-                    id={withdrawal.reportID}
-                    weight={withdrawal.weight}
-                    start={withdrawal.startDateTime}
-                    end={withdrawal.endDateTime}
-                    location={withdrawal.stationID}
-                    locations={locations}
-                    onSubmit={onSubmit}
-                />
-            ));
-
-    const notReportedList =
-        withdrawals &&
-        withdrawals
-            .filter((withdrawal) => !withdrawal.weight)
-            .map((withdrawal) => (
-                <WithdrawalSubmission
-                    key={withdrawal.reportID}
-                    id={withdrawal.reportID}
-                    weight={withdrawal.weight}
-                    start={withdrawal.startDateTime}
-                    end={withdrawal.endDateTime}
-                    location={withdrawal.stationID}
-                    locations={locations}
-                    onSubmit={onSubmit}
-                />
-            ));
 
     return (
         <Wrapper>
-            {!withdrawals && !locations && isValidatingWithdrawals && isValidatingLocations ? (
+            {!withdrawals && isValidating ? (
                 <Loading text="Laster inn data..." />
             ) : (
                 <Content>
-                    <Latest isEmpty={notReportedList === undefined || notReportedList?.length === 0}>
+                    <Latest>
                         <h2>Ikke rapportert</h2>
-                        <OverflowWrapper>{notReportedList}</OverflowWrapper>
+                        <OverflowWrapper>
+                            {withdrawals &&
+                                withdrawals
+                                    .filter((withdrawal) => !withdrawal.weight)
+                                    .map((withdrawal) => (
+                                        <WithdrawalSubmission
+                                            key={withdrawal.reportID}
+                                            id={withdrawal.reportID}
+                                            weight={withdrawal.weight}
+                                            start={withdrawal.startDateTime}
+                                            end={withdrawal.endDateTime}
+                                            location={withdrawal.station}
+                                            onSubmit={onSubmit}
+                                        />
+                                    ))}
+                        </OverflowWrapper>
                     </Latest>
                     <Older>
                         <h2>Tidligere uttak</h2>
-                        <OverflowWrapper>{withdrawalList}</OverflowWrapper>
+                        <OverflowWrapper>
+                            {withdrawals &&
+                                withdrawals
+                                    .filter((withdrawal) => withdrawal.weight)
+                                    .map((withdrawal) => (
+                                        <WithdrawalSubmission
+                                            key={withdrawal.reportID + 'weight'}
+                                            id={withdrawal.reportID}
+                                            weight={withdrawal.weight}
+                                            start={withdrawal.startDateTime}
+                                            end={withdrawal.endDateTime}
+                                            location={withdrawal.station}
+                                            onSubmit={onSubmit}
+                                        />
+                                    ))}
+                        </OverflowWrapper>
                     </Older>
                 </Content>
             )}

@@ -32,7 +32,7 @@ export interface ApiWithdrawal {
     reportID: number;
     eventID: number;
     partnerID: number;
-    stationID: number;
+    station: ApiLocation;
     startDateTime: string;
     endDateTime: string;
     weight: number;
@@ -74,7 +74,7 @@ export interface Withdrawal {
     reportID: number;
     eventID: number;
     partnerID: number;
-    stationID: number;
+    station: ApiLocation;
     startDateTime: Date;
     endDateTime: Date;
     weight: number | null;
