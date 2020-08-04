@@ -7,7 +7,7 @@ import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
-import {Button} from "../../sharedComponents/Button";
+import { Button } from '../../sharedComponents/Button';
 
 const Wrapper = styled.div`
     display: flex;

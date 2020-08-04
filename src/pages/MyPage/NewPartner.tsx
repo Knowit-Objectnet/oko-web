@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Colors } from '../../types';
 import { useRef, useState } from 'react';
 import { useAlert, types } from 'react-alert';
-import {Button} from "../../sharedComponents/Button";
+import { Button } from '../../sharedComponents/Button';
 
 const Wrapper = styled.div`
     display: flex;
