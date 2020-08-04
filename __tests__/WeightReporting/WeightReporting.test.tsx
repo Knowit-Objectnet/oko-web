@@ -41,9 +41,11 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                             id: 1,
                             name: 'fretex',
                         },
-                        location: {
+                        station: {
                             id: 1,
                             name: 'haraldrud',
+                            openingTime: '08:00:00Z',
+                            closingTime: '20:00:00Z',
                         },
                     },
                     {
@@ -55,9 +57,11 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                             id: 1,
                             name: 'fretex',
                         },
-                        location: {
+                        station: {
                             id: 1,
                             name: 'haraldrud',
+                            openingTime: '08:00:00Z',
+                            closingTime: '20:00:00Z',
                         },
                     },
                     {
@@ -69,9 +73,11 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                             id: 1,
                             name: 'fretex',
                         },
-                        location: {
+                        station: {
                             id: 1,
                             name: 'haraldrud',
+                            openingTime: '08:00:00Z',
+                            closingTime: '20:00:00Z',
                         },
                     },
                     {
@@ -83,9 +89,11 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                             id: 1,
                             name: 'fretex',
                         },
-                        location: {
+                        station: {
                             id: 1,
                             name: 'haraldrud',
+                            openingTime: '08:00:00Z',
+                            closingTime: '20:00:00Z',
                         },
                     },
                 ]);
