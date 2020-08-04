@@ -168,8 +168,7 @@ interface WithdrawalProps {
     weight: number | null;
     start: Date;
     end: Date;
-    location: number;
-    locations?: Array<ApiLocation>;
+    location: ApiLocation;
     onSubmit: (weight: number, id: number) => void;
 }
 
@@ -251,9 +250,7 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                         .padStart(2, '0')}:${props.end.getMinutes().toString().padStart(2, '0')}`}
                 </DateTime>
             </WithdrawalDate>
-            <WithdrawalLocation weight={props.weight}>
-                {props.locations && props.locations.find((location) => location.id === props.location)?.name}
-            </WithdrawalLocation>
+            <WithdrawalLocation weight={props.weight}>{props.location.name}</WithdrawalLocation>
             {editing ? (
                 <InputWrapper>
                     <Suffix>
@@ -292,7 +289,7 @@ const areEqual = (
         prevProps.id === nextProps.id &&
         prevProps.start.getTime() === nextProps.start.getTime() &&
         prevProps.end.getTime() === nextProps.end.getTime() &&
-        prevProps.locations === nextProps.locations
+        prevProps.location.id === nextProps.location.id
     );
 };
 

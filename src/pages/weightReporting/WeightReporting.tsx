@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import { useEffect, useState } from 'react';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
-import { apiUrl, Colors, Withdrawal, ApiLocation } from '../../types';
+import { apiUrl, Colors, Withdrawal } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
@@ -66,18 +66,12 @@ export const WeightReporting: React.FC = () => {
     const { keycloak } = useKeycloak();
 
     // List of withdrawals fetched from the server
-    const { data: apiWithdrawals, isValidating: isValidatingWithdrawals, mutate } = useSWR<Array<Withdrawal>>(
+    const { data: apiWithdrawals, isValidating, mutate } = useSWR<Array<Withdrawal>>(
         [`${apiUrl}/reports/?partnerId=${keycloak.tokenParsed.GroupID}`, keycloak.token],
         fetcher,
     );
     // List of withdrawals transformed from the Api fetch
     const [withdrawals, setWithdrawals] = useState<Array<Withdrawal> | null>(null);
-
-    // List of stations fetched from the server
-    const { data: locations, isValidating: isValidatingLocations } = useSWR<Array<ApiLocation>>(
-        [`${apiUrl}/stations`, keycloak.token],
-        fetcher,
-    );
 
     useEffect(() => {
         // If the api was successful and returned an array then transform it and update state
@@ -134,8 +128,7 @@ export const WeightReporting: React.FC = () => {
                     weight={withdrawal.weight}
                     start={withdrawal.startDateTime}
                     end={withdrawal.endDateTime}
-                    location={withdrawal.stationID}
-                    locations={locations}
+                    location={withdrawal.station}
                     onSubmit={onSubmit}
                 />
             ));
@@ -151,15 +144,14 @@ export const WeightReporting: React.FC = () => {
                     weight={withdrawal.weight}
                     start={withdrawal.startDateTime}
                     end={withdrawal.endDateTime}
-                    location={withdrawal.stationID}
-                    locations={locations}
+                    location={withdrawal.station}
                     onSubmit={onSubmit}
                 />
             ));
 
     return (
         <Wrapper>
-            {!withdrawals && !locations && isValidatingWithdrawals && isValidatingLocations ? (
+            {!withdrawals && isValidating ? (
                 <Loading text="Laster inn data..." />
             ) : (
                 <Content>
