@@ -103,6 +103,7 @@ export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => (
                 {keycloak.hasRealmRole(Roles.Partner) && props.groupId ? (
                     <PartnerRequestForm
                         partnerId={props.groupId}
+                        selectedPartnerId={props.chosenPartner?.id}
                         pickupId={props.id}
                         deleteRequest={props.deleteRequest}
                         registerRequest={props.registerRequest}

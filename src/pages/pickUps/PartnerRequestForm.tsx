@@ -24,6 +24,7 @@ const DeleteButton = styled.div`
 
 interface PartnerRequestFormProps {
     partnerId: number;
+    selectedPartnerId?: number;
     pickupId: number;
     registerRequest: (pickupId: number, partnerId: number) => void;
     deleteRequest: (pickupId: number, partnerId: number) => void;
@@ -51,10 +52,10 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => 
     // Selection of correct button
     let RenderedButton = <Button text="Meld deg på ekstrauttak" color="Green" onClick={onRegisterClick} width={180} />;
     if (request) {
-        if (!request.pickup.chosenPartner) {
+        if (!props.selectedPartnerId) {
             RenderedButton = <Button text="Avventer svar" styling={`border: 2px solid ${Colors.Blue}`} width={180} />;
         } else {
-            if (request.pickup.chosenPartner.id == props.partnerId) {
+            if (props.selectedPartnerId == props.partnerId) {
                 RenderedButton = (
                     <Button text="Forspørsel godkjent" styling={`border: 2px solid ${Colors.Green}`} width={180} />
                 );
@@ -74,7 +75,7 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => 
     return (
         <Wrapper>
             {RenderedButton}
-            {request && !request.pickup.chosenPartner ? (
+            {request && !props.selectedPartnerId ? (
                 <DeleteButton onClick={onDeleteClick}>
                     <Cross height="1.5em" /> Meld av
                 </DeleteButton>
