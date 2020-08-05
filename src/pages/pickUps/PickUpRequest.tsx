@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {ApiPartner, Colors, PickUp, Roles} from '../../types';
-import keycloak from "../../keycloak";
-import {PartnerRequestForm} from "./PartnerRequestForm";
-import {Requests} from "./Requests";
+import { ApiPartner, Colors, PickUp, Roles } from '../../types';
+import keycloak from '../../keycloak';
+import { PartnerRequestForm } from './PartnerRequestForm';
+import { Requests } from './Requests';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -62,7 +62,6 @@ interface PickUpRequestProps extends PickUp {
 }
 
 export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => {
-
     return (
         <Wrapper>
             <Content>
@@ -83,7 +82,7 @@ export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => {
                         .padStart(2, '0')}:${props.startDateTime
                         .getMinutes()
                         .toString()
-                        .padStart(2, '0')}-${props.endDateTime
+                        .padStart(2, '0')} - ${props.endDateTime
                         .getHours()
                         .toString()
                         .padStart(2, '0')}:${props.endDateTime
@@ -117,5 +116,5 @@ export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => {
             </Content>
             {props.description ? <Notice>{props.description}</Notice> : null}
         </Wrapper>
-    )
+    );
 };

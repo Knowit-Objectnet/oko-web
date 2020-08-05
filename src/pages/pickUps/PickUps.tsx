@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWR, { mutate } from 'swr';
-import {ApiPartner, ApiPickUp, apiUrl, Colors, PickUp, Roles} from '../../types';
+import { ApiPartner, ApiPickUp, apiUrl, Colors, PickUp, Roles } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 import { useEffect, useState } from 'react';
 import { PickUpRequest } from './PickUpRequest';
