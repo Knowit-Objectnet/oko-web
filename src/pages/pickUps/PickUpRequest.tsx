@@ -66,64 +66,62 @@ interface PickUpRequestProps extends PickUp {
     onApprove: (partner: ApiPartner, pickupId: number) => void;
 }
 
-export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => {
-    return (
-        <Wrapper>
-            <Content>
-                <LocationDate>
-                    <Location>{props.station.name}</Location>
-                    <span>{`${props.startDateTime
-                        .getDate()
-                        .toString()
-                        .padStart(2, '0')}.${props.startDateTime
-                        .getMonth()
-                        .toString()
-                        .padStart(2, '0')}.${props.startDateTime.getFullYear().toString().padStart(2, '0')}`}</span>
-                </LocationDate>
-                <Event>
-                    {`${props.startDateTime
-                        .getHours()
-                        .toString()
-                        .padStart(2, '0')}:${props.startDateTime
-                        .getMinutes()
-                        .toString()
-                        .padStart(2, '0')} - ${props.endDateTime
-                        .getHours()
-                        .toString()
-                        .padStart(2, '0')}:${props.endDateTime
-                        .getMinutes()
-                        .toString()
-                        .padStart(2, '0')} ${props.startDateTime.toLocaleString('nb-NO', {
-                        weekday: 'short',
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                    })}`}
-                </Event>
-                <Registration>
-                    {keycloak.hasRealmRole(Roles.Partner) && props.groupId ? (
-                        <PartnerRequestForm
-                            partnerId={props.groupId}
-                            pickupId={props.id}
-                            deleteRequest={props.deleteRequest}
-                            registerRequest={props.registerRequest}
-                        />
-                    ) : (
-                        <Requests
-                            pickupId={props.id}
-                            selectedPartnerId={props.chosenPartner?.id}
-                            isStation={props.groupId === props.station.id}
-                            onApprove={props.onApprove}
-                            onReject={props.onReject}
-                        />
-                    )}
-                </Registration>
-            </Content>
-            {props.description ? (
-                <Notice>
-                    <NoticeText>Merknad:</NoticeText> {props.description}
-                </Notice>
-            ) : null}
-        </Wrapper>
-    );
-};
+export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => (
+    <Wrapper>
+        <Content>
+            <LocationDate>
+                <Location>{props.station.name}</Location>
+                <span>{`${props.startDateTime
+                    .getDate()
+                    .toString()
+                    .padStart(2, '0')}.${props.startDateTime
+                    .getMonth()
+                    .toString()
+                    .padStart(2, '0')}.${props.startDateTime.getFullYear().toString().padStart(2, '0')}`}</span>
+            </LocationDate>
+            <Event>
+                {`${props.startDateTime
+                    .getHours()
+                    .toString()
+                    .padStart(2, '0')}:${props.startDateTime
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, '0')} - ${props.endDateTime
+                    .getHours()
+                    .toString()
+                    .padStart(2, '0')}:${props.endDateTime
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, '0')} ${props.startDateTime.toLocaleString('nb-NO', {
+                    weekday: 'short',
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                })}`}
+            </Event>
+            <Registration>
+                {keycloak.hasRealmRole(Roles.Partner) && props.groupId ? (
+                    <PartnerRequestForm
+                        partnerId={props.groupId}
+                        pickupId={props.id}
+                        deleteRequest={props.deleteRequest}
+                        registerRequest={props.registerRequest}
+                    />
+                ) : (
+                    <Requests
+                        pickupId={props.id}
+                        selectedPartnerId={props.chosenPartner?.id}
+                        isStation={props.groupId === props.station.id}
+                        onApprove={props.onApprove}
+                        onReject={props.onReject}
+                    />
+                )}
+            </Registration>
+        </Content>
+        {props.description ? (
+            <Notice>
+                <NoticeText>Merknad:</NoticeText> {props.description}
+            </Notice>
+        ) : null}
+    </Wrapper>
+);

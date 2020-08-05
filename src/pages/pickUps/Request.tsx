@@ -69,10 +69,13 @@ interface RequestProps {
 }
 
 export const Request: React.FC<RequestProps> = (props) => {
+    // Function to handle the rejection of a request
+    // TODO: Currently not used as backend doesnt support it
     const onReject = () => {
         props.onApprove(props.partner, props.pickupId);
     };
 
+    // Function to handle the approval of a request
     const onApprove = () => {
         props.onApprove(props.partner, props.pickupId);
     };

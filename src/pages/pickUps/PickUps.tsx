@@ -101,15 +101,14 @@ export const PickUps: React.FC = () => {
     const { keycloak } = useKeycloak();
     // Alert dispatcher
     const alert = useAlert();
-
-    //
+    // Fetch data pickups/extraEvents from aPI
     const { data: apiPickUps, isValidating } = useSWR<Array<ApiPickUp>>(`${apiUrl}/pickups/`, fetcher);
 
-    //
+    // pickups and modal state
     const [pickUps, setPickUps] = useState<Array<PickUp>>([]);
     const [showModal, setShowModal] = useState(false);
 
-    //
+    // update the pickups state when data is fetched
     useEffect(() => {
         const _pickUps: Array<PickUp> = apiPickUps
             ? apiPickUps.map((pickUp) => {
@@ -123,7 +122,7 @@ export const PickUps: React.FC = () => {
         setPickUps(_pickUps);
     }, [apiPickUps]);
 
-    //
+    // Function to submit new pickup
     const extraEventSubmition = async (start: Date, end: Date, description: string) => {
         try {
             // Data for new extra event
@@ -148,6 +147,7 @@ export const PickUps: React.FC = () => {
                 chosenPartner: null,
             };
 
+            // Old pickups (needed to spread it)
             const oldPickups = apiPickUps || [];
 
             // Update local state
@@ -170,6 +170,7 @@ export const PickUps: React.FC = () => {
         /* TODO: Make this function when the backend supports it */
     };
 
+    // Function to approve a request for a pickup
     const pickupApprove = async (partner: ApiPartner, pickupId: number) => {
         try {
             // Update local state
@@ -187,9 +188,11 @@ export const PickUps: React.FC = () => {
                 mutate(`${apiUrl}/pickups/`, newExtraEvents, false);
             }
 
+            // Update pickup in API
             await PatchToAPI(`${apiUrl}/pickups`, { id: pickupId, chosenPartnerId: partner.id }, keycloak.token);
             alert.show('Valg av sam.partner til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
 
+            // Revalidate
             mutate(`${apiUrl}/pickups/`);
         } catch {
             alert.show('Noe gikk galt, valg av sam.partner til ekstrauttak ble ikke registrert.', {
@@ -198,6 +201,7 @@ export const PickUps: React.FC = () => {
         }
     };
 
+    // Function to submit new request for pickup
     const requestSubmission = async (pickupId: number, partnerId: number) => {
         try {
             // Date to mutate the local state with
@@ -238,6 +242,7 @@ export const PickUps: React.FC = () => {
         }
     };
 
+    // Function to delete request for pickup
     const requestDeletion = async (pickupId: number, partnerId: number) => {
         try {
             // Mutate the local data
@@ -256,6 +261,7 @@ export const PickUps: React.FC = () => {
         }
     };
 
+    // On click function for new extraevent/pickup button
     const onClick = () => {
         setShowModal(true);
     };

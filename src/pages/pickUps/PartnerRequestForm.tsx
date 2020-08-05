@@ -30,20 +30,25 @@ interface PartnerRequestFormProps {
 }
 
 export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => {
+    // Fetching data from API
     const { data: apiRequest, isValidating } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${props.pickupId}&partnerId=${props.partnerId}`,
         fetcher,
     );
+    // Getting the apiRequest object if it isnt empty (its always 1 or empty]
     const request = apiRequest ? apiRequest[0] : undefined;
 
+    // Function to handle deletion of request
     const onDeleteClick = () => {
         props.deleteRequest(props.pickupId, props.partnerId);
     };
 
+    // Function to handle registration of request
     const onRegisterClick = () => {
         props.registerRequest(props.pickupId, props.partnerId);
     };
 
+    // Selection of correct button
     let RenderedButton = <Button text="Meld deg på ekstrauttak" color="Green" onClick={onRegisterClick} width={180} />;
     if (request) {
         if (!request.pickup.chosenPartner) {
@@ -61,6 +66,7 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => 
         }
     }
 
+    // If it's still loading data then return nothing as to not render wrong button
     if (!apiRequest && isValidating) {
         return null;
     }

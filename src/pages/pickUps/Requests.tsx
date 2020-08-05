@@ -31,13 +31,15 @@ interface RequestsProps {
 }
 
 export const Requests: React.FC<RequestsProps> = (props) => {
-    //
+    // Get the requests for the pickup from the API
     const { data: apiRequests, isValidating } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${props.pickupId}`,
         fetcher,
     );
+    // State
     const [requests, setRequests] = useState<Array<ApiRequest>>([]);
 
+    // Update state when data is fetched
     useEffect(() => {
         setRequests(apiRequests || []);
     }, [apiRequests]);
