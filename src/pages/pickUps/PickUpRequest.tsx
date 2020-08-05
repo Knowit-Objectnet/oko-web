@@ -25,6 +25,11 @@ const Notice = styled.div`
     box-sizing: border-box;
 `;
 
+const NoticeText = styled.span`
+    font-weight: bold;
+    margin-right: 5px;
+`;
+
 const LocationDate = styled.div`
     width: 150px;
     padding: 8px;
@@ -114,7 +119,11 @@ export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => {
                     )}
                 </Registration>
             </Content>
-            {props.description ? <Notice>{props.description}</Notice> : null}
+            {props.description ? (
+                <Notice>
+                    <NoticeText>Merknad:</NoticeText> {props.description}
+                </Notice>
+            ) : null}
         </Wrapper>
     );
 };
