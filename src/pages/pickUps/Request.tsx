@@ -12,7 +12,7 @@ const Partner = styled.div`
     padding: 5px;
     box-sizing: border-box;
 
-    &:not(last-child) {
+    &:not(:last-child) {
         border-bottom: 2px solid ${Colors.White};
     }
 `;
