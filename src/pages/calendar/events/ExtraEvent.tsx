@@ -7,8 +7,11 @@ import { EventOptionCategory } from './EventOptionCategory';
 import useSWR from 'swr';
 import { fetcher } from '../../../utils/fetcher';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiPartner, apiUrl } from '../../../types';
+import { ApiLocation, ApiPartner, apiUrl } from '../../../types';
 import { Button } from '../../../sharedComponents/Button';
+import { EventOptionLocation } from './EventOptionLocation';
+import { types, useAlert } from 'react-alert';
+import { PostToAPI } from '../../../utils/PostToAPI';
 
 const Specifier = styled.div`
     margin: 20px 0px;
@@ -29,7 +32,7 @@ const Textarea = styled.textarea`
 interface ExtraEventProps {
     start: Date;
     end: Date;
-    onFinished: () => void;
+    onSubmit: (start: Date, end: Date, description: string) => void;
 }
 
 /**
@@ -38,21 +41,25 @@ interface ExtraEventProps {
  */
 export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     // Valid partners fetched from api
-    let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners/`, fetcher);
-    partners = partners || [];
+    //let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners/`, fetcher);
+    //partners = partners || [];
+
+    // Valid partners fetched from api
+    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations/`, fetcher);
+    locations = locations || [];
 
     // Valid categories fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: categories } = useSWR<string[]>(`${apiUrl}/categories`, fetcher);
-    categories = categories && categories.length !== 0 ? categories : ['Møbler', 'Bøker', 'Sportsutstyr'];
+    //let { data: categories } = useSWR<string[]>(`${apiUrl}/categories`, fetcher);
+    //categories = categories && categories.length !== 0 ? categories : ['Møbler', 'Bøker', 'Sportsutstyr'];
     // State
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
-    const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
-    const [categoryIndex, setCategoryIndex] = useState(-1);
+    //const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
+    //const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
 
     // On change functions for DateRange
@@ -73,15 +80,15 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     };
 
     // On change for Partner selection
-    const onPartnerChange = (partnerId: number) => {
-        setSelectedPartnerId(partnerId);
-    };
+    //const onPartnerChange = (partnerId: number) => {
+    //    setSelectedPartnerId(partnerId);
+    //};
 
     // On change function for Category
-    const onCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        e.persist();
-        setCategoryIndex(parseInt(e.currentTarget.value));
-    };
+    //const onCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    //    e.persist();
+    //    setCategoryIndex(parseInt(e.currentTarget.value));
+    //};
 
     // On change function for Description
     const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -90,9 +97,13 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     };
 
     // Function called on submission of new extra event
-    const onSubmit = () => {
-        //TODO: Submit to server
-        props.onFinished();
+    const onSubmit = async () => {
+        const start = dateRange[0];
+        const end = dateRange[1];
+        start.setHours(timeRange[0].getHours(), timeRange[0].getMinutes(), 0, 0);
+        end.setHours(timeRange[1].getHours(), timeRange[1].getMinutes(), 0, 0);
+
+        props.onSubmit(start, end, description);
     };
 
     return (
@@ -110,18 +121,20 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 recurrenceEnabled={false}
             />
             <Specifier>
-                <EventOptionCategory
-                    selectedCategory={categoryIndex}
-                    categories={categories}
-                    isEditing={true}
-                    onChange={onCategoryChange}
-                />
-                <OR>Eller</OR>
-                <EventOptionPartner
-                    selectedPartner={selectedPartnerId}
-                    partners={partners}
-                    onChange={onPartnerChange}
-                />
+                {/*
+                    <EventOptionCategory
+                        selectedCategory={categoryIndex}
+                        categories={categories}
+                        isEditing={true}
+                        onChange={onCategoryChange}
+                    />
+                    <OR>Eller</OR>
+                    <EventOptionPartner
+                        selectedPartner={selectedPartnerId}
+                        partners={partners}
+                        onChange={onPartnerChange}
+                    />
+                */}
             </Specifier>
             <Textarea
                 maxLength={200}

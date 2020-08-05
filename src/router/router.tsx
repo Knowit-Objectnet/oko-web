@@ -17,6 +17,7 @@ import { Logout } from '../pages/logout/Logout';
 import { CalendarPage } from '../pages/calendar/Calendar';
 import { WeightReporting } from '../pages/weightReporting/WeightReporting';
 import { MyPage } from '../pages/MyPage/MyPage';
+import { PickUps } from '../pages/pickUps/PickUps';
 
 export const RouterComponent: React.FC = () => {
     const [, initialized] = useKeycloak();
@@ -41,7 +42,7 @@ export const RouterComponent: React.FC = () => {
                                 path={`${props.match.url}`}
                                 authenticatedRoles={[Roles.Oslo]}
                                 not={<Redirect to="/calendar" />}
-                                is={() => 'Hello overview'}
+                                is={<PickUps />}
                             />
                             <Route exact path={`${props.match.url}calendar`} component={CalendarPage} />
                             <AuthenticatedRoute
@@ -81,7 +82,7 @@ export const RouterComponent: React.FC = () => {
                                 path={`${props.match.url}notifications`}
                                 authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
                                 not={<Redirect to="/" />}
-                                is={() => 'Hello notifications'}
+                                is={<PickUps />}
                             />
                             <AuthenticatedRoute
                                 exact={true}

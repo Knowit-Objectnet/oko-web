@@ -13,7 +13,7 @@ import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
 import differenceInDays from 'date-fns/differenceInDays';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
 import { DeleteToAPI } from '../../utils/DeleteToAPI';
@@ -209,15 +209,7 @@ export const CalendarPage: React.FC = () => {
     // Extra event display function
     const extraEvent = () => {
         const { start, end } = getStartAndEnd();
-        setModalContent(
-            <ExtraEvent
-                start={start}
-                end={end}
-                onFinished={() => {
-                    setShowModal(false);
-                }}
-            />,
-        );
+        setModalContent(<ExtraEvent start={start} end={end} onSubmit={extraEventSubmition} />);
         setShowModal(true);
     };
 
@@ -248,15 +240,7 @@ export const CalendarPage: React.FC = () => {
                 />,
             );
         } else {
-            setModalContent(
-                <ExtraEvent
-                    start={start}
-                    end={end}
-                    onFinished={() => {
-                        setShowModal(false);
-                    }}
-                />,
-            );
+            setModalContent(<ExtraEvent start={start} end={end} onSubmit={extraEventSubmition} />);
         }
         setShowModal(true);
     };
@@ -275,6 +259,26 @@ export const CalendarPage: React.FC = () => {
     // On location change selector function
     const onSelectedLocationChange = (index: number) => {
         setSelectedLocation(index);
+    };
+
+    // Function to submit new pickup
+    const extraEventSubmition = async (start: Date, end: Date, description: string) => {
+        try {
+            // Data for new extra event
+            const data = {
+                startDateTime: start,
+                endDateTime: end,
+                description: description,
+                stationId: keycloak.tokenParsed.GroupID,
+            };
+            // Post extra event to API
+            await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
+            // Give userfeedback and close modal
+            alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
+            setShowModal(false);
+        } catch {
+            alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
+        }
     };
 
     const addEvent = async (
