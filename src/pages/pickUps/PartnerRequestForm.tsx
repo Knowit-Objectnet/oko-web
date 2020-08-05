@@ -30,7 +30,7 @@ interface PartnerRequestFormProps {
 }
 
 export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => {
-    const { data: apiRequest, isValidating, mutate } = useSWR<Array<ApiRequest>>(
+    const { data: apiRequest, isValidating } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${props.pickupId}&partnerId=${props.partnerId}`,
         fetcher,
     );
@@ -59,6 +59,10 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => 
                 );
             }
         }
+    }
+
+    if (!apiRequest && isValidating) {
+        return null;
     }
 
     return (

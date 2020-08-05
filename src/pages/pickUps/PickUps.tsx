@@ -13,6 +13,7 @@ import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { DeleteToAPI } from '../../utils/DeleteToAPI';
 import { PatchToAPI } from '../../utils/PatchToAPI';
+import { Loading } from '../../sharedComponents/Loading';
 
 const Wrapper = styled.div`
     display: flex;
@@ -288,17 +289,21 @@ export const PickUps: React.FC = () => {
                         </ExplanationLast>
                     </Explanation>
                     <PickUpsList>
-                        {pickUps.map((pickUp) => (
-                            <PickUpRequest
-                                key={`Pickup: ${pickUp.id}`}
-                                {...pickUp}
-                                groupId={keycloak.tokenParsed.GroupID}
-                                deleteRequest={requestDeletion}
-                                registerRequest={requestSubmission}
-                                onReject={pickupReject}
-                                onApprove={pickupApprove}
-                            />
-                        ))}
+                        {!apiPickUps && isValidating ? (
+                            <Loading text="Laster inn data..." />
+                        ) : (
+                            pickUps.map((pickUp) => (
+                                <PickUpRequest
+                                    key={`Pickup: ${pickUp.id}`}
+                                    {...pickUp}
+                                    groupId={keycloak.tokenParsed.GroupID}
+                                    deleteRequest={requestDeletion}
+                                    registerRequest={requestSubmission}
+                                    onReject={pickupReject}
+                                    onApprove={pickupApprove}
+                                />
+                            ))
+                        )}
                     </PickUpsList>
                 </Content>
             </Wrapper>

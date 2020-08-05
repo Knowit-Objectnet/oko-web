@@ -32,7 +32,7 @@ interface RequestsProps {
 
 export const Requests: React.FC<RequestsProps> = (props) => {
     //
-    const { data: apiRequests, isValidating, mutate } = useSWR<Array<ApiRequest>>(
+    const { data: apiRequests, isValidating } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${props.pickupId}`,
         fetcher,
     );
@@ -44,7 +44,8 @@ export const Requests: React.FC<RequestsProps> = (props) => {
 
     return (
         <Wrapper>
-            {requests.length === 0 ? <NoRequests>Ingen påmeldte enda</NoRequests> : null}
+            {!apiRequests && isValidating ? <NoRequests>Laster inn...</NoRequests> : null}
+            {requests && requests.length === 0 ? <NoRequests>Ingen påmeldte enda</NoRequests> : null}
             {requests.map((request) => (
                 <Request
                     key={`pickupId: ${request.pickup.id} partner ${request.partner.id}`}
