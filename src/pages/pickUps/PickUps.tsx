@@ -1,0 +1,307 @@
+import * as React from 'react';
+import styled from 'styled-components';
+import useSWR, { mutate } from 'swr';
+import {ApiPartner, ApiPickUp, apiUrl, Colors, PickUp, Roles} from '../../types';
+import { fetcher } from '../../utils/fetcher';
+import { useEffect, useState } from 'react';
+import { PickUpRequest } from './PickUpRequest';
+import Plus from '../../assets/Plus.svg';
+import { Modal } from '../../sharedComponents/Modal';
+import { ExtraEvent } from '../calendar/events/ExtraEvent';
+import { PostToAPI } from '../../utils/PostToAPI';
+import { types, useAlert } from 'react-alert';
+import { useKeycloak } from '@react-keycloak/web';
+import { DeleteToAPI } from '../../utils/DeleteToAPI';
+import { PatchToAPI } from '../../utils/PatchToAPI';
+
+const Wrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+`;
+
+const Content = styled.div`
+    margin-top: 90px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 80%;
+    height: 100%;
+    overflow: auto;
+`;
+
+const Explanation = styled.div`
+    display: flex;
+    align-items: center;
+    width: 100%;
+`;
+
+const ExplanationLocation = styled.div`
+    width: 150px;
+`;
+
+const ExplanationPickup = styled.div`
+    flex: 1;
+`;
+
+const ExplanationLast = styled.div`
+    width: 350px;
+`;
+
+const PickUpsList = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+`;
+
+const Item = styled.div`
+    position: absolute;
+    top: 40px;
+    right: 50px;
+    display: flex;
+    flex-direction: row;
+    &:not(:last-child) {
+        margin-bottom: 25px;
+    }
+`;
+
+const Description = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    background-color: ${Colors.LightBeige};
+`;
+
+const Button = styled.div`
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    background-color: ${Colors.Green};
+    border-radius: 50%;
+    box-sizing: border-box;
+
+    &:not(:last-child) {
+        margin-bottom: 30px;
+    }
+`;
+
+export const PickUps: React.FC = () => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
+    // Alert dispatcher
+    const alert = useAlert();
+
+    //
+    const { data: apiPickUps, isValidating } = useSWR<Array<ApiPickUp>>(`${apiUrl}/pickups/`, fetcher);
+
+    //
+    const [pickUps, setPickUps] = useState<Array<PickUp>>([]);
+    const [showModal, setShowModal] = useState(false);
+
+    //
+    useEffect(() => {
+        const _pickUps: Array<PickUp> = apiPickUps
+            ? apiPickUps.map((pickUp) => {
+                  return {
+                      ...pickUp,
+                      startDateTime: new Date(pickUp.startDateTime),
+                      endDateTime: new Date(pickUp.endDateTime),
+                  };
+              })
+            : [];
+        setPickUps(_pickUps);
+    }, [apiPickUps]);
+
+    //
+    const extraEventSubmition = async (start: Date, end: Date, description: string) => {
+        try {
+            // Data for new extra event
+            const data = {
+                startDateTime: start,
+                endDateTime: end,
+                description: description,
+                stationId: keycloak.tokenParsed.GroupID,
+            };
+
+            // Local state update data
+            const newExtraEvent = {
+                startDateTime: start,
+                endDateTime: end,
+                description: description,
+                station: {
+                    id: keycloak.tokenParsed.GroupID,
+                    name: keycloak.tokenParsed.groups[0],
+                    openingTime: '09:00:00Z',
+                    closingTime: '20:00:00Z',
+                },
+                chosenPartner: null,
+            };
+
+            const oldPickups = apiPickUps || [];
+
+            // Update local state
+            mutate(`${apiUrl}/pickups/`, [...oldPickups, newExtraEvent], false);
+
+            // Post extra event to API
+            await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
+            // Give userfeedback and close modal
+            alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
+            setShowModal(false);
+
+            // Revalidate
+            mutate(`${apiUrl}/pickups/`);
+        } catch {
+            alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
+        }
+    };
+
+    const pickupReject = async (partner: ApiPartner, pickupId: number) => {
+        /* TODO: Make this function when the backend supports it */
+    };
+
+    const pickupApprove = async (partner: ApiPartner, pickupId: number) => {
+        try {
+            // Update local state
+            if (apiPickUps) {
+                const updatedExtraEvent = apiPickUps.find((pickUp) => pickUp.id === pickupId);
+                const filteredExtraEvents = apiPickUps.filter((pickUp) => pickUp.id !== pickupId);
+                const newExtraEvents = [
+                    ...filteredExtraEvents,
+                    {
+                        ...updatedExtraEvent,
+                        chosenPartner: partner,
+                    },
+                ];
+                // Update local state
+                mutate(`${apiUrl}/pickups/`, newExtraEvents, false);
+            }
+
+            await PatchToAPI(`${apiUrl}/pickups`, { id: pickupId, chosenPartnerId: partner.id }, keycloak.token);
+            alert.show('Valg av sam.partner til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
+
+            mutate(`${apiUrl}/pickups/`);
+        } catch {
+            alert.show('Noe gikk galt, valg av sam.partner til ekstrauttak ble ikke registrert.', {
+                type: types.ERROR,
+            });
+        }
+    };
+
+    const requestSubmission = async (pickupId: number, partnerId: number) => {
+        try {
+            // Date to mutate the local state with
+            const localMutation = {
+                pickup: {
+                    id: pickupId,
+                    startDateTime: '',
+                    endDateTime: '',
+                    description: '',
+                    station: {
+                        id: -1,
+                        name: '',
+                        openingTime: '',
+                        closingTime: '',
+                    },
+                    chosenPartner: null,
+                },
+                partner: {
+                    id: partnerId,
+                    name: '',
+                    description: '',
+                    phone: '',
+                    email: '',
+                },
+            };
+
+            // Mutate the local data
+            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`, [localMutation], false);
+
+            // Post to the API
+            await PostToAPI(`${apiUrl}/requests`, { pickupId: pickupId, partnerId: partnerId }, keycloak.token);
+            alert.show('Påmelding til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
+
+            // Revalidate
+            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`);
+        } catch {
+            alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
+        }
+    };
+
+    const requestDeletion = async (pickupId: number, partnerId: number) => {
+        try {
+            // Mutate the local data
+            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`, [], false);
+
+            // Delete the request in the API
+            await DeleteToAPI(`${apiUrl}/requests?pickupId=${pickupId}&partnerId=${partnerId}`, keycloak.token);
+            alert.show('Påmelding til ekstrauttak ble sletteet suksessfullt.', { type: types.SUCCESS });
+
+            // Revalidate
+            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`);
+        } catch {
+            alert.show('Noe gikk galt, sletting av påmelding til ekstrauttaket ble ikke registrert.', {
+                type: types.ERROR,
+            });
+        }
+    };
+
+    const onClick = () => {
+        setShowModal(true);
+    };
+
+    return (
+        <>
+            {showModal ? (
+                <Modal
+                    exitModalCallback={() => {
+                        setShowModal(false);
+                    }}
+                    content={<ExtraEvent end={new Date()} onSubmit={extraEventSubmition} start={new Date()} />}
+                />
+            ) : null}
+            <Wrapper>
+                {keycloak.hasRealmRole(Roles.Ambassador) ? (
+                    <Item>
+                        <Description>Ektrauttak</Description>
+                        <Button onClick={onClick}>
+                            <Plus height="100%" />
+                        </Button>
+                    </Item>
+                ) : null}
+                <Content>
+                    <h2>Forespørsler</h2>
+                    <Explanation>
+                        <ExplanationLocation>Sendt av:</ExplanationLocation>
+                        <ExplanationPickup>Uttak:</ExplanationPickup>
+                        <ExplanationLast>
+                            {keycloak.hasRealmRole(Roles.Ambassador) ? 'Handlingsalternativer:' : 'Påmeldte:'}
+                        </ExplanationLast>
+                    </Explanation>
+                    <PickUpsList>
+                        {pickUps.map((pickUp) => (
+                            <PickUpRequest
+                                key={`Pickup: ${pickUp.id}`}
+                                {...pickUp}
+                                groupId={keycloak.tokenParsed.GroupID}
+                                deleteRequest={requestDeletion}
+                                registerRequest={requestSubmission}
+                                onReject={pickupReject}
+                                onApprove={pickupApprove}
+                            />
+                        ))}
+                    </PickUpsList>
+                </Content>
+            </Wrapper>
+        </>
+    );
+};

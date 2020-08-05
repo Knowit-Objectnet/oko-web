@@ -39,6 +39,20 @@ export interface ApiWithdrawal {
     reportedDateTime: string;
 }
 
+export interface ApiPickUp {
+    id: number;
+    startDateTime: string;
+    endDateTime: string;
+    description: string;
+    station: ApiLocation;
+    chosenPartner: ApiPartner | null;
+}
+
+export interface ApiRequest {
+    pickup: ApiPickUp;
+    partner: ApiPartner;
+}
+
 export interface EventInfo {
     title: string;
     start: Date;
@@ -79,6 +93,15 @@ export interface Withdrawal {
     endDateTime: Date;
     weight: number | null;
     reportedDateTime: Date;
+}
+
+export interface PickUp {
+    id: number;
+    startDateTime: Date;
+    endDateTime: Date;
+    description: string;
+    station: ApiLocation;
+    chosenPartner: ApiPartner | null;
 }
 
 // Roles

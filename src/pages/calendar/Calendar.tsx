@@ -213,7 +213,7 @@ export const CalendarPage: React.FC = () => {
             <ExtraEvent
                 start={start}
                 end={end}
-                onFinished={() => {
+                onSubmit={() => {
                     setShowModal(false);
                 }}
             />,
@@ -252,7 +252,7 @@ export const CalendarPage: React.FC = () => {
                 <ExtraEvent
                     start={start}
                     end={end}
-                    onFinished={() => {
+                    onSubmit={() => {
                         setShowModal(false);
                     }}
                 />,
