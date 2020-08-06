@@ -196,7 +196,8 @@ export const CalendarPage: React.FC = () => {
             <NewEvent
                 start={start}
                 end={end}
-                addEvent={addEvent}
+                beforeSubmit={beforeNewEventSubmission}
+                afterSubmit={afterNewEventSubmission}
                 onFinished={() => {
                     modal.remove();
                 }}
@@ -229,7 +230,8 @@ export const CalendarPage: React.FC = () => {
                 <NewEvent
                     start={start}
                     end={end}
-                    addEvent={addEvent}
+                    beforeSubmit={beforeNewEventSubmission}
+                    afterSubmit={afterNewEventSubmission}
                     onFinished={() => {
                         modal.remove();
                     }}
@@ -267,7 +269,8 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const addEvent = async (
+    const beforeNewEventSubmission = async (
+        key: string,
         data: {
             startDateTime: string;
             endDateTime: string;
@@ -283,90 +286,91 @@ export const CalendarPage: React.FC = () => {
         station: ApiLocation,
         partner: ApiPartner,
     ) => {
-        try {
-            if (apiEvents) {
-                // Mutate local data
-                const newEvent: ApiEvent = {
-                    startDateTime: data.startDateTime,
-                    endDateTime: data.endDateTime,
-                    id: -1,
-                    partner: partner,
-                    station: station,
-                    recurrenceRule: data.recurrenceRule
-                        ? {
-                              id: -1,
-                              until: data.recurrenceRule.until,
-                              days: data.recurrenceRule.days || [],
-                              count: data.recurrenceRule.count || 0,
-                              interval: data.recurrenceRule.interval || 0,
-                          }
-                        : null,
-                };
-                // Create the new event(s) locally for the local state
-                const newEvents = [...apiEvents];
-                if (data.recurrenceRule && data.recurrenceRule.days) {
-                    const days: Array<number> = data.recurrenceRule.days.map((day) => {
-                        switch (day) {
-                            case 'MONDAY':
-                                return 1;
-                            case 'TUESDAY':
-                                return 2;
-                            case 'WEDNESDAY':
-                                return 3;
-                            case 'THURSDAY':
-                                return 4;
-                            case 'FRIDAY':
-                                return 5;
-                        }
-                    });
-
-                    // Make the minimum of 5 (the days we show in the calendar at once) and the dayes in the new event range
-                    const min = Math.min(
-                        5,
-                        differenceInDays(new Date(data.recurrenceRule.until), new Date(data.startDateTime)) + 1,
-                    );
-                    for (let i = 0; i < min; i++) {
-                        // create a copy of the start and end time
-                        const newStart = new Date(data.startDateTime);
-                        const newEnd = new Date(data.endDateTime);
-
-                        // Copy the new event
-                        const additionalEvent = { ...newEvent };
-                        // Update the id to get an unique id
-                        additionalEvent.id -= i + 1;
-
-                        // Get the next day
-                        const newDate = add(newStart, { days: i });
-
-                        // Check if the next day is included in the days
-                        const day = newDate.getDay();
-                        if (!days.includes(day)) continue;
-
-                        // Set the date to the weekday of this week
-                        newStart.setDate(newDate.getDate());
-                        newEnd.setDate(newDate.getDate());
-                        // Update the event with the new dates
-                        additionalEvent.startDateTime = newStart.toISOString();
-                        additionalEvent.endDateTime = newEnd.toISOString();
-                        newEvents.push(additionalEvent);
+        if (apiEvents) {
+            // Mutate local data
+            const newEvent: ApiEvent = {
+                startDateTime: data.startDateTime,
+                endDateTime: data.endDateTime,
+                id: -1,
+                partner: partner,
+                station: station,
+                recurrenceRule: data.recurrenceRule
+                    ? {
+                          id: -1,
+                          until: data.recurrenceRule.until,
+                          days: data.recurrenceRule.days || [],
+                          count: data.recurrenceRule.count || 0,
+                          interval: data.recurrenceRule.interval || 0,
+                      }
+                    : null,
+            };
+            // Create the new event(s) locally for the local state
+            const newEvents = [...apiEvents];
+            if (data.recurrenceRule && data.recurrenceRule.days) {
+                const days: Array<number> = data.recurrenceRule.days.map((day) => {
+                    switch (day) {
+                        case 'MONDAY':
+                            return 1;
+                        case 'TUESDAY':
+                            return 2;
+                        case 'WEDNESDAY':
+                            return 3;
+                        case 'THURSDAY':
+                            return 4;
+                        case 'FRIDAY':
+                            return 5;
                     }
-                } else {
-                    newEvents.push(newEvent);
-                }
+                });
 
-                await mutate(newEvents, false);
-                modal.remove();
+                // Make the minimum of 5 (the days we show in the calendar at once) and the dayes in the new event range
+                const min = Math.min(
+                    5,
+                    differenceInDays(new Date(data.recurrenceRule.until), new Date(data.startDateTime)) + 1,
+                );
+                for (let i = 0; i < min; i++) {
+                    // create a copy of the start and end time
+                    const newStart = new Date(data.startDateTime);
+                    const newEnd = new Date(data.endDateTime);
+
+                    // Copy the new event
+                    const additionalEvent = { ...newEvent };
+                    // Update the id to get an unique id
+                    additionalEvent.id -= i + 1;
+
+                    // Get the next day
+                    const newDate = add(newStart, { days: i });
+
+                    // Check if the next day is included in the days
+                    const day = newDate.getDay();
+                    if (!days.includes(day)) continue;
+
+                    // Set the date to the weekday of this week
+                    newStart.setDate(newDate.getDate());
+                    newEnd.setDate(newDate.getDate());
+                    // Update the event with the new dates
+                    additionalEvent.startDateTime = newStart.toISOString();
+                    additionalEvent.endDateTime = newEnd.toISOString();
+                    newEvents.push(additionalEvent);
+                }
+            } else {
+                newEvents.push(newEvent);
             }
 
-            // Post the event to the backend
-            await PostToAPI(`${apiUrl}/events`, data, keycloak.token);
+            mutate(newEvents, false);
+        }
+    };
 
+    const afterNewEventSubmission = (successful: boolean, key: string) => {
+        if (successful) {
             // Give user feedback
             alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
 
+            // Remove modal
+            modal.remove();
+
             // trigger a revalidation (refetch) to make sure our local data is correct
             mutate();
-        } catch (err) {
+        } else {
             alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
         }
     };
