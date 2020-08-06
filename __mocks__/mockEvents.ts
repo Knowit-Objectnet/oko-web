@@ -35,6 +35,46 @@ export const mockEvents: Array<EventInfo> = [
             recurrenceRule: null,
         },
     },
+    {
+        title: 'Test',
+        start: start,
+        end: end,
+        resource: {
+            eventId: 1,
+            location: {
+                id: 2,
+                name: "Grønmo",
+                openingTime: "09:00:00Z",
+                closingTime: "20:00:00Z"
+            },
+            partner: {
+                id: 1,
+                name: 'Fretex',
+                description: "...",
+                phone: "40400040",
+                email: "test@knowit.no",
+            },
+            weight: 100,
+            message: {
+                start: start,
+                end: end,
+                text: 'Tar ikke i mot barneleker ifm. Covid-19 tiltak.',
+            },
+            recurrenceRule: {
+                id: 15,
+                until: end.toISOString(),
+                days: [
+                    "MONDAY",
+                    "TUESDAY",
+                    "WEDNESDAY",
+                    "THURSDAY",
+                    "FRIDAY"
+                ],
+                interval: 1,
+                count: null
+            }
+        },
+    },
 ];
 
 export const mockApiEvents: Array<ApiEvent> = [

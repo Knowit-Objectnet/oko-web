@@ -131,7 +131,7 @@ export const Event: React.FC<EventProps> = (props) => {
 
         try {
             if (props.beforeDeleteRangeEvent) {
-                props.beforeDeleteRangeEvent(`${apiUrl}/events?`, event, range);
+                props.beforeDeleteRangeEvent(`${apiUrl}/events`, event, range);
             }
             // send a request to the API to update the source
             await DeleteToAPI(
@@ -142,11 +142,11 @@ export const Event: React.FC<EventProps> = (props) => {
             );
 
             if (props.afterDeleteRangeEvent) {
-                props.afterDeleteRangeEvent(true, `${apiUrl}/events?`);
+                props.afterDeleteRangeEvent(true, `${apiUrl}/events`);
             }
         } catch (err) {
             if (props.afterDeleteRangeEvent) {
-                props.afterDeleteRangeEvent(false, `${apiUrl}/events?`);
+                props.afterDeleteRangeEvent(false, `${apiUrl}/events`);
             }
         }
     };
