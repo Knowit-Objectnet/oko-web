@@ -13,6 +13,7 @@ import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import { apiUrl } from '../../src/types';
 import { mockLocations } from '../../__mocks__/mockLocations';
+import ModalProvider from "../../src/sharedComponents/Modal/Provider";
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -50,11 +51,13 @@ describe('Provides a page to view the calendar', () => {
     it('Should render without errors', async () => {
         render(
             <AlertProvider template={AlertTemplate} {...options}>
-                <KeycloakProvider keycloak={keycloak}>
-                    <Router history={history}>
-                        <CalendarPage />
-                    </Router>
-                </KeycloakProvider>
+                <ModalProvider>
+                    <KeycloakProvider keycloak={keycloak}>
+                        <Router history={history}>
+                            <CalendarPage />
+                        </Router>
+                    </KeycloakProvider>
+                </ModalProvider>
             </AlertProvider>,
         );
     });

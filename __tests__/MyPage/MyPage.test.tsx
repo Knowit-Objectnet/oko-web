@@ -9,6 +9,7 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import { MyPage } from '../../src/pages/MyPage/MyPage';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
+import ModalProvider from "../../src/sharedComponents/Modal/Provider";
 
 describe('Provides a page to view the calendar in addition to change log and notifications', () => {
     // router history
@@ -37,11 +38,13 @@ describe('Provides a page to view the calendar in addition to change log and not
     it('Should render working logout button', async () => {
         const { findByText } = render(
             <AlertProvider template={AlertTemplate} {...options}>
-                <KeycloakProvider keycloak={keycloak}>
-                    <Router history={history}>
-                        <MyPage />
-                    </Router>
-                </KeycloakProvider>
+                <ModalProvider>
+                    <KeycloakProvider keycloak={keycloak}>
+                        <Router history={history}>
+                            <MyPage />
+                        </Router>
+                    </KeycloakProvider>
+                </ModalProvider>
             </AlertProvider>,
         );
 
@@ -67,11 +70,13 @@ describe('Provides a page to view the calendar in addition to change log and not
     it("Should render the user's contact info ", async () => {
         const { findByText } = render(
             <AlertProvider template={AlertTemplate} {...options}>
-                <KeycloakProvider keycloak={keycloak}>
-                    <Router history={history}>
-                        <MyPage />
-                    </Router>
-                </KeycloakProvider>
+                <ModalProvider>
+                    <KeycloakProvider keycloak={keycloak}>
+                        <Router history={history}>
+                            <MyPage />
+                        </Router>
+                    </KeycloakProvider>
+                </ModalProvider>
             </AlertProvider>,
         );
 
