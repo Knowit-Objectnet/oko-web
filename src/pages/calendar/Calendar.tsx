@@ -216,9 +216,12 @@ export const CalendarPage: React.FC = () => {
         modal.show(
             <Event
                 {...event}
-                deleteSingleEvent={deleteSingleEvent}
-                deleteRangeEvents={deleteRangeEvents}
-                updateEvent={updateEvent}
+                beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                afterDeleteSingleEvent={afterDeleteSingleEvent}
+                beforeDeleteRangeEvent={beforeDeleteRangeEvents}
+                afterDeleteRangeEvent={afterDeleteRangeEvents}
+                beforeUpdateEvent={beforeUpdateEvent}
+                afterUpdateEvent={afterUpdateEvent}
             />,
         );
     };
@@ -356,7 +359,10 @@ export const CalendarPage: React.FC = () => {
                 newEvents.push(newEvent);
             }
 
-            mutate(newEvents, false);
+            await mutate(newEvents, false);
+
+            // Remove modal
+            modal.remove();
         }
     };
 
@@ -365,9 +371,6 @@ export const CalendarPage: React.FC = () => {
             // Give user feedback
             alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
 
-            // Remove modal
-            modal.remove();
-
             // trigger a revalidation (refetch) to make sure our local data is correct
             mutate();
         } else {
@@ -375,115 +378,98 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const deleteSingleEvent = async (event: EventInfo) => {
-        try {
-            if (apiEvents) {
-                // update the local data immediately, but disable the revalidation
-                const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
-                await mutate(newEvents, false);
-                modal.remove();
-            }
+    const beforeDeleteSingleEvent = async (key: string, event: EventInfo) => {
+        if (apiEvents) {
+            // update the local data immediately, but disable the revalidation
+            const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
+            await mutate(newEvents, false);
+            modal.remove();
+        }
+    };
 
-            // send a request to the API to update the source
-            await DeleteToAPI(`${apiUrl}/events?eventId=${event.resource.eventId}`, keycloak.token);
-
+    const afterDeleteSingleEvent = (successful: boolean, key: string) => {
+        if (successful) {
             // Give user feedback
             alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
 
             // trigger a revalidation (refetch) to make sure our local data is correct
             mutate();
-        } catch (err) {
+        } else {
             alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
         }
     };
 
-    const deleteRangeEvents = async (event: EventInfo, range: [Date, Date]) => {
-        if (!event.resource.recurrenceRule) {
-            await deleteSingleEvent(event);
-            return;
+    const beforeDeleteRangeEvents = async (key: string, event: EventInfo, range: [Date, Date]) => {
+        if (apiEvents) {
+            // Set range date times to low and high times to make sure all events in the range gets deleeted
+            const start = range[0];
+            const end = range[1];
+            start.setHours(2, 0, 0, 0);
+            end.setHours(22, 0, 0, 0);
+            // update the local data immediately, but disable the revalidation
+            const newEvents = apiEvents.filter(
+                (apiEvent) =>
+                    !(
+                        apiEvent.recurrenceRule &&
+                        event.resource.recurrenceRule &&
+                        apiEvent.recurrenceRule.id === event.resource.recurrenceRule.id &&
+                        new Date(apiEvent.startDateTime) >= start &&
+                        new Date(apiEvent.startDateTime) <= end
+                    ),
+            );
+            await mutate(newEvents, false);
+            modal.remove();
         }
+    };
 
-        try {
-            if (apiEvents) {
-                // Set range date times to low and high times to make sure all events in the range gets deleeted
-                const start = range[0];
-                const end = range[1];
-                start.setHours(2, 0, 0, 0);
-                end.setHours(22, 0, 0, 0);
-                // update the local data immediately, but disable the revalidation
-                const newEvents = apiEvents.filter(
-                    (apiEvent) =>
-                        !(
-                            apiEvent.recurrenceRule &&
-                            event.resource.recurrenceRule &&
-                            apiEvent.recurrenceRule.id === event.resource.recurrenceRule.id &&
-                            new Date(apiEvent.startDateTime) >= start &&
-                            new Date(apiEvent.startDateTime) <= end
-                        ),
-                );
-                await mutate(newEvents, false);
-                modal.remove();
+    const afterDeleteRangeEvents = (successful: boolean, key: string) => {
+        if (successful) {
+            // Give user feedback
+            alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
 
-                // send a request to the API to update the source
-                await DeleteToAPI(
-                    `${apiUrl}/events?recurrenceRuleId=${
-                        event.resource.recurrenceRule?.id
-                    }&fromDate=${start.toISOString().slice(0, -2)}&toDate=${end.toISOString().slice(0, -2)}`,
-                    keycloak.token,
-                );
-
-                // Give user feedback
-                alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
-
-                // trigger a revalidation (refetch) to make sure our local data is correct
-                mutate();
-            }
-        } catch (err) {
+            // trigger a revalidation (refetch) to make sure our local data is correct
+            mutate();
+        } else {
             alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
         }
     };
 
-    const updateEvent = async (eventId: number, start: string, end: string) => {
-        try {
-            // Update the local state if the apiEvents exist
-            if (apiEvents) {
-                // Find the event we want to update
-                const newEvent = apiEvents.find((event) => event.id === eventId);
+    const beforeUpdateEvent = async (key: string, eventId: number, start: string, end: string) => {
+        // Update the local state if the apiEvents exist
+        if (apiEvents) {
+            // Find the event we want to update
+            const newEvent = apiEvents.find((event) => event.id === eventId);
 
-                // Tell the user that we were unable to update local data if we cant find the event
-                // , and hope that it works to update the api
-                if (!newEvent) {
-                    alert.show('Klarte ikke å oppdatere lokal data, vennligst vent.', { type: types.INFO });
-                } else {
-                    // Update the event
-                    newEvent.startDateTime = start;
-                    newEvent.endDateTime = end;
+            // Tell the user that we were unable to update local data if we cant find the event
+            // , and hope that it works to update the api
+            if (!newEvent) {
+                alert.show('Klarte ikke å oppdatere lokal data, vennligst vent.', { type: types.INFO });
+            } else {
+                // Update the event
+                newEvent.startDateTime = start;
+                newEvent.endDateTime = end;
 
-                    // Create a new array of events to not directly mutate state
-                    const newEvents = apiEvents.filter((event) => event.id !== eventId);
+                // Create a new array of events to not directly mutate state
+                const newEvents = apiEvents.filter((event) => event.id !== eventId);
 
-                    // Add the updated event to the new Events
-                    newEvents.push(newEvent);
+                // Add the updated event to the new Events
+                newEvents.push(newEvent);
 
-                    // update the local data immediately, but disable the revalidation
-                    await mutate(newEvents, false);
-                    modal.remove();
-                }
+                // update the local data immediately, but disable the revalidation
+                await mutate(newEvents, false);
+                modal.remove();
             }
+        }
+    };
 
-            // send a request to the API to update the source
-            await PatchToAPI(
-                `${apiUrl}/events`,
-                { id: eventId, startDateTime: start.slice(0, -2), endDateTime: end.slice(0, -2) },
-                keycloak.token,
-            );
-
+    const afterUpdateEvent = (successful: boolean, key: string) => {
+        if (successful) {
             // Give user feedback
             alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
 
             // trigger a revalidation (refetch) to make sure our local data is correct
             mutate();
-        } catch (err) {
+        } else {
             alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
         }
     };
@@ -498,7 +484,8 @@ export const CalendarPage: React.FC = () => {
                     isToggled={isToggled}
                     onWeekChange={onWeekChange}
                     events={events}
-                    deleteEvent={deleteSingleEvent}
+                    beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                    afterDeleteSingleEvent={afterDeleteSingleEvent}
                 />
             );
         } else if (keycloak.hasRealmRole(Roles.Ambassador)) {

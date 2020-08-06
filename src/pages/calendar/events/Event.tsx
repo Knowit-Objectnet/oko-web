@@ -4,13 +4,15 @@ import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { EventInfo, Roles } from '../../../types';
+import { ApiPickUp, apiUrl, EventInfo, Roles } from '../../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import { useAlert, types } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../../../sharedComponents/Button';
+import { PatchToAPI } from '../../../utils/PatchToAPI';
+import {DeleteToAPI} from "../../../utils/DeleteToAPI";
 
 const Body = styled.div`
     display: flex;
@@ -35,9 +37,12 @@ const Options = styled.div`
 `;
 
 interface EventProps extends EventInfo {
-    deleteSingleEvent: (event: EventInfo) => void;
-    deleteRangeEvents: (event: EventInfo, range: [Date, Date]) => void;
-    updateEvent: (eventId: number, start: string, end: string) => void;
+    beforeDeleteSingleEvent?: (key: string, event: EventInfo) => void;
+    afterDeleteSingleEvent?: (successful: boolean, key: string) => void;
+    beforeDeleteRangeEvent?: (key: string, event: EventInfo, range: [Date, Date]) => void;
+    afterDeleteRangeEvent?: (successful: boolean, key: string) => void;
+    beforeUpdateEvent?: (key: string, eventId: number, start: string, end: string) => void;
+    afterUpdateEvent?: (successful: boolean, key: string) => void;
 }
 
 /**
@@ -84,11 +89,65 @@ export const Event: React.FC<EventProps> = (props) => {
     };
 
     const onDelete = (range: [Date, Date], isSingleDeletion: boolean) => {
-        const { deleteSingleEvent, deleteRangeEvents, updateEvent, ...rest } = props;
+        const {
+            beforeDeleteSingleEvent,
+            afterDeleteSingleEvent,
+            beforeDeleteRangeEvent,
+            afterDeleteRangeEvent,
+            beforeUpdateEvent,
+            afterUpdateEvent,
+            ...rest
+        } = props;
         if (isSingleDeletion) {
             deleteSingleEvent(rest);
         } else {
             deleteRangeEvents(rest, range);
+        }
+    };
+
+    const deleteSingleEvent = async (event: EventInfo) => {
+        try {
+            if (props.beforeDeleteSingleEvent) {
+                props.beforeDeleteSingleEvent(`${apiUrl}/events?eventId=${event.resource.eventId}`, event);
+            }
+            // send a request to the API to update the source
+            await DeleteToAPI(`${apiUrl}/events?eventId=${event.resource.eventId}`, keycloak.token);
+
+            if (props.afterDeleteSingleEvent) {
+                props.afterDeleteSingleEvent(true, `${apiUrl}/events?eventId=${event.resource.eventId}`);
+            }
+        } catch (err) {
+            if (props.afterDeleteSingleEvent) {
+                props.afterDeleteSingleEvent(false, `${apiUrl}/events?eventId=${event.resource.eventId}`);
+            }
+        }
+    };
+
+    const deleteRangeEvents = async (event: EventInfo, range: [Date, Date]) => {
+        if (!event.resource.recurrenceRule) {
+            await deleteSingleEvent(event);
+            return;
+        }
+
+        try {
+            if (props.beforeDeleteRangeEvent) {
+                props.beforeDeleteRangeEvent(`${apiUrl}/events?`, event, range);
+            }
+            // send a request to the API to update the source
+            await DeleteToAPI(
+                `${apiUrl}/events?recurrenceRuleId=${
+                    event.resource.recurrenceRule?.id
+                }&fromDate=${range[0].toISOString().slice(0, -2)}&toDate=${range[1].toISOString().slice(0, -2)}`,
+                keycloak.token,
+            );
+
+            if (props.afterDeleteRangeEvent) {
+                props.afterDeleteRangeEvent(true, `${apiUrl}/events?`);
+            }
+        } catch (err) {
+            if (props.afterDeleteRangeEvent) {
+                props.afterDeleteRangeEvent(false, `${apiUrl}/events?`);
+            }
         }
     };
 
@@ -100,7 +159,7 @@ export const Event: React.FC<EventProps> = (props) => {
     };
 
     // Function called on successful event edit.
-    const onSubmit = () => {
+    const onSubmit = async () => {
         const start = new Date(dateRange[0]);
         const end = new Date(dateRange[1]);
         start.setHours(
@@ -136,8 +195,33 @@ export const Event: React.FC<EventProps> = (props) => {
             return;
         }
 
-        props.updateEvent(props.resource.eventId, start.toISOString(), end.toISOString());
-        setIsEditing(false);
+        try {
+            if (props.beforeUpdateEvent) {
+                props.beforeUpdateEvent(
+                    `${apiUrl}/events`,
+                    props.resource.eventId,
+                    start.toISOString(),
+                    end.toISOString(),
+                );
+            }
+            // send a request to the API to update the source
+            await PatchToAPI(
+                `${apiUrl}/events`,
+                {
+                    id: props.resource.eventId,
+                    startDateTime: start.toISOString().slice(0, -2),
+                    endDateTime: end.toISOString().slice(0, -2),
+                },
+                keycloak.token,
+            );
+            if (props.afterUpdateEvent) {
+                props.afterUpdateEvent(true, `${apiUrl}/events`);
+            }
+        } catch {
+            if (props.afterUpdateEvent) {
+                props.afterUpdateEvent(false, `${apiUrl}/events`);
+            }
+        }
     };
 
     return (
