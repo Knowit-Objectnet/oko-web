@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route, Router, Redirect } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from '../types';
+import useModal from '../sharedComponents/Modal/useModal';
 
 // History
 import { historyObj } from './historyObj';

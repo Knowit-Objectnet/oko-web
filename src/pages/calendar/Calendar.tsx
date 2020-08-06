@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { default as DateCalendar } from 'react-calendar';
 import { RegCalendar } from './RegCalendar/RegCalendar';
 import { useEffect, useState } from 'react';
-import { Modal } from '../../sharedComponents/Modal';
 import { Event } from './events/Event';
 import { ExtraEvent } from './events/ExtraEvent';
 import { NewEvent } from './events/NewEvent';
@@ -22,6 +21,7 @@ import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useKeycloak } from '@react-keycloak/web';
 import { useAlert, types } from 'react-alert';
 import { LocationSelector } from './LocationSelector';
+import useModal from '../../sharedComponents/Modal/useModal';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -86,13 +86,12 @@ const Sidebar = styled.div`
  * The page component for the calendar view
  */
 export const CalendarPage: React.FC = () => {
-    // Alert dispatcher
-    const alert = useAlert();
     // Keycloak instance
     const { keycloak } = useKeycloak();
-    // State for handling modal
-    const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
+    // Alert dispatcher
+    const alert = useAlert();
+    // Modal dispatcher
+    const modal = useModal();
     // State for day handling
     const [selectedDate, setSelectedDate] = useState(new Date());
     // State for side menu
@@ -193,29 +192,27 @@ export const CalendarPage: React.FC = () => {
     // New event display function
     const newEvent = () => {
         const { start, end } = getStartAndEnd();
-        setModalContent(
+        modal.show(
             <NewEvent
                 start={start}
                 end={end}
                 addEvent={addEvent}
                 onFinished={() => {
-                    setShowModal(false);
+                    modal.remove();
                 }}
             />,
         );
-        setShowModal(true);
     };
 
     // Extra event display function
     const extraEvent = () => {
         const { start, end } = getStartAndEnd();
-        setModalContent(<ExtraEvent start={start} end={end} onSubmit={extraEventSubmition} />);
-        setShowModal(true);
+        modal.show(<ExtraEvent start={start} end={end} onSubmit={extraEventSubmition} />);
     };
 
     // On event selection function to display an event
     const onSelectEvent = (event: EventInfo) => {
-        setModalContent(
+        modal.show(
             <Event
                 {...event}
                 deleteSingleEvent={deleteSingleEvent}
@@ -223,26 +220,24 @@ export const CalendarPage: React.FC = () => {
                 updateEvent={updateEvent}
             />,
         );
-        setShowModal(true);
     };
 
     // On slot selection function to display new or extra event
     const onSelectSlot = (start: Date, end: Date, isOslo: boolean) => {
         if (isOslo) {
-            setModalContent(
+            modal.show(
                 <NewEvent
                     start={start}
                     end={end}
                     addEvent={addEvent}
                     onFinished={() => {
-                        setShowModal(false);
+                        modal.remove();
                     }}
                 />,
             );
         } else {
-            setModalContent(<ExtraEvent start={start} end={end} onSubmit={extraEventSubmition} />);
+            modal.show(<ExtraEvent start={start} end={end} onSubmit={extraEventSubmition} />);
         }
-        setShowModal(true);
     };
 
     // Click function for agenda/calendar toggle button
@@ -275,7 +270,7 @@ export const CalendarPage: React.FC = () => {
             await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
             // Give userfeedback and close modal
             alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
-            setShowModal(false);
+            modal.remove();
         } catch {
             alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
         }
@@ -369,7 +364,7 @@ export const CalendarPage: React.FC = () => {
                 }
 
                 await mutate(newEvents, false);
-                setShowModal(false);
+                modal.remove();
             }
 
             // Post the event to the backend
@@ -391,7 +386,7 @@ export const CalendarPage: React.FC = () => {
                 // update the local data immediately, but disable the revalidation
                 const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
                 await mutate(newEvents, false);
-                setShowModal(false);
+                modal.remove();
             }
 
             // send a request to the API to update the source
@@ -432,7 +427,7 @@ export const CalendarPage: React.FC = () => {
                         ),
                 );
                 await mutate(newEvents, false);
-                setShowModal(false);
+                modal.remove();
 
                 // send a request to the API to update the source
                 await DeleteToAPI(
@@ -477,7 +472,7 @@ export const CalendarPage: React.FC = () => {
 
                     // update the local data immediately, but disable the revalidation
                     await mutate(newEvents, false);
-                    setShowModal(false);
+                    modal.remove();
                 }
             }
 
@@ -536,38 +531,28 @@ export const CalendarPage: React.FC = () => {
     };
 
     return (
-        <>
-            {showModal ? (
-                <Modal
-                    exitModalCallback={() => {
-                        setShowModal(false);
-                    }}
-                    content={modalContent}
-                />
-            ) : null}
-            <Wrapper>
-                <ModuleDateCalendar>
-                    <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
-                    {(keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo) ? (
-                        <LocationSelector
-                            selectedLocation={selectedLocation}
-                            onSelectedLocationChange={onSelectedLocationChange}
-                        />
-                    ) : null}
-                </ModuleDateCalendar>
-                {!apiEvents && (!events || events.length <= 0) && isValidating ? (
-                    <Loading text="Laster inn data..." />
-                ) : (
-                    <ModuleCalendar>{getCalendar()}</ModuleCalendar>
-                )}
-                <Sidebar>
-                    <SideMenu
-                        onCalendarToggleClick={toggleCalendarClick}
-                        onNewEventClick={newEvent}
-                        onExtraEventClick={extraEvent}
+        <Wrapper>
+            <ModuleDateCalendar>
+                <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
+                {(keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo) ? (
+                    <LocationSelector
+                        selectedLocation={selectedLocation}
+                        onSelectedLocationChange={onSelectedLocationChange}
                     />
-                </Sidebar>
-            </Wrapper>
-        </>
+                ) : null}
+            </ModuleDateCalendar>
+            {!apiEvents && (!events || events.length <= 0) && isValidating ? (
+                <Loading text="Laster inn data..." />
+            ) : (
+                <ModuleCalendar>{getCalendar()}</ModuleCalendar>
+            )}
+            <Sidebar>
+                <SideMenu
+                    onCalendarToggleClick={toggleCalendarClick}
+                    onNewEventClick={newEvent}
+                    onExtraEventClick={extraEvent}
+                />
+            </Sidebar>
+        </Wrapper>
     );
 };

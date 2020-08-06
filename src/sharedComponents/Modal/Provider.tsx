@@ -1,20 +1,34 @@
 import * as React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import DefaultContext from './Context';
+import { Wrapper } from './Wrapper';
 
 interface Props {
     children: React.ReactNode;
-    context: React.Context<any>;
+    Context?: React.Context<any>;
 }
 
-const Provider = ({ children, context: Context, ...props }: Props) => {
+interface Options {
+    width?: number;
+    maxWidth?: number;
+    minWidth?: number;
+    height?: number;
+    maxHeight?: number;
+    minHeight?: number;
+}
+
+const ModalProvider: ({ children, Context }: Props) => JSX.Element = ({
+    children,
+    Context = DefaultContext,
+}: Props) => {
     const root = useRef<HTMLDivElement | null>(null);
     const modalContext = useRef<{
-        content: React.ReactNode;
-        show: (_content: any, options?: any) => void;
+        content: ReactNode;
+        show: (_content: ReactNode, options?: Options) => void;
         remove: () => void;
     } | null>(null);
-    const [content, setContent] = useState<React.ReactNode | null>(null);
+    const [content, setContent] = useState<ReactNode | null>(null);
 
     useEffect(() => {
         root.current = document.createElement('div');
@@ -31,8 +45,8 @@ const Provider = ({ children, context: Context, ...props }: Props) => {
     }, []);
 
     const show = useCallback(
-        (_content, options = {}) => {
-            setContent(_content);
+        (_content, options: Options = {}) => {
+            setContent(<Wrapper content={_content} exitModalCallback={remove} {...options} />);
         },
         [remove],
     );
@@ -51,4 +65,4 @@ const Provider = ({ children, context: Context, ...props }: Props) => {
     );
 };
 
-export default Provider;
+export default ModalProvider;
