@@ -13,7 +13,7 @@ import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import { apiUrl } from '../../src/types';
 import { mockLocations } from '../../__mocks__/mockLocations';
-import ModalProvider from "../../src/sharedComponents/Modal/Provider";
+import ModalProvider from '../../src/sharedComponents/Modal/Provider';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;

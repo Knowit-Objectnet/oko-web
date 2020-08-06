@@ -123,46 +123,24 @@ export const PickUps: React.FC = () => {
         setPickUps(_pickUps);
     }, [apiPickUps]);
 
-    // Function to submit new pickup
-    const extraEventSubmition = async (start: Date, end: Date, description: string) => {
-        try {
-            // Data for new extra event
-            const data = {
-                startDateTime: start,
-                endDateTime: end,
-                description: description,
-                stationId: keycloak.tokenParsed.GroupID,
-            };
+    const beforeExtraEventSubmission = (key: string, newPickup: ApiPickUp) => {
+        // Old pickups (needed to spread it)
+        const oldPickups = apiPickUps || [];
 
-            // Local state update data
-            const newExtraEvent = {
-                startDateTime: start,
-                endDateTime: end,
-                description: description,
-                station: {
-                    id: keycloak.tokenParsed.GroupID,
-                    name: keycloak.tokenParsed.groups[0],
-                    openingTime: '09:00:00Z',
-                    closingTime: '20:00:00Z',
-                },
-                chosenPartner: null,
-            };
+        // Update local state
+        mutate(key, [...oldPickups, newPickup], false);
+    };
 
-            // Old pickups (needed to spread it)
-            const oldPickups = apiPickUps || [];
-
-            // Update local state
-            mutate(`${apiUrl}/pickups/`, [...oldPickups, newExtraEvent], false);
-
-            // Post extra event to API
-            await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
-            // Give userfeedback and close modal
+    const afterExtraEventSubmission = (successful: boolean, key: string) => {
+        if (successful) {
+            // Give user feedback and close modal
             alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
             modal.remove();
 
             // Revalidate
-            mutate(`${apiUrl}/pickups/`);
-        } catch {
+            mutate(key);
+        } else {
+            // Give user feedback
             alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
         }
     };
@@ -264,7 +242,14 @@ export const PickUps: React.FC = () => {
 
     // On click function for new extraevent/pickup button
     const onClick = () => {
-        modal.show(<ExtraEvent end={new Date()} onSubmit={extraEventSubmition} start={new Date()} />);
+        modal.show(
+            <ExtraEvent
+                end={new Date()}
+                beforeSubmit={beforeExtraEventSubmission}
+                afterSubmit={afterExtraEventSubmission}
+                start={new Date()}
+            />,
+        );
     };
 
     return (

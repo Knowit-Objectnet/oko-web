@@ -207,7 +207,7 @@ export const CalendarPage: React.FC = () => {
     // Extra event display function
     const extraEvent = () => {
         const { start, end } = getStartAndEnd();
-        modal.show(<ExtraEvent start={start} end={end} onSubmit={extraEventSubmition} />);
+        modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
     };
 
     // On event selection function to display an event
@@ -236,7 +236,7 @@ export const CalendarPage: React.FC = () => {
                 />,
             );
         } else {
-            modal.show(<ExtraEvent start={start} end={end} onSubmit={extraEventSubmition} />);
+            modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
         }
     };
 
@@ -256,22 +256,13 @@ export const CalendarPage: React.FC = () => {
         setSelectedLocation(index);
     };
 
-    // Function to submit new pickup
-    const extraEventSubmition = async (start: Date, end: Date, description: string) => {
-        try {
-            // Data for new extra event
-            const data = {
-                startDateTime: start,
-                endDateTime: end,
-                description: description,
-                stationId: keycloak.tokenParsed.GroupID,
-            };
-            // Post extra event to API
-            await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
-            // Give userfeedback and close modal
+    const afterExtraEventSubmission = (successful: boolean, key: string) => {
+        if (successful) {
+            // Give user feedback and close modal
             alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
             modal.remove();
-        } catch {
+        } else {
+            // Give user feedback
             alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
         }
     };

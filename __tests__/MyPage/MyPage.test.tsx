@@ -9,7 +9,7 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 import { MyPage } from '../../src/pages/MyPage/MyPage';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
-import ModalProvider from "../../src/sharedComponents/Modal/Provider";
+import ModalProvider from '../../src/sharedComponents/Modal/Provider';
 
 describe('Provides a page to view the calendar in addition to change log and notifications', () => {
     // router history

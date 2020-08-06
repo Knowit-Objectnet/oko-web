@@ -25,9 +25,9 @@ const options = {
 
 export const App: React.FC = () => {
     return (
-        <AlertProvider template={AlertTemplate} {...options}>
-            <ModalProvider>
-                <KeycloakProvider keycloak={keycloak} onTokens={onKeycloakTokens}>
+        <KeycloakProvider keycloak={keycloak} onTokens={onKeycloakTokens}>
+            <AlertProvider template={AlertTemplate} {...options}>
+                <ModalProvider>
                     <SWRConfig
                         value={{
                             refreshInterval: 0,
@@ -37,10 +37,10 @@ export const App: React.FC = () => {
                     >
                         <RouterComponent />
                     </SWRConfig>
-                </KeycloakProvider>
-                <GlobalStyle />
-            </ModalProvider>
-        </AlertProvider>
+                    <GlobalStyle />
+                </ModalProvider>
+            </AlertProvider>
+        </KeycloakProvider>
     );
 };
 
