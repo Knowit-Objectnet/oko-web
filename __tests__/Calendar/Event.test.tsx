@@ -6,7 +6,7 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
-import { Event } from '../../src/sharedComponents/events/Event';
+import { Event } from '../../src/sharedComponents/Events/Event';
 import { mockApiEvents, mockEvents } from '../../__mocks__/mockEvents';
 import fetch from 'jest-fetch-mock';
 import AlertTemplate from 'react-alert-template-basic';
