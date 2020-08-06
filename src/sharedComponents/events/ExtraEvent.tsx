@@ -5,11 +5,11 @@ import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionCategory } from './EventOptionCategory';
 import useSWR, { mutate } from 'swr';
-import { fetcher } from '../../../utils/fetcher';
+import { fetcher } from '../../utils/fetcher';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, ApiPickUp, apiUrl } from '../../../types';
-import { Button } from '../../../sharedComponents/Button';
-import { PostToAPI } from '../../../utils/PostToAPI';
+import { ApiLocation, ApiPartner, ApiPickUp, apiUrl } from '../../types';
+import { Button } from '../Button';
+import { PostToAPI } from '../../utils/PostToAPI';
 import { useKeycloak } from '@react-keycloak/web';
 
 const Specifier = styled.div`

@@ -4,15 +4,15 @@ import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { ApiPickUp, apiUrl, EventInfo, Roles } from '../../../types';
+import { ApiPickUp, apiUrl, EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import { useAlert, types } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
-import { Button } from '../../../sharedComponents/Button';
-import { PatchToAPI } from '../../../utils/PatchToAPI';
-import {DeleteToAPI} from "../../../utils/DeleteToAPI";
+import { Button } from '../Button';
+import { PatchToAPI } from '../../utils/PatchToAPI';
+import { DeleteToAPI } from '../../utils/DeleteToAPI';
 
 const Body = styled.div`
     display: flex;

@@ -5,7 +5,7 @@ import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
 import DatePicker from 'react-date-picker';
 import { useState } from 'react';
-import { Colors } from '../../../types';
+import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;

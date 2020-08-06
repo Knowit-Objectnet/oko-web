@@ -6,7 +6,7 @@ import { fetcher } from '../../utils/fetcher';
 import { useEffect, useState } from 'react';
 import { PickUpRequest } from './PickUpRequest';
 import Plus from '../../assets/Plus.svg';
-import { ExtraEvent } from '../calendar/events/ExtraEvent';
+import { ExtraEvent } from '../../sharedComponents/events/ExtraEvent';
 import { PostToAPI } from '../../utils/PostToAPI';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
