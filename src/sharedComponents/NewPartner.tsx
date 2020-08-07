@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {apiUrl, Colors} from '../../types';
+import { apiUrl, Colors } from '../types';
 import { useRef, useState } from 'react';
 import { useAlert, types } from 'react-alert';
-import { Button } from '../../sharedComponents/Button';
-import {PostToAPI} from "../../utils/PostToAPI";
-import {FetchError} from "../../utils/FetchError";
-import {useKeycloak} from "@react-keycloak/web";
+import { Button } from './Button';
+import { PostToAPI } from '../utils/PostToAPI';
+import { FetchError } from '../utils/FetchError';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     display: flex;

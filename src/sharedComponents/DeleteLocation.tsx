@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, apiUrl, Colors } from '../../types';
+import { ApiPartner, apiUrl, Colors } from '../types';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
-import {DeleteToAPI} from "../../utils/DeleteToAPI";
-import {useKeycloak} from "@react-keycloak/web";
+import { fetcher } from '../utils/fetcher';
+import { DeleteToAPI } from '../utils/DeleteToAPI';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     display: flex;
@@ -55,58 +55,58 @@ interface NewPartnerProps {
     afterSubmit?: (successful: boolean, key: string) => void;
 }
 
-export const DeletePartner: React.FC<NewPartnerProps> = (props) => {
+export const DeleteLocation: React.FC<NewPartnerProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
     // Alert instance
     const alert = useAlert();
 
-    const [selectedPartner, setSelectedPartner] = useState(-1);
+    const [selectedLocation, setSelectedLocation] = useState(-1);
 
     // Valid partners fetched from api
-    let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
-    partners = partners || [];
+    let { data: locations } = useSWR<ApiPartner[]>(`${apiUrl}/stations`, fetcher);
+    locations = locations || [];
 
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.persist();
 
-        setSelectedPartner(parseInt(e.currentTarget.value));
+        setSelectedLocation(parseInt(e.currentTarget.value));
     };
 
     const onSubmit = async () => {
-        if (selectedPartner === -1) {
-            alert.show('Vennligst  velg en samarbeidspartner.', { type: types.ERROR });
+        if (selectedLocation === -1) {
+            alert.show('Vennligst velg en stasjon.', { type: types.ERROR });
             return;
         }
 
         try {
             if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/partners/${selectedPartner}`, selectedPartner);
+                props.beforeSubmit(`${apiUrl}/stations/${selectedLocation}`, selectedLocation);
             }
 
-            await DeleteToAPI(`${apiUrl}/partners/${selectedPartner}`, keycloak.token);
+            await DeleteToAPI(`${apiUrl}/stations/${selectedLocation}`, keycloak.token);
 
             if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/partners/${selectedPartner}`);
+                props.afterSubmit(true, `${apiUrl}/stations/${selectedLocation}`);
             }
         } catch (err) {
             if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/partners/${selectedPartner}`);
+                props.afterSubmit(false, `${apiUrl}/stations/${selectedLocation}`);
             }
         }
     };
 
     return (
         <Wrapper>
-            <Title>Fjern samarbeidspartner</Title>
+            <Title>Fjern stasjon</Title>
             <Content>
-                <Select value={selectedPartner} onChange={onChange}>
+                <Select value={selectedLocation} onChange={onChange}>
                     <option value={-1} disabled>
-                        Velg samarbeidspartner
+                        Velg stasjon
                     </option>
-                    {partners.map((partner) => (
-                        <option value={partner.id} key={partner.id}>
-                            {partner.name}
+                    {locations.map((location) => (
+                        <option value={location.id} key={location.id}>
+                            {location.name}
                         </option>
                     ))}
                 </Select>

@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 
-import { NewPartner } from '../../src/pages/MyPage/NewPartner';
+import { NewPartner } from '../../src/sharedComponents/NewPartner';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 

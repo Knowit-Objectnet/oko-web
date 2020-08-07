@@ -16,7 +16,7 @@ import { Login } from '../pages/login/Login';
 import { Logout } from '../pages/logout/Logout';
 import { CalendarPage } from '../pages/calendar/Calendar';
 import { WeightReporting } from '../pages/weightReporting/WeightReporting';
-import { MyPage } from '../pages/MyPage/MyPage';
+import { MyPage } from '../pages/myPage/MyPage';
 import { PickUps } from '../pages/pickUps/PickUps';
 import { Stations } from '../pages/stations/Stations';
 
