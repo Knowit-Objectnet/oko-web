@@ -33,7 +33,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
             if (url.endsWith('/reports/?partnerId=1')) {
                 return JSON.stringify([
                     {
-                        id: 1,
+                        reportID: 1,
                         weight: 200,
                         start: new Date(),
                         end: new Date(),
@@ -49,7 +49,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         },
                     },
                     {
-                        id: 2,
+                        reportID: 2,
                         weight: null,
                         start: new Date(),
                         end: new Date(),
@@ -65,7 +65,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         },
                     },
                     {
-                        id: 3,
+                        reportID: 3,
                         weight: null,
                         start: new Date(),
                         end: new Date(),
@@ -81,7 +81,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         },
                     },
                     {
-                        id: 4,
+                        reportID: 4,
                         weight: 200,
                         start: new Date(),
                         end: new Date(),
