@@ -14,12 +14,11 @@ import Bell from '../../assets/Bell.svg';
 import PencilRec from '../../assets/PencilRec.svg';
 import Cog from '../../assets/Cog.svg';
 import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
-import useModal from "../Modal/useModal";
-import {getStartAndEndDateTime} from "../../utils/getStartAndEndDateTime";
-import {ExtraEvent} from "../Events/ExtraEvent";
-import {types, useAlert} from "react-alert";
-import {mutate} from "swr";
-import {NewEvent} from "../Events/NewEvent";
+import useModal from '../Modal/useModal';
+import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
+import { ExtraEvent } from '../Events/ExtraEvent';
+import { types, useAlert } from 'react-alert';
+import { NewEvent } from '../Events/NewEvent';
 
 const duration = 500;
 
