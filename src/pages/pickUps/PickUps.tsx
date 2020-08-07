@@ -246,10 +246,10 @@ export const PickUps: React.FC = () => {
         const { start, end } = getStartAndEndDateTime();
         modal.show(
             <ExtraEvent
-                end={start}
+                end={end}
                 beforeSubmit={beforeExtraEventSubmission}
                 afterSubmit={afterExtraEventSubmission}
-                start={end}
+                start={start}
             />,
         );
     };
