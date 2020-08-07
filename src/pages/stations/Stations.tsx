@@ -24,21 +24,10 @@ const Content = styled.div`
     margin-top: 75px;
 `;
 
-export const Stations = () => {
+export const Stations: React.FC = () => {
     // List of stations
     const { data: apiLocations, isValidating, mutate } = useSWR<Array<ApiLocation>>(`${apiUrl}/stations`, fetcher);
-
-    const [locations, setLocations] = useState<Array<ApiLocation>>([]);
-
-    useEffect(() => {
-        if (apiLocations) {
-            const parsedLocations = apiLocations.map((location) => {
-                const parsedLocation = { ...location };
-                return parsedLocation;
-            });
-            setLocations(parsedLocations);
-        }
-    }, [apiLocations]);
+    const locations = apiLocations || [];
 
     return (
         <Wrapper>
