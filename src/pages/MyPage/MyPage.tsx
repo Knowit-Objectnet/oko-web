@@ -6,7 +6,6 @@ import { ApiPartner, apiUrl, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
-import { Modal } from '../../sharedComponents/Modal';
 import { useEffect, useState } from 'react';
 import { NewPartner } from './NewPartner';
 import { NewLocation } from './NewLocation';
@@ -21,6 +20,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
 import { DeleteToAPI } from '../../utils/DeleteToAPI';
+import useModal from '../../sharedComponents/Modal/useModal';
 
 const Wrapper = styled.div`
     display: flex;
@@ -68,9 +68,9 @@ export const MyPage: React.FC = () => {
     const { keycloak } = useKeycloak();
     // Alert dispatcher
     const alert = useAlert();
-    // State for handling modal
-    const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
+    // Modal dispatcher
+    const modal = useModal();
+    // State for partner info
     const [partnerInfo, setPartnerInfo] = useState<ApiPartner | undefined>(undefined);
 
     // History
@@ -106,7 +106,7 @@ export const MyPage: React.FC = () => {
             await PostToAPI(`${apiUrl}/partners/`, data, keycloak.token);
             alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
 
-            setShowModal(false);
+            modal.remove();
         } catch (err) {
             if (err instanceof FetchError && err.code === 409) {
                 alert.show('En partner med det navnet eksisterer allerede, vennligst velg et annet navn', {
@@ -153,7 +153,7 @@ export const MyPage: React.FC = () => {
             await PostToAPI(`${apiUrl}/stations`, data, keycloak.token);
             alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
 
-            setShowModal(false);
+            modal.remove();
         } catch (err) {
             // Show appropriate error alert if something went wrong.
             if (err instanceof FetchError && err.code === 409) {
@@ -171,7 +171,7 @@ export const MyPage: React.FC = () => {
             await DeleteToAPI(`${apiUrl}/partners/${id}`, keycloak.token);
             alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
 
-            setShowModal(false);
+            modal.remove();
         } catch (err) {
             alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
         }
@@ -182,7 +182,7 @@ export const MyPage: React.FC = () => {
             await DeleteToAPI(`${apiUrl}/stations/${id}`, keycloak.token);
             alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
 
-            setShowModal(false);
+            modal.remove();
         } catch (err) {
             alert.show('Noe gikk galt, stasjoneen ble ikke slettet.', { type: types.ERROR });
         }
@@ -190,69 +190,55 @@ export const MyPage: React.FC = () => {
 
     // Function to show new partner ui modal
     const showNewPartner = () => {
-        setModalContent(<NewPartner onSubmit={submitNewPartner} />);
-        setShowModal(true);
+        modal.show(<NewPartner onSubmit={submitNewPartner} />);
     };
 
     // Function to show new location ui modal
     const showNewLocation = () => {
-        setModalContent(<NewLocation onSubmit={submitNewLocation} />);
-        setShowModal(true);
+        modal.show(<NewLocation onSubmit={submitNewLocation} />);
     };
 
     // Function to show delete partner ui modal
     const showDeletePartner = () => {
-        setModalContent(<DeletePartner onSubmit={deletePartner} />);
-        setShowModal(true);
+        modal.show(<DeletePartner onSubmit={deletePartner} />);
     };
 
     // Function to show delete location ui modal
     const showDeleteLocation = () => {
-        setModalContent(<DeleteLocation onSubmit={deleteLocation} />);
-        setShowModal(true);
+        modal.show(<DeleteLocation onSubmit={deleteLocation} />);
     };
 
     return (
-        <>
-            {showModal ? (
-                <Modal
-                    exitModalCallback={() => {
-                        setShowModal(false);
-                    }}
-                    content={modalContent}
-                />
-            ) : null}
-            <Wrapper>
-                <Content sideMenuVisible={keycloak.hasRealmRole(Roles.Oslo)}>
-                    <Header>
-                        <DefaultProfilePicture />
-                        <h2>Min side</h2>
-                        <Button
-                            onClick={onLogoutClick}
-                            text="Logg ut"
-                            color="DarkBlue"
-                            width={100}
-                            styling="margin-left: auto;"
-                        />
-                    </Header>
-                    {keycloak.hasRealmRole(Roles.Partner) ? (
-                        <AboutPartner
-                            name={partnerInfo ? partnerInfo.name : keycloak.tokenParsed.groups[0] || '<laster inn...>'}
-                            description={partnerInfo ? partnerInfo.description : 'Laster inn...'}
-                        />
-                    ) : null}
-                    <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
-                    {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
-                </Content>
-                {keycloak.hasRealmRole(Roles.Oslo) ? (
-                    <SideMenu
-                        newPartnerClick={showNewPartner}
-                        newLocationClick={showNewLocation}
-                        deletePartnerClick={showDeletePartner}
-                        deleteLocationClick={showDeleteLocation}
+        <Wrapper>
+            <Content sideMenuVisible={keycloak.hasRealmRole(Roles.Oslo)}>
+                <Header>
+                    <DefaultProfilePicture />
+                    <h2>Min side</h2>
+                    <Button
+                        onClick={onLogoutClick}
+                        text="Logg ut"
+                        color="DarkBlue"
+                        width={100}
+                        styling="margin-left: auto;"
+                    />
+                </Header>
+                {keycloak.hasRealmRole(Roles.Partner) ? (
+                    <AboutPartner
+                        name={partnerInfo ? partnerInfo.name : keycloak.tokenParsed.groups[0] || '<laster inn...>'}
+                        description={partnerInfo ? partnerInfo.description : 'Laster inn...'}
                     />
                 ) : null}
-            </Wrapper>
-        </>
+                <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
+                {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
+            </Content>
+            {keycloak.hasRealmRole(Roles.Oslo) ? (
+                <SideMenu
+                    newPartnerClick={showNewPartner}
+                    newLocationClick={showNewLocation}
+                    deletePartnerClick={showDeletePartner}
+                    deleteLocationClick={showDeleteLocation}
+                />
+            ) : null}
+        </Wrapper>
     );
 };

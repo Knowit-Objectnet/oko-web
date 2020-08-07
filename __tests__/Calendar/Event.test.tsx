@@ -6,7 +6,7 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
-import { Event } from '../../src/pages/calendar/events/Event';
+import { Event } from '../../src/sharedComponents/Events/Event';
 import { mockApiEvents, mockEvents } from '../../__mocks__/mockEvents';
 import fetch from 'jest-fetch-mock';
 import AlertTemplate from 'react-alert-template-basic';
@@ -45,9 +45,12 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should show edit symbol on Event if user is logged in as REG', async () => {
-        const deleteSingleEvent = jest.fn();
-        const deleteRangeEvents = jest.fn();
-        const updatevent = jest.fn();
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
 
         // Change the keycloak instance to be logged in as REG
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -60,9 +63,12 @@ describe('Provides an interface to view and edit an Event', () => {
                     <Router history={history}>
                         <Event
                             {...mockEvents[0]}
-                            deleteSingleEvent={deleteSingleEvent}
-                            deleteRangeEvents={deleteRangeEvents}
-                            updateEvent={updatevent}
+                            beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                            afterDeleteSingleEvent={afterDeleteSingleEvent}
+                            beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                            afterDeleteRangeEvent={afterDeleteRangeEvent}
+                            beforeUpdateEvent={beforeUpdateEvent}
+                            afterUpdateEvent={afterUpdateEvent}
                         />
                     </Router>
                 </KeycloakProvider>
@@ -75,9 +81,12 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should show edit symbol on Event if user is logged in as Partner and its the partners event', async () => {
-        const deleteSingleEvent = jest.fn();
-        const deleteRangeEvents = jest.fn();
-        const updatevent = jest.fn();
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
 
         // Change the keycloak instance to be logged in as Partner
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -93,9 +102,12 @@ describe('Provides an interface to view and edit an Event', () => {
                     <Router history={history}>
                         <Event
                             {...mockEvents[0]}
-                            deleteSingleEvent={deleteSingleEvent}
-                            deleteRangeEvents={deleteRangeEvents}
-                            updateEvent={updatevent}
+                            beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                            afterDeleteSingleEvent={afterDeleteSingleEvent}
+                            beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                            afterDeleteRangeEvent={afterDeleteRangeEvent}
+                            beforeUpdateEvent={beforeUpdateEvent}
+                            afterUpdateEvent={afterUpdateEvent}
                         />
                     </Router>
                 </KeycloakProvider>
@@ -108,9 +120,12 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should not show edit symbol on Event if user is not logged in as REG or partner who own eveent', async () => {
-        const deleteSingleEvent = jest.fn();
-        const deleteRangeEvents = jest.fn();
-        const updatevent = jest.fn();
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
 
         // Change the keycloak instance to be nothing
         keycloak.hasRealmRole = jest.fn(() => {
@@ -126,9 +141,12 @@ describe('Provides an interface to view and edit an Event', () => {
                     <Router history={history}>
                         <Event
                             {...mockEvents[0]}
-                            deleteSingleEvent={deleteSingleEvent}
-                            deleteRangeEvents={deleteRangeEvents}
-                            updateEvent={updatevent}
+                            beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                            afterDeleteSingleEvent={afterDeleteSingleEvent}
+                            beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                            afterDeleteRangeEvent={afterDeleteRangeEvent}
+                            beforeUpdateEvent={beforeUpdateEvent}
+                            afterUpdateEvent={afterUpdateEvent}
                         />
                     </Router>
                 </KeycloakProvider>
@@ -141,9 +159,12 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should show edit interface on edit button click and should submit new data to update function', async () => {
-        const deleteSingleEvent = jest.fn();
-        const deleteRangeEvents = jest.fn();
-        const updatevent = jest.fn();
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
 
         // Change the keycloak instance to be logged in as REG
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -156,9 +177,12 @@ describe('Provides an interface to view and edit an Event', () => {
                     <Router history={history}>
                         <Event
                             {...mockEvents[0]}
-                            deleteSingleEvent={deleteSingleEvent}
-                            deleteRangeEvents={deleteRangeEvents}
-                            updateEvent={updatevent}
+                            beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                            afterDeleteSingleEvent={afterDeleteSingleEvent}
+                            beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                            afterDeleteRangeEvent={afterDeleteRangeEvent}
+                            beforeUpdateEvent={beforeUpdateEvent}
+                            afterUpdateEvent={afterUpdateEvent}
                         />
                     </Router>
                 </KeycloakProvider>
@@ -198,18 +222,24 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(updatevent.mock.calls.length).toBe(1);
-        expect(updatevent.mock.calls[0]).toEqual([
+        expect(beforeUpdateEvent.mock.calls.length).toBe(1);
+        expect(beforeUpdateEvent.mock.calls[0]).toEqual([
+            `${apiUrl}/events`,
             mockEvents[0].resource.eventId,
             mockEvents[0].start.toISOString(),
             mockEvents[0].end.toISOString(),
         ]);
+        expect(afterUpdateEvent.mock.calls.length).toBe(1);
+        expect(afterUpdateEvent.mock.calls[0]).toEqual([true, `${apiUrl}/events`]);
     });
 
     it('Should allow single deletion of event if logged in as REG', async () => {
-        const deleteSingleEvent = jest.fn();
-        const deleteRangeEvents = jest.fn();
-        const updatevent = jest.fn();
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
 
         // Change the keycloak instance to be logged in as REG
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -222,9 +252,12 @@ describe('Provides an interface to view and edit an Event', () => {
                     <Router history={history}>
                         <Event
                             {...mockEvents[0]}
-                            deleteSingleEvent={deleteSingleEvent}
-                            deleteRangeEvents={deleteRangeEvents}
-                            updateEvent={updatevent}
+                            beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                            afterDeleteSingleEvent={afterDeleteSingleEvent}
+                            beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                            afterDeleteRangeEvent={afterDeleteRangeEvent}
+                            beforeUpdateEvent={beforeUpdateEvent}
+                            afterUpdateEvent={afterUpdateEvent}
                         />
                     </Router>
                 </KeycloakProvider>
@@ -258,14 +291,25 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(deleteSingleEvent.mock.calls.length).toBe(1);
-        expect(deleteSingleEvent.mock.calls[0]).toEqual([mockEvents[0]]);
+        expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1);
+        expect(beforeDeleteSingleEvent.mock.calls[0]).toEqual([
+            `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
+            mockEvents[0],
+        ]);
+        expect(afterDeleteSingleEvent.mock.calls.length).toBe(1);
+        expect(afterDeleteSingleEvent.mock.calls[0]).toEqual([
+            true,
+            `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
+        ]);
     });
 
     it('Should allow single deletion of event if logged in as Partner who own event', async () => {
-        const deleteSingleEvent = jest.fn();
-        const deleteRangeEvents = jest.fn();
-        const updatevent = jest.fn();
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
 
         // Change the keycloak instance to be logged in as Partner
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -281,9 +325,12 @@ describe('Provides an interface to view and edit an Event', () => {
                     <Router history={history}>
                         <Event
                             {...mockEvents[0]}
-                            deleteSingleEvent={deleteSingleEvent}
-                            deleteRangeEvents={deleteRangeEvents}
-                            updateEvent={updatevent}
+                            beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                            afterDeleteSingleEvent={afterDeleteSingleEvent}
+                            beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                            afterDeleteRangeEvent={afterDeleteRangeEvent}
+                            beforeUpdateEvent={beforeUpdateEvent}
+                            afterUpdateEvent={afterUpdateEvent}
                         />
                     </Router>
                 </KeycloakProvider>
@@ -317,14 +364,25 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(deleteSingleEvent.mock.calls.length).toBe(1);
-        expect(deleteSingleEvent.mock.calls[0]).toEqual([mockEvents[0]]);
+        expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1);
+        expect(beforeDeleteSingleEvent.mock.calls[0]).toEqual([
+            `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
+            mockEvents[0],
+        ]);
+        expect(afterDeleteSingleEvent.mock.calls.length).toBe(1);
+        expect(afterDeleteSingleEvent.mock.calls[0]).toEqual([
+            true,
+            `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
+        ]);
     });
 
     it('Should allow range deletion of event if logged in as REG', async () => {
-        const deleteSingleEvent = jest.fn();
-        const deleteRangeEvents = jest.fn();
-        const updatevent = jest.fn();
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
 
         // Change the keycloak instance to be logged in as REG
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -336,10 +394,13 @@ describe('Provides an interface to view and edit an Event', () => {
                 <KeycloakProvider keycloak={keycloak}>
                     <Router history={history}>
                         <Event
-                            {...mockEvents[0]}
-                            deleteSingleEvent={deleteSingleEvent}
-                            deleteRangeEvents={deleteRangeEvents}
-                            updateEvent={updatevent}
+                            {...mockEvents[1]}
+                            beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                            afterDeleteSingleEvent={afterDeleteSingleEvent}
+                            beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                            afterDeleteRangeEvent={afterDeleteRangeEvent}
+                            beforeUpdateEvent={beforeUpdateEvent}
+                            afterUpdateEvent={afterUpdateEvent}
                         />
                     </Router>
                 </KeycloakProvider>
@@ -387,16 +448,23 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(deleteRangeEvents.mock.calls.length).toBe(1);
         const date = new Date();
         date.setHours(2, 0, 0, 0);
-        expect(deleteRangeEvents.mock.calls[0]).toEqual([mockEvents[0], [date, date]]);
+
+        expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1);
+        expect(beforeDeleteRangeEvent.mock.calls[0]).toEqual([`${apiUrl}/events`, mockEvents[1], [date, date]]);
+
+        expect(afterDeleteRangeEvent.mock.calls.length).toBe(1);
+        expect(afterDeleteRangeEvent.mock.calls[0]).toEqual([true, `${apiUrl}/events`]);
     });
 
     it('Should allow range deletion of event if logged in as Partner who own event', async () => {
-        const deleteSingleEvent = jest.fn();
-        const deleteRangeEvents = jest.fn();
-        const updatevent = jest.fn();
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
 
         // Change the keycloak instance to be logged in as Partner
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -411,10 +479,13 @@ describe('Provides an interface to view and edit an Event', () => {
                 <KeycloakProvider keycloak={keycloak}>
                     <Router history={history}>
                         <Event
-                            {...mockEvents[0]}
-                            deleteSingleEvent={deleteSingleEvent}
-                            deleteRangeEvents={deleteRangeEvents}
-                            updateEvent={updatevent}
+                            {...mockEvents[1]}
+                            beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                            afterDeleteSingleEvent={afterDeleteSingleEvent}
+                            beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                            afterDeleteRangeEvent={afterDeleteRangeEvent}
+                            beforeUpdateEvent={beforeUpdateEvent}
+                            afterUpdateEvent={afterUpdateEvent}
                         />
                     </Router>
                 </KeycloakProvider>
@@ -462,9 +533,11 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(deleteRangeEvents.mock.calls.length).toBe(1);
         const date = new Date();
         date.setHours(2, 0, 0, 0);
-        expect(deleteRangeEvents.mock.calls[0]).toEqual([mockEvents[0], [date, date]]);
+        expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1);
+        expect(beforeDeleteRangeEvent.mock.calls[0]).toEqual([`${apiUrl}/events`, mockEvents[1], [date, date]]);
+        expect(afterDeleteRangeEvent.mock.calls.length).toBe(1);
+        expect(afterDeleteRangeEvent.mock.calls[0]).toEqual([true, `${apiUrl}/events`]);
     });
 });

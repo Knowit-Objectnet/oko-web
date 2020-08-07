@@ -6,14 +6,15 @@ import { fetcher } from '../../utils/fetcher';
 import { useEffect, useState } from 'react';
 import { PickUpRequest } from './PickUpRequest';
 import Plus from '../../assets/Plus.svg';
-import { Modal } from '../../sharedComponents/Modal';
-import { ExtraEvent } from '../calendar/events/ExtraEvent';
+import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { PostToAPI } from '../../utils/PostToAPI';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { DeleteToAPI } from '../../utils/DeleteToAPI';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { Loading } from '../../sharedComponents/Loading';
+import useModal from '../../sharedComponents/Modal/useModal';
+import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 
 const Wrapper = styled.div`
     display: flex;
@@ -101,12 +102,13 @@ export const PickUps: React.FC = () => {
     const { keycloak } = useKeycloak();
     // Alert dispatcher
     const alert = useAlert();
+    // Modal dispatcher
+    const modal = useModal();
     // Fetch data pickups/extraEvents from aPI
     const { data: apiPickUps, isValidating } = useSWR<Array<ApiPickUp>>(`${apiUrl}/pickups/`, fetcher);
 
-    // pickups and modal state
+    // pickups state
     const [pickUps, setPickUps] = useState<Array<PickUp>>([]);
-    const [showModal, setShowModal] = useState(false);
 
     // update the pickups state when data is fetched
     useEffect(() => {
@@ -122,46 +124,24 @@ export const PickUps: React.FC = () => {
         setPickUps(_pickUps);
     }, [apiPickUps]);
 
-    // Function to submit new pickup
-    const extraEventSubmition = async (start: Date, end: Date, description: string) => {
-        try {
-            // Data for new extra event
-            const data = {
-                startDateTime: start,
-                endDateTime: end,
-                description: description,
-                stationId: keycloak.tokenParsed.GroupID,
-            };
+    const beforeExtraEventSubmission = (key: string, newPickup: ApiPickUp) => {
+        // Old pickups (needed to spread it)
+        const oldPickups = apiPickUps || [];
 
-            // Local state update data
-            const newExtraEvent = {
-                startDateTime: start,
-                endDateTime: end,
-                description: description,
-                station: {
-                    id: keycloak.tokenParsed.GroupID,
-                    name: keycloak.tokenParsed.groups[0],
-                    openingTime: '09:00:00Z',
-                    closingTime: '20:00:00Z',
-                },
-                chosenPartner: null,
-            };
+        // Update local state
+        mutate(key, [...oldPickups, newPickup], false);
+    };
 
-            // Old pickups (needed to spread it)
-            const oldPickups = apiPickUps || [];
-
-            // Update local state
-            mutate(`${apiUrl}/pickups/`, [...oldPickups, newExtraEvent], false);
-
-            // Post extra event to API
-            await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
-            // Give userfeedback and close modal
+    const afterExtraEventSubmission = (successful: boolean, key: string) => {
+        if (successful) {
+            // Give user feedback and close modal
             alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
-            setShowModal(false);
+            modal.remove();
 
             // Revalidate
-            mutate(`${apiUrl}/pickups/`);
-        } catch {
+            mutate(key);
+        } else {
+            // Give user feedback
             alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
         }
     };
@@ -263,56 +243,54 @@ export const PickUps: React.FC = () => {
 
     // On click function for new extraevent/pickup button
     const onClick = () => {
-        setShowModal(true);
+        const { start, end } = getStartAndEndDateTime();
+        modal.show(
+            <ExtraEvent
+                end={end}
+                beforeSubmit={beforeExtraEventSubmission}
+                afterSubmit={afterExtraEventSubmission}
+                start={start}
+            />,
+        );
     };
 
     return (
-        <>
-            {showModal ? (
-                <Modal
-                    exitModalCallback={() => {
-                        setShowModal(false);
-                    }}
-                    content={<ExtraEvent end={new Date()} onSubmit={extraEventSubmition} start={new Date()} />}
-                />
+        <Wrapper>
+            {keycloak.hasRealmRole(Roles.Ambassador) ? (
+                <Item>
+                    <Description>Ektrauttak</Description>
+                    <Button onClick={onClick}>
+                        <Plus height="100%" />
+                    </Button>
+                </Item>
             ) : null}
-            <Wrapper>
-                {keycloak.hasRealmRole(Roles.Ambassador) ? (
-                    <Item>
-                        <Description>Ektrauttak</Description>
-                        <Button onClick={onClick}>
-                            <Plus height="100%" />
-                        </Button>
-                    </Item>
-                ) : null}
-                <Content>
-                    <h2>Forespørsler</h2>
-                    <Explanation>
-                        <ExplanationLocation>Sendt av:</ExplanationLocation>
-                        <ExplanationPickup>Uttak:</ExplanationPickup>
-                        <ExplanationLast>
-                            {keycloak.hasRealmRole(Roles.Ambassador) ? 'Handlingsalternativer:' : 'Påmeldte:'}
-                        </ExplanationLast>
-                    </Explanation>
-                    <PickUpsList>
-                        {!apiPickUps && isValidating ? (
-                            <Loading text="Laster inn data..." />
-                        ) : (
-                            pickUps.map((pickUp) => (
-                                <PickUpRequest
-                                    key={`Pickup: ${pickUp.id}`}
-                                    {...pickUp}
-                                    groupId={keycloak.tokenParsed.GroupID}
-                                    deleteRequest={requestDeletion}
-                                    registerRequest={requestSubmission}
-                                    onReject={pickupReject}
-                                    onApprove={pickupApprove}
-                                />
-                            ))
-                        )}
-                    </PickUpsList>
-                </Content>
-            </Wrapper>
-        </>
+            <Content>
+                <h2>Forespørsler</h2>
+                <Explanation>
+                    <ExplanationLocation>Sendt av:</ExplanationLocation>
+                    <ExplanationPickup>Uttak:</ExplanationPickup>
+                    <ExplanationLast>
+                        {keycloak.hasRealmRole(Roles.Ambassador) ? 'Handlingsalternativer:' : 'Påmeldte:'}
+                    </ExplanationLast>
+                </Explanation>
+                <PickUpsList>
+                    {!apiPickUps && isValidating ? (
+                        <Loading text="Laster inn data..." />
+                    ) : (
+                        pickUps.map((pickUp) => (
+                            <PickUpRequest
+                                key={`Pickup: ${pickUp.id}`}
+                                {...pickUp}
+                                groupId={keycloak.tokenParsed.GroupID}
+                                deleteRequest={requestDeletion}
+                                registerRequest={requestSubmission}
+                                onReject={pickupReject}
+                                onApprove={pickupApprove}
+                            />
+                        ))
+                    )}
+                </PickUpsList>
+            </Content>
+        </Wrapper>
     );
 };

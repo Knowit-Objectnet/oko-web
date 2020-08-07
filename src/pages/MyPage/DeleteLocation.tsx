@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ApiPartner, apiUrl, Colors } from '../../types';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';

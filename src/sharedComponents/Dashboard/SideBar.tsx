@@ -14,6 +14,11 @@ import Bell from '../../assets/Bell.svg';
 import PencilRec from '../../assets/PencilRec.svg';
 import Cog from '../../assets/Cog.svg';
 import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
+import useModal from '../Modal/useModal';
+import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
+import { ExtraEvent } from '../Events/ExtraEvent';
+import { types, useAlert } from 'react-alert';
+import { NewEvent } from '../Events/NewEvent';
 
 const duration = 500;
 
@@ -75,6 +80,18 @@ const Link = styled(LocalLink)<LinkProps>`
     width: fit-content;
     white-space: nowrap;
     font-weight: bold;
+`;
+
+const FakeLink = styled.div`
+    display: flex;
+    align-items: center;
+    color: ${Colors.White};
+    fill: ${Colors.White};
+    margin-bottom: 15px;
+    width: fit-content;
+    white-space: nowrap;
+    font-weight: bold;
+    cursor: pointer;
 `;
 
 const StyledChart = styled(Chart)`
@@ -150,6 +167,43 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
     const { keycloak } = useKeycloak();
     // History instance
     const history = useHistory();
+    // Alert instance
+    const alert = useAlert();
+    // Modal instance
+    const modal = useModal();
+
+    const onExtraEventClick = () => {
+        const { start, end } = getStartAndEndDateTime();
+        const afterSubmission = (successful: boolean) => {
+            if (successful) {
+                // Give user feedback and close modal
+                alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
+                modal.remove();
+            } else {
+                // Give user feedback
+                alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
+            }
+            props.onClick();
+        };
+
+        modal.show(<ExtraEvent end={end} afterSubmit={afterSubmission} start={start} />);
+    };
+
+    const onNewEventClick = () => {
+        const { start, end } = getStartAndEndDateTime();
+        const afterSubmission = (successful: boolean) => {
+            if (successful) {
+                // Give user feedback
+                alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
+                modal.remove();
+            } else {
+                alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
+            }
+            props.onClick();
+        };
+
+        modal.show(<NewEvent end={end} afterSubmit={afterSubmission} start={start} />);
+    };
 
     return (
         <Transition in={props.isVisible} timeout={0}>
@@ -189,9 +243,9 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                             <StyledLocation /> Stasjonene
                                         </Link>
                                         {keycloak.hasRealmRole(Roles.Oslo) ? (
-                                            <Link current={history.location.pathname} to="/" onClick={props.onClick}>
+                                            <FakeLink onClick={onNewEventClick}>
                                                 <StyledPlus /> Opprett hendelse
-                                            </Link>
+                                            </FakeLink>
                                         ) : null}
                                         {keycloak.hasRealmRole(Roles.Partner) ? (
                                             <Link current={history.location.pathname} to="/" onClick={props.onClick}>
@@ -199,9 +253,9 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                             </Link>
                                         ) : null}
                                         {keycloak.hasRealmRole(Roles.Ambassador) ? (
-                                            <Link current={history.location.pathname} to="/" onClick={props.onClick}>
+                                            <FakeLink onClick={onExtraEventClick}>
                                                 <StyledPlus /> Utlys ekstrauttak
-                                            </Link>
+                                            </FakeLink>
                                         ) : null}
                                         {keycloak.hasRealmRole(Roles.Partner) ? (
                                             <Link

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../../../types';
-import Pencil from '../../../assets/Pencil.svg';
+import { Colors } from '../../types';
+import Pencil from '../../assets/Pencil.svg';
 
 const Wrapper = styled.div`
     display: flex;

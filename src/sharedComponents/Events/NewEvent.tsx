@@ -5,12 +5,13 @@ import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import useSWR from 'swr';
-import { fetcher } from '../../../utils/fetcher';
+import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, apiUrl } from '../../../types';
+import { ApiLocation, ApiPartner, apiUrl } from '../../types';
 import { useAlert, types } from 'react-alert';
-import { Button } from '../../../sharedComponents/Button';
+import { Button } from '../Button';
+import { PostToAPI } from '../../utils/PostToAPI';
 
 const Options = styled.div`
     display: flex;
@@ -21,8 +22,8 @@ const Options = styled.div`
 interface NewEventProps {
     start: Date;
     end: Date;
-    onFinished: () => void;
-    addEvent: (
+    beforeSubmit?: (
+        key: string,
         data: {
             startDateTime: string;
             endDateTime: string;
@@ -38,6 +39,7 @@ interface NewEventProps {
         station: ApiLocation,
         partner: ApiPartner,
     ) => void;
+    afterSubmit?: (successful: boolean, key: string) => void;
 }
 
 /**
@@ -198,7 +200,22 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             }
         }
 
-        props.addEvent(data, location, partner);
+        try {
+            if (props.beforeSubmit) {
+                props.beforeSubmit(`${apiUrl}/events`, data, location, partner);
+            }
+
+            // Post the event to the backend
+            await PostToAPI(`${apiUrl}/events`, data, keycloak.token);
+
+            if (props.afterSubmit) {
+                props.afterSubmit(true, `${apiUrl}/events`);
+            }
+        } catch (err) {
+            if (props.afterSubmit) {
+                props.afterSubmit(false, `${apiUrl}/events`);
+            }
+        }
     };
 
     return (

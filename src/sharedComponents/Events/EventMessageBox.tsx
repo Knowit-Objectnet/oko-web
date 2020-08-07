@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Warning from '../../../assets/Warning.svg';
-import { Colors } from '../../../types';
+import Warning from '../../assets/Warning.svg';
+import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;
