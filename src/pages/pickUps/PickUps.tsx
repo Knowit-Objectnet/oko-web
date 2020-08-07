@@ -14,6 +14,7 @@ import { DeleteToAPI } from '../../utils/DeleteToAPI';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { Loading } from '../../sharedComponents/Loading';
 import useModal from '../../sharedComponents/Modal/useModal';
+import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 
 const Wrapper = styled.div`
     display: flex;
@@ -242,12 +243,13 @@ export const PickUps: React.FC = () => {
 
     // On click function for new extraevent/pickup button
     const onClick = () => {
+        const { start, end } = getStartAndEndDateTime();
         modal.show(
             <ExtraEvent
-                end={new Date()}
+                end={start}
                 beforeSubmit={beforeExtraEventSubmission}
                 afterSubmit={afterExtraEventSubmission}
-                start={new Date()}
+                start={end}
             />,
         );
     };
