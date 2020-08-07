@@ -3,19 +3,11 @@ import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import DefaultContext from './Context';
 import { Wrapper } from './Wrapper';
+import { ModalManager, Options } from './Type';
 
 interface Props {
     children: React.ReactNode;
-    Context?: React.Context<any>;
-}
-
-interface Options {
-    width?: number;
-    maxWidth?: number;
-    minWidth?: number;
-    height?: number;
-    maxHeight?: number;
-    minHeight?: number;
+    Context?: React.Context<ModalManager | undefined>;
 }
 
 const ModalProvider: ({ children, Context }: Props) => JSX.Element = ({
@@ -23,12 +15,8 @@ const ModalProvider: ({ children, Context }: Props) => JSX.Element = ({
     Context = DefaultContext,
 }: Props) => {
     const root = useRef<HTMLDivElement | null>(null);
-    const modalContext = useRef<{
-        content: ReactNode;
-        show: (_content: ReactNode, options?: Options) => void;
-        remove: () => void;
-    } | null>(null);
-    const [content, setContent] = useState<ReactNode | null>(null);
+    const modalContext = useRef<ModalManager | undefined>(undefined);
+    const [modalContent, setModalContent] = useState<ReactNode | null>(null);
 
     useEffect(() => {
         root.current = document.createElement('div');
@@ -41,26 +29,26 @@ const ModalProvider: ({ children, Context }: Props) => JSX.Element = ({
     }, []);
 
     const remove = useCallback(() => {
-        setContent(null);
+        setModalContent(null);
     }, []);
 
     const show = useCallback(
-        (_content, options: Options = {}) => {
-            setContent(<Wrapper content={_content} exitModalCallback={remove} {...options} />);
+        (content, options: Options = {}) => {
+            setModalContent(<Wrapper content={content} exitModalCallback={remove} {...options} />);
         },
         [remove],
     );
 
     modalContext.current = {
-        content,
+        content: modalContent,
         show,
         remove,
     };
 
     return (
-        <Context.Provider value={modalContext}>
+        <Context.Provider value={modalContext.current}>
             {children}
-            {root.current && createPortal(content, root.current)}
+            {root.current && createPortal(modalContent, root.current)}
         </Context.Provider>
     );
 };

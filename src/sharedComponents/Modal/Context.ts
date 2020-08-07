@@ -1,5 +1,6 @@
-import { createContext, ReactNode } from 'react';
+import { createContext } from 'react';
+import { ModalManager } from './Type';
 
-const Context = createContext<ReactNode | null>(null);
+const Context = createContext<ModalManager | undefined>(undefined);
 
 export default Context;
