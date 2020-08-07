@@ -1,9 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../../types';
+import {apiUrl, Colors} from '../../types';
 import { useRef, useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import { Button } from '../../sharedComponents/Button';
+import {PostToAPI} from "../../utils/PostToAPI";
+import {FetchError} from "../../utils/FetchError";
+import {useKeycloak} from "@react-keycloak/web";
 
 const Wrapper = styled.div`
     display: flex;
@@ -64,10 +67,14 @@ const FileInput = styled.input`
 `;
 
 interface NewPartnerProps {
-    onSubmit: (name: string, contract: File | null) => void;
+    beforeSubmit?: (key: string, name: string, contract: File | null) => void;
+    afterSubmit?: (successful: boolean, key: string, error: Error | null) => void;
 }
 
 export const NewPartner: React.FC<NewPartnerProps> = (props) => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
+    // Alert instance
     const alert = useAlert();
     // General info state
     const [name, setName] = useState('');
@@ -104,7 +111,30 @@ export const NewPartner: React.FC<NewPartnerProps> = (props) => {
             alert.show('Navnet kan ikke være tomt.', { type: types.ERROR });
             return;
         }
-        props.onSubmit(name, contract);
+
+        const data: { name: string; contract?: File } = {
+            name,
+        };
+
+        if (contract) {
+            data.contract = contract;
+        }
+
+        try {
+            if (props.beforeSubmit) {
+                props.beforeSubmit(`${apiUrl}/partners/`, name, contract);
+            }
+
+            await PostToAPI(`${apiUrl}/partners/`, data, keycloak.token);
+
+            if (props.afterSubmit) {
+                props.afterSubmit(true, `${apiUrl}/partners/`, null);
+            }
+        } catch (err) {
+            if (props.afterSubmit) {
+                props.afterSubmit(false, `${apiUrl}/partners/`, err);
+            }
+        }
     };
 
     return (
