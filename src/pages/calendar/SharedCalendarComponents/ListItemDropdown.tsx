@@ -155,8 +155,11 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
         setSelectedEvent(event);
     };
 
-    const onDeleteEvent = () => {
-        if (selectedEvent && props.deleteEvent) props.deleteEvent(selectedEvent);
+    const onDeleteEvent = async () => {
+        if (selectedEvent && props.deleteEvent) {
+            await props.deleteEvent(selectedEvent);
+            setSelectedEvent(null);
+        }
     };
 
     // new min and mix which is set to 1 hour before and after event to give a cleaner look

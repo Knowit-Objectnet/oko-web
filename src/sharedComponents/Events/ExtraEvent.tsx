@@ -3,15 +3,10 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventOptionCategory } from './EventOptionCategory';
-import useSWR from 'swr';
-import { fetcher } from '../../../utils/fetcher';
-import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, apiUrl } from '../../../types';
-import { Button } from '../../../sharedComponents/Button';
-import { EventOptionLocation } from './EventOptionLocation';
-import { types, useAlert } from 'react-alert';
-import { PostToAPI } from '../../../utils/PostToAPI';
+import { ApiPickUp, apiUrl } from '../../types';
+import { Button } from '../Button';
+import { PostToAPI } from '../../utils/PostToAPI';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Specifier = styled.div`
     margin: 20px 0px;
@@ -32,7 +27,8 @@ const Textarea = styled.textarea`
 interface ExtraEventProps {
     start: Date;
     end: Date;
-    onSubmit: (start: Date, end: Date, description: string) => void;
+    beforeSubmit?: (key: string, newPickup: ApiPickUp) => void;
+    afterSubmit?: (successful: boolean, key: string) => void;
 }
 
 /**
@@ -40,13 +36,11 @@ interface ExtraEventProps {
  * Should only be visible for ambassadors (ombruksstasjon ambasadør).
  */
 export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
     // Valid partners fetched from api
     //let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners/`, fetcher);
     //partners = partners || [];
-
-    // Valid partners fetched from api
-    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations/`, fetcher);
-    locations = locations || [];
 
     // Valid categories fetched from api
     // Dummy data until backend service is up and running
@@ -103,7 +97,45 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
         start.setHours(timeRange[0].getHours(), timeRange[0].getMinutes(), 0, 0);
         end.setHours(timeRange[1].getHours(), timeRange[1].getMinutes(), 0, 0);
 
-        props.onSubmit(start, end, description);
+        try {
+            // Data for new extra event
+            const data = {
+                startDateTime: start,
+                endDateTime: end,
+                description: description,
+                stationId: keycloak.tokenParsed.GroupID,
+            };
+
+            // Local state update data
+            const newExtraEvent = {
+                id: -1,
+                startDateTime: start.toISOString(),
+                endDateTime: end.toISOString(),
+                description: description,
+                station: {
+                    id: parseInt(keycloak.tokenParsed.GroupID),
+                    name: keycloak.tokenParsed.groups[0],
+                    openingTime: '09:00:00Z',
+                    closingTime: '20:00:00Z',
+                },
+                chosenPartner: null,
+            };
+
+            if (props.beforeSubmit) {
+                props.beforeSubmit(`${apiUrl}/pickups/`, newExtraEvent);
+            }
+
+            // Post extra event to API
+            await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
+            // Give userfeedback and close modal
+            if (props.afterSubmit) {
+                props.afterSubmit(true, `${apiUrl}/pickups/`);
+            }
+        } catch {
+            if (props.afterSubmit) {
+                props.afterSubmit(false, `${apiUrl}/pickups/`);
+            }
+        }
     };
 
     return (

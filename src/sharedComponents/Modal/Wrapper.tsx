@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Cross from '../assets/Cross.svg';
+import Cross from '../../assets/Cross.svg';
+import { Options } from './Types';
 
 const Background = styled.div`
     z-index: 60;
@@ -15,16 +16,7 @@ const Background = styled.div`
     align-items: center;
 `;
 
-interface styledContentProps {
-    width?: number;
-    maxWidth?: number;
-    minWidth?: number;
-    height?: number;
-    maxHeight?: number;
-    minHeight?: number;
-}
-
-const Content = styled.div<styledContentProps>`
+const Content = styled.div<Options>`
     position: relative;
     z-index: 50;
     background-color: white;
@@ -65,7 +57,7 @@ interface ModalProps {
 }
 
 // Modal (pop-up) component
-export const Modal: React.FC<ModalProps> = (props) => {
+export const Wrapper: React.FC<ModalProps> = (props) => {
     /*
      * Makes it possible to click the modal without triggering the action that happens
      * when you click the background (which usually is to close the modal)
