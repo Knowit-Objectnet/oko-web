@@ -162,9 +162,6 @@ export const CalendarPage: React.FC = () => {
                 end={end}
                 beforeSubmit={beforeNewEventSubmission}
                 afterSubmit={afterNewEventSubmission}
-                onFinished={() => {
-                    modal.remove();
-                }}
             />,
         );
     };
@@ -199,9 +196,6 @@ export const CalendarPage: React.FC = () => {
                     end={end}
                     beforeSubmit={beforeNewEventSubmission}
                     afterSubmit={afterNewEventSubmission}
-                    onFinished={() => {
-                        modal.remove();
-                    }}
                 />,
             );
         } else {

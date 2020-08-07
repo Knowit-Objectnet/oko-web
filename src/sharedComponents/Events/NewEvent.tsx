@@ -22,7 +22,6 @@ const Options = styled.div`
 interface NewEventProps {
     start: Date;
     end: Date;
-    onFinished: () => void;
     beforeSubmit?: (
         key: string,
         data: {
