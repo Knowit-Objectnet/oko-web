@@ -18,6 +18,7 @@ const Wrapper = styled.div`
     align-items: center;
     height: 100%;
     width: 100%;
+    position: relative;
     background-color: ${Colors.White};
 `;
 
@@ -60,6 +61,8 @@ const Content = styled.div`
     height: 100%;
     width: 70%;
     margin-top: 75px;
+    margin-bottom: 20px;
+    overflow: auto;
 `;
 
 export const Stations: React.FC = () => {
@@ -91,13 +94,15 @@ export const Stations: React.FC = () => {
 
         const oldLocations = apiLocations || [];
 
-        await mutate([...oldLocations, newLocation]);
+        await mutate([...oldLocations, newLocation], false);
 
         modal.remove();
     };
     const afterSubmit = (successful: boolean, key: string, error: Error | null) => {
         if (successful) {
             alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
+
+            mutate();
         } else {
             // Show appropriate error alert if something went wrong.
             if (error instanceof FetchError && error.code === 409) {

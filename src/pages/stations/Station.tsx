@@ -51,9 +51,11 @@ export const Station: React.FC<ApiLocation> = (props) => {
         <Wrapper>
             <Header>
                 <Title>{props.name}</Title>
-                <Icon>
-                    <StyledPencil />
-                </Icon>
+                {/*
+                    <Icon>
+                        <StyledPencil />
+                    </Icon>
+                */}
             </Header>
             <Info>
                 <StationAddress address="N/A" />
