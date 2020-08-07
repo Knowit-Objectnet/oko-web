@@ -3,7 +3,7 @@ import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import DefaultContext from './Context';
 import { Wrapper } from './Wrapper';
-import { ModalManager, Options } from './Type';
+import { ModalManager, Options } from './Types';
 
 interface Props {
     children: React.ReactNode;
