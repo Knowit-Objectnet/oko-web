@@ -109,7 +109,7 @@ export const MyPage: React.FC = () => {
 
     const afterNewLocation = (successful: boolean, key: string, error: Error | null) => {
         if (successful) {
-            alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
+            alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
 
             modal.remove();
         } else {
