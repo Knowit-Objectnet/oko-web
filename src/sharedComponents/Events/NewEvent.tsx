@@ -8,11 +8,9 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiEvent, ApiLocation, ApiPartner, ApiPickUp, apiUrl } from '../../types';
+import { ApiLocation, ApiPartner, apiUrl } from '../../types';
 import { useAlert, types } from 'react-alert';
 import { Button } from '../Button';
-import differenceInDays from 'date-fns/differenceInDays';
-import add from 'date-fns/add';
 import { PostToAPI } from '../../utils/PostToAPI';
 
 const Options = styled.div`
