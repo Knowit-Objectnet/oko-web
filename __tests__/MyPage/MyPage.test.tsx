@@ -6,7 +6,7 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
-import { MyPage } from '../../src/pages/MyPage/MyPage';
+import { MyPage } from '../../src/pages/myPage/MyPage';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import ModalProvider from '../../src/sharedComponents/Modal/Provider';

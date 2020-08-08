@@ -1,10 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, apiUrl, Colors } from '../../types';
+import { ApiPartner, apiUrl, Colors } from '../types';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
+import { fetcher } from '../utils/fetcher';
+import { DeleteToAPI } from '../utils/DeleteToAPI';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     display: flex;
@@ -49,10 +51,14 @@ const Button = styled.button`
 `;
 
 interface NewPartnerProps {
-    onSubmit: (id: number) => void;
+    beforeSubmit?: (key: string, id: number) => void;
+    afterSubmit?: (successful: boolean, key: string) => void;
 }
 
 export const DeletePartner: React.FC<NewPartnerProps> = (props) => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
+    // Alert instance
     const alert = useAlert();
 
     const [selectedPartner, setSelectedPartner] = useState(-1);
@@ -67,12 +73,27 @@ export const DeletePartner: React.FC<NewPartnerProps> = (props) => {
         setSelectedPartner(parseInt(e.currentTarget.value));
     };
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if (selectedPartner === -1) {
             alert.show('Vennligst  velg en samarbeidspartner.', { type: types.ERROR });
             return;
         }
-        props.onSubmit(selectedPartner);
+
+        try {
+            if (props.beforeSubmit) {
+                props.beforeSubmit(`${apiUrl}/partners/${selectedPartner}`, selectedPartner);
+            }
+
+            await DeleteToAPI(`${apiUrl}/partners/${selectedPartner}`, keycloak.token);
+
+            if (props.afterSubmit) {
+                props.afterSubmit(true, `${apiUrl}/partners/${selectedPartner}`);
+            }
+        } catch (err) {
+            if (props.afterSubmit) {
+                props.afterSubmit(false, `${apiUrl}/partners/${selectedPartner}`);
+            }
+        }
     };
 
     return (

@@ -1,13 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../../types';
+import { apiUrl, Colors } from '../types';
 import { useState } from 'react';
-import { OpeningTime } from './OpeningTime';
-import Person from '../../assets/Person.svg';
-import Phone from '../../assets/Phone.svg';
-import Mail from '../../assets/Mail.svg';
+import { OpeningTime } from '../pages/myPage/OpeningTime';
+import Person from '../assets/Person.svg';
+import Phone from '../assets/Phone.svg';
+import Mail from '../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
-import { Button } from '../../sharedComponents/Button';
+import { Button } from './Button';
+import { PostToAPI } from '../utils/PostToAPI';
+import { FetchError } from '../utils/FetchError';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     display: flex;
@@ -91,7 +94,8 @@ const StyledMail = styled(Mail)`
 `;
 
 interface NewLocationProps {
-    onSubmit: (
+    beforeSubmit?: (
+        key: string,
         name: string,
         monday: [Date, Date, boolean],
         tuesday: [Date, Date, boolean],
@@ -101,10 +105,13 @@ interface NewLocationProps {
         saturday: [Date, Date, boolean],
         sunday: [Date, Date, boolean],
     ) => void;
+    afterSubmit?: (successful: boolean, key: string, error: Error | null) => void;
 }
 
 export const NewLocation: React.FC<NewLocationProps> = (props) => {
-    // Alert dispatcher
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
+    // Alert instance
     const alert = useAlert();
     // General info
     const [name, setName] = useState('');
@@ -167,7 +174,7 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
     };
 
     // Submit function for when the location is to be submitted to the backend
-    const onSubmit = (e: React.SyntheticEvent) => {
+    const onSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         e.persist();
 
@@ -210,16 +217,50 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
             return;
         }
 
-        props.onSubmit(
-            name,
-            [...mondayRange, mondayClosed],
-            [...tuesdayRange, tuesdayClosed],
-            [...wednesdayRange, wednesdayClosed],
-            [...thursdayRange, thursdayClosed],
-            [...fridayRange, fridayClosed],
-            [...saturdayRange, saturdayClosed],
-            [...sundayRange, sundayClosed],
-        );
+        try {
+            if (props.beforeSubmit) {
+                props.beforeSubmit(
+                    `${apiUrl}/stations`,
+                    name,
+                    [...mondayRange, mondayClosed],
+                    [...tuesdayRange, tuesdayClosed],
+                    [...wednesdayRange, wednesdayClosed],
+                    [...thursdayRange, thursdayClosed],
+                    [...fridayRange, fridayClosed],
+                    [...saturdayRange, saturdayClosed],
+                    [...sundayRange, sundayClosed],
+                );
+            }
+            // Turn the data into the correct format for the API
+            const data = {
+                name: name,
+                openingTime: `${mondayRange[0]
+                    .getHours()
+                    .toString()
+                    .padStart(2, '0')}:${mondayRange[0]
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, '0')}:${mondayRange[0].getSeconds().toString().padStart(2, '0')}Z`,
+                closingTime: `${mondayRange[1]
+                    .getHours()
+                    .toString()
+                    .padStart(2, '0')}:${mondayRange[1]
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, '0')}:${mondayRange[1].getSeconds().toString().padStart(2, '0')}Z`,
+            };
+
+            // Post to the api, show alert that it was successful if it was and close the modal
+            await PostToAPI(`${apiUrl}/stations`, data, keycloak.token);
+
+            if (props.afterSubmit) {
+                props.afterSubmit(true, `${apiUrl}/stations`, null);
+            }
+        } catch (err) {
+            if (props.afterSubmit) {
+                props.afterSubmit(false, `${apiUrl}/stations`, err);
+            }
+        }
     };
 
     return (

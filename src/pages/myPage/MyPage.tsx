@@ -7,19 +7,17 @@ import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
 import { useEffect, useState } from 'react';
-import { NewPartner } from './NewPartner';
-import { NewLocation } from './NewLocation';
-import { PostToAPI } from '../../utils/PostToAPI';
+import { NewPartner } from '../../sharedComponents/NewPartner';
+import { NewLocation } from '../../sharedComponents/NewLocation';
 import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
-import { DeletePartner } from './DeletePartner';
-import { DeleteLocation } from './DeleteLocation';
+import { DeletePartner } from '../../sharedComponents/DeletePartner';
+import { DeleteLocation } from '../../sharedComponents/DeleteLocation';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
-import { DeleteToAPI } from '../../utils/DeleteToAPI';
 import useModal from '../../sharedComponents/Modal/useModal';
 
 const Wrapper = styled.div`
@@ -93,22 +91,13 @@ export const MyPage: React.FC = () => {
         history.push('/logout');
     };
 
-    const submitNewPartner = async (name: string, contract: File | null) => {
-        const data: { name: string; contract?: File } = {
-            name,
-        };
-
-        if (contract) {
-            data.contract = contract;
-        }
-
-        try {
-            await PostToAPI(`${apiUrl}/partners/`, data, keycloak.token);
+    const afterNewPartner = (successful: boolean, key: string, error: Error | null) => {
+        if (successful) {
             alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
 
             modal.remove();
-        } catch (err) {
-            if (err instanceof FetchError && err.code === 409) {
+        } else {
+            if (error instanceof FetchError && error.code === 409) {
                 alert.show('En partner med det navnet eksisterer allerede, vennligst velg et annet navn', {
                     type: types.ERROR,
                 });
@@ -118,45 +107,14 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    // TODO: Update to support opening/closing & closed on individual days
-    const submitNewLocation = async (
-        name: string,
-        monday: [Date, Date, boolean],
-        tuesday: [Date, Date, boolean],
-        wednesday: [Date, Date, boolean],
-        thursday: [Date, Date, boolean],
-        friday: [Date, Date, boolean],
-        saturday: [Date, Date, boolean],
-        sunday: [Date, Date, boolean],
-    ) => {
-        try {
-            // Turn the data into the correct format for the API
-            const data = {
-                name: name,
-                openingTime: `${monday[0]
-                    .getHours()
-                    .toString()
-                    .padStart(2, '0')}:${monday[0]
-                    .getMinutes()
-                    .toString()
-                    .padStart(2, '0')}:${monday[0].getSeconds().toString().padStart(2, '0')}Z`,
-                closingTime: `${monday[1]
-                    .getHours()
-                    .toString()
-                    .padStart(2, '0')}:${monday[1]
-                    .getMinutes()
-                    .toString()
-                    .padStart(2, '0')}:${monday[1].getSeconds().toString().padStart(2, '0')}Z`,
-            };
-
-            // Post to the api, show alert that it was successful if it was and close the modal
-            await PostToAPI(`${apiUrl}/stations`, data, keycloak.token);
-            alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
+    const afterNewLocation = (successful: boolean, key: string, error: Error | null) => {
+        if (successful) {
+            alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
 
             modal.remove();
-        } catch (err) {
+        } else {
             // Show appropriate error alert if something went wrong.
-            if (err instanceof FetchError && err.code === 409) {
+            if (error instanceof FetchError && error.code === 409) {
                 alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
                     type: types.ERROR,
                 });
@@ -166,46 +124,44 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    const deletePartner = async (id: number) => {
-        try {
-            await DeleteToAPI(`${apiUrl}/partners/${id}`, keycloak.token);
+    const afterDeletePartner = (successful: boolean, key: string) => {
+        if (successful) {
             alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
 
             modal.remove();
-        } catch (err) {
+        } else {
             alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
         }
     };
 
-    const deleteLocation = async (id: number) => {
-        try {
-            await DeleteToAPI(`${apiUrl}/stations/${id}`, keycloak.token);
+    const afterDeleteLocation = (successful: boolean, key: string) => {
+        if (successful) {
             alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
 
             modal.remove();
-        } catch (err) {
+        } else {
             alert.show('Noe gikk galt, stasjoneen ble ikke slettet.', { type: types.ERROR });
         }
     };
 
     // Function to show new partner ui modal
     const showNewPartner = () => {
-        modal.show(<NewPartner onSubmit={submitNewPartner} />);
+        modal.show(<NewPartner afterSubmit={afterNewPartner} />);
     };
 
     // Function to show new location ui modal
     const showNewLocation = () => {
-        modal.show(<NewLocation onSubmit={submitNewLocation} />);
+        modal.show(<NewLocation afterSubmit={afterNewLocation} />);
     };
 
     // Function to show delete partner ui modal
     const showDeletePartner = () => {
-        modal.show(<DeletePartner onSubmit={deletePartner} />);
+        modal.show(<DeletePartner afterSubmit={afterDeletePartner} />);
     };
 
     // Function to show delete location ui modal
     const showDeleteLocation = () => {
-        modal.show(<DeleteLocation onSubmit={deleteLocation} />);
+        modal.show(<DeleteLocation afterSubmit={afterDeleteLocation} />);
     };
 
     return (
