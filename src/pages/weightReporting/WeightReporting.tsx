@@ -9,7 +9,7 @@ import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useAlert, types } from 'react-alert';
-import {Helmet} from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;

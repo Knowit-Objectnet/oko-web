@@ -15,7 +15,7 @@ import { PatchToAPI } from '../../utils/PatchToAPI';
 import { Loading } from '../../sharedComponents/Loading';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
-import {Helmet} from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;

@@ -10,7 +10,7 @@ import { types, useAlert } from 'react-alert';
 import { FetchError } from '../../utils/FetchError';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { NewLocation } from '../../sharedComponents/NewLocation';
-import {Helmet} from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;

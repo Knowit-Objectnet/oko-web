@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import { useEffect } from 'react';
-import {Helmet} from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;

@@ -20,7 +20,7 @@ import { useAlert, types } from 'react-alert';
 import { LocationSelector } from './LocationSelector';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
-import {Helmet} from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     height: 100%;
