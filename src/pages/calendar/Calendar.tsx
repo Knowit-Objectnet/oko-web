@@ -20,6 +20,7 @@ import { useAlert, types } from 'react-alert';
 import { LocationSelector } from './LocationSelector';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
+import {Helmet} from "react-helmet";
 
 const Wrapper = styled.div`
     height: 100%;
@@ -471,28 +472,33 @@ export const CalendarPage: React.FC = () => {
     };
 
     return (
-        <Wrapper>
-            <ModuleDateCalendar>
-                <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
-                {(keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo) ? (
-                    <LocationSelector
-                        selectedLocation={selectedLocation}
-                        onSelectedLocationChange={onSelectedLocationChange}
+        <>
+            <Helmet>
+                <title>Kalender</title>
+            </Helmet>
+            <Wrapper>
+                <ModuleDateCalendar>
+                    <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
+                    {(keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo) ? (
+                        <LocationSelector
+                            selectedLocation={selectedLocation}
+                            onSelectedLocationChange={onSelectedLocationChange}
+                        />
+                    ) : null}
+                </ModuleDateCalendar>
+                {!apiEvents && (!events || events.length <= 0) && isValidating ? (
+                    <Loading text="Laster inn data..." />
+                ) : (
+                    <ModuleCalendar>{getCalendar()}</ModuleCalendar>
+                )}
+                <Sidebar>
+                    <SideMenu
+                        onCalendarToggleClick={toggleCalendarClick}
+                        onNewEventClick={newEvent}
+                        onExtraEventClick={extraEvent}
                     />
-                ) : null}
-            </ModuleDateCalendar>
-            {!apiEvents && (!events || events.length <= 0) && isValidating ? (
-                <Loading text="Laster inn data..." />
-            ) : (
-                <ModuleCalendar>{getCalendar()}</ModuleCalendar>
-            )}
-            <Sidebar>
-                <SideMenu
-                    onCalendarToggleClick={toggleCalendarClick}
-                    onNewEventClick={newEvent}
-                    onExtraEventClick={extraEvent}
-                />
-            </Sidebar>
-        </Wrapper>
+                </Sidebar>
+            </Wrapper>
+        </>
     );
 };
