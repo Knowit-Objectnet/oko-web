@@ -5,7 +5,6 @@ import { useRef, useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import { Button } from './Button';
 import { PostToAPI } from '../utils/PostToAPI';
-import { FetchError } from '../utils/FetchError';
 import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`

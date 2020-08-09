@@ -178,23 +178,23 @@ export const MyPage: React.FC = () => {
                         styling="margin-left: auto;"
                     />
                 </Header>
-                {keycloak.hasRealmRole(Roles.Partner) ? (
+                {keycloak.hasRealmRole(Roles.Partner) && (
                     <AboutPartner
                         name={partnerInfo ? partnerInfo.name : keycloak.tokenParsed.groups[0] || '<laster inn...>'}
                         description={partnerInfo ? partnerInfo.description : 'Laster inn...'}
                     />
-                ) : null}
+                )}
                 <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
-                {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
+                {keycloak.hasRealmRole(Roles.Partner) && <ShareContactInfo />}
             </Content>
-            {keycloak.hasRealmRole(Roles.Oslo) ? (
+            {keycloak.hasRealmRole(Roles.Oslo) && (
                 <SideMenu
                     newPartnerClick={showNewPartner}
                     newLocationClick={showNewLocation}
                     deletePartnerClick={showDeletePartner}
                     deleteLocationClick={showDeleteLocation}
                 />
-            ) : null}
+            )}
         </Wrapper>
     );
 };

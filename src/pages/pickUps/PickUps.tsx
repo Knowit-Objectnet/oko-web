@@ -256,14 +256,14 @@ export const PickUps: React.FC = () => {
 
     return (
         <Wrapper>
-            {keycloak.hasRealmRole(Roles.Ambassador) ? (
+            {keycloak.hasRealmRole(Roles.Ambassador) && (
                 <Item>
                     <Description>Ektrauttak</Description>
                     <Button onClick={onClick}>
                         <Plus height="100%" />
                     </Button>
                 </Item>
-            ) : null}
+            )}
             <Content>
                 <h2>Forespørsler</h2>
                 <Explanation>

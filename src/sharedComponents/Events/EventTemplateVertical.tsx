@@ -53,7 +53,7 @@ export const EventTemplateVertical: React.FC<VerticalEventTemplateProps> = (prop
     <Wrapper>
         <Title>
             <H2>{props.title}</H2>
-            {props.isEditing || !props.showEditSymbol ? null : (
+            {!props.isEditing && props.showEditSymbol && (
                 <EditTitle>
                     <Pencil height="1em" onClick={props.onEditClick} />
                 </EditTitle>

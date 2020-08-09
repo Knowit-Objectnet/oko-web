@@ -119,10 +119,10 @@ export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => (
                 )}
             </Registration>
         </Content>
-        {props.description ? (
+        {props.description && (
             <Notice>
                 <NoticeText>Merknad:</NoticeText> {props.description}
             </Notice>
-        ) : null}
+        )}
     </Wrapper>
 );

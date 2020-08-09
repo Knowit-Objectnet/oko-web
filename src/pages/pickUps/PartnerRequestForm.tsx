@@ -75,11 +75,11 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => 
     return (
         <Wrapper>
             {RenderedButton}
-            {request && !props.selectedPartnerId ? (
+            {request && !props.selectedPartnerId && (
                 <DeleteButton onClick={onDeleteClick}>
                     <Cross height="1.5em" /> Meld av
                 </DeleteButton>
-            ) : null}
+            )}
         </Wrapper>
     );
 };

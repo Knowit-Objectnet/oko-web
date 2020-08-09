@@ -180,7 +180,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
                     events={[props.events]}
                 />
             </Calendar>
-            {selectedEvent ? (
+            {selectedEvent && (
                 <Event>
                     <Info>
                         <Specifics>
@@ -220,7 +220,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
                                 <Text>{selectedEvent.resource?.location.name}</Text>
                             </Row>
                         </Specifics>
-                        {selectedEventResource && selectedEventResource.message ? (
+                        {selectedEventResource && selectedEventResource.message && (
                             <MessageBox>
                                 <Message>
                                     <MessageText>{selectedEventResource.message.text}</MessageText>
@@ -239,15 +239,15 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
                                     </MessageDate>
                                 </Message>
                             </MessageBox>
-                        ) : null}
+                        )}
                     </Info>
-                    {props.allowDeletionOfEvent ? (
+                    {props.allowDeletionOfEvent && (
                         <Submission>
                             <Button onClick={onDeleteEvent}>Avlys</Button>
                         </Submission>
-                    ) : null}
+                    )}
                 </Event>
-            ) : null}
+            )}
         </Wrapper>
     );
 };
