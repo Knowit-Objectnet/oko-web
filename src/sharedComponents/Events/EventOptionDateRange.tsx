@@ -207,6 +207,11 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
         }
     };
 
+    // Function to disable weekends in the date and date-range pickers
+    const disableWeekends = ({ date }: { date: Date }) => {
+        return date.getDay() === 0 || date.getDay() === 6;
+    };
+
     return (
         <EventOption>
             {props.isEditing ? (
@@ -258,6 +263,7 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                                 clearIcon={null}
                                 onChange={onDateRangeChange}
                                 value={props.dateRange}
+                                tileDisabled={disableWeekends}
                             />
                         </DateTimePickersWrapper>
                     )}
@@ -266,6 +272,7 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                             clearIcon={null}
                             onChange={onNonRecurringDateChange}
                             value={nonRecurringDate}
+                            tileDisabled={disableWeekends}
                         />
                     )}
                 </Wrapper>
