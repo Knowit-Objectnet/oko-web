@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, Colors } from '../../types';
+import { ApiPartner } from '../../types';
 import { Button } from '../../sharedComponents/Button';
 import Cross from '../../assets/Cross.svg';
 
@@ -13,7 +13,7 @@ const Partner = styled.div`
     box-sizing: border-box;
 
     &:not(:last-child) {
-        border-bottom: 2px solid ${Colors.White};
+        border-bottom: 2px solid ${(props) => props.theme.colors.White};
     }
 `;
 
@@ -44,7 +44,7 @@ const Status = styled.div<StatusProps>`
     margin-left: 10px;
     width: 90px;
     height: 22px;
-    background-color: ${(props) => (props.approved ? Colors.Green : Colors.Red)};
+    background-color: ${(props) => (props.approved ? props.theme.colors.Green : props.theme.colors.Red)};
     font-weight: bold;
     font-size: 12px;
 `;

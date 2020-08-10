@@ -19,7 +19,7 @@ const Background = styled.div`
 const Content = styled.div<Options>`
     position: relative;
     z-index: 50;
-    background-color: white;
+    background-color: ${(props) => props.theme.colors.White};
     width: ${(props) => props.width};
     max-width: ${(props) => props.maxWidth};
     min-width: ${(props) => props.minWidth};

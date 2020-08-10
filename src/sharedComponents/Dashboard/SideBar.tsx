@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Transition } from 'react-transition-group';
 import { Link as LocalLink } from 'react-router-dom';
-import { Colors, Roles } from '../../types';
+import { Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import { useHistory } from 'react-router-dom';
 import Chart from '../../assets/Chart.svg';
@@ -50,7 +50,7 @@ const linkTransitionStyles: IIndexable = {
 const Wrapper = styled.div`
     display: flex;
     height: 100%;
-    background-color: ${Colors.DarkBlue};
+    background-color: ${(props) => props.theme.colors.DarkBlue};
     box-sizing: border-box;
 `;
 
@@ -74,8 +74,8 @@ interface LinkProps {
 const Link = styled(LocalLink)<LinkProps>`
     display: flex;
     align-items: center;
-    color: ${(props) => (props.to !== props.current ? Colors.White : Colors.Blue)};
-    fill: ${(props) => (props.to !== props.current ? Colors.White : Colors.Blue)};
+    color: ${(props) => (props.to !== props.current ? props.theme.colors.White : props.theme.colors.Blue)};
+    fill: ${(props) => (props.to !== props.current ? props.theme.colors.White : props.theme.colors.Blue)};
     margin-bottom: 15px;
     width: fit-content;
     white-space: nowrap;
@@ -85,8 +85,8 @@ const Link = styled(LocalLink)<LinkProps>`
 const FakeLink = styled.div`
     display: flex;
     align-items: center;
-    color: ${Colors.White};
-    fill: ${Colors.White};
+    color: ${(props) => props.theme.colors.White};
+    fill: ${(props) => props.theme.colors.White};
     margin-bottom: 15px;
     width: fit-content;
     white-space: nowrap;

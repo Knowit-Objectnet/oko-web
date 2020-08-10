@@ -3,8 +3,10 @@ import { render, fireEvent, waitFor, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import { WithdrawalSubmission } from '../../src/pages/weightReporting/WithdrawalSubmission';
+import { ThemeProvider } from 'styled-components';
+import theme from '../../src/theme';
 
-describe('Provides a page to view the calendar in addition to change log and notifications', () => {
+describe('Provides a component to update a single weight withdrawal', () => {
     afterEach(() => {
         cleanup();
     });
@@ -30,7 +32,11 @@ describe('Provides a page to view the calendar in addition to change log and not
         };
 
         // Render component
-        const { findByText } = render(<WithdrawalSubmission {...props} />);
+        const { findByText } = render(
+            <ThemeProvider theme={theme}>
+                <WithdrawalSubmission {...props} />
+            </ThemeProvider>,
+        );
 
         // Find the box that displays the weight
         const weight = await findByText('100 kg');
@@ -58,7 +64,11 @@ describe('Provides a page to view the calendar in addition to change log and not
         };
 
         // Render component
-        const { findByText, findByPlaceholderText, findByDisplayValue } = render(<WithdrawalSubmission {...props} />);
+        const { findByText, findByPlaceholderText, findByDisplayValue } = render(
+            <ThemeProvider theme={theme}>
+                <WithdrawalSubmission {...props} />
+            </ThemeProvider>,
+        );
 
         // Find the input where we can write in a weight
         const input = await findByPlaceholderText('Skriv inn vektuttak');

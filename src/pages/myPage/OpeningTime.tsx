@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
-import { Colors } from '../../types';
 import { Dispatch } from 'react';
 
 const Wrapper = styled.div`
@@ -22,7 +21,7 @@ const Divider = styled.div`
 
 const StyledTimeRangePicker = styled(TimeRangePicker)`
     width: 100%;
-    background-color: ${Colors.White};
+    background-color: ${(props) => props.theme.colors.White};
 
     & .react-timerange-picker__range-divider {
         flex: auto;

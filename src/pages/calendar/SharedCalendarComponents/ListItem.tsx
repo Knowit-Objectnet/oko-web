@@ -1,10 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors, EventInfo } from '../../../types';
+import { EventInfo } from '../../../types';
 import ArrowUp from '../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../assets/ArrowDown.svg';
 import { useState } from 'react';
 import { ListItemDropdown } from './ListItemDropdown';
+import { Colors } from '../../../theme';
 
 interface WrapperProps {
     expanded: boolean;

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../../types';
 import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
@@ -28,7 +27,7 @@ const Table = styled.table`
 `;
 
 const TableBody = styled.tbody`
-    background-color: ${Colors.LightBlue};
+    background-color: ${(props) => props.theme.colors.LightBlue};
 `;
 
 const Tr = styled.tr`
@@ -80,19 +79,26 @@ const StyledCheck = styled(Check)`
     height: 0.7em;
 `;
 
-interface IconProps {
-    color: Colors;
-}
-
-const Icon = styled.div<IconProps>`
+const Icon = styled.div`
     margin-left: 10px;
-    background-color: ${(props) => props.color};
     border-radius: 50%;
     height: 27px;
     width: 27px;
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const RedIcon = styled(Icon)`
+    background-color: ${(props) => props.theme.colors.Red};
+`;
+
+const GreenIcon = styled(Icon)`
+    background-color: ${(props) => props.theme.colors.Green};
+`;
+
+const BlueIcon = styled(Icon)`
+    background-color: ${(props) => props.theme.colors.Blue};
 `;
 
 const EditOptions = styled.div`
@@ -166,17 +172,17 @@ export const ContactInfo: React.FC<ContactInfoProps> = (props) => {
                 Kontaktinfo
                 {editing ? (
                     <EditOptions>
-                        <Icon color={Colors.Red} onClick={onCancel}>
+                        <RedIcon onClick={onCancel}>
                             <StyledCross />
-                        </Icon>
-                        <Icon color={Colors.Green} onClick={onSubmit}>
+                        </RedIcon>
+                        <GreenIcon onClick={onSubmit}>
                             <StyledCheck />
-                        </Icon>
+                        </GreenIcon>
                     </EditOptions>
                 ) : (
-                    <Icon color={Colors.Blue} onClick={onEditButtonClick}>
+                    <BlueIcon onClick={onEditButtonClick}>
                         <StyledPencil />
-                    </Icon>
+                    </BlueIcon>
                 )}
             </TableTitle>
             <Table>

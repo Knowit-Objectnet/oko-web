@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Calendar from '../../assets/Calendar.svg';
 import Plus from '../../assets/Plus.svg';
-import { Colors, Roles } from '../../types';
+import { Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
@@ -15,7 +15,7 @@ const Button = styled.div`
     width: 50px;
     height: 50px;
     padding: 10px;
-    background-color: ${Colors.Green};
+    background-color: ${(props) => props.theme.colors.Green};
     border-radius: 50%;
     box-sizing: border-box;
 

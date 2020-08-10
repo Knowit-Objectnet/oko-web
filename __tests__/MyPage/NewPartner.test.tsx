@@ -8,6 +8,8 @@ import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import { apiUrl } from '../../src/types';
 import fetch from 'jest-fetch-mock';
+import theme from '../../src/theme';
+import { ThemeProvider } from 'styled-components';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -41,11 +43,13 @@ describe('Provides a page to view the calendar in addition to change log and not
         const beforeSubmitMock = jest.fn();
         const afterSubmitMock = jest.fn();
         const { findByText, findByPlaceholderText } = render(
-            <AlertProvider template={AlertTemplate} {...options}>
-                <KeycloakProvider keycloak={keycloak}>
-                    <NewPartner beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
-                </KeycloakProvider>
-            </AlertProvider>,
+            <ThemeProvider theme={theme}>
+                <AlertProvider template={AlertTemplate} {...options}>
+                    <KeycloakProvider keycloak={keycloak}>
+                        <NewPartner beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
+                    </KeycloakProvider>
+                </AlertProvider>
+            </ThemeProvider>,
         );
 
         // Find the text input for the name

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, apiUrl, Colors } from '../types';
+import { ApiPartner, apiUrl } from '../types';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import useSWR from 'swr';
@@ -12,14 +12,14 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
 `;
 
 const Title = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     padding: 10px 20px;
     margin-bottom: 25px;
     font-weight: bold;
@@ -43,7 +43,7 @@ const Select = styled.select`
 
 const Button = styled.button`
     height: 35px;
-    background-color: ${Colors.Red};
+    background-color: ${(props) => props.theme.colors.Red};
     border: none;
     font-weight: bold;
     font-size: 14px;

@@ -1,13 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Warning from '../../assets/Warning.svg';
-import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     flex: auto;
-    background-color: ${Colors.Yellow};
+    background-color: ${(props) => props.theme.colors.Yellow};
     width: 300px;
     padding: 10px;
 `;

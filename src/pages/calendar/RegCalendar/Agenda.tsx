@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors, EventInfo } from '../../../types';
+import { EventInfo } from '../../../types';
 
 const Table = styled.table`
     table-layout: fixed;
@@ -11,7 +11,7 @@ const TH = styled.th`
     position: sticky;
     top: 0;
     z-index: 20;
-    background-color: ${Colors.LightBlue};
+    background-color: ${(props) => props.theme.colors.LightBlue};
 `;
 
 interface TDProps {
@@ -19,8 +19,8 @@ interface TDProps {
 }
 
 const TD = styled.td<TDProps>`
-    background-color: ${(props) => (props.isEmpty ? Colors.White : Colors.LightBeige)};
-    border: ${(props) => props.isEmpty && `2px solid ${Colors.LightBeige}`};
+    background-color: ${(props) => (props.isEmpty ? props.theme.colors.White : props.theme.colors.LightBeige)};
+    border: ${(props) => props.isEmpty && `2px solid ${props.theme.colors.LightBeige}`};
     overflow: hidden;
     text-overflow: ellipsis;
 `;

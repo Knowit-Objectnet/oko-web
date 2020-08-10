@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiLocation, Colors } from '../../types';
+import { ApiLocation } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
 import { StationAddress } from './StationAddress';
 import { StationOpeningTimes } from './StationOpeningTimes';
@@ -33,7 +33,7 @@ const Info = styled.div`
 
 const Icon = styled.div`
     margin-left: 10px;
-    background-color: ${Colors.Blue};
+    background-color: ${(props) => props.theme.colors.Blue};
     border-radius: 50%;
     height: 27px;
     width: 27px;

@@ -1,7 +1,6 @@
 {
   "include": [
-    "src/*",
-    "decs.d.ts"
+    "src/**/*"
   ],
   "compilerOptions": {
     "outDir": "./dist/",

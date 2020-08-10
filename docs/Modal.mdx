@@ -3,37 +3,31 @@ name: Modal
 ---
 
 import { Playground, Props } from 'docz';
-import { Modal } from '../src/sharedComponents/Modal';
+import useModal from '../src/sharedComponents/Modal/useModal';
+import styled from 'styled-components';
 
 # Modal
 
-<Props of={Modal} />
+## Options
+
+Options can be found in '../src/sharedComponents/Modal/Types.ts';
 
 ## Basic usage
 
 <Playground>
-    {() => {
-        const [showModal, setShowModal] = React.useState(false);
-        return (
-            <>
-                {showModal ? (
-                    <Modal
-                        exitModalCallback={() => {
-                            setShowModal(false);
-                        }}
-                        content="Hello world"
-                        width="200px"
-                        height="200px"
-                    />
-                ) : null}
-                <button
-                    onClick={() => {
-                        setShowModal(true);
-                    }}
-                >
-                    Test
-                </button>
-            </>
-        );
-    }}
+  {() => {
+    const modal = useModal();
+    return (
+      <button onClick={() =>
+            modal.show(<div>
+                Hello world
+                <button onClick={() => modal.remove()}>Close the modal</button></div>,
+                {width: "200px", height: "200px"}
+            )
+        }
+      >
+        Click me!
+      </button>
+    )
+  }}
 </Playground>

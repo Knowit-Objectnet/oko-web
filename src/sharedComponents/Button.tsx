@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../types';
 
 interface WrapperProps {
     color?: 'Red' | 'Green' | 'DarkBlue';
@@ -13,16 +12,16 @@ const Wrapper = styled.button<WrapperProps>`
     background-color: ${(props) => {
         switch (props.color) {
             case 'Red':
-                return Colors.Red;
+                return props.theme.colors.Red;
             case 'Green':
-                return Colors.Green;
+                return props.theme.colors.Green;
             case 'DarkBlue':
-                return Colors.DarkBlue;
+                return props.theme.colors.DarkBlue;
             default:
                 return null;
         }
     }};
-    color: ${(props) => (props.color === 'DarkBlue' ? Colors.White : null)};
+    color: ${(props) => props.color === 'DarkBlue' && props.theme.colors.White};
     height: ${(props) => (props.height ? props.height + 'px' : '45px')};
     width: ${(props) => (props.width ? props.width + 'px' : null)};
     font-weight: bold;

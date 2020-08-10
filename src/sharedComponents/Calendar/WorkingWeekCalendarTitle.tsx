@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../../types';
 import isSameDay from 'date-fns/isSameDay';
 
 const Group = styled.div`
@@ -11,7 +10,7 @@ const Group = styled.div`
     position: sticky;
     top: 0;
     z-index: 20;
-    background-color: ${Colors.White};
+    background-color: ${(props) => props.theme.colors.White};
 `;
 
 const Slot = styled.div`
@@ -32,8 +31,8 @@ const DateText = styled.div<DateTextProps>`
     font-size: x-large;
     border-radius: 50%;
     padding: ${(props) => (props.isSingleDigit ? '5px 13px' : '5px')};
-    color: ${(props) => (props.isToday ? Colors.White : Colors.Black)};
-    background-color: ${(props) => (props.isToday ? Colors.DarkBlue : null)};
+    color: ${(props) => (props.isToday ? props.theme.colors.White : props.theme.colors.Black)};
+    background-color: ${(props) => (props.isToday ? props.theme.colors.DarkBlue : null)};
 `;
 
 interface WorkingWeekCalendarTitleProps {

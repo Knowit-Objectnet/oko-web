@@ -10,8 +10,10 @@ import { MyPage } from '../../src/pages/myPage/MyPage';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import ModalProvider from '../../src/sharedComponents/Modal/Provider';
+import theme from '../../src/theme';
+import { ThemeProvider } from 'styled-components';
 
-describe('Provides a page to view the calendar in addition to change log and notifications', () => {
+describe('Provides a page to view contact info', () => {
     // router history
     let history: MemoryHistory;
 
@@ -37,15 +39,17 @@ describe('Provides a page to view the calendar in addition to change log and not
 
     it('Should render working logout button', async () => {
         const { findByText } = render(
-            <AlertProvider template={AlertTemplate} {...options}>
-                <ModalProvider>
-                    <KeycloakProvider keycloak={keycloak}>
-                        <Router history={history}>
-                            <MyPage />
-                        </Router>
-                    </KeycloakProvider>
-                </ModalProvider>
-            </AlertProvider>,
+            <ThemeProvider theme={theme}>
+                <AlertProvider template={AlertTemplate} {...options}>
+                    <ModalProvider>
+                        <KeycloakProvider keycloak={keycloak}>
+                            <Router history={history}>
+                                <MyPage />
+                            </Router>
+                        </KeycloakProvider>
+                    </ModalProvider>
+                </AlertProvider>
+            </ThemeProvider>,
         );
 
         // Find logout button
@@ -69,15 +73,17 @@ describe('Provides a page to view the calendar in addition to change log and not
 
     it("Should render the user's contact info ", async () => {
         const { findByText } = render(
-            <AlertProvider template={AlertTemplate} {...options}>
-                <ModalProvider>
-                    <KeycloakProvider keycloak={keycloak}>
-                        <Router history={history}>
-                            <MyPage />
-                        </Router>
-                    </KeycloakProvider>
-                </ModalProvider>
-            </AlertProvider>,
+            <ThemeProvider theme={theme}>
+                <AlertProvider template={AlertTemplate} {...options}>
+                    <ModalProvider>
+                        <KeycloakProvider keycloak={keycloak}>
+                            <Router history={history}>
+                                <MyPage />
+                            </Router>
+                        </KeycloakProvider>
+                    </ModalProvider>
+                </AlertProvider>
+            </ThemeProvider>,
         );
 
         // Find thee name, email and placeholder text for phone number as non is set in the users credentials

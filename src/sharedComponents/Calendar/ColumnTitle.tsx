@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../../types';
 
 const Group = styled.div`
     min-height: 40px;
@@ -10,7 +9,7 @@ const Group = styled.div`
     position: sticky;
     top: 0;
     z-index: 20;
-    background-color: ${Colors.LightBlue};
+    background-color: ${(props) => props.theme.colors.LightBlue};
 `;
 
 const Slot = styled.div`

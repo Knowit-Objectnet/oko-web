@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
-import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     flex: 1;
@@ -23,7 +22,7 @@ const Info = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     padding: 15px;
     box-sizing: border-box;
     flex: 1;

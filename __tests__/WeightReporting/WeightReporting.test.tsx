@@ -11,6 +11,8 @@ import { WeightReporting } from '../../src/pages/weightReporting/WeightReporting
 import { Roles } from '../../src/types';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
+import theme from '../../src/theme';
+import { ThemeProvider } from 'styled-components';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -116,13 +118,15 @@ describe('Provides a page provide and update weight of withdrawals', () => {
 
     it('Should render all withdrawals', async () => {
         const { findAllByText, findAllByPlaceholderText } = render(
-            <AlertProvider template={AlertTemplate} {...options}>
-                <KeycloakProvider keycloak={keycloak}>
-                    <Router history={history}>
-                        <WeightReporting />
-                    </Router>
-                </KeycloakProvider>
-            </AlertProvider>,
+            <KeycloakProvider keycloak={keycloak}>
+                <ThemeProvider theme={theme}>
+                    <AlertProvider template={AlertTemplate} {...options}>
+                        <Router history={history}>
+                            <WeightReporting />
+                        </Router>
+                    </AlertProvider>
+                </ThemeProvider>
+            </KeycloakProvider>,
         );
 
         const withdrawalsWithWeight = await findAllByText('200 kg');
