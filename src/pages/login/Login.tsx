@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,5 +24,12 @@ export const Login: React.FC = () => {
         keycloak.login();
     });
 
-    return <Wrapper>Logger deg inn...</Wrapper>;
+    return (
+        <>
+            <Helmet>
+                <title>Innlogging</title>
+            </Helmet>
+            <Wrapper>Logger deg inn...</Wrapper>
+        </>
+    );
 };

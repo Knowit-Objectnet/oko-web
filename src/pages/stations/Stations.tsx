@@ -10,6 +10,7 @@ import { types, useAlert } from 'react-alert';
 import { FetchError } from '../../utils/FetchError';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { NewLocation } from '../../sharedComponents/NewLocation';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;
@@ -124,18 +125,23 @@ export const Stations: React.FC = () => {
     }
 
     return (
-        <Wrapper>
-            <Item>
-                <Description>Ny stasjon</Description>
-                <Button>
-                    <Plus height="100%" onClick={onClick} />
-                </Button>
-            </Item>
-            <Content>
-                {locations.map((location) => (
-                    <Station key={`LocationId: ${location.id}`} {...location} />
-                ))}
-            </Content>
-        </Wrapper>
+        <>
+            <Helmet>
+                <title>Stasjonene</title>
+            </Helmet>
+            <Wrapper>
+                <Item>
+                    <Description>Ny stasjon</Description>
+                    <Button>
+                        <Plus height="100%" onClick={onClick} />
+                    </Button>
+                </Item>
+                <Content>
+                    {locations.map((location) => (
+                        <Station key={`LocationId: ${location.id}`} {...location} />
+                    ))}
+                </Content>
+            </Wrapper>
+        </>
     );
 };

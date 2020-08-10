@@ -8,6 +8,7 @@ import { preFetch } from './pre-fetch';
 import ModalProvider from './sharedComponents/Modal/Provider';
 import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
+import { Helmet } from 'react-helmet';
 
 // Pre-fetch data with a token if the user is logged in
 const onKeycloakTokens = (tokens: { idToken: string; refreshToken: string; token: string }) => {
@@ -35,9 +36,13 @@ export const App: React.FC = () => {
                             revalidateOnReconnect: true,
                         }}
                     >
+                        <Helmet titleTemplate="Oslo kommune REG | %s">
+                            <html lang="no" />
+                            <meta name="description" content="Oslo kommune REG" />
+                        </Helmet>
                         <RouterComponent />
+                        <GlobalStyle />
                     </SWRConfig>
-                    <GlobalStyle />
                 </ModalProvider>
             </AlertProvider>
         </KeycloakProvider>
