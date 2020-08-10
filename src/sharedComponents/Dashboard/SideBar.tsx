@@ -276,16 +276,24 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                                 <StyledBell /> Varsler
                                             </Link>
                                         ) : null}
-                                        <Link current={history.location.pathname} to="/" onClick={props.onClick}>
-                                            <StyledPencilRec /> Skriv beskjed
-                                        </Link>
-                                        <Link
-                                            current={history.location.pathname}
-                                            to="/settings"
-                                            onClick={props.onClick}
-                                        >
-                                            <StyledCog /> Innstillinger
-                                        </Link>
+                                        {keycloak.authenticated && (
+                                            <>
+                                                <Link
+                                                    current={history.location.pathname}
+                                                    to="/"
+                                                    onClick={props.onClick}
+                                                >
+                                                    <StyledPencilRec /> Skriv beskjed
+                                                </Link>
+                                                <Link
+                                                    current={history.location.pathname}
+                                                    to="/settings"
+                                                    onClick={props.onClick}
+                                                >
+                                                    <StyledCog /> Innstillinger
+                                                </Link>
+                                            </>
+                                        )}
                                     </Links>
                                     <LogoWrapper>
                                         <Logo />
