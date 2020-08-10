@@ -219,7 +219,7 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                             ...linkTransitionStyles[state],
                                         }}
                                     >
-                                        {keycloak.hasRealmRole(Roles.Oslo) ? (
+                                        {keycloak.hasRealmRole(Roles.Oslo) && (
                                             <Link
                                                 current={history.location.pathname}
                                                 to="/statistics"
@@ -227,7 +227,7 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                             >
                                                 <StyledChart /> Statistikk
                                             </Link>
-                                        ) : null}
+                                        )}
                                         <Link
                                             current={history.location.pathname}
                                             to="/partners"
@@ -242,22 +242,22 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                         >
                                             <StyledLocation /> Stasjonene
                                         </Link>
-                                        {keycloak.hasRealmRole(Roles.Oslo) ? (
+                                        {keycloak.hasRealmRole(Roles.Oslo) && (
                                             <FakeLink onClick={onNewEventClick}>
                                                 <StyledPlus /> Opprett hendelse
                                             </FakeLink>
-                                        ) : null}
-                                        {keycloak.hasRealmRole(Roles.Partner) ? (
+                                        )}
+                                        {keycloak.hasRealmRole(Roles.Partner) && (
                                             <Link current={history.location.pathname} to="/" onClick={props.onClick}>
                                                 <StyledPlus /> Søk ekstrauttak
                                             </Link>
-                                        ) : null}
-                                        {keycloak.hasRealmRole(Roles.Ambassador) ? (
+                                        )}
+                                        {keycloak.hasRealmRole(Roles.Ambassador) && (
                                             <FakeLink onClick={onExtraEventClick}>
                                                 <StyledPlus /> Utlys ekstrauttak
                                             </FakeLink>
-                                        ) : null}
-                                        {keycloak.hasRealmRole(Roles.Partner) ? (
+                                        )}
+                                        {keycloak.hasRealmRole(Roles.Partner) && (
                                             <Link
                                                 current={history.location.pathname}
                                                 to="/reporting"
@@ -265,9 +265,9 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                             >
                                                 <StyledWeight /> Vektuttak
                                             </Link>
-                                        ) : null}
-                                        {keycloak.hasRealmRole(Roles.Partner) ||
-                                        keycloak.hasRealmRole(Roles.Ambassador) ? (
+                                        )}
+                                        {(keycloak.hasRealmRole(Roles.Partner) ||
+                                            keycloak.hasRealmRole(Roles.Ambassador)) && (
                                             <Link
                                                 current={history.location.pathname}
                                                 to="/notifications"
@@ -275,7 +275,7 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                             >
                                                 <StyledBell /> Varsler
                                             </Link>
-                                        ) : null}
+                                        )}
                                         {keycloak.authenticated && (
                                             <>
                                                 <Link

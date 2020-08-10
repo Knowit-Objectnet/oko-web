@@ -50,16 +50,16 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
 
     return (
         <Wrapper>
-            {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
+            {(keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador)) && (
                 <Button onClick={props.onCalendarToggleClick}>
                     <Calendar height="100%" />
                 </Button>
-            ) : null}
-            {keycloak.hasRealmRole(Roles.Oslo) || keycloak.hasRealmRole(Roles.Ambassador) ? (
+            )}
+            {(keycloak.hasRealmRole(Roles.Oslo) || keycloak.hasRealmRole(Roles.Ambassador)) && (
                 <Button onClick={onNewOrExtraEventClick}>
                     <Plus height="100%" />
                 </Button>
-            ) : null}
+            )}
         </Wrapper>
     );
 };

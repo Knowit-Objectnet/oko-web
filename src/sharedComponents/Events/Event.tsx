@@ -259,12 +259,12 @@ export const Event: React.FC<EventProps> = (props) => {
                         />
                     </Options>
                 </Section>
-                {!isEditing ? (
+                {!isEditing && (
                     <Section>
                         <EventMessageBox {...props.resource.message} />
-                        {keycloak.hasRealmRole(Roles.Oslo) ||
-                        (keycloak.hasRealmRole(Roles.Partner) &&
-                            keycloak.tokenParsed.GroupID === props.resource.partner.id) ? (
+                        {(keycloak.hasRealmRole(Roles.Oslo) ||
+                            (keycloak.hasRealmRole(Roles.Partner) &&
+                                keycloak.tokenParsed.GroupID === props.resource.partner.id)) && (
                             <>
                                 <Button
                                     text="Avlys uttak"
@@ -272,13 +272,13 @@ export const Event: React.FC<EventProps> = (props) => {
                                     color="Red"
                                     styling="margin-top: 10px;"
                                 />
-                                {isDeletionConfirmationVisible ? <DeleteEvent onSubmit={onDelete} /> : null}
+                                {isDeletionConfirmationVisible && <DeleteEvent onSubmit={onDelete} />}
                             </>
-                        ) : null}
+                        )}
                     </Section>
-                ) : null}
+                )}
             </Body>
-            {isEditing ? <EventSubmission onSubmit={onSubmit} onCancel={onCancel} /> : null}
+            {isEditing && <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />}
         </EventTemplateHorizontal>
     );
 };

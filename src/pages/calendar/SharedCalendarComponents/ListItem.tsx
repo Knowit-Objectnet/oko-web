@@ -114,7 +114,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     return (
         <div>
             <Wrapper expanded={expanded}>
-                {expanded ? null : <Time color={props.color}>{getTimeString(minTime, maxTime)}</Time>}
+                {!expanded && <Time color={props.color}>{getTimeString(minTime, maxTime)}</Time>}
                 <Info color={props.color}>
                     <Name>{props.title}</Name>
                     <Toggle>
@@ -127,7 +127,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
                     </Toggle>
                 </Info>
             </Wrapper>
-            {expanded ? (
+            {expanded && (
                 <ListItemDropdown
                     date={props.date}
                     min={minTime}
@@ -137,7 +137,7 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
                     allowDeletionOfEvent={props.allowDeletionOfEvent}
                     deleteEvent={props.deleteEvent}
                 />
-            ) : null}
+            )}
         </div>
     );
 };

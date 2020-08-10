@@ -20,7 +20,7 @@ interface TDProps {
 
 const TD = styled.td<TDProps>`
     background-color: ${(props) => (props.isEmpty ? Colors.White : Colors.LightBeige)};
-    border: ${(props) => (props.isEmpty ? `2px solid ${Colors.LightBeige}` : null)};
+    border: ${(props) => props.isEmpty && `2px solid ${Colors.LightBeige}`};
     overflow: hidden;
     text-overflow: ellipsis;
 `;
@@ -80,7 +80,7 @@ export const Agenda: React.FC<AgendaProps> = (props) => {
 
                                 return (
                                     <TD isEmpty={props.events[j].length <= i} key={column + j}>
-                                        {props.events[j].length <= i ? null : (
+                                        {props.events[j].length > i && (
                                             <Cell>
                                                 <Time>
                                                     {getTimeString(props.events[j][i].start, props.events[j][i].end)}

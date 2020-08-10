@@ -207,11 +207,16 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
         }
     };
 
+    // Function to disable weekends in the date and date-range pickers
+    const disableWeekends = ({ date }: { date: Date }) => {
+        return date.getDay() === 0 || date.getDay() === 6;
+    };
+
     return (
         <EventOption>
             {props.isEditing ? (
                 <Wrapper>
-                    {props.recurrenceEnabled ? (
+                    {props.recurrenceEnabled && (
                         <Label>
                             <Select value={props.recurring} onChange={onRecurringChange}>
                                 <option value="None">Gjentas ikke</option>
@@ -219,8 +224,8 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                                 <option value="Weekly">Ukentlig</option>
                             </Select>
                         </Label>
-                    ) : null}
-                    {props.recurring === 'Weekly' ? (
+                    )}
+                    {props.recurring === 'Weekly' && (
                         <Label>
                             <Span>Velg ukedag(er)</Span>
                             <DaySelection>
@@ -241,7 +246,7 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                                 </Day>
                             </DaySelection>
                         </Label>
-                    ) : null}
+                    )}
                     <DateTimePickersWrapper>
                         <Span>Velg tidspunkt</Span>
                         <StyledTimeRangePicker
@@ -251,23 +256,25 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                             value={props.timeRange}
                         />
                     </DateTimePickersWrapper>
-                    {props.recurring !== 'None' ? (
+                    {props.recurring !== 'None' && (
                         <DateTimePickersWrapper>
                             <Span>Velg periode</Span>
                             <StyledDateRangePicker
                                 clearIcon={null}
                                 onChange={onDateRangeChange}
                                 value={props.dateRange}
+                                tileDisabled={disableWeekends}
                             />
                         </DateTimePickersWrapper>
-                    ) : null}
-                    {props.recurring === 'None' ? (
+                    )}
+                    {props.recurring === 'None' && (
                         <StyledDatePicker
                             clearIcon={null}
                             onChange={onNonRecurringDateChange}
                             value={nonRecurringDate}
+                            tileDisabled={disableWeekends}
                         />
-                    ) : null}
+                    )}
                 </Wrapper>
             ) : (
                 <BoxWrapper>

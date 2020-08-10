@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
-import { ApiPartner, ApiRequest, apiUrl, PickUp } from '../../types';
+import { ApiPartner, ApiRequest, apiUrl } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 import { Request } from './Request';
 import { useEffect, useState } from 'react';
@@ -46,8 +46,8 @@ export const Requests: React.FC<RequestsProps> = (props) => {
 
     return (
         <Wrapper>
-            {!apiRequests && isValidating ? <NoRequests>Laster inn...</NoRequests> : null}
-            {requests && requests.length === 0 ? <NoRequests>Ingen påmeldte enda</NoRequests> : null}
+            {!apiRequests && isValidating && <NoRequests>Laster inn...</NoRequests>}
+            {requests && requests.length === 0 && <NoRequests>Ingen påmeldte enda</NoRequests>}
             {requests.map((request) => (
                 <Request
                     key={`pickupId: ${request.pickup.id} partner ${request.partner.id}`}

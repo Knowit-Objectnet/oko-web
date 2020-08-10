@@ -34,7 +34,7 @@ export const Navigation: React.FC = () => {
 
     return (
         <Nav>
-            {keycloak.hasRealmRole(Roles.Oslo) ? (
+            {keycloak.hasRealmRole(Roles.Oslo) && (
                 <NavElement
                     text={'Oversikt'}
                     icon={List}
@@ -42,7 +42,7 @@ export const Navigation: React.FC = () => {
                     selected={history.location.pathname.slice(1) === ''}
                     onClick={onClick}
                 />
-            ) : null}
+            )}
             <NavElement
                 text={'Kalender'}
                 icon={Calendar}
@@ -50,7 +50,7 @@ export const Navigation: React.FC = () => {
                 selected={history.location.pathname.slice(1) === 'calendar'}
                 onClick={onClick}
             />
-            {keycloak.hasRealmRole(Roles.Oslo) ? (
+            {keycloak.hasRealmRole(Roles.Oslo) && (
                 <>
                     <NavElement
                         text={'Statistikk'}
@@ -60,8 +60,8 @@ export const Navigation: React.FC = () => {
                         onClick={onClick}
                     />
                 </>
-            ) : null}
-            {keycloak.hasRealmRole(Roles.Partner) ? (
+            )}
+            {keycloak.hasRealmRole(Roles.Partner) && (
                 <NavElement
                     text={'Vektuttak'}
                     icon={Weight}
@@ -69,8 +69,8 @@ export const Navigation: React.FC = () => {
                     selected={history.location.pathname.slice(1) === 'reporting'}
                     onClick={onClick}
                 />
-            ) : null}
-            {keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador) ? (
+            )}
+            {(keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador)) && (
                 <NavElement
                     text={'Varsler'}
                     icon={Bell}
@@ -78,7 +78,7 @@ export const Navigation: React.FC = () => {
                     selected={history.location.pathname.slice(1) === 'notifications'}
                     onClick={onClick}
                 />
-            ) : null}
+            )}
         </Nav>
     );
 };

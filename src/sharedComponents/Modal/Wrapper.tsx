@@ -83,7 +83,7 @@ export const Wrapper: React.FC<ModalProps> = (props) => {
                 onClick={stopBackgroundCall}
             >
                 <StyledCross onClick={onExitClick} />
-                {props.content ? props.content instanceof String ? <p>{props.content}</p> : props.content : null}
+                {props.content && (props.content instanceof String ? <p>{props.content}</p> : props.content)}
             </Content>
         </Background>
     );

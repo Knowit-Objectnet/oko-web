@@ -479,12 +479,12 @@ export const CalendarPage: React.FC = () => {
             <Wrapper>
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
-                    {(keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo) ? (
+                    {((keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo)) && (
                         <LocationSelector
                             selectedLocation={selectedLocation}
                             onSelectedLocationChange={onSelectedLocationChange}
                         />
-                    ) : null}
+                    )}
                 </ModuleDateCalendar>
                 {!apiEvents && (!events || events.length <= 0) && isValidating ? (
                     <Loading text="Laster inn data..." />
