@@ -10,6 +10,8 @@ import { ApiEvent, apiUrl, EventInfo, Roles } from '../../src/types';
 // Component to test
 import { RegCalendar } from '../../src/pages/calendar/RegCalendar/RegCalendar';
 import { mockLocations } from '../../__mocks__/mockLocations';
+import theme from "../../src/theme";
+import {ThemeProvider} from "styled-components";
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -62,15 +64,17 @@ describe('Provides a page for REG to view the calendar', () => {
 
         render(
             <KeycloakProvider keycloak={keycloak}>
-                <RegCalendar
-                    date={date}
-                    onSelectEvent={onSelectEventMock}
-                    newEvent={newEvent}
-                    onSelectSlot={onSelectSlot}
-                    events={events}
-                    isToggled={false}
-                    onWeekChange={onWeekChange}
-                />
+                <ThemeProvider theme={theme}>
+                    <RegCalendar
+                        date={date}
+                        onSelectEvent={onSelectEventMock}
+                        newEvent={newEvent}
+                        onSelectSlot={onSelectSlot}
+                        events={events}
+                        isToggled={false}
+                        onWeekChange={onWeekChange}
+                    />
+                </ThemeProvider>
             </KeycloakProvider>,
         );
     });
@@ -87,15 +91,17 @@ describe('Provides a page for REG to view the calendar', () => {
 
         const { findAllByText } = render(
             <KeycloakProvider keycloak={keycloak}>
-                <RegCalendar
-                    date={date}
-                    onSelectEvent={onSelectEventMock}
-                    newEvent={newEvent}
-                    onSelectSlot={onSelectSlot}
-                    events={events}
-                    isToggled={false}
-                    onWeekChange={onWeekChange}
-                />
+                <ThemeProvider theme={theme}>
+                    <RegCalendar
+                        date={date}
+                        onSelectEvent={onSelectEventMock}
+                        newEvent={newEvent}
+                        onSelectSlot={onSelectSlot}
+                        events={events}
+                        isToggled={false}
+                        onWeekChange={onWeekChange}
+                    />
+                </ThemeProvider>
             </KeycloakProvider>,
         );
 
@@ -117,15 +123,17 @@ describe('Provides a page for REG to view the calendar', () => {
 
         const { findAllByText } = render(
             <KeycloakProvider keycloak={keycloak}>
-                <RegCalendar
-                    date={date}
-                    onSelectEvent={onSelectEventMock}
-                    newEvent={newEvent}
-                    onSelectSlot={onSelectSlot}
-                    events={events}
-                    isToggled={false}
-                    onWeekChange={onWeekChange}
-                />
+                <ThemeProvider theme={theme}>
+                    <RegCalendar
+                        date={date}
+                        onSelectEvent={onSelectEventMock}
+                        newEvent={newEvent}
+                        onSelectSlot={onSelectSlot}
+                        events={events}
+                        isToggled={false}
+                        onWeekChange={onWeekChange}
+                    />
+                </ThemeProvider>
             </KeycloakProvider>,
         );
 
