@@ -15,6 +15,7 @@ import { PatchToAPI } from '../../utils/PatchToAPI';
 import { Loading } from '../../sharedComponents/Loading';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;
@@ -255,42 +256,47 @@ export const PickUps: React.FC = () => {
     };
 
     return (
-        <Wrapper>
-            {keycloak.hasRealmRole(Roles.Ambassador) ? (
-                <Item>
-                    <Description>Ektrauttak</Description>
-                    <Button onClick={onClick}>
-                        <Plus height="100%" />
-                    </Button>
-                </Item>
-            ) : null}
-            <Content>
-                <h2>Forespørsler</h2>
-                <Explanation>
-                    <ExplanationLocation>Sendt av:</ExplanationLocation>
-                    <ExplanationPickup>Uttak:</ExplanationPickup>
-                    <ExplanationLast>
-                        {keycloak.hasRealmRole(Roles.Ambassador) ? 'Handlingsalternativer:' : 'Påmeldte:'}
-                    </ExplanationLast>
-                </Explanation>
-                <PickUpsList>
-                    {!apiPickUps && isValidating ? (
-                        <Loading text="Laster inn data..." />
-                    ) : (
-                        pickUps.map((pickUp) => (
-                            <PickUpRequest
-                                key={`Pickup: ${pickUp.id}`}
-                                {...pickUp}
-                                groupId={keycloak.tokenParsed.GroupID}
-                                deleteRequest={requestDeletion}
-                                registerRequest={requestSubmission}
-                                onReject={pickupReject}
-                                onApprove={pickupApprove}
-                            />
-                        ))
-                    )}
-                </PickUpsList>
-            </Content>
-        </Wrapper>
+        <>
+            <Helmet>
+                <title>Ektrauttak</title>
+            </Helmet>
+            <Wrapper>
+                {keycloak.hasRealmRole(Roles.Ambassador) && (
+                    <Item>
+                        <Description>Ektrauttak</Description>
+                        <Button onClick={onClick}>
+                            <Plus height="100%" />
+                        </Button>
+                    </Item>
+                )}
+                <Content>
+                    <h2>Forespørsler</h2>
+                    <Explanation>
+                        <ExplanationLocation>Sendt av:</ExplanationLocation>
+                        <ExplanationPickup>Uttak:</ExplanationPickup>
+                        <ExplanationLast>
+                            {keycloak.hasRealmRole(Roles.Ambassador) ? 'Handlingsalternativer:' : 'Påmeldte:'}
+                        </ExplanationLast>
+                    </Explanation>
+                    <PickUpsList>
+                        {!apiPickUps && isValidating ? (
+                            <Loading text="Laster inn data..." />
+                        ) : (
+                            pickUps.map((pickUp) => (
+                                <PickUpRequest
+                                    key={`Pickup: ${pickUp.id}`}
+                                    {...pickUp}
+                                    groupId={keycloak.tokenParsed.GroupID}
+                                    deleteRequest={requestDeletion}
+                                    registerRequest={requestSubmission}
+                                    onReject={pickupReject}
+                                    onApprove={pickupApprove}
+                                />
+                            ))
+                        )}
+                    </PickUpsList>
+                </Content>
+            </Wrapper>
+        </>
     );
 };

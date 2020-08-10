@@ -276,9 +276,9 @@ export const TimeSlotColumn: React.FC<TimeColumnProps> = (props) => {
         <Wrapper {...wrapperFunctions}>
             {props.titleComponent ? (
                 <props.titleComponent date={props.date} />
-            ) : props.title ? (
-                <ColumnTitle title={props.title} />
-            ) : null}
+            ) : (
+                props.title && <ColumnTitle title={props.title} />
+            )}
             <EventsSlotsWrapper>
                 <Column {...columnFunctions}>{groups}</Column>
                 <EventsColumn

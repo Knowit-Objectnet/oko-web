@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiLocation, apiUrl } from '../../types';
+import { ApiLocation, apiUrl, Roles } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Station } from './Station';
@@ -10,6 +10,8 @@ import { types, useAlert } from 'react-alert';
 import { FetchError } from '../../utils/FetchError';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { NewLocation } from '../../sharedComponents/NewLocation';
+import keycloak from '../../keycloak';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;
@@ -124,18 +126,25 @@ export const Stations: React.FC = () => {
     }
 
     return (
-        <Wrapper>
-            <Item>
-                <Description>Ny stasjon</Description>
-                <Button>
-                    <Plus height="100%" onClick={onClick} />
-                </Button>
-            </Item>
-            <Content>
-                {locations.map((location) => (
-                    <Station key={`LocationId: ${location.id}`} {...location} />
-                ))}
-            </Content>
-        </Wrapper>
+        <>
+            <Helmet>
+                <title>Stasjonene</title>
+            </Helmet>
+            <Wrapper>
+                {keycloak.hasRealmRole(Roles.Oslo) && (
+                    <Item>
+                        <Description>Ny stasjon</Description>
+                        <Button>
+                            <Plus height="100%" onClick={onClick} />
+                        </Button>
+                    </Item>
+                )}
+                <Content>
+                    {locations.map((location) => (
+                        <Station key={`LocationId: ${location.id}`} {...location} />
+                    ))}
+                </Content>
+            </Wrapper>
+        </>
     );
 };

@@ -9,6 +9,7 @@ import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useAlert, types } from 'react-alert';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;
@@ -120,51 +121,56 @@ export const WeightReporting: React.FC = () => {
     );
 
     return (
-        <Wrapper>
-            {!withdrawals && isValidating ? (
-                <Loading text="Laster inn data..." />
-            ) : (
-                <Content>
-                    <Latest>
-                        <h2>Ikke rapportert</h2>
-                        <OverflowWrapper>
-                            {withdrawals &&
-                                withdrawals
-                                    .filter((withdrawal) => !withdrawal.weight)
-                                    .map((withdrawal) => (
-                                        <WithdrawalSubmission
-                                            key={withdrawal.reportID}
-                                            id={withdrawal.reportID}
-                                            weight={withdrawal.weight}
-                                            start={withdrawal.startDateTime}
-                                            end={withdrawal.endDateTime}
-                                            location={withdrawal.station}
-                                            onSubmit={onSubmit}
-                                        />
-                                    ))}
-                        </OverflowWrapper>
-                    </Latest>
-                    <Older>
-                        <h2>Tidligere uttak</h2>
-                        <OverflowWrapper>
-                            {withdrawals &&
-                                withdrawals
-                                    .filter((withdrawal) => withdrawal.weight)
-                                    .map((withdrawal) => (
-                                        <WithdrawalSubmission
-                                            key={withdrawal.reportID + 'weight'}
-                                            id={withdrawal.reportID}
-                                            weight={withdrawal.weight}
-                                            start={withdrawal.startDateTime}
-                                            end={withdrawal.endDateTime}
-                                            location={withdrawal.station}
-                                            onSubmit={onSubmit}
-                                        />
-                                    ))}
-                        </OverflowWrapper>
-                    </Older>
-                </Content>
-            )}
-        </Wrapper>
+        <>
+            <Helmet>
+                <title>Vektuttak</title>
+            </Helmet>
+            <Wrapper>
+                {!withdrawals && isValidating ? (
+                    <Loading text="Laster inn data..." />
+                ) : (
+                    <Content>
+                        <Latest>
+                            <h2>Ikke rapportert</h2>
+                            <OverflowWrapper>
+                                {withdrawals &&
+                                    withdrawals
+                                        .filter((withdrawal) => !withdrawal.weight)
+                                        .map((withdrawal) => (
+                                            <WithdrawalSubmission
+                                                key={withdrawal.reportID}
+                                                id={withdrawal.reportID}
+                                                weight={withdrawal.weight}
+                                                start={withdrawal.startDateTime}
+                                                end={withdrawal.endDateTime}
+                                                location={withdrawal.station}
+                                                onSubmit={onSubmit}
+                                            />
+                                        ))}
+                            </OverflowWrapper>
+                        </Latest>
+                        <Older>
+                            <h2>Tidligere uttak</h2>
+                            <OverflowWrapper>
+                                {withdrawals &&
+                                    withdrawals
+                                        .filter((withdrawal) => withdrawal.weight)
+                                        .map((withdrawal) => (
+                                            <WithdrawalSubmission
+                                                key={withdrawal.reportID + 'weight'}
+                                                id={withdrawal.reportID}
+                                                weight={withdrawal.weight}
+                                                start={withdrawal.startDateTime}
+                                                end={withdrawal.endDateTime}
+                                                location={withdrawal.station}
+                                                onSubmit={onSubmit}
+                                            />
+                                        ))}
+                            </OverflowWrapper>
+                        </Older>
+                    </Content>
+                )}
+            </Wrapper>
+        </>
     );
 };

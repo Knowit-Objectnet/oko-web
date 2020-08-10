@@ -10,6 +10,7 @@ import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
+import { Helmet } from 'react-helmet';
 
 // Pre-fetch data with a token if the user is logged in
 const onKeycloakTokens = (tokens: { idToken: string; refreshToken: string; token: string }) => {
@@ -38,6 +39,10 @@ export const App: React.FC = () => {
                                 revalidateOnReconnect: true,
                             }}
                         >
+                            <Helmet titleTemplate="Oslo kommune REG | %s">
+                                <html lang="no" />
+                                <meta name="description" content="Oslo kommune REG" />
+                            </Helmet>
                             <RouterComponent />
                             <GlobalStyle />
                         </SWRConfig>

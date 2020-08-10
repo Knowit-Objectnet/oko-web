@@ -90,7 +90,7 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
                 Velg enkelte stasjoner
                 {toggled ? <StyledArrowDown onClick={onToggleClick} /> : <StyledArrowUp onClick={onToggleClick} />}
             </Header>
-            {toggled ? (
+            {toggled && (
                 <Locations>
                     {locations.map((location) => (
                         <Label key={location.name + location.id}>
@@ -115,7 +115,7 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
                         Alle
                     </Label>
                 </Locations>
-            ) : null}
+            )}
         </Wrapper>
     );
 };

@@ -19,6 +19,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
 import useModal from '../../sharedComponents/Modal/useModal';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
     display: flex;
@@ -165,36 +166,41 @@ export const MyPage: React.FC = () => {
     };
 
     return (
-        <Wrapper>
-            <Content sideMenuVisible={keycloak.hasRealmRole(Roles.Oslo)}>
-                <Header>
-                    <DefaultProfilePicture />
-                    <h2>Min side</h2>
-                    <Button
-                        onClick={onLogoutClick}
-                        text="Logg ut"
-                        color="DarkBlue"
-                        width={100}
-                        styling="margin-left: auto;"
+        <>
+            <Helmet>
+                <title>Min side</title>
+            </Helmet>
+            <Wrapper>
+                <Content sideMenuVisible={keycloak.hasRealmRole(Roles.Oslo)}>
+                    <Header>
+                        <DefaultProfilePicture />
+                        <h2>Min side</h2>
+                        <Button
+                            onClick={onLogoutClick}
+                            text="Logg ut"
+                            color="DarkBlue"
+                            width={100}
+                            styling="margin-left: auto;"
+                        />
+                    </Header>
+                    {keycloak.hasRealmRole(Roles.Partner) && (
+                        <AboutPartner
+                            name={partnerInfo ? partnerInfo.name : keycloak.tokenParsed.groups[0] || '<laster inn...>'}
+                            description={partnerInfo ? partnerInfo.description : 'Laster inn...'}
+                        />
+                    )}
+                    <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
+                    {keycloak.hasRealmRole(Roles.Partner) && <ShareContactInfo />}
+                </Content>
+                {keycloak.hasRealmRole(Roles.Oslo) && (
+                    <SideMenu
+                        newPartnerClick={showNewPartner}
+                        newLocationClick={showNewLocation}
+                        deletePartnerClick={showDeletePartner}
+                        deleteLocationClick={showDeleteLocation}
                     />
-                </Header>
-                {keycloak.hasRealmRole(Roles.Partner) ? (
-                    <AboutPartner
-                        name={partnerInfo ? partnerInfo.name : keycloak.tokenParsed.groups[0] || '<laster inn...>'}
-                        description={partnerInfo ? partnerInfo.description : 'Laster inn...'}
-                    />
-                ) : null}
-                <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
-                {keycloak.hasRealmRole(Roles.Partner) ? <ShareContactInfo /> : null}
-            </Content>
-            {keycloak.hasRealmRole(Roles.Oslo) ? (
-                <SideMenu
-                    newPartnerClick={showNewPartner}
-                    newLocationClick={showNewLocation}
-                    deletePartnerClick={showDeletePartner}
-                    deleteLocationClick={showDeleteLocation}
-                />
-            ) : null}
-        </Wrapper>
+                )}
+            </Wrapper>
+        </>
     );
 };

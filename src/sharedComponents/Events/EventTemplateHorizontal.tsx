@@ -45,7 +45,7 @@ export const EventTemplateHorizontal: React.FC<HorizontalEventTemplateProps> = (
     <Wrapper>
         <Title>
             <h2>{props.title}</h2>
-            {props.isEditing || !props.showEditSymbol ? null : (
+            {!props.isEditing && props.showEditSymbol && (
                 <EditTitle>
                     <Pencil height="1em" onClick={props.onEditClick} />
                 </EditTitle>

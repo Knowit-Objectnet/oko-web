@@ -53,7 +53,7 @@ export const Gutter: React.FC<GutterProps> = (props) => {
 
     return (
         <Column>
-            {props.showTitleGroup ? <TitleGutterGroup height={props.titleComponentHeight} /> : null}
+            {props.showTitleGroup && <TitleGutterGroup height={props.titleComponentHeight} />}
             {groups}
         </Column>
     );

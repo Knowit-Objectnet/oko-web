@@ -33,7 +33,7 @@ interface EventOptionProps {
  */
 export const EventOption: React.FC<EventOptionProps> = (props) => (
     <Option>
-        {props.icon ? <props.icon height="1.5em" /> : null}
+        {props.icon && <props.icon height="1.5em" />}
         <OptionInfo icon={props.icon}>{props.children}</OptionInfo>
     </Option>
 );

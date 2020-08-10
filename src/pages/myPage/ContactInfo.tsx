@@ -220,9 +220,9 @@ export const ContactInfo: React.FC<ContactInfoProps> = (props) => {
                         </Td>
                         <Td>
                             <Cell>
-                                {editing ? (
+                                {editing && (
                                     <Input type="text" name="description" value={description} onChange={onChange} />
-                                ) : null}
+                                )}
                             </Cell>
                         </Td>
                     </Tr>

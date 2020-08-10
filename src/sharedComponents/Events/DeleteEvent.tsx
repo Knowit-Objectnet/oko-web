@@ -85,9 +85,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                     Over en periode
                 </Selection>
             </RangeSelection>
-            {!isSingleDeletion ? (
-                <StyledDateRangePicker clearIcon={null} onChange={onDateRangeChange} value={range} />
-            ) : null}
+            {!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={onDateRangeChange} value={range} />}
             <Button onClick={onSubmit} text="Bekreft" color="Green" height={35} />
         </Wrapper>
     );

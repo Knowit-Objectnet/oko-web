@@ -53,18 +53,10 @@ export const RouterComponent: React.FC = () => {
                                 not={<Redirect to="/" />}
                                 is={() => 'Hello statistics'}
                             />
-                            <AuthenticatedRoute
-                                exact={true}
-                                path={`${props.match.url}partners`}
-                                not={<Redirect to="/" />}
-                                is={() => 'Hello partners'}
-                            />
-                            <AuthenticatedRoute
-                                exact={true}
-                                path={`${props.match.url}stations`}
-                                not={<Redirect to="/" />}
-                                is={<Stations />}
-                            />
+                            <Route exact path={`${props.match.url}partners`}>
+                                Hello partners
+                            </Route>
+                            <Route exact path={`${props.match.url}stations`} component={Stations} />
                             <AuthenticatedRoute
                                 exact={true}
                                 path={`${props.match.url}reporting`}
