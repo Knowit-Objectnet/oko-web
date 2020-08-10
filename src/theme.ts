@@ -14,7 +14,7 @@ enum colorScheme {
     White = '#FFFFFF',
 }
 
-export const theme = {
+const theme = {
     colors: {
         DarkBlue: colorScheme.DarkBlue,
         Blue: colorScheme.Blue,
@@ -30,3 +30,7 @@ export const theme = {
         White: colorScheme.White,
     },
 } as const;
+
+export type ThemeType = typeof theme;
+
+export default theme;
