@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 
 import { WithdrawalSubmission } from '../../src/pages/weightReporting/WithdrawalSubmission';
 import { ThemeProvider } from 'styled-components';
-import theme from "../../src/theme";
+import theme from '../../src/theme';
 
 describe('Provides a component to update a single weight withdrawal', () => {
     afterEach(() => {

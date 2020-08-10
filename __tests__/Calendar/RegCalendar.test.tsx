@@ -10,8 +10,8 @@ import { ApiEvent, apiUrl, EventInfo, Roles } from '../../src/types';
 // Component to test
 import { RegCalendar } from '../../src/pages/calendar/RegCalendar/RegCalendar';
 import { mockLocations } from '../../__mocks__/mockLocations';
-import theme from "../../src/theme";
-import {ThemeProvider} from "styled-components";
+import theme from '../../src/theme';
+import { ThemeProvider } from 'styled-components';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
