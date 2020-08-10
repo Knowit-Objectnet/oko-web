@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Plus from '../../assets/Plus.svg';
 import Minus from '../../assets/Minus.svg';
-import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,7 +22,7 @@ const Description = styled.div`
     align-items: center;
     justify-content: center;
     width: 150px;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
 `;
 
 interface ButtonProps {
@@ -34,7 +33,7 @@ const Button = styled.div<ButtonProps>`
     width: 50px;
     height: 50px;
     padding: 10px;
-    background-color: ${(props) => (props.deletion ? Colors.Red : Colors.Green)};
+    background-color: ${(props) => (props.deletion ? props.theme.colors.Red : props.theme.colors.Green)};
     border-radius: 50%;
     box-sizing: border-box;
 

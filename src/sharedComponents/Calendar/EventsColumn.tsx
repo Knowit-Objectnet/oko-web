@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors, EventInfo } from '../../types';
+import { EventInfo } from '../../types';
 import { useEffect, useRef, useState } from 'react';
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import add from 'date-fns/add';
@@ -28,40 +28,40 @@ const Event = styled.div<EventProps>`
     height: ${(props) => props.height}px;
     width: ${(props) => props.width}%;
     &:nth-child(n + 1) {
-        background-color: ${Colors.DarkBlue};
-        color: ${Colors.White};
+        background-color: ${(props) => props.theme.colors.DarkBlue};
+        color: ${(props) => props.theme.colors.White};
     }
     &:nth-child(n + 2) {
-        background-color: ${Colors.DarkGreen};
-        color: ${Colors.White};
+        background-color: ${(props) => props.theme.colors.DarkGreen};
+        color: ${(props) => props.theme.colors.White};
     }
     &:nth-child(n + 3) {
-        background-color: ${Colors.LightBlue};
-        color: ${Colors.Black};
+        background-color: ${(props) => props.theme.colors.LightBlue};
+        color: ${(props) => props.theme.colors.Black};
     }
     &:nth-child(n + 4) {
-        background-color: ${Colors.Green};
-        color: ${Colors.Black};
+        background-color: ${(props) => props.theme.colors.Green};
+        color: ${(props) => props.theme.colors.Black};
     }
     &:nth-child(n + 5) {
-        background-color: ${Colors.Red};
-        color: ${Colors.Black};
+        background-color: ${(props) => props.theme.colors.Red};
+        color: ${(props) => props.theme.colors.Black};
     }
     &:nth-child(n + 6) {
-        background-color: ${Colors.LightGreen};
-        color: ${Colors.Black};
+        background-color: ${(props) => props.theme.colors.LightGreen};
+        color: ${(props) => props.theme.colors.Black};
     }
     &:nth-child(n + 7) {
-        background-color: ${Colors.DarkBegie};
-        color: ${Colors.White};
+        background-color: ${(props) => props.theme.colors.DarkBegie};
+        color: ${(props) => props.theme.colors.White};
     }
     &:nth-child(n + 8) {
-        background-color: ${Colors.Yellow};
-        color: ${Colors.Black};
+        background-color: ${(props) => props.theme.colors.Yellow};
+        color: ${(props) => props.theme.colors.Black};
     }
     &:nth-child(n + 9) {
-        background-color: ${Colors.LightBeige};
-        color: ${Colors.Black};
+        background-color: ${(props) => props.theme.colors.LightBeige};
+        color: ${(props) => props.theme.colors.Black};
     }
     display: flex;
     align-items: center;

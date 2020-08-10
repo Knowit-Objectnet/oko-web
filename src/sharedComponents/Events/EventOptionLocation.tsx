@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import { ApiLocation, Colors } from '../../types';
+import { ApiLocation } from '../../types';
 
 const Select = styled.select`
     width: 100%;
@@ -13,7 +13,7 @@ interface GrayBoxProps {
 }
 
 const Box = styled.div<GrayBoxProps>`
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     padding: 0px 40px;
     height: 45px;
     flex: 1;

@@ -5,7 +5,6 @@ import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
 import DatePicker from 'react-date-picker';
 import { useState } from 'react';
-import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -62,14 +61,14 @@ const Day = styled.div<DayProps>`
     font-size: 18px;
     line-height: 25px;
     border-radius: 50%;
-    border: 2px solid ${Colors.Blue};
-    background-color: ${(props) => (props.selected ? Colors.Blue : Colors.White)};
+    border: 2px solid ${(props) => props.theme.colors.Blue};
+    background-color: ${(props) => (props.selected ? props.theme.colors.Blue : props.theme.colors.White)};
     user-select: none;
 `;
 
 const StyledTimeRangePicker = styled(TimeRangePicker)`
     width: 100%;
-    background-color: ${Colors.White};
+    background-color: ${(props) => props.theme.colors.White};
 
     & .react-timerange-picker__range-divider {
         flex: auto;
@@ -78,7 +77,7 @@ const StyledTimeRangePicker = styled(TimeRangePicker)`
 
 const StyledDateRangePicker = styled(DateRangePicker)`
     width: 100%;
-    background-color: ${Colors.White};
+    background-color: ${(props) => props.theme.colors.White};
 
     & .react-daterange-picker__range-divider {
         flex: auto;
@@ -86,7 +85,7 @@ const StyledDateRangePicker = styled(DateRangePicker)`
 `;
 
 const StyledDatePicker = styled(DatePicker)`
-    background-color: ${Colors.White};
+    background-color: ${(props) => props.theme.colors.White};
 `;
 
 const BoxWrapper = styled.div`
@@ -100,7 +99,7 @@ const TimeWrapper = styled.div`
 `;
 
 const TimeBox = styled.div`
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     flex: 1;
     padding: 0px 5px;
     height: 45px;
@@ -114,7 +113,7 @@ const TimeBox = styled.div`
 `;
 
 const Box = styled.div`
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     padding: 0px 40px;
     height: 45px;
     display: flex;

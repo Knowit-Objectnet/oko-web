@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, Colors, PickUp, Roles } from '../../types';
+import { ApiPartner, PickUp, Roles } from '../../types';
 import keycloak from '../../keycloak';
 import { PartnerRequestForm } from './PartnerRequestForm';
 import { Requests } from './Requests';
@@ -19,7 +19,7 @@ const Content = styled.div`
 `;
 
 const Notice = styled.div`
-    border: 2px solid ${Colors.LightBlue};
+    border: 2px solid ${(props) => props.theme.colors.LightBlue};
     border-top: none;
     padding: 10px;
     box-sizing: border-box;
@@ -36,7 +36,7 @@ const LocationDate = styled.div`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    background-color: ${Colors.LightBlue};
+    background-color: ${(props) => props.theme.colors.LightBlue};
 `;
 
 const Location = styled.span`
@@ -46,15 +46,15 @@ const Location = styled.span`
 
 const Event = styled.div`
     flex: 1;
-    border-left: 2px solid ${Colors.White};
-    background-color: ${Colors.LightBlue};
+    border-left: 2px solid ${(props) => props.theme.colors.White};
+    background-color: ${(props) => props.theme.colors.LightBlue};
     padding: 10px;
     box-sizing: border-box;
 `;
 
 const Registration = styled.div`
-    border-left: 2px solid ${Colors.White};
-    background-color: ${Colors.LightBlue};
+    border-left: 2px solid ${(props) => props.theme.colors.White};
+    background-color: ${(props) => props.theme.colors.LightBlue};
     width: 350px;
 `;
 

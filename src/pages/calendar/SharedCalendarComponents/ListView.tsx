@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors, EventInfo } from '../../../types';
+import { EventInfo } from '../../../types';
 import { ListGroup } from './ListGroup';
+import { Colors } from '../../../theme';
 
 const Wrapper = styled.div``;
 

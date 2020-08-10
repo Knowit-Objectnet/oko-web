@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Hamburger from '../../assets/Hamburger.svg';
 import Cross from '../../assets/Cross.svg';
 import Default from '../../assets/Default_profile_pic.svg';
-import { Colors } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import { useHistory, Link } from 'react-router-dom';
 
@@ -17,10 +16,10 @@ const Wrapper = styled.div`
 const Menu = styled.div`
     display: flex;
     align-items: center;
-    border: 2px solid ${Colors.White};
+    border: 2px solid ${(props) => props.theme.colors.White};
     font-size: 22px;
     line-height: 31px;
-    color: ${Colors.White};
+    color: ${(props) => props.theme.colors.White};
     padding: 16px;
     margin-right: 45px;
 `;
@@ -29,6 +28,16 @@ const MenuText = styled.span`
     font-size: 22px;
     line-height: 31px;
     margin-right: 23px;
+`;
+
+const StyledCross = styled(Cross)`
+    height: 1.5em;
+    fill: ${(props) => props.theme.colors.White};
+`;
+
+const StyledHamburger = styled(Hamburger)`
+    height: 1em;
+    fill: ${(props) => props.theme.colors.White};
 `;
 
 const Profile = styled.div`
@@ -41,7 +50,7 @@ const MyLink = styled(Link)`
     font-size: 22px;
     line-height: 31px;
     margin-right: 10px;
-    color: ${Colors.White};
+    color: ${(props) => props.theme.colors.White};
 `;
 
 const ProfilePicture = styled.img``;
@@ -49,7 +58,7 @@ const ProfilePicture = styled.img``;
 const DefaultProfilePicture = styled(Default)`
     width: 50px;
     height: 50px;
-    fill: ${Colors.White};
+    fill: ${(props) => props.theme.colors.White};
 `;
 
 interface SideMenuProps {
@@ -77,9 +86,9 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
             <Menu>
                 <MenuText>Meny</MenuText>
                 {props.isSidebarVisible ? (
-                    <Cross height="1.5em" fill={Colors.White} onClick={props.toggleSidebar} />
+                    <StyledCross onClick={props.toggleSidebar} />
                 ) : (
-                    <Hamburger height="1em" fill={Colors.White} onClick={props.toggleSidebar} />
+                    <StyledHamburger onClick={props.toggleSidebar} />
                 )}
             </Menu>
             {keycloak.authenticated ? (

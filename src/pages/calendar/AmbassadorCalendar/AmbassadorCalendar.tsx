@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { EventInfo } from '../../../types';
-import { ExpandableAgenda } from '../AmbassadorCalendar/ExpandableAgenda';
+import { ExpandableAgenda } from './ExpandableAgenda';
 
 const Wrapper = styled.div``;
 

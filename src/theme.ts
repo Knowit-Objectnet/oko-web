@@ -1,5 +1,5 @@
 // Oslo's color scheme
-enum colorScheme {
+export enum Colors {
     DarkBlue = '#2A2859',
     Blue = '#6FE9FF',
     LightBlue = '#B3F5FF',
@@ -16,18 +16,18 @@ enum colorScheme {
 
 const theme = {
     colors: {
-        DarkBlue: colorScheme.DarkBlue,
-        Blue: colorScheme.Blue,
-        LightBlue: colorScheme.LightBlue,
-        DarkGreen: colorScheme.DarkGreen,
-        Green: colorScheme.Green,
-        LightGreen: colorScheme.LightGreen,
-        Red: colorScheme.Red,
-        Yellow: colorScheme.Yellow,
-        LightBeige: colorScheme.LightBeige,
-        DarkBegie: colorScheme.DarkBegie,
-        Black: colorScheme.Black,
-        White: colorScheme.White,
+        DarkBlue: Colors.DarkBlue,
+        Blue: Colors.Blue,
+        LightBlue: Colors.LightBlue,
+        DarkGreen: Colors.DarkGreen,
+        Green: Colors.Green,
+        LightGreen: Colors.LightGreen,
+        Red: Colors.Red,
+        Yellow: Colors.Yellow,
+        LightBeige: Colors.LightBeige,
+        DarkBegie: Colors.DarkBegie,
+        Black: Colors.Black,
+        White: Colors.White,
     },
 } as const;
 

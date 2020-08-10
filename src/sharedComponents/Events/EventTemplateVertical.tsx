@@ -1,13 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
 `;
 
 const Title = styled.div`

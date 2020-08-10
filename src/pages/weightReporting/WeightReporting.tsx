@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import { useCallback, useEffect, useState } from 'react';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
-import { apiUrl, Colors, Withdrawal } from '../../types';
+import { apiUrl, Withdrawal } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
     align-items: center;
     height: 100%;
     width: 100%;
-    background-color: ${Colors.White};
+    background-color: ${(props) => props.theme.colors.White};
 `;
 
 const Content = styled.div`

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { PropsWithChildren, useState } from 'react';
-import { Colors, ApiLocation } from '../../types';
+import { ApiLocation } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
 
 const Wrapper = styled.div`
@@ -18,7 +18,7 @@ const WithdrawalDate = styled.div<WithdrawalWeightProps>`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: ${(props) => (props.weight ? Colors.LightGreen : Colors.Red)};
+    background-color: ${(props) => (props.weight ? props.theme.colors.LightGreen : props.theme.colors.Red)};
     min-width: 470px;
     height: 50px;
     margin-right: 2px;
@@ -39,7 +39,7 @@ const WithdrawalLocation = styled.div<WithdrawalWeightProps>`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: ${(props) => (props.weight ? Colors.LightGreen : Colors.Red)};
+    background-color: ${(props) => (props.weight ? props.theme.colors.LightGreen : props.theme.colors.Red)};
     min-width: 150px;
     height: 50px;
     margin-right: 2px;
@@ -61,7 +61,7 @@ const Suffix = styled.label`
     flex: 1;
     display: flex;
     position: relative;
-    border: solid 2px ${Colors.Red};
+    border: solid 2px ${(props) => props.theme.colors.Red};
     box-sizing: border-box;
 
     &::after {
@@ -79,9 +79,9 @@ const Suffix = styled.label`
 
     &:focus-within {
         outline: none;
-        border: 2px solid ${Colors.Red};
-        -webkit-box-shadow: 0px 0px 5px ${Colors.Red};
-        box-shadow: 0px 0px 5px ${Colors.Red};
+        border: 2px solid ${(props) => props.theme.colors.Red};
+        -webkit-box-shadow: 0px 0px 5px ${(props) => props.theme.colors.Red};
+        box-shadow: 0px 0px 5px ${(props) => props.theme.colors.Red};
     }
 
     &::after {
@@ -113,7 +113,7 @@ const Button = styled.button`
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: ${Colors.Red};
+    background-color: ${(props) => props.theme.colors.Red};
 `;
 
 const Box = styled.div`
@@ -123,7 +123,7 @@ const Box = styled.div`
     flex: auto;
     min-width: 300px;
     height: 50px;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     font-weight: bold;
     font-size: 20px;
     line-height: 28px;
@@ -138,7 +138,7 @@ const BoxText = styled.div`
 
 const EditIcon = styled(Pencil)`
     height: 1em;
-    fill: ${Colors.Black};
+    fill: ${(props) => props.theme.colors.Black};
     margin-right: 20px;
 `;
 

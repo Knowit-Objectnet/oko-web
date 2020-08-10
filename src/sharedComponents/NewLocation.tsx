@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { apiUrl, Colors } from '../types';
+import { apiUrl } from '../types';
 import { useState } from 'react';
 import { OpeningTime } from '../pages/myPage/OpeningTime';
 import Person from '../assets/Person.svg';
@@ -9,21 +9,20 @@ import Mail from '../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
 import { Button } from './Button';
 import { PostToAPI } from '../utils/PostToAPI';
-import { FetchError } from '../utils/FetchError';
 import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
 `;
 
 const Title = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     padding: 10px 20px;
     margin-bottom: 25px;
     font-weight: bold;

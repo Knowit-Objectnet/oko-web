@@ -1,10 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiRequest, apiUrl, Colors } from '../../types';
+import { ApiRequest, apiUrl } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
 import Cross from '../../assets/Cross.svg';
+import { Colors } from '../../theme';
 
 const Wrapper = styled.div`
     display: flex;

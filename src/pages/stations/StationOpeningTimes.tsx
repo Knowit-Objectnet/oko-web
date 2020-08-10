@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Clock from '../../assets/Clock.svg';
-import { Colors } from '../../types';
 
 const Wrapper = styled.div`
     flex: 1;
@@ -20,7 +19,7 @@ const Info = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     padding: 15px;
     box-sizing: border-box;
     flex: 1;

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Navigation } from './Navigation';
 import { SideMenu } from './SideMenu';
 import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
-import { Colors } from '../../types';
 import { Link } from 'react-router-dom';
 
 const StyledHeader = styled.header`
@@ -11,7 +10,7 @@ const StyledHeader = styled.header`
     height: 125px;
     display: flex;
     justify-content: space-between;
-    background-color: ${Colors.DarkBlue};
+    background-color: ${(props) => props.theme.colors.DarkBlue};
 `;
 
 const LogoWrapper = styled(Link)`

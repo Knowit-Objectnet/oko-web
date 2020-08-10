@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
-import { Colors } from '../../types';
 import { useState } from 'react';
 import { Button } from '../Button';
 
@@ -9,7 +8,7 @@ const Wrapper = styled.div`
     position: absolute;
     top: 100%;
     right: 0px;
-    background-color: ${Colors.White};
+    background-color: ${(props) => props.theme.colors.White};
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -17,7 +16,7 @@ const Wrapper = styled.div`
 `;
 
 const RangeSelection = styled.div`
-    background-color: ${Colors.Yellow};
+    background-color: ${(props) => props.theme.colors.Yellow};
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -31,7 +30,7 @@ interface SelectionProps {
 }
 
 const Selection = styled.div<SelectionProps>`
-    background-color: ${(props) => (props.selected ? Colors.White : null)};
+    background-color: ${(props) => props.selected && props.theme.colors.White};
     padding: 5px;
     box-sizing: border-box;
     user-select: none;
@@ -43,7 +42,7 @@ const Selection = styled.div<SelectionProps>`
 
 const StyledDateRangePicker = styled(DateRangePicker)`
     width: 100%;
-    background-color: ${Colors.White};
+    background-color: ${(props) => props.theme.colors.White};
 
     & .react-daterange-picker__range-divider {
         flex: auto;

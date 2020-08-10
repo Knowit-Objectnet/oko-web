@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWR, { mutate } from 'swr';
-import { ApiPartner, ApiPickUp, apiUrl, Colors, PickUp, Roles } from '../../types';
+import { ApiPartner, ApiPickUp, apiUrl, PickUp, Roles } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 import { useEffect, useState } from 'react';
 import { PickUpRequest } from './PickUpRequest';
@@ -81,14 +81,14 @@ const Description = styled.div`
     align-items: center;
     justify-content: center;
     width: 150px;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
 `;
 
 const Button = styled.div`
     width: 50px;
     height: 50px;
     padding: 10px;
-    background-color: ${Colors.Green};
+    background-color: ${(props) => props.theme.colors.Green};
     border-radius: 50%;
     box-sizing: border-box;
 

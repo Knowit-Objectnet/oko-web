@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiLocation, apiUrl, Colors } from '../../types';
+import { ApiLocation, apiUrl } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Station } from './Station';
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
     height: 100%;
     width: 100%;
     position: relative;
-    background-color: ${Colors.White};
+    background-color: ${(props) => props.theme.colors.White};
 `;
 
 const Item = styled.div`
@@ -39,14 +39,14 @@ const Description = styled.div`
     align-items: center;
     justify-content: center;
     width: 150px;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
 `;
 
 const Button = styled.div`
     width: 50px;
     height: 50px;
     padding: 10px;
-    background-color: ${Colors.Green};
+    background-color: ${(props) => props.theme.colors.Green};
     border-radius: 50%;
     box-sizing: border-box;
 

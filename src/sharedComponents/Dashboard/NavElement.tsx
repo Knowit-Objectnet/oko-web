@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Colors } from '../../types';
+import { Colors } from '../../theme';
 
 interface StyledElementProps {
     selected: boolean;
 }
 
 const Element = styled.div<StyledElementProps>`
-    color: ${(props) => (props.selected ? Colors.Blue : Colors.White)};
-    border-bottom: solid 4px ${(props) => (props.selected ? Colors.Blue : 'transparent')};
+    color: ${(props) => (props.selected ? props.theme.colors.Blue : props.theme.colors.White)};
+    border-bottom: solid 4px ${(props) => (props.selected ? props.theme.colors.Blue : 'transparent')};
     font-weight: bold;
     font-size: 22px;
     line-height: 31px;

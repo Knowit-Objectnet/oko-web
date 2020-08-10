@@ -1,12 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo, Colors } from '../../../types';
+import { EventInfo } from '../../../types';
 import { SingleDayCalendar } from '../../../sharedComponents/Calendar/SingleDayCalendar';
 import { useState } from 'react';
 import CalendarIcon from '../../../assets/Calendar.svg';
 import ClickIcon from '../../../assets/Clock.svg';
 import LocationIcon from '../../../assets/Location.svg';
 import add from 'date-fns/add';
+import { Colors } from '../../../theme';
 
 interface WrapperProps {
     color: Colors;
@@ -63,7 +64,7 @@ const Icon = styled.div`
 const Text = styled.div`
     height: 45px;
     flex: 1;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,7 +82,7 @@ const TimeText = styled.div`
     height: 45px;
     padding: 0px 5px;
     box-sizing: border-box;
-    background-color: ${Colors.LightBeige};
+    background-color: ${(props) => props.theme.colors.LightBeige};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,7 +95,7 @@ const MessageBox = styled.div`
 `;
 
 const Message = styled.div`
-    background-color: ${Colors.Yellow};
+    background-color: ${(props) => props.theme.colors.Yellow};
     width: 100%;
     height: 100%;
     display: flex;
@@ -124,7 +125,7 @@ const Submission = styled.div`
 `;
 
 const Button = styled.button`
-    background-color: ${Colors.Red};
+    background-color: ${(props) => props.theme.colors.Red};
     border: none;
     font-weight: bold;
     font-size: 14px;
