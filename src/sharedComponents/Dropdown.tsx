@@ -9,6 +9,8 @@ const Wrapper = styled.div`
     width: fit-content;
     height: fit-content;
     color: #000;
+    display: flex;
+    align-items: center;
 `;
 
 const Header = styled.div`
@@ -16,17 +18,15 @@ const Header = styled.div`
     align-items: center;
     justify-content: space-between;
     line-height: 38px;
-    border: 1px solid #dfdfdf;
     border-radius: 3px;
     cursor: default;
     position: relative;
-    background-color: #fff;
 `;
 
 const Title = styled.div`
-    font-weight: 300;
-    margin: 2px 20px;
-    margin-right: 30px;
+    margin: 2px 10px;
+    margin-right: 20px;
+    white-space: nowrap;
 `;
 
 const AngleDown = styled(ArrowDown)`
@@ -40,21 +40,19 @@ const AngleUp = styled(ArrowUp)`
 `;
 
 const List = styled.ul`
+    top: 0;
     z-index: 10;
     position: absolute;
     width: 100%;
-    border: 1px solid #dfdfdf;
     border-top: none;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
-    background-color: #fff;
-    -webkit-box-shadow: 0 2px 5px -1px #e8e8e8;
-    box-shadow: 0 2px 5px -1px #e8e8e8;
-    font-weight: 700;
     padding: 0px;
-    max-height: 215px;
+    max-height: 400px;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    margin: 0;
+    background-color: ${(props) => props.theme.colors.LightBeige};
 `;
 
 const ListItem = styled.li`
@@ -67,14 +65,11 @@ const ListItem = styled.li`
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: auto;
-
-    &:not(:last-child) {
-        border-bottom: 0.5px solid lightgrey;
-    }
 `;
 
 interface DropdownProps {
-    list: Array<string>;
+    selectedIndex: number;
+    list: Array<React.ReactElement>;
 }
 
 export const Dropdown: React.FC<DropdownProps> = (props) => {
@@ -88,14 +83,17 @@ export const Dropdown: React.FC<DropdownProps> = (props) => {
 
     return (
         <Wrapper>
-            <Header onClick={toggleList}>{open ? <AngleUp size="2em" /> : <AngleDown size="2em" />}</Header>
-            {open && (
-                <List>
-                    {props.list.map((item) => (
-                        <ListItem key={`Dropdown: ${item}`}>{item}</ListItem>
-                    ))}
-                </List>
-            )}
+            <Header>
+                <Title>{props.list.slice(props.selectedIndex, props.selectedIndex + 1)}</Title>
+                {open && (
+                    <List>
+                        {props.list.map((item, index) => (
+                            <ListItem key={`Dropdown: ${index}`}>{item}</ListItem>
+                        ))}
+                    </List>
+                )}
+            </Header>
+            {open ? <AngleUp onClick={toggleList} /> : <AngleDown onClick={toggleList} />}
         </Wrapper>
     );
 };

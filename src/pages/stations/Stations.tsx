@@ -82,7 +82,7 @@ export const Stations: React.FC = () => {
         data: {
             [index: string]: any;
             name: string;
-            days: {
+            hours: {
                 [index: string]: [string, string];
             };
         },
@@ -90,7 +90,7 @@ export const Stations: React.FC = () => {
         const newLocation: ApiLocation = {
             id: -1,
             name: name,
-            days: data.days,
+            hours: data.hours,
         };
 
         const oldLocations = apiLocations || [];

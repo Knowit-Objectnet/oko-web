@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Clock from '../../assets/Clock.svg';
-import { ApiLocation, LocationOpeningTimes } from '../../types';
+import { LocationOpeningTimes } from '../../types';
 import { Dropdown } from '../../sharedComponents/Dropdown';
 
 const Wrapper = styled.div`
@@ -32,25 +32,48 @@ const StyledClock = styled(Clock)`
     margin-right: 10px;
 `;
 
+const Bold = styled.span`
+    font-weight: bold;
+`;
+
 interface StationOpeningTimesProps {
     openingTimes: LocationOpeningTimes;
 }
 
 export const StationOpeningTimes: React.FC<StationOpeningTimesProps> = (props) => {
-    const getList: () => Array<string> = () => {
-        const list: Array<string> = [];
+    const getList: () => [Array<React.ReactElement>, number] = () => {
+        const list: Array<React.ReactElement> = [];
+        const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
+        let selectedIndex = 0;
         for (const [key, value] of Object.entries(props.openingTimes)) {
-            list.push(`${key}: ${value[0].slice(0, 5)}`);
+            if (days[new Date().getDay()] == key) {
+                selectedIndex = new Date().getDay();
+                list.push(
+                    <>
+                        <Bold>{`${key.toLowerCase()}: `}</Bold>
+                        {`${value[0].slice(0, 5)} - ${value[1].slice(0, 5)}`}
+                    </>,
+                );
+                continue;
+            }
+            list.push(
+                <>
+                    {`${key.toLowerCase()}: `}
+                    {`${value[0].slice(0, 5)} - ${value[1].slice(0, 5)}`}
+                </>,
+            );
         }
-        return list;
+        return [list, selectedIndex];
     };
+
+    const [list, index] = getList();
 
     return (
         <Wrapper>
             <Title>Åpningstider:</Title>
             <Info>
                 <StyledClock />
-                <Dropdown list={getList()} />
+                <Dropdown list={list} selectedIndex={index} />
             </Info>
         </Wrapper>
     );
