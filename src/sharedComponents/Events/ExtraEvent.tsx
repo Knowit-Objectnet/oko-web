@@ -115,7 +115,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 station: {
                     id: parseInt(keycloak.tokenParsed.GroupID),
                     name: keycloak.tokenParsed.groups[0],
-                    days: {},
+                    hours: {},
                 },
                 chosenPartner: null,
             };

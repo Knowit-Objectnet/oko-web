@@ -24,7 +24,7 @@ export interface LocationOpeningTimes {
 export interface ApiLocation {
     id: number;
     name: string;
-    days: LocationOpeningTimes;
+    hours: LocationOpeningTimes;
 }
 
 export interface ApiPartner {

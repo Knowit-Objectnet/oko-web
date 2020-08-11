@@ -4,7 +4,7 @@ export const mockLocations: Array<ApiLocation> = [
     {
         id: 0,
         name: "Haraldrud",
-        days: {
+        hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
             TUESDAY: ["07:00:00Z", "20:00:00Z"],
             WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -15,7 +15,7 @@ export const mockLocations: Array<ApiLocation> = [
     {
         id: 1,
         name: "Smestad",
-        days: {
+        hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
             TUESDAY: ["07:00:00Z", "20:00:00Z"],
             WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -26,7 +26,7 @@ export const mockLocations: Array<ApiLocation> = [
     {
         id: 2,
         name: "Grønmo",
-        days: {
+        hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
             TUESDAY: ["07:00:00Z", "20:00:00Z"],
             WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -37,7 +37,7 @@ export const mockLocations: Array<ApiLocation> = [
     {
         id: 3,
         name: "Grefsen",
-        days: {
+        hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
             TUESDAY: ["07:00:00Z", "20:00:00Z"],
             WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -48,7 +48,7 @@ export const mockLocations: Array<ApiLocation> = [
     {
         id: 4,
         name: "Ryen",
-        days: {
+        hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
             TUESDAY: ["07:00:00Z", "20:00:00Z"],
             WEDNESDAY: ["07:00:00Z", "20:00:00Z"],

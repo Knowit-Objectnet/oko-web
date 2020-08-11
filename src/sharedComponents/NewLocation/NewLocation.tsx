@@ -95,7 +95,7 @@ const StyledMail = styled(Mail)`
 interface Data {
     [index: string]: any;
     name: string;
-    days: {
+    hours: {
         [index: string]: [string, string];
     };
 }
@@ -221,12 +221,12 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
 
             const data: Data = {
                 name: name,
-                days: {},
+                hours: {},
             };
 
             for (let i = 0; i < days.length; i++) {
                 if (!days[i][2]) {
-                    data.days[dayNames[i]] = [
+                    data.hours[dayNames[i]] = [
                         `${days[i][0].getHours().toString().padStart(2, '0')}:${days[i][0]
                             .getMinutes()
                             .toString()
