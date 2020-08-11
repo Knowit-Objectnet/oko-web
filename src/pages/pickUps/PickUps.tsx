@@ -130,9 +130,9 @@ export const PickUps: React.FC = () => {
             const idB = pickUpB.id;
 
             if (timeA == timeB) {
-                return idA < idB ? -1 : idA > idB ? 1 : 0;
+                return idA < idB ? 1 : idA > idB ? -1 : 0;
             } else {
-                return timeA < timeB ? -1 : 1;
+                return timeA < timeB ? 1 : -1;
             }
         });
         setPickUps(_pickUps);
