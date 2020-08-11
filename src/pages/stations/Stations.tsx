@@ -9,7 +9,7 @@ import Plus from '../../assets/Plus.svg';
 import { types, useAlert } from 'react-alert';
 import { FetchError } from '../../utils/FetchError';
 import useModal from '../../sharedComponents/Modal/useModal';
-import { NewLocation } from '../../sharedComponents/NewLocation';
+import { NewLocation } from '../../sharedComponents/NewLocation/NewLocation';
 import keycloak from '../../keycloak';
 import { Helmet } from 'react-helmet';
 
@@ -79,19 +79,18 @@ export const Stations: React.FC = () => {
     const beforeSubmit = async (
         key: string,
         name: string,
-        monday: [Date, Date, boolean],
-        tuesday: [Date, Date, boolean],
-        wednesday: [Date, Date, boolean],
-        thursday: [Date, Date, boolean],
-        friday: [Date, Date, boolean],
-        saturday: [Date, Date, boolean],
-        sunday: [Date, Date, boolean],
+        data: {
+            [index: string]: any;
+            name: string;
+            days: {
+                [index: string]: [string, string];
+            };
+        },
     ) => {
         const newLocation: ApiLocation = {
             id: -1,
             name: name,
-            openingTime: `${monday[0].getHours()}:${monday[0].getMinutes()}:00Z`,
-            closingTime: `${monday[1].getHours()}:${monday[1].getMinutes()}:00Z`,
+            days: data.days,
         };
 
         const oldLocations = apiLocations || [];

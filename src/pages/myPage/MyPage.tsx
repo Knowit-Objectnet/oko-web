@@ -8,7 +8,7 @@ import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
 import { useEffect, useState } from 'react';
 import { NewPartner } from '../../sharedComponents/NewPartner';
-import { NewLocation } from '../../sharedComponents/NewLocation';
+import { NewLocation } from '../../sharedComponents/NewLocation/NewLocation';
 import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
