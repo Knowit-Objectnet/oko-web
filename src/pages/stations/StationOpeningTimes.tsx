@@ -39,8 +39,8 @@ interface StationOpeningTimesProps {
 export const StationOpeningTimes: React.FC<StationOpeningTimesProps> = (props) => {
     const getList: () => Array<string> = () => {
         const list: Array<string> = [];
-        for (const times in props.openingTimes) {
-            list.push(times[0].slice(0, 5));
+        for (const [key, value] of Object.entries(props.openingTimes)) {
+            list.push(`${key}: ${value[0].slice(0, 5)}`);
         }
         return list;
     };
