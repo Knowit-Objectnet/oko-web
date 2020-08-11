@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { apiUrl } from '../types';
+import { apiUrl } from '../../types';
 import { useState } from 'react';
-import { OpeningTime } from '../pages/myPage/OpeningTime';
-import Person from '../assets/Person.svg';
-import Phone from '../assets/Phone.svg';
-import Mail from '../assets/Mail.svg';
+import { OpeningTime } from './OpeningTime';
+import Person from '../../assets/Person.svg';
+import Phone from '../../assets/Phone.svg';
+import Mail from '../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
-import { Button } from './Button';
-import { PostToAPI } from '../utils/PostToAPI';
+import { Button } from '../Button';
+import { PostToAPI } from '../../utils/PostToAPI';
 import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
@@ -92,18 +92,16 @@ const StyledMail = styled(Mail)`
     margin-right: 5px;
 `;
 
+interface Data {
+    [index: string]: any;
+    name: string;
+    days: {
+        [index: string]: [string, string];
+    };
+}
+
 interface NewLocationProps {
-    beforeSubmit?: (
-        key: string,
-        name: string,
-        monday: [Date, Date, boolean],
-        tuesday: [Date, Date, boolean],
-        wednesday: [Date, Date, boolean],
-        thursday: [Date, Date, boolean],
-        friday: [Date, Date, boolean],
-        saturday: [Date, Date, boolean],
-        sunday: [Date, Date, boolean],
-    ) => void;
+    beforeSubmit?: (key: string, name: string, data: Data) => void;
     afterSubmit?: (successful: boolean, key: string, error: Error | null) => void;
 }
 
@@ -130,16 +128,12 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
     const [wednesdayRange, setWednesdayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
     const [thursdayRange, setThursdayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
     const [fridayRange, setFridayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
-    const [saturdayRange, setSaturdayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
-    const [sundayRange, setSundayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
     // Closed or not
     const [mondayClosed, setMondayClosed] = useState(false);
     const [tuesdayClosed, setTuesdayClosed] = useState(false);
     const [wednesdayClosed, setWednesdayClosed] = useState(false);
     const [thursdayClosed, setThursdayClosed] = useState(false);
     const [fridayClosed, setFridayClosed] = useState(false);
-    const [saturdayClosed, setSaturdayClosed] = useState(false);
-    const [sundayClosed, setSundayClosed] = useState(false);
 
     // Changee function for the inputs. Uses the name tag to figure out which input is calling it
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -207,47 +201,47 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
             alert.show('Sluttiden kan ikke være før starttiden på fredager.', { type: types.ERROR });
             return;
         }
-        if (saturdayRange[0] > saturdayRange[1]) {
-            alert.show('Sluttiden kan ikke være før starttiden på lørdager.', { type: types.ERROR });
-            return;
-        }
-        if (sundayRange[0] > sundayRange[1]) {
-            alert.show('Sluttiden kan ikke være før starttiden på søndager.', { type: types.ERROR });
-            return;
-        }
 
         try {
-            if (props.beforeSubmit) {
-                props.beforeSubmit(
-                    `${apiUrl}/stations`,
-                    name,
-                    [...mondayRange, mondayClosed],
-                    [...tuesdayRange, tuesdayClosed],
-                    [...wednesdayRange, wednesdayClosed],
-                    [...thursdayRange, thursdayClosed],
-                    [...fridayRange, fridayClosed],
-                    [...saturdayRange, saturdayClosed],
-                    [...sundayRange, sundayClosed],
-                );
-            }
-            // Turn the data into the correct format for the API
-            const data = {
+            const days: [
+                [Date, Date, boolean],
+                [Date, Date, boolean],
+                [Date, Date, boolean],
+                [Date, Date, boolean],
+                [Date, Date, boolean],
+            ] = [
+                [...mondayRange, mondayClosed],
+                [...tuesdayRange, tuesdayClosed],
+                [...wednesdayRange, wednesdayClosed],
+                [...thursdayRange, thursdayClosed],
+                [...fridayRange, fridayClosed],
+            ];
+
+            const dayNames = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
+
+            const data: Data = {
                 name: name,
-                openingTime: `${mondayRange[0]
-                    .getHours()
-                    .toString()
-                    .padStart(2, '0')}:${mondayRange[0]
-                    .getMinutes()
-                    .toString()
-                    .padStart(2, '0')}:${mondayRange[0].getSeconds().toString().padStart(2, '0')}Z`,
-                closingTime: `${mondayRange[1]
-                    .getHours()
-                    .toString()
-                    .padStart(2, '0')}:${mondayRange[1]
-                    .getMinutes()
-                    .toString()
-                    .padStart(2, '0')}:${mondayRange[1].getSeconds().toString().padStart(2, '0')}Z`,
+                days: {},
             };
+
+            for (let i = 0; i < days.length; i++) {
+                if (!days[i][2]) {
+                    data.days[dayNames[i]] = [
+                        `${days[i][0].getHours().toString().padStart(2, '0')}:${days[i][0]
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, '0')}:00Z`,
+                        `${days[i][1].getHours().toString().padStart(2, '0')}:${days[i][1]
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, '0')}:00Z`,
+                    ];
+                }
+            }
+
+            if (props.beforeSubmit) {
+                props.beforeSubmit(`${apiUrl}/stations`, name, data);
+            }
 
             // Post to the api, show alert that it was successful if it was and close the modal
             await PostToAPI(`${apiUrl}/stations`, data, keycloak.token);
@@ -323,24 +317,6 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                         min={min}
                         setRange={setFridayRange}
                         setClosed={setFridayClosed}
-                    />
-                    <OpeningTime
-                        day="Lør"
-                        range={saturdayRange}
-                        closed={saturdayClosed}
-                        max={max}
-                        min={min}
-                        setRange={setSaturdayRange}
-                        setClosed={setSaturdayClosed}
-                    />
-                    <OpeningTime
-                        day="Søn"
-                        range={sundayRange}
-                        closed={sundayClosed}
-                        max={max}
-                        min={min}
-                        setRange={setSundayRange}
-                        setClosed={setSundayClosed}
                     />
                 </OpeningTimes>
                 <AmbassadorContactInfo>

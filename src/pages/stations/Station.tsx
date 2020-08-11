@@ -59,7 +59,7 @@ export const Station: React.FC<ApiLocation> = (props) => {
             </Header>
             <Info>
                 <StationAddress address="N/A" />
-                <StationOpeningTimes start={props.openingTime} end={props.closingTime} />
+                <StationOpeningTimes openingTimes={props.days} />
                 <StationAmbassador name="N/A" email="N/A" phone="N/A" title="N/A" />
             </Info>
         </Wrapper>

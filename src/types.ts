@@ -13,11 +13,18 @@ export interface ApiEvent {
     } | null;
 }
 
+export interface LocationOpeningTimes {
+    MONDAY?: [string, string];
+    TUESDAY?: [string, string];
+    WEDNESDAY?: [string, string];
+    THURSDAY?: [string, string];
+    FRIDAY?: [string, string];
+}
+
 export interface ApiLocation {
     id: number;
     name: string;
-    openingTime: string;
-    closingTime: string;
+    days: LocationOpeningTimes;
 }
 
 export interface ApiPartner {
