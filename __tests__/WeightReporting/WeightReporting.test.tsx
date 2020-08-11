@@ -46,7 +46,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         station: {
                             id: 1,
                             name: 'haraldrud',
-                            days: {
+                            hours: {
                                 MONDAY: ['07:00:00Z', '20:00:00Z'],
                                 TUESDAY: ['07:00:00Z', '20:00:00Z'],
                                 WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
@@ -67,7 +67,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         station: {
                             id: 1,
                             name: 'haraldrud',
-                            days: {
+                            hours: {
                                 MONDAY: ['07:00:00Z', '20:00:00Z'],
                                 TUESDAY: ['07:00:00Z', '20:00:00Z'],
                                 WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
@@ -88,7 +88,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         station: {
                             id: 1,
                             name: 'haraldrud',
-                            days: {
+                            hours: {
                                 MONDAY: ['07:00:00Z', '20:00:00Z'],
                                 TUESDAY: ['07:00:00Z', '20:00:00Z'],
                                 WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
@@ -109,7 +109,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                         station: {
                             id: 1,
                             name: 'haraldrud',
-                            days: {
+                            hours: {
                                 MONDAY: ['07:00:00Z', '20:00:00Z'],
                                 TUESDAY: ['07:00:00Z', '20:00:00Z'],
                                 WEDNESDAY: ['07:00:00Z', '20:00:00Z'],

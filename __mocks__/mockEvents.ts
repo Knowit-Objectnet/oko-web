@@ -16,7 +16,7 @@ export const mockEvents: Array<EventInfo> = [
             location: {
                 id: 2,
                 name: "Grønmo",
-                days: {
+                hours: {
                     MONDAY: ["07:00:00Z", "20:00:00Z"],
                     TUESDAY: ["07:00:00Z", "20:00:00Z"],
                     WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -49,7 +49,7 @@ export const mockEvents: Array<EventInfo> = [
             location: {
                 id: 2,
                 name: "Grønmo",
-                days: {
+                hours: {
                     MONDAY: ["07:00:00Z", "20:00:00Z"],
                     TUESDAY: ["07:00:00Z", "20:00:00Z"],
                     WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -95,7 +95,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -131,7 +131,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -167,7 +167,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -203,7 +203,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -239,7 +239,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -275,7 +275,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -311,7 +311,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -347,7 +347,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -383,7 +383,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -419,7 +419,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
@@ -455,7 +455,7 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            days: {
+            hours: {
                 MONDAY: ["07:00:00Z", "20:00:00Z"],
                 TUESDAY: ["07:00:00Z", "20:00:00Z"],
                 WEDNESDAY: ["07:00:00Z", "20:00:00Z"],

@@ -40,7 +40,7 @@ describe('Provides a component to update a single weight withdrawal', () => {
             location: {
                 id: 1,
                 name: 'Haraldrud',
-                days: {
+                hours: {
                     MONDAY: ['07:00:00Z', '20:00:00Z'],
                     TUESDAY: ['07:00:00Z', '20:00:00Z'],
                     WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
@@ -90,7 +90,7 @@ describe('Provides a component to update a single weight withdrawal', () => {
             location: {
                 id: 1,
                 name: 'Haraldrud',
-                days: {
+                hours: {
                     MONDAY: ['07:00:00Z', '20:00:00Z'],
                     TUESDAY: ['07:00:00Z', '20:00:00Z'],
                     WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
