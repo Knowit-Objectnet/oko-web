@@ -86,15 +86,17 @@ export const WeightReporting: React.FC = () => {
             });
             // First sort on start date and then sort on reportID
             _withdrawals.sort((withdrawalA, withdrawalB) => {
+                withdrawalA.startDateTime.setSeconds(0, 0);
+                withdrawalB.startDateTime.setSeconds(0, 0);
                 const timeA = withdrawalA.startDateTime.getTime();
                 const timeB = withdrawalB.startDateTime.getTime();
                 const idA = withdrawalA.reportID;
                 const idB = withdrawalB.reportID;
 
                 if (timeA == timeB) {
-                    return idA < idB ? -1 : idA > idB ? 1 : 0;
+                    return idA < idB ? 1 : idA > idB ? -1 : 0;
                 } else {
-                    return timeA < timeB ? -1 : 1;
+                    return timeA < timeB ? 1 : -1;
                 }
             });
             // Update the state
