@@ -16,8 +16,13 @@ export const mockEvents: Array<EventInfo> = [
             location: {
                 id: 2,
                 name: "Grønmo",
-                openingTime: "09:00:00Z",
-                closingTime: "20:00:00Z"
+                days: {
+                    MONDAY: ["07:00:00Z", "20:00:00Z"],
+                    TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                    WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                    THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                    FRIDAY: ["07:00:00Z", "20:00:00Z"],
+                },
             },
             partner: {
                 id: 1,
@@ -44,8 +49,13 @@ export const mockEvents: Array<EventInfo> = [
             location: {
                 id: 2,
                 name: "Grønmo",
-                openingTime: "09:00:00Z",
-                closingTime: "20:00:00Z"
+                days: {
+                    MONDAY: ["07:00:00Z", "20:00:00Z"],
+                    TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                    WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                    THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                    FRIDAY: ["07:00:00Z", "20:00:00Z"],
+                },
             },
             partner: {
                 id: 1,
@@ -85,8 +95,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 2,
@@ -116,8 +131,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 2,
@@ -147,8 +167,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 2,
@@ -178,8 +203,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 2,
@@ -209,8 +239,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 2,
@@ -240,8 +275,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 1,
@@ -271,8 +311,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 1,
@@ -302,8 +347,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 1,
@@ -333,8 +383,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 1,
@@ -364,8 +419,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 0,
             name: "Haraldrud",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 1,
@@ -395,8 +455,13 @@ export const mockApiEvents: Array<ApiEvent> = [
         station: {
             id: 1,
             name: "Smestad",
-            openingTime: "09:00:00Z",
-            closingTime: "20:00:00Z"
+            days: {
+                MONDAY: ["07:00:00Z", "20:00:00Z"],
+                TUESDAY: ["07:00:00Z", "20:00:00Z"],
+                WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+                THURSDAY: ["07:00:00Z", "20:00:00Z"],
+                FRIDAY: ["07:00:00Z", "20:00:00Z"],
+            },
         },
         partner: {
             id: 1,

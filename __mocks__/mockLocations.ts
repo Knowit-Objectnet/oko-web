@@ -4,31 +4,56 @@ export const mockLocations: Array<ApiLocation> = [
     {
         id: 0,
         name: "Haraldrud",
-        openingTime: "09:00:00Z",
-        closingTime: "20:00:00Z"
+        days: {
+            MONDAY: ["07:00:00Z", "20:00:00Z"],
+            TUESDAY: ["07:00:00Z", "20:00:00Z"],
+            WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+            THURSDAY: ["07:00:00Z", "20:00:00Z"],
+            FRIDAY: ["07:00:00Z", "20:00:00Z"],
+        },
     },
     {
         id: 1,
         name: "Smestad",
-        openingTime: "09:00:00Z",
-        closingTime: "20:00:00Z"
+        days: {
+            MONDAY: ["07:00:00Z", "20:00:00Z"],
+            TUESDAY: ["07:00:00Z", "20:00:00Z"],
+            WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+            THURSDAY: ["07:00:00Z", "20:00:00Z"],
+            FRIDAY: ["07:00:00Z", "20:00:00Z"],
+        },
     },
     {
         id: 2,
         name: "Grønmo",
-        openingTime: "09:00:00Z",
-        closingTime: "20:00:00Z"
+        days: {
+            MONDAY: ["07:00:00Z", "20:00:00Z"],
+            TUESDAY: ["07:00:00Z", "20:00:00Z"],
+            WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+            THURSDAY: ["07:00:00Z", "20:00:00Z"],
+            FRIDAY: ["07:00:00Z", "20:00:00Z"],
+        },
     },
     {
         id: 3,
         name: "Grefsen",
-        openingTime: "09:00:00Z",
-        closingTime: "20:00:00Z"
+        days: {
+            MONDAY: ["07:00:00Z", "20:00:00Z"],
+            TUESDAY: ["07:00:00Z", "20:00:00Z"],
+            WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+            THURSDAY: ["07:00:00Z", "20:00:00Z"],
+            FRIDAY: ["07:00:00Z", "20:00:00Z"],
+        },
     },
     {
         id: 4,
         name: "Ryen",
-        openingTime: "09:00:00Z",
-        closingTime: "20:00:00Z"
+        days: {
+            MONDAY: ["07:00:00Z", "20:00:00Z"],
+            TUESDAY: ["07:00:00Z", "20:00:00Z"],
+            WEDNESDAY: ["07:00:00Z", "20:00:00Z"],
+            THURSDAY: ["07:00:00Z", "20:00:00Z"],
+            FRIDAY: ["07:00:00Z", "20:00:00Z"],
+        },
     },
 ]
