@@ -5,6 +5,7 @@ import '@testing-library/jest-dom';
 import { WithdrawalSubmission } from '../../src/pages/weightReporting/WithdrawalSubmission';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../src/theme';
+import { ApiLocation, ApiPartner } from '../../src/types';
 
 describe('Provides a component to update a single weight withdrawal', () => {
     afterEach(() => {
@@ -12,22 +13,40 @@ describe('Provides a component to update a single weight withdrawal', () => {
     });
 
     it('Should display the weight from the withdrawal which contains weight', async () => {
+        const mock = jest.fn();
+        type type = typeof mock;
         // Props for the component
-        const props = {
+        const props: {
+            id: number;
+            weight: number | null;
+            start: Date;
+            end: Date;
+            onSubmit: type;
+            partner: ApiPartner;
+            location: ApiLocation;
+        } = {
             id: 1,
             weight: 100,
             start: new Date(),
             end: new Date(),
-            onSubmit: jest.fn(),
+            onSubmit: mock,
             partner: {
                 id: 1,
                 name: 'fretex',
+                description: '...',
+                phone: '40400040',
+                email: 'test@knowit.no',
             },
             location: {
                 id: 1,
                 name: 'Haraldrud',
-                openingTime: '08:00:00Z',
-                closingTime: '20:00:00Z',
+                days: {
+                    MONDAY: ['07:00:00Z', '20:00:00Z'],
+                    TUESDAY: ['07:00:00Z', '20:00:00Z'],
+                    WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
+                    THURSDAY: ['07:00:00Z', '20:00:00Z'],
+                    FRIDAY: ['07:00:00Z', '20:00:00Z'],
+                },
             },
         };
 
@@ -44,22 +63,40 @@ describe('Provides a component to update a single weight withdrawal', () => {
     });
 
     it('Should allow us to input a value and submit it on a withdrawal without weight', async () => {
+        const mock = jest.fn();
+        type type = typeof mock;
         // Props for the component
-        const props = {
+        const props: {
+            id: number;
+            weight: number | null;
+            start: Date;
+            end: Date;
+            onSubmit: type;
+            partner: ApiPartner;
+            location: ApiLocation;
+        } = {
             id: 1,
             weight: null,
             start: new Date(),
             end: new Date(),
-            onSubmit: jest.fn(),
+            onSubmit: mock,
             partner: {
                 id: 1,
                 name: 'fretex',
+                description: '...',
+                phone: '40400040',
+                email: 'test@knowit.no',
             },
             location: {
                 id: 1,
                 name: 'Haraldrud',
-                openingTime: '08:00:00Z',
-                closingTime: '20:00:00Z',
+                days: {
+                    MONDAY: ['07:00:00Z', '20:00:00Z'],
+                    TUESDAY: ['07:00:00Z', '20:00:00Z'],
+                    WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
+                    THURSDAY: ['07:00:00Z', '20:00:00Z'],
+                    FRIDAY: ['07:00:00Z', '20:00:00Z'],
+                },
             },
         };
 
