@@ -122,6 +122,19 @@ export const PickUps: React.FC = () => {
                   };
               })
             : [];
+        // First sort on start date and then sort on id
+        _pickUps.sort((pickUpA, pickUpB) => {
+            const timeA = pickUpA.startDateTime.getTime();
+            const timeB = pickUpB.startDateTime.getTime();
+            const idA = pickUpA.id;
+            const idB = pickUpB.id;
+
+            if (timeA == timeB) {
+                return idA < idB ? 1 : idA > idB ? -1 : 0;
+            } else {
+                return timeA < timeB ? 1 : -1;
+            }
+        });
         setPickUps(_pickUps);
     }, [apiPickUps]);
 
