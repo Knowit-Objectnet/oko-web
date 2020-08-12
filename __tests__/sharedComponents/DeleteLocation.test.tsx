@@ -9,7 +9,7 @@ import { apiUrl } from '../../src/types';
 import fetch from 'jest-fetch-mock';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
-import { DeletePartner } from '../../src/sharedComponents/DeletePartner';
+import { DeleteLocation } from '../../src/sharedComponents/DeleteLocation';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -26,31 +26,43 @@ describe('Provides an interface to submit a new partner', () => {
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async (req) => {
-            if (req.url.startsWith(`${apiUrl}/partners`)) {
+            if (req.url.startsWith(`${apiUrl}/stations`)) {
                 if (req.method === 'GET') {
                     return JSON.stringify([
                         {
-                            description: 'Fretex driver med gjenbruk',
-                            email: 'example@example.com',
-                            id: 3,
-                            name: 'Fretex',
-                            phone: '004712345678',
+                            id: 1,
+                            name: 'Haraldrud',
+                            hours: {
+                                MONDAY: ['08:00:00Z', '20:00:00Z'],
+                                TUESDAY: ['08:00:00Z', '20:00:00Z'],
+                                WEDNESDAY: ['08:00:00Z', '20:00:00Z'],
+                                THURSDAY: ['08:00:00Z', '20:00:00Z'],
+                                FRIDAY: ['10:00:00Z', '18:00:00Z'],
+                            },
                         },
                         {
-                            description: 'Maritastiftelsen driver også med gjenbruk',
-                            email: 'example@example.com',
-                            id: 4,
-                            name: 'Maritastiftelsen',
-                            phone: '004712345678',
+                            id: 3,
+                            name: 'Smestad',
+                            hours: {
+                                MONDAY: ['10:00:00Z', '20:00:00Z'],
+                                TUESDAY: ['10:00:00Z', '20:00:00Z'],
+                                WEDNESDAY: ['10:00:00Z', '20:00:00Z'],
+                                THURSDAY: ['10:00:00Z', '20:00:00Z'],
+                                FRIDAY: ['10:00:00Z', '20:00:00Z'],
+                            },
                         },
                     ]);
                 } else if (req.method === 'DELETE') {
                     return JSON.stringify({
-                        description: 'Fretex driver med gjenbruk',
-                        email: 'example@example.com',
                         id: 3,
-                        name: 'Fretex',
-                        phone: '004712345678',
+                        name: 'Smestad',
+                        hours: {
+                            MONDAY: ['10:00:00Z', '20:00:00Z'],
+                            TUESDAY: ['10:00:00Z', '20:00:00Z'],
+                            WEDNESDAY: ['10:00:00Z', '20:00:00Z'],
+                            THURSDAY: ['10:00:00Z', '20:00:00Z'],
+                            FRIDAY: ['10:00:00Z', '20:00:00Z'],
+                        },
                     });
                 } else {
                     return '';
@@ -73,14 +85,14 @@ describe('Provides an interface to submit a new partner', () => {
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...options}>
                     <KeycloakProvider keycloak={keycloak}>
-                        <DeletePartner beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
+                        <DeleteLocation beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
                     </KeycloakProvider>
                 </AlertProvider>
             </ThemeProvider>,
         );
 
         // Get the selector for selecting which partner to delete
-        const select = await getByDisplayValue('Velg samarbeidspartner');
+        const select = await getByDisplayValue('Velg stasjon');
 
         // Select Fretex
         await waitFor(() => {
@@ -105,10 +117,10 @@ describe('Provides an interface to submit a new partner', () => {
 
         // Expect the submission button to be called once and be supplied with the partner name
         expect(beforeSubmitMock.mock.calls.length).toBe(1);
-        expect(beforeSubmitMock.mock.calls[0]).toEqual([`${apiUrl}/partners/3`, 3]);
+        expect(beforeSubmitMock.mock.calls[0]).toEqual([`${apiUrl}/stations/3`, 3]);
 
         // Expect the submission button to be called once and be supplied with the partner name
         expect(afterSubmitMock.mock.calls.length).toBe(1);
-        expect(afterSubmitMock.mock.calls[0]).toEqual([true, `${apiUrl}/partners/3`]);
+        expect(afterSubmitMock.mock.calls[0]).toEqual([true, `${apiUrl}/stations/3`]);
     });
 });
