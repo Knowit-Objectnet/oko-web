@@ -95,6 +95,7 @@ describe('Provides an interface to create a new Event', () => {
             });
         });
 
+        // Get the submit button
         const submitButton = await findByText('Fullfør');
 
         // Click the submission button
@@ -108,7 +109,7 @@ describe('Provides an interface to create a new Event', () => {
             ),
         );
 
-        // Expect
+        // Expect the beforeSubmit function to be called with the data
         expect(mockBeforeSubmit).toHaveBeenCalledTimes(1);
         expect(mockBeforeSubmit.mock.calls[0]).toEqual([
             `${apiUrl}/events`,
@@ -122,7 +123,217 @@ describe('Provides an interface to create a new Event', () => {
             mockPartners[0],
         ]);
 
-        // Expect
+        // Expect the afterSubmit function to be called with the data
+        expect(mockAfterSubmit).toHaveBeenCalledTimes(1);
+        expect(mockAfterSubmit.mock.calls[0]).toEqual([true, `${apiUrl}/events`]);
+    });
+
+    it('should be possible to add a daily reccuring event', async () => {
+        // Get a start end end date that isnt a saturday or sunday
+        let date = new Date();
+        if (date.getDay() === 0 || date.getDay() === 6) {
+            date = add(date, { days: 2 });
+        }
+        const start = new Date(date.setHours(16, 0, 0, 0));
+        let end = new Date(date.setHours(16, 30, 0, 0));
+        end = add(end, { days: 1 });
+
+        const mockBeforeSubmit = jest.fn();
+        const mockAfterSubmit = jest.fn();
+
+        // This has to be set as NewEvent checks if keycloak?.token exists and exists the submit function
+        // if it isnt, making the test stall into infinity
+        keycloak.token = 'FakeToken';
+        // Render
+        const { findByText, getByDisplayValue } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <ThemeProvider theme={theme}>
+                    <AlertProvider template={AlertTemplate} {...options}>
+                        <NewEvent
+                            start={start}
+                            end={end}
+                            beforeSubmit={mockBeforeSubmit}
+                            afterSubmit={mockAfterSubmit}
+                        />
+                    </AlertProvider>
+                </ThemeProvider>
+            </KeycloakProvider>,
+        );
+
+        // Get the selector for selecting parter
+        const selectPartner = await getByDisplayValue('Velg samarbeidspartner');
+
+        // Select partner 0 from mocks
+        await waitFor(() => {
+            fireEvent.change(selectPartner, {
+                target: { value: mockPartners[0].id.toString() },
+            });
+        });
+
+        // Get the selector for selecting station
+        const selectLocation = await getByDisplayValue('Velg stasjon');
+
+        // Select location 0 from mocks
+        await waitFor(() => {
+            fireEvent.change(selectLocation, {
+                target: { value: mockLocations[0].id.toString() },
+            });
+        });
+
+        // Get the selector for recurrence selector
+        const selectReccurence = await getByDisplayValue('Gjentas ikke');
+
+        // Select location 0 from mocks
+        await waitFor(() => {
+            fireEvent.change(selectReccurence, {
+                target: { value: 'Daily' },
+            });
+        });
+
+        // Get the submit button
+        const submitButton = await findByText('Fullfør');
+
+        // Click the submission button
+        await waitFor(() =>
+            fireEvent(
+                submitButton,
+                new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                }),
+            ),
+        );
+
+        // Expect the beforeSubmit function to be called with the data
+        expect(mockBeforeSubmit).toHaveBeenCalledTimes(1);
+        expect(mockBeforeSubmit.mock.calls[0]).toEqual([
+            `${apiUrl}/events`,
+            {
+                startDateTime: start.toISOString(),
+                endDateTime: end.toISOString(),
+                stationId: mockLocations[0].id,
+                partnerId: mockPartners[0].id,
+                recurrenceRule: {
+                    days: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
+                    until: end.toISOString(),
+                },
+            },
+            mockLocations[0],
+            mockPartners[0],
+        ]);
+
+        // Expect the afterSubmit function to be called with the data
+        expect(mockAfterSubmit).toHaveBeenCalledTimes(1);
+        expect(mockAfterSubmit.mock.calls[0]).toEqual([true, `${apiUrl}/events`]);
+    });
+
+    it('should be possible to add a weekly reccuring event', async () => {
+        // Get a start end end date that isnt a saturday or sunday
+        let date = new Date();
+        if (date.getDay() === 0 || date.getDay() === 6) {
+            date = add(date, { days: 2 });
+        }
+        const start = new Date(date.setHours(16, 0, 0, 0));
+        let end = new Date(date.setHours(16, 30, 0, 0));
+        end = add(end, { days: 1 });
+
+        const mockBeforeSubmit = jest.fn();
+        const mockAfterSubmit = jest.fn();
+
+        // This has to be set as NewEvent checks if keycloak?.token exists and exists the submit function
+        // if it isnt, making the test stall into infinity
+        keycloak.token = 'FakeToken';
+        // Render
+        const { findByText, getByDisplayValue } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <ThemeProvider theme={theme}>
+                    <AlertProvider template={AlertTemplate} {...options}>
+                        <NewEvent
+                            start={start}
+                            end={end}
+                            beforeSubmit={mockBeforeSubmit}
+                            afterSubmit={mockAfterSubmit}
+                        />
+                    </AlertProvider>
+                </ThemeProvider>
+            </KeycloakProvider>,
+        );
+
+        // Get the selector for selecting parter
+        const selectPartner = await getByDisplayValue('Velg samarbeidspartner');
+
+        // Select partner 0 from mocks
+        await waitFor(() => {
+            fireEvent.change(selectPartner, {
+                target: { value: mockPartners[0].id.toString() },
+            });
+        });
+
+        // Get the selector for selecting station
+        const selectLocation = await getByDisplayValue('Velg stasjon');
+
+        // Select location 0 from mocks
+        await waitFor(() => {
+            fireEvent.change(selectLocation, {
+                target: { value: mockLocations[0].id.toString() },
+            });
+        });
+
+        // Get the selector for recurrence selector
+        const selectReccurence = await getByDisplayValue('Gjentas ikke');
+
+        // Select location 0 from mocks
+        await waitFor(() => {
+            fireEvent.change(selectReccurence, {
+                target: { value: 'Weekly' },
+            });
+        });
+
+        // Get the thursday weekday recurrence button
+        const thursdayButton = await findByText('To');
+
+        // Click the submission button
+        fireEvent(
+            thursdayButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
+
+        // Get the submit button
+        const submitButton = await findByText('Fullfør');
+
+        // Click the submission button
+        await waitFor(() =>
+            fireEvent(
+                submitButton,
+                new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                }),
+            ),
+        );
+
+        // Expect the beforeSubmit function to be called with the data
+        expect(mockBeforeSubmit).toHaveBeenCalledTimes(1);
+        expect(mockBeforeSubmit.mock.calls[0]).toEqual([
+            `${apiUrl}/events`,
+            {
+                startDateTime: start.toISOString(),
+                endDateTime: end.toISOString(),
+                stationId: mockLocations[0].id,
+                partnerId: mockPartners[0].id,
+                recurrenceRule: {
+                    days: ['MONDAY', 'THURSDAY'],
+                    until: end.toISOString(),
+                },
+            },
+            mockLocations[0],
+            mockPartners[0],
+        ]);
+
+        // Expect the afterSubmit function to be called with the data
         expect(mockAfterSubmit).toHaveBeenCalledTimes(1);
         expect(mockAfterSubmit.mock.calls[0]).toEqual([true, `${apiUrl}/events`]);
     });

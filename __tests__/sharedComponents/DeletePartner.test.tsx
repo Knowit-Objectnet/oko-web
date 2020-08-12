@@ -10,7 +10,7 @@ import fetch from 'jest-fetch-mock';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
 import { DeletePartner } from '../../src/sharedComponents/DeletePartner';
-import {mockPartners} from "../../__mocks__/mockPartners";
+import { mockPartners } from '../../__mocks__/mockPartners';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
