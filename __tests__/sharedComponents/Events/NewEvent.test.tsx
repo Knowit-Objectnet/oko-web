@@ -3,7 +3,6 @@ import { render, cleanup, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../../src/keycloak';
-import { mockApiEvents } from '../../../__mocks__/mockEvents';
 import fetch from 'jest-fetch-mock';
 import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
