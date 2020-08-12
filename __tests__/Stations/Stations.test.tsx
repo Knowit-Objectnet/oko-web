@@ -12,6 +12,9 @@ import { Stations } from '../../src/pages/stations/Stations';
 import fetch from 'jest-fetch-mock';
 import { apiUrl } from '../../src/types';
 
+// Fetch mock to intercept fetch requests.
+global.fetch = fetch;
+
 describe('Provides a page to view a list of the stations', () => {
     // Alert options
     const options = {
