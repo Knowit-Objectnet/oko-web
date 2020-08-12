@@ -3,16 +3,16 @@ import { render, cleanup, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Router } from 'react-router-dom';
 import { KeycloakProvider } from '@react-keycloak/web';
-import keycloak from '../../src/keycloak';
+import keycloak from '../../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
-import { Event } from '../../src/sharedComponents/Events/Event';
-import { mockApiEvents, mockEvents } from '../../__mocks__/mockEvents';
+import { Event } from '../../../src/sharedComponents/Events/Event';
+import { mockApiEvents, mockEvents } from '../../../__mocks__/mockEvents';
 import fetch from 'jest-fetch-mock';
 import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import { apiUrl, Roles } from '../../src/types';
-import theme from '../../src/theme';
+import { apiUrl, Roles } from '../../../src/types';
+import theme from '../../../src/theme';
 import { ThemeProvider } from 'styled-components';
 
 // Fetch mock to intercept fetch requests.
