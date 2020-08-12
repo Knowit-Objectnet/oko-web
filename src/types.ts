@@ -119,4 +119,4 @@ export enum Roles {
 }
 
 // Url to API
-export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging/backend';
+export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging';
