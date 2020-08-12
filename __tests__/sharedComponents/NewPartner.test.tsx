@@ -14,7 +14,7 @@ import { ThemeProvider } from 'styled-components';
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
 
-describe('Provides a page to view the calendar in addition to change log and notifications', () => {
+describe('Provides an interface to submit a new partner', () => {
     // Alert options
     const options = {
         position: positions.TOP_CENTER,
