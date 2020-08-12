@@ -28,7 +28,7 @@ describe('Provides an interface to create a pickup/Extra event', () => {
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async (req) => {
-            console.log(req.url)
+            console.log(req.url);
             if (req.url.startsWith(`${apiUrl}/pickups`)) {
                 const data = await req.json();
                 return JSON.stringify({
@@ -43,7 +43,7 @@ describe('Provides an interface to create a pickup/Extra event', () => {
         });
 
         // Set needed keycloak data
-        keycloak.token = "FakeToken";
+        keycloak.token = 'FakeToken';
         keycloak.tokenParsed.GroupID = mockLocations[0].id;
         keycloak.tokenParsed.groups = [mockLocations[0].name];
     });
