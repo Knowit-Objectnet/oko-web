@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import fetch from 'jest-fetch-mock';
-import add from 'date-fns/add'
+import add from 'date-fns/add';
 
 import { getStartAndEndDateTime } from '../../src/utils/getStartAndEndDateTime';
 

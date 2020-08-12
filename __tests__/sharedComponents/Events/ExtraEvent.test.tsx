@@ -28,7 +28,6 @@ describe('Provides an interface to create a pickup/Extra event', () => {
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async (req) => {
-            console.log(req.url);
             if (req.url.startsWith(`${apiUrl}/pickups`)) {
                 const data = await req.json();
                 return JSON.stringify({
