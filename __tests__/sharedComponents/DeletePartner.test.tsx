@@ -10,6 +10,7 @@ import fetch from 'jest-fetch-mock';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
 import { DeletePartner } from '../../src/sharedComponents/DeletePartner';
+import {mockPartners} from "../../__mocks__/mockPartners";
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -28,30 +29,9 @@ describe('Provides an interface to submit a new partner', () => {
         fetch.mockResponse(async (req) => {
             if (req.url.startsWith(`${apiUrl}/partners`)) {
                 if (req.method === 'GET') {
-                    return JSON.stringify([
-                        {
-                            description: 'Fretex driver med gjenbruk',
-                            email: 'example@example.com',
-                            id: 3,
-                            name: 'Fretex',
-                            phone: '004712345678',
-                        },
-                        {
-                            description: 'Maritastiftelsen driver også med gjenbruk',
-                            email: 'example@example.com',
-                            id: 4,
-                            name: 'Maritastiftelsen',
-                            phone: '004712345678',
-                        },
-                    ]);
+                    return JSON.stringify(mockPartners);
                 } else if (req.method === 'DELETE') {
-                    return JSON.stringify({
-                        description: 'Fretex driver med gjenbruk',
-                        email: 'example@example.com',
-                        id: 3,
-                        name: 'Fretex',
-                        phone: '004712345678',
-                    });
+                    return JSON.stringify(mockPartners[0]);
                 } else {
                     return '';
                 }

@@ -2,7 +2,7 @@ import { ApiLocation } from "../src/types";
 
 export const mockLocations: Array<ApiLocation> = [
     {
-        id: 0,
+        id: 1,
         name: "Haraldrud",
         hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
@@ -13,7 +13,7 @@ export const mockLocations: Array<ApiLocation> = [
         },
     },
     {
-        id: 1,
+        id: 2,
         name: "Smestad",
         hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
@@ -24,7 +24,7 @@ export const mockLocations: Array<ApiLocation> = [
         },
     },
     {
-        id: 2,
+        id: 3,
         name: "Grønmo",
         hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
@@ -35,7 +35,7 @@ export const mockLocations: Array<ApiLocation> = [
         },
     },
     {
-        id: 3,
+        id: 4,
         name: "Grefsen",
         hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
@@ -46,7 +46,7 @@ export const mockLocations: Array<ApiLocation> = [
         },
     },
     {
-        id: 4,
+        id: 5,
         name: "Ryen",
         hours: {
             MONDAY: ["07:00:00Z", "20:00:00Z"],
