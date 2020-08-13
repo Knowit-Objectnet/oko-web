@@ -5,6 +5,8 @@
   "main": "index.tsx",
   "scripts": {
     "test": "jest",
+    "coverage": "jest --coverage",
+    "coverage-summary": "jest --coverage --coverageReporters=\"text-summary\"",
     "cypress": "cypress run",
     "lint": "eslint --fix --ignore-path .eslintignore --ext js,jsx,ts,tsx,mdx .",
     "check-types": "tsc",
