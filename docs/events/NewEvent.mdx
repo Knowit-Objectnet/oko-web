@@ -3,13 +3,35 @@ name: Event - New event
 menu: Events
 ---
 
-import { Props } from 'docz';
+import { Playground, Props } from 'docz';
+import useModal from '../../src/sharedComponents/Modal/useModal';
 import { NewEvent } from '../../src/sharedComponents/Events/NewEvent';
 
 # Event - New event
+
+## File: NewEvent.tsx
 
 Component used in a Modal to create a new event. It's build from the vertical template and options.
 
 ## Props
 
 <Props of={NewEvent} />
+
+## Usage
+
+<Playground>
+  {() => {
+    const modal = useModal();
+    const showEvent = () => {
+        modal.show(
+            <NewEvent
+                start={new Date()}
+                end={new Date()}
+            />
+        )
+    }
+    return (
+        <button onClick={() => showEvent()}>Show new event ui</button>
+    )
+  }}
+</Playground>
