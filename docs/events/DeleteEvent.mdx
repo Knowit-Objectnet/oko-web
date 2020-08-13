@@ -3,8 +3,9 @@ name: Event - Delete event
 menu: Events
 ---
 
-import { Props } from 'docz';
+import { Playground, Props } from 'docz';
 import { DeleteEvent } from '../../src/sharedComponents/Events/DeleteEvent';
+import styled from 'styled-components';
 
 # Event - Delete event
 
@@ -13,3 +14,22 @@ Component used inside the Event component to allow for the deletion of an event 
 ## Props
 
 <Props of={DeleteEvent} />
+
+## Showcase
+
+<Playground>
+  {() => {
+      const Wrapper = styled.div`
+        width: 100%;
+        margin-bottom: 150px;
+        position: relative;
+      `;
+    return (
+        <Wrapper>
+            <div>
+                <DeleteEvent onSubmit={() => {/* linter be quite */}} />
+            </div>
+        </Wrapper>
+    )
+  }}
+</Playground>

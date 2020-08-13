@@ -3,7 +3,8 @@ name: Event - Extra event
 menu: Events
 ---
 
-import { Props } from 'docz';
+import { Playground, Props } from 'docz';
+import useModal from '../../src/sharedComponents/Modal/useModal';
 import { ExtraEvent } from '../../src/sharedComponents/Events/ExtraEvent';
 
 # Event - Extra event
@@ -13,3 +14,22 @@ Component used in a Modal to create an extra event / pickup. It's build from the
 ## Props
 
 <Props of={ExtraEvent} />
+
+## Usage
+
+<Playground>
+  {() => {
+    const modal = useModal();
+    const showEvent = () => {
+        modal.show(
+            <ExtraEvent
+                start={new Date()}
+                end={new Date()}
+            />
+        )
+    }
+    return (
+        <button onClick={() => showEvent()}>Show new pickup ui</button>
+    )
+  }}
+</Playground>
