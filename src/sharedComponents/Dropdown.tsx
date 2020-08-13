@@ -64,6 +64,7 @@ const ListItem = styled.li`
     display: inline-block;
     white-space: nowrap;
     text-overflow: ellipsis;
+    direction: rtl;
     overflow: auto;
 `;
 
