@@ -1,0 +1,26 @@
+---
+name: DeletePartner
+---
+
+import { Playground, Props } from 'docz';
+import useModal from '../src/sharedComponents/Modal/useModal';
+import { DeletePartner } from '../src/sharedComponents/DeletePartner';
+
+# DeletePartner
+## File: DeletePartner.tsx
+
+## Basic usage
+
+<Playground>
+  {() => {
+    const modal = useModal();
+    return (
+      <button onClick={() =>
+            modal.show(<DeletePartner />)
+        }
+      >
+        Click me!
+      </button>
+    )
+  }}
+</Playground>

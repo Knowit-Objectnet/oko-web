@@ -1,0 +1,26 @@
+---
+name: NewPartner
+---
+
+import { Playground, Props } from 'docz';
+import useModal from '../src/sharedComponents/Modal/useModal';
+import { NewPartner } from '../src/sharedComponents/NewPartner';
+
+# NewPartner
+## File: NewPartner.tsx
+
+## Basic usage
+
+<Playground>
+  {() => {
+    const modal = useModal();
+    return (
+      <button onClick={() =>
+            modal.show(<NewPartner />)
+        }
+      >
+        Click me!
+      </button>
+    )
+  }}
+</Playground>
