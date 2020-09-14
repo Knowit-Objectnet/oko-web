@@ -32,8 +32,8 @@ interface IIndexable {
 
 const sidebarTransitionStyles: IIndexable = {
     entering: { width: 0 },
-    entered: { width: '220px' },
-    exiting: { width: '220px' },
+    entered: { width: '250px' },
+    exiting: { width: '250px' },
     exited: { width: 0 },
 };
 
@@ -219,21 +219,12 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                             ...linkTransitionStyles[state],
                                         }}
                                     >
-                                        {keycloak.hasRealmRole(Roles.Oslo) && (
-                                            <Link
-                                                current={history.location.pathname}
-                                                to="/statistics"
-                                                onClick={props.onClick}
-                                            >
-                                                <StyledChart /> Statistikk
-                                            </Link>
-                                        )}
                                         <Link
                                             current={history.location.pathname}
                                             to="/partners"
                                             onClick={props.onClick}
                                         >
-                                            <StyledPeople /> Sam.partnere
+                                            <StyledPeople /> Samarbeidspartnere
                                         </Link>
                                         <Link
                                             current={history.location.pathname}
@@ -247,36 +238,17 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                                 <StyledPlus /> Opprett hendelse
                                             </FakeLink>
                                         )}
-                                        {keycloak.hasRealmRole(Roles.Partner) && (
+                                        {/* Temporarily disabled:keycloak.hasRealmRole(Roles.Partner) && (
                                             <Link current={history.location.pathname} to="/" onClick={props.onClick}>
                                                 <StyledPlus /> Søk ekstrauttak
                                             </Link>
-                                        )}
+                                        )*/}
                                         {keycloak.hasRealmRole(Roles.Ambassador) && (
                                             <FakeLink onClick={onExtraEventClick}>
                                                 <StyledPlus /> Utlys ekstrauttak
                                             </FakeLink>
                                         )}
-                                        {keycloak.hasRealmRole(Roles.Partner) && (
-                                            <Link
-                                                current={history.location.pathname}
-                                                to="/reporting"
-                                                onClick={props.onClick}
-                                            >
-                                                <StyledWeight /> Vektuttak
-                                            </Link>
-                                        )}
-                                        {(keycloak.hasRealmRole(Roles.Partner) ||
-                                            keycloak.hasRealmRole(Roles.Ambassador)) && (
-                                            <Link
-                                                current={history.location.pathname}
-                                                to="/notifications"
-                                                onClick={props.onClick}
-                                            >
-                                                <StyledBell /> Varsler
-                                            </Link>
-                                        )}
-                                        {keycloak.authenticated && (
+                                        {/* Temporarily disabled: keycloak.authenticated && (
                                             <>
                                                 <Link
                                                     current={history.location.pathname}
@@ -293,7 +265,7 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                                     <StyledCog /> Innstillinger
                                                 </Link>
                                             </>
-                                        )}
+                                        )*/}
                                     </Links>
                                     <LogoWrapper>
                                         <Logo />
