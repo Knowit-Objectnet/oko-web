@@ -36,9 +36,9 @@ export interface ApiPartner {
 }
 
 export interface ApiWithdrawal {
-    reportID: number;
-    eventID: number;
-    partnerID: number;
+    reportId: number;
+    eventId: number;
+    partnerId: number;
     station: ApiLocation;
     startDateTime: string;
     endDateTime: string;
@@ -92,9 +92,9 @@ export interface SlotInfo {
 }
 
 export interface Withdrawal {
-    reportID: number;
-    eventID: number;
-    partnerID: number;
+    reportId: number;
+    eventId: number;
+    partnerId: number;
     station: ApiLocation;
     startDateTime: Date;
     endDateTime: Date;
