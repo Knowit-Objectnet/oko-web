@@ -38,7 +38,7 @@ describe('Provides an interface to submit a new partner', () => {
         cleanup();
     });
 
-    it('Should submit partner on input change and button click', async () => {
+    test('Should submit partner on input change and button click', async () => {
         // mock function for the submission
         const beforeSubmitMock = jest.fn();
         const afterSubmitMock = jest.fn();
@@ -79,7 +79,7 @@ describe('Provides an interface to submit a new partner', () => {
 
         // Expect the submission button to be called once and be supplied with the partner name
         expect(beforeSubmitMock.mock.calls.length).toBe(1);
-        expect(beforeSubmitMock.mock.calls[0]).toEqual([`${apiUrl}/partners/`, 'Test', null]);
+        expect(beforeSubmitMock.mock.calls[0]).toEqual([`${apiUrl}/partners/`, 'Test']);
 
         // Expect the submission button to be called once and be supplied with the partner name
         expect(afterSubmitMock.mock.calls.length).toBe(1);
