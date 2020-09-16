@@ -90,8 +90,8 @@ export const WeightReporting: React.FC = () => {
                 withdrawalB.startDateTime.setSeconds(0, 0);
                 const timeA = withdrawalA.startDateTime.getTime();
                 const timeB = withdrawalB.startDateTime.getTime();
-                const idA = withdrawalA.reportID;
-                const idB = withdrawalB.reportID;
+                const idA = withdrawalA.reportId;
+                const idB = withdrawalB.reportId;
 
                 if (timeA == timeB) {
                     return idA < idB ? 1 : idA > idB ? -1 : 0;
@@ -109,13 +109,13 @@ export const WeightReporting: React.FC = () => {
             try {
                 if (apiWithdrawals) {
                     // update the local data immediately, but disable the revalidation
-                    const updatedWithdrawal = apiWithdrawals.find((withdrawal) => withdrawal.reportID === id);
+                    const updatedWithdrawal = apiWithdrawals.find((withdrawal) => withdrawal.reportId === id);
                     if (updatedWithdrawal) {
                         const newWithdrawal = {
                             ...updatedWithdrawal,
                             weight,
                         };
-                        const newWithdrawals = apiWithdrawals.filter((withdrawal) => withdrawal.reportID !== id);
+                        const newWithdrawals = apiWithdrawals.filter((withdrawal) => withdrawal.reportId !== id);
                         mutate([...newWithdrawals, newWithdrawal], false);
 
                         // Post update to API
@@ -153,8 +153,8 @@ export const WeightReporting: React.FC = () => {
                                         .filter((withdrawal) => !withdrawal.weight)
                                         .map((withdrawal) => (
                                             <WithdrawalSubmission
-                                                key={withdrawal.reportID}
-                                                id={withdrawal.reportID}
+                                                key={withdrawal.reportId}
+                                                id={withdrawal.reportId}
                                                 weight={withdrawal.weight}
                                                 start={withdrawal.startDateTime}
                                                 end={withdrawal.endDateTime}
@@ -172,8 +172,8 @@ export const WeightReporting: React.FC = () => {
                                         .filter((withdrawal) => withdrawal.weight)
                                         .map((withdrawal) => (
                                             <WithdrawalSubmission
-                                                key={withdrawal.reportID + 'weight'}
-                                                id={withdrawal.reportID}
+                                                key={withdrawal.reportId + 'weight'}
+                                                id={withdrawal.reportId}
                                                 weight={withdrawal.weight}
                                                 start={withdrawal.startDateTime}
                                                 end={withdrawal.endDateTime}
