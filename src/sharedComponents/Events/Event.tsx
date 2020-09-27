@@ -229,7 +229,7 @@ export const Event: React.FC<EventProps> = (props) => {
             title={props.title}
             showEditSymbol={
                 keycloak.hasRealmRole(Roles.Oslo) ||
-                (keycloak.hasRealmRole(Roles.Partner) && keycloak.tokenParsed.GroupID === props.resource.partner.id)
+                (keycloak.hasRealmRole(Roles.Ambassador) && keycloak.tokenParsed.GroupID === props.resource.location.id)
             }
             isEditing={isEditing}
             onEditClick={onEditClick}
@@ -264,7 +264,9 @@ export const Event: React.FC<EventProps> = (props) => {
                         <EventMessageBox {...props.resource.message} />
                         {(keycloak.hasRealmRole(Roles.Oslo) ||
                             (keycloak.hasRealmRole(Roles.Partner) &&
-                                keycloak.tokenParsed.GroupID === props.resource.partner.id)) && (
+                                keycloak.tokenParsed.GroupID === props.resource.partner.id) ||
+                            (keycloak.hasRealmRole(Roles.Ambassador) &&
+                                keycloak.tokenParsed.GroupID === props.resource.location.id)) && (
                             <>
                                 <Button
                                     text="Avlys uttak"
