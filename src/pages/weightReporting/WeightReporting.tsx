@@ -98,7 +98,9 @@ export const WeightReporting: React.FC = () => {
             const _withdrawals = apiWithdrawals.map((withdrawal: Withdrawal) => {
                 withdrawal.startDateTime = new Date(withdrawal.startDateTime);
                 withdrawal.endDateTime = new Date(withdrawal.endDateTime);
-                withdrawal.reportedDateTime = new Date(withdrawal.reportedDateTime);
+                withdrawal.reportedDateTime = withdrawal.reportedDateTime
+                    ? new Date(withdrawal.reportedDateTime)
+                    : null;
                 return withdrawal;
             });
             // First sort on start date and then sort on reportID

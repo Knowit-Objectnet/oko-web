@@ -42,8 +42,8 @@ export interface ApiWithdrawal {
     station: ApiLocation;
     startDateTime: string;
     endDateTime: string;
-    weight: number;
-    reportedDateTime: string;
+    weight: number | null;
+    reportedDateTime: string | null;
 }
 
 export interface ApiPickUp {
@@ -99,7 +99,7 @@ export interface Withdrawal {
     startDateTime: Date;
     endDateTime: Date;
     weight: number | null;
-    reportedDateTime: Date;
+    reportedDateTime: Date | null;
 }
 
 export interface PickUp {

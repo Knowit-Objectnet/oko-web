@@ -13,6 +13,7 @@ import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
+import { mockWithdrawals } from '../../__mocks__/mockWithdrawals';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -31,97 +32,18 @@ describe('Provides a page provide and update weight of withdrawals', () => {
 
     beforeEach(() => {
         fetch.resetMocks();
-        const now = new Date();
-        now.setHours(10, 0, 0, 0);
         fetch.mockResponse(async ({ url }) => {
             const parsedUrl = new URL(url);
             if (parsedUrl.pathname.endsWith('/reports/') && parsedUrl.searchParams.get('partnerId') === '1') {
-                return JSON.stringify([
-                    {
-                        reportID: 1,
-                        weight: 200,
-                        start: '2020-09-23T10:00:00.000Z',
-                        end: '2020-09-23T11:00:00.000Z',
-                        partner: {
-                            id: 1,
-                            name: 'fretex',
-                        },
-                        station: {
-                            id: 1,
-                            name: 'haraldrud',
-                            hours: {
-                                MONDAY: ['07:00:00Z', '20:00:00Z'],
-                                TUESDAY: ['07:00:00Z', '20:00:00Z'],
-                                WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
-                                THURSDAY: ['07:00:00Z', '20:00:00Z'],
-                                FRIDAY: ['07:00:00Z', '20:00:00Z'],
-                            },
-                        },
-                    },
-                    {
-                        reportID: 2,
-                        weight: null,
-                        start: '2020-09-23T09:00:00.000Z',
-                        end: '2020-09-23T10:00:00.000Z',
-                        partner: {
-                            id: 1,
-                            name: 'fretex',
-                        },
-                        station: {
-                            id: 1,
-                            name: 'haraldrud',
-                            hours: {
-                                MONDAY: ['07:00:00Z', '20:00:00Z'],
-                                TUESDAY: ['07:00:00Z', '20:00:00Z'],
-                                WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
-                                THURSDAY: ['07:00:00Z', '20:00:00Z'],
-                                FRIDAY: ['07:00:00Z', '20:00:00Z'],
-                            },
-                        },
-                    },
-                    {
-                        reportID: 3,
-                        weight: null,
-                        start: '2020-09-24T13:00:00.000Z',
-                        end: '2020-09-24T14:30:00.000Z',
-                        partner: {
-                            id: 1,
-                            name: 'fretex',
-                        },
-                        station: {
-                            id: 1,
-                            name: 'haraldrud',
-                            hours: {
-                                MONDAY: ['07:00:00Z', '20:00:00Z'],
-                                TUESDAY: ['07:00:00Z', '20:00:00Z'],
-                                WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
-                                THURSDAY: ['07:00:00Z', '20:00:00Z'],
-                                FRIDAY: ['07:00:00Z', '20:00:00Z'],
-                            },
-                        },
-                    },
-                    {
-                        reportID: 4,
-                        weight: 200,
-                        start: '2020-08-23T12:15:00.000Z',
-                        end: '2020-08-23T12:45:00.000Z',
-                        partner: {
-                            id: 1,
-                            name: 'fretex',
-                        },
-                        station: {
-                            id: 1,
-                            name: 'haraldrud',
-                            hours: {
-                                MONDAY: ['07:00:00Z', '20:00:00Z'],
-                                TUESDAY: ['07:00:00Z', '20:00:00Z'],
-                                WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
-                                THURSDAY: ['07:00:00Z', '20:00:00Z'],
-                                FRIDAY: ['07:00:00Z', '20:00:00Z'],
-                            },
-                        },
-                    },
-                ]);
+                const queryToDateFilter = parsedUrl.searchParams.get('toDate');
+                if (queryToDateFilter) {
+                    const withdrawals = mockWithdrawals.filter(
+                        (w) => new Date(w.endDateTime) <= new Date(queryToDateFilter),
+                    );
+                    return JSON.stringify(withdrawals);
+                }
+
+                return JSON.stringify(mockWithdrawals);
             }
             return '';
         });
