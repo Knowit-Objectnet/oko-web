@@ -31,14 +31,17 @@ describe('Provides a page provide and update weight of withdrawals', () => {
 
     beforeEach(() => {
         fetch.resetMocks();
+        const now = new Date();
+        now.setHours(10, 0, 0, 0);
         fetch.mockResponse(async ({ url }) => {
-            if (url.endsWith('/reports/?partnerId=1')) {
+            const parsedUrl = new URL(url);
+            if (parsedUrl.pathname.endsWith('/reports/') && parsedUrl.searchParams.get('partnerId') === '1') {
                 return JSON.stringify([
                     {
                         reportID: 1,
                         weight: 200,
-                        start: new Date(),
-                        end: new Date(),
+                        start: '2020-09-23T10:00:00.000Z',
+                        end: '2020-09-23T11:00:00.000Z',
                         partner: {
                             id: 1,
                             name: 'fretex',
@@ -58,8 +61,8 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                     {
                         reportID: 2,
                         weight: null,
-                        start: new Date(),
-                        end: new Date(),
+                        start: '2020-09-23T09:00:00.000Z',
+                        end: '2020-09-23T10:00:00.000Z',
                         partner: {
                             id: 1,
                             name: 'fretex',
@@ -79,8 +82,8 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                     {
                         reportID: 3,
                         weight: null,
-                        start: new Date(),
-                        end: new Date(),
+                        start: '2020-09-24T13:00:00.000Z',
+                        end: '2020-09-24T14:30:00.000Z',
                         partner: {
                             id: 1,
                             name: 'fretex',
@@ -100,8 +103,8 @@ describe('Provides a page provide and update weight of withdrawals', () => {
                     {
                         reportID: 4,
                         weight: 200,
-                        start: new Date(),
-                        end: new Date(),
+                        start: '2020-08-23T12:15:00.000Z',
+                        end: '2020-08-23T12:45:00.000Z',
                         partner: {
                             id: 1,
                             name: 'fretex',
