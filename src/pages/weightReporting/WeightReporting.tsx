@@ -65,10 +65,27 @@ export const WeightReporting: React.FC = () => {
     const alert = useAlert();
     // Getting Keycloak instance
     const { keycloak } = useKeycloak();
+    // Date object of now
+    const date = new Date();
+    /* Set the seconds and milliseconds of the date object to 0
+     *
+     * Why milliseconds are set to 0: There seem to be a problem with the component rerendering a few milliseconds
+     * after swr returns undefined (perhaps to return the fetched value?) and when the component rerendres the
+     * swr key is obv. no longer the same as the date ISO string has changed by a few milliseconds. Meaning that
+     * swr will continue to return undefined as it is forced to fetch data again leading to an error
+     * "Uncaught Error: Maximum update depth exceeded." coming from swr.
+     *
+     * Why seconds are set to 0: This is more of an optimization and consistency decision. The optimization comes
+     * from that the swr caching works for 1 minute and the consistency decision comes from that by setting it to 0
+     * we make sure that a withdrwal always shows up the minute after it's timestamp. Instead of one withdrawal
+     * showing up at 11:53:00 and another at 11:53:55 although both shows up as 11:53 for the user in the GUI.
+     */
+    date.setSeconds(0, 0);
 
     // List of withdrawals fetched from the server
+    // NB: toDate filters based on the 'end' timestamp of the withdrawal.
     const { data: apiWithdrawals, isValidating, mutate } = useSWR<Array<Withdrawal>>(
-        [`${apiUrl}/reports/?partnerId=${keycloak.tokenParsed.GroupID}`, keycloak.token],
+        [`${apiUrl}/reports/?partnerId=${keycloak.tokenParsed.GroupID}&toDate=${date.toISOString()}`, keycloak.token],
         fetcher,
     );
     // List of withdrawals transformed from the Api fetch
@@ -81,7 +98,9 @@ export const WeightReporting: React.FC = () => {
             const _withdrawals = apiWithdrawals.map((withdrawal: Withdrawal) => {
                 withdrawal.startDateTime = new Date(withdrawal.startDateTime);
                 withdrawal.endDateTime = new Date(withdrawal.endDateTime);
-                withdrawal.reportedDateTime = new Date(withdrawal.reportedDateTime);
+                withdrawal.reportedDateTime = withdrawal.reportedDateTime
+                    ? new Date(withdrawal.reportedDateTime)
+                    : null;
                 return withdrawal;
             });
             // First sort on start date and then sort on reportID
