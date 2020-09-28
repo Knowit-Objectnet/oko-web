@@ -274,7 +274,16 @@ export const Event: React.FC<EventProps> = (props) => {
                                     color="Red"
                                     styling="margin-top: 10px;"
                                 />
-                                {isDeletionConfirmationVisible && <DeleteEvent onSubmit={onDelete} />}
+                                {isDeletionConfirmationVisible && (
+                                    <DeleteEvent
+                                        allowRangeDeletion={
+                                            keycloak.hasRealmRole(Roles.Oslo) ||
+                                            (keycloak.hasRealmRole(Roles.Ambassador) &&
+                                                keycloak.tokenParsed.GroupID === props.resource.location.id)
+                                        }
+                                        onSubmit={onDelete}
+                                    />
+                                )}
                             </>
                         )}
                     </Section>

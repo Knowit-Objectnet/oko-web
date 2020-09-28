@@ -50,6 +50,7 @@ const StyledDateRangePicker = styled(DateRangePicker)`
 `;
 
 interface DeleteEventProps {
+    allowRangeDeletion: boolean;
     onSubmit: (range: [Date, Date], isSingleDeletion: boolean) => void;
 }
 
@@ -77,16 +78,28 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
 
     return (
         <Wrapper>
-            <RangeSelection>
-                <Selection selected={isSingleDeletion} onClick={setIsSingleDeletionClick}>
-                    Engangstilfelle
-                </Selection>
-                <Selection selected={!isSingleDeletion} onClick={setIsRangeDeletionClick}>
-                    Over en periode
-                </Selection>
-            </RangeSelection>
+            {props.allowRangeDeletion && (
+                <RangeSelection>
+                    <Selection selected={isSingleDeletion} onClick={setIsSingleDeletionClick}>
+                        Engangstilfelle
+                    </Selection>
+                    <Selection selected={!isSingleDeletion} onClick={setIsRangeDeletionClick}>
+                        Over en periode
+                    </Selection>
+                </RangeSelection>
+            )}
             {!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={onDateRangeChange} value={range} />}
-            <Button onClick={onSubmit} text="Bekreft" color="Green" height={35} />
+            <Button
+                onClick={onSubmit}
+                text="Bekreft"
+                color="Green"
+                height={35}
+                width={props.allowRangeDeletion ? undefined : 250}
+            />
         </Wrapper>
     );
 };
+
+/*
+
+ */
