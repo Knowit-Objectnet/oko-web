@@ -42,8 +42,8 @@ export interface ApiWithdrawal {
     station: ApiLocation;
     startDateTime: string;
     endDateTime: string;
-    weight: number;
-    reportedDateTime: string;
+    weight: number | null;
+    reportedDateTime: string | null;
 }
 
 export interface ApiPickUp {
@@ -89,17 +89,6 @@ interface EventInfoResource {
 export interface SlotInfo {
     start: Date;
     end: Date;
-}
-
-export interface Withdrawal {
-    reportId: number;
-    eventId: number;
-    partnerId: number;
-    station: ApiLocation;
-    startDateTime: Date;
-    endDateTime: Date;
-    weight: number | null;
-    reportedDateTime: Date;
 }
 
 export interface PickUp {

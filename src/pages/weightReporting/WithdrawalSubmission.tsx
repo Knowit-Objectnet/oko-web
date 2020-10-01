@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { PropsWithChildren, useState } from 'react';
-import { ApiLocation } from '../../types';
+import { ApiWithdrawal } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
+import { types, useAlert } from 'react-alert';
+import { useReports } from '../../services/useReports';
 
 const Wrapper = styled.div`
     display: flex;
@@ -143,21 +145,20 @@ const EditIcon = styled(Pencil)`
 `;
 
 interface WithdrawalProps {
-    id: number;
-    weight: number | null;
-    start: Date;
-    end: Date;
-    location: ApiLocation;
-    onSubmit: (weight: number, id: number) => void;
+    withdrawal: ApiWithdrawal;
 }
 
 /**
  * Event option that allows the user to choose a weight for the event.
  */
-export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
+export const WithdrawalSubmission: React.FC<WithdrawalProps> = ({ withdrawal }) => {
+    // Alert dispatcher
+    const alert = useAlert();
+    const { updateReport } = useReports();
+
     // State
-    const [weight, setWeight] = useState<number | ''>(props.weight || '');
-    const [editing, setEditing] = useState(props.weight === null);
+    const [weight, setWeight] = useState<number | ''>(withdrawal.weight || '');
+    const [editing, setEditing] = useState(withdrawal.weight === null);
 
     // On change function for the input element
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,13 +178,21 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
     const onSubmitClick = async () => {
         // If the new weight is the same as the old weight then turn off editing
         // without sending an api request as nothing is changed
-        if (weight === props.weight) {
+        if (weight === withdrawal.weight) {
             setEditing(false);
             // If the weight isnt an empty string or the old weight then send an
             // api request as the weight has changed
         } else if (weight) {
-            await props.onSubmit(weight, props.id);
             setEditing(false);
+            try {
+                // Post update to API
+                await updateReport(withdrawal.reportId, weight);
+
+                // Give user feedback
+                alert.show('Uttaket ble oppdatert suksessfullt.', { type: types.SUCCESS });
+            } catch (err) {
+                alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
+            }
         }
     };
 
@@ -192,12 +201,15 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
         setEditing(true);
     };
 
+    const startDate = new Date(withdrawal.startDateTime);
+    const endDate = new Date(withdrawal.endDateTime);
+
     return (
         <Wrapper>
-            <WithdrawalDate weight={props.weight}>
+            <WithdrawalDate weight={withdrawal.weight}>
                 <DateTime>
                     <b>Dato: </b>
-                    {props.start
+                    {startDate
                         .toLocaleString('nb-NO', {
                             month: 'long',
                             day: 'numeric',
@@ -206,7 +218,7 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                         })
                         .slice(0, 1)
                         .toUpperCase() +
-                        props.start
+                        startDate
                             .toLocaleString('nb-NO', {
                                 month: 'long',
                                 day: 'numeric',
@@ -217,19 +229,16 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                 </DateTime>
                 <DateTime>
                     <b>Klokken: </b>
-                    {`${props.start
-                        .getHours()
-                        .toString()
-                        .padStart(2, '0')}:${props.start
+                    {`${startDate.getHours().toString().padStart(2, '0')}:${startDate
                         .getMinutes()
                         .toString()
-                        .padStart(2, '0')} - ${props.end
+                        .padStart(2, '0')} - ${endDate
                         .getHours()
                         .toString()
-                        .padStart(2, '0')}:${props.end.getMinutes().toString().padStart(2, '0')}`}
+                        .padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`}
                 </DateTime>
             </WithdrawalDate>
-            <WithdrawalLocation weight={props.weight}>{props.location.name}</WithdrawalLocation>
+            <WithdrawalLocation weight={withdrawal.weight}>{withdrawal.station.name}</WithdrawalLocation>
             {editing ? (
                 <InputWrapper>
                     <Suffix>
@@ -251,26 +260,10 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                 </InputWrapper>
             ) : (
                 <Box>
-                    <BoxText>{props.weight} kg</BoxText>
+                    <BoxText>{withdrawal.weight} kg</BoxText>
                     <EditIcon onClick={onEditButtonClick} />
                 </Box>
             )}
         </Wrapper>
     );
 };
-
-const areEqual = (
-    prevProps: Readonly<PropsWithChildren<WithdrawalProps>>,
-    nextProps: Readonly<PropsWithChildren<WithdrawalProps>>,
-) => {
-    return (
-        prevProps.weight === nextProps.weight &&
-        prevProps.id === nextProps.id &&
-        prevProps.start.getTime() === nextProps.start.getTime() &&
-        prevProps.end.getTime() === nextProps.end.getTime() &&
-        prevProps.location.id === nextProps.location.id &&
-        prevProps.onSubmit === nextProps.onSubmit
-    );
-};
-
-export const WithdrawalSubmission = React.memo(MemoWithdrawalSubmission, areEqual);

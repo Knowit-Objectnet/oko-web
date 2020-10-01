@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import fetch from 'jest-fetch-mock';
 import { Router } from 'react-router-dom';
@@ -8,7 +8,7 @@ import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { WeightReporting } from '../../src/pages/weightReporting/WeightReporting';
-import { Roles } from '../../src/types';
+import { apiUrl, Roles } from '../../src/types';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import theme from '../../src/theme';
@@ -31,8 +31,12 @@ describe('Provides a page provide and update weight of withdrawals', () => {
 
     beforeEach(() => {
         fetch.resetMocks();
+
+        const date = new Date();
+        date.setSeconds(0, 0);
+
         fetch.mockResponse(async ({ url }) => {
-            if (url.endsWith('/reports/?partnerId=1')) {
+            if (url.endsWith(`${apiUrl}/reports/?partnerId=1&toDate=${date.toISOString()}`)) {
                 return JSON.stringify([
                     {
                         reportID: 1,
