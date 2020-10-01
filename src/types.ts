@@ -35,7 +35,7 @@ export interface ApiPartner {
     email: string;
 }
 
-export interface ApiWithdrawal {
+export interface Report {
     reportId: number;
     eventId: number;
     partnerId: number;

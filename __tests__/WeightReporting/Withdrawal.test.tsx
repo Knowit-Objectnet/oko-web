@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 import { WithdrawalSubmission } from '../../src/pages/weightReporting/WithdrawalSubmission';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../src/theme';
-import { ApiWithdrawal } from '../../src/types';
+import { Report } from '../../src/types';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
@@ -27,7 +27,7 @@ describe('Provides a component to update a single weight withdrawal', () => {
     it('Should display the weight from the withdrawal which contains weight', async () => {
         // Props for the component
         const props: {
-            withdrawal: ApiWithdrawal;
+            withdrawal: Report;
         } = {
             withdrawal: {
                 reportId: 1,
@@ -70,7 +70,7 @@ describe('Provides a component to update a single weight withdrawal', () => {
     it('Should allow us to input a value and submit it on a withdrawal without weight', async () => {
         // Props for the component
         const props: {
-            withdrawal: ApiWithdrawal;
+            withdrawal: Report;
         } = {
             withdrawal: {
                 reportId: 1,

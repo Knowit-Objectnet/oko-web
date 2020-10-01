@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { ApiWithdrawal } from '../../types';
+import { Report } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
 import { types, useAlert } from 'react-alert';
 import { useReports } from '../../services/useReports';
@@ -145,7 +145,7 @@ const EditIcon = styled(Pencil)`
 `;
 
 interface WithdrawalProps {
-    withdrawal: ApiWithdrawal;
+    withdrawal: Report;
 }
 
 /**
