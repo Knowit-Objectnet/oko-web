@@ -15,7 +15,6 @@ interface ExpandableAgendaProps {
     events: Array<EventInfo>;
     onSelectEvent: (event: EventInfo) => void;
     onWeekChange: (delta: -1 | 1) => void;
-    deleteEvent: (event: EventInfo) => void;
 }
 
 /*
@@ -85,8 +84,7 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     date={props.date}
                     dayAndEvents={daysAndSortedEvents}
                     sorting={sorting}
-                    allowDeletionOfEvent={true}
-                    deleteEvent={props.deleteEvent}
+                    allowDeletionOfEvent={false}
                 />
             )}
         </Wrapper>
