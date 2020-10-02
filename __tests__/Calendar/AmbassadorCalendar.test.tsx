@@ -33,6 +33,28 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         })
         .filter((event) => event.resource.location.id === 0);
 
+    // Save the original clientHeight of the element rendered in the virtualDom by Jest
+    const originalClientHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight');
+
+    beforeAll(() => {
+        /* Redefine the clientHeight property to give it a value higher than 0.
+         *
+         * This is needed because EventsColumn inside the calendar needs a clientHeight value to know how it
+         * should render the events inside of it (it has a check of clientHeight > 0)
+         */
+        Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, value: 1066 });
+    });
+
+    afterAll(() => {
+        // Set the clientHeight property back to it's original value before exiting the test set to not
+        // interfere with other tests
+        if (originalClientHeight) {
+            Object.defineProperty(HTMLElement.prototype, 'clientHeight', originalClientHeight);
+        } else {
+            Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, value: 0 });
+        }
+    });
+
     beforeEach(() => {
         // Set the role to ambassador
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -71,7 +93,6 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         );
     });
 
-    /* Broken test
     it('Should render all the events for 7.13.2020-7.17.2020 at Haraldrud', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
@@ -100,5 +121,5 @@ describe('Provides a page for ambassadors to view the calendar', () => {
 
         // Find all the agenda groups with fretex which should be 5 as there's 5 days and
         // events by fretex on all days
-    }); */
+    });
 });
