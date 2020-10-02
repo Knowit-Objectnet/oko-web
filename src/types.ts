@@ -1,30 +1,33 @@
+export type Weekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
+
 export interface ApiEvent {
     id: number;
     startDateTime: string;
     endDateTime: string;
-    station: ApiLocation;
+    station: Station;
     partner: ApiPartner;
     recurrenceRule: {
         id: number;
         until: string;
-        days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+        days: Array<Weekdays>;
         interval: number;
         count: number | null;
     } | null;
 }
 
-export interface LocationOpeningTimes {
-    MONDAY?: [string, string];
-    TUESDAY?: [string, string];
-    WEDNESDAY?: [string, string];
-    THURSDAY?: [string, string];
-    FRIDAY?: [string, string];
-}
+export type StationOpeningHours = {
+    [index in Weekdays]?: [string, string];
+};
 
-export interface ApiLocation {
+export interface Station {
     id: number;
     name: string;
-    hours: LocationOpeningTimes;
+    hours: StationOpeningHours;
+}
+
+export interface StationRequest {
+    name: string;
+    hours: StationOpeningHours;
 }
 
 export interface ApiPartner {
@@ -39,7 +42,7 @@ export interface Report {
     reportId: number;
     eventId: number;
     partnerId: number;
-    station: ApiLocation;
+    station: Station;
     startDateTime: string;
     endDateTime: string;
     weight: number | null;
@@ -51,7 +54,7 @@ export interface ApiPickUp {
     startDateTime: string;
     endDateTime: string;
     description: string;
-    station: ApiLocation;
+    station: Station;
     chosenPartner: ApiPartner | null;
 }
 
@@ -69,12 +72,12 @@ export interface EventInfo {
 
 interface EventInfoResource {
     eventId: number;
-    location: ApiLocation;
+    location: Station;
     partner: ApiPartner;
     recurrenceRule: {
         id: number;
         until: string;
-        days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
+        days?: Array<Weekdays>;
         interval?: number;
         count?: number | null;
     } | null;
@@ -96,7 +99,7 @@ export interface PickUp {
     startDateTime: Date;
     endDateTime: Date;
     description: string;
-    station: ApiLocation;
+    station: Station;
     chosenPartner: ApiPartner | null;
 }
 

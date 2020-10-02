@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Clock from '../../assets/Clock.svg';
-import { LocationOpeningTimes } from '../../types';
+import { StationOpeningHours } from '../../types';
 import { Dropdown } from '../../sharedComponents/Dropdown';
 
 const Wrapper = styled.div`
@@ -36,32 +36,34 @@ const Bold = styled.span`
     font-weight: bold;
 `;
 
-interface StationOpeningTimesProps {
-    openingTimes: LocationOpeningTimes;
+interface StationOpeningHoursProps {
+    openingHours: StationOpeningHours;
 }
 
-export const StationOpeningTimes: React.FC<StationOpeningTimesProps> = (props) => {
+export const StationOpeningHoursInfo: React.FC<StationOpeningHoursProps> = (props) => {
     const getList: () => [Array<React.ReactElement>, number] = () => {
         const list: Array<React.ReactElement> = [];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
         let selectedIndex = 0;
-        for (const [key, value] of Object.entries(props.openingTimes)) {
-            if (days[new Date().getDay()] == key) {
-                selectedIndex = new Date().getDay();
+        for (const [key, value] of Object.entries(props.openingHours)) {
+            if (value) {
+                if (days[new Date().getDay()] == key) {
+                    selectedIndex = new Date().getDay();
+                    list.push(
+                        <React.Fragment key={key}>
+                            <Bold>{`${key.toLowerCase()}: `}</Bold>
+                            {`${value[0].slice(0, 5)} - ${value[1].slice(0, 5)}`}
+                        </React.Fragment>,
+                    );
+                    continue;
+                }
                 list.push(
-                    <>
-                        <Bold>{`${key.toLowerCase()}: `}</Bold>
+                    <React.Fragment key={key}>
+                        {`${key.toLowerCase()}: `}
                         {`${value[0].slice(0, 5)} - ${value[1].slice(0, 5)}`}
-                    </>,
+                    </React.Fragment>,
                 );
-                continue;
             }
-            list.push(
-                <>
-                    {`${key.toLowerCase()}: `}
-                    {`${value[0].slice(0, 5)} - ${value[1].slice(0, 5)}`}
-                </>,
-            );
         }
         return [list, selectedIndex];
     };

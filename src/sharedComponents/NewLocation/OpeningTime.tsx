@@ -81,7 +81,7 @@ export const OpeningTime: React.FC<OpeningTimeProps> = (props) => {
         <Wrapper>
             <Day>{props.day}</Day>
             {props.closed ? (
-                <Divider></Divider>
+                <Divider />
             ) : (
                 <StyledTimeRangePicker
                     clearIcon={null}

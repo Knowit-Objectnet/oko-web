@@ -108,23 +108,6 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    const afterNewLocation = (successful: boolean, key: string, error: Error | null) => {
-        if (successful) {
-            alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
-
-            modal.remove();
-        } else {
-            // Show appropriate error alert if something went wrong.
-            if (error instanceof FetchError && error.code === 409) {
-                alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
-                    type: types.ERROR,
-                });
-            } else {
-                alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
-            }
-        }
-    };
-
     const afterDeletePartner = (successful: boolean, key: string) => {
         if (successful) {
             alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
@@ -152,7 +135,7 @@ export const MyPage: React.FC = () => {
 
     // Function to show new location ui modal
     const showNewLocation = () => {
-        modal.show(<NewLocation afterSubmit={afterNewLocation} />);
+        modal.show(<NewLocation afterSubmit={modal.remove} />);
     };
 
     // Function to show delete partner ui modal

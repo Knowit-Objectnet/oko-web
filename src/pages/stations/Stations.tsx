@@ -1,17 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiLocation, apiUrl, Roles } from '../../types';
-import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
-import { Station } from './Station';
+import { Roles } from '../../types';
+import { StationInfo } from './StationInfo';
 import { Loading } from '../../sharedComponents/Loading';
 import Plus from '../../assets/Plus.svg';
-import { types, useAlert } from 'react-alert';
-import { FetchError } from '../../utils/FetchError';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { NewLocation } from '../../sharedComponents/NewLocation/NewLocation';
 import keycloak from '../../keycloak';
 import { Helmet } from 'react-helmet';
+import { useStations } from '../../services/useStations';
 
 const Wrapper = styled.div`
     display: flex;
@@ -68,79 +65,36 @@ const Content = styled.div`
 `;
 
 export const Stations: React.FC = () => {
-    // Alert dispatcher
-    const alert = useAlert();
     // Modal dispatcher
     const modal = useModal();
     // List of stations
-    const { data: apiLocations, isValidating, mutate } = useSWR<Array<ApiLocation>>(`${apiUrl}/stations`, fetcher);
-    const locations = apiLocations || [];
+    const { data: stations, isValidating } = useStations();
 
-    const beforeSubmit = async (
-        key: string,
-        name: string,
-        data: {
-            [index: string]: any;
-            name: string;
-            hours: {
-                [index: string]: [string, string];
-            };
-        },
-    ) => {
-        const newLocation: ApiLocation = {
-            id: -1,
-            name: name,
-            hours: data.hours,
-        };
-
-        const oldLocations = apiLocations || [];
-
-        await mutate([...oldLocations, newLocation], false);
-
-        modal.remove();
-    };
-    const afterSubmit = (successful: boolean, key: string, error: Error | null) => {
-        if (successful) {
-            alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
-
-            mutate();
-        } else {
-            // Show appropriate error alert if something went wrong.
-            if (error instanceof FetchError && error.code === 409) {
-                alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
-                    type: types.ERROR,
-                });
-            } else {
-                alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
-            }
-        }
+    const showNewStationModal = () => {
+        modal.show(<NewLocation beforeSubmit={modal.remove} />);
     };
 
-    const onClick = () => {
-        modal.show(<NewLocation beforeSubmit={beforeSubmit} afterSubmit={afterSubmit} />);
-    };
-
-    if (!apiLocations && isValidating) {
+    if (!stations && isValidating) {
         return <Loading text="Laster inn data..." />;
     }
 
     return (
         <>
             <Helmet>
-                <title>Stasjonene</title>
+                <title>Stasjoner</title>
             </Helmet>
             <Wrapper>
                 {keycloak.hasRealmRole(Roles.Oslo) && (
                     <Item>
                         <Description>Ny stasjon</Description>
                         <Button>
-                            <Plus height="100%" onClick={onClick} />
+                            <Plus height="100%" onClick={showNewStationModal} />
                         </Button>
                     </Item>
                 )}
                 <Content>
-                    {locations.map((location) => (
-                        <Station key={`LocationId: ${location.id}`} {...location} />
+                    {(stations || []).map((station) => (
+                        <StationInfo key={station.id} {...station} />
                     ))}
                 </Content>
             </Wrapper>

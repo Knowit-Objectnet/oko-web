@@ -1,15 +1,15 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import { apiUrl } from '../../types';
 import { useState } from 'react';
+import styled from 'styled-components';
+import { apiUrl, StationRequest } from '../../types';
 import { OpeningTime } from './OpeningTime';
 import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
-import { useAlert, types } from 'react-alert';
+import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
-import { PostToAPI } from '../../utils/PostToAPI';
-import { useKeycloak } from '@react-keycloak/web';
+import { FetchError } from '../../utils/FetchError';
+import { useStations } from '../../services/useStations';
 
 const Wrapper = styled.div`
     display: flex;
@@ -92,24 +92,16 @@ const StyledMail = styled(Mail)`
     margin-right: 5px;
 `;
 
-interface Data {
-    [index: string]: any;
-    name: string;
-    hours: {
-        [index: string]: [string, string];
-    };
-}
-
 interface NewLocationProps {
-    beforeSubmit?: (key: string, name: string, data: Data) => void;
+    beforeSubmit?: () => void;
     afterSubmit?: (successful: boolean, key: string, error: Error | null) => void;
 }
 
 export const NewLocation: React.FC<NewLocationProps> = (props) => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
     // Alert instance
     const alert = useAlert();
+    const { addStation } = useStations();
+
     // General info
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
@@ -217,41 +209,55 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                 [...fridayRange, fridayClosed],
             ];
 
-            const dayNames = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
-
-            const data: Data = {
-                name: name,
-                hours: {},
-            };
+            const weekdays = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
+            const openingHours: { [index: string]: [string, string] } = {};
 
             for (let i = 0; i < days.length; i++) {
-                if (!days[i][2]) {
-                    data.hours[dayNames[i]] = [
-                        `${days[i][0].getHours().toString().padStart(2, '0')}:${days[i][0]
-                            .getMinutes()
-                            .toString()
-                            .padStart(2, '0')}:00Z`,
-                        `${days[i][1].getHours().toString().padStart(2, '0')}:${days[i][1]
-                            .getMinutes()
-                            .toString()
-                            .padStart(2, '0')}:00Z`,
+                const currentDayInfo = days[i];
+                const currentDayName = weekdays[i];
+                const currentDayClosed = currentDayInfo[2];
+
+                if (!currentDayClosed) {
+                    const openingHour = currentDayInfo[0].getHours().toString().padStart(2, '0');
+                    const openingMinutes = currentDayInfo[0].getMinutes().toString().padStart(2, '0');
+                    const closingHour = currentDayInfo[1].getHours().toString().padStart(2, '0');
+                    const closingMinutes = currentDayInfo[1].getMinutes().toString().padStart(2, '0');
+
+                    openingHours[currentDayName] = [
+                        `${openingHour}:${openingMinutes}:00Z`,
+                        `${closingHour}:${closingMinutes}:00Z`,
                     ];
                 }
             }
 
+            const newStation: StationRequest = {
+                name: name,
+                hours: openingHours,
+            };
+
             if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/stations`, name, data);
+                props.beforeSubmit();
             }
 
-            // Post to the api, show alert that it was successful if it was and close the modal
-            await PostToAPI(`${apiUrl}/stations`, data, keycloak.token);
+            // Post to the api, show alert that it was successful if it was
+            await addStation(newStation);
+
+            alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
 
             if (props.afterSubmit) {
                 props.afterSubmit(true, `${apiUrl}/stations`, null);
             }
-        } catch (err) {
+        } catch (error) {
             if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/stations`, err);
+                props.afterSubmit(false, `${apiUrl}/stations`, error);
+            }
+            // Show appropriate error alert if something went wrong.
+            if (error instanceof FetchError && error.code === 409) {
+                alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
+                    type: types.ERROR,
+                });
+            } else {
+                alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
             }
         }
     };

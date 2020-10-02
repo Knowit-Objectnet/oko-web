@@ -1,6 +1,6 @@
 import { FetchError } from '../utils/FetchError';
 
-export async function ApiPostClient<T>(url: string, data: T, token: string): Promise<unknown> {
+export async function ApiPostClient<T, R>(url: string, data: T, token: string): Promise<R> {
     const response = await fetch(url, {
         method: 'POST',
         mode: 'cors',

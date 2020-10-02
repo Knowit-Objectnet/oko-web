@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, apiUrl } from '../../types';
+import { Station, ApiPartner, apiUrl } from '../../types';
 import { useAlert, types } from 'react-alert';
 import { Button } from '../Button';
 import { PostToAPI } from '../../utils/PostToAPI';
@@ -36,7 +36,7 @@ interface NewEventProps {
                 interval?: number;
             };
         },
-        station: ApiLocation,
+        station: Station,
         partner: ApiPartner,
     ) => void;
     afterSubmit?: (successful: boolean, key: string) => void;
@@ -54,7 +54,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     // Valid recycling stations (ombruksstasjon) locations fetched from api
     // Dummy data until backend service is up and running
     // TODO: Remove dummy data
-    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
+    let { data: locations } = useSWR<Station[]>(`${apiUrl}/stations`, fetcher);
     locations = locations && locations.length !== 0 ? locations : [];
     // Valid partners fetched from api
     let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);

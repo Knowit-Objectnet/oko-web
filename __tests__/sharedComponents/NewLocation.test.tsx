@@ -27,7 +27,16 @@ describe('Provides an interface to submit a new station', () => {
         fetch.resetMocks();
         fetch.mockResponse(async ({ url }) => {
             if (url.startsWith(`${apiUrl}/stations`)) {
-                return JSON.stringify('');
+                return JSON.stringify({
+                    name: 'Test',
+                    hours: {
+                        MONDAY: ['07:00:00Z', '20:00:00Z'],
+                        TUESDAY: ['07:00:00Z', '20:00:00Z'],
+                        WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
+                        THURSDAY: ['07:00:00Z', '20:00:00Z'],
+                        FRIDAY: ['07:00:00Z', '20:00:00Z'],
+                    },
+                });
             } else {
                 return '';
             }
@@ -39,14 +48,11 @@ describe('Provides an interface to submit a new station', () => {
     });
 
     it('Should submit station on input changes and button click', async () => {
-        // mock function for the submission
-        const beforeSubmitMock = jest.fn();
-        const afterSubmitMock = jest.fn();
         const { findByText, findByPlaceholderText } = render(
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...options}>
                     <KeycloakProvider keycloak={keycloak}>
-                        <NewLocation beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
+                        <NewLocation />
                     </KeycloakProvider>
                 </AlertProvider>
             </ThemeProvider>,
@@ -57,10 +63,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(nameInput).toBeInTheDocument();
 
         // Write in the station name Test
-        await waitFor(() => {
-            fireEvent.change(nameInput, {
-                target: { value: 'Test' },
-            });
+        await fireEvent.change(nameInput, {
+            target: { value: 'Test' },
         });
 
         // Find the text input for the address
@@ -68,10 +72,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(addressInput).toBeInTheDocument();
 
         // Write in the station address Test adresse
-        await waitFor(() => {
-            fireEvent.change(addressInput, {
-                target: { value: 'Test adresse' },
-            });
+        await fireEvent.change(addressInput, {
+            target: { value: 'Test adresse' },
         });
 
         // Find the text input for the ambassador name
@@ -79,10 +81,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(ambassadorNameInput).toBeInTheDocument();
 
         // Write in the ambassador name Ola
-        await waitFor(() => {
-            fireEvent.change(ambassadorNameInput, {
-                target: { value: 'Ola' },
-            });
+        await fireEvent.change(ambassadorNameInput, {
+            target: { value: 'Ola' },
         });
 
         // Find the text input for the ambassador phone
@@ -90,10 +90,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(ambassadorPhoneInput).toBeInTheDocument();
 
         // Write in the ambassador phone number 40404040
-        await waitFor(() => {
-            fireEvent.change(ambassadorPhoneInput, {
-                target: { value: '40404040' },
-            });
+        await fireEvent.change(ambassadorPhoneInput, {
+            target: { value: '40404040' },
         });
 
         // Find the text input for the ambassador mail
@@ -101,10 +99,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(ambassadorMailInput).toBeInTheDocument();
 
         // Write in the ambassador email olaRegTest@knowit.no
-        await waitFor(() => {
-            fireEvent.change(ambassadorMailInput, {
-                target: { value: 'olaRegTest@knowit.no' },
-            });
+        await fireEvent.change(ambassadorMailInput, {
+            target: { value: 'olaRegTest@knowit.no' },
         });
 
         // Find the submit button
@@ -112,35 +108,12 @@ describe('Provides an interface to submit a new station', () => {
         expect(submitButton).toBeInTheDocument();
 
         // Click the submission button
-        await waitFor(() => {
-            fireEvent(
-                submitButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
-
-        // Expect the submission button to be called once and be supplied with the partner name
-        expect(beforeSubmitMock.mock.calls.length).toBe(1);
-        expect(beforeSubmitMock.mock.calls[0]).toEqual([
-            `${apiUrl}/stations`,
-            'Test',
-            {
-                hours: {
-                    FRIDAY: ['07:00:00Z', '20:00:00Z'],
-                    MONDAY: ['07:00:00Z', '20:00:00Z'],
-                    THURSDAY: ['07:00:00Z', '20:00:00Z'],
-                    TUESDAY: ['07:00:00Z', '20:00:00Z'],
-                    WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
-                },
-                name: 'Test',
-            },
-        ]);
-
-        // Expect the submission button to be called once and be supplied with the partner name
-        expect(afterSubmitMock.mock.calls.length).toBe(1);
-        expect(afterSubmitMock.mock.calls[0]).toEqual([true, `${apiUrl}/stations`, null]);
+        await fireEvent(
+            submitButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
     });
 });
