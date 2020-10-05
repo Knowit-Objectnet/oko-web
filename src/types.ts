@@ -58,6 +58,18 @@ export interface ApiPickUp {
     chosenPartner: ApiPartner | null;
 }
 
+export interface ApiPickUpPost {
+    startDateTime: string;
+    endDateTime: string;
+    description: string;
+    stationId: number;
+}
+
+export interface ApiPickUpPatch {
+    id: number;
+    chosenPartnerId: number;
+}
+
 export interface ApiRequest {
     pickup: ApiPickUp;
     partner: ApiPartner;

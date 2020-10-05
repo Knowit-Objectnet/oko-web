@@ -82,28 +82,24 @@ describe('Provides an interface to create a pickup/Extra event', () => {
         const messageText = await findByPlaceholderText('Meldingstekst (maks 200 tegn)');
 
         // Set the message text
-        await waitFor(() => {
-            fireEvent.change(messageText, {
-                target: { value: 'Ting må hentes' },
-            });
+        fireEvent.change(messageText, {
+            target: { value: 'Ting må hentes' },
         });
 
         // Get the submit button
         const submitButton = await findByText('Send');
 
         // Click the submission button
-        await waitFor(() =>
-            fireEvent(
-                submitButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            ),
+        fireEvent(
+            submitButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
         );
 
         // Expect the beforeSubmit function to be called with the data
-        expect(mockBeforeSubmit).toHaveBeenCalledTimes(1);
+        await waitFor(() => expect(mockBeforeSubmit).toHaveBeenCalledTimes(1));
         expect(mockBeforeSubmit.mock.calls[0]).toEqual([
             `${apiUrl}/pickups/`,
             {

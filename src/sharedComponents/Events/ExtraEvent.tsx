@@ -3,18 +3,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { ApiPickUp, apiUrl } from '../../types';
+import { ApiPickUp, ApiPickUpPost, apiUrl } from '../../types';
 import { Button } from '../Button';
-import { PostToAPI } from '../../utils/PostToAPI';
 import { useKeycloak } from '@react-keycloak/web';
-
-const Specifier = styled.div`
-    margin: 20px 0px;
-`;
-
-const OR = styled.div`
-    margin-bottom: 10px;
-`;
+import { types, useAlert } from 'react-alert';
+import { usePickUps } from '../../services/usePickUps';
 
 const Textarea = styled.textarea`
     min-height: 54px;
@@ -38,22 +31,14 @@ interface ExtraEventProps {
 export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
-    // Valid partners fetched from api
-    //let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners/`, fetcher);
-    //partners = partners || [];
+    const { addPickUp, mutate } = usePickUps();
+    const alert = useAlert();
 
-    // Valid categories fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
-    //let { data: categories } = useSWR<string[]>(`${apiUrl}/categories`, fetcher);
-    //categories = categories && categories.length !== 0 ? categories : ['Møbler', 'Bøker', 'Sportsutstyr'];
     // State
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
-    //const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
-    //const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
 
     // On change functions for DateRange
@@ -73,17 +58,6 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
         setSelectedDays(num);
     };
 
-    // On change for Partner selection
-    //const onPartnerChange = (partnerId: number) => {
-    //    setSelectedPartnerId(partnerId);
-    //};
-
-    // On change function for Category
-    //const onCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    //    e.persist();
-    //    setCategoryIndex(parseInt(e.currentTarget.value));
-    //};
-
     // On change function for Description
     const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.persist();
@@ -99,15 +73,15 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
 
         try {
             // Data for new extra event
-            const data = {
-                startDateTime: start,
-                endDateTime: end,
+            const newPickUp: ApiPickUpPost = {
+                startDateTime: start.toISOString(),
+                endDateTime: end.toISOString(),
                 description: description,
                 stationId: keycloak.tokenParsed.GroupID,
             };
 
             // Local state update data
-            const newExtraEvent = {
+            const newExtraEvent: ApiPickUp = {
                 id: -1,
                 startDateTime: start.toISOString(),
                 endDateTime: end.toISOString(),
@@ -125,12 +99,22 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
             }
 
             // Post extra event to API
-            await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
+            await addPickUp(newPickUp);
+
+            // Give user feedback and close modal
+            alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
+
+            // Revalidate
+            mutate();
+
             // Give userfeedback and close modal
             if (props.afterSubmit) {
                 props.afterSubmit(true, `${apiUrl}/pickups/`);
             }
         } catch {
+            // Give user feedback
+            alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
+
             if (props.afterSubmit) {
                 props.afterSubmit(false, `${apiUrl}/pickups/`);
             }
@@ -151,22 +135,6 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 onSelectedDaysChange={onSelectedDaysChange}
                 recurrenceEnabled={false}
             />
-            <Specifier>
-                {/*
-                    <EventOptionCategory
-                        selectedCategory={categoryIndex}
-                        categories={categories}
-                        isEditing={true}
-                        onChange={onCategoryChange}
-                    />
-                    <OR>Eller</OR>
-                    <EventOptionPartner
-                        selectedPartner={selectedPartnerId}
-                        partners={partners}
-                        onChange={onPartnerChange}
-                    />
-                */}
-            </Specifier>
             <Textarea
                 maxLength={200}
                 placeholder="Meldingstekst (maks 200 tegn)"

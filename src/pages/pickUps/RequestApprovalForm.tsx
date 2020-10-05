@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { ApiPartner } from '../../types';
 import { Button } from '../../sharedComponents/Button';
 import Cross from '../../assets/Cross.svg';
+import { usePickUps } from '../../services/usePickUps';
+import { types, useAlert } from 'react-alert';
 
 const Partner = styled.div`
     display: flex;
@@ -64,20 +66,28 @@ interface RequestProps {
     partner: ApiPartner;
     selectedId?: number;
     isStation: boolean;
-    onReject: (partner: ApiPartner, pickupId: number) => void;
-    onApprove: (partner: ApiPartner, pickupId: number) => void;
 }
 
-export const Request: React.FC<RequestProps> = (props) => {
+export const RequestApprovalForm: React.FC<RequestProps> = (props) => {
+    const { updatePickUp } = usePickUps();
+    const alert = useAlert();
+
     // Function to handle the rejection of a request
     // TODO: Currently not used as backend doesnt support it
     const onReject = () => {
-        props.onApprove(props.partner, props.pickupId);
+        //
     };
 
     // Function to handle the approval of a request
-    const onApprove = () => {
-        props.onApprove(props.partner, props.pickupId);
+    const onApprove = async () => {
+        try {
+            await updatePickUp({ id: props.pickupId, chosenPartnerId: props.partner.id });
+            alert.show('Valg av sam.partner til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
+        } catch {
+            alert.show('Noe gikk galt, valg av sam.partner til ekstrauttak ble ikke registrert.', {
+                type: types.ERROR,
+            });
+        }
     };
 
     return (

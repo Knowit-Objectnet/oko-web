@@ -1,21 +1,15 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import useSWR, { mutate } from 'swr';
-import { ApiPartner, ApiPickUp, apiUrl, PickUp, Roles } from '../../types';
-import { fetcher } from '../../utils/fetcher';
-import { useEffect, useState } from 'react';
-import { PickUpRequest } from './PickUpRequest';
+import { Roles } from '../../types';
+import { PickUpInfo } from './PickUpInfo';
 import Plus from '../../assets/Plus.svg';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
-import { PostToAPI } from '../../utils/PostToAPI';
-import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
-import { DeleteToAPI } from '../../utils/DeleteToAPI';
-import { PatchToAPI } from '../../utils/PatchToAPI';
 import { Loading } from '../../sharedComponents/Loading';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
+import { usePickUps } from '../../services/usePickUps';
 
 const Wrapper = styled.div`
     display: flex;
@@ -101,171 +95,36 @@ const Button = styled.div`
 export const PickUps: React.FC = () => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
-    // Alert dispatcher
-    const alert = useAlert();
     // Modal dispatcher
     const modal = useModal();
     // Fetch data pickups/extraEvents from aPI
-    const { data: apiPickUps, isValidating } = useSWR<Array<ApiPickUp>>(`${apiUrl}/pickups/`, fetcher);
+    const { data: pickUps, isValidating } = usePickUps();
 
-    // pickups state
-    const [pickUps, setPickUps] = useState<Array<PickUp>>([]);
+    const sortedPickUps = (pickUps ?? []).sort((pickUpA, pickUpB) => {
+        const pickUpAstart = new Date(pickUpA.startDateTime);
+        const pickUpBstart = new Date(pickUpB.startDateTime);
 
-    // update the pickups state when data is fetched
-    useEffect(() => {
-        const _pickUps: Array<PickUp> = apiPickUps
-            ? apiPickUps.map((pickUp) => {
-                  return {
-                      ...pickUp,
-                      startDateTime: new Date(pickUp.startDateTime),
-                      endDateTime: new Date(pickUp.endDateTime),
-                  };
-              })
-            : [];
-        // First sort on start date and then sort on id
-        _pickUps.sort((pickUpA, pickUpB) => {
-            const timeA = pickUpA.startDateTime.getTime();
-            const timeB = pickUpB.startDateTime.getTime();
-            const idA = pickUpA.id;
-            const idB = pickUpB.id;
+        if (pickUpAstart > pickUpBstart) {
+            return -1;
+        }
+        if (pickUpAstart < pickUpBstart) {
+            return 1;
+        }
+        return 0;
 
-            if (timeA == timeB) {
-                return idA < idB ? 1 : idA > idB ? -1 : 0;
-            } else {
-                return timeA < timeB ? 1 : -1;
-            }
-        });
-        setPickUps(_pickUps);
-    }, [apiPickUps]);
+        // TODO: the pickUps were also sorted by ID. Why is that, and should it be re-implemented?
+    });
 
-    const beforeExtraEventSubmission = (key: string, newPickup: ApiPickUp) => {
-        // Old pickups (needed to spread it)
-        const oldPickups = apiPickUps || [];
-
-        // Update local state
-        mutate(key, [...oldPickups, newPickup], false);
+    // On click function for new extraevent/pickup button
+    const showNewExtraEventModal = () => {
+        const { start, end } = getStartAndEndDateTime();
+        modal.show(<ExtraEvent end={end} afterSubmit={afterExtraEventSubmission} start={start} />);
     };
 
     const afterExtraEventSubmission = (successful: boolean, key: string) => {
         if (successful) {
-            // Give user feedback and close modal
-            alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
             modal.remove();
-
-            // Revalidate
-            mutate(key);
-        } else {
-            // Give user feedback
-            alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
         }
-    };
-
-    const pickupReject = async (partner: ApiPartner, pickupId: number) => {
-        /* TODO: Make this function when the backend supports it */
-    };
-
-    // Function to approve a request for a pickup
-    const pickupApprove = async (partner: ApiPartner, pickupId: number) => {
-        try {
-            // Update local state
-            if (apiPickUps) {
-                const updatedExtraEvent = apiPickUps.find((pickUp) => pickUp.id === pickupId);
-                const filteredExtraEvents = apiPickUps.filter((pickUp) => pickUp.id !== pickupId);
-                const newExtraEvents = [
-                    ...filteredExtraEvents,
-                    {
-                        ...updatedExtraEvent,
-                        chosenPartner: partner,
-                    },
-                ];
-                // Update local state
-                mutate(`${apiUrl}/pickups/`, newExtraEvents, false);
-            }
-
-            // Update pickup in API
-            await PatchToAPI(`${apiUrl}/pickups`, { id: pickupId, chosenPartnerId: partner.id }, keycloak.token);
-            alert.show('Valg av sam.partner til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
-
-            // Revalidate
-            mutate(`${apiUrl}/pickups/`);
-        } catch {
-            alert.show('Noe gikk galt, valg av sam.partner til ekstrauttak ble ikke registrert.', {
-                type: types.ERROR,
-            });
-        }
-    };
-
-    // Function to submit new request for pickup
-    const requestSubmission = async (pickupId: number, partnerId: number) => {
-        try {
-            // Date to mutate the local state with
-            const localMutation = {
-                pickup: {
-                    id: pickupId,
-                    startDateTime: '',
-                    endDateTime: '',
-                    description: '',
-                    station: {
-                        id: -1,
-                        name: '',
-                        openingTime: '',
-                        closingTime: '',
-                    },
-                    chosenPartner: null,
-                },
-                partner: {
-                    id: partnerId,
-                    name: '',
-                    description: '',
-                    phone: '',
-                    email: '',
-                },
-            };
-
-            // Mutate the local data
-            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`, [localMutation], false);
-
-            // Post to the API
-            await PostToAPI(`${apiUrl}/requests`, { pickupId: pickupId, partnerId: partnerId }, keycloak.token);
-            alert.show('Påmelding til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
-
-            // Revalidate
-            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`);
-        } catch {
-            alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
-        }
-    };
-
-    // Function to delete request for pickup
-    const requestDeletion = async (pickupId: number, partnerId: number) => {
-        try {
-            // Mutate the local data
-            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`, [], false);
-
-            // Delete the request in the API
-            await DeleteToAPI(`${apiUrl}/requests?pickupId=${pickupId}&partnerId=${partnerId}`, keycloak.token);
-            alert.show('Påmelding til ekstrauttak ble sletteet suksessfullt.', { type: types.SUCCESS });
-
-            // Revalidate
-            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`);
-        } catch {
-            alert.show('Noe gikk galt, sletting av påmelding til ekstrauttaket ble ikke registrert.', {
-                type: types.ERROR,
-            });
-        }
-    };
-
-    // On click function for new extraevent/pickup button
-    const onClick = () => {
-        const { start, end } = getStartAndEndDateTime();
-        modal.show(
-            <ExtraEvent
-                end={end}
-                beforeSubmit={beforeExtraEventSubmission}
-                afterSubmit={afterExtraEventSubmission}
-                start={start}
-            />,
-        );
     };
 
     return (
@@ -277,7 +136,7 @@ export const PickUps: React.FC = () => {
                 {keycloak.hasRealmRole(Roles.Ambassador) && (
                     <Item>
                         <Description>Ektrauttak</Description>
-                        <Button onClick={onClick}>
+                        <Button onClick={showNewExtraEventModal}>
                             <Plus height="100%" />
                         </Button>
                     </Item>
@@ -292,20 +151,10 @@ export const PickUps: React.FC = () => {
                         </ExplanationLast>
                     </Explanation>
                     <PickUpsList>
-                        {!apiPickUps && isValidating ? (
+                        {!pickUps && isValidating ? (
                             <Loading text="Laster inn data..." />
                         ) : (
-                            pickUps.map((pickUp) => (
-                                <PickUpRequest
-                                    key={`Pickup: ${pickUp.id}`}
-                                    {...pickUp}
-                                    groupId={keycloak.tokenParsed.GroupID}
-                                    deleteRequest={requestDeletion}
-                                    registerRequest={requestSubmission}
-                                    onReject={pickupReject}
-                                    onApprove={pickupApprove}
-                                />
-                            ))
+                            sortedPickUps.map((pickUp) => <PickUpInfo key={pickUp.id} pickUp={pickUp} />)
                         )}
                     </PickUpsList>
                 </Content>

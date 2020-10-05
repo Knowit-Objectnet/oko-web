@@ -57,7 +57,6 @@ const OverflowWrapper = styled.div`
 export const WeightReporting: React.FC = () => {
     const { data: withdrawals, isValidating } = useReports();
 
-    // First sort on start date and then sort on reportID
     const sortedWithdrawals = (withdrawals ?? []).sort((withdrawalA, withdrawalB) => {
         const withdrawalAstart = new Date(withdrawalA.startDateTime);
         const withdrawalBstart = new Date(withdrawalB.startDateTime);
@@ -69,6 +68,8 @@ export const WeightReporting: React.FC = () => {
             return 1;
         }
         return 0;
+
+        // TODO: the withdrawals were also sorted by ID. Why is that, and should it be re-implemented?
     });
 
     return (

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
-import { ApiPartner, ApiRequest, apiUrl } from '../../types';
+import { ApiRequest, apiUrl } from '../../types';
 import { fetcher } from '../../utils/fetcher';
-import { Request } from './Request';
+import { RequestApprovalForm } from './RequestApprovalForm';
 import { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
@@ -26,11 +26,9 @@ interface RequestsProps {
     pickupId: number;
     selectedPartnerId?: number;
     isStation: boolean;
-    onReject: (partner: ApiPartner, pickupId: number) => void;
-    onApprove: (partner: ApiPartner, pickupId: number) => void;
 }
 
-export const Requests: React.FC<RequestsProps> = (props) => {
+export const RequestForm: React.FC<RequestsProps> = (props) => {
     // Get the requests for the pickup from the API
     const { data: apiRequests, isValidating } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${props.pickupId}`,
@@ -49,14 +47,12 @@ export const Requests: React.FC<RequestsProps> = (props) => {
             {!apiRequests && isValidating && <NoRequests>Laster inn...</NoRequests>}
             {requests && requests.length === 0 && <NoRequests>Ingen påmeldte enda</NoRequests>}
             {requests.map((request) => (
-                <Request
+                <RequestApprovalForm
                     key={`pickupId: ${request.pickup.id} partner ${request.partner.id}`}
                     pickupId={props.pickupId}
                     partner={request.partner}
                     selectedId={props.selectedPartnerId}
                     isStation={props.isStation}
-                    onReject={props.onReject}
-                    onApprove={props.onApprove}
                 />
             ))}
         </Wrapper>
