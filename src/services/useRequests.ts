@@ -26,7 +26,7 @@ export const useRequests = (params: ApiRequestParams): RequestsApiService => {
         .map((key) => `${key}=${params[key as keyof ApiRequestParams]}`)
         .join('&');
 
-    const endpoint = `${apiUrl}/requests`;
+    const endpoint = `${apiUrl}/requests/`;
 
     const { data, error, isValidating, mutate } = useSWR<Array<ApiRequest>>(`${endpoint}?${paramsString}`, fetcher);
 

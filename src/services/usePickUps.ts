@@ -16,7 +16,7 @@ export interface PickupsApiService {
 
 export const usePickups = (): PickupsApiService => {
     const [keycloak] = useKeycloak();
-    const endpoint = `${apiUrl}/pickups`;
+    const endpoint = `${apiUrl}/pickups/`;
 
     const { data, error, isValidating, mutate } = useSWR<Array<ApiPickup>>(endpoint, fetcher);
 

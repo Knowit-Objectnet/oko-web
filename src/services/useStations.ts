@@ -14,7 +14,7 @@ export interface StationsApiService {
 
 export const useStations = (): StationsApiService => {
     const [keycloak] = useKeycloak();
-    const endpoint = `${apiUrl}/stations`;
+    const endpoint = `${apiUrl}/stations/`;
 
     const { data, error, isValidating, mutate } = useSWR<Array<Station>>(endpoint, fetcher);
 
