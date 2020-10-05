@@ -1,6 +1,6 @@
-import { ApiPartner } from '../src/types';
+import { Partner } from '../src/types';
 
-export const mockPartners: Array<ApiPartner> = [
+export const mockPartners: Array<Partner> = [
     {
         id: 3,
         name: 'Fretex',

@@ -1,34 +1,34 @@
 import useSWR from 'swr';
-import { apiUrl, ApiPickup, ApiPickupPost, ApiPickupPatch } from '../types';
+import { apiUrl, Pickup, PickupPost, PickupPatch } from '../types';
 import { fetcher } from '../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiPostClient } from './ApiPostClient';
 import { ApiPatchClient } from './ApiPatchClient';
 
 export interface PickupsApiService {
-    data?: Array<ApiPickup>;
+    data?: Array<Pickup>;
     error: boolean;
     isValidating: boolean;
-    mutate: (data?: Array<ApiPickup>) => void;
-    addPickup: (station: ApiPickupPost) => Promise<ApiPickup>;
-    updatePickup: (station: ApiPickupPatch) => Promise<ApiPickup>;
+    mutate: (data?: Array<Pickup>) => void;
+    addPickup: (station: PickupPost) => Promise<Pickup>;
+    updatePickup: (station: PickupPatch) => Promise<Pickup>;
 }
 
 export const usePickups = (): PickupsApiService => {
     const [keycloak] = useKeycloak();
     const endpoint = `${apiUrl}/pickups/`;
 
-    const { data, error, isValidating, mutate } = useSWR<Array<ApiPickup>>(endpoint, fetcher);
+    const { data, error, isValidating, mutate } = useSWR<Array<Pickup>>(endpoint, fetcher);
 
-    const updatePickup = async (pickupPatch: ApiPickupPatch) => {
-        const response = await ApiPatchClient<ApiPickupPatch, ApiPickup>(endpoint, pickupPatch, keycloak.token);
+    const updatePickup = async (pickupPatch: PickupPatch) => {
+        const response = await ApiPatchClient<PickupPatch, Pickup>(endpoint, pickupPatch, keycloak.token);
         console.log(response);
         await mutate();
         return response;
     };
 
-    const addPickup = async (pickup: ApiPickupPost) => {
-        const response = await ApiPostClient<ApiPickupPost, ApiPickup>(endpoint, pickup, keycloak.token);
+    const addPickup = async (pickup: PickupPost) => {
+        const response = await ApiPostClient<PickupPost, Pickup>(endpoint, pickup, keycloak.token);
         await mutate();
         return response;
     };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPickup, Roles } from '../../types';
+import { Pickup, Roles } from '../../types';
 import { PickupInfo } from './PickupInfo';
 import Plus from '../../assets/Plus.svg';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
@@ -115,7 +115,7 @@ export const Pickups: React.FC = () => {
     });
 
     const sortedAndFilteredPickups = keycloak.hasRealmRole(Roles.Ambassador)
-        ? sortedPickups.filter((pickup: ApiPickup) => pickup.station.id === userId)
+        ? sortedPickups.filter((pickup: Pickup) => pickup.station.id === userId)
         : sortedPickups;
 
     const showNewExtraEventModal = () => {

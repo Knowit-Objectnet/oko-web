@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPickup } from '../../types';
+import { Pickup } from '../../types';
 import { RequestApprovalForm } from './RequestApprovalForm';
 import { useRequests } from '../../services/useRequests';
 
@@ -20,7 +20,7 @@ const NoRequests = styled.div`
     height: 100%;
 `;
 
-export const RequestList: React.FC<{ pickup: ApiPickup }> = ({ pickup }) => {
+export const RequestList: React.FC<{ pickup: Pickup }> = ({ pickup }) => {
     const { data: requests, isValidating } = useRequests({ pickupId: pickup.id });
 
     return (

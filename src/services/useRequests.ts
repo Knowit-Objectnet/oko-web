@@ -1,16 +1,16 @@
 import useSWR from 'swr';
-import { apiUrl, ApiRequest, ApiRequestPost } from '../types';
+import { apiUrl, Request, RequestPost } from '../types';
 import { fetcher } from '../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiPostClient } from './ApiPostClient';
 import { ApiDeleteClient } from './ApiDeleteClient';
 
 export interface RequestsApiService {
-    data?: Array<ApiRequest>;
+    data?: Array<Request>;
     error: boolean;
     isValidating: boolean;
-    mutate: (data?: Array<ApiRequest>) => void;
-    addRequest: (request: ApiRequestPost) => Promise<ApiRequest>;
+    mutate: (data?: Array<Request>) => void;
+    addRequest: (request: RequestPost) => Promise<Request>;
     deleteRequest: () => Promise<boolean>;
 }
 
@@ -28,7 +28,7 @@ export const useRequests = (params: ApiRequestParams): RequestsApiService => {
 
     const endpoint = `${apiUrl}/requests/`;
 
-    const { data, error, isValidating, mutate } = useSWR<Array<ApiRequest>>(`${endpoint}?${paramsString}`, fetcher);
+    const { data, error, isValidating, mutate } = useSWR<Array<Request>>(`${endpoint}?${paramsString}`, fetcher);
 
     const deleteRequest = async () => {
         if (params.pickupId && params.partnerId) {
@@ -42,8 +42,8 @@ export const useRequests = (params: ApiRequestParams): RequestsApiService => {
         }
     };
 
-    const addRequest = async (request: ApiRequestPost) => {
-        const response = await ApiPostClient<ApiRequestPost, ApiRequest>(endpoint, request, keycloak.token);
+    const addRequest = async (request: RequestPost) => {
+        const response = await ApiPostClient<RequestPost, Request>(endpoint, request, keycloak.token);
         await mutate();
         return response;
     };

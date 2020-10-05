@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
-import { ApiPartner, apiUrl, Roles } from '../../types';
+import { Partner, apiUrl, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
@@ -70,17 +70,14 @@ export const MyPage: React.FC = () => {
     // Modal dispatcher
     const modal = useModal();
     // State for partner info
-    const [partnerInfo, setPartnerInfo] = useState<ApiPartner | undefined>(undefined);
+    const [partnerInfo, setPartnerInfo] = useState<Partner | undefined>(undefined);
 
     // History
     const history = useHistory();
 
     // If the user is a partner, get their info
     if (keycloak.tokenParsed.GroupID && keycloak.hasRealmRole(Roles.Partner)) {
-        const { data: apiPartnerInfo } = useSWR<ApiPartner>(
-            `${apiUrl}/partners/${keycloak.tokenParsed.GroupID}`,
-            fetcher,
-        );
+        const { data: apiPartnerInfo } = useSWR<Partner>(`${apiUrl}/partners/${keycloak.tokenParsed.GroupID}`, fetcher);
 
         useEffect(() => {
             setPartnerInfo(apiPartnerInfo);

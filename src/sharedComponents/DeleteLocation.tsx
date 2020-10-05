@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, apiUrl } from '../types';
+import { apiUrl, Station } from '../types';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import useSWR from 'swr';
@@ -64,7 +64,7 @@ export const DeleteLocation: React.FC<NewPartnerProps> = (props) => {
     const [selectedLocation, setSelectedLocation] = useState(-1);
 
     // Valid partners fetched from api
-    let { data: locations } = useSWR<ApiPartner[]>(`${apiUrl}/stations`, fetcher);
+    let { data: locations } = useSWR<Array<Station>>(`${apiUrl}/stations`, fetcher);
     locations = locations || [];
 
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

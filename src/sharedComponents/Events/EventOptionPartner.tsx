@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import { ApiPartner } from '../../types';
+import { Partner } from '../../types';
 
 const Select = styled.select`
     width: 100%;
@@ -14,7 +14,7 @@ interface GrayBoxProps {
 
 interface EventOptionPartnerProps {
     selectedPartner: number;
-    partners: Array<ApiPartner>;
+    partners: Array<Partner>;
     onChange: (partnerId: number) => void;
 }
 

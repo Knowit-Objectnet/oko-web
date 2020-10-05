@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, ApiPickup, ApiRequest } from '../../types';
+import { Partner, Pickup, Request } from '../../types';
 import { Button } from '../../sharedComponents/Button';
 import Cross from '../../assets/Cross.svg';
 import { usePickups } from '../../services/usePickups';
@@ -63,8 +63,8 @@ const Waiting = styled.div`
 `;
 
 interface RequestProps {
-    pickup: ApiPickup;
-    request: ApiRequest;
+    pickup: Pickup;
+    request: Request;
 }
 
 export const RequestApprovalForm: React.FC<RequestProps> = ({ pickup, request }) => {

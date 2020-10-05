@@ -1,6 +1,6 @@
-import { ApiRequest } from '../src/types';
+import { Request } from '../src/types';
 
-export const mockApiRequests: Array<ApiRequest> = [
+export const mockApiRequests: Array<Request> = [
     {
         pickup: {
             id: 1,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { apiUrl, StationRequest } from '../../types';
+import { apiUrl, StationPost } from '../../types';
 import { OpeningTime } from './OpeningTime';
 import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
@@ -230,7 +230,7 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                 }
             }
 
-            const newStation: StationRequest = {
+            const newStation: StationPost = {
                 name: name,
                 hours: openingHours,
             };

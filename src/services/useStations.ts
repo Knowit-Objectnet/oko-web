@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { Station, apiUrl, StationRequest } from '../types';
+import { Station, apiUrl, StationPost } from '../types';
 import { fetcher } from '../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiPostClient } from './ApiPostClient';
@@ -9,7 +9,7 @@ export interface StationsApiService {
     error: boolean;
     isValidating: boolean;
     mutate: (data?: Array<Station>) => void;
-    addStation: (station: StationRequest) => Promise<Station>;
+    addStation: (station: StationPost) => Promise<Station>;
 }
 
 export const useStations = (): StationsApiService => {
@@ -18,8 +18,8 @@ export const useStations = (): StationsApiService => {
 
     const { data, error, isValidating, mutate } = useSWR<Array<Station>>(endpoint, fetcher);
 
-    const addStation = async (station: StationRequest) => {
-        const response = await ApiPostClient<StationRequest, Station>(endpoint, station, keycloak.token);
+    const addStation = async (station: StationPost) => {
+        const response = await ApiPostClient<StationPost, Station>(endpoint, station, keycloak.token);
         await mutate();
         return response;
     };

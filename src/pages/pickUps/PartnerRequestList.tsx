@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPickup } from '../../types';
+import { Pickup } from '../../types';
 import { Button } from '../../sharedComponents/Button';
 import Cross from '../../assets/Cross.svg';
 import { Colors } from '../../theme';
@@ -26,7 +26,7 @@ const DeleteButton = styled.button`
     cursor: pointer;
 `;
 
-export const PartnerRequestList: React.FC<{ pickup: ApiPickup }> = ({ pickup }) => {
+export const PartnerRequestList: React.FC<{ pickup: Pickup }> = ({ pickup }) => {
     const alert = useAlert();
 
     const [keycloak] = useKeycloak();

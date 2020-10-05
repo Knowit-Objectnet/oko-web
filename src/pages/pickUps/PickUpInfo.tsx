@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPickup, Roles } from '../../types';
+import { Pickup, Roles } from '../../types';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { PartnerRequestList } from './PartnerRequestList';
@@ -55,7 +55,7 @@ const Requests = styled.div`
     width: 350px;
 `;
 
-export const PickupInfo: React.FC<{ pickup: ApiPickup }> = ({ pickup }) => {
+export const PickupInfo: React.FC<{ pickup: Pickup }> = ({ pickup }) => {
     const [keycloak] = useKeycloak();
     const groupId = keycloak.tokenParsed.GroupID;
 

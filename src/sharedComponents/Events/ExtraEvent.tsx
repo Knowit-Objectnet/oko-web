@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { ApiPickupPost } from '../../types';
+import { PickupPost } from '../../types';
 import { Button } from '../Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
@@ -72,7 +72,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
 
         try {
             // Data for new extra event
-            const newPickup: ApiPickupPost = {
+            const newPickup: PickupPost = {
                 startDateTime: start.toISOString(),
                 endDateTime: end.toISOString(),
                 description: description,

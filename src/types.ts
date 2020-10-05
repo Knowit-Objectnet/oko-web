@@ -5,7 +5,7 @@ export interface ApiEvent {
     startDateTime: string;
     endDateTime: string;
     station: Station;
-    partner: ApiPartner;
+    partner: Partner;
     recurrenceRule: {
         id: number;
         until: string;
@@ -25,12 +25,12 @@ export interface Station {
     hours: StationOpeningHours;
 }
 
-export interface StationRequest {
+export interface StationPost {
     name: string;
     hours: StationOpeningHours;
 }
 
-export interface ApiPartner {
+export interface Partner {
     id: number;
     name: string;
     description: string;
@@ -49,33 +49,33 @@ export interface Report {
     reportedDateTime: string | null;
 }
 
-export interface ApiPickup {
+export interface Pickup {
     id: number;
     startDateTime: string;
     endDateTime: string;
     description: string;
     station: Station;
-    chosenPartner: ApiPartner | null;
+    chosenPartner: Partner | null;
 }
 
-export interface ApiPickupPost {
+export interface PickupPost {
     startDateTime: string;
     endDateTime: string;
     description: string;
     stationId: number;
 }
 
-export interface ApiPickupPatch {
+export interface PickupPatch {
     id: number;
     chosenPartnerId: number;
 }
 
-export interface ApiRequest {
-    pickup: ApiPickup;
-    partner: ApiPartner;
+export interface Request {
+    pickup: Pickup;
+    partner: Partner;
 }
 
-export interface ApiRequestPost {
+export interface RequestPost {
     pickupId: number;
     partnerId: number;
 }
@@ -90,7 +90,7 @@ export interface EventInfo {
 interface EventInfoResource {
     eventId: number;
     location: Station;
-    partner: ApiPartner;
+    partner: Partner;
     recurrenceRule: {
         id: number;
         until: string;
