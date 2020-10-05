@@ -49,7 +49,7 @@ export interface Report {
     reportedDateTime: string | null;
 }
 
-export interface ApiPickUp {
+export interface ApiPickup {
     id: number;
     startDateTime: string;
     endDateTime: string;
@@ -58,21 +58,26 @@ export interface ApiPickUp {
     chosenPartner: ApiPartner | null;
 }
 
-export interface ApiPickUpPost {
+export interface ApiPickupPost {
     startDateTime: string;
     endDateTime: string;
     description: string;
     stationId: number;
 }
 
-export interface ApiPickUpPatch {
+export interface ApiPickupPatch {
     id: number;
     chosenPartnerId: number;
 }
 
 export interface ApiRequest {
-    pickup: ApiPickUp;
+    pickup: ApiPickup;
     partner: ApiPartner;
+}
+
+export interface ApiRequestPost {
+    pickupId: number;
+    partnerId: number;
 }
 
 export interface EventInfo {
@@ -104,15 +109,6 @@ interface EventInfoResource {
 export interface SlotInfo {
     start: Date;
     end: Date;
-}
-
-export interface PickUp {
-    id: number;
-    startDateTime: Date;
-    endDateTime: Date;
-    description: string;
-    station: Station;
-    chosenPartner: ApiPartner | null;
 }
 
 // Roles

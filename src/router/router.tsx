@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Router, Redirect } from 'react-router-dom';
+import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from '../types';
 
@@ -17,7 +17,7 @@ import { Logout } from '../pages/logout/Logout';
 import { CalendarPage } from '../pages/calendar/Calendar';
 import { WeightReporting } from '../pages/weightReporting/WeightReporting';
 import { MyPage } from '../pages/myPage/MyPage';
-import { PickUps } from '../pages/pickUps/PickUps';
+import { Pickups } from '../pages/pickups/Pickups';
 import { Stations } from '../pages/stations/Stations';
 
 export const RouterComponent: React.FC = () => {
@@ -43,7 +43,7 @@ export const RouterComponent: React.FC = () => {
                                 path={`${props.match.url}`}
                                 authenticatedRoles={[Roles.Oslo]}
                                 not={<Redirect to="/calendar" />}
-                                is={<PickUps />}
+                                is={<Pickups />}
                             />
                             <Route exact path={`${props.match.url}calendar`} component={CalendarPage} />
                             <AuthenticatedRoute
@@ -75,7 +75,7 @@ export const RouterComponent: React.FC = () => {
                                 path={`${props.match.url}notifications`}
                                 authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
                                 not={<Redirect to="/" />}
-                                is={<PickUps />}
+                                is={<Pickups />}
                             />
                             <AuthenticatedRoute
                                 exact={true}

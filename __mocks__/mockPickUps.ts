@@ -1,6 +1,6 @@
-import { ApiPickUp } from '../src/types';
+import { ApiPickup } from '../src/types';
 
-export const mockApiPickUps: Array<ApiPickUp> = [
+export const mockApiPickUps: Array<ApiPickup> = [
     {
         id: 1,
         startDateTime: '2020-08-05T07:47:00Z',

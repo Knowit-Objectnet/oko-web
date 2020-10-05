@@ -1,34 +1,34 @@
 import useSWR from 'swr';
-import { apiUrl, ApiPickUp, ApiPickUpPost, ApiPickUpPatch } from '../types';
+import { apiUrl, ApiPickup, ApiPickupPost, ApiPickupPatch } from '../types';
 import { fetcher } from '../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiPostClient } from './ApiPostClient';
 import { ApiPatchClient } from './ApiPatchClient';
 
-export interface PickUpsApiService {
-    data?: Array<ApiPickUp>;
+export interface PickupsApiService {
+    data?: Array<ApiPickup>;
     error: boolean;
     isValidating: boolean;
-    mutate: (data?: Array<ApiPickUp>) => void;
-    addPickUp: (station: ApiPickUpPost) => Promise<ApiPickUp>;
-    updatePickUp: (station: ApiPickUpPatch) => Promise<ApiPickUp>;
+    mutate: (data?: Array<ApiPickup>) => void;
+    addPickup: (station: ApiPickupPost) => Promise<ApiPickup>;
+    updatePickup: (station: ApiPickupPatch) => Promise<ApiPickup>;
 }
 
-export const usePickUps = (): PickUpsApiService => {
+export const usePickups = (): PickupsApiService => {
     const [keycloak] = useKeycloak();
     const endpoint = `${apiUrl}/pickups`;
 
-    const { data, error, isValidating, mutate } = useSWR<Array<ApiPickUp>>(endpoint, fetcher);
+    const { data, error, isValidating, mutate } = useSWR<Array<ApiPickup>>(endpoint, fetcher);
 
-    const updatePickUp = async (pickUpPatch: ApiPickUpPatch) => {
-        const response = await ApiPatchClient<ApiPickUpPatch, ApiPickUp>(endpoint, pickUpPatch, keycloak.token);
+    const updatePickup = async (pickupPatch: ApiPickupPatch) => {
+        const response = await ApiPatchClient<ApiPickupPatch, ApiPickup>(endpoint, pickupPatch, keycloak.token);
         console.log(response);
         await mutate();
         return response;
     };
 
-    const addPickUp = async (pickUp: ApiPickUpPost) => {
-        const response = await ApiPostClient<ApiPickUpPost, ApiPickUp>(endpoint, pickUp, keycloak.token);
+    const addPickup = async (pickup: ApiPickupPost) => {
+        const response = await ApiPostClient<ApiPickupPost, ApiPickup>(endpoint, pickup, keycloak.token);
         await mutate();
         return response;
     };
@@ -38,7 +38,7 @@ export const usePickUps = (): PickUpsApiService => {
         isValidating,
         error,
         mutate,
-        addPickUp,
-        updatePickUp,
+        addPickup,
+        updatePickup,
     };
 };

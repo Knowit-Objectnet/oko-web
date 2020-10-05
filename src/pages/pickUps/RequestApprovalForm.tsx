@@ -1,10 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner } from '../../types';
+import { ApiPartner, ApiPickup, ApiRequest } from '../../types';
 import { Button } from '../../sharedComponents/Button';
 import Cross from '../../assets/Cross.svg';
-import { usePickUps } from '../../services/usePickUps';
+import { usePickups } from '../../services/usePickups';
 import { types, useAlert } from 'react-alert';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Partner = styled.div`
     display: flex;
@@ -62,26 +63,26 @@ const Waiting = styled.div`
 `;
 
 interface RequestProps {
-    pickupId: number;
-    partner: ApiPartner;
-    selectedId?: number;
-    isStation: boolean;
+    pickup: ApiPickup;
+    request: ApiRequest;
 }
 
-export const RequestApprovalForm: React.FC<RequestProps> = (props) => {
-    const { updatePickUp } = usePickUps();
+export const RequestApprovalForm: React.FC<RequestProps> = ({ pickup, request }) => {
+    const { updatePickup } = usePickups();
     const alert = useAlert();
+
+    const [keycloak] = useKeycloak();
+    const isStation = keycloak.tokenParsed.GroupID === pickup.station.id;
 
     // Function to handle the rejection of a request
     // TODO: Currently not used as backend doesnt support it
-    const onReject = () => {
-        //
+    const rejectRequest = () => {
+        console.log('Rejection of requests is not yet implemented in backend');
     };
 
-    // Function to handle the approval of a request
-    const onApprove = async () => {
+    const approveRequest = async () => {
         try {
-            await updatePickUp({ id: props.pickupId, chosenPartnerId: props.partner.id });
+            await updatePickup({ id: pickup.id, chosenPartnerId: request.partner.id });
             alert.show('Valg av sam.partner til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
         } catch {
             alert.show('Noe gikk galt, valg av sam.partner til ekstrauttak ble ikke registrert.', {
@@ -92,19 +93,19 @@ export const RequestApprovalForm: React.FC<RequestProps> = (props) => {
 
     return (
         <Partner>
-            <PartnerName>{props.partner.name}</PartnerName>
-            {props.isStation && !props.selectedId ? (
+            <PartnerName>{request.partner.name}</PartnerName>
+            {isStation && !pickup.chosenPartner ? (
                 <Selection>
                     {/*
                         <Reject onClick={onReject}>
                             <Cross height="1em" /> Avvis
                         </Reject>
                     */}
-                    <Button text="Godkjenn" color="Green" height={22} onClick={onApprove} />
+                    <Button text="Godkjenn" color="Green" height={22} onClick={approveRequest} />
                 </Selection>
-            ) : props.selectedId ? (
-                <Status approved={props.partner.id === props.selectedId}>
-                    {props.partner.id === props.selectedId ? 'Godkjent' : 'Avvist'}
+            ) : pickup.chosenPartner ? (
+                <Status approved={request.partner.id === pickup.chosenPartner.id}>
+                    {request.partner.id === pickup.chosenPartner.id ? 'Godkjent' : 'Avvist'}
                 </Status>
             ) : (
                 <Waiting>Avventer svar</Waiting>

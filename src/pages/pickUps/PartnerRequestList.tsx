@@ -1,15 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPickUp, ApiRequest, apiUrl } from '../../types';
-import useSWR, { mutate } from 'swr';
-import { fetcher } from '../../utils/fetcher';
+import { ApiPickup } from '../../types';
 import { Button } from '../../sharedComponents/Button';
 import Cross from '../../assets/Cross.svg';
 import { Colors } from '../../theme';
-import { PostToAPI } from '../../utils/PostToAPI';
 import { types, useAlert } from 'react-alert';
-import { DeleteToAPI } from '../../utils/DeleteToAPI';
 import { useKeycloak } from '@react-keycloak/web';
+import { useRequests } from '../../services/useRequests';
 
 const Wrapper = styled.div`
     display: flex;
@@ -19,7 +16,9 @@ const Wrapper = styled.div`
     box-sizing: border-box;
 `;
 
-const DeleteButton = styled.div`
+const DeleteButton = styled.button`
+    border: 0;
+    background: none;
     margin-left: 10px;
     display: flex;
     align-items: center;
@@ -27,33 +26,26 @@ const DeleteButton = styled.div`
     cursor: pointer;
 `;
 
-interface PartnerRequestFormProps {
-    partnerId: number;
-    pickUp: ApiPickUp;
-}
-
-export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = ({ pickUp, partnerId }) => {
-    const selectedPartnerId = pickUp.chosenPartner?.id;
-    const pickupId = pickUp.id;
-    const [keycloak] = useKeycloak();
+export const PartnerRequestList: React.FC<{ pickup: ApiPickup }> = ({ pickup }) => {
     const alert = useAlert();
-    // Fetching data from API
-    const { data: apiRequest, isValidating } = useSWR<Array<ApiRequest>>(
-        `${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`,
-        fetcher,
-    );
+
+    const [keycloak] = useKeycloak();
+    const partnerId = keycloak.tokenParsed.GroupID;
+    const selectedPartnerId = pickup.chosenPartner?.id;
+    const pickupId = pickup.id;
+
+    const { data: apiRequest, isValidating, mutate, addRequest, deleteRequest } = useRequests({
+        pickupId,
+        partnerId,
+    });
     // Getting the apiRequest object if it isnt empty (its always 1 or empty]
     const request = apiRequest ? apiRequest[0] : undefined;
 
-    // Function to handle deletion of request
     const onDeleteClick = async () => {
         try {
-            // Delete the request in the API
-            await DeleteToAPI(`${apiUrl}/requests?pickupId=${pickupId}&partnerId=${partnerId}`, keycloak.token);
+            await deleteRequest();
             alert.show('Påmelding til ekstrauttak ble sletteet suksessfullt.', { type: types.SUCCESS });
-
-            // Revalidate
-            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`);
+            mutate();
         } catch {
             alert.show('Noe gikk galt, sletting av påmelding til ekstrauttaket ble ikke registrert.', {
                 type: types.ERROR,
@@ -61,15 +53,11 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = ({ pickUp, 
         }
     };
 
-    // Function to handle registration of request
     const onRegisterClick = async () => {
         try {
-            // Post to the API
-            await PostToAPI(`${apiUrl}/requests`, { pickupId, partnerId }, keycloak.token);
+            await addRequest({ pickupId, partnerId });
             alert.show('Påmelding til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
-
-            // Revalidate
-            mutate(`${apiUrl}/requests/?pickupId=${pickupId}&partnerId=${partnerId}`);
+            mutate();
         } catch {
             alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
         }

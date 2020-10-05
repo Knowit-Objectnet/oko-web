@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Roles } from '../../types';
-import { PickUpInfo } from './PickUpInfo';
+import { ApiPickup, Roles } from '../../types';
+import { PickupInfo } from './PickupInfo';
 import Plus from '../../assets/Plus.svg';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { useKeycloak } from '@react-keycloak/web';
@@ -9,7 +9,7 @@ import { Loading } from '../../sharedComponents/Loading';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
-import { usePickUps } from '../../services/usePickUps';
+import { usePickups } from '../../services/usePickups';
 
 const Wrapper = styled.div`
     display: flex;
@@ -50,7 +50,7 @@ const ExplanationLast = styled.div`
     width: 350px;
 `;
 
-const PickUpsList = styled.div`
+const PickupsList = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -92,30 +92,32 @@ const Button = styled.div`
     }
 `;
 
-export const PickUps: React.FC = () => {
-    // Keycloak instance
+export const Pickups: React.FC = () => {
     const { keycloak } = useKeycloak();
-    // Modal dispatcher
+    const userId = keycloak.tokenParsed.GroupID;
+
     const modal = useModal();
-    // Fetch data pickups/extraEvents from aPI
-    const { data: pickUps, isValidating } = usePickUps();
+    const { data: pickups, isValidating } = usePickups();
 
-    const sortedPickUps = (pickUps ?? []).sort((pickUpA, pickUpB) => {
-        const pickUpAstart = new Date(pickUpA.startDateTime);
-        const pickUpBstart = new Date(pickUpB.startDateTime);
+    const sortedPickups = (pickups ?? []).sort((pickupA, pickupB) => {
+        const pickupAstart = new Date(pickupA.startDateTime);
+        const pickupBstart = new Date(pickupB.startDateTime);
 
-        if (pickUpAstart > pickUpBstart) {
+        if (pickupAstart > pickupBstart) {
             return -1;
         }
-        if (pickUpAstart < pickUpBstart) {
+        if (pickupAstart < pickupBstart) {
             return 1;
         }
         return 0;
 
-        // TODO: the pickUps were also sorted by ID. Why is that, and should it be re-implemented?
+        // TODO: the pickups were also sorted by ID. Why is that, and should it be re-implemented?
     });
 
-    // On click function for new extraevent/pickup button
+    const sortedAndFilteredPickups = keycloak.hasRealmRole(Roles.Ambassador)
+        ? sortedPickups.filter((pickup: ApiPickup) => pickup.station.id === userId)
+        : sortedPickups;
+
     const showNewExtraEventModal = () => {
         const { start, end } = getStartAndEndDateTime();
         modal.show(<ExtraEvent end={end} afterSubmit={afterExtraEventSubmission} start={start} />);
@@ -150,13 +152,13 @@ export const PickUps: React.FC = () => {
                             {keycloak.hasRealmRole(Roles.Ambassador) ? 'Handlingsalternativer:' : 'Påmeldte:'}
                         </ExplanationLast>
                     </Explanation>
-                    <PickUpsList>
-                        {!pickUps && isValidating ? (
+                    <PickupsList>
+                        {!pickups && isValidating ? (
                             <Loading text="Laster inn data..." />
                         ) : (
-                            sortedPickUps.map((pickUp) => <PickUpInfo key={pickUp.id} pickUp={pickUp} />)
+                            sortedAndFilteredPickups.map((pickup) => <PickupInfo key={pickup.id} pickup={pickup} />)
                         )}
-                    </PickUpsList>
+                    </PickupsList>
                 </Content>
             </Wrapper>
         </>

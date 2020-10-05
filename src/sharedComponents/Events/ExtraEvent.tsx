@@ -3,11 +3,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { ApiPickUpPost } from '../../types';
+import { ApiPickupPost } from '../../types';
 import { Button } from '../Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { usePickUps } from '../../services/usePickUps';
+import { usePickups } from '../../services/usePickups';
 
 const Textarea = styled.textarea`
     min-height: 54px;
@@ -30,7 +30,7 @@ interface ExtraEventProps {
 export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
-    const { addPickUp, mutate } = usePickUps();
+    const { addPickup, mutate } = usePickups();
     const alert = useAlert();
 
     // State
@@ -72,7 +72,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
 
         try {
             // Data for new extra event
-            const newPickUp: ApiPickUpPost = {
+            const newPickup: ApiPickupPost = {
                 startDateTime: start.toISOString(),
                 endDateTime: end.toISOString(),
                 description: description,
@@ -80,7 +80,7 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
             };
 
             // Post extra event to API
-            await addPickUp(newPickUp);
+            await addPickup(newPickup);
 
             // Give user feedback and close modal
             alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });

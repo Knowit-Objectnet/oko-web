@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPickUp, Roles } from '../../types';
-import { PartnerRequestForm } from './PartnerRequestForm';
-import { RequestForm } from './RequestForm';
+import { ApiPickup, Roles } from '../../types';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
+import { PartnerRequestList } from './PartnerRequestList';
+import { RequestList } from './RequestList';
 import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
@@ -49,50 +49,42 @@ const Event = styled.div`
     box-sizing: border-box;
 `;
 
-const Registration = styled.div`
+const Requests = styled.div`
     border-left: 2px solid ${(props) => props.theme.colors.White};
     background-color: ${(props) => props.theme.colors.LightBlue};
     width: 350px;
 `;
 
-interface PickUpRequestProps {
-    pickUp: ApiPickUp;
-}
-
-export const PickUpInfo: React.FC<PickUpRequestProps> = ({ pickUp }) => {
+export const PickupInfo: React.FC<{ pickup: ApiPickup }> = ({ pickup }) => {
     const [keycloak] = useKeycloak();
     const groupId = keycloak.tokenParsed.GroupID;
 
-    const pickUpStartDateTime = new Date(pickUp.startDateTime);
-    const pickUpEndDateTime = new Date(pickUp.endDateTime);
-    const pickUpShortDate = format(pickUpStartDateTime, 'dd.MM.yyyy');
-    const pickUpLongDate = format(pickUpStartDateTime, 'eee. dd. MMMM yyyy', { locale: nb });
-    const pickUpStartTime = format(pickUpStartDateTime, 'HH:mm');
-    const pickUpEndTime = format(pickUpEndDateTime, 'HH:mm');
+    const pickupStartDateTime = new Date(pickup.startDateTime);
+    const pickupEndDateTime = new Date(pickup.endDateTime);
+    const pickupShortDate = format(pickupStartDateTime, 'dd.MM.yyyy');
+    const pickupLongDate = format(pickupStartDateTime, 'eee. dd. MMMM yyyy', { locale: nb });
+    const pickupStartTime = format(pickupStartDateTime, 'HH:mm');
+    const pickupEndTime = format(pickupEndDateTime, 'HH:mm');
 
     return (
         <Wrapper>
             <Content>
                 <LocationDate>
-                    <Location>{pickUp.station.name}</Location>
-                    <span>{pickUpShortDate}</span>
+                    <Location>{pickup.station.name}</Location>
+                    <span>{pickupShortDate}</span>
                 </LocationDate>
-                <Event>{`${pickUpStartTime}–${pickUpEndTime}, ${pickUpLongDate}`}</Event>
-                <Registration>
+                <Event>{`${pickupStartTime}–${pickupEndTime}, ${pickupLongDate}`}</Event>
+                <Requests>
                     {keycloak.hasRealmRole(Roles.Partner) && groupId ? (
-                        <PartnerRequestForm partnerId={groupId} pickUp={pickUp} />
+                        <PartnerRequestList pickup={pickup} />
                     ) : (
-                        <RequestForm
-                            pickupId={pickUp.id}
-                            selectedPartnerId={pickUp.chosenPartner?.id}
-                            isStation={groupId === pickUp.station.id}
-                        />
+                        <RequestList pickup={pickup} />
                     )}
-                </Registration>
+                </Requests>
             </Content>
-            {pickUp.description && (
+            {pickup.description && (
                 <Description>
-                    <strong>Merknad:</strong> {pickUp.description}
+                    <strong>Merknad:</strong> {pickup.description}
                 </Description>
             )}
         </Wrapper>
