@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { ApiPickUp, ApiPickUpPost, apiUrl } from '../../types';
+import { ApiPickUpPost } from '../../types';
 import { Button } from '../Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
@@ -20,8 +20,7 @@ const Textarea = styled.textarea`
 interface ExtraEventProps {
     start: Date;
     end: Date;
-    beforeSubmit?: (key: string, newPickup: ApiPickUp) => void;
-    afterSubmit?: (successful: boolean, key: string) => void;
+    afterSubmit?: (successful: boolean) => void;
 }
 
 /**
@@ -80,24 +79,6 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 stationId: keycloak.tokenParsed.GroupID,
             };
 
-            // Local state update data
-            const newExtraEvent: ApiPickUp = {
-                id: -1,
-                startDateTime: start.toISOString(),
-                endDateTime: end.toISOString(),
-                description: description,
-                station: {
-                    id: parseInt(keycloak.tokenParsed.GroupID),
-                    name: keycloak.tokenParsed.groups[0],
-                    hours: {},
-                },
-                chosenPartner: null,
-            };
-
-            if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/pickups/`, newExtraEvent);
-            }
-
             // Post extra event to API
             await addPickUp(newPickUp);
 
@@ -109,14 +90,14 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
 
             // Give userfeedback and close modal
             if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/pickups/`);
+                props.afterSubmit(true);
             }
         } catch {
             // Give user feedback
             alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
 
             if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/pickups/`);
+                props.afterSubmit(false);
             }
         }
     };

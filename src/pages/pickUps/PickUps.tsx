@@ -121,7 +121,7 @@ export const PickUps: React.FC = () => {
         modal.show(<ExtraEvent end={end} afterSubmit={afterExtraEventSubmission} start={start} />);
     };
 
-    const afterExtraEventSubmission = (successful: boolean, key: string) => {
+    const afterExtraEventSubmission = (successful: boolean) => {
         if (successful) {
             modal.remove();
         }

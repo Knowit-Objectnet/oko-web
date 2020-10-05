@@ -60,7 +60,6 @@ describe('Provides an interface to create a pickup/Extra event', () => {
         const start = new Date(date.setHours(16, 0, 0, 0));
         const end = new Date(date.setHours(16, 30, 0, 0));
 
-        const mockBeforeSubmit = jest.fn();
         const mockAfterSubmit = jest.fn();
 
         // Render
@@ -68,12 +67,7 @@ describe('Provides an interface to create a pickup/Extra event', () => {
             <KeycloakProvider keycloak={keycloak}>
                 <ThemeProvider theme={theme}>
                     <AlertProvider template={AlertTemplate} {...options}>
-                        <ExtraEvent
-                            start={start}
-                            end={end}
-                            beforeSubmit={mockBeforeSubmit}
-                            afterSubmit={mockAfterSubmit}
-                        />
+                        <ExtraEvent start={start} end={end} afterSubmit={mockAfterSubmit} />
                     </AlertProvider>
                 </ThemeProvider>
             </KeycloakProvider>,
@@ -98,25 +92,10 @@ describe('Provides an interface to create a pickup/Extra event', () => {
             }),
         );
 
-        // Expect the beforeSubmit function to be called with the data
-        await waitFor(() => expect(mockBeforeSubmit).toHaveBeenCalledTimes(1));
-        expect(mockBeforeSubmit.mock.calls[0]).toEqual([
-            `${apiUrl}/pickups/`,
-            {
-                id: -1,
-                startDateTime: start.toISOString(),
-                endDateTime: end.toISOString(),
-                description: 'Ting må hentes',
-                chosenPartner: null,
-                station: {
-                    ...mockLocations[0],
-                    hours: {},
-                },
-            },
-        ]);
-
         // Expect the afterSubmit function to be called with the data
-        expect(mockAfterSubmit).toHaveBeenCalledTimes(1);
-        expect(mockAfterSubmit.mock.calls[0]).toEqual([true, `${apiUrl}/pickups/`]);
+        await waitFor(() => {
+            expect(mockAfterSubmit).toHaveBeenCalledTimes(1);
+        });
+        expect(mockAfterSubmit.mock.calls[0]).toEqual([true]);
     });
 });

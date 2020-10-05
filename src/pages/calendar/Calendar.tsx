@@ -220,14 +220,9 @@ export const CalendarPage: React.FC = () => {
         setSelectedLocation(index);
     };
 
-    const afterExtraEventSubmission = (successful: boolean, key: string) => {
+    const afterExtraEventSubmission = (successful: boolean) => {
         if (successful) {
-            // Give user feedback and close modal
-            alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
             modal.remove();
-        } else {
-            // Give user feedback
-            alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
         }
     };
 
