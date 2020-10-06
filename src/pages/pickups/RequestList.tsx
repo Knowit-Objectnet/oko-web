@@ -27,7 +27,7 @@ export const RequestList: React.FC<{ pickup: Pickup }> = ({ pickup }) => {
         <Wrapper>
             {!requests && isValidating && <NoRequests>Laster inn...</NoRequests>}
             {requests && requests.length === 0 && <NoRequests>Ingen påmeldte enda</NoRequests>}
-            {(requests ?? []).map((request) => (
+            {requests?.map((request) => (
                 <RequestApprovalForm
                     key={`${request.pickup.id}-${request.partner.id}`}
                     pickup={pickup}

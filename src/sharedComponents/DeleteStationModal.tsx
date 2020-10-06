@@ -91,9 +91,9 @@ export const DeleteStationModal: React.FC<DeleteStationProps> = (props) => {
                     <option value={-1} disabled>
                         Velg stasjon
                     </option>
-                    {(stations ?? []).map((location) => (
-                        <option value={location.id} key={location.id}>
-                            {location.name}
+                    {stations?.map((station) => (
+                        <option value={station.id} key={station.id}>
+                            {station.name}
                         </option>
                     ))}
                 </Select>

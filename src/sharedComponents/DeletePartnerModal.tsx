@@ -91,7 +91,7 @@ export const DeletePartnerModal: React.FC<DeletePartnerProps> = (props) => {
                     <option value={-1} disabled>
                         Velg samarbeidspartner
                     </option>
-                    {(partners ?? []).map((partner) => (
+                    {partners?.map((partner) => (
                         <option value={partner.id} key={partner.id}>
                             {partner.name}
                         </option>
