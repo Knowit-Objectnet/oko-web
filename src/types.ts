@@ -6,13 +6,56 @@ export interface ApiEvent {
     endDateTime: string;
     station: Station;
     partner: Partner;
+    recurrenceRule: ApiRecurrenceRule | null;
+}
+
+export interface ApiEventPost {
+    startDateTime: string;
+    endDateTime: string;
+    stationId: number;
+    partnerId: number;
+    recurrenceRule?: ApiRecurrenceRulePost;
+}
+
+export interface ApiRecurrenceRule {
+    id: number;
+    until: string;
+    days: Array<Weekdays>;
+    interval: number;
+    count: number | null;
+}
+
+export interface ApiRecurrenceRulePost {
+    until: string;
+    days: Array<Weekdays>;
+    interval?: number;
+    count?: number;
+}
+
+export interface EventInfo {
+    title: string;
+    start: Date;
+    end: Date;
+    resource: EventInfoResource;
+}
+
+interface EventInfoResource {
+    eventId: number;
+    station: Station;
+    partner: Partner;
     recurrenceRule: {
         id: number;
         until: string;
-        days: Array<Weekdays>;
-        interval: number;
-        count: number | null;
+        days?: Array<Weekdays>;
+        interval?: number;
+        count?: number | null;
     } | null;
+    weight?: number;
+    message?: {
+        start: Date;
+        end: Date;
+        text: string;
+    };
 }
 
 export type StationOpeningHours = {
@@ -85,32 +128,6 @@ export interface Request {
 export interface RequestPost {
     pickupId: number;
     partnerId: number;
-}
-
-export interface EventInfo {
-    title: string;
-    start: Date;
-    end: Date;
-    resource: EventInfoResource;
-}
-
-interface EventInfoResource {
-    eventId: number;
-    location: Station;
-    partner: Partner;
-    recurrenceRule: {
-        id: number;
-        until: string;
-        days?: Array<Weekdays>;
-        interval?: number;
-        count?: number | null;
-    } | null;
-    weight?: number;
-    message?: {
-        start: Date;
-        end: Date;
-        text: string;
-    };
 }
 
 export interface SlotInfo {

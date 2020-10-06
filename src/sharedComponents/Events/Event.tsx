@@ -5,7 +5,7 @@ import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
 import { apiUrl, EventInfo, Roles } from '../../types';
-import { EventOptionLocation } from './EventOptionLocation';
+import { EventOptionStation } from './EventOptionStation';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import { useAlert, types } from 'react-alert';
@@ -249,10 +249,9 @@ export const Event: React.FC<EventProps> = (props) => {
                             onSelectedDaysChange={onSelectedDaysChange}
                             recurrenceEnabled={false}
                         />
-                        <EventOptionLocation
+                        <EventOptionStation
                             isEditing={false}
-                            selectedLocation={props.resource.location.id}
-                            locations={[props.resource.location]}
+                            selectedStation={props.resource.station.id}
                             onChange={() => {
                                 /* TODO: make it so that we don't need this nop func */
                             }}

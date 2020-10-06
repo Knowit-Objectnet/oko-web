@@ -56,14 +56,14 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     const sorting = (events: Array<EventInfo>) => {
         const sortedEvents = new Map<string, Array<EventInfo>>();
         events.forEach((event) => {
-            if (event.resource?.location) {
-                if (sortedEvents.has(event.resource.location.name)) {
-                    const _events = sortedEvents.get(event.resource.location.name);
+            if (event.resource?.station) {
+                if (sortedEvents.has(event.resource.station.name)) {
+                    const _events = sortedEvents.get(event.resource.station.name);
                     if (_events) {
                         _events.push(event);
                     }
                 } else {
-                    sortedEvents.set(event.resource.location.name, [event]);
+                    sortedEvents.set(event.resource.station.name, [event]);
                 }
             }
         });

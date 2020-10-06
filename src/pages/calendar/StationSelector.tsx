@@ -26,7 +26,7 @@ const Header = styled.div`
     margin-bottom: 15px;
 `;
 
-const Locations = styled.div`
+const Stations = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -58,20 +58,20 @@ const Input = styled.input`
     margin-right: 15px;
 `;
 
-interface LocationSelectorProps {
-    selectedLocation: number;
-    onSelectedLocationChange: (index: number) => void;
+interface StationSelectorProps {
+    selectedStation: number;
+    onSelectedStationChange: (index: number) => void;
 }
 
 /*
- * Component for selecting location
+ * Component for selecting station
  */
-export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
+export const StationSelector: React.FC<StationSelectorProps> = (props) => {
     // State
     const [toggled, setToggled] = useState(true);
 
-    let { data: locations } = useSWR<Station[]>(`${apiUrl}/stations`, fetcher);
-    locations = locations && locations.length !== 0 ? locations : [];
+    let { data: stations } = useSWR<Station[]>(`${apiUrl}/stations`, fetcher);
+    stations = stations && stations.length !== 0 ? stations : [];
 
     const onToggleClick = () => {
         setToggled(!toggled);
@@ -80,7 +80,7 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         const val = parseInt(e.currentTarget.value);
-        props.onSelectedLocationChange(val);
+        props.onSelectedStationChange(val);
     };
 
     return (
@@ -91,17 +91,17 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
                 {toggled ? <StyledArrowDown onClick={onToggleClick} /> : <StyledArrowUp onClick={onToggleClick} />}
             </Header>
             {toggled && (
-                <Locations>
-                    {locations.map((location) => (
-                        <Label key={location.name + location.id}>
+                <Stations>
+                    {stations.map((station) => (
+                        <Label key={station.name + station.id}>
                             <Input
                                 type="radio"
                                 name="location-selector"
-                                value={location.id}
-                                checked={location.id === props.selectedLocation}
+                                value={station.id}
+                                checked={station.id === props.selectedStation}
                                 onChange={onChange}
                             />
-                            {location.name}
+                            {station.name}
                         </Label>
                     ))}
                     <Label key="AllRadioButton">
@@ -109,12 +109,12 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
                             type="radio"
                             name="location-selector"
                             value={-1}
-                            checked={-1 === props.selectedLocation}
+                            checked={-1 === props.selectedStation}
                             onChange={onChange}
                         />
                         Alle
                     </Label>
-                </Locations>
+                </Stations>
             )}
         </Wrapper>
     );

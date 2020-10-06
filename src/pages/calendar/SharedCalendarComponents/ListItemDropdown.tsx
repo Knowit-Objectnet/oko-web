@@ -218,7 +218,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
                                 <Icon>
                                     <LocationIcon height="2em" />
                                 </Icon>
-                                <Text>{selectedEvent.resource?.location.name}</Text>
+                                <Text>{selectedEvent.resource?.station.name}</Text>
                             </Row>
                         </Specifics>
                         {selectedEventResource && selectedEventResource.message && (

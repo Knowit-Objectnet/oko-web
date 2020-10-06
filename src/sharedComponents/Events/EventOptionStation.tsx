@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import { Station } from '../../types';
+import { useStations } from '../../services/useStations';
 
 const Select = styled.select`
     width: 100%;
@@ -14,7 +14,7 @@ interface GrayBoxProps {
 
 const Box = styled.div<GrayBoxProps>`
     background-color: ${(props) => props.theme.colors.LightBeige};
-    padding: 0px 40px;
+    padding: 0 40px;
     height: 45px;
     flex: 1;
     display: flex;
@@ -24,15 +24,16 @@ const Box = styled.div<GrayBoxProps>`
 
 interface EventOptionDateRangeProps {
     isEditing: boolean;
-    selectedLocation: number;
-    locations: Station[];
+    selectedStation: number;
     onChange: (locationId: number) => void;
 }
 
 /**
  * Event option that allows the user choose a location for the event.
  */
-export const EventOptionLocation: React.FC<EventOptionDateRangeProps> = (props) => {
+export const EventOptionStation: React.FC<EventOptionDateRangeProps> = (props) => {
+    const { data: stations } = useStations();
+
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.persist();
         const id = e.currentTarget.value;
@@ -44,18 +45,18 @@ export const EventOptionLocation: React.FC<EventOptionDateRangeProps> = (props) 
     return (
         <EventOption>
             {props.isEditing ? (
-                <Select value={props.selectedLocation} onChange={onChange}>
+                <Select value={props.selectedStation} onChange={onChange}>
                     <option value={-1} disabled>
                         Velg stasjon
                     </option>
-                    {props.locations.map((location) => (
+                    {stations?.map((location) => (
                         <option value={location.id} key={location.id}>
                             {location.name}
                         </option>
                     ))}
                 </Select>
             ) : (
-                <Box>{props.locations.find((location) => location.id == props.selectedLocation)?.name}</Box>
+                <Box>{stations?.find((station) => station.id == props.selectedStation)?.name}</Box>
             )}
         </EventOption>
     );

@@ -7,7 +7,7 @@ import { Event } from '../../sharedComponents/Events/Event';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { ApiEvent, Station, Partner, apiUrl, EventInfo, Roles } from '../../types';
+import { ApiEvent, Station, Partner, apiUrl, EventInfo, Roles, ApiEventPost } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
@@ -17,7 +17,7 @@ import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
 import { useKeycloak } from '@react-keycloak/web';
 import { useAlert, types } from 'react-alert';
-import { LocationSelector } from './LocationSelector';
+import { StationSelector } from './StationSelector';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
@@ -95,8 +95,8 @@ export const CalendarPage: React.FC = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     // State for side menu
     const [isToggled, setIsToggled] = useState(false);
-    // State for location filtering
-    const [selectedLocation, setSelectedLocation] = useState(-1);
+    // State for station filtering
+    const [selectedStation, setSelectedStation] = useState(-1);
 
     // from and to date for event fetching
     // The from date is the last monday from props.date and the to date is 1 week into the future
@@ -114,16 +114,16 @@ export const CalendarPage: React.FC = () => {
     } else if (keycloak.hasRealmRole(Roles.Partner)) {
         url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&partnerId=${
             keycloak.tokenParsed.GroupID
-        }${selectedLocation === -1 || !isToggled ? '' : '&stationId=' + selectedLocation}`;
+        }${selectedStation === -1 || !isToggled ? '' : '&stationId=' + selectedStation}`;
     } else {
         url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}${
-            selectedLocation === -1 ? '' : '&stationId=' + selectedLocation
+            selectedStation === -1 ? '' : '&stationId=' + selectedStation
         }`;
     }
 
     // Events fetched from the api
     // Contains parameters to only get events in date range specified above and only from the accounts
-    // station location
+    // station station
     const { data: apiEvents, isValidating, mutate } = useSWR<ApiEvent[]>(url, fetcher);
     const [events, setEvents] = useState<Array<EventInfo>>([]);
 
@@ -137,7 +137,7 @@ export const CalendarPage: React.FC = () => {
                       resource: {
                           eventId: event.id,
                           partner: event.partner,
-                          location: event.station,
+                          station: event.station,
                           recurrenceRule: event.recurrenceRule,
                       },
                   };
@@ -215,9 +215,9 @@ export const CalendarPage: React.FC = () => {
         setSelectedDate(dayOfDeltaWeek);
     };
 
-    // On location change selector function
-    const onSelectedLocationChange = (index: number) => {
-        setSelectedLocation(index);
+    // On station change selector function
+    const onSelectedStationChange = (index: number) => {
+        setSelectedStation(index);
     };
 
     const afterExtraEventSubmission = (successful: boolean) => {
@@ -226,23 +226,7 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const beforeNewEventSubmission = async (
-        key: string,
-        data: {
-            startDateTime: string;
-            endDateTime: string;
-            stationId: number;
-            partnerId: number;
-            recurrenceRule?: {
-                until: string;
-                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-                count?: number;
-                interval?: number;
-            };
-        },
-        station: Station,
-        partner: Partner,
-    ) => {
+    const beforeNewEventSubmission = async (key: string, data: ApiEventPost, station: Station, partner: Partner) => {
         if (apiEvents) {
             // Mutate local data
             const newEvent: ApiEvent = {
@@ -459,7 +443,7 @@ export const CalendarPage: React.FC = () => {
                 onSelectSlot={onSelectSlot}
                 newEvent={newEvent}
                 date={selectedDate}
-                isToggled={selectedLocation !== -1}
+                isToggled={selectedStation !== -1}
                 onWeekChange={onWeekChange}
                 events={events}
             />
@@ -475,9 +459,9 @@ export const CalendarPage: React.FC = () => {
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
                     {((keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo)) && (
-                        <LocationSelector
-                            selectedLocation={selectedLocation}
-                            onSelectedLocationChange={onSelectedLocationChange}
+                        <StationSelector
+                            selectedStation={selectedStation}
+                            onSelectedStationChange={onSelectedStationChange}
                         />
                     )}
                 </ModuleDateCalendar>

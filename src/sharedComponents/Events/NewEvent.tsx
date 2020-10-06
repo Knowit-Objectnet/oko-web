@@ -2,16 +2,16 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventOptionLocation } from './EventOptionLocation';
+import { EventOptionStation } from './EventOptionStation';
 import { EventTemplateVertical } from './EventTemplateVertical';
-import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { Station, Partner, apiUrl } from '../../types';
+import { Station, Partner, apiUrl, ApiEventPost, Weekdays, ApiRecurrenceRulePost } from '../../types';
 import { useAlert, types } from 'react-alert';
 import { Button } from '../Button';
-import { PostToAPI } from '../../utils/PostToAPI';
+import { useStations } from '../../services/useStations';
+import { usePartners } from '../../services/usePartners';
+import { useEvents } from '../../services/useEvents';
 
 const Options = styled.div`
     display: flex;
@@ -22,23 +22,7 @@ const Options = styled.div`
 interface NewEventProps {
     start: Date;
     end: Date;
-    beforeSubmit?: (
-        key: string,
-        data: {
-            startDateTime: string;
-            endDateTime: string;
-            stationId: number;
-            partnerId: number;
-            recurrenceRule?: {
-                until: string;
-                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-                count?: number;
-                interval?: number;
-            };
-        },
-        station: Station,
-        partner: Partner,
-    ) => void;
+    beforeSubmit?: (key: string, data: ApiEventPost, station: Station, partner: Partner) => void;
     afterSubmit?: (successful: boolean, key: string) => void;
 }
 
@@ -47,18 +31,11 @@ interface NewEventProps {
  * Will only be rendered for Oslo Kommune.
  */
 export const NewEvent: React.FC<NewEventProps> = (props) => {
-    // Alert dispatcher
     const alert = useAlert();
-    // Keycloak instance
     const { keycloak } = useKeycloak();
-    // Valid recycling stations (ombruksstasjon) locations fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
-    let { data: locations } = useSWR<Station[]>(`${apiUrl}/stations`, fetcher);
-    locations = locations && locations.length !== 0 ? locations : [];
-    // Valid partners fetched from api
-    let { data: partners } = useSWR<Partner[]>(`${apiUrl}/partners`, fetcher);
-    partners = partners || [];
+    const { data: stations } = useStations();
+    const { data: partners } = usePartners();
+    const { addEvent } = useEvents();
 
     // State
     const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
@@ -66,7 +43,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
-    const [locationId, setLocationId] = useState(-1);
+    const [selectedStationId, setSelectedStationId] = useState(-1);
 
     // On change functions for DateRange
     const onDateRangeChange = (range: [Date, Date]) => {
@@ -91,8 +68,8 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     };
 
     // On change for Location selection
-    const onLocationChange = (_locationId: number) => {
-        setLocationId(_locationId);
+    const onStationChange = (_locationId: number) => {
+        setSelectedStationId(_locationId);
     };
 
     // Function called on successful event edit.
@@ -103,7 +80,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         // @ts-ignore
         alert.removeAll();
         // Get location and partner
-        const location = locations?.find((_location) => _location.id === locationId);
+        const station = stations?.find((_station) => _station.id === selectedStationId);
         const partner = partners?.find((_partner) => _partner.id === selectedPartnerId);
 
         // Cancel submission if token doesn't exist as they are not logged in
@@ -119,7 +96,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         }
 
         // Cancel submission of no location is selected
-        if (!location) {
+        if (!station) {
             alert.show('Du må velge en stasjon for avtalen.', { type: types.ERROR });
             return;
         }
@@ -144,36 +121,15 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             return;
         }
 
-        // Dates has to be written as strings as we need to remove the Z, as ISO 8601 is not fully supported
-        const data: {
-            startDateTime: string;
-            endDateTime: string;
-            stationId: number;
-            partnerId: number;
-            recurrenceRule?: {
-                until: string;
-                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-                count?: number;
-                interval?: number;
-            };
-        } = {
-            startDateTime: timeRange[0].toISOString(),
-            endDateTime: timeRange[1].toISOString(),
-            stationId: locationId,
-            partnerId: selectedPartnerId,
-        };
+        let recurrenceRule: ApiRecurrenceRulePost | undefined = undefined;
 
         if (recurring === 'Daily') {
-            data.recurrenceRule = {
+            recurrenceRule = {
                 until: dateRange[1].toISOString(),
                 days: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
             };
         } else if (recurring === 'Weekly') {
-            data.recurrenceRule = {
-                until: dateRange[1].toISOString(),
-            };
-
-            const days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'> = [];
+            const days: Array<Weekdays> = [];
 
             for (const day of selectedDays) {
                 switch (day) {
@@ -195,18 +151,28 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 }
             }
 
-            if (days) {
-                data.recurrenceRule.days = days;
-            }
+            recurrenceRule = {
+                until: dateRange[1].toISOString(),
+                days: days,
+            };
         }
+
+        // Dates has to be written as strings as we need to remove the Z, as ISO 8601 is not fully supported
+        const newEvent: ApiEventPost = {
+            startDateTime: timeRange[0].toISOString(),
+            endDateTime: timeRange[1].toISOString(),
+            stationId: selectedStationId,
+            partnerId: selectedPartnerId,
+            recurrenceRule: recurrenceRule,
+        };
 
         try {
             if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/events`, data, location, partner);
+                props.beforeSubmit(`${apiUrl}/events`, newEvent, station, partner);
             }
 
             // Post the event to the backend
-            await PostToAPI(`${apiUrl}/events`, data, keycloak.token);
+            await addEvent(newEvent);
 
             if (props.afterSubmit) {
                 props.afterSubmit(true, `${apiUrl}/events`);
@@ -221,17 +187,8 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     return (
         <EventTemplateVertical title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
             <Options>
-                <EventOptionPartner
-                    selectedPartner={selectedPartnerId}
-                    partners={partners}
-                    onChange={onPartnerChange}
-                />
-                <EventOptionLocation
-                    isEditing={true}
-                    selectedLocation={locationId}
-                    locations={locations}
-                    onChange={onLocationChange}
-                />
+                <EventOptionPartner selectedPartner={selectedPartnerId} onChange={onPartnerChange} />
+                <EventOptionStation isEditing={true} selectedStation={selectedStationId} onChange={onStationChange} />
                 <EventOptionDateRange
                     dateRange={dateRange}
                     timeRange={timeRange}
