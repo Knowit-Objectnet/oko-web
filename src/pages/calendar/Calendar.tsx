@@ -452,8 +452,6 @@ export const CalendarPage: React.FC = () => {
                     isToggled={isToggled}
                     onWeekChange={onWeekChange}
                     events={events}
-                    beforeDeleteSingleEvent={beforeDeleteSingleEvent}
-                    afterDeleteSingleEvent={afterDeleteSingleEvent}
                 />
             );
         }
