@@ -38,6 +38,13 @@ export interface Partner {
     email: string;
 }
 
+export interface PartnerPost {
+    name: string;
+    description: string;
+    phone: string;
+    email: string;
+}
+
 export interface Report {
     reportId: number;
     eventId: number;

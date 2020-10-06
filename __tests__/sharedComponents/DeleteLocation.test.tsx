@@ -9,7 +9,7 @@ import { apiUrl } from '../../src/types';
 import fetch from 'jest-fetch-mock';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
-import { DeleteLocation } from '../../src/sharedComponents/DeleteLocation';
+import { DeleteStationModal } from '../../src/sharedComponents/DeleteStationModal';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -79,13 +79,12 @@ describe('Provides an interface to submit a new partner', () => {
 
     it('Should submit partner on input change and button click', async () => {
         // mock function for the submission
-        const beforeSubmitMock = jest.fn();
         const afterSubmitMock = jest.fn();
         const { findByText, getByDisplayValue } = render(
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...options}>
                     <KeycloakProvider keycloak={keycloak}>
-                        <DeleteLocation beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
+                        <DeleteStationModal afterSubmit={afterSubmitMock} />
                     </KeycloakProvider>
                 </AlertProvider>
             </ThemeProvider>,
@@ -95,32 +94,26 @@ describe('Provides an interface to submit a new partner', () => {
         const select = await getByDisplayValue('Velg stasjon');
 
         // Select Fretex
-        await waitFor(() => {
-            fireEvent.change(select, {
-                target: { value: '3' },
-            });
+        fireEvent.change(select, {
+            target: { value: '3' },
         });
 
         // Find the submission button
         const submitButton = await findByText('Slett');
 
         // Click the submission button
+        fireEvent(
+            submitButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
+
+        // Expect the submission button to be called once and be supplied with the partner name
         await waitFor(() => {
-            fireEvent(
-                submitButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
+            expect(afterSubmitMock.mock.calls.length).toBe(1);
         });
-
-        // Expect the submission button to be called once and be supplied with the partner name
-        expect(beforeSubmitMock.mock.calls.length).toBe(1);
-        expect(beforeSubmitMock.mock.calls[0]).toEqual([`${apiUrl}/stations/3`, 3]);
-
-        // Expect the submission button to be called once and be supplied with the partner name
-        expect(afterSubmitMock.mock.calls.length).toBe(1);
-        expect(afterSubmitMock.mock.calls[0]).toEqual([true, `${apiUrl}/stations/3`]);
+        expect(afterSubmitMock.mock.calls[0]).toEqual([true]);
     });
 });

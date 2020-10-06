@@ -3,7 +3,7 @@ import { render, cleanup, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
-import { NewPartner } from '../../src/sharedComponents/NewPartner';
+import { NewPartnerModal } from '../../src/sharedComponents/NewPartnerModal';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import { apiUrl } from '../../src/types';
@@ -40,13 +40,12 @@ describe('Provides an interface to submit a new partner', () => {
 
     test('Should submit partner on input change and button click', async () => {
         // mock function for the submission
-        const beforeSubmitMock = jest.fn();
         const afterSubmitMock = jest.fn();
         const { findByText, findByPlaceholderText } = render(
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...options}>
                     <KeycloakProvider keycloak={keycloak}>
-                        <NewPartner beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
+                        <NewPartnerModal afterSubmit={afterSubmitMock} />
                     </KeycloakProvider>
                 </AlertProvider>
             </ThemeProvider>,
@@ -57,32 +56,25 @@ describe('Provides an interface to submit a new partner', () => {
         expect(input).toBeInTheDocument();
 
         // Write in the partner name Test
-        await waitFor(() => {
-            fireEvent.change(input, {
-                target: { value: 'Test' },
-            });
+        fireEvent.change(input, {
+            target: { value: 'Test' },
         });
 
         // Find the submission button
         const submitButton = await findByText('Legg til samarbeidspartner');
 
-        // Click the submission button
+        fireEvent(
+            submitButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
+
+        // Expect the submission button to be called once and be supplied with the partner name
         await waitFor(() => {
-            fireEvent(
-                submitButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
+            expect(afterSubmitMock.mock.calls.length).toBe(1);
         });
-
-        // Expect the submission button to be called once and be supplied with the partner name
-        expect(beforeSubmitMock.mock.calls.length).toBe(1);
-        expect(beforeSubmitMock.mock.calls[0]).toEqual([`${apiUrl}/partners/`, 'Test']);
-
-        // Expect the submission button to be called once and be supplied with the partner name
-        expect(afterSubmitMock.mock.calls.length).toBe(1);
-        expect(afterSubmitMock.mock.calls[0]).toEqual([true, `${apiUrl}/partners/`, null]);
+        expect(afterSubmitMock.mock.calls[0]).toEqual([true]);
     });
 });

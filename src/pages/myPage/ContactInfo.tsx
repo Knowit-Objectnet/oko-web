@@ -80,7 +80,7 @@ const StyledCheck = styled(Check)`
 `;
 
 const Icon = styled.div`
-    margin-left: 10;
+    margin-left: 10px;
     border-radius: 50%;
     height: 27px;
     width: 27px;

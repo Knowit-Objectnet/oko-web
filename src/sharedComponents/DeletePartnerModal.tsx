@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { apiUrl } from '../types';
 import { types, useAlert } from 'react-alert';
-import { useStations } from '../services/useStations';
+import { usePartners } from '../services/usePartners';
 
 const Wrapper = styled.div`
     display: flex;
@@ -47,56 +46,54 @@ const Button = styled.button`
     line-height: 20px;
 `;
 
-interface NewPartnerProps {
-    beforeSubmit?: (key: string, id: number) => void;
-    afterSubmit?: (successful: boolean, key: string) => void;
+interface DeletePartnerProps {
+    afterSubmit?: (successful: boolean) => void;
 }
 
-export const DeleteLocation: React.FC<NewPartnerProps> = (props) => {
+export const DeletePartnerModal: React.FC<DeletePartnerProps> = (props) => {
     const alert = useAlert();
-    const { data: locations, deleteStation } = useStations();
-
-    const [selectedLocation, setSelectedLocation] = useState(-1);
+    const { data: partners, deletePartner } = usePartners();
+    const [selectedPartner, setSelectedPartner] = useState(-1);
 
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.persist();
-        setSelectedLocation(parseInt(e.currentTarget.value));
+        setSelectedPartner(parseInt(e.currentTarget.value));
     };
 
     const onSubmit = async () => {
-        if (selectedLocation === -1) {
-            alert.show('Vennligst velg en stasjon.', { type: types.ERROR });
+        if (selectedPartner === -1) {
+            alert.show('Vennligst  velg en samarbeidspartner.', { type: types.ERROR });
             return;
         }
 
         try {
-            if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/stations/${selectedLocation}`, selectedLocation);
-            }
+            await deletePartner(selectedPartner);
 
-            await deleteStation(selectedLocation);
+            alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
 
             if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/stations/${selectedLocation}`);
+                props.afterSubmit(true);
             }
         } catch (err) {
+            alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
+
             if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/stations/${selectedLocation}`);
+                props.afterSubmit(false);
             }
         }
     };
 
     return (
         <Wrapper>
-            <Title>Fjern stasjon</Title>
+            <Title>Fjern samarbeidspartner</Title>
             <Content>
-                <Select value={selectedLocation} onChange={onChange}>
+                <Select value={selectedPartner} onChange={onChange}>
                     <option value={-1} disabled>
-                        Velg stasjon
+                        Velg samarbeidspartner
                     </option>
-                    {(locations ?? []).map((location) => (
-                        <option value={location.id} key={location.id}>
-                            {location.name}
+                    {(partners ?? []).map((partner) => (
+                        <option value={partner.id} key={partner.id}>
+                            {partner.name}
                         </option>
                     ))}
                 </Select>

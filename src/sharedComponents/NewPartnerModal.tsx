@@ -1,11 +1,11 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import { apiUrl } from '../types';
 import { useState } from 'react';
-import { useAlert, types } from 'react-alert';
+import styled from 'styled-components';
+import { types, useAlert } from 'react-alert';
 import { Button } from './Button';
-import { PostToAPI } from '../utils/PostToAPI';
-import { useKeycloak } from '@react-keycloak/web';
+import { usePartners } from '../services/usePartners';
+import { FetchError } from '../utils/FetchError';
+import { PartnerPost } from '../types';
 
 const Wrapper = styled.div`
     display: flex;
@@ -44,16 +44,12 @@ const Input = styled.input`
 `;
 
 interface NewPartnerProps {
-    beforeSubmit?: (key: string, name: string) => void;
-    afterSubmit?: (successful: boolean, key: string, error: Error | null) => void;
+    afterSubmit?: (successful: boolean) => void;
 }
 
-export const NewPartner: React.FC<NewPartnerProps> = (props) => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
-    // Alert instance
+export const NewPartnerModal: React.FC<NewPartnerProps> = (props) => {
     const alert = useAlert();
-    // General info state
+    const { addPartner } = usePartners();
     const [name, setName] = useState('');
 
     // Name input onchange function
@@ -69,23 +65,31 @@ export const NewPartner: React.FC<NewPartnerProps> = (props) => {
             return;
         }
 
-        const data: { name: string; contract?: File } = {
+        // TODO: replace empty data with data from form when form is created
+        const newPartner: PartnerPost = {
             name,
+            description: '',
+            email: '',
+            phone: '',
         };
 
         try {
-            if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/partners/`, name);
-            }
-
-            await PostToAPI(`${apiUrl}/partners/`, data, keycloak.token);
+            await addPartner(newPartner);
+            alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
 
             if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/partners/`, null);
+                props.afterSubmit(true);
             }
-        } catch (err) {
+        } catch (error) {
+            if (error instanceof FetchError && error.code === 409) {
+                alert.show('En partner med det navnet eksisterer allerede, vennligst velg et annet navn', {
+                    type: types.ERROR,
+                });
+            } else {
+                alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
+            }
             if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/partners/`, err);
+                props.afterSubmit(false);
             }
         }
     };

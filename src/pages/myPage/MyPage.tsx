@@ -5,17 +5,10 @@ import Default from '../../assets/Default_profile_pic.svg';
 import { Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
-import { SideMenu } from './SideMenu';
-import { NewPartner } from '../../sharedComponents/NewPartner';
-import { NewLocation } from '../../sharedComponents/NewLocation/NewLocation';
-import { types, useAlert } from 'react-alert';
+import { AdminButtonMenu } from './AdminButtonMenu';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
-import { FetchError } from '../../utils/FetchError';
-import { DeletePartner } from '../../sharedComponents/DeletePartner';
-import { DeleteLocation } from '../../sharedComponents/DeleteLocation';
 import { Button } from '../../sharedComponents/Button';
-import useModal from '../../sharedComponents/Modal/useModal';
 import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.div`
@@ -64,78 +57,10 @@ export const MyPage: React.FC = () => {
     const userId = keycloak.tokenParsed.GroupID;
     const isPartner = keycloak.hasRealmRole(Roles.Partner);
     const isRegEmployee = keycloak.hasRealmRole(Roles.Oslo);
-
-    const alert = useAlert();
-
-    const modal = useModal();
-
     const history = useHistory();
 
-    // Logout function for the logout button click
     const onLogoutClick = () => {
         history.push('/logout');
-    };
-
-    const afterNewPartner = (successful: boolean, key: string, error: Error | null) => {
-        if (successful) {
-            alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
-
-            modal.remove();
-        } else {
-            if (error instanceof FetchError && error.code === 409) {
-                alert.show('En partner med det navnet eksisterer allerede, vennligst velg et annet navn', {
-                    type: types.ERROR,
-                });
-            } else {
-                alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
-            }
-        }
-    };
-
-    const afterDeletePartner = (successful: boolean, key: string) => {
-        if (successful) {
-            alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
-
-            modal.remove();
-        } else {
-            alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
-        }
-    };
-
-    const afterNewLocation = (successful: boolean) => {
-        if (successful) {
-            modal.remove();
-        }
-    };
-
-    const afterDeleteLocation = (successful: boolean, key: string) => {
-        if (successful) {
-            alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
-
-            modal.remove();
-        } else {
-            alert.show('Noe gikk galt, stasjoneen ble ikke slettet.', { type: types.ERROR });
-        }
-    };
-
-    // Function to show new partner ui modal
-    const showNewPartner = () => {
-        modal.show(<NewPartner afterSubmit={afterNewPartner} />);
-    };
-
-    // Function to show new location ui modal
-    const showNewLocation = () => {
-        modal.show(<NewLocation afterSubmit={afterNewLocation} />);
-    };
-
-    // Function to show delete partner ui modal
-    const showDeletePartner = () => {
-        modal.show(<DeletePartner afterSubmit={afterDeletePartner} />);
-    };
-
-    // Function to show delete location ui modal
-    const showDeleteLocation = () => {
-        modal.show(<DeleteLocation afterSubmit={afterDeleteLocation} />);
     };
 
     return (
@@ -160,14 +85,7 @@ export const MyPage: React.FC = () => {
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
                     {isPartner && <ShareContactInfo />}
                 </Content>
-                {isRegEmployee && (
-                    <SideMenu
-                        newPartnerClick={showNewPartner}
-                        newLocationClick={showNewLocation}
-                        deletePartnerClick={showDeletePartner}
-                        deleteLocationClick={showDeleteLocation}
-                    />
-                )}
+                {isRegEmployee && <AdminButtonMenu />}
             </Wrapper>
         </>
     );

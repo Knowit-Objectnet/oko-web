@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { Dispatch } from 'react';
 import styled from 'styled-components';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
-import { Dispatch } from 'react';
 
 const Wrapper = styled.div`
     display: flex;

@@ -93,11 +93,10 @@ const StyledMail = styled(Mail)`
 `;
 
 interface NewLocationProps {
-    beforeSubmit?: () => void;
-    afterSubmit?: (successful: boolean, key: string, error: Error | null) => void;
+    afterSubmit?: (successful: boolean) => void;
 }
 
-export const NewLocation: React.FC<NewLocationProps> = (props) => {
+export const NewStationModal: React.FC<NewLocationProps> = (props) => {
     // Alert instance
     const alert = useAlert();
     const { addStation } = useStations();
@@ -235,22 +234,15 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                 hours: openingHours,
             };
 
-            if (props.beforeSubmit) {
-                props.beforeSubmit();
-            }
-
             // Post to the api, show alert that it was successful if it was
             await addStation(newStation);
 
             alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
 
             if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/stations`, null);
+                props.afterSubmit(true);
             }
         } catch (error) {
-            if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/stations`, error);
-            }
             // Show appropriate error alert if something went wrong.
             if (error instanceof FetchError && error.code === 409) {
                 alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
@@ -258,6 +250,9 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                 });
             } else {
                 alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
+            }
+            if (props.afterSubmit) {
+                props.afterSubmit(false);
             }
         }
     };
