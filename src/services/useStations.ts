@@ -1,8 +1,9 @@
 import useSWR from 'swr';
-import { Station, apiUrl, StationPost } from '../types';
+import { apiUrl, Station, StationPost } from '../types';
 import { fetcher } from '../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiPostClient } from './ApiPostClient';
+import { ApiDeleteClient } from './ApiDeleteClient';
 
 export interface StationsApiService {
     data?: Array<Station>;
@@ -10,6 +11,7 @@ export interface StationsApiService {
     isValidating: boolean;
     mutate: (data?: Array<Station>) => void;
     addStation: (station: StationPost) => Promise<Station>;
+    deleteStation: (stationId: number) => void;
 }
 
 export const useStations = (): StationsApiService => {
@@ -24,11 +26,18 @@ export const useStations = (): StationsApiService => {
         return response;
     };
 
+    const deleteStation = async (stationId: number) => {
+        await ApiDeleteClient(`${endpoint}/${stationId}`, keycloak.token);
+        await mutate();
+        // TODO: should this method return some response?
+    };
+
     return {
         data,
         isValidating,
         error,
         mutate,
         addStation,
+        deleteStation,
     };
 };

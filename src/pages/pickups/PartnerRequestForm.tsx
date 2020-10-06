@@ -26,7 +26,7 @@ const DeleteButton = styled.button`
     cursor: pointer;
 `;
 
-export const PartnerRequestList: React.FC<{ pickup: Pickup }> = ({ pickup }) => {
+export const PartnerRequestForm: React.FC<{ pickup: Pickup }> = ({ pickup }) => {
     const alert = useAlert();
 
     const [keycloak] = useKeycloak();
@@ -34,17 +34,15 @@ export const PartnerRequestList: React.FC<{ pickup: Pickup }> = ({ pickup }) => 
     const selectedPartnerId = pickup.chosenPartner?.id;
     const pickupId = pickup.id;
 
-    const { data: apiRequest, isValidating, mutate, addRequest, deleteRequest } = useRequests({
+    const { data: request, isValidating, mutate, addRequest, deleteRequest } = useRequests({
         pickupId,
         partnerId,
     });
-    // Getting the apiRequest object if it isnt empty (its always 1 or empty]
-    const request = apiRequest ? apiRequest[0] : undefined;
 
     const onDeleteClick = async () => {
         try {
-            await deleteRequest();
-            alert.show('Påmelding til ekstrauttak ble sletteet suksessfullt.', { type: types.SUCCESS });
+            await deleteRequest(pickupId, partnerId);
+            alert.show('Påmelding til ekstrauttak ble slettet suksessfullt.', { type: types.SUCCESS });
             mutate();
         } catch {
             alert.show('Noe gikk galt, sletting av påmelding til ekstrauttaket ble ikke registrert.', {
@@ -81,8 +79,7 @@ export const PartnerRequestList: React.FC<{ pickup: Pickup }> = ({ pickup }) => 
         }
     }
 
-    // If it's still loading data then return nothing as to not render wrong button
-    if (!apiRequest && isValidating) {
+    if (!request && isValidating) {
         return null;
     }
 

@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Partner, Pickup, Request } from '../../types';
 import { Button } from '../../sharedComponents/Button';
-import Cross from '../../assets/Cross.svg';
 import { usePickups } from '../../services/usePickups';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
@@ -74,9 +73,8 @@ export const RequestApprovalForm: React.FC<RequestProps> = ({ pickup, request })
     const [keycloak] = useKeycloak();
     const isStation = keycloak.tokenParsed.GroupID === pickup.station.id;
 
-    // Function to handle the rejection of a request
-    // TODO: Currently not used as backend doesnt support it
     const rejectRequest = () => {
+        // TODO: Currently not used as backend doesnt support it
         console.log('Rejection of requests is not yet implemented in backend');
     };
 

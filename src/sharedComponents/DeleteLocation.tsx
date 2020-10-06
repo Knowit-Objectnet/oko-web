@@ -1,12 +1,9 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import { apiUrl, Station } from '../types';
 import { useState } from 'react';
-import { useAlert, types } from 'react-alert';
-import useSWR from 'swr';
-import { fetcher } from '../utils/fetcher';
-import { DeleteToAPI } from '../utils/DeleteToAPI';
-import { useKeycloak } from '@react-keycloak/web';
+import styled from 'styled-components';
+import { apiUrl } from '../types';
+import { types, useAlert } from 'react-alert';
+import { useStations } from '../services/useStations';
 
 const Wrapper = styled.div`
     display: flex;
@@ -56,20 +53,13 @@ interface NewPartnerProps {
 }
 
 export const DeleteLocation: React.FC<NewPartnerProps> = (props) => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
-    // Alert instance
     const alert = useAlert();
+    const { data: locations, deleteStation } = useStations();
 
     const [selectedLocation, setSelectedLocation] = useState(-1);
 
-    // Valid partners fetched from api
-    let { data: locations } = useSWR<Array<Station>>(`${apiUrl}/stations`, fetcher);
-    locations = locations || [];
-
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.persist();
-
         setSelectedLocation(parseInt(e.currentTarget.value));
     };
 
@@ -84,7 +74,7 @@ export const DeleteLocation: React.FC<NewPartnerProps> = (props) => {
                 props.beforeSubmit(`${apiUrl}/stations/${selectedLocation}`, selectedLocation);
             }
 
-            await DeleteToAPI(`${apiUrl}/stations/${selectedLocation}`, keycloak.token);
+            await deleteStation(selectedLocation);
 
             if (props.afterSubmit) {
                 props.afterSubmit(true, `${apiUrl}/stations/${selectedLocation}`);
@@ -104,7 +94,7 @@ export const DeleteLocation: React.FC<NewPartnerProps> = (props) => {
                     <option value={-1} disabled>
                         Velg stasjon
                     </option>
-                    {locations.map((location) => (
+                    {(locations ?? []).map((location) => (
                         <option value={location.id} key={location.id}>
                             {location.name}
                         </option>

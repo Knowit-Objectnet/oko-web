@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { Pickup, Roles } from '../../types';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
-import { PartnerRequestList } from './PartnerRequestList';
 import { RequestList } from './RequestList';
 import { useKeycloak } from '@react-keycloak/web';
+import { PartnerRequestForm } from './PartnerRequestForm';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -49,7 +49,7 @@ const Event = styled.div`
     box-sizing: border-box;
 `;
 
-const Requests = styled.div`
+const PickupRequests = styled.div`
     border-left: 2px solid ${(props) => props.theme.colors.White};
     background-color: ${(props) => props.theme.colors.LightBlue};
     width: 350px;
@@ -74,13 +74,13 @@ export const PickupInfo: React.FC<{ pickup: Pickup }> = ({ pickup }) => {
                     <span>{pickupShortDate}</span>
                 </LocationDate>
                 <Event>{`${pickupStartTime}–${pickupEndTime}, ${pickupLongDate}`}</Event>
-                <Requests>
+                <PickupRequests>
                     {keycloak.hasRealmRole(Roles.Partner) && groupId ? (
-                        <PartnerRequestList pickup={pickup} />
+                        <PartnerRequestForm pickup={pickup} />
                     ) : (
                         <RequestList pickup={pickup} />
                     )}
-                </Requests>
+                </PickupRequests>
             </Content>
             {pickup.description && (
                 <Description>

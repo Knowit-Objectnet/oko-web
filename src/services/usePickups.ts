@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { apiUrl, Pickup, PickupPost, PickupPatch } from '../types';
+import { apiUrl, Pickup, PickupPatch, PickupPost } from '../types';
 import { fetcher } from '../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiPostClient } from './ApiPostClient';

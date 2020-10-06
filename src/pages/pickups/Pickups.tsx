@@ -32,21 +32,21 @@ const Content = styled.div`
     overflow: auto;
 `;
 
-const Explanation = styled.div`
+const HeaderRow = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
 `;
 
-const ExplanationLocation = styled.div`
+const LocationHeader = styled.div`
     width: 150px;
 `;
 
-const ExplanationPickup = styled.div`
+const PickupHeader = styled.div`
     flex: 1;
 `;
 
-const ExplanationLast = styled.div`
+const RequestHeader = styled.div`
     width: 350px;
 `;
 
@@ -145,13 +145,13 @@ export const Pickups: React.FC = () => {
                 )}
                 <Content>
                     <h2>Forespørsler</h2>
-                    <Explanation>
-                        <ExplanationLocation>Sendt av:</ExplanationLocation>
-                        <ExplanationPickup>Uttak:</ExplanationPickup>
-                        <ExplanationLast>
+                    <HeaderRow>
+                        <LocationHeader>Sendt av:</LocationHeader>
+                        <PickupHeader>Uttak:</PickupHeader>
+                        <RequestHeader>
                             {keycloak.hasRealmRole(Roles.Ambassador) ? 'Handlingsalternativer:' : 'Påmeldte:'}
-                        </ExplanationLast>
-                    </Explanation>
+                        </RequestHeader>
+                    </HeaderRow>
                     <PickupsList>
                         {!pickups && isValidating ? (
                             <Loading text="Laster inn data..." />

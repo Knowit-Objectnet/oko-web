@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 const TableTitle = styled.h3`
     display: flex;
     align-items: center;
-    margin-top: 0px;
+    margin-top: 0;
 `;
 
 const Table = styled.table`
@@ -56,15 +56,15 @@ const CellText = styled.div`
 `;
 
 const StyledPerson = styled(Person)`
-    margin: 0px 5px;
+    margin: 0 5px;
 `;
 
 const StyledPhone = styled(Phone)`
-    margin: 0px 5px;
+    margin: 0 5px;
 `;
 
 const StyledMail = styled(Mail)`
-    margin: 0px 5px;
+    margin: 0 5px;
 `;
 
 const StyledPencil = styled(Pencil)`
@@ -80,7 +80,7 @@ const StyledCheck = styled(Check)`
 `;
 
 const Icon = styled.div`
-    margin-left: 10px;
+    margin-left: 10;
     border-radius: 50%;
     height: 27px;
     width: 27px;
