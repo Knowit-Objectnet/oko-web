@@ -1,12 +1,10 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import useSWR from 'swr';
-import { Station, apiUrl } from '../../types';
-import { fetcher } from '../../utils/fetcher';
 import Filter from '../../assets/Filter.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
 import ArrowUp from '../../assets/ArrowUp.svg';
-import { useState } from 'react';
+import { useStations } from '../../services/useStations';
 
 const Wrapper = styled.div`
     display: flex;
@@ -15,7 +13,7 @@ const Wrapper = styled.div`
     margin-top: 50px;
 
     @media screen and (max-width: 900px) {
-        margin-top: 0px;
+        margin-top: 0;
         margin-left: 15px;
     }
 `;
@@ -70,8 +68,7 @@ export const StationSelector: React.FC<StationSelectorProps> = (props) => {
     // State
     const [toggled, setToggled] = useState(true);
 
-    let { data: stations } = useSWR<Station[]>(`${apiUrl}/stations`, fetcher);
-    stations = stations && stations.length !== 0 ? stations : [];
+    const { data: stations } = useStations();
 
     const onToggleClick = () => {
         setToggled(!toggled);
@@ -92,7 +89,7 @@ export const StationSelector: React.FC<StationSelectorProps> = (props) => {
             </Header>
             {toggled && (
                 <Stations>
-                    {stations.map((station) => (
+                    {stations?.map((station) => (
                         <Label key={station.name + station.id}>
                             <Input
                                 type="radio"

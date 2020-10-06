@@ -17,6 +17,12 @@ export interface ApiEventPost {
     recurrenceRule?: ApiRecurrenceRulePost;
 }
 
+export interface ApiEventPatch {
+    id: number;
+    startDateTime?: string;
+    endDateTime?: string;
+}
+
 export interface ApiRecurrenceRule {
     id: number;
     until: string;

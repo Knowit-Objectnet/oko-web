@@ -1,26 +1,25 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { default as DateCalendar } from 'react-calendar';
 import { RegCalendar } from './RegCalendar/RegCalendar';
-import { useEffect, useState } from 'react';
 import { Event } from '../../sharedComponents/Events/Event';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { ApiEvent, Station, Partner, apiUrl, EventInfo, Roles, ApiEventPost } from '../../types';
+import { ApiEvent, ApiEventPost, EventInfo, Partner, Roles, Station } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
 import differenceInDays from 'date-fns/differenceInDays';
-import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
 import { useKeycloak } from '@react-keycloak/web';
-import { useAlert, types } from 'react-alert';
+import { types, useAlert } from 'react-alert';
 import { StationSelector } from './StationSelector';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
+import { ApiEventParams, useEvents } from '../../services/useEvents';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -68,7 +67,6 @@ const Sidebar = styled.div`
     display: flex;
     flex-direction: column;
     justify-contents: center;
-    align-items: center;
     margin-left: 40px;
     justify-content: flex-start;
     align-items: flex-start;
@@ -85,12 +83,10 @@ const Sidebar = styled.div`
  * The page component for the calendar view
  */
 export const CalendarPage: React.FC = () => {
-    // Keycloak instance
     const { keycloak } = useKeycloak();
-    // Alert dispatcher
     const alert = useAlert();
-    // Modal dispatcher
     const modal = useModal();
+
     // State for day handling
     const [selectedDate, setSelectedDate] = useState(new Date());
     // State for side menu
@@ -106,25 +102,25 @@ export const CalendarPage: React.FC = () => {
     const toDate = add(selectedDate, { weeks: 1 });
     toDate.setHours(20, 0, 0, 0);
 
-    let url = '';
+    const apiParams: ApiEventParams = {
+        fromDate: fromDate.toISOString(),
+        toDate: toDate.toISOString(),
+    };
+
     if (keycloak.hasRealmRole(Roles.Ambassador)) {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&stationId=${
-            keycloak.tokenParsed.GroupID
-        }`;
+        apiParams.stationId = keycloak.tokenParsed.GroupID;
     } else if (keycloak.hasRealmRole(Roles.Partner)) {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&partnerId=${
-            keycloak.tokenParsed.GroupID
-        }${selectedStation === -1 || !isToggled ? '' : '&stationId=' + selectedStation}`;
+        apiParams.partnerId = keycloak.tokenParsed.GroupID;
+        if (isToggled && selectedStation !== -1) {
+            apiParams.stationId = selectedStation;
+        }
     } else {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}${
-            selectedStation === -1 ? '' : '&stationId=' + selectedStation
-        }`;
+        if (selectedStation !== -1) {
+            apiParams.stationId = selectedStation;
+        }
     }
 
-    // Events fetched from the api
-    // Contains parameters to only get events in date range specified above and only from the accounts
-    // station station
-    const { data: apiEvents, isValidating, mutate } = useSWR<ApiEvent[]>(url, fetcher);
+    const { data: apiEvents, isValidating, mutate } = useEvents(apiParams);
     const [events, setEvents] = useState<Array<EventInfo>>([]);
 
     useEffect(() => {

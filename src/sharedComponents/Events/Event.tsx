@@ -4,15 +4,15 @@ import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { apiUrl, EventInfo, Roles } from '../../types';
+import { ApiEventPatch, apiUrl, EventInfo, Roles } from '../../types';
 import { EventOptionStation } from './EventOptionStation';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
-import { useAlert, types } from 'react-alert';
+import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
-import { PatchToAPI } from '../../utils/PatchToAPI';
 import { DeleteToAPI } from '../../utils/DeleteToAPI';
+import { useEvents } from '../../services/useEvents';
 
 const Body = styled.div`
     display: flex;
@@ -50,11 +50,10 @@ interface EventProps extends EventInfo {
  * Will be rendered differently depending on user's role.
  */
 export const Event: React.FC<EventProps> = (props) => {
-    // Alert dispatcher
     const alert = useAlert();
-    // Keycloak instance
     const { keycloak } = useKeycloak();
-    // State
+    const { updateEvent, deleteEvent } = useEvents();
+
     const [isEditing, setIsEditing] = useState(false);
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
@@ -110,8 +109,8 @@ export const Event: React.FC<EventProps> = (props) => {
             if (props.beforeDeleteSingleEvent) {
                 props.beforeDeleteSingleEvent(`${apiUrl}/events?eventId=${event.resource.eventId}`, event);
             }
-            // send a request to the API to update the source
-            await DeleteToAPI(`${apiUrl}/events?eventId=${event.resource.eventId}`, keycloak.token);
+
+            await deleteEvent(event.resource.eventId);
 
             if (props.afterDeleteSingleEvent) {
                 props.afterDeleteSingleEvent(true, `${apiUrl}/events?eventId=${event.resource.eventId}`);
@@ -204,16 +203,15 @@ export const Event: React.FC<EventProps> = (props) => {
                     end.toISOString(),
                 );
             }
-            // send a request to the API to update the source
-            await PatchToAPI(
-                `${apiUrl}/events`,
-                {
-                    id: props.resource.eventId,
-                    startDateTime: start.toISOString().slice(0, -2),
-                    endDateTime: end.toISOString().slice(0, -2),
-                },
-                keycloak.token,
-            );
+
+            const eventPatch: ApiEventPatch = {
+                id: props.resource.eventId,
+                startDateTime: start.toISOString().slice(0, -2),
+                endDateTime: end.toISOString().slice(0, -2),
+            };
+
+            await updateEvent(eventPatch);
+
             if (props.afterUpdateEvent) {
                 props.afterUpdateEvent(true, `${apiUrl}/events`);
             }
