@@ -50,7 +50,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => {
 
     return (
         <Wrapper>
-            {(keycloak.hasRealmRole(Roles.Partner) || keycloak.hasRealmRole(Roles.Ambassador)) && (
+            {keycloak.hasRealmRole(Roles.Partner) && (
                 <Button onClick={props.onCalendarToggleClick}>
                     <Calendar height="100%" />
                 </Button>

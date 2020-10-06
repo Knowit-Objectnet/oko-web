@@ -58,10 +58,7 @@ const ModuleDateCalendar = styled.div`
 
 const ModuleCalendar = styled(Module)`
     flex: 1;
-
-    @media screen and (min-width: 900px) {
-        overflow: auto;
-    }
+    overflow: auto;
 `;
 
 const Sidebar = styled.div`

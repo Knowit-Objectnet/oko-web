@@ -6,6 +6,8 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
 import { ApiEvent, EventInfo, Roles } from '../../src/types';
+import theme from '../../src/theme';
+import { ThemeProvider } from 'styled-components';
 
 // Component to test
 import { AmbassadorCalendar } from '../../src/pages/calendar/AmbassadorCalendar/AmbassadorCalendar';
@@ -31,6 +33,28 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         })
         .filter((event) => event.resource.location.id === 0);
 
+    // Save the original clientHeight of the element rendered in the virtualDom by Jest
+    const originalClientHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight');
+
+    beforeAll(() => {
+        /* Redefine the clientHeight property to give it a value higher than 0.
+         *
+         * This is needed because EventsColumn inside the calendar needs a clientHeight value to know how it
+         * should render the events inside of it (it has a check of clientHeight > 0)
+         */
+        Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, value: 1066 });
+    });
+
+    afterAll(() => {
+        // Set the clientHeight property back to it's original value before exiting the test set to not
+        // interfere with other tests
+        if (originalClientHeight) {
+            Object.defineProperty(HTMLElement.prototype, 'clientHeight', originalClientHeight);
+        } else {
+            Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, value: 0 });
+        }
+    });
+
     beforeEach(() => {
         // Set the role to ambassador
         keycloak.hasRealmRole = jest.fn((role: string) => {
@@ -48,7 +72,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
     it('Should render without errors', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const onWeekCahngeMock = jest.fn();
+        const onWeekChangeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 13);
@@ -56,21 +80,23 @@ describe('Provides a page for ambassadors to view the calendar', () => {
 
         render(
             <KeycloakProvider keycloak={keycloak}>
-                <AmbassadorCalendar
-                    date={date}
-                    isToggled={isToggled}
-                    onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekCahngeMock}
-                    events={events}
-                />
+                <ThemeProvider theme={theme}>
+                    <AmbassadorCalendar
+                        date={date}
+                        isToggled={isToggled}
+                        onSelectEvent={onSelectEventMock}
+                        onWeekChange={onWeekChangeMock}
+                        events={events}
+                    />
+                </ThemeProvider>
             </KeycloakProvider>,
         );
     });
 
-    it('Should render all the partner groups for 7.13.2020-7.18.2020 at Haraldrud', async () => {
+    it('Should render all the events for 7.13.2020-7.17.2020 at Haraldrud', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const onWeekCahngeMock = jest.fn();
+        const onWeekChangeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 13);
@@ -78,46 +104,22 @@ describe('Provides a page for ambassadors to view the calendar', () => {
 
         const { findAllByText } = render(
             <KeycloakProvider keycloak={keycloak}>
-                <AmbassadorCalendar
-                    date={date}
-                    isToggled={isToggled}
-                    onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekCahngeMock}
-                    events={events}
-                />
+                <ThemeProvider theme={theme}>
+                    <AmbassadorCalendar
+                        date={date}
+                        isToggled={isToggled}
+                        onSelectEvent={onSelectEventMock}
+                        onWeekChange={onWeekChangeMock}
+                        events={events}
+                    />
+                </ThemeProvider>
             </KeycloakProvider>,
         );
+
+        const fretexGroups = await findAllByText('Fretex');
+        expect(fretexGroups.length).toBe(5);
 
         // Find all the agenda groups with fretex which should be 5 as there's 5 days and
         // events by fretex on all days
-        const fretexGroups = await findAllByText('Fretex');
-        expect(fretexGroups.length).toBe(5);
-    });
-
-    it('Should change which partner groups are rendered when the date changes', async () => {
-        // set up props for the calendar
-        const onSelectEventMock = jest.fn();
-        const onWeekCahngeMock = jest.fn();
-        const isToggled = false;
-        const date = new Date();
-        date.setFullYear(2020, 6, 15);
-        date.setHours(7, 0, 0, 0);
-
-        const { findAllByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <AmbassadorCalendar
-                    date={date}
-                    isToggled={isToggled}
-                    onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekCahngeMock}
-                    events={events}
-                />
-            </KeycloakProvider>,
-        );
-
-        // Find all the agenda groups with fretex which should be 3 as there's 3 days and
-        // events by fretex on all days
-        const fretexGroups = await findAllByText('Fretex');
-        expect(fretexGroups.length).toBe(3);
     });
 });

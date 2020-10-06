@@ -1,9 +1,7 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { EventInfo } from '../../../types';
-import { ExpandableAgenda } from './ExpandableAgenda';
-
-const Wrapper = styled.div``;
+import { WeekMenu } from '../WeekMenu';
+import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
 
 interface AmbassadorCalendarProps {
     date: Date;
@@ -17,20 +15,21 @@ interface AmbassadorCalendarProps {
  * Calendar and Agenda for station ambassadors
  */
 export const AmbassadorCalendar: React.FC<AmbassadorCalendarProps> = (props) => {
-    // Function that handles an event click in the calendar. It displays the Event in a modal
-    const onSelectEvent = (event: EventInfo) => {
-        props.onSelectEvent(event);
-    };
+    // min and max times for the agenda and calendar
+    const date = new Date(props.date);
+    const min = new Date(date.setHours(7, 0, 0, 0));
+    const max = new Date(date.setHours(20, 0, 0, 0));
 
     return (
-        <Wrapper>
-            <ExpandableAgenda
+        <>
+            <WeekMenu date={props.date} changeWeek={props.onWeekChange} />
+            <WorkingWeekCalendar
                 date={props.date}
-                isToggled={props.isToggled}
-                onSelectEvent={onSelectEvent}
+                onSelectEvent={props.onSelectEvent}
                 events={props.events}
-                onWeekChange={props.onWeekChange}
+                min={min}
+                max={max}
             />
-        </Wrapper>
+        </>
     );
 };

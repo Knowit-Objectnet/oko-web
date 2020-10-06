@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import isSameDay from 'date-fns/isSameDay';
 
 const Wrapper = styled.div`
+    overflow: auto;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -19,7 +20,7 @@ const Content = styled.div`
     display: flex;
     flex-direction: row;
     flex: 1;
-    min-height: 0;
+    height: fit-content;
 `;
 
 const Columns = styled.div`
@@ -28,6 +29,7 @@ const Columns = styled.div`
     display: flex;
     flex-direction: row;
     min-height: 100%;
+    height: inherit;
     border-right: 1px solid #ddd;
     box-sizing: border-box;
 `;
