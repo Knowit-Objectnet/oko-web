@@ -1,10 +1,8 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import { apiUrl, EventInfo } from '../../../types';
 import { DeleteToAPI } from '../../../utils/DeleteToAPI';
 import { useKeycloak } from '@react-keycloak/web';
-const Wrapper = styled.div``;
 
 interface PartnerCalendarProps {
     date: Date;
@@ -46,15 +44,13 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
     };
 
     return (
-        <Wrapper>
-            <ExpandableAgenda
-                date={props.date}
-                isToggled={props.isToggled}
-                onSelectEvent={onSelectEvent}
-                events={props.events}
-                onWeekChange={props.onWeekChange}
-                deleteEvent={deleteEvent}
-            />
-        </Wrapper>
+        <ExpandableAgenda
+            date={props.date}
+            isToggled={props.isToggled}
+            onSelectEvent={onSelectEvent}
+            events={props.events}
+            onWeekChange={props.onWeekChange}
+            deleteEvent={deleteEvent}
+        />
     );
 };

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
 import { ListView } from '../SharedCalendarComponents/ListView';
 import { EventInfo } from '../../../types';
@@ -7,8 +6,6 @@ import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 import { WeekMenu } from '../WeekMenu';
 import { Colors } from '../../../theme';
-
-const Wrapper = styled.div``;
 
 interface ExpandableAgendaProps {
     date: Date;
@@ -71,7 +68,7 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
     };
 
     return (
-        <Wrapper>
+        <>
             {props.isToggled ? (
                 <>
                     <WeekMenu date={props.date} changeWeek={props.onWeekChange} />
@@ -93,6 +90,6 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     deleteEvent={props.deleteEvent}
                 />
             )}
-        </Wrapper>
+        </>
     );
 };

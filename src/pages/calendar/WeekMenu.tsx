@@ -9,6 +9,7 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
+    min-height: fit-content;
 `;
 
 const WeekText = styled.div`
