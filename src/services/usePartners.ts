@@ -1,9 +1,9 @@
 import useSWR from 'swr';
 import { apiUrl, Partner, PartnerPost } from '../types';
 import { fetcher } from '../utils/fetcher';
-import { ApiDeleteClient } from './ApiDeleteClient';
+import { apiDelete } from './apiDelete';
 import { useKeycloak } from '@react-keycloak/web';
-import { ApiPostClient } from './ApiPostClient';
+import { apiPost } from './apiPost';
 
 export interface PartnersApiService {
     data?: Array<Partner>;
@@ -18,16 +18,16 @@ export const usePartners = (): PartnersApiService => {
     const [keycloak] = useKeycloak();
     const endpoint = `${apiUrl}/partners/`;
 
-    const { data, error, isValidating, mutate } = useSWR<Array<Partner>>(endpoint, fetcher);
+    const { data, error, isValidating, mutate } = useSWR<Array<Partner>>([endpoint, keycloak.token], fetcher);
 
     const addPartner = async (partner: PartnerPost) => {
-        const response = await ApiPostClient<PartnerPost, Partner>(endpoint, partner, keycloak.token);
+        const response = await apiPost<PartnerPost, Partner>(endpoint, partner, keycloak.token);
         await mutate();
         return response;
     };
 
     const deletePartner = async (partnerId: number) => {
-        await ApiDeleteClient(`${endpoint}?partnerId=${partnerId}`, keycloak.token);
+        await apiDelete(`${endpoint}?partnerId=${partnerId}`, keycloak.token);
         await mutate();
         // TODO: should this method return some response?
     };

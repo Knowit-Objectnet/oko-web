@@ -1,6 +1,6 @@
 import { FetchError } from '../utils/FetchError';
 
-export async function ApiDeleteClient(url: string, token: string): Promise<string> {
+export async function apiDelete(url: string, token: string): Promise<string> {
     const response = await fetch(url, {
         method: 'DELETE',
         mode: 'cors',

@@ -1,8 +1,8 @@
 import { FetchError } from '../utils/FetchError';
 
-export async function ApiPatchClient<T, R>(url: string, data: T, token: string): Promise<R> {
+export async function apiPost<T, R>(url: string, data: T, token: string): Promise<R> {
     const response = await fetch(url, {
-        method: 'PATCH',
+        method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
         credentials: 'include',

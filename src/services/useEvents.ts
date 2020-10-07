@@ -1,10 +1,10 @@
 import useSWR from 'swr';
 import { ApiEvent, ApiEventPatch, ApiEventPost, apiUrl } from '../types';
 import { fetcher } from '../utils/fetcher';
-import { ApiPostClient } from './ApiPostClient';
+import { apiPost } from './apiPost';
 import { useKeycloak } from '@react-keycloak/web';
-import { ApiPatchClient } from './ApiPatchClient';
-import { ApiDeleteClient } from './ApiDeleteClient';
+import { apiPatch } from './apiPatch';
+import { apiDelete } from './apiDelete';
 
 export interface EventApiService {
     data?: Array<ApiEvent>;
@@ -27,8 +27,8 @@ export const useEvents = (params?: ApiEventParams): EventApiService => {
     const [keycloak] = useKeycloak();
     const endpoint = `${apiUrl}/events/`;
 
+    // TODO: not necessary when using axios (can pass params object to .get-method)
     let paramsString = '';
-
     if (params) {
         paramsString = Object.keys(params)
             .map((key) => `${key}=${params[key as keyof ApiEventParams]}`)
@@ -38,19 +38,19 @@ export const useEvents = (params?: ApiEventParams): EventApiService => {
     const { data, error, isValidating, mutate } = useSWR<Array<ApiEvent>>(`${endpoint}?${paramsString}`, fetcher);
 
     const addEvent = async (event: ApiEventPost) => {
-        const response = await ApiPostClient<ApiEventPost, ApiEvent>(endpoint, event, keycloak.token);
+        const response = await apiPost<ApiEventPost, ApiEvent>(endpoint, event, keycloak.token);
         await mutate();
         return response;
     };
 
     const updateEvent = async (event: ApiEventPatch) => {
-        const response = await ApiPatchClient<ApiEventPatch, ApiEvent>(endpoint, event, keycloak.token);
+        const response = await apiPatch<ApiEventPatch, ApiEvent>(endpoint, event, keycloak.token);
         await mutate();
         return response;
     };
 
     const deleteEvent = async (eventId: number) => {
-        await ApiDeleteClient(`${endpoint}?eventId=${eventId}`, keycloak.token);
+        await apiDelete(`${endpoint}?eventId=${eventId}`, keycloak.token);
         await mutate();
     };
 

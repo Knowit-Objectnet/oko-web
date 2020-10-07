@@ -2,8 +2,8 @@ import useSWR from 'swr';
 import { apiUrl, Request, RequestPost } from '../types';
 import { fetcher } from '../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
-import { ApiPostClient } from './ApiPostClient';
-import { ApiDeleteClient } from './ApiDeleteClient';
+import { apiPost } from './apiPost';
+import { apiDelete } from './apiDelete';
 
 export interface RequestsApiService {
     data?: Array<Request>;
@@ -28,16 +28,19 @@ export const useRequests = (params: ApiRequestParams): RequestsApiService => {
 
     const endpoint = `${apiUrl}/requests/`;
 
-    const { data, error, isValidating, mutate } = useSWR<Array<Request>>(`${endpoint}?${paramsString}`, fetcher);
+    const { data, error, isValidating, mutate } = useSWR<Array<Request>>(
+        [`${endpoint}?${paramsString}`, keycloak.token],
+        fetcher,
+    );
 
     const deleteRequest = async (pickupId: number, partnerId: number) => {
-        await ApiDeleteClient(`${endpoint}?pickupId=${pickupId}&partnerId=${partnerId}`, keycloak.token);
+        await apiDelete(`${endpoint}?pickupId=${pickupId}&partnerId=${partnerId}`, keycloak.token);
         await mutate();
         // TODO: should this method return some response?
     };
 
     const addRequest = async (request: RequestPost) => {
-        const response = await ApiPostClient<RequestPost, Request>(endpoint, request, keycloak.token);
+        const response = await apiPost<RequestPost, Request>(endpoint, request, keycloak.token);
         await mutate();
         return response;
     };
