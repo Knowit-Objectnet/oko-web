@@ -195,7 +195,11 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
                         key={event.title + event.wPos + event.start.getTime()}
                         index={event.index}
                         onClick={onEventClick}
-                        selected={props.selectedEvent === event.resource.eventId}
+                        selected={
+                            props.selectedEvent === undefined
+                                ? undefined
+                                : props.selectedEvent === event.resource.eventId
+                        }
                         userIsOwner={
                             keycloak.hasRealmRole(Roles.Partner) &&
                             event.resource.partner.id === keycloak.tokenParsed.GroupID
