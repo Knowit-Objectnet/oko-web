@@ -11,9 +11,12 @@ import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
 import { Helmet } from 'react-helmet';
+import axios from 'axios';
 
 // Pre-fetch data with a token if the user is logged in
 const onKeycloakTokens = (tokens: { idToken: string; refreshToken: string; token: string }) => {
+    axios.defaults.headers['Authorization'] = `Bearer ${tokens.token}`;
+
     if (tokens.token) {
         preFetch(tokens.token);
     }
