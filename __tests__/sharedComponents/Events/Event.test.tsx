@@ -84,7 +84,48 @@ describe('Provides an interface to view and edit an Event', () => {
         expect(title.parentElement?.children.length).toBe(2);
     });
 
-    it('Should show edit symbol on Event if user is logged in as Partner and its the partners event', async () => {
+    it('Should show edit symbol on Event if user is logged in as a station that has the event', async () => {
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
+
+        // Change the keycloak instance to be logged in as REG
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Ambassador;
+        });
+
+        // Set the stations groupID
+        keycloak.tokenParsed.GroupID = mockEvents[0].resource.location.id;
+
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <ThemeProvider theme={theme}>
+                    <AlertProvider template={AlertTemplate} {...options}>
+                        <Router history={history}>
+                            <Event
+                                {...mockEvents[0]}
+                                beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                                afterDeleteSingleEvent={afterDeleteSingleEvent}
+                                beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                                afterDeleteRangeEvent={afterDeleteRangeEvent}
+                                beforeUpdateEvent={beforeUpdateEvent}
+                                afterUpdateEvent={afterUpdateEvent}
+                            />
+                        </Router>
+                    </AlertProvider>
+                </ThemeProvider>
+            </KeycloakProvider>,
+        );
+
+        // Find the title of the event
+        const title = await findByText(mockEvents[0].title);
+        expect(title.parentElement?.children.length).toBe(2);
+    });
+
+    it('Should not show edit symbol on Event if user is logged in as Partner', async () => {
         const beforeDeleteSingleEvent = jest.fn();
         const afterDeleteSingleEvent = jest.fn();
         const beforeDeleteRangeEvent = jest.fn();
@@ -122,10 +163,10 @@ describe('Provides an interface to view and edit an Event', () => {
 
         // Find the title of the event
         const title = await findByText(mockEvents[0].title);
-        expect(title.parentElement?.children.length).toBe(2);
+        expect(title.parentElement?.children.length).toBe(1);
     });
 
-    it('Should not show edit symbol on Event if user is not logged in as REG or partner who own eveent', async () => {
+    it('Should not show edit symbol on Event if user is not logged in', async () => {
         const beforeDeleteSingleEvent = jest.fn();
         const afterDeleteSingleEvent = jest.fn();
         const beforeDeleteRangeEvent = jest.fn();
@@ -207,32 +248,28 @@ describe('Provides an interface to view and edit an Event', () => {
         if (!editButton) fail('failed to find edit button');
 
         // Click the edit button
-        await waitFor(() => {
-            fireEvent(
-                editButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            editButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Find the submit button
         const submitButton = await findByText('Godkjenn');
 
         // Click the submit button
-        await waitFor(() => {
-            fireEvent(
-                submitButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            submitButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(beforeUpdateEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeUpdateEvent.mock.calls.length).toBe(1));
         expect(beforeUpdateEvent.mock.calls[0]).toEqual([
             `${apiUrl}/events`,
             mockEvents[0].resource.eventId,
@@ -292,18 +329,89 @@ describe('Provides an interface to view and edit an Event', () => {
         const deleteSubmissionButton = await findByText('Bekreft');
 
         // Click the delete submission button
-        await waitFor(() => {
-            fireEvent(
-                deleteSubmissionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1));
+        expect(beforeDeleteSingleEvent.mock.calls[0]).toEqual([
+            `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
+            mockEvents[0],
+        ]);
+        expect(afterDeleteSingleEvent.mock.calls.length).toBe(1);
+        expect(afterDeleteSingleEvent.mock.calls[0]).toEqual([
+            true,
+            `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
+        ]);
+    });
+
+    it('Should allow single deletion of event if logged in as the station who own the  event', async () => {
+        const beforeDeleteSingleEvent = jest.fn();
+        const afterDeleteSingleEvent = jest.fn();
+        const beforeDeleteRangeEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
+        const beforeUpdateEvent = jest.fn();
+        const afterUpdateEvent = jest.fn();
+
+        // Change the keycloak instance to be logged in as REG
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Ambassador;
+        });
+
+        // Set the stations groupID
+        keycloak.tokenParsed.GroupID = mockEvents[0].resource.location.id;
+
+        const { findByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <ThemeProvider theme={theme}>
+                    <AlertProvider template={AlertTemplate} {...options}>
+                        <Router history={history}>
+                            <Event
+                                {...mockEvents[0]}
+                                beforeDeleteSingleEvent={beforeDeleteSingleEvent}
+                                afterDeleteSingleEvent={afterDeleteSingleEvent}
+                                beforeDeleteRangeEvent={beforeDeleteRangeEvent}
+                                afterDeleteRangeEvent={afterDeleteRangeEvent}
+                                beforeUpdateEvent={beforeUpdateEvent}
+                                afterUpdateEvent={afterUpdateEvent}
+                            />
+                        </Router>
+                    </AlertProvider>
+                </ThemeProvider>
+            </KeycloakProvider>,
+        );
+
+        // Find the delete button
+        const deleteButton = await findByText('Avlys uttak');
+
+        // Click the delete button
+        fireEvent(
+            deleteButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
+
+        // Find delete submission button
+        const deleteSubmissionButton = await findByText('Bekreft');
+
+        // Click the delete submission button
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
+
+        // Expect the submission button to be called once and be supplied with the updated data
+        await waitFor(() => expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1));
         expect(beforeDeleteSingleEvent.mock.calls[0]).toEqual([
             `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
             mockEvents[0],
@@ -367,18 +475,16 @@ describe('Provides an interface to view and edit an Event', () => {
         const deleteSubmissionButton = await findByText('Bekreft');
 
         // Click the delete submission button
-        await waitFor(() => {
-            fireEvent(
-                deleteSubmissionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1));
         expect(beforeDeleteSingleEvent.mock.calls[0]).toEqual([
             `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
             mockEvents[0],
@@ -439,42 +545,38 @@ describe('Provides an interface to view and edit an Event', () => {
         const optionButton = await findByText('Over en periode');
 
         // Click the delete button
-        await waitFor(() => {
-            fireEvent(
-                optionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            optionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Find delete submission button
         const deleteSubmissionButton = await findByText('Bekreft');
 
         // Click the delete submission button
-        await waitFor(() => {
-            fireEvent(
-                deleteSubmissionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
         const date = new Date();
         date.setHours(2, 0, 0, 0);
 
-        expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1));
         expect(beforeDeleteRangeEvent.mock.calls[0]).toEqual([`${apiUrl}/events`, mockEvents[1], [date, date]]);
 
         expect(afterDeleteRangeEvent.mock.calls.length).toBe(1);
         expect(afterDeleteRangeEvent.mock.calls[0]).toEqual([true, `${apiUrl}/events`]);
     });
 
-    it('Should allow range deletion of event if logged in as Partner who own event', async () => {
+    it('Should allow range deletion of event if logged in as the station who own the event', async () => {
         const beforeDeleteSingleEvent = jest.fn();
         const afterDeleteSingleEvent = jest.fn();
         const beforeDeleteRangeEvent = jest.fn();
@@ -482,13 +584,13 @@ describe('Provides an interface to view and edit an Event', () => {
         const beforeUpdateEvent = jest.fn();
         const afterUpdateEvent = jest.fn();
 
-        // Change the keycloak instance to be logged in as Partner
+        // Change the keycloak instance to be logged in as REG
         keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Partner;
+            return role === Roles.Ambassador;
         });
 
-        // Set the partners groupID
-        keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
+        // Set the stations groupID
+        keycloak.tokenParsed.GroupID = mockEvents[0].resource.location.id;
 
         const { findByText } = render(
             <KeycloakProvider keycloak={keycloak}>
@@ -526,36 +628,75 @@ describe('Provides an interface to view and edit an Event', () => {
         const optionButton = await findByText('Over en periode');
 
         // Click the delete button
-        await waitFor(() => {
-            fireEvent(
-                optionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            optionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Find delete submission button
         const deleteSubmissionButton = await findByText('Bekreft');
 
         // Click the delete submission button
-        await waitFor(() => {
-            fireEvent(
-                deleteSubmissionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
         const date = new Date();
         date.setHours(2, 0, 0, 0);
-        expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1);
+
+        await waitFor(() => expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1));
         expect(beforeDeleteRangeEvent.mock.calls[0]).toEqual([`${apiUrl}/events`, mockEvents[1], [date, date]]);
+
         expect(afterDeleteRangeEvent.mock.calls.length).toBe(1);
         expect(afterDeleteRangeEvent.mock.calls[0]).toEqual([true, `${apiUrl}/events`]);
+    });
+
+    it('Should NOT allow range deletion of event if logged in as Partner', async () => {
+        // Change the keycloak instance to be logged in as Partner
+        keycloak.hasRealmRole = jest.fn((role: string) => {
+            return role === Roles.Partner;
+        });
+
+        // Set the partners groupID
+        keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
+
+        const { findByText, queryByText } = render(
+            <KeycloakProvider keycloak={keycloak}>
+                <ThemeProvider theme={theme}>
+                    <AlertProvider template={AlertTemplate} {...options}>
+                        <Router history={history}>
+                            <Event {...mockEvents[1]} />
+                        </Router>
+                    </AlertProvider>
+                </ThemeProvider>
+            </KeycloakProvider>,
+        );
+
+        // Find the delete button
+        const deleteButton = await findByText('Avlys uttak');
+
+        // Click the delete button
+        fireEvent(
+            deleteButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
+
+        // Make sure the options buttons for single or period deletion is hidden
+        const optionButton1 = await queryByText('Engangstilfelle');
+        const optionButton2 = await queryByText('Over en periode');
+
+        expect(optionButton1).toBeNull();
+        expect(optionButton2).toBeNull();
     });
 });
