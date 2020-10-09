@@ -6,7 +6,7 @@ import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 import { WeekMenu } from '../WeekMenu';
 import { Colors } from '../../../theme';
-import {useKeycloak} from "@react-keycloak/web";
+import { useKeycloak } from '@react-keycloak/web';
 
 interface ExpandableAgendaProps {
     date: Date;
