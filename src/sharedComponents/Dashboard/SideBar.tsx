@@ -89,16 +89,19 @@ const FakeLink = styled.div`
 `;
 
 const StyledPeople = styled(People)`
+    fill: inherit;
     width: 1.5em;
     margin-right: 10px;
 `;
 
 const StyledLocation = styled(Location)`
+    fill: inherit;
     width: 1.5em;
     margin-right: 10px;
 `;
 
 const StyledPlus = styled(Plus)`
+    fill: inherit;
     width: 1.5em;
     margin-right: 10px;
 `;
