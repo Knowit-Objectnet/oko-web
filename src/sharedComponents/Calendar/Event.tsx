@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { RGBAtoRGB } from '../../utils/RGBAtoRGB';
 
 interface WrapperProps {
     top: number;
@@ -27,7 +28,12 @@ const Wrapper = styled.div<WrapperProps>`
                 return props.theme.colors.LightBeige;
             }
         } else {
-            return props.theme.colors.LightBlue + '80';
+            const r = parseInt(props.theme.colors.LightBlue.slice(1, 3), 16);
+            const g = parseInt(props.theme.colors.LightBlue.slice(3, 5), 16);
+            const b = parseInt(props.theme.colors.LightBlue.slice(5, 7), 16);
+            const a = 0.5;
+            const rgb = RGBAtoRGB({ r, g, b, a });
+            return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
         }
     }};
     border: ${(props) =>
