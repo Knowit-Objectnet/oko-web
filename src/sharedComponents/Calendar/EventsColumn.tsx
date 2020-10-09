@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo } from '../../types';
+import { EventInfo, Roles } from '../../types';
 import { useEffect, useRef, useState } from 'react';
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import add from 'date-fns/add';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Events = styled.div`
     top: 0;
@@ -18,6 +19,7 @@ interface EventProps {
     left: number;
     height: number;
     width: number;
+    userIsOwner: boolean;
 }
 
 const Event = styled.div<EventProps>`
@@ -27,45 +29,13 @@ const Event = styled.div<EventProps>`
     left: ${(props) => props.left}%;
     height: ${(props) => props.height}px;
     width: ${(props) => props.width}%;
-    &:nth-child(n + 1) {
-        background-color: ${(props) => props.theme.colors.DarkBlue};
-        color: ${(props) => props.theme.colors.White};
-    }
-    &:nth-child(n + 2) {
-        background-color: ${(props) => props.theme.colors.DarkGreen};
-        color: ${(props) => props.theme.colors.White};
-    }
-    &:nth-child(n + 3) {
-        background-color: ${(props) => props.theme.colors.LightBlue};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 4) {
-        background-color: ${(props) => props.theme.colors.Green};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 5) {
-        background-color: ${(props) => props.theme.colors.Red};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 6) {
-        background-color: ${(props) => props.theme.colors.LightGreen};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 7) {
-        background-color: ${(props) => props.theme.colors.DarkBegie};
-        color: ${(props) => props.theme.colors.White};
-    }
-    &:nth-child(n + 8) {
-        background-color: ${(props) => props.theme.colors.Yellow};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 9) {
-        background-color: ${(props) => props.theme.colors.LightBeige};
-        color: ${(props) => props.theme.colors.Black};
-    }
+    background-color: ${(props) => (props.userIsOwner ? props.theme.colors.LightBlue : props.theme.colors.LightBeige)};
+    border: 1px solid ${(props) => props.theme.colors.DarkBegie};
+    color: ${(props) => props.theme.colors.Black};
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
 `;
 
 const EventText = styled.span`
@@ -86,6 +56,8 @@ interface EventsColumnProps {
  * Events column component to render events in the calendar
  */
 export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
     // Ref to the events column (used to get the height of the calendar)
     const eventsRef = useRef<HTMLDivElement>(null);
     // List of the rendered events
@@ -253,6 +225,10 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
                         key={event.title + event.wPos + event.start.getTime()}
                         data-index={event.index}
                         onClick={onEventClick}
+                        userIsOwner={
+                            keycloak.hasRealmRole(Roles.Partner) &&
+                            event.resource.partner.id === keycloak.tokenParsed.GroupID
+                        }
                     >
                         <EventText>{event.title}</EventText>
                     </Event>,
