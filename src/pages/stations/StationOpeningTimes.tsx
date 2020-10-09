@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Clock from '../../assets/Clock.svg';
-import { LocationOpeningTimes } from '../../types';
+import { StationOpeningHours } from '../../types';
 import { Dropdown } from '../../sharedComponents/Dropdown';
 
 const Wrapper = styled.div`
@@ -37,7 +37,7 @@ const Bold = styled.span`
 `;
 
 interface StationOpeningTimesProps {
-    openingTimes: LocationOpeningTimes;
+    openingTimes: StationOpeningHours;
 }
 
 export const StationOpeningTimes: React.FC<StationOpeningTimesProps> = (props) => {

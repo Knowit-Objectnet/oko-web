@@ -1,31 +1,78 @@
+export type Weekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
+
 export interface ApiEvent {
     id: number;
     startDateTime: string;
     endDateTime: string;
-    station: ApiLocation;
+    station: ApiStation;
+    partner: ApiPartner;
+    recurrenceRule: ApiRecurrenceRule | null;
+}
+
+export interface ApiEventPost {
+    startDateTime: string;
+    endDateTime: string;
+    stationId: number;
+    partnerId: number;
+    recurrenceRule?: ApiRecurrenceRulePost;
+}
+
+export interface ApiEventPatch {
+    id: number;
+    startDateTime?: string;
+    endDateTime?: string;
+}
+
+export interface ApiRecurrenceRule {
+    id: number;
+    until: string;
+    days: Array<Weekdays>;
+    interval: number;
+    count: number | null;
+}
+
+export interface ApiRecurrenceRulePost {
+    until: string;
+    days: Array<Weekdays>;
+    interval?: number;
+    count?: number;
+}
+
+export interface EventInfo {
+    title: string;
+    start: Date;
+    end: Date;
+    resource: EventInfoResource;
+}
+
+interface EventInfoResource {
+    eventId: number;
+    location: ApiStation;
     partner: ApiPartner;
     recurrenceRule: {
         id: number;
         until: string;
-        days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-        interval: number;
-        count: number | null;
+        days?: Array<Weekdays>;
+        interval?: number;
+        count?: number | null;
     } | null;
+    weight?: number;
+    message?: {
+        start: Date;
+        end: Date;
+        text: string;
+    };
 }
 
-export interface LocationOpeningTimes {
-    MONDAY?: [string, string];
-    TUESDAY?: [string, string];
-    WEDNESDAY?: [string, string];
-    THURSDAY?: [string, string];
-    FRIDAY?: [string, string];
-}
-
-export interface ApiLocation {
+export interface ApiStation {
     id: number;
     name: string;
-    hours: LocationOpeningTimes;
+    hours: StationOpeningHours;
 }
+
+export type StationOpeningHours = {
+    [index in Weekdays]?: [string, string];
+};
 
 export interface ApiPartner {
     id: number;
@@ -39,7 +86,7 @@ export interface ApiWithdrawal {
     reportId: number;
     eventId: number;
     partnerId: number;
-    station: ApiLocation;
+    station: ApiStation;
     startDateTime: string;
     endDateTime: string;
     weight: number | null;
@@ -51,39 +98,13 @@ export interface ApiPickUp {
     startDateTime: string;
     endDateTime: string;
     description: string;
-    station: ApiLocation;
+    station: ApiStation;
     chosenPartner: ApiPartner | null;
 }
 
 export interface ApiRequest {
     pickup: ApiPickUp;
     partner: ApiPartner;
-}
-
-export interface EventInfo {
-    title: string;
-    start: Date;
-    end: Date;
-    resource: EventInfoResource;
-}
-
-interface EventInfoResource {
-    eventId: number;
-    location: ApiLocation;
-    partner: ApiPartner;
-    recurrenceRule: {
-        id: number;
-        until: string;
-        days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-        interval?: number;
-        count?: number | null;
-    } | null;
-    weight?: number;
-    message?: {
-        start: Date;
-        end: Date;
-        text: string;
-    };
 }
 
 export interface SlotInfo {
@@ -95,7 +116,7 @@ export interface Withdrawal {
     reportId: number;
     eventId: number;
     partnerId: number;
-    station: ApiLocation;
+    station: ApiStation;
     startDateTime: Date;
     endDateTime: Date;
     weight: number | null;
@@ -107,7 +128,7 @@ export interface PickUp {
     startDateTime: Date;
     endDateTime: Date;
     description: string;
-    station: ApiLocation;
+    station: ApiStation;
     chosenPartner: ApiPartner | null;
 }
 

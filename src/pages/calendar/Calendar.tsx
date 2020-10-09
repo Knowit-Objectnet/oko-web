@@ -7,7 +7,7 @@ import { Event } from '../../sharedComponents/Events/Event';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { ApiEvent, ApiLocation, ApiPartner, apiUrl, EventInfo, Roles } from '../../types';
+import { ApiEvent, ApiStation, ApiPartner, apiUrl, EventInfo, Roles } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
@@ -242,7 +242,7 @@ export const CalendarPage: React.FC = () => {
                 interval?: number;
             };
         },
-        station: ApiLocation,
+        station: ApiStation,
         partner: ApiPartner,
     ) => {
         if (apiEvents) {
