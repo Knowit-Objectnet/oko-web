@@ -152,9 +152,10 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
     const { keycloak } = useKeycloak();
     // Select the first event that is owned by the logged in partner. It should never be undefined, but if it is
     // then it should cause problems as it simply won't open the sideview with event info.
-    const firstOwnedEvent = props.events.find((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID);
+    const firstOwnedEvent = () =>
+        props.events.find((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID);
     // The selected event to show in the sideview
-    const [selectedEvent, setSelectedEvent] = useState<EventInfo | undefined>(firstOwnedEvent);
+    const [selectedEvent, setSelectedEvent] = useState<EventInfo | undefined>(firstOwnedEvent());
     const selectedEventResource = selectedEvent && selectedEvent.resource;
 
     // On event click function
@@ -167,7 +168,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
     const onDeleteEvent = async () => {
         if (selectedEvent && props.deleteEvent) {
             await props.deleteEvent(selectedEvent);
-            setSelectedEvent(undefined);
+            setSelectedEvent(firstOwnedEvent());
         }
     };
 
@@ -179,7 +180,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
 
     return (
         <Wrapper color={props.color}>
-            <Calendar isEventSelected={selectedEvent !== null}>
+            <Calendar isEventSelected={selectedEvent !== undefined}>
                 <SingleDayCalendar
                     date={props.date}
                     columns={[undefined]}
