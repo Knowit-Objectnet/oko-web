@@ -248,32 +248,28 @@ describe('Provides an interface to view and edit an Event', () => {
         if (!editButton) fail('failed to find edit button');
 
         // Click the edit button
-        await waitFor(() => {
-            fireEvent(
-                editButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            editButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Find the submit button
         const submitButton = await findByText('Godkjenn');
 
         // Click the submit button
-        await waitFor(() => {
-            fireEvent(
-                submitButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            submitButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(beforeUpdateEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeUpdateEvent.mock.calls.length).toBe(1));
         expect(beforeUpdateEvent.mock.calls[0]).toEqual([
             `${apiUrl}/events`,
             mockEvents[0].resource.eventId,
@@ -333,18 +329,16 @@ describe('Provides an interface to view and edit an Event', () => {
         const deleteSubmissionButton = await findByText('Bekreft');
 
         // Click the delete submission button
-        await waitFor(() => {
-            fireEvent(
-                deleteSubmissionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1));
         expect(beforeDeleteSingleEvent.mock.calls[0]).toEqual([
             `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
             mockEvents[0],
@@ -408,18 +402,16 @@ describe('Provides an interface to view and edit an Event', () => {
         const deleteSubmissionButton = await findByText('Bekreft');
 
         // Click the delete submission button
-        await waitFor(() => {
-            fireEvent(
-                deleteSubmissionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1));
         expect(beforeDeleteSingleEvent.mock.calls[0]).toEqual([
             `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
             mockEvents[0],
@@ -483,18 +475,16 @@ describe('Provides an interface to view and edit an Event', () => {
         const deleteSubmissionButton = await findByText('Bekreft');
 
         // Click the delete submission button
-        await waitFor(() => {
-            fireEvent(
-                deleteSubmissionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
-        expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeDeleteSingleEvent.mock.calls.length).toBe(1));
         expect(beforeDeleteSingleEvent.mock.calls[0]).toEqual([
             `${apiUrl}/events?eventId=${mockEvents[0].resource.eventId}`,
             mockEvents[0],
@@ -555,35 +545,31 @@ describe('Provides an interface to view and edit an Event', () => {
         const optionButton = await findByText('Over en periode');
 
         // Click the delete button
-        await waitFor(() => {
-            fireEvent(
-                optionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            optionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Find delete submission button
         const deleteSubmissionButton = await findByText('Bekreft');
 
         // Click the delete submission button
-        await waitFor(() => {
-            fireEvent(
-                deleteSubmissionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
         const date = new Date();
         date.setHours(2, 0, 0, 0);
 
-        expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1));
         expect(beforeDeleteRangeEvent.mock.calls[0]).toEqual([`${apiUrl}/events`, mockEvents[1], [date, date]]);
 
         expect(afterDeleteRangeEvent.mock.calls.length).toBe(1);
@@ -642,35 +628,31 @@ describe('Provides an interface to view and edit an Event', () => {
         const optionButton = await findByText('Over en periode');
 
         // Click the delete button
-        await waitFor(() => {
-            fireEvent(
-                optionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            optionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Find delete submission button
         const deleteSubmissionButton = await findByText('Bekreft');
 
         // Click the delete submission button
-        await waitFor(() => {
-            fireEvent(
-                deleteSubmissionButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
-        });
+        fireEvent(
+            deleteSubmissionButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
 
         // Expect the submission button to be called once and be supplied with the updated data
         const date = new Date();
         date.setHours(2, 0, 0, 0);
 
-        expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1);
+        await waitFor(() => expect(beforeDeleteRangeEvent.mock.calls.length).toBe(1));
         expect(beforeDeleteRangeEvent.mock.calls[0]).toEqual([`${apiUrl}/events`, mockEvents[1], [date, date]]);
 
         expect(afterDeleteRangeEvent.mock.calls.length).toBe(1);
