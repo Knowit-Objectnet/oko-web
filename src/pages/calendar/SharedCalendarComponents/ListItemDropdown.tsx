@@ -8,6 +8,7 @@ import ClickIcon from '../../../assets/Clock.svg';
 import LocationIcon from '../../../assets/Location.svg';
 import add from 'date-fns/add';
 import { Colors } from '../../../theme';
+import { useKeycloak } from '@react-keycloak/web';
 
 interface WrapperProps {
     color: Colors;
@@ -147,19 +148,26 @@ interface ListItemDropdownProps {
  * Dropdown component for list items container a singleday calendar and event info view
  */
 export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
-    // State for handling the selected event to view info of
-    const [selectedEvent, setSelectedEvent] = useState<EventInfo | null>(null);
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
+    // Select the first event that is owned by the logged in partner. It should never be undefined, but if it is
+    // then it should cause problems as it simply won't open the sideview with event info.
+    const firstOwnedEvent = props.events.find((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID);
+    // The selected event to show in the sideview
+    const [selectedEvent, setSelectedEvent] = useState<EventInfo | undefined>(firstOwnedEvent);
     const selectedEventResource = selectedEvent && selectedEvent.resource;
 
     // On event click function
     const onSelectEvent = (event: EventInfo) => {
-        setSelectedEvent(event);
+        if (event.resource.partner.id === keycloak.tokenParsed.GroupID) {
+            setSelectedEvent(event);
+        }
     };
 
     const onDeleteEvent = async () => {
         if (selectedEvent && props.deleteEvent) {
             await props.deleteEvent(selectedEvent);
-            setSelectedEvent(null);
+            setSelectedEvent(undefined);
         }
     };
 
