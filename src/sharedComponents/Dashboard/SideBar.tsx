@@ -1,18 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Transition } from 'react-transition-group';
-import { Link as LocalLink } from 'react-router-dom';
+import { Link as LocalLink, useHistory } from 'react-router-dom';
 import { Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
-import { useHistory } from 'react-router-dom';
-import Chart from '../../assets/Chart.svg';
 import People from '../../assets/People.svg';
 import Location from '../../assets/Location.svg';
 import Plus from '../../assets/Plus.svg';
-import Weight from '../../assets/Weight.svg';
-import Bell from '../../assets/Bell.svg';
-import PencilRec from '../../assets/PencilRec.svg';
-import Cog from '../../assets/Cog.svg';
 import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
 import useModal from '../Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
@@ -32,8 +26,8 @@ interface IIndexable {
 
 const sidebarTransitionStyles: IIndexable = {
     entering: { width: 0 },
-    entered: { width: '220px' },
-    exiting: { width: '220px' },
+    entered: { width: '250px' },
+    exiting: { width: '250px' },
     exited: { width: 0 },
 };
 
@@ -94,12 +88,6 @@ const FakeLink = styled.div`
     cursor: pointer;
 `;
 
-const StyledChart = styled(Chart)`
-    fill: inherit;
-    width: 1.5em;
-    margin-right: 10px;
-`;
-
 const StyledPeople = styled(People)`
     fill: inherit;
     width: 1.5em;
@@ -113,30 +101,6 @@ const StyledLocation = styled(Location)`
 `;
 
 const StyledPlus = styled(Plus)`
-    fill: inherit;
-    width: 1.5em;
-    margin-right: 10px;
-`;
-
-const StyledWeight = styled(Weight)`
-    fill: inherit;
-    width: 1.5em;
-    margin-right: 10px;
-`;
-
-const StyledBell = styled(Bell)`
-    fill: inherit;
-    width: 1.5em;
-    margin-right: 10px;
-`;
-
-const StyledPencilRec = styled(PencilRec)`
-    fill: inherit;
-    width: 1.5em;
-    margin-right: 10px;
-`;
-
-const StyledCog = styled(Cog)`
     fill: inherit;
     width: 1.5em;
     margin-right: 10px;
@@ -219,21 +183,12 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                             ...linkTransitionStyles[state],
                                         }}
                                     >
-                                        {keycloak.hasRealmRole(Roles.Oslo) && (
-                                            <Link
-                                                current={history.location.pathname}
-                                                to="/statistics"
-                                                onClick={props.onClick}
-                                            >
-                                                <StyledChart /> Statistikk
-                                            </Link>
-                                        )}
                                         <Link
                                             current={history.location.pathname}
                                             to="/partners"
                                             onClick={props.onClick}
                                         >
-                                            <StyledPeople /> Sam.partnere
+                                            <StyledPeople /> Samarbeidspartnere
                                         </Link>
                                         <Link
                                             current={history.location.pathname}
@@ -247,52 +202,10 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                                 <StyledPlus /> Opprett hendelse
                                             </FakeLink>
                                         )}
-                                        {keycloak.hasRealmRole(Roles.Partner) && (
-                                            <Link current={history.location.pathname} to="/" onClick={props.onClick}>
-                                                <StyledPlus /> Søk ekstrauttak
-                                            </Link>
-                                        )}
                                         {keycloak.hasRealmRole(Roles.Ambassador) && (
                                             <FakeLink onClick={onExtraEventClick}>
                                                 <StyledPlus /> Utlys ekstrauttak
                                             </FakeLink>
-                                        )}
-                                        {keycloak.hasRealmRole(Roles.Partner) && (
-                                            <Link
-                                                current={history.location.pathname}
-                                                to="/reporting"
-                                                onClick={props.onClick}
-                                            >
-                                                <StyledWeight /> Vektuttak
-                                            </Link>
-                                        )}
-                                        {(keycloak.hasRealmRole(Roles.Partner) ||
-                                            keycloak.hasRealmRole(Roles.Ambassador)) && (
-                                            <Link
-                                                current={history.location.pathname}
-                                                to="/notifications"
-                                                onClick={props.onClick}
-                                            >
-                                                <StyledBell /> Varsler
-                                            </Link>
-                                        )}
-                                        {keycloak.authenticated && (
-                                            <>
-                                                <Link
-                                                    current={history.location.pathname}
-                                                    to="/"
-                                                    onClick={props.onClick}
-                                                >
-                                                    <StyledPencilRec /> Skriv beskjed
-                                                </Link>
-                                                <Link
-                                                    current={history.location.pathname}
-                                                    to="/settings"
-                                                    onClick={props.onClick}
-                                                >
-                                                    <StyledCog /> Innstillinger
-                                                </Link>
-                                            </>
                                         )}
                                     </Links>
                                     <LogoWrapper>
