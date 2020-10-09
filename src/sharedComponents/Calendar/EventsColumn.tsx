@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { EventInfo, Roles } from '../../types';
-import { useEffect, useRef, useState } from 'react';
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import add from 'date-fns/add';
 import { useKeycloak } from '@react-keycloak/web';
+import { Event } from './Event';
 
 const Events = styled.div`
     top: 0;
@@ -12,36 +13,6 @@ const Events = styled.div`
     height: 100%;
     position: absolute;
     pointer-events: none;
-`;
-
-interface EventProps {
-    top: number;
-    left: number;
-    height: number;
-    width: number;
-    userIsOwner: boolean;
-}
-
-const Event = styled.div<EventProps>`
-    position: absolute;
-    pointer-events: auto;
-    top: ${(props) => props.top}px;
-    left: ${(props) => props.left}%;
-    height: ${(props) => props.height}px;
-    width: ${(props) => props.width}%;
-    background-color: ${(props) => (props.userIsOwner ? props.theme.colors.LightBlue : props.theme.colors.LightBeige)};
-    border: 1px solid ${(props) => props.theme.colors.DarkBegie};
-    color: ${(props) => props.theme.colors.Black};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-`;
-
-const EventText = styled.span`
-    text-align: center;
-    text-overflow: ellipsis;
-    overflow: hidden;
 `;
 
 interface EventsColumnProps {
@@ -179,13 +150,10 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
     };
 
     // On event click function
-    const onEventClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.persist();
-        // Get the index of the event
-        const index = e.currentTarget.dataset['index'];
-        if (props.events && index) {
+    const onEventClick = (index: number | undefined) => {
+        if (props.events && index !== undefined) {
             // Find the correct event and call the prop function
-            const event = props.events[parseInt(index)];
+            const event = props.events[index];
             if (event) props.onClick(event);
         }
     };
@@ -222,16 +190,15 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
                         left={(event.wPos / event.wLen) * 100}
                         width={event.width}
                         height={event.length * pxPerMin}
+                        title={event.title}
                         key={event.title + event.wPos + event.start.getTime()}
-                        data-index={event.index}
+                        index={event.index}
                         onClick={onEventClick}
                         userIsOwner={
                             keycloak.hasRealmRole(Roles.Partner) &&
                             event.resource.partner.id === keycloak.tokenParsed.GroupID
                         }
-                    >
-                        <EventText>{event.title}</EventText>
-                    </Event>,
+                    />,
                 );
             });
             // Add the events to the state
