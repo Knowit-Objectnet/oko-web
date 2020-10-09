@@ -21,6 +21,7 @@ interface EventsColumnProps {
     numberOfMinutes: number;
     deltaStart: Date;
     onClick: (event: EventInfo) => void;
+    selectedEvent?: number;
 }
 
 /*
@@ -194,6 +195,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
                         key={event.title + event.wPos + event.start.getTime()}
                         index={event.index}
                         onClick={onEventClick}
+                        selected={props.selectedEvent === event.resource.eventId}
                         userIsOwner={
                             keycloak.hasRealmRole(Roles.Partner) &&
                             event.resource.partner.id === keycloak.tokenParsed.GroupID

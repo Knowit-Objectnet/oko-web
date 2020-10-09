@@ -185,6 +185,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
                     columns={[undefined]}
                     min={newMin}
                     max={newMax}
+                    selectedEvent={selectedEventResource && selectedEventResource.eventId}
                     onSelectEvent={onSelectEvent}
                     events={[props.events]}
                 />
