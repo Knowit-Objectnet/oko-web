@@ -6,6 +6,7 @@ import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 import { WeekMenu } from '../WeekMenu';
 import { Colors } from '../../../theme';
+import {useKeycloak} from "@react-keycloak/web";
 
 interface ExpandableAgendaProps {
     date: Date;
@@ -20,6 +21,8 @@ interface ExpandableAgendaProps {
  * Expandable agenda that expans into a week calendar, for partners
  */
 export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
     // min and max times for the agenda and calendar
     const date = new Date(props.date);
     const min = new Date(date.setHours(7, 0, 0, 0));
@@ -64,6 +67,24 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                 }
             }
         });
+
+        // Go through all the groups of events (one group is one station)
+        for (const [key, value] of sortedEvents) {
+            // Go through all the events in the group
+            let foundPartnerEvent = false;
+            for (const element of value) {
+                // If one of the events in the group is owned by the partner logged in then save and go to next group
+                if (element.resource.partner.id === keycloak.tokenParsed.GroupID) {
+                    foundPartnerEvent = true;
+                    break;
+                }
+            }
+            // If we didnt find any events owned by the partner logged in, then delete the group as it is
+            // irrelevant for the logged in user.
+            if (!foundPartnerEvent) {
+                sortedEvents.delete(key);
+            }
+        }
         return sortedEvents;
     };
 
