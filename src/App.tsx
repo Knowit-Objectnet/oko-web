@@ -11,45 +11,47 @@ import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
 import { Helmet } from 'react-helmet';
-import axios from 'axios';
+import { QueryCache, ReactQueryCacheProvider } from 'react-query';
 
 // Pre-fetch data with a token if the user is logged in
 const onKeycloakTokens = (tokens: { idToken: string; refreshToken: string; token: string }) => {
-    axios.defaults.headers['Authorization'] = `Bearer ${tokens.token}`;
-
     if (tokens.token) {
         preFetch(tokens.token);
     }
 };
 
-const options = {
+const alertOptions = {
     position: positions.TOP_CENTER,
     timeout: 5000,
     offset: '30px',
     transition: transitions.SCALE,
 };
 
+const queryCache = new QueryCache();
+
 export const App: React.FC = () => {
     return (
         <KeycloakProvider keycloak={keycloak} onTokens={onKeycloakTokens}>
             <ThemeProvider theme={theme}>
-                <AlertProvider template={AlertTemplate} {...options}>
-                    <ModalProvider>
-                        <SWRConfig
-                            value={{
-                                refreshInterval: 0,
-                                revalidateOnFocus: true,
-                                revalidateOnReconnect: true,
-                            }}
-                        >
-                            <Helmet titleTemplate="Oslo kommune REG | %s">
-                                <html lang="no" />
-                                <meta name="description" content="Oslo kommune REG" />
-                            </Helmet>
-                            <RouterComponent />
-                            <GlobalStyle />
-                        </SWRConfig>
-                    </ModalProvider>
+                <AlertProvider template={AlertTemplate} {...alertOptions}>
+                    <ReactQueryCacheProvider queryCache={queryCache}>
+                        <ModalProvider>
+                            <SWRConfig
+                                value={{
+                                    refreshInterval: 0,
+                                    revalidateOnFocus: true,
+                                    revalidateOnReconnect: true,
+                                }}
+                            >
+                                <Helmet titleTemplate="Oslo kommune REG | %s">
+                                    <html lang="no" />
+                                    <meta name="description" content="Oslo kommune REG" />
+                                </Helmet>
+                                <RouterComponent />
+                                <GlobalStyle />
+                            </SWRConfig>
+                        </ModalProvider>
+                    </ReactQueryCacheProvider>
                 </AlertProvider>
             </ThemeProvider>
         </KeycloakProvider>

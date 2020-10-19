@@ -21,6 +21,8 @@ import { LocationSelector } from './LocationSelector';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
+import { useQuery } from 'react-query';
+import { ApiEventParams, getEvents } from '../../services/apiClient';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -118,10 +120,32 @@ export const CalendarPage: React.FC = () => {
         }`;
     }
 
+    const eventsParams: ApiEventParams = {
+        fromDate: fromDate.toISOString(),
+        toDate: toDate.toISOString(),
+    };
+
+    if (keycloak.hasRealmRole(Roles.Ambassador)) {
+        eventsParams.stationId = keycloak.tokenParsed.GroupID;
+    } else if (keycloak.hasRealmRole(Roles.Partner)) {
+        eventsParams.partnerId = keycloak.tokenParsed.GroupID;
+        if (isToggled && selectedLocation !== -1) {
+            eventsParams.stationId = selectedLocation;
+        }
+    } else {
+        if (selectedLocation !== -1) {
+            eventsParams.stationId = selectedLocation;
+        }
+    }
+
     // Events fetched from the api
     // Contains parameters to only get events in date range specified above and only from the accounts
     // station location
-    const { data: apiEvents, isValidating, mutate } = useSWR<ApiEvent[]>(url, fetcher);
+    const { data: apiEvents, isLoading: isValidating } = useQuery<Array<ApiEvent>>({
+        queryKey: ['getEvents', keycloak.token, eventsParams],
+        queryFn: getEvents,
+    });
+    const { mutate } = useSWR<ApiEvent[]>(url, fetcher);
     const [events, setEvents] = useState<Array<EventInfo>>([]);
 
     useEffect(() => {
@@ -315,7 +339,7 @@ export const CalendarPage: React.FC = () => {
                 newEvents.push(newEvent);
             }
 
-            await mutate(newEvents, false);
+            // await mutate(newEvents, false);
 
             // Remove modal
             modal.remove();
@@ -338,7 +362,7 @@ export const CalendarPage: React.FC = () => {
         if (apiEvents) {
             // update the local data immediately, but disable the revalidation
             const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
-            await mutate(newEvents, false);
+            // await mutate(newEvents, false);
             modal.remove();
         }
     };
@@ -373,7 +397,7 @@ export const CalendarPage: React.FC = () => {
                         new Date(apiEvent.startDateTime) <= end
                     ),
             );
-            await mutate(newEvents, false);
+            // await mutate(newEvents, false);
             modal.remove();
         }
     };
@@ -412,7 +436,7 @@ export const CalendarPage: React.FC = () => {
                 newEvents.push(newEvent);
 
                 // update the local data immediately, but disable the revalidation
-                await mutate(newEvents, false);
+                // await mutate(newEvents, false);
                 modal.remove();
             }
         }
