@@ -1,22 +1,20 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { default as DateCalendar } from 'react-calendar';
 import { RegCalendar } from './RegCalendar/RegCalendar';
-import { useEffect, useState } from 'react';
 import { Event } from '../../sharedComponents/Events/Event';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { ApiEvent, ApiStation, ApiPartner, apiUrl, EventInfo, Roles, Weekdays, ApiEventPost } from '../../types';
+import { ApiEvent, ApiPartner, ApiStation, EventInfo, Roles } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
 import differenceInDays from 'date-fns/differenceInDays';
-import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
 import { useKeycloak } from '@react-keycloak/web';
-import { useAlert, types } from 'react-alert';
+import { types, useAlert } from 'react-alert';
 import { LocationSelector } from './LocationSelector';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
@@ -66,8 +64,6 @@ const ModuleCalendar = styled(Module)`
 const Sidebar = styled.div`
     display: flex;
     flex-direction: column;
-    justify-contents: center;
-    align-items: center;
     margin-left: 40px;
     justify-content: flex-start;
     align-items: flex-start;
@@ -105,21 +101,6 @@ export const CalendarPage: React.FC = () => {
     const toDate = add(selectedDate, { weeks: 1 });
     toDate.setHours(20, 0, 0, 0);
 
-    let url = '';
-    if (keycloak.hasRealmRole(Roles.Ambassador)) {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&stationId=${
-            keycloak.tokenParsed.GroupID
-        }`;
-    } else if (keycloak.hasRealmRole(Roles.Partner)) {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&partnerId=${
-            keycloak.tokenParsed.GroupID
-        }${selectedLocation === -1 || !isToggled ? '' : '&stationId=' + selectedLocation}`;
-    } else {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}${
-            selectedLocation === -1 ? '' : '&stationId=' + selectedLocation
-        }`;
-    }
-
     const eventsParams: ApiEventParams = {
         fromDate: fromDate.toISOString(),
         toDate: toDate.toISOString(),
@@ -145,7 +126,7 @@ export const CalendarPage: React.FC = () => {
         queryKey: ['getEvents', keycloak.token, eventsParams],
         queryFn: getEvents,
     });
-    const { mutate } = useSWR<Array<ApiEvent>>(url, fetcher);
+
     const [events, setEvents] = useState<Array<EventInfo>>([]);
 
     useEffect(() => {
@@ -178,7 +159,14 @@ export const CalendarPage: React.FC = () => {
     // New event display function
     const newEvent = () => {
         const { start, end } = getStartAndEndDateTime();
-        modal.show(<NewEvent start={start} end={end} beforeSubmit={beforeNewEventSubmission} />);
+        modal.show(
+            <NewEvent
+                start={start}
+                end={end}
+                beforeSubmit={beforeNewEventSubmission}
+                afterSubmit={(success) => success && modal.remove()}
+            />,
+        );
     };
 
     // Extra event display function
@@ -238,6 +226,7 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
+    // TODO: not working currently, this optimistic UI mutation should probably be moved to 'NewEvent' component
     const beforeNewEventSubmission = async (
         key: string,
         data: {
@@ -325,10 +314,8 @@ export const CalendarPage: React.FC = () => {
                 newEvents.push(newEvent);
             }
 
+            // TODO: Optimistic UI disabled for now
             // await mutate(newEvents, false);
-
-            // Remove modal
-            modal.remove();
         }
     };
 
@@ -336,8 +323,8 @@ export const CalendarPage: React.FC = () => {
         if (apiEvents) {
             // update the local data immediately, but disable the revalidation
             const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
+            // TODO: Optimistic UI disabled for now
             // await mutate(newEvents, false);
-            modal.remove();
         }
     };
 
@@ -347,7 +334,9 @@ export const CalendarPage: React.FC = () => {
             alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
 
             // trigger a revalidation (refetch) to make sure our local data is correct
-            mutate();
+            // TODO: move to 'Event' component
+            // mutate();
+            modal.remove();
         } else {
             alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
         }
@@ -371,8 +360,8 @@ export const CalendarPage: React.FC = () => {
                         new Date(apiEvent.startDateTime) <= end
                     ),
             );
+            // TODO: Optimistic UI disabled for now
             // await mutate(newEvents, false);
-            modal.remove();
         }
     };
 
@@ -382,7 +371,9 @@ export const CalendarPage: React.FC = () => {
             alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
 
             // trigger a revalidation (refetch) to make sure our local data is correct
-            mutate();
+            // TODO: move to 'Event' component
+            // mutate();
+            modal.remove();
         } else {
             alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
         }
@@ -410,6 +401,7 @@ export const CalendarPage: React.FC = () => {
                 newEvents.push(newEvent);
 
                 // update the local data immediately, but disable the revalidation
+                // TODO: Optimistic UI disabled for now
                 // await mutate(newEvents, false);
                 modal.remove();
             }
@@ -422,7 +414,8 @@ export const CalendarPage: React.FC = () => {
             alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
 
             // trigger a revalidation (refetch) to make sure our local data is correct
-            mutate();
+            // TODO: move to 'Event' component
+            // mutate();
         } else {
             alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
         }

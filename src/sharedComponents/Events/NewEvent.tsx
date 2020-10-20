@@ -66,11 +66,10 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             await postEvent(newEvent, keycloak.token);
         },
         {
-            onMutate: (newEvent) => {
-                // TODO: move optimistic updates here
+            onMutate: () => {
+                // TODO: move optimistic updates here, and return rollback-function for use in onError
                 // see: https://react-query.tanstack.com/docs/guides/optimistic-updates
                 // and https://codesandbox.io/s/github/tannerlinsley/react-query/tree/master/examples/optimistic-updates
-                return () => console.log('Rollback function used in onError');
             },
             onSuccess: () => {
                 alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
@@ -78,12 +77,11 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                     props.afterSubmit(true);
                 }
             },
-            onError: (error, newEvent, rollback: () => void) => {
+            onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
                 if (props.afterSubmit) {
                     props.afterSubmit(false);
                 }
-                rollback();
             },
             onSettled: () => {
                 queryCache.invalidateQueries('getEvents');
