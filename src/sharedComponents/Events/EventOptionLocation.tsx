@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import { ApiStation } from '../../types';
+import { ApiLocation } from '../../types';
 
 const Select = styled.select`
     width: 100%;
@@ -25,7 +25,7 @@ const Box = styled.div<GrayBoxProps>`
 interface EventOptionDateRangeProps {
     isEditing: boolean;
     selectedLocation: number;
-    locations: ApiStation[];
+    locations: ApiLocation[];
     onChange: (locationId: number) => void;
 }
 

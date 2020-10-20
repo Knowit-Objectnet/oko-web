@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
-import { ApiStation, apiUrl } from '../../types';
+import { ApiLocation, apiUrl } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 import Filter from '../../assets/Filter.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
@@ -70,7 +70,7 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
     // State
     const [toggled, setToggled] = useState(true);
 
-    let { data: locations } = useSWR<ApiStation[]>(`${apiUrl}/stations`, fetcher);
+    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
     locations = locations && locations.length !== 0 ? locations : [];
 
     const onToggleClick = () => {

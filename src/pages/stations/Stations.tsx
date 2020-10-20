@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiStation, apiUrl, Roles } from '../../types';
+import { ApiLocation, apiUrl, Roles } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Station } from './Station';
@@ -73,7 +73,7 @@ export const Stations: React.FC = () => {
     // Modal dispatcher
     const modal = useModal();
     // List of stations
-    const { data: apiLocations, isValidating, mutate } = useSWR<Array<ApiStation>>(`${apiUrl}/stations`, fetcher);
+    const { data: apiLocations, isValidating, mutate } = useSWR<Array<ApiLocation>>(`${apiUrl}/stations`, fetcher);
     const locations = apiLocations || [];
 
     const beforeSubmit = async (
@@ -87,7 +87,7 @@ export const Stations: React.FC = () => {
             };
         },
     ) => {
-        const newLocation: ApiStation = {
+        const newLocation: ApiLocation = {
             id: -1,
             name: name,
             hours: data.hours,

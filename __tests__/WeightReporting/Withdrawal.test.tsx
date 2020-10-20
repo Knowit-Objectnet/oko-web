@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 import { WithdrawalSubmission } from '../../src/pages/weightReporting/WithdrawalSubmission';
 import { ThemeProvider } from 'styled-components';
 import theme from '../../src/theme';
-import { ApiStation, ApiPartner } from '../../src/types';
+import { ApiLocation, ApiPartner } from '../../src/types';
 
 describe('Provides a component to update a single weight withdrawal', () => {
     afterEach(() => {
@@ -23,7 +23,7 @@ describe('Provides a component to update a single weight withdrawal', () => {
             end: Date;
             onSubmit: type;
             partner: ApiPartner;
-            location: ApiStation;
+            location: ApiLocation;
         } = {
             id: 1,
             weight: 100,
@@ -73,7 +73,7 @@ describe('Provides a component to update a single weight withdrawal', () => {
             end: Date;
             onSubmit: type;
             partner: ApiPartner;
-            location: ApiStation;
+            location: ApiLocation;
         } = {
             id: 1,
             weight: null,

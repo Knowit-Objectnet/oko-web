@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiStation, apiUrl, EventInfo, Roles, SlotInfo } from '../../../types';
+import { ApiLocation, apiUrl, EventInfo, Roles, SlotInfo } from '../../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
@@ -63,7 +63,7 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     const max = new Date(date.setHours(20, 0, 0, 0));
 
     // Get locations for the calendar
-    let { data: locations } = useSWR<ApiStation[]>(`${apiUrl}/stations`, fetcher);
+    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
     locations = locations && locations.length !== 0 ? locations : [];
 
     // Function that handles an event click in the calendar. It displays the Event in a modal
