@@ -7,7 +7,7 @@ import { Event } from '../../sharedComponents/Events/Event';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { ApiEvent, ApiStation, ApiPartner, apiUrl, EventInfo, Roles } from '../../types';
+import { ApiEvent, ApiStation, ApiPartner, apiUrl, EventInfo, Roles, Weekdays, ApiEventPost } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
@@ -145,7 +145,7 @@ export const CalendarPage: React.FC = () => {
         queryKey: ['getEvents', keycloak.token, eventsParams],
         queryFn: getEvents,
     });
-    const { mutate } = useSWR<ApiEvent[]>(url, fetcher);
+    const { mutate } = useSWR<Array<ApiEvent>>(url, fetcher);
     const [events, setEvents] = useState<Array<EventInfo>>([]);
 
     useEffect(() => {
@@ -178,14 +178,7 @@ export const CalendarPage: React.FC = () => {
     // New event display function
     const newEvent = () => {
         const { start, end } = getStartAndEndDateTime();
-        modal.show(
-            <NewEvent
-                start={start}
-                end={end}
-                beforeSubmit={beforeNewEventSubmission}
-                afterSubmit={afterNewEventSubmission}
-            />,
-        );
+        modal.show(<NewEvent start={start} end={end} beforeSubmit={beforeNewEventSubmission} />);
     };
 
     // Extra event display function
@@ -212,14 +205,7 @@ export const CalendarPage: React.FC = () => {
     // On slot selection function to display new or extra event
     const onSelectSlot = (start: Date, end: Date, isOslo: boolean) => {
         if (isOslo) {
-            modal.show(
-                <NewEvent
-                    start={start}
-                    end={end}
-                    beforeSubmit={beforeNewEventSubmission}
-                    afterSubmit={afterNewEventSubmission}
-                />,
-            );
+            modal.show(<NewEvent start={start} end={end} beforeSubmit={beforeNewEventSubmission} />);
         } else {
             modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
         }
@@ -343,18 +329,6 @@ export const CalendarPage: React.FC = () => {
 
             // Remove modal
             modal.remove();
-        }
-    };
-
-    const afterNewEventSubmission = (successful: boolean, key: string) => {
-        if (successful) {
-            // Give user feedback
-            alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
-
-            // trigger a revalidation (refetch) to make sure our local data is correct
-            mutate();
-        } else {
-            alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
         }
     };
 

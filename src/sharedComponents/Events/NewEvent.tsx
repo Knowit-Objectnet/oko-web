@@ -8,10 +8,11 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiStation, ApiPartner, apiUrl } from '../../types';
+import { ApiStation, ApiPartner, apiUrl, ApiEventPost, Weekdays, ApiEvent } from '../../types';
 import { useAlert, types } from 'react-alert';
 import { Button } from '../Button';
-import { PostToAPI } from '../../utils/PostToAPI';
+import { useMutation, useQueryCache } from 'react-query';
+import { postEvent } from '../../services/apiClient';
 
 const Options = styled.div`
     display: flex;
@@ -39,7 +40,7 @@ interface NewEventProps {
         station: ApiStation,
         partner: ApiPartner,
     ) => void;
-    afterSubmit?: (successful: boolean, key: string) => void;
+    afterSubmit?: (successful: boolean) => void;
 }
 
 /**
@@ -51,14 +52,44 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     const alert = useAlert();
     // Keycloak instance
     const { keycloak } = useKeycloak();
+
     // Valid recycling stations (ombruksstasjon) locations fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
     let { data: locations } = useSWR<ApiStation[]>(`${apiUrl}/stations`, fetcher);
     locations = locations && locations.length !== 0 ? locations : [];
     // Valid partners fetched from api
     let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
     partners = partners || [];
+
+    const queryCache = useQueryCache();
+    const [newEventMutation] = useMutation(
+        async (newEvent: ApiEventPost) => {
+            await postEvent(newEvent, keycloak.token);
+        },
+        {
+            onMutate: (newEvent) => {
+                // TODO: move optimistic updates here
+                // see: https://react-query.tanstack.com/docs/guides/optimistic-updates
+                // and https://codesandbox.io/s/github/tannerlinsley/react-query/tree/master/examples/optimistic-updates
+                return () => console.log('Rollback function used in onError');
+            },
+            onSuccess: () => {
+                alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
+                if (props.afterSubmit) {
+                    props.afterSubmit(true);
+                }
+            },
+            onError: (error, newEvent, rollback: () => void) => {
+                alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
+                if (props.afterSubmit) {
+                    props.afterSubmit(false);
+                }
+                rollback();
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries('getEvents');
+            },
+        },
+    );
 
     // State
     const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
@@ -144,19 +175,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             return;
         }
 
-        // Dates has to be written as strings as we need to remove the Z, as ISO 8601 is not fully supported
-        const data: {
-            startDateTime: string;
-            endDateTime: string;
-            stationId: number;
-            partnerId: number;
-            recurrenceRule?: {
-                until: string;
-                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-                count?: number;
-                interval?: number;
-            };
-        } = {
+        const newEvent: ApiEventPost = {
             startDateTime: timeRange[0].toISOString(),
             endDateTime: timeRange[1].toISOString(),
             stationId: locationId,
@@ -164,17 +183,12 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         };
 
         if (recurring === 'Daily') {
-            data.recurrenceRule = {
+            newEvent.recurrenceRule = {
                 until: dateRange[1].toISOString(),
                 days: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
             };
         } else if (recurring === 'Weekly') {
-            data.recurrenceRule = {
-                until: dateRange[1].toISOString(),
-            };
-
-            const days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'> = [];
-
+            const days: Array<Weekdays> = [];
             for (const day of selectedDays) {
                 switch (day) {
                     case 1:
@@ -195,27 +209,17 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 }
             }
 
-            if (days) {
-                data.recurrenceRule.days = days;
-            }
+            newEvent.recurrenceRule = {
+                until: dateRange[1].toISOString(),
+                days,
+            };
         }
 
-        try {
-            if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/events`, data, location, partner);
-            }
-
-            // Post the event to the backend
-            await PostToAPI(`${apiUrl}/events`, data, keycloak.token);
-
-            if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/events`);
-            }
-        } catch (err) {
-            if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/events`);
-            }
+        if (props.beforeSubmit) {
+            props.beforeSubmit(`${apiUrl}/events`, newEvent, location, partner);
         }
+
+        await newEventMutation(newEvent);
     };
 
     return (

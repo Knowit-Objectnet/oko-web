@@ -1,5 +1,5 @@
-import axios, { AxiosInstance } from 'axios';
-import { ApiEvent, apiUrl } from '../types';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { ApiEvent, ApiEventPost, apiUrl } from '../types';
 
 export const apiClient = (token?: string): AxiosInstance => {
     // TODO: add all default headers here
@@ -21,10 +21,12 @@ export interface ApiEventParams {
 }
 
 // TODO, first parameter is the query key, could be stripped out somewhere else before calling this method
-export const getEvents = (_: string, token: string, params: ApiEventParams): Promise<ApiEvent> => {
-    return apiClient(token)
-        .get<ApiEvent>('/events', { params: params })
-        .then((response) => {
-            return response.data;
-        });
-};
+export const getEvents = (_: string, token: string, params: ApiEventParams): Promise<Array<ApiEvent>> =>
+    apiClient(token)
+        .get<Array<ApiEvent>>('/events', { params: params })
+        .then((response) => response.data);
+
+export const postEvent = (newEvent: ApiEventPost, token: string): Promise<ApiEvent> =>
+    apiClient(token)
+        .post<ApiEventPost, AxiosResponse<ApiEvent>>('/events', newEvent)
+        .then((response) => response.data);

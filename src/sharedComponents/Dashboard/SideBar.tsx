@@ -193,11 +193,7 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
         const { start, end } = getStartAndEndDateTime();
         const afterSubmission = (successful: boolean) => {
             if (successful) {
-                // Give user feedback
-                alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
                 modal.remove();
-            } else {
-                alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
             }
             props.onClick();
         };
