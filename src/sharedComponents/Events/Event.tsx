@@ -54,6 +54,7 @@ export const Event: React.FC<EventProps> = (props) => {
     const alert = useAlert();
     // Keycloak instance
     const { keycloak } = useKeycloak();
+
     // State
     const [isEditing, setIsEditing] = useState(false);
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
