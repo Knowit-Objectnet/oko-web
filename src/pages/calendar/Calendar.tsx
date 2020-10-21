@@ -171,7 +171,6 @@ export const CalendarPage: React.FC = () => {
                 event={event}
                 afterDeleteSingleEvent={closeModalOnSuccess}
                 afterDeleteRangeEvent={closeModalOnSuccess}
-                afterUpdateEvent={closeModalOnSuccess}
             />,
         );
     };

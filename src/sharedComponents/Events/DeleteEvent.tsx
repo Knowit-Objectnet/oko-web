@@ -49,12 +49,13 @@ const StyledDateRangePicker = styled(DateRangePicker)`
     }
 `;
 
-interface DeleteEventProps {
+interface Props {
     allowRangeDeletion: boolean;
     onSubmit: (range: [Date, Date], isSingleDeletion: boolean) => void;
+    submitDisabled: boolean;
 }
 
-export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
+export const DeleteEvent: React.FC<Props> = (props) => {
     const date = new Date();
     date.setHours(2, 0, 0, 0);
     const [range, setRange] = useState<[Date, Date]>([new Date(date), new Date(date)]);
@@ -95,6 +96,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                 color="Green"
                 height={35}
                 width={props.allowRangeDeletion ? undefined : 250}
+                disabled={props.submitDisabled}
             />
         </Wrapper>
     );

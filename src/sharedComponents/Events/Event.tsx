@@ -4,14 +4,13 @@ import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { ApiEventPatch, apiUrl, EventInfo, Roles } from '../../types';
+import { ApiEventPatch, EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
-import { useAlert, types } from 'react-alert';
+import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
-import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useMutation, useQueryCache } from 'react-query';
 import { ApiEventParams, deleteEvents, patchEvent } from '../../httpclient/eventClients';
 
@@ -41,8 +40,6 @@ interface EventProps {
     event: EventInfo;
     afterDeleteSingleEvent?: (successful: boolean) => void;
     afterDeleteRangeEvent?: (successful: boolean) => void;
-    beforeUpdateEvent?: (key: string, eventId: number, start: string, end: string) => void;
-    afterUpdateEvent?: (successful: boolean) => void;
 }
 
 /**
@@ -57,7 +54,7 @@ export const Event: React.FC<EventProps> = (props) => {
 
     const queryCache = useQueryCache();
 
-    const [deleteSingleEventMutation] = useMutation(
+    const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
         async (event: EventInfo) => {
             await deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
         },
@@ -80,7 +77,7 @@ export const Event: React.FC<EventProps> = (props) => {
         },
     );
 
-    const [deleteRangeEventsMutation] = useMutation(
+    const [deleteRangeEventsMutation, { isLoading: deleteRangeEventLoading }] = useMutation(
         async ([event, range]: [EventInfo, [Date, Date]]) => {
             const apiParams: ApiEventParams = {
                 recurrenceRuleId: event.resource.recurrenceRule?.id,
@@ -108,22 +105,17 @@ export const Event: React.FC<EventProps> = (props) => {
         },
     );
 
-    const [updateEventMutation] = useMutation(
+    const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
         async (updatedEvent: ApiEventPatch) => {
             await patchEvent(updatedEvent, keycloak.token);
         },
         {
             onSuccess: () => {
                 alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
-                if (props.afterUpdateEvent) {
-                    props.afterUpdateEvent(true);
-                }
+                setIsEditing(false);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
-                if (props.afterUpdateEvent) {
-                    props.afterUpdateEvent(false);
-                }
             },
             onSettled: () => {
                 queryCache.invalidateQueries('getEvents');
@@ -287,6 +279,7 @@ export const Event: React.FC<EventProps> = (props) => {
                                                 keycloak.tokenParsed.GroupID === props.event.resource.location.id)
                                         }
                                         onSubmit={onDelete}
+                                        submitDisabled={deleteSingleEventLoading || deleteRangeEventLoading}
                                     />
                                 )}
                             </>
@@ -294,7 +287,9 @@ export const Event: React.FC<EventProps> = (props) => {
                     </Section>
                 )}
             </Body>
-            {isEditing && <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />}
+            {isEditing && (
+                <EventSubmission onSubmit={onSubmit} onCancel={onCancel} buttonsDisabled={updateEventLoading} />
+            )}
         </EventTemplateHorizontal>
     );
 };
