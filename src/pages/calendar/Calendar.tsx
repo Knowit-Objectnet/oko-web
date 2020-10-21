@@ -97,9 +97,9 @@ export const CalendarPage: React.FC = () => {
     // The from date is the last monday from props.date and the to date is 1 week into the future
     // This is such that the week-calendar always has it's 5 days of events
     const fromDate = add(selectedDate, { days: selectedDate.getDay() === 0 ? -6 : -selectedDate.getDay() + 1 });
-    fromDate.setHours(7, 0, 0, 0);
+    fromDate.setHours(0, 0, 0, 0);
     const toDate = add(selectedDate, { weeks: 1 });
-    toDate.setHours(20, 0, 0, 0);
+    toDate.setHours(24, 0, 0, 0);
 
     const eventsParams: ApiEventParams = {
         fromDate: fromDate.toISOString(),
