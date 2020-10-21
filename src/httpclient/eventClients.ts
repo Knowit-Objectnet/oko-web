@@ -1,8 +1,9 @@
 import { ApiEvent, ApiEventPost } from '../types';
-import { AxiosResponse } from 'axios';
 import { apiClient } from './apiClient';
 
 export interface ApiEventParams {
+    eventId?: number;
+    recurrenceRuleId?: number;
     fromDate?: string;
     toDate?: string;
     stationId?: number;
@@ -10,12 +11,17 @@ export interface ApiEventParams {
 }
 
 // TODO, first parameter is the query key, could be stripped out somewhere else before calling this method
-export const getEvents = (_: string, token: string, params: ApiEventParams): Promise<Array<ApiEvent>> =>
+export const getEvents = (_: string, params: ApiEventParams, token: string): Promise<Array<ApiEvent>> =>
     apiClient(token)
-        .get<Array<ApiEvent>>('/events', { params: params })
+        .get('/events', { params })
         .then((response) => response.data);
 
 export const postEvent = (newEvent: ApiEventPost, token: string): Promise<ApiEvent> =>
     apiClient(token)
-        .post<ApiEventPost, AxiosResponse<ApiEvent>>('/events', newEvent)
+        .post('/events', newEvent)
+        .then((response) => response.data);
+
+export const deleteEvents = (params: ApiEventParams, token: string): Promise<Array<ApiEvent>> =>
+    apiClient(token)
+        .delete('/events', { params })
         .then((response) => response.data);

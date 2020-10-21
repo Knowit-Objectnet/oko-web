@@ -12,7 +12,8 @@ import { useAlert, types } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
 import { PatchToAPI } from '../../utils/PatchToAPI';
-import { DeleteToAPI } from '../../utils/DeleteToAPI';
+import { useMutation, useQueryCache } from 'react-query';
+import { ApiEventParams, deleteEvents } from '../../httpclient/eventClients';
 
 const Body = styled.div`
     display: flex;
@@ -56,6 +57,75 @@ export const Event: React.FC<EventProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
 
+    const queryCache = useQueryCache();
+
+    const [deleteSingleEventMutation] = useMutation(
+        async (event: EventInfo) => {
+            await deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
+        },
+        {
+            onMutate: (event: EventInfo) => {
+                // TODO: move optimistic updates here, and return rollback-function for use in onError
+                // see: https://react-query.tanstack.com/docs/guides/optimistic-updates
+                // and https://codesandbox.io/s/github/tannerlinsley/react-query/tree/master/examples/optimistic-updates
+                if (props.beforeDeleteSingleEvent) {
+                    props.beforeDeleteSingleEvent(`${apiUrl}/events?eventId=${event.resource.eventId}`, event);
+                }
+            },
+            onSuccess: () => {
+                alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
+                if (props.afterDeleteSingleEvent) {
+                    props.afterDeleteSingleEvent(true);
+                }
+            },
+            onError: () => {
+                alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
+                if (props.afterDeleteSingleEvent) {
+                    props.afterDeleteSingleEvent(false);
+                }
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries('getEvents');
+            },
+        },
+    );
+
+    const [deleteRangeEventsMutation] = useMutation(
+        async ([event, range]: [EventInfo, [Date, Date]]) => {
+            const apiParams: ApiEventParams = {
+                recurrenceRuleId: event.resource.recurrenceRule?.id,
+                fromDate: range[0].toISOString().slice(0, -2),
+                toDate: range[1].toISOString().slice(0, -2),
+            };
+            await deleteEvents(apiParams, keycloak.token);
+        },
+        {
+            onMutate: ([event, range]) => {
+                // TODO: move optimistic updates here, and return rollback-function for use in onError
+                // see: https://react-query.tanstack.com/docs/guides/optimistic-updates
+                // and https://codesandbox.io/s/github/tannerlinsley/react-query/tree/master/examples/optimistic-updates
+                if (props.beforeDeleteRangeEvent) {
+                    props.beforeDeleteRangeEvent(`${apiUrl}/events`, event, range);
+                }
+            },
+            onSuccess: () => {
+                alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
+                if (props.afterDeleteRangeEvent) {
+                    props.afterDeleteRangeEvent(true);
+                }
+            },
+            onError: () => {
+                alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
+                if (props.afterDeleteRangeEvent) {
+                    props.afterDeleteRangeEvent(false);
+                }
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries('getEvents');
+            },
+        },
+    );
+
     // State
     const [isEditing, setIsEditing] = useState(false);
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.event.start, props.event.end]);
@@ -90,69 +160,12 @@ export const Event: React.FC<EventProps> = (props) => {
         setIsDeletionConfirmationVisible(!isDeletionConfirmationVisible);
     };
 
-    const onDelete = (range: [Date, Date], isSingleDeletion: boolean) => {
-        if (isSingleDeletion) {
-            deleteSingleEvent(props.event);
+    const onDelete = async (range: [Date, Date], isSingleDeletion: boolean) => {
+        const eventIsNotRecurring = !props.event.resource.recurrenceRule;
+        if (isSingleDeletion || eventIsNotRecurring) {
+            deleteSingleEventMutation(props.event);
         } else {
-            deleteRangeEvents(props.event, range);
-        }
-    };
-
-    const deleteSingleEvent = async (event: EventInfo) => {
-        try {
-            if (props.beforeDeleteSingleEvent) {
-                props.beforeDeleteSingleEvent(`${apiUrl}/events?eventId=${event.resource.eventId}`, event);
-            }
-            // send a request to the API to update the source
-            await DeleteToAPI(`${apiUrl}/events?eventId=${event.resource.eventId}`, keycloak.token);
-            // TODO: replace with useMutation
-            // mutate();
-
-            // Give user feedback
-            alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
-
-            if (props.afterDeleteSingleEvent) {
-                props.afterDeleteSingleEvent(true);
-            }
-        } catch (err) {
-            alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
-            if (props.afterDeleteSingleEvent) {
-                props.afterDeleteSingleEvent(false);
-            }
-        }
-    };
-
-    const deleteRangeEvents = async (event: EventInfo, range: [Date, Date]) => {
-        if (!event.resource.recurrenceRule) {
-            await deleteSingleEvent(event);
-            return;
-        }
-
-        try {
-            if (props.beforeDeleteRangeEvent) {
-                props.beforeDeleteRangeEvent(`${apiUrl}/events`, event, range);
-            }
-
-            // TODO: refactor to useMutation hook
-            // mutate();
-            // send a request to the API to update the source
-            await DeleteToAPI(
-                `${apiUrl}/events?recurrenceRuleId=${
-                    event.resource.recurrenceRule?.id
-                }&fromDate=${range[0].toISOString().slice(0, -2)}&toDate=${range[1].toISOString().slice(0, -2)}`,
-                keycloak.token,
-            );
-
-            // Give user feedback
-            alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
-            if (props.afterDeleteRangeEvent) {
-                props.afterDeleteRangeEvent(true);
-            }
-        } catch (err) {
-            alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
-            if (props.afterDeleteRangeEvent) {
-                props.afterDeleteRangeEvent(false);
-            }
+            deleteRangeEventsMutation([props.event, range]);
         }
     };
 
