@@ -79,7 +79,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
             </Calendar>
             {selectedEvent && (
                 <Event
-                    {...selectedEvent}
+                    event={selectedEvent}
                     afterDeleteRangeEvent={onDeleteEvent}
                     afterDeleteSingleEvent={onDeleteEvent}
                 />

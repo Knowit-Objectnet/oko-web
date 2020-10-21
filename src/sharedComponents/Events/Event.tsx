@@ -36,9 +36,10 @@ const Options = styled.div`
     flex: 1;
 `;
 
-interface EventProps extends EventInfo {
+interface EventProps {
+    event: EventInfo;
     beforeDeleteSingleEvent?: (key: string, event: EventInfo) => void;
-    afterDeleteSingleEvent?: (successful: boolean, key: string) => void;
+    afterDeleteSingleEvent?: (successful: boolean) => void;
     beforeDeleteRangeEvent?: (key: string, event: EventInfo, range: [Date, Date]) => void;
     afterDeleteRangeEvent?: (successful: boolean, key: string) => void;
     beforeUpdateEvent?: (key: string, eventId: number, start: string, end: string) => void;
@@ -57,8 +58,8 @@ export const Event: React.FC<EventProps> = (props) => {
 
     // State
     const [isEditing, setIsEditing] = useState(false);
-    const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
-    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([props.event.start, props.event.end]);
+    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.event.start, props.event.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
     const [isDeletionConfirmationVisible, setIsDeletionConfirmationVisible] = useState(false);
@@ -90,19 +91,10 @@ export const Event: React.FC<EventProps> = (props) => {
     };
 
     const onDelete = (range: [Date, Date], isSingleDeletion: boolean) => {
-        const {
-            beforeDeleteSingleEvent,
-            afterDeleteSingleEvent,
-            beforeDeleteRangeEvent,
-            afterDeleteRangeEvent,
-            beforeUpdateEvent,
-            afterUpdateEvent,
-            ...rest
-        } = props;
         if (isSingleDeletion) {
-            deleteSingleEvent(rest);
+            deleteSingleEvent(props.event);
         } else {
-            deleteRangeEvents(rest, range);
+            deleteRangeEvents(props.event, range);
         }
     };
 
@@ -113,13 +105,19 @@ export const Event: React.FC<EventProps> = (props) => {
             }
             // send a request to the API to update the source
             await DeleteToAPI(`${apiUrl}/events?eventId=${event.resource.eventId}`, keycloak.token);
+            // TODO: replace with useMutation
+            // mutate();
+
+            // Give user feedback
+            alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
 
             if (props.afterDeleteSingleEvent) {
-                props.afterDeleteSingleEvent(true, `${apiUrl}/events?eventId=${event.resource.eventId}`);
+                props.afterDeleteSingleEvent(true);
             }
         } catch (err) {
+            alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
             if (props.afterDeleteSingleEvent) {
-                props.afterDeleteSingleEvent(false, `${apiUrl}/events?eventId=${event.resource.eventId}`);
+                props.afterDeleteSingleEvent(false);
             }
         }
     };
@@ -155,8 +153,8 @@ export const Event: React.FC<EventProps> = (props) => {
     // Function called if edit was cancelled. Resets all values to the original event info
     const onCancel = () => {
         setIsEditing(false);
-        setDateRange([props.start, props.end]);
-        setTimeRange([props.start, props.end]);
+        setDateRange([props.event.start, props.event.end]);
+        setTimeRange([props.event.start, props.event.end]);
     };
 
     // Function called on successful event edit.
@@ -200,7 +198,7 @@ export const Event: React.FC<EventProps> = (props) => {
             if (props.beforeUpdateEvent) {
                 props.beforeUpdateEvent(
                     `${apiUrl}/events`,
-                    props.resource.eventId,
+                    props.event.resource.eventId,
                     start.toISOString(),
                     end.toISOString(),
                 );
@@ -209,7 +207,7 @@ export const Event: React.FC<EventProps> = (props) => {
             await PatchToAPI(
                 `${apiUrl}/events`,
                 {
-                    id: props.resource.eventId,
+                    id: props.event.resource.eventId,
                     startDateTime: start.toISOString().slice(0, -2),
                     endDateTime: end.toISOString().slice(0, -2),
                 },
@@ -227,10 +225,11 @@ export const Event: React.FC<EventProps> = (props) => {
 
     return (
         <EventTemplateHorizontal
-            title={props.title}
+            title={props.event.title}
             showEditSymbol={
                 keycloak.hasRealmRole(Roles.Oslo) ||
-                (keycloak.hasRealmRole(Roles.Ambassador) && keycloak.tokenParsed.GroupID === props.resource.location.id)
+                (keycloak.hasRealmRole(Roles.Ambassador) &&
+                    keycloak.tokenParsed.GroupID === props.event.resource.location.id)
             }
             isEditing={isEditing}
             onEditClick={onEditClick}
@@ -252,8 +251,8 @@ export const Event: React.FC<EventProps> = (props) => {
                         />
                         <EventOptionLocation
                             isEditing={false}
-                            selectedLocation={props.resource.location.id}
-                            locations={[props.resource.location]}
+                            selectedLocation={props.event.resource.location.id}
+                            locations={[props.event.resource.location]}
                             onChange={() => {
                                 /* TODO: make it so that we don't need this nop func */
                             }}
@@ -262,12 +261,12 @@ export const Event: React.FC<EventProps> = (props) => {
                 </Section>
                 {!isEditing && (
                     <Section>
-                        <EventMessageBox {...props.resource.message} />
+                        <EventMessageBox {...props.event.resource.message} />
                         {(keycloak.hasRealmRole(Roles.Oslo) ||
                             (keycloak.hasRealmRole(Roles.Partner) &&
-                                keycloak.tokenParsed.GroupID === props.resource.partner.id) ||
+                                keycloak.tokenParsed.GroupID === props.event.resource.partner.id) ||
                             (keycloak.hasRealmRole(Roles.Ambassador) &&
-                                keycloak.tokenParsed.GroupID === props.resource.location.id)) && (
+                                keycloak.tokenParsed.GroupID === props.event.resource.location.id)) && (
                             <>
                                 <Button
                                     text="Avlys uttak"
@@ -280,7 +279,7 @@ export const Event: React.FC<EventProps> = (props) => {
                                         allowRangeDeletion={
                                             keycloak.hasRealmRole(Roles.Oslo) ||
                                             (keycloak.hasRealmRole(Roles.Ambassador) &&
-                                                keycloak.tokenParsed.GroupID === props.resource.location.id)
+                                                keycloak.tokenParsed.GroupID === props.event.resource.location.id)
                                         }
                                         onSubmit={onDelete}
                                     />
