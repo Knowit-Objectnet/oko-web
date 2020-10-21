@@ -119,11 +119,8 @@ export const CalendarPage: React.FC = () => {
         }
     }
 
-    // Events fetched from the api
-    // Contains parameters to only get events in date range specified above and only from the accounts
-    // station location
     const { data: apiEvents, isLoading: isValidating } = useQuery<Array<ApiEvent>>({
-        queryKey: ['getEvents', keycloak.token, eventsParams],
+        queryKey: ['getEvents', eventsParams, keycloak.token],
         queryFn: getEvents,
     });
 
@@ -396,8 +393,6 @@ export const CalendarPage: React.FC = () => {
                     isToggled={isToggled}
                     onWeekChange={onWeekChange}
                     events={events}
-                    beforeDeleteSingleEvent={beforeDeleteSingleEvent}
-                    afterDeleteSingleEvent={closeModalOnSuccess}
                 />
             );
         } else if (keycloak.hasRealmRole(Roles.Ambassador)) {

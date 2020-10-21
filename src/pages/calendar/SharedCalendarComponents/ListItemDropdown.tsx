@@ -37,8 +37,6 @@ interface ListItemDropdownProps {
     min: Date;
     max: Date;
     color: Colors;
-    allowDeletionOfEvent?: boolean;
-    deleteEvent?: (event: EventInfo) => void;
 }
 
 /*
