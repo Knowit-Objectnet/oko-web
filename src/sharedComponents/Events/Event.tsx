@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { apiUrl, EventInfo, Roles } from '../../types';
+import { ApiEventPatch, apiUrl, EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
@@ -13,7 +13,7 @@ import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useMutation, useQueryCache } from 'react-query';
-import { ApiEventParams, deleteEvents } from '../../httpclient/eventClients';
+import { ApiEventParams, deleteEvents, patchEvent } from '../../httpclient/eventClients';
 
 const Body = styled.div`
     display: flex;
@@ -40,7 +40,6 @@ const Options = styled.div`
 interface EventProps {
     event: EventInfo;
     afterDeleteSingleEvent?: (successful: boolean) => void;
-    beforeDeleteRangeEvent?: (key: string, event: EventInfo, range: [Date, Date]) => void;
     afterDeleteRangeEvent?: (successful: boolean) => void;
     beforeUpdateEvent?: (key: string, eventId: number, start: string, end: string) => void;
     afterUpdateEvent?: (successful: boolean) => void;
@@ -63,14 +62,6 @@ export const Event: React.FC<EventProps> = (props) => {
             await deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
         },
         {
-            onMutate: (event: EventInfo) => {
-                // TODO: move optimistic updates here, and return rollback-function for use in onError
-                // see: https://react-query.tanstack.com/docs/guides/optimistic-updates
-                // and https://codesandbox.io/s/github/tannerlinsley/react-query/tree/master/examples/optimistic-updates
-                if (props.beforeDeleteSingleEvent) {
-                    props.beforeDeleteSingleEvent(`${apiUrl}/events?eventId=${event.resource.eventId}`, event);
-                }
-            },
             onSuccess: () => {
                 alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
                 if (props.afterDeleteSingleEvent) {
@@ -99,14 +90,6 @@ export const Event: React.FC<EventProps> = (props) => {
             await deleteEvents(apiParams, keycloak.token);
         },
         {
-            onMutate: ([event, range]) => {
-                // TODO: move optimistic updates here, and return rollback-function for use in onError
-                // see: https://react-query.tanstack.com/docs/guides/optimistic-updates
-                // and https://codesandbox.io/s/github/tannerlinsley/react-query/tree/master/examples/optimistic-updates
-                if (props.beforeDeleteRangeEvent) {
-                    props.beforeDeleteRangeEvent(`${apiUrl}/events`, event, range);
-                }
-            },
             onSuccess: () => {
                 alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
                 if (props.afterDeleteRangeEvent) {
@@ -117,6 +100,29 @@ export const Event: React.FC<EventProps> = (props) => {
                 alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
                 if (props.afterDeleteRangeEvent) {
                     props.afterDeleteRangeEvent(false);
+                }
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries('getEvents');
+            },
+        },
+    );
+
+    const [updateEventMutation] = useMutation(
+        async (updatedEvent: ApiEventPatch) => {
+            await patchEvent(updatedEvent, keycloak.token);
+        },
+        {
+            onSuccess: () => {
+                alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
+                if (props.afterUpdateEvent) {
+                    props.afterUpdateEvent(true);
+                }
+            },
+            onError: () => {
+                alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
+                if (props.afterUpdateEvent) {
+                    props.afterUpdateEvent(false);
                 }
             },
             onSettled: () => {
@@ -192,6 +198,7 @@ export const Event: React.FC<EventProps> = (props) => {
             timeRange[1].getMilliseconds(),
         );
 
+        // FIXME: these values should not be hardcoded, but use station opening hours
         const min = new Date(start);
         min.setHours(8, 0, 0, 0);
         const max = new Date(end);
@@ -212,40 +219,13 @@ export const Event: React.FC<EventProps> = (props) => {
             return;
         }
 
-        try {
-            if (props.beforeUpdateEvent) {
-                props.beforeUpdateEvent(
-                    `${apiUrl}/events`,
-                    props.event.resource.eventId,
-                    start.toISOString(),
-                    end.toISOString(),
-                );
-            }
+        const data: ApiEventPatch = {
+            id: props.event.resource.eventId,
+            startDateTime: start.toISOString().slice(0, -2),
+            endDateTime: end.toISOString().slice(0, -2),
+        };
 
-            // TODO: refactor to useMutation hook
-            // mutate();
-            // send a request to the API to update the source
-            await PatchToAPI(
-                `${apiUrl}/events`,
-                {
-                    id: props.event.resource.eventId,
-                    startDateTime: start.toISOString().slice(0, -2),
-                    endDateTime: end.toISOString().slice(0, -2),
-                },
-                keycloak.token,
-            );
-
-            // Give user feedback
-            alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
-            if (props.afterUpdateEvent) {
-                props.afterUpdateEvent(true);
-            }
-        } catch {
-            alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
-            if (props.afterUpdateEvent) {
-                props.afterUpdateEvent(false);
-            }
-        }
+        await updateEventMutation(data);
     };
 
     return (

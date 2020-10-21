@@ -7,11 +7,10 @@ import { Event } from '../../sharedComponents/Events/Event';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { ApiEvent, ApiPartner, ApiLocation, EventInfo, Roles } from '../../types';
+import { ApiEvent, EventInfo, Roles } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
-import differenceInDays from 'date-fns/differenceInDays';
 import { Loading } from '../../sharedComponents/Loading';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
@@ -119,7 +118,7 @@ export const CalendarPage: React.FC = () => {
         }
     }
 
-    const { data: apiEvents, isLoading: isValidating } = useQuery<Array<ApiEvent>>({
+    const { data: apiEvents, isLoading } = useQuery<Array<ApiEvent>>({
         queryKey: ['getEvents', eventsParams, keycloak.token],
         queryFn: getEvents,
     });
@@ -172,7 +171,6 @@ export const CalendarPage: React.FC = () => {
                 event={event}
                 afterDeleteSingleEvent={closeModalOnSuccess}
                 afterDeleteRangeEvent={closeModalOnSuccess}
-                beforeUpdateEvent={beforeUpdateEvent}
                 afterUpdateEvent={closeModalOnSuccess}
             />,
         );
@@ -203,7 +201,7 @@ export const CalendarPage: React.FC = () => {
         setSelectedLocation(index);
     };
 
-    const afterExtraEventSubmission = (successful: boolean, key: string) => {
+    const afterExtraEventSubmission = (successful: boolean) => {
         if (successful) {
             // Give user feedback and close modal
             alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
@@ -217,35 +215,6 @@ export const CalendarPage: React.FC = () => {
     const closeModalOnSuccess = (successful: boolean) => {
         if (successful) {
             modal.remove();
-        }
-    };
-
-    const beforeUpdateEvent = async (key: string, eventId: number, start: string, end: string) => {
-        // Update the local state if the apiEvents exist
-        if (apiEvents) {
-            // Find the event we want to update
-            const newEvent = apiEvents.find((event) => event.id === eventId);
-
-            // Tell the user that we were unable to update local data if we cant find the event
-            // , and hope that it works to update the api
-            if (!newEvent) {
-                alert.show('Klarte ikke å oppdatere lokal data, vennligst vent.', { type: types.INFO });
-            } else {
-                // Update the event
-                newEvent.startDateTime = start;
-                newEvent.endDateTime = end;
-
-                // Create a new array of events to not directly mutate state
-                const newEvents = apiEvents.filter((event) => event.id !== eventId);
-
-                // Add the updated event to the new Events
-                newEvents.push(newEvent);
-
-                // update the local data immediately, but disable the revalidation
-                // TODO: Optimistic UI disabled for now
-                // await mutate(newEvents, false);
-                modal.remove();
-            }
         }
     };
 
@@ -300,7 +269,7 @@ export const CalendarPage: React.FC = () => {
                         />
                     )}
                 </ModuleDateCalendar>
-                {!apiEvents && (!events || events.length <= 0) && isValidating ? (
+                {!apiEvents && (!events || events.length <= 0) && isLoading ? (
                     <Loading text="Laster inn data..." />
                 ) : (
                     <ModuleCalendar>{getCalendar()}</ModuleCalendar>
