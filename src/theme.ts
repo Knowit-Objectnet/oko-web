@@ -12,6 +12,7 @@ export enum Colors {
     DarkBegie = '#D0BFAE',
     Black = '#2C2C2C',
     White = '#FFFFFF',
+    Disabled = '#AAAAAA',
 }
 
 const theme = {
@@ -28,6 +29,7 @@ const theme = {
         DarkBegie: Colors.DarkBegie,
         Black: Colors.Black,
         White: Colors.White,
+        Disabled: Colors.Disabled,
     },
 } as const;
 

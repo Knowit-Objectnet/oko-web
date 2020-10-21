@@ -6,19 +6,24 @@ interface WrapperProps {
     width?: number;
     height?: number;
     styling?: string;
+    disabled?: boolean;
 }
 
 const Wrapper = styled.button<WrapperProps>`
     background-color: ${(props) => {
-        switch (props.color) {
-            case 'Red':
-                return props.theme.colors.Red;
-            case 'Green':
-                return props.theme.colors.Green;
-            case 'DarkBlue':
-                return props.theme.colors.DarkBlue;
-            default:
-                return null;
+        if (!props.disabled) {
+            switch (props.color) {
+                case 'Red':
+                    return props.theme.colors.Red;
+                case 'Green':
+                    return props.theme.colors.Green;
+                case 'DarkBlue':
+                    return props.theme.colors.DarkBlue;
+                default:
+                    return null;
+            }
+        } else {
+            return props.theme.colors.Disabled;
         }
     }};
     color: ${(props) => props.color === 'DarkBlue' && props.theme.colors.White};
@@ -37,6 +42,7 @@ interface ButtonProps {
     width?: number;
     height?: number;
     styling?: string;
+    disabled?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = (props) => (
@@ -47,6 +53,7 @@ export const Button: React.FC<ButtonProps> = (props) => (
         width={props.width}
         height={props.height}
         styling={props.styling}
+        disabled={props.disabled}
     >
         {props.text}
     </Wrapper>
