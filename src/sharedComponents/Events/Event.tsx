@@ -39,7 +39,6 @@ const Options = styled.div`
 
 interface EventProps {
     event: EventInfo;
-    beforeDeleteSingleEvent?: (key: string, event: EventInfo) => void;
     afterDeleteSingleEvent?: (successful: boolean) => void;
     beforeDeleteRangeEvent?: (key: string, event: EventInfo, range: [Date, Date]) => void;
     afterDeleteRangeEvent?: (successful: boolean) => void;

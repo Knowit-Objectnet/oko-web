@@ -156,14 +156,7 @@ export const CalendarPage: React.FC = () => {
     // New event display function
     const newEvent = () => {
         const { start, end } = getStartAndEndDateTime();
-        modal.show(
-            <NewEvent
-                start={start}
-                end={end}
-                beforeSubmit={beforeNewEventSubmission}
-                afterSubmit={(success) => success && modal.remove()}
-            />,
-        );
+        modal.show(<NewEvent start={start} end={end} afterSubmit={closeModalOnSuccess} />);
     };
 
     // Extra event display function
@@ -177,9 +170,7 @@ export const CalendarPage: React.FC = () => {
         modal.show(
             <Event
                 event={event}
-                beforeDeleteSingleEvent={beforeDeleteSingleEvent}
                 afterDeleteSingleEvent={closeModalOnSuccess}
-                beforeDeleteRangeEvent={beforeDeleteRangeEvents}
                 afterDeleteRangeEvent={closeModalOnSuccess}
                 beforeUpdateEvent={beforeUpdateEvent}
                 afterUpdateEvent={closeModalOnSuccess}
@@ -190,7 +181,7 @@ export const CalendarPage: React.FC = () => {
     // On slot selection function to display new or extra event
     const onSelectSlot = (start: Date, end: Date, isOslo: boolean) => {
         if (isOslo) {
-            modal.show(<NewEvent start={start} end={end} beforeSubmit={beforeNewEventSubmission} />);
+            modal.show(<NewEvent start={start} end={end} />);
         } else {
             modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
         }
@@ -223,134 +214,9 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    // TODO: not working currently, this optimistic UI mutation should probably be moved to 'NewEvent' component
-    const beforeNewEventSubmission = async (
-        key: string,
-        data: {
-            startDateTime: string;
-            endDateTime: string;
-            stationId: number;
-            partnerId: number;
-            recurrenceRule?: {
-                until: string;
-                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-                count?: number;
-                interval?: number;
-            };
-        },
-        station: ApiLocation,
-        partner: ApiPartner,
-    ) => {
-        if (apiEvents) {
-            // Mutate local data
-            const newEvent: ApiEvent = {
-                startDateTime: data.startDateTime,
-                endDateTime: data.endDateTime,
-                id: -1,
-                partner: partner,
-                station: station,
-                recurrenceRule: data.recurrenceRule
-                    ? {
-                          id: -1,
-                          until: data.recurrenceRule.until,
-                          days: data.recurrenceRule.days || [],
-                          count: data.recurrenceRule.count || 0,
-                          interval: data.recurrenceRule.interval || 0,
-                      }
-                    : null,
-            };
-            // Create the new event(s) locally for the local state
-            const newEvents = [...apiEvents];
-            if (data.recurrenceRule && data.recurrenceRule.days) {
-                const days: Array<number> = data.recurrenceRule.days.map((day) => {
-                    switch (day) {
-                        case 'MONDAY':
-                            return 1;
-                        case 'TUESDAY':
-                            return 2;
-                        case 'WEDNESDAY':
-                            return 3;
-                        case 'THURSDAY':
-                            return 4;
-                        case 'FRIDAY':
-                            return 5;
-                    }
-                });
-
-                // Make the minimum of 5 (the days we show in the calendar at once) and the dayes in the new event range
-                const min = Math.min(
-                    5,
-                    differenceInDays(new Date(data.recurrenceRule.until), new Date(data.startDateTime)) + 1,
-                );
-                for (let i = 0; i < min; i++) {
-                    // create a copy of the start and end time
-                    const newStart = new Date(data.startDateTime);
-                    const newEnd = new Date(data.endDateTime);
-
-                    // Copy the new event
-                    const additionalEvent = { ...newEvent };
-                    // Update the id to get an unique id
-                    additionalEvent.id -= i + 1;
-
-                    // Get the next day
-                    const newDate = add(newStart, { days: i });
-
-                    // Check if the next day is included in the days
-                    const day = newDate.getDay();
-                    if (!days.includes(day)) continue;
-
-                    // Set the date to the weekday of this week
-                    newStart.setDate(newDate.getDate());
-                    newEnd.setDate(newDate.getDate());
-                    // Update the event with the new dates
-                    additionalEvent.startDateTime = newStart.toISOString();
-                    additionalEvent.endDateTime = newEnd.toISOString();
-                    newEvents.push(additionalEvent);
-                }
-            } else {
-                newEvents.push(newEvent);
-            }
-
-            // TODO: Optimistic UI disabled for now
-            // await mutate(newEvents, false);
-        }
-    };
-
-    const beforeDeleteSingleEvent = async (key: string, event: EventInfo) => {
-        if (apiEvents) {
-            // update the local data immediately, but disable the revalidation
-            const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
-            // TODO: Optimistic UI disabled for now
-            // await mutate(newEvents, false);
-        }
-    };
-
     const closeModalOnSuccess = (successful: boolean) => {
         if (successful) {
             modal.remove();
-        }
-    };
-
-    const beforeDeleteRangeEvents = async (key: string, event: EventInfo, range: [Date, Date]) => {
-        if (apiEvents) {
-            // Set range date times to low and high times to make sure all events in the range gets deleeted
-            const start = range[0];
-            const end = range[1];
-            start.setHours(2, 0, 0, 0);
-            end.setHours(22, 0, 0, 0);
-            // update the local data immediately, but disable the revalidation
-            const newEvents = apiEvents.filter(
-                (apiEvent) =>
-                    !(
-                        apiEvent.recurrenceRule &&
-                        event.resource.recurrenceRule &&
-                        apiEvent.recurrenceRule.id === event.resource.recurrenceRule.id &&
-                        new Date(apiEvent.startDateTime) >= start &&
-                        new Date(apiEvent.startDateTime) <= end
-                    ),
-            );
-            // TODO: Optimistic UI disabled for now
-            // await mutate(newEvents, false);
         }
     };
 

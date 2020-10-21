@@ -61,16 +61,11 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     partners = partners || [];
 
     const queryCache = useQueryCache();
-    const [newEventMutation] = useMutation(
+    const [newEventMutation, { isLoading: mutationLoading }] = useMutation(
         async (newEvent: ApiEventPost) => {
             await postEvent(newEvent, keycloak.token);
         },
         {
-            onMutate: () => {
-                // TODO: move optimistic updates here, and return rollback-function for use in onError
-                // see: https://react-query.tanstack.com/docs/guides/optimistic-updates
-                // and https://codesandbox.io/s/github/tannerlinsley/react-query/tree/master/examples/optimistic-updates
-            },
             onSuccess: () => {
                 alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
                 if (props.afterSubmit) {
@@ -254,6 +249,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 height={35}
                 width={350}
                 styling="margin-top: 40px;"
+                disabled={mutationLoading}
             />
         </EventTemplateVertical>
     );
