@@ -41,9 +41,9 @@ interface EventProps {
     beforeDeleteSingleEvent?: (key: string, event: EventInfo) => void;
     afterDeleteSingleEvent?: (successful: boolean) => void;
     beforeDeleteRangeEvent?: (key: string, event: EventInfo, range: [Date, Date]) => void;
-    afterDeleteRangeEvent?: (successful: boolean, key: string) => void;
+    afterDeleteRangeEvent?: (successful: boolean) => void;
     beforeUpdateEvent?: (key: string, eventId: number, start: string, end: string) => void;
-    afterUpdateEvent?: (successful: boolean, key: string) => void;
+    afterUpdateEvent?: (successful: boolean) => void;
 }
 
 /**
@@ -132,6 +132,9 @@ export const Event: React.FC<EventProps> = (props) => {
             if (props.beforeDeleteRangeEvent) {
                 props.beforeDeleteRangeEvent(`${apiUrl}/events`, event, range);
             }
+
+            // TODO: refactor to useMutation hook
+            // mutate();
             // send a request to the API to update the source
             await DeleteToAPI(
                 `${apiUrl}/events?recurrenceRuleId=${
@@ -140,12 +143,15 @@ export const Event: React.FC<EventProps> = (props) => {
                 keycloak.token,
             );
 
+            // Give user feedback
+            alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
             if (props.afterDeleteRangeEvent) {
-                props.afterDeleteRangeEvent(true, `${apiUrl}/events`);
+                props.afterDeleteRangeEvent(true);
             }
         } catch (err) {
+            alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
             if (props.afterDeleteRangeEvent) {
-                props.afterDeleteRangeEvent(false, `${apiUrl}/events`);
+                props.afterDeleteRangeEvent(false);
             }
         }
     };
@@ -203,6 +209,9 @@ export const Event: React.FC<EventProps> = (props) => {
                     end.toISOString(),
                 );
             }
+
+            // TODO: refactor to useMutation hook
+            // mutate();
             // send a request to the API to update the source
             await PatchToAPI(
                 `${apiUrl}/events`,
@@ -213,12 +222,16 @@ export const Event: React.FC<EventProps> = (props) => {
                 },
                 keycloak.token,
             );
+
+            // Give user feedback
+            alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
             if (props.afterUpdateEvent) {
-                props.afterUpdateEvent(true, `${apiUrl}/events`);
+                props.afterUpdateEvent(true);
             }
         } catch {
+            alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
             if (props.afterUpdateEvent) {
-                props.afterUpdateEvent(false, `${apiUrl}/events`);
+                props.afterUpdateEvent(false);
             }
         }
     };

@@ -179,13 +179,13 @@ export const CalendarPage: React.FC = () => {
     const onSelectEvent = (event: EventInfo) => {
         modal.show(
             <Event
-                {...event}
+                event={event}
                 beforeDeleteSingleEvent={beforeDeleteSingleEvent}
-                afterDeleteSingleEvent={afterDeleteSingleEvent}
+                afterDeleteSingleEvent={closeModalOnSuccess}
                 beforeDeleteRangeEvent={beforeDeleteRangeEvents}
-                afterDeleteRangeEvent={afterDeleteRangeEvents}
+                afterDeleteRangeEvent={closeModalOnSuccess}
                 beforeUpdateEvent={beforeUpdateEvent}
-                afterUpdateEvent={afterUpdateEvent}
+                afterUpdateEvent={closeModalOnSuccess}
             />,
         );
     };
@@ -328,17 +328,9 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const afterDeleteSingleEvent = (successful: boolean, key: string) => {
+    const closeModalOnSuccess = (successful: boolean) => {
         if (successful) {
-            // Give user feedback
-            alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
-
-            // trigger a revalidation (refetch) to make sure our local data is correct
-            // TODO: move to 'Event' component
-            // mutate();
             modal.remove();
-        } else {
-            alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
         }
     };
 
@@ -362,20 +354,6 @@ export const CalendarPage: React.FC = () => {
             );
             // TODO: Optimistic UI disabled for now
             // await mutate(newEvents, false);
-        }
-    };
-
-    const afterDeleteRangeEvents = (successful: boolean, key: string) => {
-        if (successful) {
-            // Give user feedback
-            alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
-
-            // trigger a revalidation (refetch) to make sure our local data is correct
-            // TODO: move to 'Event' component
-            // mutate();
-            modal.remove();
-        } else {
-            alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
         }
     };
 
@@ -408,19 +386,6 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const afterUpdateEvent = (successful: boolean, key: string) => {
-        if (successful) {
-            // Give user feedback
-            alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
-
-            // trigger a revalidation (refetch) to make sure our local data is correct
-            // TODO: move to 'Event' component
-            // mutate();
-        } else {
-            alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
-        }
-    };
-
     // Function to decide which calendar to render depending on role
     const getCalendar = () => {
         if (keycloak.hasRealmRole(Roles.Partner)) {
@@ -432,7 +397,7 @@ export const CalendarPage: React.FC = () => {
                     onWeekChange={onWeekChange}
                     events={events}
                     beforeDeleteSingleEvent={beforeDeleteSingleEvent}
-                    afterDeleteSingleEvent={afterDeleteSingleEvent}
+                    afterDeleteSingleEvent={closeModalOnSuccess}
                 />
             );
         } else if (keycloak.hasRealmRole(Roles.Ambassador)) {
