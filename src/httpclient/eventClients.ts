@@ -1,17 +1,6 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { ApiEvent, ApiEventPost, apiUrl } from '../types';
-
-export const apiClient = (token?: string): AxiosInstance => {
-    // TODO: add all default headers here
-    return axios.create({
-        baseURL: apiUrl,
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-        responseType: 'json',
-    });
-};
+import { ApiEvent, ApiEventPost } from '../types';
+import { AxiosResponse } from 'axios';
+import { apiClient } from './apiClient';
 
 export interface ApiEventParams {
     fromDate?: string;

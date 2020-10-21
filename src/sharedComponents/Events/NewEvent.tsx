@@ -12,7 +12,7 @@ import { ApiLocation, ApiPartner, apiUrl, ApiEventPost, Weekdays, ApiEvent } fro
 import { useAlert, types } from 'react-alert';
 import { Button } from '../Button';
 import { useMutation, useQueryCache } from 'react-query';
-import { postEvent } from '../../services/apiClient';
+import { postEvent } from '../../httpclient/eventClients';
 
 const Options = styled.div`
     display: flex;
