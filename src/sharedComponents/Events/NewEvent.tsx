@@ -86,8 +86,8 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
 
     // State
     const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
-    const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
-    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
+    const [timeRange, setTimeRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
     const [locationId, setLocationId] = useState(-1);

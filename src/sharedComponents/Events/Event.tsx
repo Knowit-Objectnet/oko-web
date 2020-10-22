@@ -125,8 +125,8 @@ export const Event: React.FC<EventProps> = (props) => {
 
     // State
     const [isEditing, setIsEditing] = useState(false);
-    const [dateRange, setDateRange] = useState<[Date, Date]>([props.event.start, props.event.end]);
-    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.event.start, props.event.end]);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(props.event.start), new Date(props.event.end)]);
+    const [timeRange, setTimeRange] = useState<[Date, Date]>([new Date(props.event.start), new Date(props.event.end)]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
     const [isDeletionConfirmationVisible, setIsDeletionConfirmationVisible] = useState(false);
