@@ -250,9 +250,6 @@ export const Event: React.FC<EventProps> = (props) => {
                             isEditing={false}
                             selectedLocation={props.event.resource.location.id}
                             locations={[props.event.resource.location]}
-                            onChange={() => {
-                                /* TODO: make it so that we don't need this nop func */
-                            }}
                         />
                     </Options>
                 </Section>

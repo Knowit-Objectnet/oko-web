@@ -26,7 +26,7 @@ interface EventOptionDateRangeProps {
     isEditing: boolean;
     selectedLocation: number;
     locations: ApiLocation[];
-    onChange: (locationId: number) => void;
+    onChange?: (locationId: number) => void;
 }
 
 /**
@@ -36,7 +36,7 @@ export const EventOptionLocation: React.FC<EventOptionDateRangeProps> = (props) 
     const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         e.persist();
         const id = e.currentTarget.value;
-        if (id) {
+        if (props.onChange && id) {
             props.onChange(parseInt(id));
         }
     };
