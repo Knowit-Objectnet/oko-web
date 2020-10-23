@@ -10,7 +10,7 @@ export interface ApiEventParams {
     partnerId?: number;
 }
 
-// TODO, first parameter is the query key, could be stripped out somewhere else before calling this method
+// First parameter is the query key passed by react-query
 export const getEvents = (_: string, params: ApiEventParams, token: string): Promise<Array<ApiEvent>> =>
     apiClient(token)
         .get<Array<ApiEvent>>('/events', { params })

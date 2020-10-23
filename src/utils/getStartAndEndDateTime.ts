@@ -6,7 +6,7 @@ export const getStartAndEndDateTime: (customDate?: Date) => { start: Date; end: 
     const now = customDate ? new Date(customDate) : new Date();
 
     // Max and min of opening time range
-    // FIXME: These values should not be hardcoded
+    // TODO: these values should not be hardcoded, but use station opening hours
     const min = new Date(date.setHours(7, 0));
     const max = new Date(date.setHours(20, 0));
 

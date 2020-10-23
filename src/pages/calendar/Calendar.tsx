@@ -19,7 +19,7 @@ import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
 import { useQuery } from 'react-query';
-import { ApiEventParams, getEvents } from '../../httpclient/eventClients';
+import { ApiEventParams, getEvents } from '../../httpclient/eventRequests';
 
 const Wrapper = styled.div`
     height: 100%;

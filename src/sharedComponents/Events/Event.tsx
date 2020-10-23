@@ -12,7 +12,7 @@ import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
 import { useMutation, useQueryCache } from 'react-query';
-import { ApiEventParams, deleteEvents, patchEvent } from '../../httpclient/eventClients';
+import { ApiEventParams, deleteEvents, patchEvent } from '../../httpclient/eventRequests';
 
 const Body = styled.div`
     display: flex;
@@ -190,7 +190,7 @@ export const Event: React.FC<EventProps> = (props) => {
             timeRange[1].getMilliseconds(),
         );
 
-        // FIXME: these values should not be hardcoded, but use station opening hours
+        // TODO: these values should not be hardcoded, but use station opening hours
         const min = new Date(start);
         min.setHours(8, 0, 0, 0);
         const max = new Date(end);
