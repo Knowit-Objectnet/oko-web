@@ -48,9 +48,7 @@ describe('Provides a page for partners to view the calendar', () => {
     it('Should render without errors', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const onWeekCahngeMock = jest.fn();
-        const beforeDeleteSingleEventMock = jest.fn();
-        const afterDeleteSingleEventMock = jest.fn();
+        const onWeekChangeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 13);
@@ -62,10 +60,8 @@ describe('Provides a page for partners to view the calendar', () => {
                     date={date}
                     isToggled={isToggled}
                     onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekCahngeMock}
+                    onWeekChange={onWeekChangeMock}
                     events={events}
-                    afterDeleteSingleEvent={afterDeleteSingleEventMock}
-                    beforeDeleteSingleEvent={beforeDeleteSingleEventMock}
                 />
             </KeycloakProvider>,
         );
@@ -74,9 +70,7 @@ describe('Provides a page for partners to view the calendar', () => {
     it('Should render all the station/locatiion groups for 7.13.2020-7.18.2020 for Fretex', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const onWeekCahngeMock = jest.fn();
-        const beforeDeleteSingleEventMock = jest.fn();
-        const afterDeleteSingleEventMock = jest.fn();
+        const onWeekChangeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 13);
@@ -88,10 +82,8 @@ describe('Provides a page for partners to view the calendar', () => {
                     date={date}
                     isToggled={isToggled}
                     onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekCahngeMock}
+                    onWeekChange={onWeekChangeMock}
                     events={events}
-                    afterDeleteSingleEvent={afterDeleteSingleEventMock}
-                    beforeDeleteSingleEvent={beforeDeleteSingleEventMock}
                 />
             </KeycloakProvider>,
         );
@@ -105,9 +97,7 @@ describe('Provides a page for partners to view the calendar', () => {
     it('Should change which station/location groups are rendered when the date changes', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const onWeekCahngeMock = jest.fn();
-        const beforeDeleteSingleEventMock = jest.fn();
-        const afterDeleteSingleEventMock = jest.fn();
+        const onWeekChangeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 15);
@@ -119,10 +109,8 @@ describe('Provides a page for partners to view the calendar', () => {
                     date={date}
                     isToggled={isToggled}
                     onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekCahngeMock}
+                    onWeekChange={onWeekChangeMock}
                     events={events}
-                    afterDeleteSingleEvent={afterDeleteSingleEventMock}
-                    beforeDeleteSingleEvent={beforeDeleteSingleEventMock}
                 />
             </KeycloakProvider>,
         );
