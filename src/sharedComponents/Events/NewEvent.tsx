@@ -23,23 +23,6 @@ const Options = styled.div`
 interface NewEventProps {
     start: Date;
     end: Date;
-    beforeSubmit?: (
-        key: string,
-        data: {
-            startDateTime: string;
-            endDateTime: string;
-            stationId: number;
-            partnerId: number;
-            recurrenceRule?: {
-                until: string;
-                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-                count?: number;
-                interval?: number;
-            };
-        },
-        station: ApiLocation,
-        partner: ApiPartner,
-    ) => void;
     afterSubmit?: (successful: boolean) => void;
 }
 
@@ -206,10 +189,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 until: dateRange[1].toISOString(),
                 days,
             };
-        }
-
-        if (props.beforeSubmit) {
-            props.beforeSubmit(`${apiUrl}/events`, newEvent, location, partner);
         }
 
         await newEventMutation(newEvent);
