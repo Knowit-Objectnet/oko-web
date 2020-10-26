@@ -48,7 +48,7 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
                 onClick={onClick}
                 text="Avbryt"
                 width={108}
-                disabled={props.buttonsDisabled}
+                loading={props.buttonsDisabled}
             />
             <Divider />
             <Button
@@ -57,7 +57,7 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
                 onClick={onClick}
                 text="Godkjenn"
                 width={108}
-                disabled={props.buttonsDisabled}
+                loading={props.buttonsDisabled}
             />
         </Submission>
     );

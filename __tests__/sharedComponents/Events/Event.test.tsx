@@ -272,7 +272,6 @@ describe('Provides an interface to view and edit an Event', () => {
         );
 
         // TODO: this assert does not really check if we're getting the wanted result
-        // Expect the submission button to be called once and be supplied with the updated data
         await waitFor(() => expect(afterDeleteSingleEvent.mock.calls.length).toBe(1));
         expect(afterDeleteSingleEvent.mock.calls[0]).toEqual([true]);
     }); */
@@ -331,7 +330,6 @@ describe('Provides an interface to view and edit an Event', () => {
         );
 
         // TODO: this assert does not really check if we're getting the wanted result
-        // Expect the submission button to be called once and be supplied with the updated data
         await waitFor(() => expect(afterDeleteSingleEvent.mock.calls.length).toBe(1));
         expect(afterDeleteSingleEvent.mock.calls[0]).toEqual([true]);
     }); */
@@ -390,7 +388,6 @@ describe('Provides an interface to view and edit an Event', () => {
         );
 
         // TODO: this assert does not really check if we're getting the wanted result
-        // Expect the submission button to be called once and be supplied with the updated data
         await waitFor(() => expect(afterDeleteSingleEvent.mock.calls.length).toBe(1));
         expect(afterDeleteSingleEvent.mock.calls[0]).toEqual([true]);
     }); */

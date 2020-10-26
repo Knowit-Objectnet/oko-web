@@ -6,12 +6,12 @@ interface WrapperProps {
     width?: number;
     height?: number;
     styling?: string;
-    disabled?: boolean;
+    loading?: boolean;
 }
 
 const Wrapper = styled.button<WrapperProps>`
     background-color: ${(props) => {
-        if (!props.disabled) {
+        if (!props.loading) {
             switch (props.color) {
                 case 'Red':
                     return props.theme.colors.Red;
@@ -42,7 +42,7 @@ interface ButtonProps {
     width?: number;
     height?: number;
     styling?: string;
-    disabled?: boolean;
+    loading?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = (props) => (
@@ -53,7 +53,7 @@ export const Button: React.FC<ButtonProps> = (props) => (
         width={props.width}
         height={props.height}
         styling={props.styling}
-        disabled={props.disabled}
+        loading={props.loading}
     >
         {props.text}
     </Wrapper>

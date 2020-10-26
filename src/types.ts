@@ -1,4 +1,4 @@
-export type Weekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
+export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
 export interface ApiEvent {
     id: number;
@@ -26,14 +26,14 @@ export interface ApiEventPatch {
 export interface ApiRecurrenceRule {
     id: number;
     until: string;
-    days: Array<Weekdays>;
+    days: Array<WorkingWeekdays>;
     interval: number;
     count: number | null;
 }
 
 export interface ApiRecurrenceRulePost {
     until: string;
-    days: Array<Weekdays>;
+    days: Array<WorkingWeekdays>;
     interval?: number;
     count?: number;
 }
@@ -52,7 +52,7 @@ interface EventInfoResource {
     recurrenceRule: {
         id: number;
         until: string;
-        days?: Array<Weekdays>;
+        days?: Array<WorkingWeekdays>;
         interval?: number;
         count?: number | null;
     } | null;
@@ -71,7 +71,7 @@ export interface ApiLocation {
 }
 
 export type StationOpeningHours = {
-    [index in Weekdays]?: [string, string];
+    [index in WorkingWeekdays]?: [string, string];
 };
 
 export interface ApiPartner {

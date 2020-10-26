@@ -91,7 +91,6 @@ describe('Provides an interface to create a new Event', () => {
         );
 
         // TODO: this assert does not really check if we're getting the wanted result
-        // Expect the afterSubmit function to be called with the data
         await waitFor(() => expect(mockAfterSubmit).toHaveBeenCalledTimes(1));
         expect(mockAfterSubmit.mock.calls[0]).toEqual([true]);
     });
@@ -159,7 +158,6 @@ describe('Provides an interface to create a new Event', () => {
         );
 
         // TODO: this assert does not really check if we're getting the wanted result
-        // Expect the afterSubmit function to be called with the data
         await waitFor(() => expect(mockAfterSubmit).toHaveBeenCalledTimes(1));
         expect(mockAfterSubmit.mock.calls[0]).toEqual([true]);
     });
@@ -241,7 +239,6 @@ describe('Provides an interface to create a new Event', () => {
         );
 
         // TODO: this assert does not really check if we're getting the wanted result
-        // Expect the afterSubmit function to be called with the data
         await waitFor(() => expect(mockAfterSubmit).toHaveBeenCalledTimes(1));
         expect(mockAfterSubmit.mock.calls[0]).toEqual([true]);
     }); */

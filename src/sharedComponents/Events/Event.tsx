@@ -54,7 +54,7 @@ export const Event: React.FC<EventProps> = (props) => {
 
     const queryCache = useQueryCache();
 
-    const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
+    const [deleteSingleEvent, { isLoading: deleteSingleEventLoading }] = useMutation(
         async (event: EventInfo) => {
             await deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
         },
@@ -77,7 +77,7 @@ export const Event: React.FC<EventProps> = (props) => {
         },
     );
 
-    const [deleteRangeEventsMutation, { isLoading: deleteRangeEventLoading }] = useMutation(
+    const [deleteRangeEvents, { isLoading: deleteRangeEventLoading }] = useMutation(
         async ([event, range]: [EventInfo, [Date, Date]]) => {
             const apiParams: ApiEventParams = {
                 recurrenceRuleId: event.resource.recurrenceRule?.id,
@@ -105,7 +105,7 @@ export const Event: React.FC<EventProps> = (props) => {
         },
     );
 
-    const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
+    const [updateEvent, { isLoading: updateEventLoading }] = useMutation(
         async (updatedEvent: ApiEventPatch) => {
             await patchEvent(updatedEvent, keycloak.token);
         },
@@ -160,9 +160,9 @@ export const Event: React.FC<EventProps> = (props) => {
     const onDelete = async (range: [Date, Date], isSingleDeletion: boolean) => {
         const eventIsNotRecurring = !props.event.resource.recurrenceRule;
         if (isSingleDeletion || eventIsNotRecurring) {
-            deleteSingleEventMutation(props.event);
+            deleteSingleEvent(props.event);
         } else {
-            deleteRangeEventsMutation([props.event, range]);
+            deleteRangeEvents([props.event, range]);
         }
     };
 
@@ -211,13 +211,13 @@ export const Event: React.FC<EventProps> = (props) => {
             return;
         }
 
-        const data: ApiEventPatch = {
+        const updatedEvent: ApiEventPatch = {
             id: props.event.resource.eventId,
             startDateTime: start.toISOString().slice(0, -2),
             endDateTime: end.toISOString().slice(0, -2),
         };
 
-        await updateEventMutation(data);
+        await updateEvent(updatedEvent);
     };
 
     return (

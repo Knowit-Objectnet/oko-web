@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiEventPost, ApiLocation, ApiPartner, apiUrl, Weekdays } from '../../types';
+import { ApiEventPost, ApiLocation, ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
 import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
 import { useMutation, useQueryCache } from 'react-query';
@@ -44,7 +44,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     partners = partners || [];
 
     const queryCache = useQueryCache();
-    const [newEventMutation, { isLoading: mutationLoading }] = useMutation(
+    const [addEvent, { isLoading: addEventLoading }] = useMutation(
         async (newEvent: ApiEventPost) => {
             await postEvent(newEvent, keycloak.token);
         },
@@ -164,7 +164,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 days: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
             };
         } else if (recurring === 'Weekly') {
-            const days: Array<Weekdays> = [];
+            const days: Array<WorkingWeekdays> = [];
             for (const day of selectedDays) {
                 switch (day) {
                     case 1:
@@ -191,7 +191,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             };
         }
 
-        await newEventMutation(newEvent);
+        await addEvent(newEvent);
     };
 
     return (
@@ -228,7 +228,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 height={35}
                 width={350}
                 styling="margin-top: 40px;"
-                disabled={mutationLoading}
+                loading={addEventLoading}
             />
         </EventTemplateVertical>
     );
