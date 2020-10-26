@@ -284,9 +284,7 @@ export const Event: React.FC<EventProps> = (props) => {
                     </Section>
                 )}
             </Body>
-            {isEditing && (
-                <EventSubmission onSubmit={onSubmit} onCancel={onCancel} buttonsDisabled={updateEventLoading} />
-            )}
+            {isEditing && <EventSubmission onSubmit={onSubmit} onCancel={onCancel} isLoading={updateEventLoading} />}
         </EventTemplateHorizontal>
     );
 };

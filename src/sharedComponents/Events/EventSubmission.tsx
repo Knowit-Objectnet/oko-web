@@ -19,7 +19,7 @@ interface EventSubmissionProps {
     submitText?: string;
     onCancel: () => void;
     onSubmit: () => void;
-    buttonsDisabled: boolean;
+    isLoading: boolean;
 }
 
 /**
@@ -42,14 +42,7 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
 
     return (
         <Submission>
-            <Button
-                color="Red"
-                name="cancelButton"
-                onClick={onClick}
-                text="Avbryt"
-                width={108}
-                loading={props.buttonsDisabled}
-            />
+            <Button color="Red" name="cancelButton" onClick={onClick} text="Avbryt" width={108} />
             <Divider />
             <Button
                 color="Green"
@@ -57,7 +50,7 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
                 onClick={onClick}
                 text="Godkjenn"
                 width={108}
-                loading={props.buttonsDisabled}
+                loading={props.isLoading}
             />
         </Submission>
     );
