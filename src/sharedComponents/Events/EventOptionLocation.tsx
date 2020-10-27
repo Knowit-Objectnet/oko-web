@@ -2,6 +2,7 @@ import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import { ApiLocation } from '../../types';
+import LocationIcon from '../../assets/Location.svg';
 
 const Select = styled.select`
     width: 100%;
@@ -20,6 +21,19 @@ const Box = styled.div<GrayBoxProps>`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const Icon = styled.div`
+    margin-right: 15px;
+`;
+
+const Row = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    &:not(:last-child) {
+        margin-bottom: 15px;
+    }
 `;
 
 interface EventOptionDateRangeProps {
@@ -55,7 +69,12 @@ export const EventOptionLocation: React.FC<EventOptionDateRangeProps> = (props) 
                     ))}
                 </Select>
             ) : (
-                <Box>{props.locations.find((location) => location.id == props.selectedLocation)?.name}</Box>
+                <Row>
+                    <Icon>
+                        <LocationIcon height="2em" />
+                    </Icon>
+                    <Box>{props.locations.find((location) => location.id == props.selectedLocation)?.name}</Box>
+                </Row>
             )}
         </EventOption>
     );
