@@ -19,7 +19,7 @@ import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
 import { useQuery } from 'react-query';
-import { ApiEventParams, getEvents } from '../../httpclient/eventRequests';
+import EventService, { ApiEventParams, eventsDefaultQueryKey } from '../../api/EventService';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -119,8 +119,8 @@ export const CalendarPage: React.FC = () => {
     }
 
     const { data: apiEvents, isLoading } = useQuery<Array<ApiEvent>>({
-        queryKey: ['getEvents', eventsParams, keycloak.token],
-        queryFn: getEvents,
+        queryKey: [eventsDefaultQueryKey, eventsParams, keycloak.token],
+        queryFn: EventService.getEvents,
     });
 
     const [events, setEvents] = useState<Array<EventInfo>>([]);

@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { apiUrl } from '../types';
 
-export const apiClient = (token?: string): AxiosInstance => {
+export const httpClient = (token?: string): AxiosInstance => {
     return axios.create({
         baseURL: apiUrl,
         headers: {

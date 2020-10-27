@@ -12,7 +12,7 @@ import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
 import { useMutation, useQueryCache } from 'react-query';
-import { ApiEventParams, deleteEvents, patchEvent } from '../../httpclient/eventRequests';
+import EventService, { ApiEventParams, eventsDefaultQueryKey } from '../../api/EventService';
 
 const Body = styled.div`
     display: flex;
@@ -56,7 +56,7 @@ export const Event: React.FC<EventProps> = (props) => {
 
     const [deleteSingleEvent, { isLoading: deleteSingleEventLoading }] = useMutation(
         async (event: EventInfo) => {
-            await deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
+            await EventService.deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
         },
         {
             onSuccess: () => {
@@ -72,7 +72,7 @@ export const Event: React.FC<EventProps> = (props) => {
                 }
             },
             onSettled: () => {
-                queryCache.invalidateQueries('getEvents');
+                queryCache.invalidateQueries(eventsDefaultQueryKey);
             },
         },
     );
@@ -84,7 +84,7 @@ export const Event: React.FC<EventProps> = (props) => {
                 fromDate: range[0].toISOString().slice(0, -2),
                 toDate: range[1].toISOString().slice(0, -2),
             };
-            await deleteEvents(apiParams, keycloak.token);
+            await EventService.deleteEvents(apiParams, keycloak.token);
         },
         {
             onSuccess: () => {
@@ -100,14 +100,14 @@ export const Event: React.FC<EventProps> = (props) => {
                 }
             },
             onSettled: () => {
-                queryCache.invalidateQueries('getEvents');
+                queryCache.invalidateQueries(eventsDefaultQueryKey);
             },
         },
     );
 
     const [updateEvent, { isLoading: updateEventLoading }] = useMutation(
         async (updatedEvent: ApiEventPatch) => {
-            await patchEvent(updatedEvent, keycloak.token);
+            await EventService.updateEvent(updatedEvent, keycloak.token);
         },
         {
             onSuccess: () => {
@@ -118,7 +118,7 @@ export const Event: React.FC<EventProps> = (props) => {
                 alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
             },
             onSettled: () => {
-                queryCache.invalidateQueries('getEvents');
+                queryCache.invalidateQueries(eventsDefaultQueryKey);
             },
         },
     );

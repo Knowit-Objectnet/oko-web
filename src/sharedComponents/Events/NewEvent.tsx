@@ -12,7 +12,7 @@ import { ApiEventPost, ApiLocation, ApiPartner, apiUrl, WorkingWeekdays } from '
 import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
 import { useMutation, useQueryCache } from 'react-query';
-import { postEvent } from '../../httpclient/eventRequests';
+import EventService, { eventsDefaultQueryKey } from '../../api/EventService';
 
 const Options = styled.div`
     display: flex;
@@ -46,7 +46,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     const queryCache = useQueryCache();
     const [addEvent, { isLoading: addEventLoading }] = useMutation(
         async (newEvent: ApiEventPost) => {
-            await postEvent(newEvent, keycloak.token);
+            await EventService.addEvent(newEvent, keycloak.token);
         },
         {
             onSuccess: () => {
@@ -62,7 +62,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 }
             },
             onSettled: () => {
-                queryCache.invalidateQueries('getEvents');
+                queryCache.invalidateQueries(eventsDefaultQueryKey);
             },
         },
     );
