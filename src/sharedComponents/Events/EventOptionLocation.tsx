@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import { ApiLocation } from '../../types';
+import { ApiStation } from '../../types';
 import LocationIcon from '../../assets/Location.svg';
 
 const Select = styled.select`
@@ -39,7 +39,7 @@ const Row = styled.div`
 interface EventOptionDateRangeProps {
     isEditing: boolean;
     selectedLocation: number;
-    locations: ApiLocation[];
+    locations: ApiStation[];
     onChange?: (locationId: number) => void;
 }
 

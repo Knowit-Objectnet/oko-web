@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
+import { ApiEventPost, ApiStation, ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
 import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
 import { queryCache, useMutation } from 'react-query';
@@ -37,7 +37,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     const { keycloak } = useKeycloak();
 
     // Valid recycling stations (ombruksstasjon) locations fetched from api
-    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
+    let { data: locations } = useSWR<ApiStation[]>(`${apiUrl}/stations`, fetcher);
     locations = locations && locations.length !== 0 ? locations : [];
     // Valid partners fetched from api
     let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);

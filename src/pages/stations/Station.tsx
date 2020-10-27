@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiLocation } from '../../types';
+import { ApiStation } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
 import { StationAddress } from './StationAddress';
 import { StationOpeningTimes } from './StationOpeningTimes';
@@ -46,7 +46,7 @@ const StyledPencil = styled(Pencil)`
     height: 1em;
 `;
 
-export const Station: React.FC<ApiLocation> = (props) => {
+export const Station: React.FC<ApiStation> = (props) => {
     return (
         <Wrapper>
             <Header>
