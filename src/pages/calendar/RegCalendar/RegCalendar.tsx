@@ -1,14 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiStation, apiUrl, EventInfo, Roles, SlotInfo } from '../../../types';
+import { EventInfo, Roles, SlotInfo } from '../../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import addDays from 'date-fns/addDays';
 import isSameDay from 'date-fns/isSameDay';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
 import { WeekMenu } from '../WeekMenu';
-import useSWR from 'swr';
-import { fetcher } from '../../../utils/fetcher';
+import useStations from '../../../api/hooks/useStations';
 
 const OverflowWrapper = styled.div`
     overflow: auto;
@@ -62,9 +61,8 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
     const min = new Date(date.setHours(7, 0, 0, 0));
     const max = new Date(date.setHours(20, 0, 0, 0));
 
-    // Get locations for the calendar
-    let { data: locations } = useSWR<ApiStation[]>(`${apiUrl}/stations`, fetcher);
-    locations = locations && locations.length !== 0 ? locations : [];
+    // Get stations for the calendar
+    const { data: stations } = useStations();
 
     // Function that handles an event click in the calendar. It displays the Event in a modal
     const onSelectEvent = (event: EventInfo) => {
@@ -76,12 +74,12 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
         props.onSelectSlot(slotInfo.start, slotInfo.end, keycloak.hasRealmRole(Roles.Oslo));
     };
 
-    // Function to order events by the locations from the API
+    // Function to order events by the stations from the API
     const getOrderedEvents = (events: Array<EventInfo>) => {
         const orderedEvents = new Map<string, Array<EventInfo>>();
-        // Add the locations to the map
-        locations?.forEach((location) => {
-            orderedEvents.set(location.name, []);
+        // Add the stations to the map
+        stations?.forEach((station) => {
+            orderedEvents.set(station.name, []);
         });
 
         events.forEach((event) => {
