@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import DotsSpinner from '../assets/DotsSpinner.svg';
 import { ButtonHTMLAttributes } from 'react';
 
+type ButtonColor = 'Red' | 'Green' | 'DarkBlue';
+
 interface StyledButtonProps {
-    color?: 'Red' | 'Green' | 'DarkBlue';
+    color?: ButtonColor;
     width?: number;
     height?: number;
     styling?: string;
@@ -33,7 +35,7 @@ const StyledButton = styled.button<StyledButtonProps>`
     ${(props) => props.styling}
 `;
 
-const LoadingSpinner = styled(DotsSpinner)<{ color?: 'Red' | 'Green' | 'DarkBlue' }>`
+const LoadingSpinner = styled(DotsSpinner)<{ color?: ButtonColor }>`
     vertical-align: middle;
     height: 0.375rem;
     transform: translateY(-20%);
@@ -44,7 +46,7 @@ const LoadingSpinner = styled(DotsSpinner)<{ color?: 'Red' | 'Green' | 'DarkBlue
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     text: string;
-    color?: 'Red' | 'Green' | 'DarkBlue';
+    color?: ButtonColor;
     width?: number;
     height?: number;
     styling?: string;
