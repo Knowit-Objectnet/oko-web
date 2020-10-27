@@ -78,6 +78,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
             {selectedEvent && (
                 <Event
                     event={selectedEvent}
+                    hideTitleBar={true}
                     afterDeleteRangeEvent={onDeleteEvent}
                     afterDeleteSingleEvent={onDeleteEvent}
                 />

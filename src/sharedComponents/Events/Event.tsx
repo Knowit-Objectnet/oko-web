@@ -38,6 +38,7 @@ const Options = styled.div`
 
 interface EventProps {
     event: EventInfo;
+    hideTitleBar?: boolean;
     afterDeleteSingleEvent?: (successful: boolean) => void;
     afterDeleteRangeEvent?: (successful: boolean) => void;
 }
@@ -223,6 +224,7 @@ export const Event: React.FC<EventProps> = (props) => {
     return (
         <EventTemplateHorizontal
             title={props.event.title}
+            hideTitleBar={props.hideTitleBar}
             showEditSymbol={
                 keycloak.hasRealmRole(Roles.Oslo) ||
                 (keycloak.hasRealmRole(Roles.Ambassador) &&
