@@ -75,7 +75,7 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         // Set the stations groupID
-        keycloak.tokenParsed.GroupID = mockEvents[0].resource.location.id;
+        keycloak.tokenParsed.GroupID = mockEvents[0].resource.station.id;
 
         const { findByText } = render(
             <KeycloakProvider keycloak={keycloak}>

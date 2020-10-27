@@ -123,7 +123,7 @@ export const Calendar: React.FC = () => {
                       resource: {
                           eventId: event.id,
                           partner: event.partner,
-                          location: event.station,
+                          station: event.station,
                           recurrenceRule: event.recurrenceRule,
                       },
                   };

@@ -9,7 +9,7 @@ export interface EventInfo {
 
 interface EventInfoResource {
     eventId: number;
-    location: ApiStation;
+    station: ApiStation;
     partner: ApiPartner;
     recurrenceRule: {
         id: number;

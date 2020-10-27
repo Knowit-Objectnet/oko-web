@@ -26,7 +26,7 @@ describe('Provides a page for REG to view the calendar', () => {
             resource: {
                 eventId: event.id,
                 partner: event.partner,
-                location: event.station,
+                station: event.station,
                 recurrenceRule: event.recurrenceRule,
             },
         };

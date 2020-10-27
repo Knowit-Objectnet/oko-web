@@ -85,9 +85,9 @@ export const RegCalendar: React.FC<WeekCalendarProps> = (props) => {
         });
 
         events.forEach((event) => {
-            if (event.resource?.location) {
-                if (orderedEvents.has(event.resource.location.name)) {
-                    const _events = orderedEvents.get(event.resource.location.name);
+            if (event.resource?.station) {
+                if (orderedEvents.has(event.resource.station.name)) {
+                    const _events = orderedEvents.get(event.resource.station.name);
                     if (_events) {
                         _events.push(event);
                     }

@@ -243,8 +243,8 @@ export const Event: React.FC<EventProps> = (props) => {
                         />
                         <EventOptionLocation
                             isEditing={false}
-                            selectedLocation={props.event.resource.location.id}
-                            locations={[props.event.resource.location]}
+                            selectedLocation={props.event.resource.station.id}
+                            locations={[props.event.resource.station]}
                         />
                     </Options>
                 </Section>
