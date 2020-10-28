@@ -1,10 +1,7 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { EventInfo } from '../../../types';
 import { ListGroup } from './ListGroup';
 import { Colors } from '../../../theme';
-
-const Wrapper = styled.div``;
 
 interface ListViewProps {
     date: Date;
@@ -17,7 +14,7 @@ interface ListViewProps {
  * Agenda list view component
  */
 export const ListView: React.FC<ListViewProps> = (props) => (
-    <Wrapper>
+    <>
         {props.dayAndEvents.map((dayAndEvent, i) => (
             <ListGroup
                 key={'day' + i}
@@ -27,5 +24,5 @@ export const ListView: React.FC<ListViewProps> = (props) => (
                 specificColor={props.specificColor}
             />
         ))}
-    </Wrapper>
+    </>
 );

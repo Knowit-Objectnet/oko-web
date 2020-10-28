@@ -11,7 +11,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
-import { queryCache, useMutation, useQueryCache } from 'react-query';
+import { queryCache, useMutation } from 'react-query';
 import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
 
 const Body = styled.div`
@@ -133,6 +133,26 @@ export const Event: React.FC<EventProps> = (props) => {
     const [selectedDays, setSelectedDays] = useState<Array<number>>([1]);
     const [isDeletionConfirmationVisible, setIsDeletionConfirmationVisible] = useState(false);
 
+    const handleDateRangeChange = (range: [Date, Date]) => {
+        setDateRange(range);
+    };
+
+    const handleTimeRangeChange = (range: [Date, Date]) => {
+        setTimeRange(range);
+    };
+
+    const handleRecurringChange = (value: 'None' | 'Daily' | 'Weekly') => {
+        setReccuring(value);
+    };
+
+    const handleSelectedDaysChange = (num: Array<number>) => {
+        setSelectedDays(num);
+    };
+
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
+
     const handleDeleteConfirmationClick = () => {
         setIsDeletionConfirmationVisible(!isDeletionConfirmationVisible);
     };
@@ -204,7 +224,7 @@ export const Event: React.FC<EventProps> = (props) => {
             hideTitleBar={props.hideTitleBar}
             showEditSymbol={isAdmin || (isStation && stationOwnsEvent)}
             isEditing={isEditing}
-            onEditClick={() => setIsEditing(true)}
+            onEditClick={handleEditClick}
         >
             <Body>
                 <Section>
@@ -215,10 +235,10 @@ export const Event: React.FC<EventProps> = (props) => {
                             recurring={recurring}
                             selectedDays={selectedDays}
                             isEditing={isEditing}
-                            onDateRangeChange={setDateRange}
-                            onTimeRangeChange={setTimeRange}
-                            onRecurringChange={setReccuring}
-                            onSelectedDaysChange={setSelectedDays}
+                            onDateRangeChange={handleDateRangeChange}
+                            onTimeRangeChange={handleTimeRangeChange}
+                            onRecurringChange={handleRecurringChange}
+                            onSelectedDaysChange={handleSelectedDaysChange}
                             recurrenceEnabled={false}
                         />
                         <EventOptionLocation
