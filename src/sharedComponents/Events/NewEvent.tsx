@@ -33,9 +33,7 @@ const WEEKDAYS: Array<WorkingWeekdays> = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THU
  * Will only be rendered for Oslo Kommune.
  */
 export const NewEvent: React.FC<NewEventProps> = (props) => {
-    // Alert dispatcher
     const alert = useAlert();
-    // Keycloak instance
     const { keycloak } = useKeycloak();
 
     // Valid recycling stations (ombruksstasjon) locations fetched from api
@@ -45,7 +43,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
     partners = partners || [];
 
-    const [addEvent, { isLoading: addEventLoading }] = useMutation(
+    const [addEventMutation, { isLoading: addEventLoading }] = useMutation(
         async (newEvent: ApiEventPost) => {
             await postEvent(newEvent, keycloak.token);
         },
@@ -171,7 +169,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             };
         }
 
-        await addEvent(newEvent);
+        await addEventMutation(newEvent);
     };
 
     return (

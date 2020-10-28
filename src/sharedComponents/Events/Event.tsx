@@ -195,7 +195,7 @@ export const Event: React.FC<EventProps> = (props) => {
         max.setHours(20, 0, 0, 0);
 
         if (start > end) {
-            alert.show('Start tiden kan ikke vøre etter slutt tiden.', { type: types.ERROR });
+            alert.show('Start tiden kan ikke være etter slutt tiden.', { type: types.ERROR });
             return;
         }
 
@@ -275,7 +275,7 @@ export const Event: React.FC<EventProps> = (props) => {
                 <EventSubmission
                     onSubmit={handleEditSubmission}
                     onCancel={handleEditCancelled}
-                    isLoading={updateEventLoading}
+                    loading={updateEventLoading}
                 />
             )}
         </EventTemplateHorizontal>

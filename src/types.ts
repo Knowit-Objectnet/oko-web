@@ -33,7 +33,7 @@ export interface ApiLocation {
 }
 
 export type StationOpeningHours = {
-    [index in WorkingWeekdays]?: [string, string];
+    [key in WorkingWeekdays]?: [string, string];
 };
 
 export interface ApiPartner {

@@ -19,7 +19,7 @@ interface EventSubmissionProps {
     submitText?: string;
     onCancel: () => void;
     onSubmit: () => void;
-    isLoading: boolean;
+    loading: boolean;
 }
 
 /**
@@ -50,7 +50,7 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
                 onClick={onClick}
                 text="Godkjenn"
                 width={108}
-                loading={props.isLoading}
+                loading={props.loading}
             />
         </Submission>
     );
