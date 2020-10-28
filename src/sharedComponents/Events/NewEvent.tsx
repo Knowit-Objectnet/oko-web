@@ -26,6 +26,8 @@ interface NewEventProps {
     afterSubmit?: (successful: boolean) => void;
 }
 
+const WEEKDAYS: Array<WorkingWeekdays> = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
+
 /**
  * Component shown when a range is selected in calendar or new event button clciked.
  * Will only be rendered for Oslo Kommune.
@@ -160,33 +162,12 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         if (recurring === 'Daily') {
             newEvent.recurrenceRule = {
                 until: dateRange[1].toISOString(),
-                days: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
+                days: WEEKDAYS,
             };
         } else if (recurring === 'Weekly') {
-            const days: Array<WorkingWeekdays> = [];
-            for (const day of selectedDays) {
-                switch (day) {
-                    case 1:
-                        days.push('MONDAY');
-                        break;
-                    case 2:
-                        days.push('TUESDAY');
-                        break;
-                    case 3:
-                        days.push('WEDNESDAY');
-                        break;
-                    case 4:
-                        days.push('THURSDAY');
-                        break;
-                    case 5:
-                        days.push('FRIDAY');
-                        break;
-                }
-            }
-
             newEvent.recurrenceRule = {
                 until: dateRange[1].toISOString(),
-                days,
+                days: selectedDays.map((index) => WEEKDAYS[index - 1]),
             };
         }
 
