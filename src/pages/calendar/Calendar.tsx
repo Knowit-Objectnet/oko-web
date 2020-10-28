@@ -14,7 +14,7 @@ import add from 'date-fns/add';
 import { Loading } from '../../sharedComponents/Loading';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { LocationSelector } from './LocationSelector';
+import { StationSelector } from './StationSelector';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
@@ -79,18 +79,18 @@ const Sidebar = styled.div`
  * The page component for the calendar view
  */
 export const CalendarPage: React.FC = () => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
-    // Alert dispatcher
     const alert = useAlert();
-    // Modal dispatcher
     const modal = useModal();
-    // State for day handling
+
+    const { keycloak } = useKeycloak();
+    const isStation = keycloak.hasRealmRole(Roles.Ambassador);
+    const isPartner = keycloak.hasRealmRole(Roles.Partner);
+    const isAdmin = keycloak.hasRealmRole(Roles.Oslo);
+    const userId = keycloak.tokenParsed?.GroupID;
+
     const [selectedDate, setSelectedDate] = useState(new Date());
-    // State for side menu
-    const [isToggled, setIsToggled] = useState(false);
-    // State for location filtering
-    const [selectedLocation, setSelectedLocation] = useState(-1);
+    const [selectedStationId, setSelectedStationId] = useState<number | undefined>();
+    const [showingCalendar, setShowingCalendar] = useState(false);
 
     // from and to date for event fetching
     // The from date is the last monday from props.date and the to date is 1 week into the future
@@ -100,26 +100,15 @@ export const CalendarPage: React.FC = () => {
     const toDate = add(selectedDate, { weeks: 1 });
     toDate.setHours(24, 0, 0, 0);
 
-    const eventsParams: ApiEventParams = {
+    const eventsFilter: ApiEventParams = {
         fromDate: fromDate.toISOString(),
         toDate: toDate.toISOString(),
+        stationId: isStation ? userId : selectedStationId,
+        partnerId: isPartner ? userId : undefined,
     };
 
-    if (keycloak.hasRealmRole(Roles.Ambassador)) {
-        eventsParams.stationId = keycloak.tokenParsed.GroupID;
-    } else if (keycloak.hasRealmRole(Roles.Partner)) {
-        eventsParams.partnerId = keycloak.tokenParsed.GroupID;
-        if (isToggled && selectedLocation !== -1) {
-            eventsParams.stationId = selectedLocation;
-        }
-    } else {
-        if (selectedLocation !== -1) {
-            eventsParams.stationId = selectedLocation;
-        }
-    }
-
     const { data: apiEvents, isLoading } = useQuery<Array<ApiEvent>>({
-        queryKey: [eventsDefaultQueryKey, eventsParams, keycloak.token],
+        queryKey: [eventsDefaultQueryKey, eventsFilter, keycloak.token],
         queryFn: getEvents,
     });
 
@@ -152,20 +141,19 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    // New event display function
-    const newEvent = () => {
+    const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
+
+    const showNewEventModal = () => {
         const { start, end } = getStartAndEndDateTime();
         modal.show(<NewEvent start={start} end={end} afterSubmit={closeModalOnSuccess} />);
     };
 
-    // Extra event display function
-    const extraEvent = () => {
+    const showNewExtraEventModal = () => {
         const { start, end } = getStartAndEndDateTime();
         modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
     };
 
-    // On event selection function to display an event
-    const onSelectEvent = (event: EventInfo) => {
+    const showEventInfoModal = (event: EventInfo) => {
         modal.show(
             <Event
                 event={event}
@@ -184,20 +172,13 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    // Click function for agenda/calendar toggle button
-    const toggleCalendarClick = () => {
-        setIsToggled(!isToggled);
+    const toggleShowCalendar = () => {
+        setShowingCalendar(!showingCalendar);
     };
 
-    // On week change selector function
-    const onWeekChange = (delta: -1 | 1) => {
+    const handleWeekChange = (delta: -1 | 1) => {
         const dayOfDeltaWeek = add(selectedDate, { weeks: delta });
         setSelectedDate(dayOfDeltaWeek);
-    };
-
-    // On location change selector function
-    const onSelectedLocationChange = (index: number) => {
-        setSelectedLocation(index);
     };
 
     const afterExtraEventSubmission = (successful: boolean) => {
@@ -211,43 +192,37 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const closeModalOnSuccess = (successful: boolean) => {
-        if (successful) {
-            modal.remove();
-        }
-    };
-
     // Function to decide which calendar to render depending on role
     const getCalendar = () => {
-        if (keycloak.hasRealmRole(Roles.Partner)) {
+        if (isPartner) {
             return (
                 <PartnerCalendar
-                    onSelectEvent={onSelectEvent}
+                    onSelectEvent={showEventInfoModal}
                     date={selectedDate}
-                    isToggled={isToggled}
-                    onWeekChange={onWeekChange}
+                    isToggled={showingCalendar}
+                    onWeekChange={handleWeekChange}
                     events={events}
                 />
             );
-        } else if (keycloak.hasRealmRole(Roles.Ambassador)) {
+        } else if (isStation) {
             return (
                 <AmbassadorCalendar
-                    onSelectEvent={onSelectEvent}
+                    onSelectEvent={showEventInfoModal}
                     date={selectedDate}
-                    isToggled={isToggled}
-                    onWeekChange={onWeekChange}
+                    isToggled={showingCalendar}
+                    onWeekChange={handleWeekChange}
                     events={events}
                 />
             );
         }
         return (
             <RegCalendar
-                onSelectEvent={onSelectEvent}
+                onSelectEvent={showEventInfoModal}
                 onSelectSlot={onSelectSlot}
-                newEvent={newEvent}
+                newEvent={showNewEventModal}
                 date={selectedDate}
-                isToggled={selectedLocation !== -1}
-                onWeekChange={onWeekChange}
+                isToggled={selectedStationId !== undefined}
+                onWeekChange={handleWeekChange}
                 events={events}
             />
         );
@@ -261,10 +236,10 @@ export const CalendarPage: React.FC = () => {
             <Wrapper>
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
-                    {((keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo)) && (
-                        <LocationSelector
-                            selectedLocation={selectedLocation}
-                            onSelectedLocationChange={onSelectedLocationChange}
+                    {(isAdmin || (isPartner && showingCalendar)) && (
+                        <StationSelector
+                            selectedStationId={selectedStationId}
+                            onSelectedStationChange={setSelectedStationId}
                         />
                     )}
                 </ModuleDateCalendar>
@@ -275,9 +250,9 @@ export const CalendarPage: React.FC = () => {
                 )}
                 <Sidebar>
                     <SideMenu
-                        onCalendarToggleClick={toggleCalendarClick}
-                        onNewEventClick={newEvent}
-                        onExtraEventClick={extraEvent}
+                        onCalendarToggleClick={toggleShowCalendar}
+                        onNewEventClick={showNewEventModal}
+                        onExtraEventClick={showNewExtraEventModal}
                     />
                 </Sidebar>
             </Wrapper>
