@@ -48,14 +48,18 @@ interface EventProps {
  * Will be rendered differently depending on user's role.
  */
 export const Event: React.FC<EventProps> = (props) => {
-    // Alert dispatcher
     const alert = useAlert();
-    // Keycloak instance
+
     const { keycloak } = useKeycloak();
+    const isAdmin = keycloak.hasRealmRole(Roles.Oslo);
+    const isStation = keycloak.hasRealmRole(Roles.Ambassador);
+    const stationOwnsEvent = keycloak.tokenParsed.GroupID === props.event.resource.location.id;
+    const isPartner = keycloak.hasRealmRole(Roles.Partner);
+    const partnerOwnsEvent = keycloak.tokenParsed.GroupID === props.event.resource.partner.id;
 
     const queryCache = useQueryCache();
 
-    const [deleteSingleEvent, { isLoading: deleteSingleEventLoading }] = useMutation(
+    const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
         async (event: EventInfo) => {
             await EventService.deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
         },
@@ -78,7 +82,7 @@ export const Event: React.FC<EventProps> = (props) => {
         },
     );
 
-    const [deleteRangeEvents, { isLoading: deleteRangeEventLoading }] = useMutation(
+    const [deleteRangeEventsMutation, { isLoading: deleteRangeEventLoading }] = useMutation(
         async ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
             const apiParams: ApiEventParams = {
                 recurrenceRuleId: event.resource.recurrenceRule?.id,
@@ -106,7 +110,7 @@ export const Event: React.FC<EventProps> = (props) => {
         },
     );
 
-    const [updateEvent, { isLoading: updateEventLoading }] = useMutation(
+    const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
         async (updatedEvent: ApiEventPatch) => {
             await EventService.updateEvent(updatedEvent, keycloak.token);
         },
@@ -124,58 +128,33 @@ export const Event: React.FC<EventProps> = (props) => {
         },
     );
 
-    // State
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(props.event.start), new Date(props.event.end)]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([new Date(props.event.start), new Date(props.event.end)]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
-    const [selectedDays, setSelectedDays] = useState([1]);
+    const [selectedDays, setSelectedDays] = useState<Array<number>>([1]);
     const [isDeletionConfirmationVisible, setIsDeletionConfirmationVisible] = useState(false);
 
-    // On change functions for DateRange
-    const onDateRangeChange = (range: [Date, Date]) => {
-        setDateRange(range);
-    };
-
-    const onTimeRangeChange = (range: [Date, Date]) => {
-        setTimeRange(range);
-    };
-
-    const onRecurringChange = (value: 'None' | 'Daily' | 'Weekly') => {
-        setReccuring(value);
-    };
-
-    const onSelectedDaysChange = (num: Array<number>) => {
-        setSelectedDays(num);
-    };
-
-    // On change function for the Edit button
-    const onEditClick = () => {
-        setIsEditing(true);
-    };
-
-    const onDeleteConfirmationClick = () => {
+    const handleDeleteConfirmationClick = () => {
         setIsDeletionConfirmationVisible(!isDeletionConfirmationVisible);
     };
 
-    const onDelete = async (range: [Date, Date], isSingleDeletion: boolean) => {
+    const handleDeleteEvent = (isSingleDeletion: boolean, fromDate: Date, toDate: Date) => {
         const eventIsNotRecurring = !props.event.resource.recurrenceRule;
         if (isSingleDeletion || eventIsNotRecurring) {
-            deleteSingleEvent(props.event);
+            deleteSingleEventMutation(props.event);
         } else {
-            deleteRangeEvents({ event: props.event, fromDate, toDate });
+            deleteRangeEventsMutation({ event: props.event, fromDate, toDate });
         }
     };
 
-    // Function called if edit was cancelled. Resets all values to the original event info
-    const onCancel = () => {
+    const handleEditCancelled = () => {
         setIsEditing(false);
         setDateRange([props.event.start, props.event.end]);
         setTimeRange([props.event.start, props.event.end]);
     };
 
-    // Function called on successful event edit.
-    const onSubmit = async () => {
+    const handleEditSubmission = async () => {
         const start = new Date(dateRange[0]);
         const end = new Date(dateRange[1]);
         start.setHours(
@@ -218,20 +197,16 @@ export const Event: React.FC<EventProps> = (props) => {
             endDateTime: end.toISOString().slice(0, -2),
         };
 
-        await updateEvent(updatedEvent);
+        await updateEventMutation(updatedEvent);
     };
 
     return (
         <EventTemplateHorizontal
             title={props.event.title}
             hideTitleBar={props.hideTitleBar}
-            showEditSymbol={
-                keycloak.hasRealmRole(Roles.Oslo) ||
-                (keycloak.hasRealmRole(Roles.Ambassador) &&
-                    keycloak.tokenParsed.GroupID === props.event.resource.location.id)
-            }
+            showEditSymbol={isAdmin || (isStation && stationOwnsEvent)}
             isEditing={isEditing}
-            onEditClick={onEditClick}
+            onEditClick={() => setIsEditing(true)}
         >
             <Body>
                 <Section>
@@ -242,10 +217,10 @@ export const Event: React.FC<EventProps> = (props) => {
                             recurring={recurring}
                             selectedDays={selectedDays}
                             isEditing={isEditing}
-                            onDateRangeChange={onDateRangeChange}
-                            onTimeRangeChange={onTimeRangeChange}
-                            onRecurringChange={onRecurringChange}
-                            onSelectedDaysChange={onSelectedDaysChange}
+                            onDateRangeChange={setDateRange}
+                            onTimeRangeChange={setTimeRange}
+                            onRecurringChange={setReccuring}
+                            onSelectedDaysChange={setSelectedDays}
                             recurrenceEnabled={false}
                         />
                         <EventOptionLocation
@@ -258,27 +233,19 @@ export const Event: React.FC<EventProps> = (props) => {
                 {!isEditing && (
                     <Section>
                         <EventMessageBox {...props.event.resource.message} />
-                        {(keycloak.hasRealmRole(Roles.Oslo) ||
-                            (keycloak.hasRealmRole(Roles.Partner) &&
-                                keycloak.tokenParsed.GroupID === props.event.resource.partner.id) ||
-                            (keycloak.hasRealmRole(Roles.Ambassador) &&
-                                keycloak.tokenParsed.GroupID === props.event.resource.location.id)) && (
+                        {(isAdmin || (isPartner && partnerOwnsEvent) || (isStation && stationOwnsEvent)) && (
                             <>
                                 <Button
                                     text="Avlys uttak"
-                                    onClick={onDeleteConfirmationClick}
+                                    onClick={handleDeleteConfirmationClick}
                                     color="Red"
                                     styling="margin-top: 10px;"
                                 />
                                 {isDeletionConfirmationVisible && (
                                     <DeleteEvent
-                                        allowRangeDeletion={
-                                            keycloak.hasRealmRole(Roles.Oslo) ||
-                                            (keycloak.hasRealmRole(Roles.Ambassador) &&
-                                                keycloak.tokenParsed.GroupID === props.event.resource.location.id)
-                                        }
-                                        onSubmit={onDelete}
-                                        submitDisabled={deleteSingleEventLoading || deleteRangeEventLoading}
+                                        allowRangeDeletion={isAdmin || (isStation && stationOwnsEvent)}
+                                        onSubmit={handleDeleteEvent}
+                                        loading={deleteSingleEventLoading || deleteRangeEventLoading}
                                     />
                                 )}
                             </>
@@ -286,7 +253,13 @@ export const Event: React.FC<EventProps> = (props) => {
                     </Section>
                 )}
             </Body>
-            {isEditing && <EventSubmission onSubmit={onSubmit} onCancel={onCancel} isLoading={updateEventLoading} />}
+            {isEditing && (
+                <EventSubmission
+                    onSubmit={handleEditSubmission}
+                    onCancel={handleEditCancelled}
+                    isLoading={updateEventLoading}
+                />
+            )}
         </EventTemplateHorizontal>
     );
 };
