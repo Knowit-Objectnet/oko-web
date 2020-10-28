@@ -11,7 +11,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
-import { useMutation, useQueryCache } from 'react-query';
+import { queryCache, useMutation, useQueryCache } from 'react-query';
 import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
 
 const Body = styled.div`
@@ -56,8 +56,6 @@ export const Event: React.FC<EventProps> = (props) => {
     const stationOwnsEvent = keycloak.tokenParsed.GroupID === props.event.resource.location.id;
     const isPartner = keycloak.hasRealmRole(Roles.Partner);
     const partnerOwnsEvent = keycloak.tokenParsed.GroupID === props.event.resource.partner.id;
-
-    const queryCache = useQueryCache();
 
     const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
         async (event: EventInfo) => {

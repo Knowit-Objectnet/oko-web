@@ -11,7 +11,7 @@ import { EventOptionPartner } from './EventOptionPartner';
 import { ApiLocation, ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
 import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
-import { useMutation, useQueryCache } from 'react-query';
+import { queryCache, useMutation } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
 
 const Options = styled.div`
@@ -43,7 +43,6 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
     partners = partners || [];
 
-    const queryCache = useQueryCache();
     const [addEvent, { isLoading: addEventLoading }] = useMutation(
         async (newEvent: ApiEventPost) => {
             await postEvent(newEvent, keycloak.token);
