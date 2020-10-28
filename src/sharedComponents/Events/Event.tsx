@@ -79,11 +79,11 @@ export const Event: React.FC<EventProps> = (props) => {
     );
 
     const [deleteRangeEvents, { isLoading: deleteRangeEventLoading }] = useMutation(
-        async ([event, range]: [EventInfo, [Date, Date]]) => {
+        async ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
             const apiParams: ApiEventParams = {
                 recurrenceRuleId: event.resource.recurrenceRule?.id,
-                fromDate: range[0].toISOString().slice(0, -2),
-                toDate: range[1].toISOString().slice(0, -2),
+                fromDate: fromDate.toISOString().slice(0, -2),
+                toDate: toDate.toISOString().slice(0, -2),
             };
             await EventService.deleteEvents(apiParams, keycloak.token);
         },
@@ -163,7 +163,7 @@ export const Event: React.FC<EventProps> = (props) => {
         if (isSingleDeletion || eventIsNotRecurring) {
             deleteSingleEvent(props.event);
         } else {
-            deleteRangeEvents([props.event, range]);
+            deleteRangeEvents({ event: props.event, fromDate, toDate });
         }
     };
 
