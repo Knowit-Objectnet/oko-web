@@ -8,11 +8,11 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiEventPost, ApiLocation, ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
+import { ApiLocation, ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
 import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
 import { useMutation, useQueryCache } from 'react-query';
-import EventService, { eventsDefaultQueryKey } from '../../api/EventService';
+import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
 
 const Options = styled.div`
     display: flex;
@@ -46,7 +46,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     const queryCache = useQueryCache();
     const [addEvent, { isLoading: addEventLoading }] = useMutation(
         async (newEvent: ApiEventPost) => {
-            await EventService.addEvent(newEvent, keycloak.token);
+            await postEvent(newEvent, keycloak.token);
         },
         {
             onSuccess: () => {

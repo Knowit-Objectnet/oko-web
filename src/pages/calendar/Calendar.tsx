@@ -7,7 +7,7 @@ import { Event } from '../../sharedComponents/Events/Event';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { ApiEvent, EventInfo, Roles } from '../../types';
+import { EventInfo, Roles } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
@@ -19,7 +19,7 @@ import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
 import { useQuery } from 'react-query';
-import EventService, { ApiEventParams, eventsDefaultQueryKey } from '../../api/EventService';
+import { ApiEvent, ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../api/EventService';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -120,7 +120,7 @@ export const CalendarPage: React.FC = () => {
 
     const { data: apiEvents, isLoading } = useQuery<Array<ApiEvent>>({
         queryKey: [eventsDefaultQueryKey, eventsParams, keycloak.token],
-        queryFn: EventService.getEvents,
+        queryFn: getEvents,
     });
 
     const [events, setEvents] = useState<Array<EventInfo>>([]);

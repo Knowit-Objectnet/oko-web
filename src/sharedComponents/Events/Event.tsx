@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { ApiEventPatch, EventInfo, Roles } from '../../types';
+import { EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
@@ -12,7 +12,7 @@ import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
 import { useMutation, useQueryCache } from 'react-query';
-import EventService, { ApiEventParams, eventsDefaultQueryKey } from '../../api/EventService';
+import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
 
 const Body = styled.div`
     display: flex;
@@ -61,7 +61,7 @@ export const Event: React.FC<EventProps> = (props) => {
 
     const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
         async (event: EventInfo) => {
-            await EventService.deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
+            await deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
         },
         {
             onSuccess: () => {
@@ -89,7 +89,7 @@ export const Event: React.FC<EventProps> = (props) => {
                 fromDate: fromDate.toISOString().slice(0, -2),
                 toDate: toDate.toISOString().slice(0, -2),
             };
-            await EventService.deleteEvents(apiParams, keycloak.token);
+            await deleteEvents(apiParams, keycloak.token);
         },
         {
             onSuccess: () => {
@@ -112,7 +112,7 @@ export const Event: React.FC<EventProps> = (props) => {
 
     const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
         async (updatedEvent: ApiEventPatch) => {
-            await EventService.updateEvent(updatedEvent, keycloak.token);
+            await patchEvent(updatedEvent, keycloak.token);
         },
         {
             onSuccess: () => {

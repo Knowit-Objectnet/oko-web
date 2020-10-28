@@ -1,43 +1,5 @@
 export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
-export interface ApiEvent {
-    id: number;
-    startDateTime: string;
-    endDateTime: string;
-    station: ApiLocation;
-    partner: ApiPartner;
-    recurrenceRule: ApiRecurrenceRule | null;
-}
-
-export interface ApiEventPost {
-    startDateTime: string;
-    endDateTime: string;
-    stationId: number;
-    partnerId: number;
-    recurrenceRule?: ApiRecurrenceRulePost;
-}
-
-export interface ApiEventPatch {
-    id: number;
-    startDateTime?: string;
-    endDateTime?: string;
-}
-
-export interface ApiRecurrenceRule {
-    id: number;
-    until: string;
-    days: Array<WorkingWeekdays>;
-    interval: number;
-    count: number | null;
-}
-
-export interface ApiRecurrenceRulePost {
-    until: string;
-    days: Array<WorkingWeekdays>;
-    interval?: number;
-    count?: number;
-}
-
 export interface EventInfo {
     title: string;
     start: Date;
