@@ -32,10 +32,6 @@ const StyledClock = styled(Clock)`
     margin-right: 10px;
 `;
 
-const Bold = styled.span`
-    font-weight: bold;
-`;
-
 interface StationOpeningTimesProps {
     openingTimes: StationOpeningHours;
 }
@@ -51,7 +47,7 @@ export const StationOpeningTimes: React.FC<StationOpeningTimesProps> = (props) =
                     selectedIndex = new Date().getDay() - 1;
                     list.push(
                         <React.Fragment key={key}>
-                            <Bold>{`${key.toLowerCase()}: `}</Bold>
+                            <strong>{`${key.toLowerCase()}: `}</strong>
                             {`${value[0].slice(0, 5)} - ${value[1].slice(0, 5)}`}
                         </React.Fragment>,
                     );
