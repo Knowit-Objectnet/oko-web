@@ -54,16 +54,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button: React.FC<ButtonProps> = (props) => {
+    const { text, loading = false, ...rest } = props;
     return (
-        <StyledButton
-            {...props}
-            disabled={props.loading}
-            aria-disabled={props.loading}
-            aria-live="polite"
-            aria-busy={props.loading}
-        >
-            {props.text}
-            {props.loading && <LoadingSpinner color={props.color} />}
+        <StyledButton {...rest} disabled={loading} aria-disabled={loading} aria-live="polite" aria-busy={loading}>
+            {text}
+            {loading && <LoadingSpinner color={rest.color} />}
         </StyledButton>
     );
 };
