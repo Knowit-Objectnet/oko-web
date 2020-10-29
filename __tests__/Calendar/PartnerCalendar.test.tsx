@@ -59,7 +59,7 @@ describe('Provides a page for partners to view the calendar', () => {
             <KeycloakProvider keycloak={keycloak}>
                 <PartnerCalendar
                     date={date}
-                    isToggled={isToggled}
+                    showCalendar={isToggled}
                     onSelectEvent={onSelectEventMock}
                     onWeekChange={onWeekChangeMock}
                     events={events}
@@ -81,7 +81,7 @@ describe('Provides a page for partners to view the calendar', () => {
             <KeycloakProvider keycloak={keycloak}>
                 <PartnerCalendar
                     date={date}
-                    isToggled={isToggled}
+                    showCalendar={isToggled}
                     onSelectEvent={onSelectEventMock}
                     onWeekChange={onWeekChangeMock}
                     events={events}
@@ -108,7 +108,7 @@ describe('Provides a page for partners to view the calendar', () => {
             <KeycloakProvider keycloak={keycloak}>
                 <PartnerCalendar
                     date={date}
-                    isToggled={isToggled}
+                    showCalendar={isToggled}
                     onSelectEvent={onSelectEventMock}
                     onWeekChange={onWeekChangeMock}
                     events={events}

@@ -199,7 +199,7 @@ export const CalendarPage: React.FC = () => {
                 <PartnerCalendar
                     onSelectEvent={showEventInfoModal}
                     date={selectedDate}
-                    isToggled={showingCalendar}
+                    showCalendar={showingCalendar}
                     onWeekChange={handleWeekChange}
                     events={events}
                 />
