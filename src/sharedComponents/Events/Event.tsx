@@ -84,8 +84,8 @@ export const Event: React.FC<EventProps> = (props) => {
         async ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
             const apiParams: ApiEventParams = {
                 recurrenceRuleId: event.resource.recurrenceRule?.id,
-                fromDate: fromDate.toISOString().slice(0, -2),
-                toDate: toDate.toISOString().slice(0, -2),
+                fromDate: fromDate.toISOString(),
+                toDate: toDate.toISOString(),
             };
             await deleteEvents(apiParams, keycloak.token);
         },
@@ -211,8 +211,8 @@ export const Event: React.FC<EventProps> = (props) => {
 
         const updatedEvent: ApiEventPatch = {
             id: props.event.resource.eventId,
-            startDateTime: start.toISOString().slice(0, -2),
-            endDateTime: end.toISOString().slice(0, -2),
+            startDateTime: start.toISOString(),
+            endDateTime: end.toISOString(),
         };
 
         await updateEventMutation(updatedEvent);
