@@ -78,7 +78,7 @@ const Sidebar = styled.div`
 /**
  * The page component for the calendar view
  */
-export const CalendarPage: React.FC = () => {
+export const Calendar: React.FC = () => {
     const alert = useAlert();
     const modal = useModal();
 

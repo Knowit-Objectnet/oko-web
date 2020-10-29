@@ -45,7 +45,7 @@ export const ListView: React.FC<ListViewProps> = (props) => {
                 key={label}
                 date={date}
                 title={label}
-                events={events ? events : []}
+                events={events ?? []}
                 color={colors[i % (colors.length - 1)]}
             />
         ));
