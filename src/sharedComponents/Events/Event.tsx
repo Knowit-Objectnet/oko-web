@@ -51,11 +51,11 @@ export const Event: React.FC<EventProps> = (props) => {
     const alert = useAlert();
 
     const { keycloak } = useKeycloak();
-    const isAdmin = keycloak.hasRealmRole(Roles.Oslo);
-    const isStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const stationOwnsEvent = keycloak.tokenParsed.GroupID === props.event.resource.location.id;
-    const isPartner = keycloak.hasRealmRole(Roles.Partner);
-    const partnerOwnsEvent = keycloak.tokenParsed.GroupID === props.event.resource.partner.id;
+    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
+    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
+    const stationOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.location.id;
+    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
+    const partnerOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.partner.id;
 
     const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
         async (event: EventInfo) => {
@@ -222,7 +222,7 @@ export const Event: React.FC<EventProps> = (props) => {
         <EventTemplateHorizontal
             title={props.event.title}
             hideTitleBar={props.hideTitleBar}
-            showEditSymbol={isAdmin || (isStation && stationOwnsEvent)}
+            showEditSymbol={userIsAdmin || (userIsStation && stationOwnsEvent)}
             isEditing={isEditing}
             onEditClick={handleEditClick}
         >
@@ -251,7 +251,9 @@ export const Event: React.FC<EventProps> = (props) => {
                 {!isEditing && (
                     <Section>
                         <EventMessageBox {...props.event.resource.message} />
-                        {(isAdmin || (isPartner && partnerOwnsEvent) || (isStation && stationOwnsEvent)) && (
+                        {(userIsAdmin ||
+                            (userIsPartner && partnerOwnsEvent) ||
+                            (userIsStation && stationOwnsEvent)) && (
                             <>
                                 <Button
                                     text="Avlys uttak"
@@ -261,7 +263,7 @@ export const Event: React.FC<EventProps> = (props) => {
                                 />
                                 {isDeletionConfirmationVisible && (
                                     <DeleteEvent
-                                        allowRangeDeletion={isAdmin || (isStation && stationOwnsEvent)}
+                                        allowRangeDeletion={userIsAdmin || (userIsStation && stationOwnsEvent)}
                                         onSubmit={handleDeleteEvent}
                                         loading={deleteSingleEventLoading || deleteRangeEventLoading}
                                     />

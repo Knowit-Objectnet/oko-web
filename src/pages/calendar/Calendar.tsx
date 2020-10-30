@@ -83,9 +83,9 @@ export const Calendar: React.FC = () => {
     const modal = useModal();
 
     const { keycloak } = useKeycloak();
-    const isStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const isPartner = keycloak.hasRealmRole(Roles.Partner);
-    const isAdmin = keycloak.hasRealmRole(Roles.Oslo);
+    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
+    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
+    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
     const userId = keycloak.tokenParsed?.GroupID;
 
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -103,8 +103,8 @@ export const Calendar: React.FC = () => {
     const eventsFilter: ApiEventParams = {
         fromDate: fromDate.toISOString(),
         toDate: toDate.toISOString(),
-        stationId: isStation ? userId : selectedStationId,
-        partnerId: isPartner ? userId : undefined,
+        stationId: userIsStation ? userId : selectedStationId,
+        partnerId: userIsPartner ? userId : undefined,
     };
 
     const { data: apiEvents, isLoading } = useQuery<Array<ApiEvent>>({
@@ -194,7 +194,7 @@ export const Calendar: React.FC = () => {
 
     // Function to decide which calendar to render depending on role
     const getCalendar = () => {
-        if (isPartner) {
+        if (userIsPartner) {
             return (
                 <PartnerCalendar
                     onSelectEvent={showEventInfoModal}
@@ -204,7 +204,7 @@ export const Calendar: React.FC = () => {
                     events={events}
                 />
             );
-        } else if (isStation) {
+        } else if (userIsStation) {
             return (
                 <AmbassadorCalendar
                     onSelectEvent={showEventInfoModal}
@@ -236,7 +236,7 @@ export const Calendar: React.FC = () => {
             <Wrapper>
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
-                    {(isAdmin || (isPartner && showingCalendar)) && (
+                    {(userIsAdmin || (userIsPartner && showingCalendar)) && (
                         <StationSelector
                             selectedStationId={selectedStationId}
                             onSelectedStationChange={setSelectedStationId}
