@@ -22,12 +22,7 @@ const Wrapper = styled.div<WrapperProps>`
         if (props.selected && props.userIsOwner) {
             return props.theme.colors.LightBlue;
         } else if (!props.selected && props.selected !== undefined && props.userIsOwner) {
-            const r = parseInt(props.theme.colors.LightBlue.slice(1, 3), 16);
-            const g = parseInt(props.theme.colors.LightBlue.slice(3, 5), 16);
-            const b = parseInt(props.theme.colors.LightBlue.slice(5, 7), 16);
-            const a = 0.5;
-            const rgb = RGBAtoRGB({ r, g, b, a });
-            return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+            return props.theme.colors.LightBlue50;
         } else if (props.selected === undefined && props.userIsOwner) {
             return props.theme.colors.LightBlue;
         } else {
