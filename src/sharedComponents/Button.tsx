@@ -1,14 +1,18 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import DotsSpinner from '../assets/DotsSpinner.svg';
+import { ButtonHTMLAttributes } from 'react';
 
-interface WrapperProps {
-    color?: 'Red' | 'Green' | 'DarkBlue';
+type ButtonColor = 'Red' | 'Green' | 'DarkBlue';
+
+interface StyledButtonProps {
+    color?: ButtonColor;
     width?: number;
     height?: number;
     styling?: string;
 }
 
-const Wrapper = styled.button<WrapperProps>`
+const StyledButton = styled.button<StyledButtonProps>`
     background-color: ${(props) => {
         switch (props.color) {
             case 'Red':
@@ -22,32 +26,39 @@ const Wrapper = styled.button<WrapperProps>`
         }
     }};
     color: ${(props) => props.color === 'DarkBlue' && props.theme.colors.White};
-    height: ${(props) => (props.height ? props.height + 'px' : '45px')};
-    width: ${(props) => (props.width ? props.width + 'px' : null)};
+    min-height: ${(props) => (props.height ? props.height + 'px' : '45px')};
+    min-width: ${(props) => (props.width ? props.width + 'px' : null)};
     font-weight: bold;
+    font-size: 0.875rem;
     border: none;
+    padding: 0.75rem 1rem;
     ${(props) => props.styling}
 `;
 
-interface ButtonProps {
+const LoadingSpinner = styled(DotsSpinner)<{ color?: ButtonColor }>`
+    vertical-align: middle;
+    height: 0.375rem;
+    transform: translateY(-20%);
+    width: auto;
+    margin-left: 0.75rem;
+    fill: ${(props) => props.color === 'DarkBlue' && props.theme.colors.White};
+`;
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     text: string;
-    color?: 'Red' | 'Green' | 'DarkBlue';
-    onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    name?: string;
+    color?: ButtonColor;
     width?: number;
     height?: number;
     styling?: string;
+    loading?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = (props) => (
-    <Wrapper
-        color={props.color}
-        onClick={props.onClick}
-        name={props.name}
-        width={props.width}
-        height={props.height}
-        styling={props.styling}
-    >
-        {props.text}
-    </Wrapper>
-);
+export const Button: React.FC<ButtonProps> = (props) => {
+    const { text, loading = false, ...rest } = props;
+    return (
+        <StyledButton {...rest} disabled={loading} aria-disabled={loading} aria-live="polite" aria-busy={loading}>
+            {text}
+            {loading && <LoadingSpinner color={rest.color} />}
+        </StyledButton>
+    );
+};

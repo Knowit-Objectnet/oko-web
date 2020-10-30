@@ -5,10 +5,11 @@ import fetch from 'jest-fetch-mock';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
-import { ApiEvent, EventInfo, Roles } from '../../src/types';
+import { EventInfo, Roles } from '../../src/types';
 
 // Component to test
 import { PartnerCalendar } from '../../src/pages/calendar/PartnerCalendar/PartnerCalendar';
+import { ApiEvent } from '../../src/api/EventService';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -48,9 +49,7 @@ describe('Provides a page for partners to view the calendar', () => {
     it('Should render without errors', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const onWeekCahngeMock = jest.fn();
-        const beforeDeleteSingleEventMock = jest.fn();
-        const afterDeleteSingleEventMock = jest.fn();
+        const onWeekChangeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 13);
@@ -60,12 +59,10 @@ describe('Provides a page for partners to view the calendar', () => {
             <KeycloakProvider keycloak={keycloak}>
                 <PartnerCalendar
                     date={date}
-                    isToggled={isToggled}
+                    showCalendar={isToggled}
                     onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekCahngeMock}
+                    onWeekChange={onWeekChangeMock}
                     events={events}
-                    afterDeleteSingleEvent={afterDeleteSingleEventMock}
-                    beforeDeleteSingleEvent={beforeDeleteSingleEventMock}
                 />
             </KeycloakProvider>,
         );
@@ -74,9 +71,7 @@ describe('Provides a page for partners to view the calendar', () => {
     it('Should render all the station/locatiion groups for 7.13.2020-7.18.2020 for Fretex', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const onWeekCahngeMock = jest.fn();
-        const beforeDeleteSingleEventMock = jest.fn();
-        const afterDeleteSingleEventMock = jest.fn();
+        const onWeekChangeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 13);
@@ -86,12 +81,10 @@ describe('Provides a page for partners to view the calendar', () => {
             <KeycloakProvider keycloak={keycloak}>
                 <PartnerCalendar
                     date={date}
-                    isToggled={isToggled}
+                    showCalendar={isToggled}
                     onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekCahngeMock}
+                    onWeekChange={onWeekChangeMock}
                     events={events}
-                    afterDeleteSingleEvent={afterDeleteSingleEventMock}
-                    beforeDeleteSingleEvent={beforeDeleteSingleEventMock}
                 />
             </KeycloakProvider>,
         );
@@ -105,9 +98,7 @@ describe('Provides a page for partners to view the calendar', () => {
     it('Should change which station/location groups are rendered when the date changes', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const onWeekCahngeMock = jest.fn();
-        const beforeDeleteSingleEventMock = jest.fn();
-        const afterDeleteSingleEventMock = jest.fn();
+        const onWeekChangeMock = jest.fn();
         const isToggled = false;
         const date = new Date();
         date.setFullYear(2020, 6, 15);
@@ -117,12 +108,10 @@ describe('Provides a page for partners to view the calendar', () => {
             <KeycloakProvider keycloak={keycloak}>
                 <PartnerCalendar
                     date={date}
-                    isToggled={isToggled}
+                    showCalendar={isToggled}
                     onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekCahngeMock}
+                    onWeekChange={onWeekChangeMock}
                     events={events}
-                    afterDeleteSingleEvent={afterDeleteSingleEventMock}
-                    beforeDeleteSingleEvent={beforeDeleteSingleEventMock}
                 />
             </KeycloakProvider>,
         );

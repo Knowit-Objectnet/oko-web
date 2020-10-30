@@ -8,10 +8,11 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiLocation, ApiPartner, apiUrl } from '../../types';
-import { useAlert, types } from 'react-alert';
+import { ApiLocation, ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
+import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
-import { PostToAPI } from '../../utils/PostToAPI';
+import { queryCache, useMutation } from 'react-query';
+import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
 
 const Options = styled.div`
     display: flex;
@@ -22,48 +23,53 @@ const Options = styled.div`
 interface NewEventProps {
     start: Date;
     end: Date;
-    beforeSubmit?: (
-        key: string,
-        data: {
-            startDateTime: string;
-            endDateTime: string;
-            stationId: number;
-            partnerId: number;
-            recurrenceRule?: {
-                until: string;
-                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-                count?: number;
-                interval?: number;
-            };
-        },
-        station: ApiLocation,
-        partner: ApiPartner,
-    ) => void;
-    afterSubmit?: (successful: boolean, key: string) => void;
+    afterSubmit?: (successful: boolean) => void;
 }
+
+const WEEKDAYS: Array<WorkingWeekdays> = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
 
 /**
  * Component shown when a range is selected in calendar or new event button clciked.
  * Will only be rendered for Oslo Kommune.
  */
 export const NewEvent: React.FC<NewEventProps> = (props) => {
-    // Alert dispatcher
     const alert = useAlert();
-    // Keycloak instance
     const { keycloak } = useKeycloak();
+
     // Valid recycling stations (ombruksstasjon) locations fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
     let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
     locations = locations && locations.length !== 0 ? locations : [];
     // Valid partners fetched from api
     let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
     partners = partners || [];
 
+    const [addEventMutation, { isLoading: addEventLoading }] = useMutation(
+        async (newEvent: ApiEventPost) => {
+            await postEvent(newEvent, keycloak.token);
+        },
+        {
+            onSuccess: () => {
+                alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
+                if (props.afterSubmit) {
+                    props.afterSubmit(true);
+                }
+            },
+            onError: () => {
+                alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
+                if (props.afterSubmit) {
+                    props.afterSubmit(false);
+                }
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries(eventsDefaultQueryKey);
+            },
+        },
+    );
+
     // State
     const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
-    const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
-    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
+    const [timeRange, setTimeRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
     const [locationId, setLocationId] = useState(-1);
@@ -144,19 +150,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             return;
         }
 
-        // Dates has to be written as strings as we need to remove the Z, as ISO 8601 is not fully supported
-        const data: {
-            startDateTime: string;
-            endDateTime: string;
-            stationId: number;
-            partnerId: number;
-            recurrenceRule?: {
-                until: string;
-                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-                count?: number;
-                interval?: number;
-            };
-        } = {
+        const newEvent: ApiEventPost = {
             startDateTime: timeRange[0].toISOString(),
             endDateTime: timeRange[1].toISOString(),
             stationId: locationId,
@@ -164,58 +158,18 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         };
 
         if (recurring === 'Daily') {
-            data.recurrenceRule = {
+            newEvent.recurrenceRule = {
                 until: dateRange[1].toISOString(),
-                days: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'],
+                days: WEEKDAYS,
             };
         } else if (recurring === 'Weekly') {
-            data.recurrenceRule = {
+            newEvent.recurrenceRule = {
                 until: dateRange[1].toISOString(),
+                days: selectedDays.map((index) => WEEKDAYS[index - 1]),
             };
-
-            const days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'> = [];
-
-            for (const day of selectedDays) {
-                switch (day) {
-                    case 1:
-                        days.push('MONDAY');
-                        break;
-                    case 2:
-                        days.push('TUESDAY');
-                        break;
-                    case 3:
-                        days.push('WEDNESDAY');
-                        break;
-                    case 4:
-                        days.push('THURSDAY');
-                        break;
-                    case 5:
-                        days.push('FRIDAY');
-                        break;
-                }
-            }
-
-            if (days) {
-                data.recurrenceRule.days = days;
-            }
         }
 
-        try {
-            if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/events`, data, location, partner);
-            }
-
-            // Post the event to the backend
-            await PostToAPI(`${apiUrl}/events`, data, keycloak.token);
-
-            if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/events`);
-            }
-        } catch (err) {
-            if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/events`);
-            }
-        }
+        await addEventMutation(newEvent);
     };
 
     return (
@@ -252,6 +206,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                 height={35}
                 width={350}
                 styling="margin-top: 40px;"
+                loading={addEventLoading}
             />
         </EventTemplateVertical>
     );

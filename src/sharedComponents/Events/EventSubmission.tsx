@@ -19,6 +19,7 @@ interface EventSubmissionProps {
     submitText?: string;
     onCancel: () => void;
     onSubmit: () => void;
+    loading: boolean;
 }
 
 /**
@@ -43,7 +44,14 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
         <Submission>
             <Button color="Red" name="cancelButton" onClick={onClick} text="Avbryt" width={108} />
             <Divider />
-            <Button color="Green" name="submitButton" onClick={onClick} text="Godkjenn" width={108} />
+            <Button
+                color="Green"
+                name="submitButton"
+                onClick={onClick}
+                text="Godkjenn"
+                width={108}
+                loading={props.loading}
+            />
         </Submission>
     );
 };

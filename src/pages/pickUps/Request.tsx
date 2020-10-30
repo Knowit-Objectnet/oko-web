@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { ApiPartner } from '../../types';
 import { Button } from '../../sharedComponents/Button';
-import Cross from '../../assets/Cross.svg';
 
 const Partner = styled.div`
     display: flex;

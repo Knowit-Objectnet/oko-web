@@ -19,13 +19,29 @@ The frontend-web for Oslo REG knowit 2020 summer project.
 
 * **[keycloak-js](https://www.npmjs.com/package/keycloak-js)**: client-side adapter for communicating with the Keycloak server. 
 [Documentation can be found here.](https://www.keycloak.org/docs/latest/securing_apps/index.html#_javascript_adapter)
-
 * **[@react-keycloak/web](https://www.npmjs.com/package/@react-keycloak/web)**: Provides a `KeycloakProvider` component 
 that wraps the entire React application (see `App.tsx`). The component holds an instance of a `Keycloak` object (from `keaycloak-js`), and provides a `useKeycloak()` hook that 
 can be used to check for authentication and roles in lower level components. See [package documentation for details](https://www.npmjs.com/package/@react-keycloak/web).
 
 ### Data fetching and caching
-* swr
+
+> The project is in the process of being migrated from `Fetch` + `SWR` to `Axios` + `react-query`.
+> <br/>Current status for resource entities:
+> 
+> | `Fetch` + `SWR`| `Axios` + `react-query` |
+> | --- | --- |
+> |`Station`, `Partner`, `PickUp`, `Request`, `Report`|`Event`|
+
+* **[Axios](https://www.npmjs.com/package/axios)**: HTTP client library for doing REST API calls.
+* **[react-query](https://www.npmjs.com/package/react-query)**: library used for caching data fetched from REST API.
+Provides a `useQuery()` hook for the fetching and caching, and a `useMutation()` hook to update the data. 
+The cache (a `QueryCache` instance) has utility methods (like `invalidateQueries()`) that can be used for interacting with the cache. 
+[Documentation can be found here.](https://react-query.tanstack.com/docs)
+
+**Will be replaced:**
+
+* **[swr](https://swr.vercel.app/)**: caching library
+---
 
 ### Alert system
 * react-alert

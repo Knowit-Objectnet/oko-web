@@ -19,7 +19,7 @@ const onKeycloakTokens = (tokens: { idToken: string; refreshToken: string; token
     }
 };
 
-const options = {
+const alertOptions = {
     position: positions.TOP_CENTER,
     timeout: 5000,
     offset: '30px',
@@ -30,7 +30,7 @@ export const App: React.FC = () => {
     return (
         <KeycloakProvider keycloak={keycloak} onTokens={onKeycloakTokens}>
             <ThemeProvider theme={theme}>
-                <AlertProvider template={AlertTemplate} {...options}>
+                <AlertProvider template={AlertTemplate} {...alertOptions}>
                     <ModalProvider>
                         <SWRConfig
                             value={{

@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
 import DatePicker from 'react-date-picker';
+import ClockIcon from '../../assets/Clock.svg';
+import CalendarIcon from '../../assets/Calendar.svg';
 import { useState } from 'react';
 
 const Wrapper = styled.div`
@@ -20,6 +22,18 @@ const DateTimePickersWrapper = styled.div`
 
     &:not(:last-child) {
         margin-bottom: 10px;
+    }
+`;
+
+const Icon = styled.div`
+    margin-right: 15px;
+`;
+
+const Row = styled.div`
+    display: flex;
+    align-items: center;
+    &:not(:last-child) {
+        margin-bottom: 15px;
     }
 `;
 
@@ -94,10 +108,6 @@ const BoxWrapper = styled.div`
     flex: 1;
 `;
 
-const TimeWrapper = styled.div`
-    display: flex;
-`;
-
 const TimeBox = styled.div`
     background-color: ${(props) => props.theme.colors.LightBeige};
     flex: 1;
@@ -106,10 +116,6 @@ const TimeBox = styled.div`
     align-items: center;
     justify-content: center;
     display: flex;
-
-    &:first-child {
-        margin-right: 20px;
-    }
 `;
 
 const Box = styled.div`
@@ -277,10 +283,22 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                 </Wrapper>
             ) : (
                 <BoxWrapper>
-                    <Box>
-                        {props.dateRange[0].toLocaleString('nb-NO', { month: 'long', day: 'numeric', year: 'numeric' })}
-                    </Box>
-                    <TimeWrapper>
+                    <Row>
+                        <Icon>
+                            <CalendarIcon height="2em" />
+                        </Icon>
+                        <Box>
+                            {props.dateRange[0].toLocaleString('nb-NO', {
+                                month: 'long',
+                                day: 'numeric',
+                                year: 'numeric',
+                            })}
+                        </Box>
+                    </Row>
+                    <Row>
+                        <Icon>
+                            <ClockIcon height="2em" />
+                        </Icon>
                         <TimeBox>
                             {props.timeRange[0].getHours().toString().padStart(2, '0')}:
                             {props.timeRange[0].getMinutes().toString().padStart(2, '0')}
@@ -289,7 +307,7 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                             {props.timeRange[1].getHours().toString().padStart(2, '0')}:
                             {props.timeRange[1].getMinutes().toString().padStart(2, '0')}
                         </TimeBox>
-                    </TimeWrapper>
+                    </Row>
                 </BoxWrapper>
             )}
         </EventOption>
