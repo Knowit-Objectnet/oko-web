@@ -34,9 +34,8 @@ can be used to check for authentication and roles in lower level components. See
 
 * **[Axios](https://www.npmjs.com/package/axios)**: HTTP client library for doing REST API calls.
 * **[react-query](https://www.npmjs.com/package/react-query)**: library used for caching data fetched from REST API.
-Provides a `useQuery` hook for the fetching and caching, and a `useMutation` hook to update the data. For this project, 
-the cache (a `QueryCache` instance) is held by a `ReactQueryCacheProvider`, located in `App.tsx`. 
-The cache has utility methods (like `invalidateQueries`) that can be used in lower level components. 
+Provides a `useQuery()` hook for the fetching and caching, and a `useMutation()` hook to update the data. 
+The cache (a `QueryCache` instance) has utility methods (like `invalidateQueries()`) that can be used for interacting with the cache. 
 [Documentation can be found here.](https://react-query.tanstack.com/docs)
 
 **Will be replaced:**
