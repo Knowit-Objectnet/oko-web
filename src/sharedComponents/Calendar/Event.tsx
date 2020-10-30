@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { RGBAtoRGB } from '../../utils/RGBAtoRGB';
 
 interface WrapperProps {
     top: number;
