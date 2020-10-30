@@ -42,7 +42,7 @@ interface OpeningTimeProps {
     max: Date;
 }
 
-export const OpeningTime: React.FC<OpeningTimeProps> = (props) => {
+export const OpeningHours: React.FC<OpeningTimeProps> = (props) => {
     const onRangeChange = (range: [string | Date, string | Date]) => {
         // Create date object
         const date = new Date();

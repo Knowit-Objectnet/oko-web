@@ -25,31 +25,29 @@ export interface ApiStationPatch {
     hours?: StationOpeningHours;
 }
 
-export default {
-    // First parameter is the query key passed by react-query
-    getStations: (_: string, token: string): Promise<Array<ApiStation>> =>
-        httpClient(token)
-            .get<Array<ApiStation>>(endpoint)
-            .then((response) => response.data),
+// First parameter is the query key passed by react-query
+export const getStations = (_: string, token: string): Promise<Array<ApiStation>> =>
+    httpClient(token)
+        .get<Array<ApiStation>>(endpoint)
+        .then((response) => response.data);
 
-    // First parameter is the query key passed by react-query
-    getStationById: (_: string, stationId: number, token: string): Promise<ApiStation> =>
-        httpClient(token)
-            .get<ApiStation>(`${endpoint}/${stationId}`)
-            .then((response) => response.data),
+// First parameter is the query key passed by react-query
+export const getStationById = (_: string, stationId: number, token: string): Promise<ApiStation> =>
+    httpClient(token)
+        .get<ApiStation>(`${endpoint}/${stationId}`)
+        .then((response) => response.data);
 
-    addStation: (newStation: ApiStationPost, token: string): Promise<ApiStation> =>
-        httpClient(token)
-            .post<ApiStation>(endpoint, newStation)
-            .then((response) => response.data),
+export const postStation = (newStation: ApiStationPost, token: string): Promise<ApiStation> =>
+    httpClient(token)
+        .post<ApiStation>(endpoint, newStation)
+        .then((response) => response.data);
 
-    deleteStation: (stationId: number, token: string): Promise<ApiStation> =>
-        httpClient(token)
-            .delete<ApiStation>(`${endpoint}/${stationId}`)
-            .then((response) => response.data),
+export const deleteStation = (stationId: number, token: string): Promise<ApiStation> =>
+    httpClient(token)
+        .delete<ApiStation>(`${endpoint}/${stationId}`)
+        .then((response) => response.data);
 
-    updateStation: (updatedStation: ApiStationPatch, token: string): Promise<ApiStation> =>
-        httpClient(token)
-            .patch<ApiStation>(endpoint, updatedStation)
-            .then((response) => response.data),
-};
+export const patchStation = (updatedStation: ApiStationPatch, token: string): Promise<ApiStation> =>
+    httpClient(token)
+        .patch<ApiStation>(endpoint, updatedStation)
+        .then((response) => response.data);

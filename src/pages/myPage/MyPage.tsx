@@ -8,7 +8,7 @@ import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
 import { useEffect, useState } from 'react';
 import { NewPartner } from '../../sharedComponents/NewPartner';
-import { NewLocation } from '../../sharedComponents/NewLocation/NewLocation';
+import { NewStationModal } from '../../sharedComponents/NewStation/NewStationModal';
 import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
@@ -108,20 +108,9 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    const afterNewLocation = (successful: boolean, key: string, error: Error | null) => {
+    const closeModalOnSuccess = (successful: boolean) => {
         if (successful) {
-            alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
-
             modal.remove();
-        } else {
-            // Show appropriate error alert if something went wrong.
-            if (error instanceof FetchError && error.code === 409) {
-                alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
-                    type: types.ERROR,
-                });
-            } else {
-                alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
-            }
         }
     };
 
@@ -152,7 +141,7 @@ export const MyPage: React.FC = () => {
 
     // Function to show new location ui modal
     const showNewLocation = () => {
-        modal.show(<NewLocation afterSubmit={afterNewLocation} />);
+        modal.show(<NewStationModal afterSubmit={closeModalOnSuccess} />);
     };
 
     // Function to show delete partner ui modal
