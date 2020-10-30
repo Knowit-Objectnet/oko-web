@@ -1,3 +1,5 @@
+import { ApiStation } from './api/StationService';
+
 export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
 export interface EventInfo {
@@ -24,30 +26,6 @@ interface EventInfoResource {
         end: Date;
         text: string;
     };
-}
-
-export type StationOpeningHours = {
-    [index in WorkingWeekdays]?: [string, string];
-};
-
-export interface ApiStation {
-    id: number;
-    name: string;
-    hours: StationOpeningHours;
-}
-
-export interface ApiStationPost {
-    name: string;
-    hours?: StationOpeningHours;
-}
-export type StationOpeningHours = {
-    [key in WorkingWeekdays]?: [string, string];
-};
-
-export interface ApiStationPatch {
-    id: number;
-    name?: string;
-    hours?: StationOpeningHours;
 }
 
 export interface ApiPartner {

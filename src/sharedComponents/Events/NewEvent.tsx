@@ -8,11 +8,12 @@ import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
 import { EventOptionPartner } from './EventOptionPartner';
-import { ApiEventPost, ApiStation, ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
 import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
+import { ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
+import { ApiStation } from '../../api/StationService';
 
 const Options = styled.div`
     display: flex;

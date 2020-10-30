@@ -1,11 +1,12 @@
 import { httpClient } from './httpClient';
-import { ApiLocation, ApiPartner, WorkingWeekdays } from '../types';
+import { ApiPartner, WorkingWeekdays } from '../types';
+import { ApiStation } from './StationService';
 
 export interface ApiEvent {
     id: number;
     startDateTime: string;
     endDateTime: string;
-    station: ApiLocation;
+    station: ApiStation;
     partner: ApiPartner;
     recurrenceRule: ApiRecurrenceRule | null;
 }

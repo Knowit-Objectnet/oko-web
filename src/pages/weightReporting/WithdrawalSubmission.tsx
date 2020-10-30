@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { PropsWithChildren, useState } from 'react';
-import { ApiStation } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
+import { ApiStation } from '../../api/StationService';
 
 const Wrapper = styled.div`
     display: flex;

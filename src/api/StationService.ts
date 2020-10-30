@@ -1,8 +1,29 @@
 import { httpClient } from './httpClient';
-import { ApiStation, ApiStationPatch, ApiStationPost } from '../types';
+import { WorkingWeekdays } from '../types';
 
 const endpoint = '/stations';
 export const stationsDefaultQueryKey = 'getStations';
+
+export type StationOpeningHours = {
+    [key in WorkingWeekdays]?: [string, string];
+};
+
+export interface ApiStation {
+    id: number;
+    name: string;
+    hours: StationOpeningHours;
+}
+
+export interface ApiStationPost {
+    name: string;
+    hours?: StationOpeningHours;
+}
+
+export interface ApiStationPatch {
+    id: number;
+    name?: string;
+    hours?: StationOpeningHours;
+}
 
 export default {
     // First parameter is the query key passed by react-query

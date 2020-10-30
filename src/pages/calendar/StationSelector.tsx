@@ -57,8 +57,8 @@ const Input = styled.input`
 `;
 
 interface StationSelectorProps {
-    selectedStation: number;
-    onSelectedStationChange: (index: number) => void;
+    selectedStationId?: number;
+    onSelectedStationChange: (index?: number) => void;
 }
 
 /*
@@ -98,7 +98,7 @@ export const StationSelector: React.FC<StationSelectorProps> = (props) => {
                                 type="radio"
                                 name="station-selector"
                                 value={station.id}
-                                checked={station.id === props.selectedStation}
+                                checked={station.id === props.selectedStationId}
                                 onChange={onChange}
                             />
                             {station.name}

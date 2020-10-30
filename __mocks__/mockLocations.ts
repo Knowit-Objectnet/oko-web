@@ -1,4 +1,4 @@
-import { ApiStation } from "../src/types";
+import {ApiStation} from "../src/api/StationService";
 
 export const mockLocations: Array<ApiStation> = [
     {

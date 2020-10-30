@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiStation, apiUrl, Roles } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Station } from './Station';
@@ -12,6 +11,8 @@ import useModal from '../../sharedComponents/Modal/useModal';
 import { NewLocation } from '../../sharedComponents/NewLocation/NewLocation';
 import keycloak from '../../keycloak';
 import { Helmet } from 'react-helmet';
+import { ApiStation } from '../../api/StationService';
+import { apiUrl, Roles } from '../../types';
 
 const Wrapper = styled.div`
     display: flex;

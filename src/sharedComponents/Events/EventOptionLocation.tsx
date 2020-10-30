@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import { ApiStation } from '../../types';
 import LocationIcon from '../../assets/Location.svg';
+import { ApiStation } from '../../api/StationService';
 
 const Select = styled.select`
     width: 100%;

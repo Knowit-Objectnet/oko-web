@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiStation } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
 import { StationAddress } from './StationAddress';
 import { StationOpeningTimes } from './StationOpeningTimes';
 import { StationAmbassador } from './StationAmbassador';
+import { ApiStation } from '../../api/StationService';
 
 const Wrapper = styled.div`
     width: 100%;

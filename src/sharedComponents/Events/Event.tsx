@@ -53,7 +53,7 @@ export const Event: React.FC<EventProps> = (props) => {
     const { keycloak } = useKeycloak();
     const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
     const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const stationOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.location.id;
+    const stationOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.station.id;
     const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
     const partnerOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.partner.id;
 
