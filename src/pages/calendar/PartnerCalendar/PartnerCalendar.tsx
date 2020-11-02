@@ -3,7 +3,6 @@ import { EventInfo } from '../../../types';
 import { WeekMenu } from '../WeekMenu';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
 import { ListView } from './ListView';
-import { Colors } from '../../../theme';
 
 interface PartnerCalendarProps {
     date: Date;
@@ -40,12 +39,7 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
                     />
                 </>
             ) : (
-                <ListView
-                    events={props.events}
-                    fromDate={date}
-                    groupingFn={groupByStationFn}
-                    numberOfDays={5}
-                />
+                <ListView events={props.events} fromDate={date} groupingFn={groupByStationFn} numberOfDays={5} />
             )}
         </>
     );
