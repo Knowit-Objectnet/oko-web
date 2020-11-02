@@ -6,6 +6,8 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
 import { EventInfo, Roles } from '../../src/types';
+import theme from '../../src/theme';
+import { ThemeProvider } from 'styled-components';
 
 // Component to test
 import { PartnerCalendar } from '../../src/pages/calendar/PartnerCalendar/PartnerCalendar';
@@ -57,13 +59,15 @@ describe('Provides a page for partners to view the calendar', () => {
 
         render(
             <KeycloakProvider keycloak={keycloak}>
-                <PartnerCalendar
-                    date={date}
-                    showCalendar={isToggled}
-                    onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekChangeMock}
-                    events={events}
-                />
+                <ThemeProvider theme={theme}>
+                    <PartnerCalendar
+                        date={date}
+                        showCalendar={isToggled}
+                        onSelectEvent={onSelectEventMock}
+                        onWeekChange={onWeekChangeMock}
+                        events={events}
+                    />
+                </ThemeProvider>
             </KeycloakProvider>,
         );
     });
@@ -79,13 +83,15 @@ describe('Provides a page for partners to view the calendar', () => {
 
         const { findAllByText } = render(
             <KeycloakProvider keycloak={keycloak}>
-                <PartnerCalendar
-                    date={date}
-                    showCalendar={isToggled}
-                    onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekChangeMock}
-                    events={events}
-                />
+                <ThemeProvider theme={theme}>
+                    <PartnerCalendar
+                        date={date}
+                        showCalendar={isToggled}
+                        onSelectEvent={onSelectEventMock}
+                        onWeekChange={onWeekChangeMock}
+                        events={events}
+                    />
+                </ThemeProvider>
             </KeycloakProvider>,
         );
 
@@ -106,13 +112,15 @@ describe('Provides a page for partners to view the calendar', () => {
 
         const { findAllByText } = render(
             <KeycloakProvider keycloak={keycloak}>
-                <PartnerCalendar
-                    date={date}
-                    showCalendar={isToggled}
-                    onSelectEvent={onSelectEventMock}
-                    onWeekChange={onWeekChangeMock}
-                    events={events}
-                />
+                <ThemeProvider theme={theme}>
+                    <PartnerCalendar
+                        date={date}
+                        showCalendar={isToggled}
+                        onSelectEvent={onSelectEventMock}
+                        onWeekChange={onWeekChangeMock}
+                        events={events}
+                    />
+                </ThemeProvider>
             </KeycloakProvider>,
         );
 
