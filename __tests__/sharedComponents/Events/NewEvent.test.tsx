@@ -11,7 +11,7 @@ import theme from '../../../src/theme';
 import { ThemeProvider } from 'styled-components';
 import { NewEvent } from '../../../src/sharedComponents/Events/NewEvent';
 import add from 'date-fns/add';
-import { mockLocations } from '../../../__mocks__/mockLocations';
+import { mockStations } from '../../../__mocks__/mockStations';
 import { mockPartners } from '../../../__mocks__/mockPartners';
 
 describe('Provides an interface to create a new Event', () => {

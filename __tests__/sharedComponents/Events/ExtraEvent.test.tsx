@@ -10,7 +10,7 @@ import { apiUrl } from '../../../src/types';
 import theme from '../../../src/theme';
 import { ThemeProvider } from 'styled-components';
 import add from 'date-fns/add';
-import { mockLocations } from '../../../__mocks__/mockLocations';
+import { mockStations } from '../../../__mocks__/mockStations';
 import { ExtraEvent } from '../../../src/sharedComponents/Events/ExtraEvent';
 
 // Fetch mock to intercept fetch requests.
@@ -34,7 +34,7 @@ describe('Provides an interface to create a pickup/Extra event', () => {
                     id: -1,
                     startDateTime: data.startDateTime,
                     endDateTime: data.endDateTime,
-                    station: mockLocations[0],
+                    station: mockStations[0],
                     chosenPartner: null,
                 });
             }
@@ -43,8 +43,8 @@ describe('Provides an interface to create a pickup/Extra event', () => {
 
         // Set needed keycloak data
         keycloak.token = 'FakeToken';
-        keycloak.tokenParsed.GroupID = mockLocations[0].id;
-        keycloak.tokenParsed.groups = [mockLocations[0].name];
+        keycloak.tokenParsed.GroupID = mockStations[0].id;
+        keycloak.tokenParsed.groups = [mockStations[0].name];
     });
 
     afterEach(() => {
@@ -113,7 +113,7 @@ describe('Provides an interface to create a pickup/Extra event', () => {
                 description: 'Ting må hentes',
                 chosenPartner: null,
                 station: {
-                    ...mockLocations[0],
+                    ...mockStations[0],
                     hours: {},
                 },
             },

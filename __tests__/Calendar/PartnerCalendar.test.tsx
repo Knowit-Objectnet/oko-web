@@ -101,7 +101,7 @@ describe('Provides a page for partners to view the calendar', () => {
         expect(smestadGroups.length).toBe(1);
     });
 
-    it('Should change which station/location groups are rendered when the date changes', async () => {
+    it('Should change which station groups are rendered when the date changes', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
         const onWeekChangeMock = jest.fn();

@@ -1,6 +1,6 @@
 import {ApiStation} from "../src/api/StationService";
 
-export const mockLocations: Array<ApiStation> = [
+export const mockStations: Array<ApiStation> = [
     {
         id: 1,
         name: "Haraldrud",
