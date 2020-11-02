@@ -51,15 +51,11 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         {
             onSuccess: () => {
                 alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
-                if (props.afterSubmit) {
-                    props.afterSubmit(true);
-                }
+                props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
-                if (props.afterSubmit) {
-                    props.afterSubmit(false);
-                }
+                props.afterSubmit?.(false);
             },
             onSettled: () => {
                 queryCache.invalidateQueries(eventsDefaultQueryKey);

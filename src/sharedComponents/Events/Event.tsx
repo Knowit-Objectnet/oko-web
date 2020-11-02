@@ -64,15 +64,11 @@ export const Event: React.FC<EventProps> = (props) => {
         {
             onSuccess: () => {
                 alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
-                if (props.afterDeleteSingleEvent) {
-                    props.afterDeleteSingleEvent(true);
-                }
+                props.afterDeleteSingleEvent?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
-                if (props.afterDeleteSingleEvent) {
-                    props.afterDeleteSingleEvent(false);
-                }
+                props.afterDeleteSingleEvent?.(false);
             },
             onSettled: () => {
                 queryCache.invalidateQueries(eventsDefaultQueryKey);
@@ -91,16 +87,12 @@ export const Event: React.FC<EventProps> = (props) => {
         },
         {
             onSuccess: () => {
-                alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
-                if (props.afterDeleteRangeEvent) {
-                    props.afterDeleteRangeEvent(true);
-                }
+                alert.show('Avtalen(e) ble slettet suksessfullt.', { type: types.SUCCESS });
+                props.afterDeleteRangeEvent?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
-                if (props.afterDeleteRangeEvent) {
-                    props.afterDeleteRangeEvent(false);
-                }
+                props.afterDeleteRangeEvent?.(false);
             },
             onSettled: () => {
                 queryCache.invalidateQueries(eventsDefaultQueryKey);
