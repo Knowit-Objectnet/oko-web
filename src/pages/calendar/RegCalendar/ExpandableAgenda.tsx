@@ -25,7 +25,7 @@ const DateText = styled.span`
     margin-right: 20px;
 `;
 
-interface ExpandableAgendaProps {
+interface Props {
     date: Date;
     events: Array<EventInfo>;
     onSelectSlot: (slot: SlotInfo) => void;
@@ -35,7 +35,7 @@ interface ExpandableAgendaProps {
 /*
  * Agenda component that expands into a week calendar
  */
-export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
+export const ExpandableAgenda: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
 
     // State for handling expansion of the agenda/calendar

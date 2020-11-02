@@ -32,11 +32,11 @@ const StyledClock = styled(Clock)`
     margin-right: 10px;
 `;
 
-interface StationOpeningTimesProps {
+interface Props {
     openingTimes: StationOpeningHours;
 }
 
-export const StationOpeningTimes: React.FC<StationOpeningTimesProps> = (props) => {
+export const StationOpeningTimes: React.FC<Props> = (props) => {
     const getList: () => [Array<React.ReactElement>, number] = () => {
         const list: Array<React.ReactElement> = [];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];

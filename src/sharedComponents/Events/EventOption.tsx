@@ -11,11 +11,11 @@ const Option = styled.div`
     }
 `;
 
-interface OptionInfoProps {
+interface Props {
     icon?: React.ElementType;
 }
 
-const OptionInfo = styled.div<OptionInfoProps>`
+const OptionInfo = styled.div<Props>`
     margin-left: ${(props) => (props.icon ? '36px' : '0')};
     display: flex;
     justify-content: center;

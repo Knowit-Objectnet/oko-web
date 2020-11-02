@@ -56,7 +56,7 @@ const Input = styled.input`
     margin-right: 15px;
 `;
 
-interface StationSelectorProps {
+interface Props {
     selectedStationId?: number;
     onSelectedStationChange: (index?: number) => void;
 }
@@ -64,7 +64,7 @@ interface StationSelectorProps {
 /*
  * Component for filtering by station
  */
-export const StationFilter: React.FC<StationSelectorProps> = (props) => {
+export const StationFilter: React.FC<Props> = (props) => {
     const [toggled, setToggled] = useState(true);
     const { data: stations } = useStations();
 

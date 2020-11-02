@@ -42,7 +42,7 @@ const Button = styled.div<ButtonProps>`
     }
 `;
 
-interface SideMenuProps {
+interface Props {
     newPartnerClick: () => void;
     newStationClick: () => void;
     deletePartnerClick: () => void;
@@ -53,7 +53,7 @@ interface SideMenuProps {
  * Component that lets a user either create a new event (if REG) or toggle between agenda and calendar (if
  * ambassador or partner)
  */
-export const SideMenu: React.FC<SideMenuProps> = (props) => (
+export const SideMenu: React.FC<Props> = (props) => (
     <Wrapper>
         <Item>
             <Description>Ny sam.partner</Description>
