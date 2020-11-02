@@ -5,7 +5,7 @@ import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
 import { EventInfo, Roles } from '../../types';
-import { EventOptionLocation } from './EventOptionLocation';
+import { EventStationInfo } from './EventStationInfo';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
@@ -36,7 +36,7 @@ const Options = styled.div`
     flex: 1;
 `;
 
-interface EventProps {
+interface Props {
     event: EventInfo;
     hideTitleBar?: boolean;
     afterDeleteSingleEvent?: (successful: boolean) => void;
@@ -47,7 +47,7 @@ interface EventProps {
  * Component shown when event in calendar is clicked.
  * Will be rendered differently depending on user's role.
  */
-export const Event: React.FC<EventProps> = (props) => {
+export const Event: React.FC<Props> = (props) => {
     const alert = useAlert();
 
     const { keycloak } = useKeycloak();
@@ -233,11 +233,7 @@ export const Event: React.FC<EventProps> = (props) => {
                             onSelectedDaysChange={handleSelectedDaysChange}
                             recurrenceEnabled={false}
                         />
-                        <EventOptionLocation
-                            isEditing={false}
-                            selectedLocation={props.event.resource.station.id}
-                            locations={[props.event.resource.station]}
-                        />
+                        <EventStationInfo station={props.event.resource.station} />
                     </Options>
                 </Section>
                 {!isEditing && (
