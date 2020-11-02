@@ -62,10 +62,9 @@ interface StationSelectorProps {
 }
 
 /*
- * Component for selecting station
+ * Component for filtering by station
  */
-export const StationSelector: React.FC<StationSelectorProps> = (props) => {
-    // State
+export const StationFilter: React.FC<StationSelectorProps> = (props) => {
     const [toggled, setToggled] = useState(true);
     const { data: stations } = useStations();
 
@@ -92,7 +91,7 @@ export const StationSelector: React.FC<StationSelectorProps> = (props) => {
             </Header>
             {toggled && (
                 <Station>
-                    {(stations ?? []).map((station) => (
+                    {stations?.map((station) => (
                         <Label key={station.name + station.id}>
                             <Input
                                 type="radio"

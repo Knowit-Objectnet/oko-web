@@ -14,7 +14,7 @@ import add from 'date-fns/add';
 import { Loading } from '../../sharedComponents/Loading';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { StationSelector } from './StationSelector';
+import { StationFilter } from './StationFilter';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
@@ -236,7 +236,7 @@ export const Calendar: React.FC = () => {
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
                     {(userIsAdmin || (userIsPartner && showingCalendar)) && (
-                        <StationSelector
+                        <StationFilter
                             selectedStationId={selectedStationId}
                             onSelectedStationChange={setSelectedStationId}
                         />
