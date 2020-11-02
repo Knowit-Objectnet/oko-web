@@ -108,15 +108,8 @@ export const NewStation: React.FC<NewStationProps> = (props) => {
                 alert.show('Stasjonen ble lagt til suksessfullt.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
-            onError: (error) => {
-                /* TODO: make this work
-                if (error.code === '409') {
-                    alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
-                        type: types.ERROR,
-                    });
-                } else { */
+            onError: () => {
                 alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
-                // }
                 props.afterSubmit?.(false);
             },
             onSettled: () => queryCache.invalidateQueries(stationsDefaultQueryKey),
@@ -215,13 +208,16 @@ export const NewStation: React.FC<NewStationProps> = (props) => {
             return;
         }
 
-        const getOpeningHours = (dayIsClosed: boolean, openingHours: [Date, Date]) =>
-            dayIsClosed
-                ? undefined
-                : // TODO: replace string literal with date-fns: `formatISO(hour, { representation: 'time' })`
-                  //  if backend starts supporting proper ISO-formatting with timezone (example: 07:00:00+01:00)
-                  // Casting to [string, string] is required to please typescript
-                  (openingHours.map((hour) => `${format(hour, 'HH:mm')}:00Z`) as [string, string]);
+        const getOpeningHours = (dayIsClosed: boolean, openingHours: [Date, Date]) => {
+            if (dayIsClosed) {
+                return undefined;
+            }
+            return openingHours.map((hour) => {
+                // TODO: replace string literal with date-fns: `formatISO(hour, { representation: 'time' })`
+                //  if backend starts supporting proper ISO-formatting with timezone (example: 07:00:00+01:00)
+                return `${format(hour, 'HH:mm')}:00Z`;
+            }) as [string, string]; // Casting to [string, string] is required to please typescript
+        };
 
         const newStation: ApiStationPost = {
             name,
