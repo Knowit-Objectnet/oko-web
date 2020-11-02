@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import LocationIcon from '../../assets/Location.svg';
 import { ApiStation } from '../../api/StationService';
@@ -33,10 +32,8 @@ interface Props {
 }
 
 export const EventStationInfo: React.FC<Props> = ({ station }) => (
-    <EventOption>
-        <Row>
-            <Icon />
-            <Box>{station.name}</Box>
-        </Row>
-    </EventOption>
+    <Row>
+        <Icon />
+        <Box>{station.name}</Box>
+    </Row>
 );

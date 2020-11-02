@@ -24,7 +24,7 @@ const Header = styled.div`
     margin-bottom: 15px;
 `;
 
-const Station = styled.div`
+const Stations = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -90,7 +90,7 @@ export const StationFilter: React.FC<StationSelectorProps> = (props) => {
                 {toggled ? <StyledArrowDown onClick={onToggleClick} /> : <StyledArrowUp onClick={onToggleClick} />}
             </Header>
             {toggled && (
-                <Station>
+                <Stations>
                     {stations?.map((station) => (
                         <Label key={station.name + station.id}>
                             <Input
@@ -113,7 +113,7 @@ export const StationFilter: React.FC<StationSelectorProps> = (props) => {
                         />
                         Alle
                     </Label>
-                </Station>
+                </Stations>
             )}
         </Wrapper>
     );

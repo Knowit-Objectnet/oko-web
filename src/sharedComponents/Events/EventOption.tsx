@@ -24,7 +24,6 @@ const OptionInfo = styled.div<OptionInfoProps>`
 `;
 
 interface EventOptionProps {
-    children: React.ReactNode;
     icon?: React.ElementType;
 }
 

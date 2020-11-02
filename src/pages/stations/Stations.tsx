@@ -66,7 +66,7 @@ const Content = styled.div`
 
 export const Stations: React.FC = () => {
     const modal = useModal();
-    const { data: stations, isLoading: isValidating } = useStations();
+    const { data: stations, isLoading } = useStations();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
@@ -74,7 +74,7 @@ export const Stations: React.FC = () => {
         modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
     };
 
-    if (!stations && isValidating) {
+    if (isLoading) {
         return <Loading text="Laster inn data..." />;
     }
 
@@ -94,7 +94,7 @@ export const Stations: React.FC = () => {
                 )}
                 <Content>
                     {stations?.map((station) => (
-                        <Station key={station.id} {...station} />
+                        <Station key={station.id} station={station} />
                     ))}
                 </Content>
             </Wrapper>

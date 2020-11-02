@@ -93,11 +93,11 @@ const StyledMail = styled(Mail)`
     margin-right: 5px;
 `;
 
-interface NewStationProps {
+interface Props {
     afterSubmit?: (successful: boolean) => void;
 }
 
-export const NewStation: React.FC<NewStationProps> = (props) => {
+export const NewStation: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
@@ -216,7 +216,7 @@ export const NewStation: React.FC<NewStationProps> = (props) => {
                 // TODO: replace string literal with date-fns: `formatISO(hour, { representation: 'time' })`
                 //  if backend starts supporting proper ISO-formatting with timezone (example: 07:00:00+01:00)
                 return `${format(hour, 'HH:mm')}:00Z`;
-            }) as [string, string]; // Casting to [string, string] is required to please typescript
+            }) as [string, string]; // Casting is required to please typescript
         };
 
         const newStation: ApiStationPost = {
