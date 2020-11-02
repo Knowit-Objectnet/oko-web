@@ -20,7 +20,6 @@ const Title = styled.span`
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
-    font-family: Roboto;
     font-style: normal;
     font-weight: bold;
     font-size: 19px;

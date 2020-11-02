@@ -1,26 +1,25 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { default as DateCalendar } from 'react-calendar';
 import { RegCalendar } from './RegCalendar/RegCalendar';
-import { useEffect, useState } from 'react';
 import { Event } from '../../sharedComponents/Events/Event';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
 import { SideMenu } from './SideMenu';
-import { ApiEvent, ApiLocation, ApiPartner, apiUrl, EventInfo, Roles } from '../../types';
+import { EventInfo, Roles } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
-import differenceInDays from 'date-fns/differenceInDays';
-import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
 import { useKeycloak } from '@react-keycloak/web';
-import { useAlert, types } from 'react-alert';
-import { LocationSelector } from './LocationSelector';
+import { types, useAlert } from 'react-alert';
+import { StationSelector } from './StationSelector';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
+import { useQuery } from 'react-query';
+import { ApiEvent, ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../api/EventService';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -64,8 +63,6 @@ const ModuleCalendar = styled(Module)`
 const Sidebar = styled.div`
     display: flex;
     flex-direction: column;
-    justify-contents: center;
-    align-items: center;
     margin-left: 40px;
     justify-content: flex-start;
     align-items: flex-start;
@@ -81,47 +78,39 @@ const Sidebar = styled.div`
 /**
  * The page component for the calendar view
  */
-export const CalendarPage: React.FC = () => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
-    // Alert dispatcher
+export const Calendar: React.FC = () => {
     const alert = useAlert();
-    // Modal dispatcher
     const modal = useModal();
-    // State for day handling
+
+    const { keycloak } = useKeycloak();
+    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
+    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
+    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
+    const userId = keycloak.tokenParsed?.GroupID;
+
     const [selectedDate, setSelectedDate] = useState(new Date());
-    // State for side menu
-    const [isToggled, setIsToggled] = useState(false);
-    // State for location filtering
-    const [selectedLocation, setSelectedLocation] = useState(-1);
+    const [selectedStationId, setSelectedStationId] = useState<number | undefined>();
+    const [showingCalendar, setShowingCalendar] = useState(false);
 
     // from and to date for event fetching
     // The from date is the last monday from props.date and the to date is 1 week into the future
     // This is such that the week-calendar always has it's 5 days of events
     const fromDate = add(selectedDate, { days: selectedDate.getDay() === 0 ? -6 : -selectedDate.getDay() + 1 });
-    fromDate.setHours(7, 0, 0, 0);
+    fromDate.setHours(0, 0, 0, 0);
     const toDate = add(selectedDate, { weeks: 1 });
-    toDate.setHours(20, 0, 0, 0);
+    toDate.setHours(24, 0, 0, 0);
 
-    let url = '';
-    if (keycloak.hasRealmRole(Roles.Ambassador)) {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&stationId=${
-            keycloak.tokenParsed.GroupID
-        }`;
-    } else if (keycloak.hasRealmRole(Roles.Partner)) {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}${
-            selectedLocation === -1 || !isToggled ? '' : '&stationId=' + selectedLocation
-        }`;
-    } else {
-        url = `${apiUrl}/events?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}${
-            selectedLocation === -1 ? '' : '&stationId=' + selectedLocation
-        }`;
-    }
+    const eventsFilter: ApiEventParams = {
+        fromDate: fromDate.toISOString(),
+        toDate: toDate.toISOString(),
+        stationId: userIsStation ? userId : selectedStationId,
+    };
 
-    // Events fetched from the api
-    // Contains parameters to only get events in date range specified above and only from the accounts
-    // station location
-    const { data: apiEvents, isValidating, mutate } = useSWR<ApiEvent[]>(url, fetcher);
+    const { data: apiEvents, isLoading } = useQuery<Array<ApiEvent>>({
+        queryKey: [eventsDefaultQueryKey, eventsFilter, keycloak.token],
+        queryFn: getEvents,
+    });
+
     const [events, setEvents] = useState<Array<EventInfo>>([]);
 
     useEffect(() => {
@@ -151,36 +140,24 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    // New event display function
-    const newEvent = () => {
+    const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
+
+    const showNewEventModal = () => {
         const { start, end } = getStartAndEndDateTime();
-        modal.show(
-            <NewEvent
-                start={start}
-                end={end}
-                beforeSubmit={beforeNewEventSubmission}
-                afterSubmit={afterNewEventSubmission}
-            />,
-        );
+        modal.show(<NewEvent start={start} end={end} afterSubmit={closeModalOnSuccess} />);
     };
 
-    // Extra event display function
-    const extraEvent = () => {
+    const showNewExtraEventModal = () => {
         const { start, end } = getStartAndEndDateTime();
         modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
     };
 
-    // On event selection function to display an event
-    const onSelectEvent = (event: EventInfo) => {
+    const showEventInfoModal = (event: EventInfo) => {
         modal.show(
             <Event
-                {...event}
-                beforeDeleteSingleEvent={beforeDeleteSingleEvent}
-                afterDeleteSingleEvent={afterDeleteSingleEvent}
-                beforeDeleteRangeEvent={beforeDeleteRangeEvents}
-                afterDeleteRangeEvent={afterDeleteRangeEvents}
-                beforeUpdateEvent={beforeUpdateEvent}
-                afterUpdateEvent={afterUpdateEvent}
+                event={event}
+                afterDeleteSingleEvent={closeModalOnSuccess}
+                afterDeleteRangeEvent={closeModalOnSuccess}
             />,
         );
     };
@@ -188,36 +165,22 @@ export const CalendarPage: React.FC = () => {
     // On slot selection function to display new or extra event
     const onSelectSlot = (start: Date, end: Date, isOslo: boolean) => {
         if (isOslo) {
-            modal.show(
-                <NewEvent
-                    start={start}
-                    end={end}
-                    beforeSubmit={beforeNewEventSubmission}
-                    afterSubmit={afterNewEventSubmission}
-                />,
-            );
+            modal.show(<NewEvent start={start} end={end} />);
         } else {
             modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
         }
     };
 
-    // Click function for agenda/calendar toggle button
-    const toggleCalendarClick = () => {
-        setIsToggled(!isToggled);
+    const toggleShowCalendar = () => {
+        setShowingCalendar(!showingCalendar);
     };
 
-    // On week change selector function
-    const onWeekChange = (delta: -1 | 1) => {
+    const handleWeekChange = (delta: -1 | 1) => {
         const dayOfDeltaWeek = add(selectedDate, { weeks: delta });
         setSelectedDate(dayOfDeltaWeek);
     };
 
-    // On location change selector function
-    const onSelectedLocationChange = (index: number) => {
-        setSelectedLocation(index);
-    };
-
-    const afterExtraEventSubmission = (successful: boolean, key: string) => {
+    const afterExtraEventSubmission = (successful: boolean) => {
         if (successful) {
             // Give user feedback and close modal
             alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
@@ -228,241 +191,37 @@ export const CalendarPage: React.FC = () => {
         }
     };
 
-    const beforeNewEventSubmission = async (
-        key: string,
-        data: {
-            startDateTime: string;
-            endDateTime: string;
-            stationId: number;
-            partnerId: number;
-            recurrenceRule?: {
-                until: string;
-                days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-                count?: number;
-                interval?: number;
-            };
-        },
-        station: ApiLocation,
-        partner: ApiPartner,
-    ) => {
-        if (apiEvents) {
-            // Mutate local data
-            const newEvent: ApiEvent = {
-                startDateTime: data.startDateTime,
-                endDateTime: data.endDateTime,
-                id: -1,
-                partner: partner,
-                station: station,
-                recurrenceRule: data.recurrenceRule
-                    ? {
-                          id: -1,
-                          until: data.recurrenceRule.until,
-                          days: data.recurrenceRule.days || [],
-                          count: data.recurrenceRule.count || 0,
-                          interval: data.recurrenceRule.interval || 0,
-                      }
-                    : null,
-            };
-            // Create the new event(s) locally for the local state
-            const newEvents = [...apiEvents];
-            if (data.recurrenceRule && data.recurrenceRule.days) {
-                const days: Array<number> = data.recurrenceRule.days.map((day) => {
-                    switch (day) {
-                        case 'MONDAY':
-                            return 1;
-                        case 'TUESDAY':
-                            return 2;
-                        case 'WEDNESDAY':
-                            return 3;
-                        case 'THURSDAY':
-                            return 4;
-                        case 'FRIDAY':
-                            return 5;
-                    }
-                });
-
-                // Make the minimum of 5 (the days we show in the calendar at once) and the dayes in the new event range
-                const min = Math.min(
-                    5,
-                    differenceInDays(new Date(data.recurrenceRule.until), new Date(data.startDateTime)) + 1,
-                );
-                for (let i = 0; i < min; i++) {
-                    // create a copy of the start and end time
-                    const newStart = new Date(data.startDateTime);
-                    const newEnd = new Date(data.endDateTime);
-
-                    // Copy the new event
-                    const additionalEvent = { ...newEvent };
-                    // Update the id to get an unique id
-                    additionalEvent.id -= i + 1;
-
-                    // Get the next day
-                    const newDate = add(newStart, { days: i });
-
-                    // Check if the next day is included in the days
-                    const day = newDate.getDay();
-                    if (!days.includes(day)) continue;
-
-                    // Set the date to the weekday of this week
-                    newStart.setDate(newDate.getDate());
-                    newEnd.setDate(newDate.getDate());
-                    // Update the event with the new dates
-                    additionalEvent.startDateTime = newStart.toISOString();
-                    additionalEvent.endDateTime = newEnd.toISOString();
-                    newEvents.push(additionalEvent);
-                }
-            } else {
-                newEvents.push(newEvent);
-            }
-
-            await mutate(newEvents, false);
-
-            // Remove modal
-            modal.remove();
-        }
-    };
-
-    const afterNewEventSubmission = (successful: boolean, key: string) => {
-        if (successful) {
-            // Give user feedback
-            alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
-
-            // trigger a revalidation (refetch) to make sure our local data is correct
-            mutate();
-        } else {
-            alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
-        }
-    };
-
-    const beforeDeleteSingleEvent = async (key: string, event: EventInfo) => {
-        if (apiEvents) {
-            // update the local data immediately, but disable the revalidation
-            const newEvents = apiEvents.filter((apiEvent) => apiEvent.id !== event.resource.eventId);
-            await mutate(newEvents, false);
-            modal.remove();
-        }
-    };
-
-    const afterDeleteSingleEvent = (successful: boolean, key: string) => {
-        if (successful) {
-            // Give user feedback
-            alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
-
-            // trigger a revalidation (refetch) to make sure our local data is correct
-            mutate();
-        } else {
-            alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
-        }
-    };
-
-    const beforeDeleteRangeEvents = async (key: string, event: EventInfo, range: [Date, Date]) => {
-        if (apiEvents) {
-            // Set range date times to low and high times to make sure all events in the range gets deleeted
-            const start = range[0];
-            const end = range[1];
-            start.setHours(2, 0, 0, 0);
-            end.setHours(22, 0, 0, 0);
-            // update the local data immediately, but disable the revalidation
-            const newEvents = apiEvents.filter(
-                (apiEvent) =>
-                    !(
-                        apiEvent.recurrenceRule &&
-                        event.resource.recurrenceRule &&
-                        apiEvent.recurrenceRule.id === event.resource.recurrenceRule.id &&
-                        new Date(apiEvent.startDateTime) >= start &&
-                        new Date(apiEvent.startDateTime) <= end
-                    ),
-            );
-            await mutate(newEvents, false);
-            modal.remove();
-        }
-    };
-
-    const afterDeleteRangeEvents = (successful: boolean, key: string) => {
-        if (successful) {
-            // Give user feedback
-            alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
-
-            // trigger a revalidation (refetch) to make sure our local data is correct
-            mutate();
-        } else {
-            alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
-        }
-    };
-
-    const beforeUpdateEvent = async (key: string, eventId: number, start: string, end: string) => {
-        // Update the local state if the apiEvents exist
-        if (apiEvents) {
-            // Find the event we want to update
-            const newEvent = apiEvents.find((event) => event.id === eventId);
-
-            // Tell the user that we were unable to update local data if we cant find the event
-            // , and hope that it works to update the api
-            if (!newEvent) {
-                alert.show('Klarte ikke å oppdatere lokal data, vennligst vent.', { type: types.INFO });
-            } else {
-                // Update the event
-                newEvent.startDateTime = start;
-                newEvent.endDateTime = end;
-
-                // Create a new array of events to not directly mutate state
-                const newEvents = apiEvents.filter((event) => event.id !== eventId);
-
-                // Add the updated event to the new Events
-                newEvents.push(newEvent);
-
-                // update the local data immediately, but disable the revalidation
-                await mutate(newEvents, false);
-                modal.remove();
-            }
-        }
-    };
-
-    const afterUpdateEvent = (successful: boolean, key: string) => {
-        if (successful) {
-            // Give user feedback
-            alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
-
-            // trigger a revalidation (refetch) to make sure our local data is correct
-            mutate();
-        } else {
-            alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
-        }
-    };
-
     // Function to decide which calendar to render depending on role
     const getCalendar = () => {
-        if (keycloak.hasRealmRole(Roles.Partner)) {
+        if (userIsPartner) {
             return (
                 <PartnerCalendar
-                    onSelectEvent={onSelectEvent}
+                    onSelectEvent={showEventInfoModal}
                     date={selectedDate}
-                    isToggled={isToggled}
-                    onWeekChange={onWeekChange}
+                    showCalendar={showingCalendar}
+                    onWeekChange={handleWeekChange}
                     events={events}
-                    beforeDeleteSingleEvent={beforeDeleteSingleEvent}
-                    afterDeleteSingleEvent={afterDeleteSingleEvent}
                 />
             );
-        } else if (keycloak.hasRealmRole(Roles.Ambassador)) {
+        } else if (userIsStation) {
             return (
                 <AmbassadorCalendar
-                    onSelectEvent={onSelectEvent}
+                    onSelectEvent={showEventInfoModal}
                     date={selectedDate}
-                    isToggled={isToggled}
-                    onWeekChange={onWeekChange}
+                    isToggled={showingCalendar}
+                    onWeekChange={handleWeekChange}
                     events={events}
                 />
             );
         }
         return (
             <RegCalendar
-                onSelectEvent={onSelectEvent}
+                onSelectEvent={showEventInfoModal}
                 onSelectSlot={onSelectSlot}
-                newEvent={newEvent}
+                newEvent={showNewEventModal}
                 date={selectedDate}
-                isToggled={selectedLocation !== -1}
-                onWeekChange={onWeekChange}
+                isToggled={selectedStationId !== undefined}
+                onWeekChange={handleWeekChange}
                 events={events}
             />
         );
@@ -476,23 +235,23 @@ export const CalendarPage: React.FC = () => {
             <Wrapper>
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
-                    {((keycloak.hasRealmRole(Roles.Partner) && isToggled) || keycloak.hasRealmRole(Roles.Oslo)) && (
-                        <LocationSelector
-                            selectedLocation={selectedLocation}
-                            onSelectedLocationChange={onSelectedLocationChange}
+                    {(userIsAdmin || (userIsPartner && showingCalendar)) && (
+                        <StationSelector
+                            selectedStationId={selectedStationId}
+                            onSelectedStationChange={setSelectedStationId}
                         />
                     )}
                 </ModuleDateCalendar>
-                {!apiEvents && (!events || events.length <= 0) && isValidating ? (
+                {!apiEvents && (!events || events.length <= 0) && isLoading ? (
                     <Loading text="Laster inn data..." />
                 ) : (
                     <ModuleCalendar>{getCalendar()}</ModuleCalendar>
                 )}
                 <Sidebar>
                     <SideMenu
-                        onCalendarToggleClick={toggleCalendarClick}
-                        onNewEventClick={newEvent}
-                        onExtraEventClick={extraEvent}
+                        onCalendarToggleClick={toggleShowCalendar}
+                        onNewEventClick={showNewEventModal}
+                        onExtraEventClick={showNewExtraEventModal}
                     />
                 </Sidebar>
             </Wrapper>

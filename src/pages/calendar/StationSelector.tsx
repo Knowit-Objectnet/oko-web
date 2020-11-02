@@ -15,7 +15,7 @@ const Wrapper = styled.div`
     margin-top: 50px;
 
     @media screen and (max-width: 900px) {
-        margin-top: 0px;
+        margin-top: 0;
         margin-left: 15px;
     }
 `;
@@ -58,16 +58,15 @@ const Input = styled.input`
     margin-right: 15px;
 `;
 
-interface LocationSelectorProps {
-    selectedLocation: number;
-    onSelectedLocationChange: (index: number) => void;
+interface StationSelectorProps {
+    selectedStationId: number | undefined;
+    onSelectedStationChange: (index: number | undefined) => void;
 }
 
 /*
  * Component for selecting location
  */
-export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
-    // State
+export const StationSelector: React.FC<StationSelectorProps> = (props) => {
     const [toggled, setToggled] = useState(true);
 
     let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
@@ -79,8 +78,12 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
-        const val = parseInt(e.currentTarget.value);
-        props.onSelectedLocationChange(val);
+        const value = e.currentTarget.value;
+        if (value === 'default') {
+            props.onSelectedStationChange(undefined);
+        } else {
+            props.onSelectedStationChange(parseInt(value));
+        }
     };
 
     return (
@@ -98,7 +101,7 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
                                 type="radio"
                                 name="location-selector"
                                 value={location.id}
-                                checked={location.id === props.selectedLocation}
+                                checked={location.id === props.selectedStationId}
                                 onChange={onChange}
                             />
                             {location.name}
@@ -108,8 +111,8 @@ export const LocationSelector: React.FC<LocationSelectorProps> = (props) => {
                         <Input
                             type="radio"
                             name="location-selector"
-                            value={-1}
-                            checked={-1 === props.selectedLocation}
+                            value="default"
+                            checked={props.selectedStationId === undefined}
                             onChange={onChange}
                         />
                         Alle

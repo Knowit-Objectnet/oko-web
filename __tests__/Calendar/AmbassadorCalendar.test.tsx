@@ -5,12 +5,13 @@ import fetch from 'jest-fetch-mock';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
-import { ApiEvent, EventInfo, Roles } from '../../src/types';
+import { EventInfo, Roles } from '../../src/types';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
 
 // Component to test
 import { AmbassadorCalendar } from '../../src/pages/calendar/AmbassadorCalendar/AmbassadorCalendar';
+import { ApiEvent } from '../../src/api/EventService';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;

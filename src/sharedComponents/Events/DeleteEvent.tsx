@@ -50,21 +50,19 @@ const StyledDateRangePicker = styled(DateRangePicker)`
 `;
 
 interface DeleteEventProps {
-    onSubmit: (range: [Date, Date], isSingleDeletion: boolean) => void;
+    allowRangeDeletion: boolean;
+    onSubmit: (isSingleDeletion: boolean, fromDate: Date, toDate: Date) => void;
+    loading: boolean;
 }
 
 export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
     const date = new Date();
     date.setHours(2, 0, 0, 0);
-    const [range, setRange] = useState<[Date, Date]>([new Date(date), new Date(date)]);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(date), new Date(date)]);
     const [isSingleDeletion, setIsSingleDeletion] = useState(true);
 
-    const onSubmit = () => {
-        props.onSubmit(range, isSingleDeletion);
-    };
-
-    const onDateRangeChange = (range: [Date, Date]) => {
-        setRange(range);
+    const handleSubmit = () => {
+        props.onSubmit(isSingleDeletion, dateRange[0], dateRange[1]);
     };
 
     const setIsSingleDeletionClick = () => {
@@ -77,16 +75,29 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
 
     return (
         <Wrapper>
-            <RangeSelection>
-                <Selection selected={isSingleDeletion} onClick={setIsSingleDeletionClick}>
-                    Engangstilfelle
-                </Selection>
-                <Selection selected={!isSingleDeletion} onClick={setIsRangeDeletionClick}>
-                    Over en periode
-                </Selection>
-            </RangeSelection>
-            {!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={onDateRangeChange} value={range} />}
-            <Button onClick={onSubmit} text="Bekreft" color="Green" height={35} />
+            {props.allowRangeDeletion && (
+                <RangeSelection>
+                    <Selection selected={isSingleDeletion} onClick={setIsSingleDeletionClick}>
+                        Engangstilfelle
+                    </Selection>
+                    <Selection selected={!isSingleDeletion} onClick={setIsRangeDeletionClick}>
+                        Over en periode
+                    </Selection>
+                </RangeSelection>
+            )}
+            {!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={setDateRange} value={dateRange} />}
+            <Button
+                onClick={handleSubmit}
+                text="Bekreft"
+                color="Green"
+                height={35}
+                width={props.allowRangeDeletion ? undefined : 250}
+                loading={props.loading}
+            />
         </Wrapper>
     );
 };
+
+/*
+
+ */

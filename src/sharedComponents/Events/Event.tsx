@@ -4,15 +4,15 @@ import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
-import { apiUrl, EventInfo, Roles } from '../../types';
+import { EventInfo, Roles } from '../../types';
 import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
-import { useAlert, types } from 'react-alert';
+import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { Button } from '../Button';
-import { PatchToAPI } from '../../utils/PatchToAPI';
-import { DeleteToAPI } from '../../utils/DeleteToAPI';
+import { queryCache, useMutation } from 'react-query';
+import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
 
 const Body = styled.div`
     display: flex;
@@ -36,13 +36,11 @@ const Options = styled.div`
     flex: 1;
 `;
 
-interface EventProps extends EventInfo {
-    beforeDeleteSingleEvent?: (key: string, event: EventInfo) => void;
-    afterDeleteSingleEvent?: (successful: boolean, key: string) => void;
-    beforeDeleteRangeEvent?: (key: string, event: EventInfo, range: [Date, Date]) => void;
-    afterDeleteRangeEvent?: (successful: boolean, key: string) => void;
-    beforeUpdateEvent?: (key: string, eventId: number, start: string, end: string) => void;
-    afterUpdateEvent?: (successful: boolean, key: string) => void;
+interface EventProps {
+    event: EventInfo;
+    hideTitleBar?: boolean;
+    afterDeleteSingleEvent?: (successful: boolean) => void;
+    afterDeleteRangeEvent?: (successful: boolean) => void;
 }
 
 /**
@@ -50,116 +48,131 @@ interface EventProps extends EventInfo {
  * Will be rendered differently depending on user's role.
  */
 export const Event: React.FC<EventProps> = (props) => {
-    // Alert dispatcher
     const alert = useAlert();
-    // Keycloak instance
+
     const { keycloak } = useKeycloak();
-    // State
-    const [isEditing, setIsEditing] = useState(false);
-    const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
-    const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
+    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
+    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
+    const stationOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.location.id;
+    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
+    const partnerOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.partner.id;
+
+    const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
+        async (event: EventInfo) => {
+            await deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
+        },
+        {
+            onSuccess: () => {
+                alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
+                if (props.afterDeleteSingleEvent) {
+                    props.afterDeleteSingleEvent(true);
+                }
+            },
+            onError: () => {
+                alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
+                if (props.afterDeleteSingleEvent) {
+                    props.afterDeleteSingleEvent(false);
+                }
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries(eventsDefaultQueryKey);
+            },
+        },
+    );
+
+    const [deleteRangeEventsMutation, { isLoading: deleteRangeEventLoading }] = useMutation(
+        async ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
+            const apiParams: ApiEventParams = {
+                recurrenceRuleId: event.resource.recurrenceRule?.id,
+                fromDate: fromDate.toISOString(),
+                toDate: toDate.toISOString(),
+            };
+            await deleteEvents(apiParams, keycloak.token);
+        },
+        {
+            onSuccess: () => {
+                alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
+                if (props.afterDeleteRangeEvent) {
+                    props.afterDeleteRangeEvent(true);
+                }
+            },
+            onError: () => {
+                alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
+                if (props.afterDeleteRangeEvent) {
+                    props.afterDeleteRangeEvent(false);
+                }
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries(eventsDefaultQueryKey);
+            },
+        },
+    );
+
+    const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
+        async (updatedEvent: ApiEventPatch) => {
+            await patchEvent(updatedEvent, keycloak.token);
+        },
+        {
+            onSuccess: () => {
+                alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
+                setIsEditing(false);
+            },
+            onError: () => {
+                alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries(eventsDefaultQueryKey);
+            },
+        },
+    );
+
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(props.event.start), new Date(props.event.end)]);
+    const [timeRange, setTimeRange] = useState<[Date, Date]>([new Date(props.event.start), new Date(props.event.end)]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
-    const [selectedDays, setSelectedDays] = useState([1]);
+    const [selectedDays, setSelectedDays] = useState<Array<number>>([1]);
     const [isDeletionConfirmationVisible, setIsDeletionConfirmationVisible] = useState(false);
 
-    // On change functions for DateRange
-    const onDateRangeChange = (range: [Date, Date]) => {
+    const handleDateRangeChange = (range: [Date, Date]) => {
         setDateRange(range);
     };
 
-    const onTimeRangeChange = (range: [Date, Date]) => {
+    const handleTimeRangeChange = (range: [Date, Date]) => {
         setTimeRange(range);
     };
 
-    const onRecurringChange = (value: 'None' | 'Daily' | 'Weekly') => {
+    const handleRecurringChange = (value: 'None' | 'Daily' | 'Weekly') => {
         setReccuring(value);
     };
 
-    const onSelectedDaysChange = (num: Array<number>) => {
+    const handleSelectedDaysChange = (num: Array<number>) => {
         setSelectedDays(num);
     };
 
-    // On change function for the Edit button
-    const onEditClick = () => {
+    const handleEditClick = () => {
         setIsEditing(true);
     };
 
-    const onDeleteConfirmationClick = () => {
+    const handleDeleteConfirmationClick = () => {
         setIsDeletionConfirmationVisible(!isDeletionConfirmationVisible);
     };
 
-    const onDelete = (range: [Date, Date], isSingleDeletion: boolean) => {
-        const {
-            beforeDeleteSingleEvent,
-            afterDeleteSingleEvent,
-            beforeDeleteRangeEvent,
-            afterDeleteRangeEvent,
-            beforeUpdateEvent,
-            afterUpdateEvent,
-            ...rest
-        } = props;
-        if (isSingleDeletion) {
-            deleteSingleEvent(rest);
+    const handleDeleteEvent = (isSingleDeletion: boolean, fromDate: Date, toDate: Date) => {
+        const eventIsNotRecurring = !props.event.resource.recurrenceRule;
+        if (isSingleDeletion || eventIsNotRecurring) {
+            deleteSingleEventMutation(props.event);
         } else {
-            deleteRangeEvents(rest, range);
+            deleteRangeEventsMutation({ event: props.event, fromDate, toDate });
         }
     };
 
-    const deleteSingleEvent = async (event: EventInfo) => {
-        try {
-            if (props.beforeDeleteSingleEvent) {
-                props.beforeDeleteSingleEvent(`${apiUrl}/events?eventId=${event.resource.eventId}`, event);
-            }
-            // send a request to the API to update the source
-            await DeleteToAPI(`${apiUrl}/events?eventId=${event.resource.eventId}`, keycloak.token);
-
-            if (props.afterDeleteSingleEvent) {
-                props.afterDeleteSingleEvent(true, `${apiUrl}/events?eventId=${event.resource.eventId}`);
-            }
-        } catch (err) {
-            if (props.afterDeleteSingleEvent) {
-                props.afterDeleteSingleEvent(false, `${apiUrl}/events?eventId=${event.resource.eventId}`);
-            }
-        }
-    };
-
-    const deleteRangeEvents = async (event: EventInfo, range: [Date, Date]) => {
-        if (!event.resource.recurrenceRule) {
-            await deleteSingleEvent(event);
-            return;
-        }
-
-        try {
-            if (props.beforeDeleteRangeEvent) {
-                props.beforeDeleteRangeEvent(`${apiUrl}/events`, event, range);
-            }
-            // send a request to the API to update the source
-            await DeleteToAPI(
-                `${apiUrl}/events?recurrenceRuleId=${
-                    event.resource.recurrenceRule?.id
-                }&fromDate=${range[0].toISOString().slice(0, -2)}&toDate=${range[1].toISOString().slice(0, -2)}`,
-                keycloak.token,
-            );
-
-            if (props.afterDeleteRangeEvent) {
-                props.afterDeleteRangeEvent(true, `${apiUrl}/events`);
-            }
-        } catch (err) {
-            if (props.afterDeleteRangeEvent) {
-                props.afterDeleteRangeEvent(false, `${apiUrl}/events`);
-            }
-        }
-    };
-
-    // Function called if edit was cancelled. Resets all values to the original event info
-    const onCancel = () => {
+    const handleEditCancelled = () => {
         setIsEditing(false);
-        setDateRange([props.start, props.end]);
-        setTimeRange([props.start, props.end]);
+        setDateRange([props.event.start, props.event.end]);
+        setTimeRange([props.event.start, props.event.end]);
     };
 
-    // Function called on successful event edit.
-    const onSubmit = async () => {
+    const handleEditSubmission = async () => {
         const start = new Date(dateRange[0]);
         const end = new Date(dateRange[1]);
         start.setHours(
@@ -175,13 +188,14 @@ export const Event: React.FC<EventProps> = (props) => {
             timeRange[1].getMilliseconds(),
         );
 
+        // TODO: these values should not be hardcoded, but use station opening hours
         const min = new Date(start);
         min.setHours(8, 0, 0, 0);
         const max = new Date(end);
         max.setHours(20, 0, 0, 0);
 
         if (start > end) {
-            alert.show('Start tiden kan ikke vøre etter slutt tiden.', { type: types.ERROR });
+            alert.show('Start tiden kan ikke være etter slutt tiden.', { type: types.ERROR });
             return;
         }
 
@@ -195,44 +209,22 @@ export const Event: React.FC<EventProps> = (props) => {
             return;
         }
 
-        try {
-            if (props.beforeUpdateEvent) {
-                props.beforeUpdateEvent(
-                    `${apiUrl}/events`,
-                    props.resource.eventId,
-                    start.toISOString(),
-                    end.toISOString(),
-                );
-            }
-            // send a request to the API to update the source
-            await PatchToAPI(
-                `${apiUrl}/events`,
-                {
-                    id: props.resource.eventId,
-                    startDateTime: start.toISOString().slice(0, -2),
-                    endDateTime: end.toISOString().slice(0, -2),
-                },
-                keycloak.token,
-            );
-            if (props.afterUpdateEvent) {
-                props.afterUpdateEvent(true, `${apiUrl}/events`);
-            }
-        } catch {
-            if (props.afterUpdateEvent) {
-                props.afterUpdateEvent(false, `${apiUrl}/events`);
-            }
-        }
+        const updatedEvent: ApiEventPatch = {
+            id: props.event.resource.eventId,
+            startDateTime: start.toISOString(),
+            endDateTime: end.toISOString(),
+        };
+
+        await updateEventMutation(updatedEvent);
     };
 
     return (
         <EventTemplateHorizontal
-            title={props.title}
-            showEditSymbol={
-                keycloak.hasRealmRole(Roles.Oslo) ||
-                (keycloak.hasRealmRole(Roles.Partner) && keycloak.tokenParsed.GroupID === props.resource.partner.id)
-            }
+            title={props.event.title}
+            hideTitleBar={props.hideTitleBar}
+            showEditSymbol={userIsAdmin || (userIsStation && stationOwnsEvent)}
             isEditing={isEditing}
-            onEditClick={onEditClick}
+            onEditClick={handleEditClick}
         >
             <Body>
                 <Section>
@@ -243,42 +235,51 @@ export const Event: React.FC<EventProps> = (props) => {
                             recurring={recurring}
                             selectedDays={selectedDays}
                             isEditing={isEditing}
-                            onDateRangeChange={onDateRangeChange}
-                            onTimeRangeChange={onTimeRangeChange}
-                            onRecurringChange={onRecurringChange}
-                            onSelectedDaysChange={onSelectedDaysChange}
+                            onDateRangeChange={handleDateRangeChange}
+                            onTimeRangeChange={handleTimeRangeChange}
+                            onRecurringChange={handleRecurringChange}
+                            onSelectedDaysChange={handleSelectedDaysChange}
                             recurrenceEnabled={false}
                         />
                         <EventOptionLocation
                             isEditing={false}
-                            selectedLocation={props.resource.location.id}
-                            locations={[props.resource.location]}
-                            onChange={() => {
-                                /* TODO: make it so that we don't need this nop func */
-                            }}
+                            selectedLocation={props.event.resource.location.id}
+                            locations={[props.event.resource.location]}
                         />
                     </Options>
                 </Section>
                 {!isEditing && (
                     <Section>
-                        <EventMessageBox {...props.resource.message} />
-                        {(keycloak.hasRealmRole(Roles.Oslo) ||
-                            (keycloak.hasRealmRole(Roles.Partner) &&
-                                keycloak.tokenParsed.GroupID === props.resource.partner.id)) && (
+                        <EventMessageBox {...props.event.resource.message} />
+                        {(userIsAdmin ||
+                            (userIsPartner && partnerOwnsEvent) ||
+                            (userIsStation && stationOwnsEvent)) && (
                             <>
                                 <Button
                                     text="Avlys uttak"
-                                    onClick={onDeleteConfirmationClick}
+                                    onClick={handleDeleteConfirmationClick}
                                     color="Red"
                                     styling="margin-top: 10px;"
                                 />
-                                {isDeletionConfirmationVisible && <DeleteEvent onSubmit={onDelete} />}
+                                {isDeletionConfirmationVisible && (
+                                    <DeleteEvent
+                                        allowRangeDeletion={userIsAdmin || (userIsStation && stationOwnsEvent)}
+                                        onSubmit={handleDeleteEvent}
+                                        loading={deleteSingleEventLoading || deleteRangeEventLoading}
+                                    />
+                                )}
                             </>
                         )}
                     </Section>
                 )}
             </Body>
-            {isEditing && <EventSubmission onSubmit={onSubmit} onCancel={onCancel} />}
+            {isEditing && (
+                <EventSubmission
+                    onSubmit={handleEditSubmission}
+                    onCancel={handleEditCancelled}
+                    loading={updateEventLoading}
+                />
+            )}
         </EventTemplateHorizontal>
     );
 };

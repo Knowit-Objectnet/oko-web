@@ -1,31 +1,40 @@
-export interface ApiEvent {
-    id: number;
-    startDateTime: string;
-    endDateTime: string;
-    station: ApiLocation;
+export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
+
+export interface EventInfo {
+    title: string;
+    start: Date;
+    end: Date;
+    resource: EventInfoResource;
+}
+
+interface EventInfoResource {
+    eventId: number;
+    location: ApiLocation;
     partner: ApiPartner;
     recurrenceRule: {
         id: number;
         until: string;
-        days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-        interval: number;
-        count: number | null;
+        days?: Array<WorkingWeekdays>;
+        interval?: number;
+        count?: number | null;
     } | null;
-}
-
-export interface LocationOpeningTimes {
-    MONDAY?: [string, string];
-    TUESDAY?: [string, string];
-    WEDNESDAY?: [string, string];
-    THURSDAY?: [string, string];
-    FRIDAY?: [string, string];
+    weight?: number;
+    message?: {
+        start: Date;
+        end: Date;
+        text: string;
+    };
 }
 
 export interface ApiLocation {
     id: number;
     name: string;
-    hours: LocationOpeningTimes;
+    hours: StationOpeningHours;
 }
+
+export type StationOpeningHours = {
+    [key in WorkingWeekdays]?: [string, string];
+};
 
 export interface ApiPartner {
     id: number;
@@ -58,32 +67,6 @@ export interface ApiPickUp {
 export interface ApiRequest {
     pickup: ApiPickUp;
     partner: ApiPartner;
-}
-
-export interface EventInfo {
-    title: string;
-    start: Date;
-    end: Date;
-    resource: EventInfoResource;
-}
-
-interface EventInfoResource {
-    eventId: number;
-    location: ApiLocation;
-    partner: ApiPartner;
-    recurrenceRule: {
-        id: number;
-        until: string;
-        days?: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY'>;
-        interval?: number;
-        count?: number | null;
-    } | null;
-    weight?: number;
-    message?: {
-        start: Date;
-        end: Date;
-        text: string;
-    };
 }
 
 export interface SlotInfo {

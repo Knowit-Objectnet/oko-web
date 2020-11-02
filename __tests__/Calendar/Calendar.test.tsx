@@ -7,7 +7,7 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
-import { CalendarPage } from '../../src/pages/calendar/Calendar';
+import { Calendar } from '../../src/pages/calendar/Calendar';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
@@ -54,7 +54,7 @@ describe('Provides a page to view the calendar', () => {
                 <ModalProvider>
                     <KeycloakProvider keycloak={keycloak}>
                         <Router history={history}>
-                            <CalendarPage />
+                            <Calendar />
                         </Router>
                     </KeycloakProvider>
                 </ModalProvider>

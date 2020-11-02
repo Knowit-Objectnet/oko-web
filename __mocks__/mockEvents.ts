@@ -1,4 +1,5 @@
-import {ApiEvent, EventInfo} from "../src/types";
+import {EventInfo} from "../src/types";
+import {ApiEvent} from "../src/api/EventService";
 
 const d = new Date();
 const start = new Date(d.setDate(d.getDate() - d.getDay() + (d.getDay() == 0 ? -6 : 1)));

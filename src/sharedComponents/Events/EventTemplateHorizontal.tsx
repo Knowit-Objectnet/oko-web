@@ -15,8 +15,7 @@ const Title = styled.div`
     display: flex;
     align-items: center;
     background-color: ${(props) => props.theme.colors.LightBeige};
-    padding: 0px 20px;
-    margin-bottom: 25px;
+    padding: 0 20px;
     box-sizing: border-box;
 `;
 
@@ -27,12 +26,13 @@ const EditTitle = styled.div`
 `;
 
 const Body = styled.div`
-    padding: 0px 25px 25px 25px;
+    padding: 25px;
 `;
 
 interface HorizontalEventTemplateProps {
     children: React.ReactNode;
     title: string;
+    hideTitleBar?: boolean;
     showEditSymbol: boolean;
     isEditing: boolean;
     onEditClick?: () => void;
@@ -43,14 +43,16 @@ interface HorizontalEventTemplateProps {
  */
 export const EventTemplateHorizontal: React.FC<HorizontalEventTemplateProps> = (props) => (
     <Wrapper>
-        <Title>
-            <h2>{props.title}</h2>
-            {!props.isEditing && props.showEditSymbol && (
-                <EditTitle>
-                    <Pencil height="1em" onClick={props.onEditClick} />
-                </EditTitle>
-            )}
-        </Title>
+        {!props.hideTitleBar && (
+            <Title>
+                <h2>{props.title}</h2>
+                {!props.isEditing && props.showEditSymbol && (
+                    <EditTitle>
+                        <Pencil height="1em" onClick={props.onEditClick} />
+                    </EditTitle>
+                )}
+            </Title>
+        )}
         <Body>{props.children}</Body>
     </Wrapper>
 );

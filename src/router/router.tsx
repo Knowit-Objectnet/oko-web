@@ -14,7 +14,7 @@ import { Dashboard } from '../sharedComponents/Dashboard/Dashboard';
 import { Loading } from '../sharedComponents/Loading';
 import { Login } from '../pages/login/Login';
 import { Logout } from '../pages/logout/Logout';
-import { CalendarPage } from '../pages/calendar/Calendar';
+import { Calendar } from '../pages/calendar/Calendar';
 import { WeightReporting } from '../pages/weightReporting/WeightReporting';
 import { MyPage } from '../pages/myPage/MyPage';
 import { PickUps } from '../pages/pickUps/PickUps';
@@ -45,7 +45,7 @@ export const RouterComponent: React.FC = () => {
                                 not={<Redirect to="/calendar" />}
                                 is={<PickUps />}
                             />
-                            <Route exact path={`${props.match.url}calendar`} component={CalendarPage} />
+                            <Route exact path={`${props.match.url}calendar`} component={Calendar} />
                             <AuthenticatedRoute
                                 exact={true}
                                 path={`${props.match.url}statistics`}

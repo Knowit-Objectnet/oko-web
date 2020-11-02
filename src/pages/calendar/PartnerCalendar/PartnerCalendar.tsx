@@ -1,56 +1,53 @@
 import * as React from 'react';
-import { ExpandableAgenda } from './ExpandableAgenda';
-import { apiUrl, EventInfo } from '../../../types';
-import { DeleteToAPI } from '../../../utils/DeleteToAPI';
-import { useKeycloak } from '@react-keycloak/web';
+import { EventInfo } from '../../../types';
+import { WeekMenu } from '../WeekMenu';
+import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
+import { ListView } from '../SharedCalendarComponents/ListView';
+import { Colors } from '../../../theme';
 
 interface PartnerCalendarProps {
     date: Date;
-    isToggled: boolean;
+    showCalendar: boolean;
     onSelectEvent: (Event: EventInfo) => void;
     onWeekChange: (delta: -1 | 1) => void;
     events: Array<EventInfo>;
-    beforeDeleteSingleEvent?: (key: string, event: EventInfo) => void;
-    afterDeleteSingleEvent?: (successful: boolean, key: string) => void;
 }
 
 /*
  * Calendar and Agenda for partners
  */
 export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
-    // Function that handles an event click in the calendar. It displays the Event in a modal
-    const onSelectEvent = (event: EventInfo) => {
-        props.onSelectEvent(event);
-    };
+    const date = new Date(props.date);
 
-    const deleteEvent = async (event: EventInfo) => {
-        try {
-            if (props.beforeDeleteSingleEvent) {
-                props.beforeDeleteSingleEvent(`${apiUrl}/events?eventId=${event.resource.eventId}`, event);
-            }
-            // send a request to the API to update the source
-            await DeleteToAPI(`${apiUrl}/events?eventId=${event.resource.eventId}`, keycloak.token);
+    // Dates for the calendar view
+    const min = new Date(date.setHours(7, 0, 0, 0));
+    const max = new Date(date.setHours(20, 0, 0, 0));
 
-            if (props.afterDeleteSingleEvent) {
-                props.afterDeleteSingleEvent(true, `${apiUrl}/events?eventId=${event.resource.eventId}`);
-            }
-        } catch (err) {
-            if (props.afterDeleteSingleEvent) {
-                props.afterDeleteSingleEvent(false, `${apiUrl}/events?eventId=${event.resource.eventId}`);
-            }
-        }
-    };
+    // Grouping for the agenda view
+    const groupByStationFn = (event: EventInfo): string => event.resource.location.name;
 
     return (
-        <ExpandableAgenda
-            date={props.date}
-            isToggled={props.isToggled}
-            onSelectEvent={onSelectEvent}
-            events={props.events}
-            onWeekChange={props.onWeekChange}
-            deleteEvent={deleteEvent}
-        />
+        <>
+            {props.showCalendar ? (
+                <>
+                    <WeekMenu date={props.date} changeWeek={props.onWeekChange} />
+                    <WorkingWeekCalendar
+                        date={props.date}
+                        onSelectEvent={props.onSelectEvent}
+                        events={props.events}
+                        min={min}
+                        max={max}
+                    />
+                </>
+            ) : (
+                <ListView
+                    events={props.events}
+                    fromDate={date}
+                    groupingFn={groupByStationFn}
+                    numberOfDays={5}
+                    specificColor={Colors.LightBlue}
+                />
+            )}
+        </>
     );
 };
