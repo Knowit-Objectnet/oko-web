@@ -163,8 +163,8 @@ export const Calendar: React.FC = () => {
     };
 
     // On slot selection function to display new or extra event
-    const onSelectSlot = (start: Date, end: Date, isOslo: boolean) => {
-        if (isOslo) {
+    const onSelectSlot = (start: Date, end: Date) => {
+        if (userIsAdmin) {
             modal.show(<NewEvent start={start} end={end} />);
         } else {
             modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
@@ -218,7 +218,6 @@ export const Calendar: React.FC = () => {
             <RegCalendar
                 onSelectEvent={showEventInfoModal}
                 onSelectSlot={onSelectSlot}
-                newEvent={showNewEventModal}
                 date={selectedDate}
                 isToggled={selectedStationId !== undefined}
                 onWeekChange={handleWeekChange}

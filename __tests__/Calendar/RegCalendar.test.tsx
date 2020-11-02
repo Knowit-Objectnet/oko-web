@@ -63,7 +63,6 @@ describe('Provides a page for REG to view the calendar', () => {
     it('Should render without errors', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const newEvent = jest.fn();
         const onSelectSlot = jest.fn();
         const onWeekChange = jest.fn();
         const date = new Date();
@@ -76,7 +75,6 @@ describe('Provides a page for REG to view the calendar', () => {
                     <RegCalendar
                         date={date}
                         onSelectEvent={onSelectEventMock}
-                        newEvent={newEvent}
                         onSelectSlot={onSelectSlot}
                         events={events}
                         isToggled={false}
@@ -90,7 +88,6 @@ describe('Provides a page for REG to view the calendar', () => {
     it('Should render the events in an agenda table form for 7.13.2020-7.18.2020', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const newEvent = jest.fn();
         const onSelectSlot = jest.fn();
         const date = new Date();
         const onWeekChange = jest.fn();
@@ -103,7 +100,6 @@ describe('Provides a page for REG to view the calendar', () => {
                     <RegCalendar
                         date={date}
                         onSelectEvent={onSelectEventMock}
-                        newEvent={newEvent}
                         onSelectSlot={onSelectSlot}
                         events={events}
                         isToggled={false}
@@ -122,7 +118,6 @@ describe('Provides a page for REG to view the calendar', () => {
     it('Should render the events in an agenda table form for 7.15.2020-7.18.2020', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const newEvent = jest.fn();
         const onSelectSlot = jest.fn();
         const date = new Date();
         const onWeekChange = jest.fn();
@@ -135,7 +130,6 @@ describe('Provides a page for REG to view the calendar', () => {
                     <RegCalendar
                         date={date}
                         onSelectEvent={onSelectEventMock}
-                        newEvent={newEvent}
                         onSelectSlot={onSelectSlot}
                         events={events}
                         isToggled={false}
