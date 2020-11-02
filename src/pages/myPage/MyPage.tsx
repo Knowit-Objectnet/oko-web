@@ -87,7 +87,6 @@ export const MyPage: React.FC = () => {
         }, [apiPartnerInfo]);
     }
 
-    // Logout function for the logout button click
     const onLogoutClick = () => {
         history.push('/logout');
     };
@@ -108,12 +107,6 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    const closeModalOnSuccess = (successful: boolean) => {
-        if (successful) {
-            modal.remove();
-        }
-    };
-
     const afterDeletePartner = (successful: boolean, key: string) => {
         if (successful) {
             alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
@@ -124,13 +117,18 @@ export const MyPage: React.FC = () => {
         }
     };
 
+    const closeModalOnSuccess = (successful: boolean) => {
+        if (successful) {
+            modal.remove();
+        }
+    };
+
     // Function to show new partner ui modal
     const showNewPartner = () => {
         modal.show(<NewPartner afterSubmit={afterNewPartner} />);
     };
 
-    // Function to show new location ui modal
-    const showNewLocation = () => {
+    const showNewStationModal = () => {
         modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
     };
 
@@ -139,8 +137,7 @@ export const MyPage: React.FC = () => {
         modal.show(<DeletePartner afterSubmit={afterDeletePartner} />);
     };
 
-    // Function to show delete location ui modal
-    const showDeleteLocation = () => {
+    const showDeleteStationModal = () => {
         modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
@@ -174,9 +171,9 @@ export const MyPage: React.FC = () => {
                 {keycloak.hasRealmRole(Roles.Oslo) && (
                     <SideMenu
                         newPartnerClick={showNewPartner}
-                        newLocationClick={showNewLocation}
+                        newStationClick={showNewStationModal}
                         deletePartnerClick={showDeletePartner}
-                        deleteLocationClick={showDeleteLocation}
+                        deleteStationClick={showDeleteStationModal}
                     />
                 )}
             </Wrapper>

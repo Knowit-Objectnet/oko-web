@@ -44,9 +44,9 @@ const Button = styled.div<ButtonProps>`
 
 interface SideMenuProps {
     newPartnerClick: () => void;
-    newLocationClick: () => void;
+    newStationClick: () => void;
     deletePartnerClick: () => void;
-    deleteLocationClick: () => void;
+    deleteStationClick: () => void;
 }
 
 /**
@@ -63,7 +63,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => (
         </Item>
         <Item>
             <Description>Ny stasjon</Description>
-            <Button onClick={props.newLocationClick}>
+            <Button onClick={props.newStationClick}>
                 <Plus height="100%" />
             </Button>
         </Item>
@@ -75,7 +75,7 @@ export const SideMenu: React.FC<SideMenuProps> = (props) => (
         </Item>
         <Item>
             <Description>Slett stasjon</Description>
-            <Button deletion={true} onClick={props.deleteLocationClick}>
+            <Button deletion={true} onClick={props.deleteStationClick}>
                 <Minus height="100%" />
             </Button>
         </Item>
