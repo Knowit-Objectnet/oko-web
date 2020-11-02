@@ -5,10 +5,7 @@ import { fetcher } from './utils/fetcher';
 // function to pre-fetch data for a better user experience
 export const preFetch: (token?: string) => void = async (token?: string) => {
     // List if urls to prefetch from
-    const list: Array<[string, boolean]> = [
-        [`${apiUrl}/partners`, false],
-        [`${apiUrl}/stations`, false],
-    ];
+    const list: Array<[string, boolean]> = [[`${apiUrl}/partners`, false]];
 
     // Loop through all urls
     for (const url of list) {
