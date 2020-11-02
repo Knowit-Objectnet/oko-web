@@ -14,7 +14,7 @@ import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
 import { DeletePartner } from '../../sharedComponents/DeletePartner';
-import { DeleteLocation } from '../../sharedComponents/DeleteLocation';
+import { DeleteStation } from '../../sharedComponents/DeleteStation';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
@@ -124,16 +124,6 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    const afterDeleteLocation = (successful: boolean, key: string) => {
-        if (successful) {
-            alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
-
-            modal.remove();
-        } else {
-            alert.show('Noe gikk galt, stasjoneen ble ikke slettet.', { type: types.ERROR });
-        }
-    };
-
     // Function to show new partner ui modal
     const showNewPartner = () => {
         modal.show(<NewPartner afterSubmit={afterNewPartner} />);
@@ -151,7 +141,7 @@ export const MyPage: React.FC = () => {
 
     // Function to show delete location ui modal
     const showDeleteLocation = () => {
-        modal.show(<DeleteLocation afterSubmit={afterDeleteLocation} />);
+        modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
     return (
