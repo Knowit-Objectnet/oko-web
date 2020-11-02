@@ -4,7 +4,6 @@ import { createNDaysFromDate } from '../../../utils/createNDaysFromDate';
 import isSameDay from 'date-fns/isSameDay';
 import groupBy from 'lodash/groupBy';
 import pickBy from 'lodash/pickBy';
-import { Colors } from '../../../theme';
 import { ListItem } from './ListItem';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
@@ -28,7 +27,6 @@ interface ListViewProps {
     events: Array<EventInfo>;
     groupingFn: (event: EventInfo) => string;
     numberOfDays: number;
-    specificColor?: Colors;
 }
 
 /*
@@ -37,9 +35,6 @@ interface ListViewProps {
 export const ListView: React.FC<ListViewProps> = (props) => {
     // Keycloak instance
     const { keycloak } = useKeycloak();
-
-    // Get all Oslo colors excpet black and white
-    const colors = Object.values(Colors).filter((color) => color !== Colors.Black && color !== Colors.White);
 
     const daysToShow: Array<Date> = createNDaysFromDate(props.fromDate, props.numberOfDays);
 
@@ -56,13 +51,7 @@ export const ListView: React.FC<ListViewProps> = (props) => {
             return false;
         });
         return Object.entries(pickedEvents).map(([label, events], i) => (
-            <ListItem
-                key={label}
-                date={date}
-                title={label}
-                events={events ?? []}
-                color={props.specificColor ? props.specificColor : colors[i % (colors.length - 1)]}
-            />
+            <ListItem key={label} date={date} title={label} events={events ?? []} />
         ));
     };
 

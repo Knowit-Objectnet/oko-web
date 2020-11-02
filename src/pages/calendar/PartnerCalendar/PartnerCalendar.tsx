@@ -2,7 +2,7 @@ import * as React from 'react';
 import { EventInfo } from '../../../types';
 import { WeekMenu } from '../WeekMenu';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
-import { ListView } from '../SharedCalendarComponents/ListView';
+import { ListView } from './ListView';
 import { Colors } from '../../../theme';
 
 interface PartnerCalendarProps {
@@ -45,7 +45,6 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
                     fromDate={date}
                     groupingFn={groupByStationFn}
                     numberOfDays={5}
-                    specificColor={Colors.LightBlue}
                 />
             )}
         </>

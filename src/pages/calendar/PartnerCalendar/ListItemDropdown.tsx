@@ -4,18 +4,13 @@ import { EventInfo } from '../../../types';
 import { SingleDayCalendar } from '../../../sharedComponents/Calendar/SingleDayCalendar';
 import { useState } from 'react';
 import add from 'date-fns/add';
-import { Colors } from '../../../theme';
 import { useKeycloak } from '@react-keycloak/web';
 import { Event } from '../../../sharedComponents/Events/Event';
 
-interface WrapperProps {
-    color: Colors;
-}
-
-const Wrapper = styled.div<WrapperProps>`
+const Wrapper = styled.div`
     width: 100%;
     display: flex;
-    border: solid 2px ${(props) => props.color};
+    border: solid 2px ${(props) => props.theme.colors.LightBlue};
     border-top: none;
     box-sizing: border-box;
 
@@ -37,7 +32,6 @@ interface ListItemDropdownProps {
     date: Date;
     min: Date;
     max: Date;
-    color: Colors;
 }
 
 /*
@@ -74,7 +68,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
     newMax = add(newMax, { hours: 1 });
 
     return (
-        <Wrapper color={props.color}>
+        <Wrapper>
             <Calendar isEventSelected={selectedEvent !== undefined}>
                 <SingleDayCalendar
                     date={props.date}
