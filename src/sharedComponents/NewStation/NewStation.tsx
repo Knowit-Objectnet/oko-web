@@ -97,7 +97,7 @@ interface NewStationProps {
     afterSubmit?: (successful: boolean) => void;
 }
 
-export const NewStationModal: React.FC<NewStationProps> = (props) => {
+export const NewStation: React.FC<NewStationProps> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 

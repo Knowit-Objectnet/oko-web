@@ -8,7 +8,7 @@ import { ContactInfo } from './ContactInfo';
 import { SideMenu } from './SideMenu';
 import { useEffect, useState } from 'react';
 import { NewPartner } from '../../sharedComponents/NewPartner';
-import { NewStationModal } from '../../sharedComponents/NewStation/NewStationModal';
+import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
@@ -141,7 +141,7 @@ export const MyPage: React.FC = () => {
 
     // Function to show new location ui modal
     const showNewLocation = () => {
-        modal.show(<NewStationModal afterSubmit={closeModalOnSuccess} />);
+        modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
     };
 
     // Function to show delete partner ui modal

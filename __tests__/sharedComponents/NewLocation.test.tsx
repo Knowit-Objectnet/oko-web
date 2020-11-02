@@ -9,7 +9,7 @@ import { apiUrl } from '../../src/types';
 import fetch from 'jest-fetch-mock';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
-import { NewStationModal } from '../../src/sharedComponents/NewStation/NewStationModal';
+import { NewStation } from '../../src/sharedComponents/NewStation/NewStation';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -46,7 +46,7 @@ describe('Provides an interface to submit a new station', () => {
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...options}>
                     <KeycloakProvider keycloak={keycloak}>
-                        <NewStationModal beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
+                        <NewStation beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
                     </KeycloakProvider>
                 </AlertProvider>
             </ThemeProvider>,

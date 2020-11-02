@@ -5,7 +5,7 @@ import { Station } from './Station';
 import { Loading } from '../../sharedComponents/Loading';
 import Plus from '../../assets/Plus.svg';
 import useModal from '../../sharedComponents/Modal/useModal';
-import { NewStationModal } from '../../sharedComponents/NewStation/NewStationModal';
+import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import keycloak from '../../keycloak';
 import { Helmet } from 'react-helmet';
 import useStations from '../../api/hooks/useStations';
@@ -71,7 +71,7 @@ export const Stations: React.FC = () => {
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
     const handleNewStationClick = () => {
-        modal.show(<NewStationModal afterSubmit={closeModalOnSuccess} />);
+        modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
     };
 
     if (!stations && isValidating) {
