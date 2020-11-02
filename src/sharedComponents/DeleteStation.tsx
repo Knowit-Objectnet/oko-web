@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
-import useStations from '../api/hooks/useStations';
 import { queryCache, useMutation } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
 import { Button } from './Button';
+import StationSelect from './forms/StationSelect';
 
 const Wrapper = styled.div`
     display: flex;
@@ -34,22 +34,14 @@ const Form = styled.form`
     flex-direction: column;
 `;
 
-const Select = styled.select`
-    width: 100%;
-    min-width: 250px;
-    height: 30px;
-    margin-bottom: 10px;
-`;
-
-interface DeleteStationProps {
+interface Props {
     afterSubmit?: (successful: boolean) => void;
 }
 
-export const DeleteStation: React.FC<DeleteStationProps> = (props) => {
+export const DeleteStation: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const { data: stations, isLoading: stationsLoading, isError: stationsError } = useStations();
     const [deleteStationMutation, { isLoading: deleteStationLoading }] = useMutation(
         async (stationId: number) => {
             await deleteStation(stationId, keycloak.token);
@@ -71,14 +63,10 @@ export const DeleteStation: React.FC<DeleteStationProps> = (props) => {
 
     const [selectedStationId, setSelectedStationId] = useState<number>();
 
-    const handleStationSelectionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        event.persist();
-        setSelectedStationId(parseInt(event.currentTarget.value));
-    };
-
     const handleDeleteStationSubmission = async (event: React.SyntheticEvent) => {
         event.preventDefault();
         if (!selectedStationId) {
+            // TODO: show this alert as inline error message in form
             alert.show('Vennligst velg en stasjon.', { type: types.ERROR });
             return;
         }
@@ -89,18 +77,7 @@ export const DeleteStation: React.FC<DeleteStationProps> = (props) => {
         <Wrapper>
             <Title>Slett stasjon</Title>
             <Form onSubmit={handleDeleteStationSubmission}>
-                <Select onChange={handleStationSelectionChange} disabled={stationsLoading || stationsError}>
-                    <option value="default" disabled selected>
-                        {(stationsLoading && 'Laster inn...') ||
-                            (stationsError && 'Kunne ikke laste stasjoner') ||
-                            'Velg stasjon'}
-                    </option>
-                    {stations?.map((station) => (
-                        <option value={station.id} key={station.id}>
-                            {station.name}
-                        </option>
-                    ))}
-                </Select>
+                <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
                 <Button text="Slett" type="submit" loading={deleteStationLoading} color="Red" />
             </Form>
         </Wrapper>

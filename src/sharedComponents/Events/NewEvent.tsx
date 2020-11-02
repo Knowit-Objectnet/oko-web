@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventOptionLocation } from './EventOptionLocation';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
@@ -13,15 +12,15 @@ import { Button } from '../Button';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
 import { ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
-import { ApiStation } from '../../api/StationService';
+import StationSelect from '../forms/StationSelect';
 
-const Options = styled.div`
+const Form = styled.form`
     display: flex;
     flex-direction: column;
     flex: 1;
 `;
 
-interface NewEventProps {
+interface Props {
     start: Date;
     end: Date;
     afterSubmit?: (successful: boolean) => void;
@@ -29,17 +28,10 @@ interface NewEventProps {
 
 const WEEKDAYS: Array<WorkingWeekdays> = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
 
-/**
- * Component shown when a range is selected in calendar or new event button clciked.
- * Will only be rendered for Oslo Kommune.
- */
-export const NewEvent: React.FC<NewEventProps> = (props) => {
+export const NewEvent: React.FC<Props> = (props) => {
     const alert = useAlert();
     const { keycloak } = useKeycloak();
 
-    // Valid recycling stations (ombruksstasjon) locations fetched from api
-    let { data: locations } = useSWR<ApiStation[]>(`${apiUrl}/stations`, fetcher);
-    locations = locations && locations.length !== 0 ? locations : [];
     // Valid partners fetched from api
     let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
     partners = partners || [];
@@ -69,9 +61,8 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
     const [timeRange, setTimeRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
-    const [locationId, setLocationId] = useState(-1);
+    const [selectedStationId, setSelectedStationId] = useState<number>();
 
-    // On change functions for DateRange
     const onDateRangeChange = (range: [Date, Date]) => {
         setDateRange(range);
     };
@@ -93,21 +84,15 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         setSelectedPartnerId(partnerId);
     };
 
-    // On change for Location selection
-    const onLocationChange = (_locationId: number) => {
-        setLocationId(_locationId);
-    };
-
     // Function called on successful event edit.
-    const onSubmit = async () => {
+    const handleEventSubmission = async (event: SyntheticEvent) => {
+        event.preventDefault();
+
         // Remove all alerts to not multiple alerts from earlier tries.
         // The ts-ignore is needed as for some reason the @types for the library forgot to add removeAll to the interface
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         alert.removeAll();
-        // Get location and partner
-        const location = locations?.find((_location) => _location.id === locationId);
-        const partner = partners?.find((_partner) => _partner.id === selectedPartnerId);
 
         // Cancel submission if token doesn't exist as they are not logged in
         if (!keycloak?.token) {
@@ -115,14 +100,14 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
             return;
         }
 
-        // Cancel submission of no location is selected
-        if (!partner) {
+        // Cancel submission if no partner is selected
+        if (selectedPartnerId === -1) {
             alert.show('Du må velge en samarbeidspartner for avtalen.', { type: types.ERROR });
             return;
         }
 
-        // Cancel submission of no location is selected
-        if (!location) {
+        // Cancel submission if no station is selected
+        if (!selectedStationId) {
             alert.show('Du må velge en stasjon for avtalen.', { type: types.ERROR });
             return;
         }
@@ -150,7 +135,7 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
         const newEvent: ApiEventPost = {
             startDateTime: timeRange[0].toISOString(),
             endDateTime: timeRange[1].toISOString(),
-            stationId: locationId,
+            stationId: selectedStationId,
             partnerId: selectedPartnerId,
         };
 
@@ -171,18 +156,13 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
 
     return (
         <EventTemplateVertical title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
-            <Options>
+            <Form onSubmit={handleEventSubmission}>
                 <EventOptionPartner
                     selectedPartner={selectedPartnerId}
                     partners={partners}
                     onChange={onPartnerChange}
                 />
-                <EventOptionLocation
-                    isEditing={true}
-                    selectedLocation={locationId}
-                    locations={locations}
-                    onChange={onLocationChange}
-                />
+                <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
                 <EventOptionDateRange
                     dateRange={dateRange}
                     timeRange={timeRange}
@@ -195,16 +175,15 @@ export const NewEvent: React.FC<NewEventProps> = (props) => {
                     onSelectedDaysChange={onSelectedDaysChange}
                     recurrenceEnabled={true}
                 />
-            </Options>
-            <Button
-                onClick={onSubmit}
-                text="Fullfør"
-                color="Green"
-                height={35}
-                width={350}
-                styling="margin-top: 40px;"
-                loading={addEventLoading}
-            />
+                <Button
+                    type="submit"
+                    text="Lagre"
+                    color="Green"
+                    width={350}
+                    styling="margin-top: 20px;"
+                    loading={addEventLoading}
+                />
+            </Form>
         </EventTemplateVertical>
     );
 };
