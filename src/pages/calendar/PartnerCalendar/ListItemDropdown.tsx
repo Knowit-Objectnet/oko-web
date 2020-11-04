@@ -82,6 +82,7 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
             </Calendar>
             {selectedEvent && (
                 <Event
+                    key={`listItemDropdown-eventId-${selectedEvent.resource.eventId}`}
                     event={selectedEvent}
                     hideTitleBar={true}
                     afterDeleteRangeEvent={onDeleteEvent}
