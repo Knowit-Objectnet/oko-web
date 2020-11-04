@@ -25,20 +25,20 @@ can be used to check for authentication and roles in lower level components. See
 
 ### Data fetching and caching
 
-> The project is in the process of being migrated from `Fetch` + `SWR` to `Axios` + `react-query`.
+> The project is in the process of being migrated from `Fetch` + `SWR` to `Axios` + `React Query`.
 > <br/>Current status for resource entities:
 > 
-> | `Fetch` + `SWR`| `Axios` + `react-query` |
+> | `Fetch` + `SWR`| `Axios` + `React Query` |
 > | --- | --- |
-> |`Station`, `Partner`, `PickUp`, `Request`, `Report`|`Event`|
+> |`Partner`, `PickUp`, `Request`, `Report`|`Event`, `Station`|
 
 * **[Axios](https://www.npmjs.com/package/axios)**: HTTP client library for doing REST API calls.
-* **[react-query](https://www.npmjs.com/package/react-query)**: library used for caching data fetched from REST API.
+* **[React Query](https://www.npmjs.com/package/react-query)**: library used for caching data fetched from REST API.
 Provides a `useQuery()` hook for the fetching and caching, and a `useMutation()` hook to update the data. 
 The cache (a `QueryCache` instance) has utility methods (like `invalidateQueries()`) that can be used for interacting with the cache. 
 [Documentation can be found here.](https://react-query.tanstack.com/docs)
 
-**Will be replaced:**
+**⚠ Will be replaced:**
 
 * **[swr](https://swr.vercel.app/)**: caching library
 ---
@@ -65,6 +65,7 @@ The cache (a `QueryCache` instance) has utility methods (like `invalidateQueries
 #### Testing
 * Jest
   * React-testing-library
+  * Axios Mock Adapter
   * Enzyme
 * Cypress
 
