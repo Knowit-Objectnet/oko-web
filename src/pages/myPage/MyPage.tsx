@@ -5,7 +5,7 @@ import Default from '../../assets/Default_profile_pic.svg';
 import { ApiPartner, apiUrl, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
-import { SideMenu } from './SideMenu';
+import { MyPageSideMenu } from './MyPageSideMenu';
 import { useEffect, useState } from 'react';
 import { NewPartner } from '../../sharedComponents/NewPartner';
 import { NewStation } from '../../sharedComponents/NewStation/NewStation';
@@ -76,6 +76,7 @@ export const MyPage: React.FC = () => {
     const history = useHistory();
 
     // If the user is a partner, get their info
+    // TODO: calling hooks conditionally breaks the 'rules of hooks' – this must be refactored
     if (keycloak.tokenParsed.GroupID && keycloak.hasRealmRole(Roles.Partner)) {
         const { data: apiPartnerInfo } = useSWR<ApiPartner>(
             `${apiUrl}/partners/${keycloak.tokenParsed.GroupID}`,
@@ -117,28 +118,14 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    const closeModalOnSuccess = (successful: boolean) => {
-        if (successful) {
-            modal.remove();
-        }
-    };
-
     // Function to show new partner ui modal
     const showNewPartner = () => {
         modal.show(<NewPartner afterSubmit={afterNewPartner} />);
     };
 
-    const showNewStationModal = () => {
-        modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
-    };
-
     // Function to show delete partner ui modal
     const showDeletePartner = () => {
         modal.show(<DeletePartner afterSubmit={afterDeletePartner} />);
-    };
-
-    const showDeleteStationModal = () => {
-        modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
     return (
@@ -169,12 +156,7 @@ export const MyPage: React.FC = () => {
                     {keycloak.hasRealmRole(Roles.Partner) && <ShareContactInfo />}
                 </Content>
                 {keycloak.hasRealmRole(Roles.Oslo) && (
-                    <SideMenu
-                        newPartnerClick={showNewPartner}
-                        newStationClick={showNewStationModal}
-                        deletePartnerClick={showDeletePartner}
-                        deleteStationClick={showDeleteStationModal}
-                    />
+                    <MyPageSideMenu newPartnerClick={showNewPartner} deletePartnerClick={showDeletePartner} />
                 )}
             </Wrapper>
         </>
