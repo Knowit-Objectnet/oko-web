@@ -22,9 +22,6 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
     const min = new Date(date.setHours(7, 0, 0, 0));
     const max = new Date(date.setHours(20, 0, 0, 0));
 
-    // Grouping for the agenda view
-    const groupByStationFn = (event: EventInfo): string => event.resource.location.name;
-
     return (
         <>
             {props.showCalendar ? (
@@ -39,7 +36,7 @@ export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
                     />
                 </>
             ) : (
-                <ListView events={props.events} fromDate={date} groupingFn={groupByStationFn} numberOfDays={5} />
+                <ListView events={props.events} fromDate={date} numberOfDays={5} />
             )}
         </>
     );

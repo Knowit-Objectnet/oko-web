@@ -25,7 +25,6 @@ const DateText = styled.span`
 interface ListViewProps {
     fromDate: Date;
     events: Array<EventInfo>;
-    groupingFn: (event: EventInfo) => string;
     numberOfDays: number;
 }
 
@@ -40,17 +39,11 @@ export const ListView: React.FC<ListViewProps> = (props) => {
 
     const getListItemsForDate = (date: Date) => {
         const eventsForDate = props.events.filter((event) => isSameDay(event.start, date));
-        const groupedEvents = groupBy(eventsForDate, props.groupingFn);
-        const pickedEvents = pickBy(groupedEvents, (events) => {
-            for (const event of events) {
-                // If one of the events in the group is owned by the partner logged in then save and go to next group
-                if (event.resource.partner.id === keycloak.tokenParsed.GroupID) {
-                    return true;
-                }
-            }
-            return false;
-        });
-        return Object.entries(pickedEvents).map(([label, events], i) => (
+        const groupedEvents = groupBy(eventsForDate, (event: EventInfo): string => event.resource.location.name);
+        const filteredAndGroupedEvents = pickBy(groupedEvents, (eventsInGroup) =>
+            eventsInGroup.some((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID),
+        );
+        return Object.entries(filteredAndGroupedEvents).map(([label, events], i) => (
             <ListItem key={label} date={date} title={label} events={events ?? []} />
         ));
     };
