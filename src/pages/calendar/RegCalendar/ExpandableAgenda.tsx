@@ -42,15 +42,13 @@ export const ExpandableAgenda: React.FC<Props> = (props) => {
     const [expanded, setExpanded] = useState(false);
 
     const { data: stations } = useStations();
-    const stationNames: Array<string> = (stations ?? []).map((station: ApiStation) => station.name);
-    const eventsByStation: Array<Array<EventInfo>> = stationNames.map((stationName: string) =>
-        props.events.filter((event: EventInfo) => event.resource.station.name === stationName),
+    const stationNames = (stations ?? []).map((station) => station.name);
+    const eventsByStation = stationNames.map((stationName) =>
+        props.events.filter((event) => event.resource.station.name === stationName),
     );
 
-    // Function that handles an event click in the calendar. It displays the Event in a modal
-    const onSelectEvent = (event: EventInfo) => {
-        const eventProps: EventInfo = event as EventInfo;
-        props.onSelectEvent(eventProps);
+    const handleSelectEvent = (event: EventInfo) => {
+        props.onSelectEvent(event);
     };
 
     // Function that handles time range selection in the calendar
@@ -107,7 +105,7 @@ export const ExpandableAgenda: React.FC<Props> = (props) => {
                     columns={stationNames}
                     events={eventsByStation}
                     onSelectSlot={onSelectSlot}
-                    onSelectEvent={onSelectEvent}
+                    onSelectEvent={handleSelectEvent}
                     selectable={keycloak.authenticated}
                     step={15}
                     min={min}
