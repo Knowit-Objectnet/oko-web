@@ -43,8 +43,8 @@ export const ListView: React.FC<ListViewProps> = (props) => {
         const filteredAndGroupedEvents = pickBy(groupedEvents, (eventsInGroup) =>
             eventsInGroup.some((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID),
         );
-        return Object.entries(filteredAndGroupedEvents).map(([label, events], i) => (
-            <ListItem key={label} date={date} title={label} events={events ?? []} />
+        return Object.entries(filteredAndGroupedEvents).map(([label, events]) => (
+            <ListItem key={label} date={date} title={label} events={events} />
         ));
     };
 
