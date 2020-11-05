@@ -37,9 +37,7 @@ export const NewEvent: React.FC<Props> = (props) => {
     partners = partners || [];
 
     const [addEventMutation, { isLoading: addEventLoading }] = useMutation(
-        async (newEvent: ApiEventPost) => {
-            await postEvent(newEvent, keycloak.token);
-        },
+        (newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token),
         {
             onSuccess: () => {
                 alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
@@ -84,9 +82,8 @@ export const NewEvent: React.FC<Props> = (props) => {
         setSelectedPartnerId(partnerId);
     };
 
-    // Function called on successful event edit.
-    const handleEventSubmission = async (event: SyntheticEvent) => {
-        event.preventDefault();
+    const handleEditEventSubmission = (submitEvent: SyntheticEvent) => {
+        submitEvent.preventDefault();
 
         // Remove all alerts to not multiple alerts from earlier tries.
         // The ts-ignore is needed as for some reason the @types for the library forgot to add removeAll to the interface
@@ -151,12 +148,12 @@ export const NewEvent: React.FC<Props> = (props) => {
             };
         }
 
-        await addEventMutation(newEvent);
+        addEventMutation(newEvent);
     };
 
     return (
         <EventTemplateVertical title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
-            <Form onSubmit={handleEventSubmission}>
+            <Form onSubmit={handleEditEventSubmission}>
                 <EventOptionPartner
                     selectedPartner={selectedPartnerId}
                     partners={partners}

@@ -58,9 +58,7 @@ export const Event: React.FC<Props> = (props) => {
     const partnerOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.partner.id;
 
     const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
-        async (event: EventInfo) => {
-            await deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
-        },
+        (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }, keycloak.token),
         {
             onSuccess: () => {
                 alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
@@ -77,13 +75,13 @@ export const Event: React.FC<Props> = (props) => {
     );
 
     const [deleteRangeEventsMutation, { isLoading: deleteRangeEventLoading }] = useMutation(
-        async ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
+        ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
             const apiParams: ApiEventParams = {
                 recurrenceRuleId: event.resource.recurrenceRule?.id,
                 fromDate: fromDate.toISOString(),
                 toDate: toDate.toISOString(),
             };
-            await deleteEvents(apiParams, keycloak.token);
+            return deleteEvents(apiParams, keycloak.token);
         },
         {
             onSuccess: () => {
@@ -101,9 +99,7 @@ export const Event: React.FC<Props> = (props) => {
     );
 
     const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
-        async (updatedEvent: ApiEventPatch) => {
-            await patchEvent(updatedEvent, keycloak.token);
-        },
+        (updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, keycloak.token),
         {
             onSuccess: () => {
                 alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
@@ -164,7 +160,7 @@ export const Event: React.FC<Props> = (props) => {
         setTimeRange([props.event.start, props.event.end]);
     };
 
-    const handleEditSubmission = async () => {
+    const handleEditSubmission = () => {
         const start = new Date(dateRange[0]);
         const end = new Date(dateRange[1]);
         start.setHours(
@@ -207,7 +203,7 @@ export const Event: React.FC<Props> = (props) => {
             endDateTime: end.toISOString(),
         };
 
-        await updateEventMutation(updatedEvent);
+        updateEventMutation(updatedEvent);
     };
 
     return (

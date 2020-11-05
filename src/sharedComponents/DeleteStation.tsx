@@ -43,9 +43,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
     const alert = useAlert();
 
     const [deleteStationMutation, { isLoading: deleteStationLoading }] = useMutation(
-        async (stationId: number) => {
-            await deleteStation(stationId, keycloak.token);
-        },
+        (stationId: number) => deleteStation(stationId, keycloak.token),
         {
             onSuccess: () => {
                 alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
@@ -63,14 +61,14 @@ export const DeleteStation: React.FC<Props> = (props) => {
 
     const [selectedStationId, setSelectedStationId] = useState<number>();
 
-    const handleDeleteStationSubmission = async (event: React.SyntheticEvent) => {
+    const handleDeleteStationSubmission = (event: React.SyntheticEvent) => {
         event.preventDefault();
         if (!selectedStationId) {
             // TODO: show this alert as inline error message in form
             alert.show('Vennligst velg en stasjon.', { type: types.ERROR });
             return;
         }
-        await deleteStationMutation(selectedStationId);
+        deleteStationMutation(selectedStationId);
     };
 
     return (

@@ -102,7 +102,7 @@ export const NewStation: React.FC<Props> = (props) => {
     const alert = useAlert();
 
     const [addStationMutation, { isLoading: addStationLoading }] = useMutation(
-        async (newStation: ApiStationPost) => await postStation(newStation, keycloak.token),
+        (newStation: ApiStationPost) => postStation(newStation, keycloak.token),
         {
             onSuccess: () => {
                 alert.show('Stasjonen ble lagt til suksessfullt.', { type: types.SUCCESS });
@@ -173,7 +173,7 @@ export const NewStation: React.FC<Props> = (props) => {
     };
 
     // Submit function for when the location is to be submitted to the backend
-    const onSubmit = async (e: React.SyntheticEvent) => {
+    const onSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
         e.persist();
 
@@ -230,7 +230,7 @@ export const NewStation: React.FC<Props> = (props) => {
             },
         };
 
-        await addStationMutation(newStation);
+        addStationMutation(newStation);
     };
 
     return (
