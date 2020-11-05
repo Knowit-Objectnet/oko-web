@@ -52,6 +52,7 @@ interface TimeColumnProps {
     colNum: number;
     events?: Array<EventInfo>;
     selectable: boolean;
+    selectedEvent?: number;
     onSelectEvent?: (eventInfo: EventInfo) => void;
     onSelectSlot?: (slotInfo: SlotInfo) => void;
     onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
@@ -287,6 +288,7 @@ export const TimeSlotColumn: React.FC<TimeColumnProps> = (props) => {
                     numberOfMinutes={numberOfMinutes}
                     deltaStart={min}
                     onClick={onClick}
+                    selectedEvent={props.selectedEvent}
                 />
             </EventsSlotsWrapper>
             <Selection ref={ref} onMouseUp={onMouseUp}>

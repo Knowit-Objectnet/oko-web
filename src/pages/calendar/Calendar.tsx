@@ -104,7 +104,6 @@ export const Calendar: React.FC = () => {
         fromDate: fromDate.toISOString(),
         toDate: toDate.toISOString(),
         stationId: userIsStation ? userId : selectedStationId,
-        partnerId: userIsPartner ? userId : undefined,
     };
 
     const { data: apiEvents, isLoading } = useQuery<Array<ApiEvent>>({

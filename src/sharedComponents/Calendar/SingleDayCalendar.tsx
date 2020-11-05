@@ -39,6 +39,7 @@ interface SingleDayCalendarProps {
     max: Date;
     selectable?: boolean;
     step?: number;
+    selectedEvent?: number;
     onSelectEvent?: (eventInfo: EventInfo) => void;
     onSelectSlot?: (slotInfo: SlotInfo) => void;
     onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
@@ -87,12 +88,13 @@ export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({
                                     max={props.max}
                                     step={step}
                                     selectable={selectable}
+                                    selectedEvent={props.selectedEvent}
                                     onSelectSlot={props.onSelectSlot}
                                     onSelecting={props.onSelecting}
                                     onSelectEvent={props.onSelectEvent}
                                 />
                             ),
-                            [events[index]],
+                            [events[index], props.selectedEvent],
                         ),
                     )}
                 </Columns>

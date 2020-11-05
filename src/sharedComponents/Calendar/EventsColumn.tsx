@@ -1,9 +1,11 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import { EventInfo } from '../../types';
 import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { EventInfo, Roles } from '../../types';
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import add from 'date-fns/add';
+import { useKeycloak } from '@react-keycloak/web';
+import { Event } from './Event';
 
 const Events = styled.div`
     top: 0;
@@ -13,79 +15,21 @@ const Events = styled.div`
     pointer-events: none;
 `;
 
-interface EventProps {
-    top: number;
-    left: number;
-    height: number;
-    width: number;
-}
-
-const Event = styled.div<EventProps>`
-    position: absolute;
-    pointer-events: auto;
-    top: ${(props) => props.top}px;
-    left: ${(props) => props.left}%;
-    height: ${(props) => props.height}px;
-    width: ${(props) => props.width}%;
-    &:nth-child(n + 1) {
-        background-color: ${(props) => props.theme.colors.DarkBlue};
-        color: ${(props) => props.theme.colors.White};
-    }
-    &:nth-child(n + 2) {
-        background-color: ${(props) => props.theme.colors.DarkGreen};
-        color: ${(props) => props.theme.colors.White};
-    }
-    &:nth-child(n + 3) {
-        background-color: ${(props) => props.theme.colors.LightBlue};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 4) {
-        background-color: ${(props) => props.theme.colors.Green};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 5) {
-        background-color: ${(props) => props.theme.colors.Red};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 6) {
-        background-color: ${(props) => props.theme.colors.LightGreen};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 7) {
-        background-color: ${(props) => props.theme.colors.DarkBegie};
-        color: ${(props) => props.theme.colors.White};
-    }
-    &:nth-child(n + 8) {
-        background-color: ${(props) => props.theme.colors.Yellow};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    &:nth-child(n + 9) {
-        background-color: ${(props) => props.theme.colors.LightBeige};
-        color: ${(props) => props.theme.colors.Black};
-    }
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-const EventText = styled.span`
-    text-align: center;
-    text-overflow: ellipsis;
-    overflow: hidden;
-`;
-
 interface EventsColumnProps {
     date: Date;
     events?: Array<EventInfo>;
     numberOfMinutes: number;
     deltaStart: Date;
     onClick: (event: EventInfo) => void;
+    selectedEvent?: number;
 }
 
 /*
  * Events column component to render events in the calendar
  */
 export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
     // Ref to the events column (used to get the height of the calendar)
     const eventsRef = useRef<HTMLDivElement>(null);
     // List of the rendered events
@@ -207,13 +151,10 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
     };
 
     // On event click function
-    const onEventClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.persist();
-        // Get the index of the event
-        const index = e.currentTarget.dataset['index'];
-        if (props.events && index) {
+    const onEventClick = (index: number | undefined) => {
+        if (props.events && index !== undefined) {
             // Find the correct event and call the prop function
-            const event = props.events[parseInt(index)];
+            const event = props.events[index];
             if (event) props.onClick(event);
         }
     };
@@ -250,18 +191,26 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
                         left={(event.wPos / event.wLen) * 100}
                         width={event.width}
                         height={event.length * pxPerMin}
+                        title={event.title}
                         key={event.title + event.wPos + event.start.getTime()}
-                        data-index={event.index}
+                        index={event.index}
                         onClick={onEventClick}
-                    >
-                        <EventText>{event.title}</EventText>
-                    </Event>,
+                        selected={
+                            props.selectedEvent === undefined
+                                ? undefined
+                                : props.selectedEvent === event.resource.eventId
+                        }
+                        userIsOwner={
+                            keycloak.hasRealmRole(Roles.Partner) &&
+                            event.resource.partner.id === keycloak.tokenParsed.GroupID
+                        }
+                    />,
                 );
             });
             // Add the events to the state
             setRenderedEvents(temp);
         }
-    }, [eventsRef.current, props.events]);
+    }, [eventsRef.current, props.events, props.selectedEvent]);
 
     return <Events ref={eventsRef}>{renderedEvents}</Events>;
 };

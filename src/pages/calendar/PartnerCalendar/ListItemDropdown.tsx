@@ -4,17 +4,13 @@ import { EventInfo } from '../../../types';
 import { SingleDayCalendar } from '../../../sharedComponents/Calendar/SingleDayCalendar';
 import { useState } from 'react';
 import add from 'date-fns/add';
-import { Colors } from '../../../theme';
+import { useKeycloak } from '@react-keycloak/web';
 import { Event } from '../../../sharedComponents/Events/Event';
 
-interface WrapperProps {
-    color: Colors;
-}
-
-const Wrapper = styled.div<WrapperProps>`
+const Wrapper = styled.div`
     width: 100%;
     display: flex;
-    border: solid 2px ${(props) => props.color};
+    border: solid 2px ${(props) => props.theme.colors.LightBlue};
     border-top: none;
     box-sizing: border-box;
 
@@ -36,24 +32,32 @@ interface ListItemDropdownProps {
     date: Date;
     min: Date;
     max: Date;
-    color: Colors;
 }
 
 /*
  * Dropdown component for list items container a singleday calendar and event info view
  */
 export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
+    // Select the first event that is owned by the logged in partner. It should never be undefined, but if it is
+    // then it should cause problems as it simply won't open the sideview with event info.
+    const firstOwnedEvent = () =>
+        props.events.find((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID);
     // State for handling the selected event to view info of
-    const [selectedEvent, setSelectedEvent] = useState<EventInfo | null>(null);
+    const [selectedEvent, setSelectedEvent] = useState<EventInfo | undefined>(firstOwnedEvent());
+    const selectedEventResource = selectedEvent && selectedEvent.resource;
 
     // On event click function
     const onSelectEvent = (event: EventInfo) => {
-        setSelectedEvent(event);
+        if (event.resource.partner.id === keycloak.tokenParsed.GroupID) {
+            setSelectedEvent(event);
+        }
     };
 
     const onDeleteEvent = (successful: boolean) => {
         if (selectedEvent && successful) {
-            setSelectedEvent(null);
+            setSelectedEvent(undefined);
         }
     };
 
@@ -64,19 +68,21 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
     newMax = add(newMax, { hours: 1 });
 
     return (
-        <Wrapper color={props.color}>
-            <Calendar isEventSelected={selectedEvent !== null}>
+        <Wrapper>
+            <Calendar isEventSelected={selectedEvent !== undefined}>
                 <SingleDayCalendar
                     date={props.date}
                     columns={[undefined]}
                     min={newMin}
                     max={newMax}
+                    selectedEvent={selectedEventResource && selectedEventResource.eventId}
                     onSelectEvent={onSelectEvent}
                     events={[props.events]}
                 />
             </Calendar>
             {selectedEvent && (
                 <Event
+                    key={`listItemDropdown-eventId-${selectedEvent.resource.eventId}`}
                     event={selectedEvent}
                     hideTitleBar={true}
                     afterDeleteRangeEvent={onDeleteEvent}

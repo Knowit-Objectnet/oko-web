@@ -3,9 +3,10 @@ import { EventInfo } from '../../../types';
 import { createNDaysFromDate } from '../../../utils/createNDaysFromDate';
 import isSameDay from 'date-fns/isSameDay';
 import groupBy from 'lodash/groupBy';
-import { Colors } from '../../../theme';
+import pickBy from 'lodash/pickBy';
 import { ListItem } from './ListItem';
 import styled from 'styled-components';
+import { useKeycloak } from '@react-keycloak/web';
 const Wrapper = styled.div``;
 
 const Header = styled.div`
@@ -24,7 +25,6 @@ const DateText = styled.span`
 interface ListViewProps {
     fromDate: Date;
     events: Array<EventInfo>;
-    groupingFn: (event: EventInfo) => string;
     numberOfDays: number;
 }
 
@@ -32,22 +32,19 @@ interface ListViewProps {
  * Agenda list view component
  */
 export const ListView: React.FC<ListViewProps> = (props) => {
-    // Get all Oslo colors excpet black and white
-    const colors = Object.values(Colors).filter((color) => color !== Colors.Black && color !== Colors.White);
+    // Keycloak instance
+    const { keycloak } = useKeycloak();
 
     const daysToShow: Array<Date> = createNDaysFromDate(props.fromDate, props.numberOfDays);
 
     const getListItemsForDate = (date: Date) => {
         const eventsForDate = props.events.filter((event) => isSameDay(event.start, date));
-        const groupedEvents = groupBy(eventsForDate, props.groupingFn);
-        return Object.entries(groupedEvents).map(([label, events], i) => (
-            <ListItem
-                key={label}
-                date={date}
-                title={label}
-                events={events ?? []}
-                color={colors[i % (colors.length - 1)]}
-            />
+        const groupedEvents = groupBy(eventsForDate, (event: EventInfo): string => event.resource.location.name);
+        const filteredAndGroupedEvents = pickBy(groupedEvents, (eventsInGroup) =>
+            eventsInGroup.some((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID),
+        );
+        return Object.entries(filteredAndGroupedEvents).map(([label, events]) => (
+            <ListItem key={label} date={date} title={label} events={events} />
         ));
     };
 

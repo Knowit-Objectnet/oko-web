@@ -5,7 +5,6 @@ import ArrowUp from '../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../assets/ArrowDown.svg';
 import { useState } from 'react';
 import { ListItemDropdown } from './ListItemDropdown';
-import { Colors } from '../../../theme';
 
 interface WrapperProps {
     expanded: boolean;
@@ -21,21 +20,9 @@ const Wrapper = styled.div<WrapperProps>`
     }
 `;
 
-interface Color {
-    color: Colors;
-}
-
-const getTextColor = (color: Colors) => {
-    if (color === Colors.DarkBlue || color === Colors.DarkBegie || color === Colors.DarkGreen) {
-        return Colors.White;
-    } else {
-        return Colors.Black;
-    }
-};
-
-const Time = styled.div<Color>`
-    background-color: ${(props) => props.color};
-    color: ${(props) => getTextColor(props.color)};
+const Time = styled.div`
+    background-color: ${(props) => props.theme.colors.LightBlue};
+    color: ${(props) => props.theme.colors.Black};
     margin-right: 2px;
     justify-content: center;
     align-items: center;
@@ -44,9 +31,9 @@ const Time = styled.div<Color>`
     min-width: fit-content;
 `;
 
-const Info = styled.div<Color>`
-    background-color: ${(props) => props.color};
-    color: ${(props) => getTextColor(props.color)};
+const Info = styled.div`
+    background-color: ${(props) => props.theme.colors.LightBlue};
+    color: ${(props) => props.theme.colors.Black};
     flex 1;
     display: flex;
     justify-content: center;
@@ -64,23 +51,22 @@ const Toggle = styled.div`
     align-items: center;
 `;
 
-const StyledArrowDown = styled(ArrowDown)<Color>`
+const StyledArrowDown = styled(ArrowDown)`
     height: 2em;
     margin-left: 5px;
-    fill: ${(props) => getTextColor(props.color)};
+    fill: ${(props) => props.theme.colors.Black};
 `;
 
-const StyledArrowUp = styled(ArrowUp)<Color>`
+const StyledArrowUp = styled(ArrowUp)`
     height: 2em;
     margin-left: 5px;
-    fill: ${(props) => getTextColor(props.color)};
+    fill: ${(props) => props.theme.colors.Black};
 `;
 
 interface ListItemProps {
     title: string;
     events: Array<EventInfo>;
     date: Date;
-    color: Colors;
 }
 
 /*
@@ -113,28 +99,20 @@ export const ListItem: React.FC<ListItemProps> = (props) => {
     return (
         <div>
             <Wrapper expanded={expanded}>
-                {!expanded && <Time color={props.color}>{getTimeString(minTime, maxTime)}</Time>}
-                <Info color={props.color}>
+                {!expanded && <Time>{getTimeString(minTime, maxTime)}</Time>}
+                <Info>
                     <Name>{props.title}</Name>
                     <Toggle>
                         {expanded ? 'Se mindre' : 'Se stasjonskalender'}
                         {expanded ? (
-                            <StyledArrowDown color={props.color} onClick={onExpandClick} />
+                            <StyledArrowDown onClick={onExpandClick} />
                         ) : (
-                            <StyledArrowUp color={props.color} onClick={onExpandClick} />
+                            <StyledArrowUp onClick={onExpandClick} />
                         )}
                     </Toggle>
                 </Info>
             </Wrapper>
-            {expanded && (
-                <ListItemDropdown
-                    date={props.date}
-                    min={minTime}
-                    max={maxTime}
-                    events={props.events}
-                    color={props.color}
-                />
-            )}
+            {expanded && <ListItemDropdown date={props.date} min={minTime} max={maxTime} events={props.events} />}
         </div>
     );
 };
