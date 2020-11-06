@@ -54,7 +54,7 @@ interface Props {
  * Component that lets a user either create a new event (if REG) or toggle between agenda and calendar (if
  * ambassador or partner)
  */
-export const MyPageSideMenu: React.FC<Props> = (props) => {
+export const UserProfileSideMenu: React.FC<Props> = (props) => {
     const modal = useModal();
 
     const closeModalOnSuccess = (successful: boolean) => {

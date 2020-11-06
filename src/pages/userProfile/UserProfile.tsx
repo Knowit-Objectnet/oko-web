@@ -5,7 +5,7 @@ import Default from '../../assets/Default_profile_pic.svg';
 import { Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
-import { MyPageSideMenu } from './MyPageSideMenu';
+import { UserProfileSideMenu } from './UserProfileSideMenu';
 import { NewPartner } from '../../sharedComponents/NewPartner';
 import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
@@ -57,7 +57,7 @@ const DefaultProfilePicture = styled(Default)`
 /**
  * Profile component to view your information
  */
-export const MyPage: React.FC = () => {
+export const UserProfile: React.FC = () => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
     const modal = useModal();
@@ -125,7 +125,7 @@ export const MyPage: React.FC = () => {
                     {keycloak.hasRealmRole(Roles.Partner) && <ShareContactInfo />}
                 </Content>
                 {keycloak.hasRealmRole(Roles.Oslo) && (
-                    <MyPageSideMenu newPartnerClick={showNewPartner} deletePartnerClick={showDeletePartner} />
+                    <UserProfileSideMenu newPartnerClick={showNewPartner} deletePartnerClick={showDeletePartner} />
                 )}
             </Wrapper>
         </>
