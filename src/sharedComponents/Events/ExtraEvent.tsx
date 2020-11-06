@@ -8,14 +8,6 @@ import { Button } from '../Button';
 import { PostToAPI } from '../../utils/PostToAPI';
 import { useKeycloak } from '@react-keycloak/web';
 
-const Specifier = styled.div`
-    margin: 20px 0px;
-`;
-
-const OR = styled.div`
-    margin-bottom: 10px;
-`;
-
 const Textarea = styled.textarea`
     min-height: 54px;
     width: 100%;
@@ -36,24 +28,12 @@ interface ExtraEventProps {
  * Should only be visible for ambassadors (ombruksstasjon ambasadør).
  */
 export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
-    // Keycloak instance
     const { keycloak } = useKeycloak();
-    // Valid partners fetched from api
-    //let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners/`, fetcher);
-    //partners = partners || [];
 
-    // Valid categories fetched from api
-    // Dummy data until backend service is up and running
-    // TODO: Remove dummy data
-    //let { data: categories } = useSWR<string[]>(`${apiUrl}/categories`, fetcher);
-    //categories = categories && categories.length !== 0 ? categories : ['Møbler', 'Bøker', 'Sportsutstyr'];
-    // State
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
-    //const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
-    //const [categoryIndex, setCategoryIndex] = useState(-1);
     const [description, setDescription] = useState('');
 
     // On change functions for DateRange
@@ -72,17 +52,6 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
     const onSelectedDaysChange = (num: Array<number>) => {
         setSelectedDays(num);
     };
-
-    // On change for Partner selection
-    //const onPartnerChange = (partnerId: number) => {
-    //    setSelectedPartnerId(partnerId);
-    //};
-
-    // On change function for Category
-    //const onCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    //    e.persist();
-    //    setCategoryIndex(parseInt(e.currentTarget.value));
-    //};
 
     // On change function for Description
     const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -151,22 +120,6 @@ export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
                 onSelectedDaysChange={onSelectedDaysChange}
                 recurrenceEnabled={false}
             />
-            <Specifier>
-                {/*
-                    <EventOptionCategory
-                        selectedCategory={categoryIndex}
-                        categories={categories}
-                        isEditing={true}
-                        onChange={onCategoryChange}
-                    />
-                    <OR>Eller</OR>
-                    <EventOptionPartner
-                        selectedPartner={selectedPartnerId}
-                        partners={partners}
-                        onChange={onPartnerChange}
-                    />
-                */}
-            </Specifier>
             <Textarea
                 maxLength={200}
                 placeholder="Meldingstekst (maks 200 tegn)"
