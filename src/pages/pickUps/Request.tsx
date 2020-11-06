@@ -58,7 +58,7 @@ const Waiting = styled.div`
     height: 100%;
 `;
 
-interface RequestProps {
+interface Props {
     pickupId: number;
     partner: ApiPartner;
     selectedId?: number;
@@ -67,7 +67,7 @@ interface RequestProps {
     onApprove: (partner: ApiPartner, pickupId: number) => void;
 }
 
-export const Request: React.FC<RequestProps> = (props) => {
+export const Request: React.FC<Props> = (props) => {
     // Function to handle the rejection of a request
     // TODO: Currently not used as backend doesnt support it
     const onReject = () => {

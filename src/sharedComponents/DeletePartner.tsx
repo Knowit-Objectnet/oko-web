@@ -34,11 +34,11 @@ const StyledForm = styled.form`
     flex-direction: column;
 `;
 
-interface NewPartnerProps {
+interface Props {
     afterSubmit?: (successful: boolean) => void;
 }
 
-export const DeletePartner: React.FC<NewPartnerProps> = (props) => {
+export const DeletePartner: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 

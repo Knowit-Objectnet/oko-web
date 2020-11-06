@@ -59,7 +59,7 @@ const Registration = styled.div`
     width: 350px;
 `;
 
-interface PickUpRequestProps extends PickUp {
+interface Props extends PickUp {
     groupId?: number;
     registerRequest: (pickupId: number, partnerId: number) => void;
     deleteRequest: (pickupId: number, partnerId: number) => void;
@@ -67,7 +67,7 @@ interface PickUpRequestProps extends PickUp {
     onApprove: (partner: ApiPartner, pickupId: number) => void;
 }
 
-export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => (
+export const PickUpRequest: React.FC<Props> = (props) => (
     <Wrapper>
         <Content>
             <LocationDate>

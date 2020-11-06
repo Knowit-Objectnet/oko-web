@@ -23,7 +23,7 @@ const NoRequests = styled.div`
     height: 100%;
 `;
 
-interface RequestsProps {
+interface Props {
     pickupId: number;
     selectedPartnerId?: number;
     isStation: boolean;
@@ -31,7 +31,7 @@ interface RequestsProps {
     onApprove: (partner: ApiPartner, pickupId: number) => void;
 }
 
-export const Requests: React.FC<RequestsProps> = (props) => {
+export const Requests: React.FC<Props> = (props) => {
     // Get the requests for the pickup from the API
     const { data: apiRequests, isValidating } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${props.pickupId}`,

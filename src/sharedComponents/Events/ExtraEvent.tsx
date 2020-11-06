@@ -16,7 +16,7 @@ const Textarea = styled.textarea`
     resize: vertical;
 `;
 
-interface ExtraEventProps {
+interface Props {
     start: Date;
     end: Date;
     beforeSubmit?: (key: string, newPickup: ApiPickUp) => void;
@@ -27,7 +27,7 @@ interface ExtraEventProps {
  * Component shown when applying for an extra event (ekstra henting)
  * Should only be visible for ambassadors (ombruksstasjon ambasadør).
  */
-export const ExtraEvent: React.FC<ExtraEventProps> = (props) => {
+export const ExtraEvent: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
 
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
