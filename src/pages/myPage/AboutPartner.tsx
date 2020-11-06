@@ -1,5 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { useKeycloak } from '@react-keycloak/web';
+import { useQuery } from 'react-query';
+import { ApiPartner, getPartnerById, partnersDefaultQueryKey } from '../../api/PartnerService';
+import { usePartnerById } from '../../api/hooks/usePartnerById';
 
 const Wrapper = styled.div`
     display: flex;
@@ -12,24 +16,29 @@ const Wrapper = styled.div`
 
 const Title = styled.p`
     font-weight: bold;
-    margin-top: 0px;
+    margin-top: 0;
 `;
 
 const Text = styled.p`
     font-size: 14px;
 `;
 
-interface AboutPartnerProps {
-    name: string;
-    description: string;
-}
+export const AboutPartner: React.FC = () => {
+    const [keycloak] = useKeycloak();
+    const userId: number = keycloak.tokenParsed?.GroupID;
 
-/**
- * Share Contact info component
- */
-export const AboutPartner: React.FC<AboutPartnerProps> = (props) => (
-    <Wrapper>
-        <Title>Om {props.name}</Title>
-        <Text>{props.description}</Text>
-    </Wrapper>
-);
+    const { data: partnerInfo, isLoading } = usePartnerById(userId);
+
+    return (
+        <Wrapper>
+            {!partnerInfo && isLoading
+                ? 'Laster inn...'
+                : partnerInfo && (
+                      <>
+                          <Title>Om {partnerInfo.name}</Title>
+                          <Text>{partnerInfo.description}</Text>
+                      </>
+                  )}
+        </Wrapper>
+    );
+};

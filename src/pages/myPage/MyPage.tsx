@@ -2,25 +2,19 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
-import { apiUrl, Roles } from '../../types';
+import { Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { MyPageSideMenu } from './MyPageSideMenu';
-import { useEffect, useState } from 'react';
 import { NewPartner } from '../../sharedComponents/NewPartner';
-import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
 import { DeletePartner } from '../../sharedComponents/DeletePartner';
-import { DeleteStation } from '../../sharedComponents/DeleteStation';
-import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { Helmet } from 'react-helmet';
-import { ApiPartner } from '../../api/PartnerService';
 
 const Wrapper = styled.div`
     display: flex;
@@ -64,30 +58,11 @@ const DefaultProfilePicture = styled(Default)`
  * Profile component to view your information
  */
 export const MyPage: React.FC = () => {
-    // Keycloak instance
     const { keycloak } = useKeycloak();
-    // Alert dispatcher
     const alert = useAlert();
-    // Modal dispatcher
     const modal = useModal();
-    // State for partner info
-    const [partnerInfo, setPartnerInfo] = useState<ApiPartner | undefined>(undefined);
 
-    // History
     const history = useHistory();
-
-    // If the user is a partner, get their info
-    // TODO: calling hooks conditionally breaks the 'rules of hooks' – this must be refactored
-    if (keycloak.tokenParsed.GroupID && keycloak.hasRealmRole(Roles.Partner)) {
-        const { data: apiPartnerInfo } = useSWR<ApiPartner>(
-            `${apiUrl}/partners/${keycloak.tokenParsed.GroupID}`,
-            fetcher,
-        );
-
-        useEffect(() => {
-            setPartnerInfo(apiPartnerInfo);
-        }, [apiPartnerInfo]);
-    }
 
     const onLogoutClick = () => {
         history.push('/logout');
@@ -119,12 +94,10 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    // Function to show new partner ui modal
     const showNewPartner = () => {
         modal.show(<NewPartner afterSubmit={afterNewPartner} />);
     };
 
-    // Function to show delete partner ui modal
     const showDeletePartner = () => {
         modal.show(<DeletePartner afterSubmit={afterDeletePartner} />);
     };
@@ -147,12 +120,7 @@ export const MyPage: React.FC = () => {
                             styling="margin-left: auto;"
                         />
                     </Header>
-                    {keycloak.hasRealmRole(Roles.Partner) && (
-                        <AboutPartner
-                            name={partnerInfo ? partnerInfo.name : keycloak.tokenParsed.groups[0] || '<laster inn...>'}
-                            description={partnerInfo ? partnerInfo.description : 'Laster inn...'}
-                        />
-                    )}
+                    {keycloak.hasRealmRole(Roles.Partner) && <AboutPartner />}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
                     {keycloak.hasRealmRole(Roles.Partner) && <ShareContactInfo />}
                 </Content>
