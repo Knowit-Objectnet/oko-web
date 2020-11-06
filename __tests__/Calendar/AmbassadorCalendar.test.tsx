@@ -26,13 +26,13 @@ describe('Provides a page for ambassadors to view the calendar', () => {
                 resource: {
                     eventId: event.id,
                     partner: event.partner,
-                    location: event.station,
+                    station: event.station,
                     recurrenceRule: event.recurrenceRule,
                 },
             };
             return newEvent;
         })
-        .filter((event) => event.resource.location.id === 0);
+        .filter((event) => event.resource.station.id === 0);
 
     // Save the original clientHeight of the element rendered in the virtualDom by Jest
     const originalClientHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight');

@@ -1,15 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { apiUrl } from '../../types';
 import { useState } from 'react';
-import { OpeningTime } from './OpeningTime';
+import { OpeningHours } from './OpeningHours';
 import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
 import { Button } from '../Button';
-import { PostToAPI } from '../../utils/PostToAPI';
 import { useKeycloak } from '@react-keycloak/web';
+import { queryCache, useMutation } from 'react-query';
+import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../api/StationService';
+import { format } from 'date-fns';
 
 const Wrapper = styled.div`
     display: flex;
@@ -32,7 +33,7 @@ const Title = styled.div`
 `;
 
 const Content = styled.div`
-    padding: 0px 50px 50px;
+    padding: 0 50px 50px;
     display: flex;
     flex-direction: column;
 `;
@@ -92,24 +93,29 @@ const StyledMail = styled(Mail)`
     margin-right: 5px;
 `;
 
-interface Data {
-    [index: string]: any;
-    name: string;
-    hours: {
-        [index: string]: [string, string];
-    };
+interface Props {
+    afterSubmit?: (successful: boolean) => void;
 }
 
-interface NewLocationProps {
-    beforeSubmit?: (key: string, name: string, data: Data) => void;
-    afterSubmit?: (successful: boolean, key: string, error: Error | null) => void;
-}
-
-export const NewLocation: React.FC<NewLocationProps> = (props) => {
-    // Keycloak instance
+export const NewStation: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
-    // Alert instance
     const alert = useAlert();
+
+    const [addStationMutation, { isLoading: addStationLoading }] = useMutation(
+        (newStation: ApiStationPost) => postStation(newStation, keycloak.token),
+        {
+            onSuccess: () => {
+                alert.show('Stasjonen ble lagt til suksessfullt.', { type: types.SUCCESS });
+                props.afterSubmit?.(true);
+            },
+            onError: () => {
+                alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
+                props.afterSubmit?.(false);
+            },
+            onSettled: () => queryCache.invalidateQueries(stationsDefaultQueryKey),
+        },
+    );
+
     // General info
     const [name, setName] = useState('');
     const [address, setAddress] = useState('');
@@ -167,7 +173,7 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
     };
 
     // Submit function for when the location is to be submitted to the backend
-    const onSubmit = async (e: React.SyntheticEvent) => {
+    const onSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
         e.persist();
 
@@ -202,58 +208,29 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
             return;
         }
 
-        try {
-            const days: [
-                [Date, Date, boolean],
-                [Date, Date, boolean],
-                [Date, Date, boolean],
-                [Date, Date, boolean],
-                [Date, Date, boolean],
-            ] = [
-                [...mondayRange, mondayClosed],
-                [...tuesdayRange, tuesdayClosed],
-                [...wednesdayRange, wednesdayClosed],
-                [...thursdayRange, thursdayClosed],
-                [...fridayRange, fridayClosed],
-            ];
-
-            const dayNames = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
-
-            const data: Data = {
-                name: name,
-                hours: {},
-            };
-
-            for (let i = 0; i < days.length; i++) {
-                if (!days[i][2]) {
-                    data.hours[dayNames[i]] = [
-                        `${days[i][0].getHours().toString().padStart(2, '0')}:${days[i][0]
-                            .getMinutes()
-                            .toString()
-                            .padStart(2, '0')}:00Z`,
-                        `${days[i][1].getHours().toString().padStart(2, '0')}:${days[i][1]
-                            .getMinutes()
-                            .toString()
-                            .padStart(2, '0')}:00Z`,
-                    ];
-                }
+        const getOpeningHours = (dayIsClosed: boolean, openingHours: [Date, Date]) => {
+            if (dayIsClosed) {
+                return undefined;
             }
+            return openingHours.map((hour) => {
+                // TODO: replace string literal with date-fns: `formatISO(hour, { representation: 'time' })`
+                //  if backend starts supporting proper ISO-formatting with timezone (example: 07:00:00+01:00)
+                return `${format(hour, 'HH:mm')}:00Z`;
+            }) as [string, string]; // Casting is required to please typescript
+        };
 
-            if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/stations`, name, data);
-            }
+        const newStation: ApiStationPost = {
+            name,
+            hours: {
+                MONDAY: getOpeningHours(mondayClosed, mondayRange),
+                TUESDAY: getOpeningHours(tuesdayClosed, tuesdayRange),
+                WEDNESDAY: getOpeningHours(wednesdayClosed, wednesdayRange),
+                THURSDAY: getOpeningHours(thursdayClosed, thursdayRange),
+                FRIDAY: getOpeningHours(fridayClosed, fridayRange),
+            },
+        };
 
-            // Post to the api, show alert that it was successful if it was and close the modal
-            await PostToAPI(`${apiUrl}/stations`, data, keycloak.token);
-
-            if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/stations`, null);
-            }
-        } catch (err) {
-            if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/stations`, err);
-            }
-        }
+        addStationMutation(newStation);
     };
 
     return (
@@ -273,7 +250,7 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                         <p>Åpningstid</p>
                         <span>stengt</span>
                     </OpeningTimesText>
-                    <OpeningTime
+                    <OpeningHours
                         day="Man"
                         range={mondayRange}
                         closed={mondayClosed}
@@ -282,7 +259,7 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                         setRange={setMondayRange}
                         setClosed={setMondayClosed}
                     />
-                    <OpeningTime
+                    <OpeningHours
                         day="Tir"
                         range={tuesdayRange}
                         closed={tuesdayClosed}
@@ -291,7 +268,7 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                         setRange={setTuesdayRange}
                         setClosed={setTuesdayClosed}
                     />
-                    <OpeningTime
+                    <OpeningHours
                         day="Ons"
                         range={wednesdayRange}
                         closed={wednesdayClosed}
@@ -300,7 +277,7 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                         setRange={setWednesdayRange}
                         setClosed={setWednesdayClosed}
                     />
-                    <OpeningTime
+                    <OpeningHours
                         day="Tor"
                         range={thursdayRange}
                         closed={thursdayClosed}
@@ -309,7 +286,7 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                         setRange={setThursdayRange}
                         setClosed={setThursdayClosed}
                     />
-                    <OpeningTime
+                    <OpeningHours
                         day="Fre"
                         range={fridayRange}
                         closed={fridayClosed}
@@ -352,7 +329,13 @@ export const NewLocation: React.FC<NewLocationProps> = (props) => {
                         />
                     </ContactWrapper>
                 </AmbassadorContactInfo>
-                <Button text="Legg til stasjon" onClick={onSubmit} color="Green" height={35} />
+                <Button
+                    text="Legg til stasjon"
+                    onClick={onSubmit}
+                    color="Green"
+                    height={35}
+                    loading={addStationLoading}
+                />
             </Content>
         </Wrapper>
     );

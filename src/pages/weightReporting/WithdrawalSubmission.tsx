@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { PropsWithChildren, useState } from 'react';
-import { ApiLocation } from '../../types';
 import Pencil from '../../assets/Pencil.svg';
+import { ApiStation } from '../../api/StationService';
 
 const Wrapper = styled.div`
     display: flex;
@@ -147,7 +147,7 @@ interface WithdrawalProps {
     weight: number | null;
     start: Date;
     end: Date;
-    location: ApiLocation;
+    location: ApiStation;
     onSubmit: (weight: number, id: number) => void;
 }
 

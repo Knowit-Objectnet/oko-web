@@ -1,3 +1,5 @@
+import { ApiStation } from './api/StationService';
+
 export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
 export interface EventInfo {
@@ -9,7 +11,7 @@ export interface EventInfo {
 
 interface EventInfoResource {
     eventId: number;
-    location: ApiLocation;
+    station: ApiStation;
     partner: ApiPartner;
     recurrenceRule: {
         id: number;
@@ -26,16 +28,6 @@ interface EventInfoResource {
     };
 }
 
-export interface ApiLocation {
-    id: number;
-    name: string;
-    hours: StationOpeningHours;
-}
-
-export type StationOpeningHours = {
-    [key in WorkingWeekdays]?: [string, string];
-};
-
 export interface ApiPartner {
     id: number;
     name: string;
@@ -48,7 +40,7 @@ export interface ApiWithdrawal {
     reportId: number;
     eventId: number;
     partnerId: number;
-    station: ApiLocation;
+    station: ApiStation;
     startDateTime: string;
     endDateTime: string;
     weight: number | null;
@@ -60,7 +52,7 @@ export interface ApiPickUp {
     startDateTime: string;
     endDateTime: string;
     description: string;
-    station: ApiLocation;
+    station: ApiStation;
     chosenPartner: ApiPartner | null;
 }
 
@@ -78,7 +70,7 @@ export interface Withdrawal {
     reportId: number;
     eventId: number;
     partnerId: number;
-    station: ApiLocation;
+    station: ApiStation;
     startDateTime: Date;
     endDateTime: Date;
     weight: number | null;
@@ -90,7 +82,7 @@ export interface PickUp {
     startDateTime: Date;
     endDateTime: Date;
     description: string;
-    station: ApiLocation;
+    station: ApiStation;
     chosenPartner: ApiPartner | null;
 }
 

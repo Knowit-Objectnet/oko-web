@@ -14,7 +14,7 @@ export const mockEvents: Array<EventInfo> = [
         end: end,
         resource: {
             eventId: 1,
-            location: {
+            station: {
                 id: 2,
                 name: "Grønmo",
                 hours: {
@@ -47,7 +47,7 @@ export const mockEvents: Array<EventInfo> = [
         end: end,
         resource: {
             eventId: 1,
-            location: {
+            station: {
                 id: 2,
                 name: "Grønmo",
                 hours: {

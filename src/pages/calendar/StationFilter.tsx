@@ -1,12 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import useSWR from 'swr';
-import { ApiLocation, apiUrl } from '../../types';
-import { fetcher } from '../../utils/fetcher';
 import Filter from '../../assets/Filter.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
 import ArrowUp from '../../assets/ArrowUp.svg';
 import { useState } from 'react';
+import useStations from '../../api/hooks/useStations';
 
 const Wrapper = styled.div`
     display: flex;
@@ -26,7 +24,7 @@ const Header = styled.div`
     margin-bottom: 15px;
 `;
 
-const Locations = styled.div`
+const Stations = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -58,19 +56,17 @@ const Input = styled.input`
     margin-right: 15px;
 `;
 
-interface StationSelectorProps {
-    selectedStationId: number | undefined;
-    onSelectedStationChange: (index: number | undefined) => void;
+interface Props {
+    selectedStationId?: number;
+    onSelectedStationChange: (index?: number) => void;
 }
 
 /*
- * Component for selecting location
+ * Component for filtering by station
  */
-export const StationSelector: React.FC<StationSelectorProps> = (props) => {
+export const StationFilter: React.FC<Props> = (props) => {
     const [toggled, setToggled] = useState(true);
-
-    let { data: locations } = useSWR<ApiLocation[]>(`${apiUrl}/stations`, fetcher);
-    locations = locations && locations.length !== 0 ? locations : [];
+    const { data: stations } = useStations();
 
     const onToggleClick = () => {
         setToggled(!toggled);
@@ -94,30 +90,30 @@ export const StationSelector: React.FC<StationSelectorProps> = (props) => {
                 {toggled ? <StyledArrowDown onClick={onToggleClick} /> : <StyledArrowUp onClick={onToggleClick} />}
             </Header>
             {toggled && (
-                <Locations>
-                    {locations.map((location) => (
-                        <Label key={location.name + location.id}>
+                <Stations>
+                    {stations?.map((station) => (
+                        <Label key={station.name + station.id}>
                             <Input
                                 type="radio"
-                                name="location-selector"
-                                value={location.id}
-                                checked={location.id === props.selectedStationId}
+                                name="station-selector"
+                                value={station.id}
+                                checked={station.id === props.selectedStationId}
                                 onChange={onChange}
                             />
-                            {location.name}
+                            {station.name}
                         </Label>
                     ))}
                     <Label key="AllRadioButton">
                         <Input
                             type="radio"
-                            name="location-selector"
+                            name="station-selector"
                             value="default"
                             checked={props.selectedStationId === undefined}
                             onChange={onChange}
                         />
                         Alle
                     </Label>
-                </Locations>
+                </Stations>
             )}
         </Wrapper>
     );

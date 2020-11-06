@@ -32,14 +32,13 @@ interface ListViewProps {
  * Agenda list view component
  */
 export const ListView: React.FC<ListViewProps> = (props) => {
-    // Keycloak instance
     const { keycloak } = useKeycloak();
 
     const daysToShow: Array<Date> = createNDaysFromDate(props.fromDate, props.numberOfDays);
 
     const getListItemsForDate = (date: Date) => {
         const eventsForDate = props.events.filter((event) => isSameDay(event.start, date));
-        const groupedEvents = groupBy(eventsForDate, (event: EventInfo): string => event.resource.location.name);
+        const groupedEvents = groupBy(eventsForDate, (event): string => event.resource.station.name);
         const filteredAndGroupedEvents = pickBy(groupedEvents, (eventsInGroup) =>
             eventsInGroup.some((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID),
         );

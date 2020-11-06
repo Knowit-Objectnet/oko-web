@@ -1,17 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiLocation, apiUrl, Roles } from '../../types';
-import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
+import { Roles } from '../../types';
 import { Station } from './Station';
 import { Loading } from '../../sharedComponents/Loading';
 import Plus from '../../assets/Plus.svg';
-import { types, useAlert } from 'react-alert';
-import { FetchError } from '../../utils/FetchError';
 import useModal from '../../sharedComponents/Modal/useModal';
-import { NewLocation } from '../../sharedComponents/NewLocation/NewLocation';
+import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import keycloak from '../../keycloak';
 import { Helmet } from 'react-helmet';
+import useStations from '../../api/hooks/useStations';
 
 const Wrapper = styled.div`
     display: flex;
@@ -68,59 +65,16 @@ const Content = styled.div`
 `;
 
 export const Stations: React.FC = () => {
-    // Alert dispatcher
-    const alert = useAlert();
-    // Modal dispatcher
     const modal = useModal();
-    // List of stations
-    const { data: apiLocations, isValidating, mutate } = useSWR<Array<ApiLocation>>(`${apiUrl}/stations`, fetcher);
-    const locations = apiLocations || [];
+    const { data: stations, isLoading } = useStations();
 
-    const beforeSubmit = async (
-        key: string,
-        name: string,
-        data: {
-            [index: string]: any;
-            name: string;
-            hours: {
-                [index: string]: [string, string];
-            };
-        },
-    ) => {
-        const newLocation: ApiLocation = {
-            id: -1,
-            name: name,
-            hours: data.hours,
-        };
+    const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
-        const oldLocations = apiLocations || [];
-
-        await mutate([...oldLocations, newLocation], false);
-
-        modal.remove();
-    };
-    const afterSubmit = (successful: boolean, key: string, error: Error | null) => {
-        if (successful) {
-            alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
-
-            mutate();
-        } else {
-            // Show appropriate error alert if something went wrong.
-            if (error instanceof FetchError && error.code === 409) {
-                alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
-                    type: types.ERROR,
-                });
-            } else {
-                alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
-            }
-        }
+    const handleNewStationClick = () => {
+        modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
     };
 
-    const onClick = () => {
-        modal.show(<NewLocation beforeSubmit={beforeSubmit} afterSubmit={afterSubmit} />);
-    };
-
-    if (!apiLocations && isValidating) {
+    if (isLoading) {
         return <Loading text="Laster inn data..." />;
     }
 
@@ -134,13 +88,13 @@ export const Stations: React.FC = () => {
                     <Item>
                         <Description>Ny stasjon</Description>
                         <Button>
-                            <Plus height="100%" onClick={onClick} />
+                            <Plus height="100%" onClick={handleNewStationClick} />
                         </Button>
                     </Item>
                 )}
                 <Content>
-                    {locations.map((location) => (
-                        <Station key={`LocationId: ${location.id}`} {...location} />
+                    {stations?.map((station) => (
+                        <Station key={station.id} station={station} />
                     ))}
                 </Content>
             </Wrapper>

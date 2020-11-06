@@ -32,7 +32,7 @@ const ClosedInput = styled.input`
     zoom: 2;
 `;
 
-interface OpeningTimeProps {
+interface Props {
     day: string;
     range: [Date, Date];
     setRange: Dispatch<React.SetStateAction<[Date, Date]>>;
@@ -42,7 +42,7 @@ interface OpeningTimeProps {
     max: Date;
 }
 
-export const OpeningTime: React.FC<OpeningTimeProps> = (props) => {
+export const OpeningHours: React.FC<Props> = (props) => {
     const onRangeChange = (range: [string | Date, string | Date]) => {
         // Create date object
         const date = new Date();

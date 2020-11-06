@@ -5,16 +5,16 @@ import Default from '../../assets/Default_profile_pic.svg';
 import { ApiPartner, apiUrl, Roles } from '../../types';
 import { useHistory } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
-import { SideMenu } from './SideMenu';
+import { MyPageSideMenu } from './MyPageSideMenu';
 import { useEffect, useState } from 'react';
 import { NewPartner } from '../../sharedComponents/NewPartner';
-import { NewLocation } from '../../sharedComponents/NewLocation/NewLocation';
+import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import { useAlert, types } from 'react-alert';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { FetchError } from '../../utils/FetchError';
 import { DeletePartner } from '../../sharedComponents/DeletePartner';
-import { DeleteLocation } from '../../sharedComponents/DeleteLocation';
+import { DeleteStation } from '../../sharedComponents/DeleteStation';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
@@ -76,6 +76,7 @@ export const MyPage: React.FC = () => {
     const history = useHistory();
 
     // If the user is a partner, get their info
+    // TODO: calling hooks conditionally breaks the 'rules of hooks' – this must be refactored
     if (keycloak.tokenParsed.GroupID && keycloak.hasRealmRole(Roles.Partner)) {
         const { data: apiPartnerInfo } = useSWR<ApiPartner>(
             `${apiUrl}/partners/${keycloak.tokenParsed.GroupID}`,
@@ -87,7 +88,6 @@ export const MyPage: React.FC = () => {
         }, [apiPartnerInfo]);
     }
 
-    // Logout function for the logout button click
     const onLogoutClick = () => {
         history.push('/logout');
     };
@@ -108,23 +108,6 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    const afterNewLocation = (successful: boolean, key: string, error: Error | null) => {
-        if (successful) {
-            alert.show('Ny stasjon ble lagt til suksessfullt.', { type: types.SUCCESS });
-
-            modal.remove();
-        } else {
-            // Show appropriate error alert if something went wrong.
-            if (error instanceof FetchError && error.code === 409) {
-                alert.show('En stasjon med det navnet eksisterer allerede, vennligst velg et annet navn', {
-                    type: types.ERROR,
-                });
-            } else {
-                alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
-            }
-        }
-    };
-
     const afterDeletePartner = (successful: boolean, key: string) => {
         if (successful) {
             alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
@@ -135,34 +118,14 @@ export const MyPage: React.FC = () => {
         }
     };
 
-    const afterDeleteLocation = (successful: boolean, key: string) => {
-        if (successful) {
-            alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
-
-            modal.remove();
-        } else {
-            alert.show('Noe gikk galt, stasjoneen ble ikke slettet.', { type: types.ERROR });
-        }
-    };
-
     // Function to show new partner ui modal
     const showNewPartner = () => {
         modal.show(<NewPartner afterSubmit={afterNewPartner} />);
     };
 
-    // Function to show new location ui modal
-    const showNewLocation = () => {
-        modal.show(<NewLocation afterSubmit={afterNewLocation} />);
-    };
-
     // Function to show delete partner ui modal
     const showDeletePartner = () => {
         modal.show(<DeletePartner afterSubmit={afterDeletePartner} />);
-    };
-
-    // Function to show delete location ui modal
-    const showDeleteLocation = () => {
-        modal.show(<DeleteLocation afterSubmit={afterDeleteLocation} />);
     };
 
     return (
@@ -193,12 +156,7 @@ export const MyPage: React.FC = () => {
                     {keycloak.hasRealmRole(Roles.Partner) && <ShareContactInfo />}
                 </Content>
                 {keycloak.hasRealmRole(Roles.Oslo) && (
-                    <SideMenu
-                        newPartnerClick={showNewPartner}
-                        newLocationClick={showNewLocation}
-                        deletePartnerClick={showDeletePartner}
-                        deleteLocationClick={showDeleteLocation}
-                    />
+                    <MyPageSideMenu newPartnerClick={showNewPartner} deletePartnerClick={showDeletePartner} />
                 )}
             </Wrapper>
         </>

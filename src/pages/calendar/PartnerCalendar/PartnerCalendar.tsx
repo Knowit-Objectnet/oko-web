@@ -4,7 +4,7 @@ import { WeekMenu } from '../WeekMenu';
 import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
 import { ListView } from './ListView';
 
-interface PartnerCalendarProps {
+interface Props {
     date: Date;
     showCalendar: boolean;
     onSelectEvent: (Event: EventInfo) => void;
@@ -15,7 +15,7 @@ interface PartnerCalendarProps {
 /*
  * Calendar and Agenda for partners
  */
-export const PartnerCalendar: React.FC<PartnerCalendarProps> = (props) => {
+export const PartnerCalendar: React.FC<Props> = (props) => {
     const date = new Date(props.date);
 
     // Dates for the calendar view

@@ -9,65 +9,58 @@ import ModalProvider from '../../src/sharedComponents/Modal/Provider';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
 import { Stations } from '../../src/pages/stations/Stations';
-import fetch from 'jest-fetch-mock';
-import { apiUrl } from '../../src/types';
-
-// Fetch mock to intercept fetch requests.
-global.fetch = fetch;
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 
 describe('Provides a page to view a list of the stations', () => {
-    // Alert options
-    const options = {
+    const alertOptions = {
         position: positions.TOP_CENTER,
         timeout: 5000,
         offset: '30px',
         transition: transitions.SCALE,
     };
 
+    let axiosMock: MockAdapter;
+
     beforeEach(() => {
-        fetch.resetMocks();
-        fetch.mockResponse(async ({ url }) => {
-            if (url.startsWith(`${apiUrl}/stations`)) {
-                return JSON.stringify([
-                    {
-                        id: 1,
-                        name: 'Haraldrud',
-                        hours: {
-                            MONDAY: ['08:00:00Z', '20:00:00Z'],
-                            TUESDAY: ['08:00:00Z', '20:00:00Z'],
-                            WEDNESDAY: ['08:00:00Z', '20:00:00Z'],
-                            THURSDAY: ['08:00:00Z', '20:00:00Z'],
-                            FRIDAY: ['10:00:00Z', '18:00:00Z'],
-                        },
-                    },
-                    {
-                        id: 3,
-                        name: 'Smestad',
-                        hours: {
-                            MONDAY: ['10:00:00Z', '20:00:00Z'],
-                            TUESDAY: ['10:00:00Z', '20:00:00Z'],
-                            WEDNESDAY: ['10:00:00Z', '20:00:00Z'],
-                            THURSDAY: ['10:00:00Z', '20:00:00Z'],
-                            FRIDAY: ['10:00:00Z', '20:00:00Z'],
-                        },
-                    },
-                ]);
-            } else {
-                return '';
-            }
-        });
+        axiosMock = new MockAdapter(axios);
+        axiosMock.onGet('/stations').reply(200, [
+            {
+                id: 1,
+                name: 'Haraldrud',
+                hours: {
+                    MONDAY: ['08:00:00Z', '20:00:00Z'],
+                    TUESDAY: ['08:00:00Z', '20:00:00Z'],
+                    WEDNESDAY: ['08:00:00Z', '20:00:00Z'],
+                    THURSDAY: ['08:00:00Z', '20:00:00Z'],
+                    FRIDAY: ['10:00:00Z', '18:00:00Z'],
+                },
+            },
+            {
+                id: 3,
+                name: 'Smestad',
+                hours: {
+                    MONDAY: ['10:00:00Z', '20:00:00Z'],
+                    TUESDAY: ['10:00:00Z', '20:00:00Z'],
+                    WEDNESDAY: ['10:00:00Z', '20:00:00Z'],
+                    THURSDAY: ['10:00:00Z', '20:00:00Z'],
+                    FRIDAY: ['10:00:00Z', '20:00:00Z'],
+                },
+            },
+        ]);
     });
 
     afterEach(() => {
+        axiosMock.restore();
         cleanup();
     });
 
-    it('Should render working logout button', async () => {
+    it('Should render list of stations', async () => {
         const { findByText } = render(
             <KeycloakProvider keycloak={keycloak}>
                 <ThemeProvider theme={theme}>
                     <ModalProvider>
-                        <AlertProvider template={AlertTemplate} {...options}>
+                        <AlertProvider template={AlertTemplate} {...alertOptions}>
                             <Stations />
                         </AlertProvider>
                     </ModalProvider>

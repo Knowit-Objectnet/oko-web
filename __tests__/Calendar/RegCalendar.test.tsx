@@ -9,10 +9,12 @@ import { apiUrl, EventInfo, Roles } from '../../src/types';
 
 // Component to test
 import { RegCalendar } from '../../src/pages/calendar/RegCalendar/RegCalendar';
-import { mockLocations } from '../../__mocks__/mockLocations';
+import { mockStations } from '../../__mocks__/mockStations';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
 import { ApiEvent } from '../../src/api/EventService';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -26,23 +28,27 @@ describe('Provides a page for REG to view the calendar', () => {
             resource: {
                 eventId: event.id,
                 partner: event.partner,
-                location: event.station,
+                station: event.station,
                 recurrenceRule: event.recurrenceRule,
             },
         };
         return newEvent;
     });
 
+    let axiosMock: MockAdapter;
+
     beforeEach(() => {
         fetch.resetMocks();
         fetch.mockResponse(async ({ url }) => {
             if (url.startsWith(`${apiUrl}/events`)) {
                 return JSON.stringify(mockApiEvents);
-            } else if (url.startsWith(`${apiUrl}/stations`)) {
-                return JSON.stringify(mockLocations);
             }
             return '';
         });
+
+        axiosMock = new MockAdapter(axios);
+        axiosMock.onGet('/stations').reply(200, mockStations);
+
         // Set the role to ambassador
         keycloak.hasRealmRole = jest.fn((role: string) => {
             return role === Roles.Oslo;
@@ -50,13 +56,13 @@ describe('Provides a page for REG to view the calendar', () => {
     });
 
     afterEach(() => {
+        axiosMock.reset();
         cleanup();
     });
 
     it('Should render without errors', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const newEvent = jest.fn();
         const onSelectSlot = jest.fn();
         const onWeekChange = jest.fn();
         const date = new Date();
@@ -69,7 +75,6 @@ describe('Provides a page for REG to view the calendar', () => {
                     <RegCalendar
                         date={date}
                         onSelectEvent={onSelectEventMock}
-                        newEvent={newEvent}
                         onSelectSlot={onSelectSlot}
                         events={events}
                         isToggled={false}
@@ -83,7 +88,6 @@ describe('Provides a page for REG to view the calendar', () => {
     it('Should render the events in an agenda table form for 7.13.2020-7.18.2020', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const newEvent = jest.fn();
         const onSelectSlot = jest.fn();
         const date = new Date();
         const onWeekChange = jest.fn();
@@ -96,7 +100,6 @@ describe('Provides a page for REG to view the calendar', () => {
                     <RegCalendar
                         date={date}
                         onSelectEvent={onSelectEventMock}
-                        newEvent={newEvent}
                         onSelectSlot={onSelectSlot}
                         events={events}
                         isToggled={false}
@@ -115,7 +118,6 @@ describe('Provides a page for REG to view the calendar', () => {
     it('Should render the events in an agenda table form for 7.15.2020-7.18.2020', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
-        const newEvent = jest.fn();
         const onSelectSlot = jest.fn();
         const date = new Date();
         const onWeekChange = jest.fn();
@@ -128,7 +130,6 @@ describe('Provides a page for REG to view the calendar', () => {
                     <RegCalendar
                         date={date}
                         onSelectEvent={onSelectEventMock}
-                        newEvent={newEvent}
                         onSelectSlot={onSelectSlot}
                         events={events}
                         isToggled={false}

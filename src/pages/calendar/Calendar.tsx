@@ -14,7 +14,7 @@ import add from 'date-fns/add';
 import { Loading } from '../../sharedComponents/Loading';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { StationSelector } from './StationSelector';
+import { StationFilter } from './StationFilter';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
@@ -123,7 +123,7 @@ export const Calendar: React.FC = () => {
                       resource: {
                           eventId: event.id,
                           partner: event.partner,
-                          location: event.station,
+                          station: event.station,
                           recurrenceRule: event.recurrenceRule,
                       },
                   };
@@ -163,8 +163,8 @@ export const Calendar: React.FC = () => {
     };
 
     // On slot selection function to display new or extra event
-    const onSelectSlot = (start: Date, end: Date, isOslo: boolean) => {
-        if (isOslo) {
+    const onSelectSlot = (start: Date, end: Date) => {
+        if (userIsAdmin) {
             modal.show(<NewEvent start={start} end={end} />);
         } else {
             modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
@@ -218,7 +218,6 @@ export const Calendar: React.FC = () => {
             <RegCalendar
                 onSelectEvent={showEventInfoModal}
                 onSelectSlot={onSelectSlot}
-                newEvent={showNewEventModal}
                 date={selectedDate}
                 isToggled={selectedStationId !== undefined}
                 onWeekChange={handleWeekChange}
@@ -236,7 +235,7 @@ export const Calendar: React.FC = () => {
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
                     {(userIsAdmin || (userIsPartner && showingCalendar)) && (
-                        <StationSelector
+                        <StationFilter
                             selectedStationId={selectedStationId}
                             onSelectedStationChange={setSelectedStationId}
                         />

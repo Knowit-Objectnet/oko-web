@@ -5,7 +5,7 @@ import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventSubmission } from './EventSubmission';
 import { EventInfo, Roles } from '../../types';
-import { EventOptionLocation } from './EventOptionLocation';
+import { EventStationInfo } from './EventStationInfo';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
@@ -36,7 +36,7 @@ const Options = styled.div`
     flex: 1;
 `;
 
-interface EventProps {
+interface Props {
     event: EventInfo;
     hideTitleBar?: boolean;
     afterDeleteSingleEvent?: (successful: boolean) => void;
@@ -47,32 +47,26 @@ interface EventProps {
  * Component shown when event in calendar is clicked.
  * Will be rendered differently depending on user's role.
  */
-export const Event: React.FC<EventProps> = (props) => {
+export const Event: React.FC<Props> = (props) => {
     const alert = useAlert();
 
     const { keycloak } = useKeycloak();
     const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
     const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const stationOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.location.id;
+    const stationOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.station.id;
     const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
     const partnerOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.partner.id;
 
     const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
-        async (event: EventInfo) => {
-            await deleteEvents({ eventId: event.resource.eventId }, keycloak.token);
-        },
+        (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }, keycloak.token),
         {
             onSuccess: () => {
                 alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
-                if (props.afterDeleteSingleEvent) {
-                    props.afterDeleteSingleEvent(true);
-                }
+                props.afterDeleteSingleEvent?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
-                if (props.afterDeleteSingleEvent) {
-                    props.afterDeleteSingleEvent(false);
-                }
+                props.afterDeleteSingleEvent?.(false);
             },
             onSettled: () => {
                 queryCache.invalidateQueries(eventsDefaultQueryKey);
@@ -81,26 +75,22 @@ export const Event: React.FC<EventProps> = (props) => {
     );
 
     const [deleteRangeEventsMutation, { isLoading: deleteRangeEventLoading }] = useMutation(
-        async ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
+        ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
             const apiParams: ApiEventParams = {
                 recurrenceRuleId: event.resource.recurrenceRule?.id,
                 fromDate: fromDate.toISOString(),
                 toDate: toDate.toISOString(),
             };
-            await deleteEvents(apiParams, keycloak.token);
+            return deleteEvents(apiParams, keycloak.token);
         },
         {
             onSuccess: () => {
-                alert.show('Slettingen var vellykket.', { type: types.SUCCESS });
-                if (props.afterDeleteRangeEvent) {
-                    props.afterDeleteRangeEvent(true);
-                }
+                alert.show('Avtalen(e) ble slettet suksessfullt.', { type: types.SUCCESS });
+                props.afterDeleteRangeEvent?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
-                if (props.afterDeleteRangeEvent) {
-                    props.afterDeleteRangeEvent(false);
-                }
+                props.afterDeleteRangeEvent?.(false);
             },
             onSettled: () => {
                 queryCache.invalidateQueries(eventsDefaultQueryKey);
@@ -109,9 +99,7 @@ export const Event: React.FC<EventProps> = (props) => {
     );
 
     const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
-        async (updatedEvent: ApiEventPatch) => {
-            await patchEvent(updatedEvent, keycloak.token);
-        },
+        (updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, keycloak.token),
         {
             onSuccess: () => {
                 alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
@@ -172,7 +160,7 @@ export const Event: React.FC<EventProps> = (props) => {
         setTimeRange([props.event.start, props.event.end]);
     };
 
-    const handleEditSubmission = async () => {
+    const handleEditSubmission = () => {
         const start = new Date(dateRange[0]);
         const end = new Date(dateRange[1]);
         start.setHours(
@@ -215,7 +203,7 @@ export const Event: React.FC<EventProps> = (props) => {
             endDateTime: end.toISOString(),
         };
 
-        await updateEventMutation(updatedEvent);
+        updateEventMutation(updatedEvent);
     };
 
     return (
@@ -241,11 +229,7 @@ export const Event: React.FC<EventProps> = (props) => {
                             onSelectedDaysChange={handleSelectedDaysChange}
                             recurrenceEnabled={false}
                         />
-                        <EventOptionLocation
-                            isEditing={false}
-                            selectedLocation={props.event.resource.location.id}
-                            locations={[props.event.resource.location]}
-                        />
+                        <EventStationInfo station={props.event.resource.station} />
                     </Options>
                 </Section>
                 {!isEditing && (

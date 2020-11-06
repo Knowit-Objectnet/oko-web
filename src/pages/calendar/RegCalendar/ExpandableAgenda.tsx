@@ -7,6 +7,8 @@ import { useKeycloak } from '@react-keycloak/web';
 import { EventInfo, SlotInfo } from '../../../types';
 import ArrowUp from '../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../assets/ArrowDown.svg';
+import useStations from '../../../api/hooks/useStations';
+import { ApiStation } from '../../../api/StationService';
 
 const Wrapper = styled.div``;
 
@@ -23,10 +25,9 @@ const DateText = styled.span`
     margin-right: 20px;
 `;
 
-interface ExpandableAgendaProps {
+interface Props {
     date: Date;
-    columns: Array<string>;
-    events: Array<Array<EventInfo>>;
+    events: Array<EventInfo>;
     onSelectSlot: (slot: SlotInfo) => void;
     onSelectEvent: (event: EventInfo) => void;
 }
@@ -34,17 +35,20 @@ interface ExpandableAgendaProps {
 /*
  * Agenda component that expands into a week calendar
  */
-export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
-    // Keycloak instance
+export const ExpandableAgenda: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
 
     // State for handling expansion of the agenda/calendar
     const [expanded, setExpanded] = useState(false);
 
-    // Function that handles an event click in the calendar. It displays the Event in a modal
-    const onSelectEvent = (event: EventInfo) => {
-        const eventProps: EventInfo = event as EventInfo;
-        props.onSelectEvent(eventProps);
+    const { data: stations } = useStations();
+    const stationNames = (stations ?? []).map((station) => station.name);
+    const eventsByStation = stationNames.map((stationName) =>
+        props.events.filter((event) => event.resource.station.name === stationName),
+    );
+
+    const handleSelectEvent = (event: EventInfo) => {
+        props.onSelectEvent(event);
     };
 
     // Function that handles time range selection in the calendar
@@ -91,17 +95,17 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     {props.date.toLocaleString('nb-NO', { weekday: 'long', month: 'long', day: 'numeric' })}
                 </DateText>
                 {expanded ? (
-                    <ArrowDown height="1.4em" onClick={onExpandClick} />
-                ) : (
                     <ArrowUp height="1.4em" onClick={onExpandClick} />
+                ) : (
+                    <ArrowDown height="1.4em" onClick={onExpandClick} />
                 )}
             </Header>
             {expanded ? (
                 <SingleDayCalendar
-                    columns={props.columns}
-                    events={props.events}
+                    columns={stationNames}
+                    events={eventsByStation}
                     onSelectSlot={onSelectSlot}
-                    onSelectEvent={onSelectEvent}
+                    onSelectEvent={handleSelectEvent}
                     selectable={keycloak.authenticated}
                     step={15}
                     min={min}
@@ -109,7 +113,7 @@ export const ExpandableAgenda: React.FC<ExpandableAgendaProps> = (props) => {
                     date={props.date}
                 />
             ) : (
-                <Agenda columns={props.columns} events={props.events} />
+                <Agenda columns={stationNames} events={eventsByStation} />
             )}
         </Wrapper>
     );

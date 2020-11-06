@@ -1,6 +1,6 @@
-import { ApiLocation } from "../src/types";
+import {ApiStation} from "../src/api/StationService";
 
-export const mockLocations: Array<ApiLocation> = [
+export const mockStations: Array<ApiStation> = [
     {
         id: 1,
         name: "Haraldrud",

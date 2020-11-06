@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Clock from '../../assets/Clock.svg';
-import { StationOpeningHours } from '../../types';
 import { Dropdown } from '../../sharedComponents/Dropdown';
+import { StationOpeningHours } from '../../api/StationService';
 
 const Wrapper = styled.div`
     flex: 1;
@@ -32,11 +32,11 @@ const StyledClock = styled(Clock)`
     margin-right: 10px;
 `;
 
-interface StationOpeningTimesProps {
+interface Props {
     openingTimes: StationOpeningHours;
 }
 
-export const StationOpeningTimes: React.FC<StationOpeningTimesProps> = (props) => {
+export const StationOpeningTimes: React.FC<Props> = (props) => {
     const getList: () => [Array<React.ReactElement>, number] = () => {
         const list: Array<React.ReactElement> = [];
         const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];

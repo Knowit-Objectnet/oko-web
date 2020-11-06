@@ -5,14 +5,11 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
-import { apiUrl } from '../../src/types';
-import fetch from 'jest-fetch-mock';
 import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
-import { NewLocation } from '../../src/sharedComponents/NewLocation/NewLocation';
-
-// Fetch mock to intercept fetch requests.
-global.fetch = fetch;
+import { NewStation } from '../../src/sharedComponents/NewStation/NewStation';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 
 describe('Provides an interface to submit a new station', () => {
     // Alert options
@@ -23,30 +20,26 @@ describe('Provides an interface to submit a new station', () => {
         transition: transitions.SCALE,
     };
 
+    let axiosMock: MockAdapter;
+
     beforeEach(() => {
-        fetch.resetMocks();
-        fetch.mockResponse(async ({ url }) => {
-            if (url.startsWith(`${apiUrl}/stations`)) {
-                return JSON.stringify('');
-            } else {
-                return '';
-            }
-        });
+        axiosMock = new MockAdapter(axios);
+        axiosMock.onPost('/stations').reply(200, {});
     });
 
     afterEach(() => {
+        axiosMock.reset();
         cleanup();
     });
 
     it('Should submit station on input changes and button click', async () => {
         // mock function for the submission
-        const beforeSubmitMock = jest.fn();
         const afterSubmitMock = jest.fn();
         const { findByText, findByPlaceholderText } = render(
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...options}>
                     <KeycloakProvider keycloak={keycloak}>
-                        <NewLocation beforeSubmit={beforeSubmitMock} afterSubmit={afterSubmitMock} />
+                        <NewStation afterSubmit={afterSubmitMock} />
                     </KeycloakProvider>
                 </AlertProvider>
             </ThemeProvider>,
@@ -57,10 +50,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(nameInput).toBeInTheDocument();
 
         // Write in the station name Test
-        await waitFor(() => {
-            fireEvent.change(nameInput, {
-                target: { value: 'Test' },
-            });
+        fireEvent.change(nameInput, {
+            target: { value: 'Test' },
         });
 
         // Find the text input for the address
@@ -68,10 +59,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(addressInput).toBeInTheDocument();
 
         // Write in the station address Test adresse
-        await waitFor(() => {
-            fireEvent.change(addressInput, {
-                target: { value: 'Test adresse' },
-            });
+        fireEvent.change(addressInput, {
+            target: { value: 'Test adresse' },
         });
 
         // Find the text input for the ambassador name
@@ -79,10 +68,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(ambassadorNameInput).toBeInTheDocument();
 
         // Write in the ambassador name Ola
-        await waitFor(() => {
-            fireEvent.change(ambassadorNameInput, {
-                target: { value: 'Ola' },
-            });
+        fireEvent.change(ambassadorNameInput, {
+            target: { value: 'Ola' },
         });
 
         // Find the text input for the ambassador phone
@@ -90,10 +77,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(ambassadorPhoneInput).toBeInTheDocument();
 
         // Write in the ambassador phone number 40404040
-        await waitFor(() => {
-            fireEvent.change(ambassadorPhoneInput, {
-                target: { value: '40404040' },
-            });
+        fireEvent.change(ambassadorPhoneInput, {
+            target: { value: '40404040' },
         });
 
         // Find the text input for the ambassador mail
@@ -101,10 +86,8 @@ describe('Provides an interface to submit a new station', () => {
         expect(ambassadorMailInput).toBeInTheDocument();
 
         // Write in the ambassador email olaRegTest@knowit.no
-        await waitFor(() => {
-            fireEvent.change(ambassadorMailInput, {
-                target: { value: 'olaRegTest@knowit.no' },
-            });
+        fireEvent.change(ambassadorMailInput, {
+            target: { value: 'olaRegTest@knowit.no' },
         });
 
         // Find the submit button
@@ -112,35 +95,17 @@ describe('Provides an interface to submit a new station', () => {
         expect(submitButton).toBeInTheDocument();
 
         // Click the submission button
+        fireEvent(
+            submitButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
+        );
+
         await waitFor(() => {
-            fireEvent(
-                submitButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            );
+            expect(afterSubmitMock.mock.calls.length).toBe(1);
         });
-
-        // Expect the submission button to be called once and be supplied with the partner name
-        expect(beforeSubmitMock.mock.calls.length).toBe(1);
-        expect(beforeSubmitMock.mock.calls[0]).toEqual([
-            `${apiUrl}/stations`,
-            'Test',
-            {
-                hours: {
-                    FRIDAY: ['07:00:00Z', '20:00:00Z'],
-                    MONDAY: ['07:00:00Z', '20:00:00Z'],
-                    THURSDAY: ['07:00:00Z', '20:00:00Z'],
-                    TUESDAY: ['07:00:00Z', '20:00:00Z'],
-                    WEDNESDAY: ['07:00:00Z', '20:00:00Z'],
-                },
-                name: 'Test',
-            },
-        ]);
-
-        // Expect the submission button to be called once and be supplied with the partner name
-        expect(afterSubmitMock.mock.calls.length).toBe(1);
-        expect(afterSubmitMock.mock.calls[0]).toEqual([true, `${apiUrl}/stations`, null]);
+        expect(afterSubmitMock.mock.calls[0]).toEqual([true]);
     });
 });
