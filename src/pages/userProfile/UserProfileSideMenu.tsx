@@ -63,22 +63,6 @@ export const UserProfileSideMenu: React.FC = () => {
         modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
-    const afterNewPartner = (successful: boolean, key: string, error: Error | null) => {
-        if (successful) {
-            alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
-
-            modal.remove();
-        } else {
-            if (error instanceof FetchError && error.code === 409) {
-                alert.show('En partner med det navnet eksisterer allerede, vennligst velg et annet navn', {
-                    type: types.ERROR,
-                });
-            } else {
-                alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
-            }
-        }
-    };
-
     const afterDeletePartner = (successful: boolean, key: string) => {
         if (successful) {
             alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
@@ -90,7 +74,7 @@ export const UserProfileSideMenu: React.FC = () => {
     };
 
     const showNewPartnerModal = () => {
-        modal.show(<NewPartner afterSubmit={afterNewPartner} />);
+        modal.show(<NewPartner afterSubmit={closeModalOnSuccess} />);
     };
 
     const showDeletePartnerModal = () => {
