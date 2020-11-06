@@ -1,21 +1,18 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { SyntheticEvent, useState } from 'react';
+import { useState } from 'react';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventTemplateVertical } from './EventTemplateVertical';
-import useSWR from 'swr';
-import { fetcher } from '../../utils/fetcher';
 import { useKeycloak } from '@react-keycloak/web';
-import { EventOptionPartner } from './EventOptionPartner';
 import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
-import { apiUrl, WorkingWeekdays } from '../../types';
+import { WorkingWeekdays } from '../../types';
 import { StationSelect } from '../forms/StationSelect';
-import { ApiPartner } from '../../api/PartnerService';
+import { PartnerSelect } from '../forms/PartnerSelect';
 
-const Form = styled.form`
+const StyledForm = styled.form`
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -32,10 +29,6 @@ const WEEKDAYS: Array<WorkingWeekdays> = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THU
 export const NewEvent: React.FC<Props> = (props) => {
     const alert = useAlert();
     const { keycloak } = useKeycloak();
-
-    // Valid partners fetched from api
-    let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
-    partners = partners || [];
 
     const [addEventMutation, { isLoading: addEventLoading }] = useMutation(
         (newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token),
@@ -54,12 +47,11 @@ export const NewEvent: React.FC<Props> = (props) => {
         },
     );
 
-    // State
-    const [selectedPartnerId, setSelectedPartnerId] = useState(-1);
     const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
     const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
     const [selectedDays, setSelectedDays] = useState([1]);
+    const [selectedPartnerId, setSelectedPartnerId] = useState<number>();
     const [selectedStationId, setSelectedStationId] = useState<number>();
 
     const onDateRangeChange = (range: [Date, Date]) => {
@@ -78,12 +70,7 @@ export const NewEvent: React.FC<Props> = (props) => {
         setSelectedDays(num);
     };
 
-    // On change for Partner selection
-    const onPartnerChange = (partnerId: number) => {
-        setSelectedPartnerId(partnerId);
-    };
-
-    const handleEditEventSubmission = (submitEvent: SyntheticEvent) => {
+    const handleEditEventSubmission = (submitEvent: React.FormEvent) => {
         submitEvent.preventDefault();
 
         // Remove all alerts to not multiple alerts from earlier tries.
@@ -99,7 +86,7 @@ export const NewEvent: React.FC<Props> = (props) => {
         }
 
         // Cancel submission if no partner is selected
-        if (selectedPartnerId === -1) {
+        if (!selectedPartnerId) {
             alert.show('Du må velge en samarbeidspartner for avtalen.', { type: types.ERROR });
             return;
         }
@@ -154,12 +141,8 @@ export const NewEvent: React.FC<Props> = (props) => {
 
     return (
         <EventTemplateVertical title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
-            <Form onSubmit={handleEditEventSubmission}>
-                <EventOptionPartner
-                    selectedPartner={selectedPartnerId}
-                    partners={partners}
-                    onChange={onPartnerChange}
-                />
+            <StyledForm onSubmit={handleEditEventSubmission}>
+                <PartnerSelect onSelectedPartnerChange={setSelectedPartnerId} selectedPartnerId={selectedPartnerId} />
                 <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
                 <EventOptionDateRange
                     dateRange={dateRange}
@@ -181,7 +164,7 @@ export const NewEvent: React.FC<Props> = (props) => {
                     styling="margin-top: 20px;"
                     loading={addEventLoading}
                 />
-            </Form>
+            </StyledForm>
         </EventTemplateVertical>
     );
 };
