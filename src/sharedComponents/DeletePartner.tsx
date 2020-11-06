@@ -1,13 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { apiUrl } from '../types';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
-import useSWR from 'swr';
-import { fetcher } from '../utils/fetcher';
-import { DeleteToAPI } from '../utils/DeleteToAPI';
 import { useKeycloak } from '@react-keycloak/web';
-import { ApiPartner } from '../api/PartnerService';
+import { deletePartner, partnersDefaultQueryKey } from '../api/PartnerService';
+import { queryCache, useMutation } from 'react-query';
+import { PartnerSelect } from './forms/PartnerSelect';
+import { Button } from './Button';
 
 const Wrapper = styled.div`
     display: flex;
@@ -29,92 +28,55 @@ const Title = styled.div`
     box-sizing: border-box;
 `;
 
-const Content = styled.div`
-    padding: 0px 35px 35px;
+const StyledForm = styled.form`
+    padding: 0 35px 35px;
     display: flex;
     flex-direction: column;
 `;
 
-const Select = styled.select`
-    width: 100%;
-    min-width: 250px;
-    height: 30px;
-    margin-bottom: 10px;
-`;
-
-const Button = styled.button`
-    height: 35px;
-    background-color: ${(props) => props.theme.colors.Red};
-    border: none;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 20px;
-`;
-
 interface NewPartnerProps {
-    beforeSubmit?: (key: string, id: number) => void;
-    afterSubmit?: (successful: boolean, key: string) => void;
+    afterSubmit?: (successful: boolean) => void;
 }
 
 export const DeletePartner: React.FC<NewPartnerProps> = (props) => {
-    // Keycloak instance
     const { keycloak } = useKeycloak();
-    // Alert instance
     const alert = useAlert();
+
+    const [deletePartnerMutation, { isLoading: deletePartnerLoading }] = useMutation(
+        (partnerId: number) => deletePartner(partnerId, keycloak.token),
+        {
+            onSuccess: () => {
+                alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
+                props.afterSubmit?.(true);
+            },
+            onError: () => {
+                alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
+                props.afterSubmit?.(false);
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries(partnersDefaultQueryKey);
+            },
+        },
+    );
 
     const [selectedPartner, setSelectedPartner] = useState(-1);
 
-    // Valid partners fetched from api
-    let { data: partners } = useSWR<ApiPartner[]>(`${apiUrl}/partners`, fetcher);
-    partners = partners || [];
-
-    const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        e.persist();
-
-        setSelectedPartner(parseInt(e.currentTarget.value));
-    };
-
-    const onSubmit = async () => {
+    const handleDeletePartnerSubmission = (submitEvent: React.FormEvent) => {
+        submitEvent.preventDefault();
         if (selectedPartner === -1) {
             alert.show('Vennligst  velg en samarbeidspartner.', { type: types.ERROR });
             return;
         }
-
-        try {
-            if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/partners/${selectedPartner}`, selectedPartner);
-            }
-
-            await DeleteToAPI(`${apiUrl}/partners/${selectedPartner}`, keycloak.token);
-
-            if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/partners/${selectedPartner}`);
-            }
-        } catch (err) {
-            if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/partners/${selectedPartner}`);
-            }
-        }
+        deletePartnerMutation(selectedPartner);
     };
 
     return (
         <Wrapper>
             <Title>Fjern samarbeidspartner</Title>
-            <Content>
-                <Select value={selectedPartner} onChange={onChange}>
-                    <option value={-1} disabled>
-                        Velg samarbeidspartner
-                    </option>
-                    {partners.map((partner) => (
-                        <option value={partner.id} key={partner.id}>
-                            {partner.name}
-                        </option>
-                    ))}
-                </Select>
-                <Button type="submit" onClick={onSubmit}>
-                    Slett
-                </Button>
-            </Content>
+            <StyledForm onSubmit={handleDeletePartnerSubmission}>
+                <PartnerSelect onSelectedPartnerChange={setSelectedPartner} />
+                <Button loading={deletePartnerLoading} text="Slett" color="Red" />
+            </StyledForm>
         </Wrapper>
     );
 };

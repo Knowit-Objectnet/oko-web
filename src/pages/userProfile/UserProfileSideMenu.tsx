@@ -51,7 +51,6 @@ const Button = styled.div<ButtonProps>`
 
 export const UserProfileSideMenu: React.FC = () => {
     const modal = useModal();
-    const alert = useAlert();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
@@ -63,22 +62,12 @@ export const UserProfileSideMenu: React.FC = () => {
         modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
-    const afterDeletePartner = (successful: boolean, key: string) => {
-        if (successful) {
-            alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
-
-            modal.remove();
-        } else {
-            alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
-        }
-    };
-
     const showNewPartnerModal = () => {
         modal.show(<NewPartner afterSubmit={closeModalOnSuccess} />);
     };
 
     const showDeletePartnerModal = () => {
-        modal.show(<DeletePartner afterSubmit={afterDeletePartner} />);
+        modal.show(<DeletePartner afterSubmit={closeModalOnSuccess} />);
     };
 
     return (
