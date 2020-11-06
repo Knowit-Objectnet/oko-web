@@ -12,7 +12,7 @@ import { Button } from '../Button';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
 import { ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
-import StationSelect from '../forms/StationSelect';
+import { StationSelect } from '../forms/StationSelect';
 
 const Form = styled.form`
     display: flex;

@@ -10,11 +10,19 @@ const Select = styled.select`
 `;
 
 interface Props {
-    selectedStationId: number | undefined;
+    /** Optional station ID that decides which station to currently be selected in the list. */
+    selectedStationId?: number;
+    /** Callback triggered when end user changes what station is selected. */
     onSelectedStationChange: (stationId: number) => void;
 }
 
-const StationSelect: React.FC<Props> = (props) => {
+/**
+ * `<select>` form element that lists all available stations, as well as a default (disabled) option.
+ * The list of stations is retrieved from backend REST API. If the data from backend is loading,
+ * or there is an error getting the data, the `<select>` element is disabled,
+ * and displays a message that informs the end user of the status.
+ */
+export const StationSelect: React.FC<Props> = (props) => {
     const { data: stations, isLoading, isError } = useStations();
 
     const handleSelectedStationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -38,5 +46,3 @@ const StationSelect: React.FC<Props> = (props) => {
         </Select>
     );
 };
-
-export default StationSelect;

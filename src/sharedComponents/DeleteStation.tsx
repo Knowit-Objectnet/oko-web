@@ -6,7 +6,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
 import { Button } from './Button';
-import StationSelect from './forms/StationSelect';
+import { StationSelect } from './forms/StationSelect';
 
 const Wrapper = styled.div`
     display: flex;
