@@ -5,6 +5,10 @@ import Minus from '../../assets/Minus.svg';
 import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import { DeleteStation } from '../../sharedComponents/DeleteStation';
 import useModal from '../../sharedComponents/Modal/useModal';
+import { types, useAlert } from 'react-alert';
+import { FetchError } from '../../utils/FetchError';
+import { NewPartner } from '../../sharedComponents/NewPartner';
+import { DeletePartner } from '../../sharedComponents/DeletePartner';
 
 const Wrapper = styled.div`
     display: flex;
@@ -45,23 +49,11 @@ const Button = styled.div<ButtonProps>`
     }
 `;
 
-interface Props {
-    newPartnerClick: () => void;
-    deletePartnerClick: () => void;
-}
-
-/**
- * Component that lets a user either create a new event (if REG) or toggle between agenda and calendar (if
- * ambassador or partner)
- */
-export const UserProfileSideMenu: React.FC<Props> = (props) => {
+export const UserProfileSideMenu: React.FC = () => {
     const modal = useModal();
+    const alert = useAlert();
 
-    const closeModalOnSuccess = (successful: boolean) => {
-        if (successful) {
-            modal.remove();
-        }
-    };
+    const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
     const showNewStationModal = () => {
         modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
@@ -71,11 +63,45 @@ export const UserProfileSideMenu: React.FC<Props> = (props) => {
         modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
+    const afterNewPartner = (successful: boolean, key: string, error: Error | null) => {
+        if (successful) {
+            alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
+
+            modal.remove();
+        } else {
+            if (error instanceof FetchError && error.code === 409) {
+                alert.show('En partner med det navnet eksisterer allerede, vennligst velg et annet navn', {
+                    type: types.ERROR,
+                });
+            } else {
+                alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
+            }
+        }
+    };
+
+    const afterDeletePartner = (successful: boolean, key: string) => {
+        if (successful) {
+            alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
+
+            modal.remove();
+        } else {
+            alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
+        }
+    };
+
+    const showNewPartnerModal = () => {
+        modal.show(<NewPartner afterSubmit={afterNewPartner} />);
+    };
+
+    const showDeletePartnerModal = () => {
+        modal.show(<DeletePartner afterSubmit={afterDeletePartner} />);
+    };
+
     return (
         <Wrapper>
             <Item>
                 <Description>Ny sam.partner</Description>
-                <Button onClick={props.newPartnerClick}>
+                <Button onClick={showNewPartnerModal}>
                     <Plus height="100%" />
                 </Button>
             </Item>
@@ -87,7 +113,7 @@ export const UserProfileSideMenu: React.FC<Props> = (props) => {
             </Item>
             <Item>
                 <Description>Slett sam.partner</Description>
-                <Button deletion={true} onClick={props.deletePartnerClick}>
+                <Button deletion={true} onClick={showDeletePartnerModal}>
                     <Minus height="100%" />
                 </Button>
             </Item>

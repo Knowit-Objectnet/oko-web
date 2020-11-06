@@ -1,8 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { useQuery } from 'react-query';
-import { ApiPartner, getPartnerById, partnersDefaultQueryKey } from '../../api/PartnerService';
 import { usePartnerById } from '../../api/hooks/usePartnerById';
 
 const Wrapper = styled.div`
@@ -14,13 +12,9 @@ const Wrapper = styled.div`
     margin-bottom: 45px;
 `;
 
-const Title = styled.p`
+const Title = styled.h3`
     font-weight: bold;
     margin-top: 0;
-`;
-
-const Text = styled.p`
-    font-size: 14px;
 `;
 
 export const AboutPartner: React.FC = () => {
@@ -36,7 +30,7 @@ export const AboutPartner: React.FC = () => {
                 : partnerInfo && (
                       <>
                           <Title>Om {partnerInfo.name}</Title>
-                          <Text>{partnerInfo.description}</Text>
+                          <p>{partnerInfo.description}</p>
                       </>
                   )}
         </Wrapper>
