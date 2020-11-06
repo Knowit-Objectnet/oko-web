@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import { ApiPartner } from '../../types';
+import { ApiPartner } from '../../api/PartnerService';
 
 const Select = styled.select`
     width: 100%;

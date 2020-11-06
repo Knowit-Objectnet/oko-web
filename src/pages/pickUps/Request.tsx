@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner } from '../../types';
 import { Button } from '../../sharedComponents/Button';
+import { ApiPartner } from '../../api/PartnerService';
 
 const Partner = styled.div`
     display: flex;

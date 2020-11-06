@@ -1,10 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
-import { ApiPartner, ApiRequest, apiUrl } from '../../types';
+import { ApiRequest, apiUrl } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 import { Request } from './Request';
 import { useEffect, useState } from 'react';
+import { ApiPartner } from '../../api/PartnerService';
 
 const Wrapper = styled.div`
     display: flex;

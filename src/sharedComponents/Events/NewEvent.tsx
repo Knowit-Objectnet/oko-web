@@ -11,8 +11,9 @@ import { types, useAlert } from 'react-alert';
 import { Button } from '../Button';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
-import { ApiPartner, apiUrl, WorkingWeekdays } from '../../types';
+import { apiUrl, WorkingWeekdays } from '../../types';
 import { StationSelect } from '../forms/StationSelect';
+import { ApiPartner } from '../../api/PartnerService';
 
 const Form = styled.form`
     display: flex;

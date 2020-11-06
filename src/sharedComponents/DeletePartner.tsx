@@ -1,12 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, apiUrl } from '../types';
+import { apiUrl } from '../types';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import useSWR from 'swr';
 import { fetcher } from '../utils/fetcher';
 import { DeleteToAPI } from '../utils/DeleteToAPI';
 import { useKeycloak } from '@react-keycloak/web';
+import { ApiPartner } from '../api/PartnerService';
 
 const Wrapper = styled.div`
     display: flex;

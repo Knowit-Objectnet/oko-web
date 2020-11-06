@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, PickUp, Roles } from '../../types';
+import { PickUp, Roles } from '../../types';
 import keycloak from '../../keycloak';
 import { PartnerRequestForm } from './PartnerRequestForm';
 import { Requests } from './Requests';
+import { ApiPartner } from '../../api/PartnerService';
 
 const Wrapper = styled.div`
     width: 100%;

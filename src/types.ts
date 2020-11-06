@@ -1,4 +1,5 @@
 import { ApiStation } from './api/StationService';
+import { ApiPartner } from './api/PartnerService';
 
 export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
@@ -26,14 +27,6 @@ interface EventInfoResource {
         end: Date;
         text: string;
     };
-}
-
-export interface ApiPartner {
-    id: number;
-    name: string;
-    description: string;
-    phone: string;
-    email: string;
 }
 
 export interface ApiWithdrawal {

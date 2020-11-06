@@ -2,7 +2,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { QueryResult, useQuery } from 'react-query';
 import { ApiStation, getStations, stationsDefaultQueryKey } from '../StationService';
 
-const useStations = (): QueryResult<Array<ApiStation>> => {
+export const useStations = (): QueryResult<Array<ApiStation>> => {
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiStation>>({
@@ -10,5 +10,3 @@ const useStations = (): QueryResult<Array<ApiStation>> => {
         queryFn: getStations,
     });
 };
-
-export default useStations;
