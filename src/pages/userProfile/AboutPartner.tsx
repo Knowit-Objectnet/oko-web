@@ -25,7 +25,7 @@ export const AboutPartner: React.FC = () => {
 
     return (
         <Wrapper>
-            {!partnerInfo && isLoading
+            {isLoading
                 ? 'Laster inn...'
                 : partnerInfo && (
                       <>

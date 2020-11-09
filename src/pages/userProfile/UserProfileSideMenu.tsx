@@ -5,8 +5,6 @@ import Minus from '../../assets/Minus.svg';
 import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import { DeleteStation } from '../../sharedComponents/DeleteStation';
 import useModal from '../../sharedComponents/Modal/useModal';
-import { types, useAlert } from 'react-alert';
-import { FetchError } from '../../utils/FetchError';
 import { NewPartner } from '../../sharedComponents/NewPartner';
 import { DeletePartner } from '../../sharedComponents/DeletePartner';
 
