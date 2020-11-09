@@ -1,10 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { PickUp, Roles } from '../../types';
-import keycloak from '../../keycloak';
+import { Roles } from '../../types';
 import { PartnerRequestForm } from './PartnerRequestForm';
 import { Requests } from './Requests';
 import { ApiPartner } from '../../api/PartnerService';
+import { ApiPickUp } from '../../api/PickUpService';
+import { format } from 'date-fns';
+import { useKeycloak } from '@react-keycloak/web';
+import { nb } from 'date-fns/locale';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -59,71 +62,55 @@ const Registration = styled.div`
     width: 350px;
 `;
 
-interface Props extends PickUp {
-    groupId?: number;
-    registerRequest: (pickupId: number, partnerId: number) => void;
-    deleteRequest: (pickupId: number, partnerId: number) => void;
-    onReject: (partner: ApiPartner, pickupId: number) => void;
-    onApprove: (partner: ApiPartner, pickupId: number) => void;
+interface Props {
+    pickUp: ApiPickUp;
 }
 
-export const PickUpRequest: React.FC<Props> = (props) => (
-    <Wrapper>
-        <Content>
-            <LocationDate>
-                <Location>{props.station.name}</Location>
-                <span>{`${props.startDateTime
-                    .getDate()
-                    .toString()
-                    .padStart(2, '0')}.${props.startDateTime
-                    .getMonth()
-                    .toString()
-                    .padStart(2, '0')}.${props.startDateTime.getFullYear().toString().padStart(2, '0')}`}</span>
-            </LocationDate>
-            <Event>
-                {`${props.startDateTime
-                    .getHours()
-                    .toString()
-                    .padStart(2, '0')}:${props.startDateTime
-                    .getMinutes()
-                    .toString()
-                    .padStart(2, '0')} - ${props.endDateTime
-                    .getHours()
-                    .toString()
-                    .padStart(2, '0')}:${props.endDateTime
-                    .getMinutes()
-                    .toString()
-                    .padStart(2, '0')} ${props.startDateTime.toLocaleString('nb-NO', {
-                    weekday: 'short',
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                })}`}
-            </Event>
-            <Registration>
-                {keycloak.hasRealmRole(Roles.Partner) && props.groupId ? (
-                    <PartnerRequestForm
-                        partnerId={props.groupId}
-                        selectedPartnerId={props.chosenPartner?.id}
-                        pickupId={props.id}
-                        deleteRequest={props.deleteRequest}
-                        registerRequest={props.registerRequest}
-                    />
-                ) : (
-                    <Requests
-                        pickupId={props.id}
-                        selectedPartnerId={props.chosenPartner?.id}
-                        isStation={props.groupId === props.station.id}
-                        onApprove={props.onApprove}
-                        onReject={props.onReject}
-                    />
-                )}
-            </Registration>
-        </Content>
-        {props.description && (
-            <Notice>
-                <NoticeText>Merknad:</NoticeText> {props.description}
-            </Notice>
-        )}
-    </Wrapper>
-);
+export const PickUpRequest: React.FC<Props> = (props) => {
+    const { keycloak } = useKeycloak();
+    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
+    const userId = keycloak.tokenParsed?.GroupID;
+
+    const { pickUp } = props;
+    const startDateTime = new Date(pickUp.startDateTime);
+    const endDateTime = new Date(pickUp.endDateTime);
+    return (
+        <Wrapper>
+            <Content>
+                <LocationDate>
+                    <Location>{pickUp.station.name}</Location>
+                    {
+                        // TODO: this should be 'createdDateTime', when backend supports it
+                        format(startDateTime, 'dd.MM.yyyy')
+                    }
+                </LocationDate>
+                <Event>
+                    {format(startDateTime, 'HH:mm')}
+                    &ndash;
+                    {format(endDateTime, 'HH:mm')}
+                    {format(startDateTime, ' eee. d. MMMM yyyy', { locale: nb })}
+                </Event>
+                <Registration>
+                    {userIsPartner && userId ? (
+                        <PartnerRequestForm
+                            partnerId={userId}
+                            selectedPartnerId={pickUp.chosenPartner?.id}
+                            pickupId={pickUp.id}
+                        />
+                    ) : (
+                        <Requests
+                            pickupId={pickUp.id}
+                            selectedPartnerId={pickUp.chosenPartner?.id}
+                            isStation={pickUp.station.id === userId}
+                        />
+                    )}
+                </Registration>
+            </Content>
+            {pickUp.description && (
+                <Notice>
+                    <NoticeText>Merknad:</NoticeText> {pickUp.description}
+                </Notice>
+            )}
+        </Wrapper>
+    );
+};

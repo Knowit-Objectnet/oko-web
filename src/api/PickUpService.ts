@@ -2,7 +2,7 @@ import { httpClient } from './httpClient';
 import { ApiStation } from './StationService';
 import { ApiPartner } from './PartnerService';
 
-const endpoint = '/pickUps';
+const endpoint = '/pickups';
 export const pickUpsDefaultQueryKey = 'getPickUps';
 
 export interface ApiPickUp {
@@ -11,7 +11,7 @@ export interface ApiPickUp {
     endDateTime: string;
     description: string;
     station: ApiStation;
-    partner: ApiPartner;
+    chosenPartner?: ApiPartner;
 }
 
 export interface ApiPickUpPost {

@@ -2,6 +2,11 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Button } from '../../sharedComponents/Button';
 import { ApiPartner } from '../../api/PartnerService';
+import { PatchToAPI } from '../../utils/PatchToAPI';
+import { apiUrl } from '../../types';
+import { types, useAlert } from 'react-alert';
+import { mutate } from 'swr';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Partner = styled.div`
     display: flex;
@@ -63,20 +68,27 @@ interface Props {
     partner: ApiPartner;
     selectedId?: number;
     isStation: boolean;
-    onReject: (partner: ApiPartner, pickupId: number) => void;
-    onApprove: (partner: ApiPartner, pickupId: number) => void;
 }
 
 export const Request: React.FC<Props> = (props) => {
-    // Function to handle the rejection of a request
-    // TODO: Currently not used as backend doesnt support it
-    const onReject = () => {
-        props.onApprove(props.partner, props.pickupId);
-    };
+    const { keycloak } = useKeycloak();
+    const alert = useAlert();
 
     // Function to handle the approval of a request
-    const onApprove = () => {
-        props.onApprove(props.partner, props.pickupId);
+    const onApprove = async () => {
+        try {
+            await PatchToAPI(
+                `${apiUrl}/pickups`,
+                { id: props.pickupId, chosenPartnerId: props.partner.id },
+                keycloak.token,
+            );
+            alert.show('Valg av sam.partner til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
+            mutate(`${apiUrl}/pickups/`);
+        } catch {
+            alert.show('Noe gikk galt, valg av sam.partner til ekstrauttak ble ikke registrert.', {
+                type: types.ERROR,
+            });
+        }
     };
 
     return (

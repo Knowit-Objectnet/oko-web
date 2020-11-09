@@ -1,11 +1,15 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ApiRequest, apiUrl } from '../../types';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
 import Cross from '../../assets/Cross.svg';
 import { Colors } from '../../theme';
+import { types, useAlert } from 'react-alert';
+import { PostToAPI } from '../../utils/PostToAPI';
+import { DeleteToAPI } from '../../utils/DeleteToAPI';
+import { useKeycloak } from '@react-keycloak/web';
 
 const Wrapper = styled.div`
     display: flex;
@@ -27,12 +31,12 @@ interface PartnerRequestFormProps {
     partnerId: number;
     selectedPartnerId?: number;
     pickupId: number;
-    registerRequest: (pickupId: number, partnerId: number) => void;
-    deleteRequest: (pickupId: number, partnerId: number) => void;
 }
 
 export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => {
-    // Fetching data from API
+    const { keycloak } = useKeycloak();
+    const alert = useAlert();
+
     const { data: apiRequest, isValidating } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${props.pickupId}&partnerId=${props.partnerId}`,
         fetcher,
@@ -40,14 +44,33 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => 
     // Getting the apiRequest object if it isnt empty (its always 1 or empty]
     const request = apiRequest ? apiRequest[0] : undefined;
 
-    // Function to handle deletion of request
-    const onDeleteClick = () => {
-        props.deleteRequest(props.pickupId, props.partnerId);
+    const onRegisterClick = async () => {
+        try {
+            await PostToAPI(
+                `${apiUrl}/requests`,
+                { pickupId: props.pickupId, partnerId: props.partnerId },
+                keycloak.token,
+            );
+            alert.show('Påmelding til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
+            mutate(`${apiUrl}/requests/?pickupId=${props.pickupId}&partnerId=${props.partnerId}`);
+        } catch {
+            alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
+        }
     };
 
-    // Function to handle registration of request
-    const onRegisterClick = () => {
-        props.registerRequest(props.pickupId, props.partnerId);
+    const onDeleteClick = async () => {
+        try {
+            await DeleteToAPI(
+                `${apiUrl}/requests?pickupId=${props.pickupId}&partnerId=${props.partnerId}`,
+                keycloak.token,
+            );
+            alert.show('Påmelding til ekstrauttak ble sletteet suksessfullt.', { type: types.SUCCESS });
+            mutate(`${apiUrl}/requests/?pickupId=${props.pickupId}&partnerId=${props.partnerId}`);
+        } catch {
+            alert.show('Noe gikk galt, sletting av påmelding til ekstrauttaket ble ikke registrert.', {
+                type: types.ERROR,
+            });
+        }
     };
 
     // Selection of correct button

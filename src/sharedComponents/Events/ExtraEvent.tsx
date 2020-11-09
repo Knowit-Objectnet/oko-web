@@ -3,10 +3,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { ApiPickUp, apiUrl } from '../../types';
+import { apiUrl } from '../../types';
 import { Button } from '../Button';
 import { PostToAPI } from '../../utils/PostToAPI';
 import { useKeycloak } from '@react-keycloak/web';
+import { types, useAlert } from 'react-alert';
 
 const Textarea = styled.textarea`
     min-height: 54px;
@@ -19,8 +20,7 @@ const Textarea = styled.textarea`
 interface Props {
     start: Date;
     end: Date;
-    beforeSubmit?: (key: string, newPickup: ApiPickUp) => void;
-    afterSubmit?: (successful: boolean, key: string) => void;
+    afterSubmit?: (successful: boolean) => void;
 }
 
 /**
@@ -29,6 +29,7 @@ interface Props {
  */
 export const ExtraEvent: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
+    const alert = useAlert();
 
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
@@ -67,42 +68,19 @@ export const ExtraEvent: React.FC<Props> = (props) => {
         end.setHours(timeRange[1].getHours(), timeRange[1].getMinutes(), 0, 0);
 
         try {
-            // Data for new extra event
-            const data = {
-                startDateTime: start,
-                endDateTime: end,
-                description: description,
-                stationId: keycloak.tokenParsed.GroupID,
-            };
-
-            // Local state update data
-            const newExtraEvent = {
-                id: -1,
+            // TODO: Type ApiPickUpPatch
+            const newPickUp = {
                 startDateTime: start.toISOString(),
                 endDateTime: end.toISOString(),
                 description: description,
-                station: {
-                    id: parseInt(keycloak.tokenParsed.GroupID),
-                    name: keycloak.tokenParsed.groups[0],
-                    hours: {},
-                },
-                chosenPartner: null,
+                stationId: keycloak.tokenParsed.GroupID,
             };
-
-            if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/pickups/`, newExtraEvent);
-            }
-
-            // Post extra event to API
-            await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
-            // Give userfeedback and close modal
-            if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/pickups/`);
-            }
+            await PostToAPI(`${apiUrl}/pickups`, newPickUp, keycloak.token);
+            alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
+            props.afterSubmit?.(true);
         } catch {
-            if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/pickups/`);
-            }
+            alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
+            props.afterSubmit?.(false);
         }
     };
 
