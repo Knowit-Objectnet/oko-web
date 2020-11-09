@@ -59,7 +59,7 @@ export const DeletePartner: React.FC<Props> = (props) => {
         },
     );
 
-    const [selectedPartner, setSelectedPartner] = useState(-1);
+    const [selectedPartner, setSelectedPartner] = useState<number>();
 
     const handleDeletePartnerSubmission = (submitEvent: React.FormEvent) => {
         submitEvent.preventDefault();
@@ -74,7 +74,7 @@ export const DeletePartner: React.FC<Props> = (props) => {
         <Wrapper>
             <Title>Fjern samarbeidspartner</Title>
             <StyledForm onSubmit={handleDeletePartnerSubmission}>
-                <PartnerSelect onSelectedPartnerChange={setSelectedPartner} />
+                <PartnerSelect onSelectedPartnerChange={setSelectedPartner} selectedPartnerId={selectedPartner} />
                 <Button loading={deletePartnerLoading} text="Slett" color="Red" />
             </StyledForm>
         </Wrapper>
