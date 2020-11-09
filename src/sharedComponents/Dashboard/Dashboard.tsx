@@ -9,13 +9,14 @@ const Wrapper = styled.div`
     flex-direction: column;
     height: 100%;
     width: 100%;
-    overflow: hidden;
 `;
 
 const Body = styled.div`
     height: Calc(100% - 125px);
     display: flex;
     position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
 `;
 
 const Page = styled.div`

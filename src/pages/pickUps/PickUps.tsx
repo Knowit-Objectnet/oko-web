@@ -4,14 +4,13 @@ import { Roles } from '../../types';
 import { PickUpRequest } from './PickUpRequest';
 import Plus from '../../assets/Plus.svg';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
-import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { Loading } from '../../sharedComponents/Loading';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
 import { usePickUps } from '../../api/hooks/usePickUps';
-import { mutate } from 'swr';
+import { FloatingActionButton } from '../../sharedComponents/FloatingActionButton';
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,75 +22,47 @@ const Wrapper = styled.div`
 `;
 
 const Content = styled.div`
-    margin-top: 90px;
-    margin-bottom: 20px;
+    padding-top: 90px;
+    padding-bottom: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     width: 80%;
     height: 100%;
-    overflow: auto;
 `;
 
-const Explanation = styled.div`
+const HeaderRow = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
 `;
 
-const ExplanationLocation = styled.div`
-    width: 150px;
+const HeaderLeft = styled.div`
+    flex-basis: 150px;
 `;
 
-const ExplanationPickup = styled.div`
+const HeaderCenter = styled.div`
     flex: 1;
 `;
 
-const ExplanationLast = styled.div`
-    width: 350px;
+const HeaderRight = styled.div`
+    flex-basis: 350px;
 `;
 
-const PickUpsList = styled.div`
+const AddPickUpButtonContainer = styled.div`
+    position: absolute;
+    top: 40px;
+    right: 50px;
+`;
+
+const PickUpList = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     width: 100%;
     height: 100%;
-    overflow: auto;
-`;
-
-const Item = styled.div`
-    position: absolute;
-    top: 40px;
-    right: 50px;
-    display: flex;
-    flex-direction: row;
-    &:not(:last-child) {
-        margin-bottom: 25px;
-    }
-`;
-
-const Description = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 150px;
-    background-color: ${(props) => props.theme.colors.LightBeige};
-`;
-
-const Button = styled.div`
-    width: 50px;
-    height: 50px;
-    padding: 10px;
-    background-color: ${(props) => props.theme.colors.Green};
-    border-radius: 50%;
-    box-sizing: border-box;
-
-    &:not(:last-child) {
-        margin-bottom: 30px;
-    }
 `;
 
 export const PickUps: React.FC = () => {
@@ -124,33 +95,33 @@ export const PickUps: React.FC = () => {
     return (
         <>
             <Helmet>
-                <title>Ektrauttak</title>
+                <title>Ekstrauttak</title>
             </Helmet>
             <Wrapper>
                 {userIsStation && (
-                    <Item>
-                        <Description>Ektrauttak</Description>
-                        <Button onClick={showNewPickUpModal}>
-                            <Plus height="100%" />
-                        </Button>
-                    </Item>
+                    <AddPickUpButtonContainer>
+                        <FloatingActionButton
+                            label="Nytt ekstrauttak"
+                            icon={<Plus />}
+                            onClick={showNewPickUpModal}
+                            variant="Positive"
+                        />
+                    </AddPickUpButtonContainer>
                 )}
                 <Content>
                     <h2>Forespørsler</h2>
-                    <Explanation>
-                        <ExplanationLocation>Sendt av:</ExplanationLocation>
-                        <ExplanationPickup>Uttak:</ExplanationPickup>
-                        <ExplanationLast>{userIsStation ? 'Handlingsalternativer:' : 'Påmeldte:'}</ExplanationLast>
-                    </Explanation>
-                    <PickUpsList>
+                    <HeaderRow>
+                        <HeaderLeft>Sendt av:</HeaderLeft>
+                        <HeaderCenter>Uttak:</HeaderCenter>
+                        <HeaderRight>{userIsStation ? 'Handlingsalternativer:' : 'Påmeldte:'}</HeaderRight>
+                    </HeaderRow>
+                    <PickUpList>
                         {isLoading ? (
                             <Loading text="Laster inn data..." />
                         ) : (
-                            sortedPickups?.map((pickUp) => (
-                                <PickUpRequest key={`Pickup: ${pickUp.id}`} pickUp={pickUp} />
-                            ))
+                            sortedPickups?.map((pickUp) => <PickUpRequest key={pickUp.id} pickUp={pickUp} />)
                         )}
-                    </PickUpsList>
+                    </PickUpList>
                 </Content>
             </Wrapper>
         </>

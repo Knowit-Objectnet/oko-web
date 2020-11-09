@@ -18,7 +18,7 @@ export interface ApiPickUpPost {
     stationId: number;
     startDateTime: string;
     endDateTime: string;
-    description?: string;
+    description: string;
 }
 
 export interface ApiPickUpPatch {
