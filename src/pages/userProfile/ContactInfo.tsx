@@ -112,14 +112,14 @@ const Input = styled.input`
     border: none;
 `;
 
-interface ContactInfoProps {
+interface Props {
     info: { name: string; phone?: string; mail: string };
 }
 
 /**
  * Contact info component
  */
-export const ContactInfo: React.FC<ContactInfoProps> = (props) => {
+export const ContactInfo: React.FC<Props> = (props) => {
     const [editing, setEditing] = useState(false);
     const [name, setName] = useState(props.info.name);
     const [phone, setPhone] = useState(props.info.phone);

@@ -6,7 +6,7 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
-import { MyPage } from '../../src/pages/myPage/MyPage';
+import { UserProfile } from '../../src/pages/userProfile/UserProfile';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
 import ModalProvider from '../../src/sharedComponents/Modal/Provider';
@@ -44,7 +44,7 @@ describe('Provides a page to view contact info', () => {
                     <ModalProvider>
                         <KeycloakProvider keycloak={keycloak}>
                             <Router history={history}>
-                                <MyPage />
+                                <UserProfile />
                             </Router>
                         </KeycloakProvider>
                     </ModalProvider>
@@ -78,7 +78,7 @@ describe('Provides a page to view contact info', () => {
                     <ModalProvider>
                         <KeycloakProvider keycloak={keycloak}>
                             <Router history={history}>
-                                <MyPage />
+                                <UserProfile />
                             </Router>
                         </KeycloakProvider>
                     </ModalProvider>

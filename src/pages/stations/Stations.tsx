@@ -8,7 +8,7 @@ import useModal from '../../sharedComponents/Modal/useModal';
 import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import keycloak from '../../keycloak';
 import { Helmet } from 'react-helmet';
-import useStations from '../../api/hooks/useStations';
+import { useStations } from '../../api/hooks/useStations';
 
 const Wrapper = styled.div`
     display: flex;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useStations from '../../api/hooks/useStations';
+import { useStations } from '../../api/hooks/useStations';
 import styled from 'styled-components';
 
 const Select = styled.select`

@@ -1,10 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
-import { ApiPartner, ApiRequest, apiUrl } from '../../types';
+import { ApiRequest, apiUrl } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 import { Request } from './Request';
 import { useEffect, useState } from 'react';
+import { ApiPartner } from '../../api/PartnerService';
 
 const Wrapper = styled.div`
     display: flex;
@@ -22,7 +23,7 @@ const NoRequests = styled.div`
     height: 100%;
 `;
 
-interface RequestsProps {
+interface Props {
     pickupId: number;
     selectedPartnerId?: number;
     isStation: boolean;
@@ -30,7 +31,7 @@ interface RequestsProps {
     onApprove: (partner: ApiPartner, pickupId: number) => void;
 }
 
-export const Requests: React.FC<RequestsProps> = (props) => {
+export const Requests: React.FC<Props> = (props) => {
     // Get the requests for the pickup from the API
     const { data: apiRequests, isValidating } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${props.pickupId}`,

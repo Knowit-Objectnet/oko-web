@@ -5,6 +5,8 @@ import Minus from '../../assets/Minus.svg';
 import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import { DeleteStation } from '../../sharedComponents/DeleteStation';
 import useModal from '../../sharedComponents/Modal/useModal';
+import { NewPartner } from '../../sharedComponents/NewPartner';
+import { DeletePartner } from '../../sharedComponents/DeletePartner';
 
 const Wrapper = styled.div`
     display: flex;
@@ -45,23 +47,10 @@ const Button = styled.div<ButtonProps>`
     }
 `;
 
-interface Props {
-    newPartnerClick: () => void;
-    deletePartnerClick: () => void;
-}
-
-/**
- * Component that lets a user either create a new event (if REG) or toggle between agenda and calendar (if
- * ambassador or partner)
- */
-export const MyPageSideMenu: React.FC<Props> = (props) => {
+export const UserProfileSideMenu: React.FC = () => {
     const modal = useModal();
 
-    const closeModalOnSuccess = (successful: boolean) => {
-        if (successful) {
-            modal.remove();
-        }
-    };
+    const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
     const showNewStationModal = () => {
         modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
@@ -71,11 +60,19 @@ export const MyPageSideMenu: React.FC<Props> = (props) => {
         modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
+    const showNewPartnerModal = () => {
+        modal.show(<NewPartner afterSubmit={closeModalOnSuccess} />);
+    };
+
+    const showDeletePartnerModal = () => {
+        modal.show(<DeletePartner afterSubmit={closeModalOnSuccess} />);
+    };
+
     return (
         <Wrapper>
             <Item>
                 <Description>Ny sam.partner</Description>
-                <Button onClick={props.newPartnerClick}>
+                <Button onClick={showNewPartnerModal}>
                     <Plus height="100%" />
                 </Button>
             </Item>
@@ -87,7 +84,7 @@ export const MyPageSideMenu: React.FC<Props> = (props) => {
             </Item>
             <Item>
                 <Description>Slett sam.partner</Description>
-                <Button deletion={true} onClick={props.deletePartnerClick}>
+                <Button deletion={true} onClick={showDeletePartnerModal}>
                     <Minus height="100%" />
                 </Button>
             </Item>

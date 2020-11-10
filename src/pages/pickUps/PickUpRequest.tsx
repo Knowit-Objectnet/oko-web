@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPartner, PickUp, Roles } from '../../types';
+import { PickUp, Roles } from '../../types';
 import keycloak from '../../keycloak';
 import { PartnerRequestForm } from './PartnerRequestForm';
 import { Requests } from './Requests';
+import { ApiPartner } from '../../api/PartnerService';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -58,7 +59,7 @@ const Registration = styled.div`
     width: 350px;
 `;
 
-interface PickUpRequestProps extends PickUp {
+interface Props extends PickUp {
     groupId?: number;
     registerRequest: (pickupId: number, partnerId: number) => void;
     deleteRequest: (pickupId: number, partnerId: number) => void;
@@ -66,7 +67,7 @@ interface PickUpRequestProps extends PickUp {
     onApprove: (partner: ApiPartner, pickupId: number) => void;
 }
 
-export const PickUpRequest: React.FC<PickUpRequestProps> = (props) => (
+export const PickUpRequest: React.FC<Props> = (props) => (
     <Wrapper>
         <Content>
             <LocationDate>

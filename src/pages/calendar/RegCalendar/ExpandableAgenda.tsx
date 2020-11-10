@@ -7,8 +7,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { EventInfo, SlotInfo } from '../../../types';
 import ArrowUp from '../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../assets/ArrowDown.svg';
-import useStations from '../../../api/hooks/useStations';
-import { ApiStation } from '../../../api/StationService';
+import { useStations } from '../../../api/hooks/useStations';
 
 const Wrapper = styled.div``;
 

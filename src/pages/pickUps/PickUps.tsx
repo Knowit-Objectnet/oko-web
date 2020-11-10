@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import useSWR, { mutate } from 'swr';
-import { ApiPartner, ApiPickUp, apiUrl, PickUp, Roles } from '../../types';
+import { ApiPickUp, apiUrl, PickUp, Roles } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 import { useEffect, useState } from 'react';
 import { PickUpRequest } from './PickUpRequest';
@@ -16,6 +16,7 @@ import { Loading } from '../../sharedComponents/Loading';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
+import { ApiPartner } from '../../api/PartnerService';
 
 const Wrapper = styled.div`
     display: flex;
