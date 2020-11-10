@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import ErrorText from './ErrorText';
 
-const Test = styled.span`
+const Wrapper = styled.span`
     display: block;
     width: 100%;
 `;
@@ -12,10 +12,10 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = React.forwardRef<HTMLInputElement, Props>(({ error, ...rest }, forwardRef) => (
-    <Test>
+    <Wrapper>
         {error && <ErrorText error={error} />}
         <input {...rest} ref={forwardRef} />
-    </Test>
+    </Wrapper>
 ));
 
 Input.displayName = 'Input';

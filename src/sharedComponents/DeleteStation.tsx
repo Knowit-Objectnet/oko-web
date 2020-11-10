@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
 import { Button } from './Button';
-import { StationSelect } from './forms/StationSelect';
+import { StationSelectNew } from './forms/StationSelectNew';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -68,8 +67,6 @@ export const DeleteStation: React.FC<Props> = (props) => {
         },
     );
 
-    const [selectedStationId, setSelectedStationId] = useState<number>();
-
     const handleDeleteStationSubmission = formMethods.handleSubmit((data) =>
         deleteStationMutation(data.selectedStation),
     );
@@ -79,10 +76,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
             <Title>Slett stasjon</Title>
             <FormProvider {...formMethods}>
                 <StyledForm onSubmit={handleDeleteStationSubmission}>
-                    <StationSelect
-                        onSelectedStationChange={setSelectedStationId}
-                        selectedStationId={selectedStationId}
-                    />
+                    <StationSelectNew />
                     <Button text="Slett" type="submit" loading={deleteStationLoading} color="Red" />
                 </StyledForm>
             </FormProvider>
