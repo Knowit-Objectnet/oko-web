@@ -7,6 +7,9 @@ import { queryCache, useMutation } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
 import { Button } from './Button';
 import { StationSelect } from './forms/StationSelect';
+import { useForm, FormProvider } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const Wrapper = styled.div`
     display: flex;
@@ -34,6 +37,10 @@ const StyledForm = styled.form`
     flex-direction: column;
 `;
 
+const validationSchema = yup.object().shape({
+    selectedStation: yup.number().min(0, 'Vennligst velg en stasjon').required('Vennligst velg en stasjon').default(-1),
+});
+
 interface Props {
     afterSubmit?: (successful: boolean) => void;
 }
@@ -41,6 +48,8 @@ interface Props {
 export const DeleteStation: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
+
+    const formMethods = useForm({ resolver: yupResolver(validationSchema) });
 
     const [deleteStationMutation, { isLoading: deleteStationLoading }] = useMutation(
         (stationId: number) => deleteStation(stationId, keycloak.token),
@@ -61,23 +70,22 @@ export const DeleteStation: React.FC<Props> = (props) => {
 
     const [selectedStationId, setSelectedStationId] = useState<number>();
 
-    const handleDeleteStationSubmission = (event: React.FormEvent) => {
-        event.preventDefault();
-        if (!selectedStationId) {
-            // TODO: show this alert as inline error message in form
-            alert.show('Vennligst velg en stasjon.', { type: types.ERROR });
-            return;
-        }
-        deleteStationMutation(selectedStationId);
-    };
+    const handleDeleteStationSubmission = formMethods.handleSubmit((data) =>
+        deleteStationMutation(data.selectedStation),
+    );
 
     return (
         <Wrapper>
             <Title>Slett stasjon</Title>
-            <StyledForm onSubmit={handleDeleteStationSubmission}>
-                <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
-                <Button text="Slett" type="submit" loading={deleteStationLoading} color="Red" />
-            </StyledForm>
+            <FormProvider {...formMethods}>
+                <StyledForm onSubmit={handleDeleteStationSubmission}>
+                    <StationSelect
+                        onSelectedStationChange={setSelectedStationId}
+                        selectedStationId={selectedStationId}
+                    />
+                    <Button text="Slett" type="submit" loading={deleteStationLoading} color="Red" />
+                </StyledForm>
+            </FormProvider>
         </Wrapper>
     );
 };
