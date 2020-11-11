@@ -12,7 +12,6 @@ import { FloatingActionButton } from '../../sharedComponents/FloatingActionButto
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
     margin-left: 45px;
 
     & > *:not(:last-child) {

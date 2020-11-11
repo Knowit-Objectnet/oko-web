@@ -6,9 +6,10 @@ import { Loading } from '../../sharedComponents/Loading';
 import Plus from '../../assets/Plus.svg';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { NewStation } from '../../sharedComponents/NewStation/NewStation';
-import keycloak from '../../keycloak';
 import { Helmet } from 'react-helmet';
 import { useStations } from '../../api/hooks/useStations';
+import { useKeycloak } from '@react-keycloak/web';
+import { FloatingActionButton } from '../../sharedComponents/FloatingActionButton';
 
 const Wrapper = styled.div`
     display: flex;
@@ -21,37 +22,10 @@ const Wrapper = styled.div`
     background-color: ${(props) => props.theme.colors.White};
 `;
 
-const Item = styled.div`
+const AddStationButtonContainer = styled.div`
     position: absolute;
-    top: 20px;
+    top: 40px;
     right: 50px;
-
-    display: flex;
-    flex-direction: row;
-    &:not(:last-child) {
-        margin-bottom: 25px;
-    }
-`;
-
-const Description = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 150px;
-    background-color: ${(props) => props.theme.colors.LightBeige};
-`;
-
-const Button = styled.div`
-    width: 50px;
-    height: 50px;
-    padding: 10px;
-    background-color: ${(props) => props.theme.colors.Green};
-    border-radius: 50%;
-    box-sizing: border-box;
-
-    &:not(:last-child) {
-        margin-bottom: 30px;
-    }
 `;
 
 const Content = styled.div`
@@ -65,7 +39,11 @@ const Content = styled.div`
 `;
 
 export const Stations: React.FC = () => {
+    const { keycloak } = useKeycloak();
+    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
+
     const modal = useModal();
+
     const { data: stations, isLoading } = useStations();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
@@ -84,13 +62,15 @@ export const Stations: React.FC = () => {
                 <title>Stasjonene</title>
             </Helmet>
             <Wrapper>
-                {keycloak.hasRealmRole(Roles.Oslo) && (
-                    <Item>
-                        <Description>Ny stasjon</Description>
-                        <Button>
-                            <Plus height="100%" onClick={handleNewStationClick} />
-                        </Button>
-                    </Item>
+                {userIsAdmin && (
+                    <AddStationButtonContainer>
+                        <FloatingActionButton
+                            label="Ny stasjon"
+                            icon={<Plus />}
+                            onClick={handleNewStationClick}
+                            variant={'Positive'}
+                        />
+                    </AddStationButtonContainer>
                 )}
                 <Content>
                     {stations?.map((station) => (

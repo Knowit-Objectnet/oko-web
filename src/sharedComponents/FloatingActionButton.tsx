@@ -6,14 +6,16 @@ const ButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    width: 100%;
 `;
 
 const Label = styled.div`
-    text-align: left;
+    text-align: center;
     white-space: nowrap;
-    vertical-align: center;
-    padding: 1rem;
+    padding: 0.8rem;
+    line-height: 1.5;
     background-color: ${(props) => props.theme.colors.LightBeige};
+    flex-grow: 1;
 `;
 
 const Button = styled.button<{ variant: ButtonVariant }>`
@@ -38,7 +40,7 @@ type ButtonVariant = 'Positive' | 'Negative';
 
 interface Props {
     label: string;
-    icon: JSX.Element;
+    icon: React.ReactNode;
     onClick: Action;
     variant: ButtonVariant;
 }
