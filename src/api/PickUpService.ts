@@ -29,10 +29,18 @@ export interface ApiPickUpPatch {
     chosenPartnerId?: number;
 }
 
+export interface ApiPickUpParams {
+    pickUpId?: number;
+    stationId?: number;
+    partnerId?: number;
+    startDateTime?: string;
+    endDateTime?: string;
+}
+
 // First parameter is the query key passed by react-query
-export const getPickUps = (_: string, token: string): Promise<Array<ApiPickUp>> =>
+export const getPickUps = (_: string, params: ApiPickUpParams, token: string): Promise<Array<ApiPickUp>> =>
     httpClient(token)
-        .get<Array<ApiPickUp>>(endpoint)
+        .get<Array<ApiPickUp>>(endpoint, { params })
         .then((response) => response.data);
 
 // First parameter is the query key passed by react-query

@@ -1,12 +1,12 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { QueryResult, useQuery } from 'react-query';
-import { ApiPickUp, getPickUps, pickUpsDefaultQueryKey } from '../PickUpService';
+import { ApiPickUp, ApiPickUpParams, getPickUps, pickUpsDefaultQueryKey } from '../PickUpService';
 
-export const usePickUps = (): QueryResult<Array<ApiPickUp>> => {
+export const usePickUps = (params: ApiPickUpParams = {}): QueryResult<Array<ApiPickUp>> => {
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiPickUp>>({
-        queryKey: [pickUpsDefaultQueryKey, keycloak.token],
+        queryKey: [pickUpsDefaultQueryKey, params, keycloak.token],
         queryFn: getPickUps,
     });
 };
