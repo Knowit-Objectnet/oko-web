@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Roles } from '../../types';
-import { PickUpRequest } from './PickUpRequest';
+import { PickUpInfo } from './PickUpInfo';
 import Plus from '../../assets/Plus.svg';
 import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
 import { useKeycloak } from '@react-keycloak/web';
@@ -13,24 +13,16 @@ import { usePickUps } from '../../api/hooks/usePickUps';
 import { FloatingActionButton } from '../../sharedComponents/FloatingActionButton';
 
 const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
     position: relative;
 `;
 
 const Content = styled.div`
-    padding-top: 90px;
-    padding-bottom: 50px;
+    margin: 0 auto;
+    padding: 40px 0 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
     width: 80%;
-    height: 100%;
 `;
 
 const HeaderRow = styled.div`
@@ -120,7 +112,7 @@ export const PickUps: React.FC = () => {
                         {isLoading ? (
                             <Loading text="Laster inn data..." />
                         ) : (
-                            sortedPickups?.map((pickUp) => <PickUpRequest key={pickUp.id} pickUp={pickUp} />)
+                            sortedPickups?.map((pickUp) => <PickUpInfo key={pickUp.id} pickUp={pickUp} />)
                         )}
                     </PickUpList>
                 </Content>
