@@ -29,19 +29,7 @@ const Selection = styled.div`
     display: flex;
 `;
 
-const Reject = styled.div`
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
-    user-select: none;
-    cursor: pointer;
-`;
-
-interface StatusProps {
-    approved: boolean;
-}
-
-const Status = styled.div<StatusProps>`
+const Status = styled.div<{ approved: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,7 +62,6 @@ export const Request: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    // Function to handle the approval of a request
     const onApprove = async () => {
         try {
             await PatchToAPI(
@@ -96,11 +83,6 @@ export const Request: React.FC<Props> = (props) => {
             <PartnerName>{props.partner.name}</PartnerName>
             {props.isStation && !props.selectedId ? (
                 <Selection>
-                    {/*
-                        <Reject onClick={onReject}>
-                            <Cross height="1em" /> Avvis
-                        </Reject>
-                    */}
                     <Button text="Godkjenn" color="Green" height={22} onClick={onApprove} />
                 </Selection>
             ) : props.selectedId ? (

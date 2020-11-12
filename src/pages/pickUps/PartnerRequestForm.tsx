@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ApiRequest, apiUrl } from '../../types';
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Button } from '../../sharedComponents/Button';
 import Cross from '../../assets/Cross.svg';
@@ -37,7 +37,7 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => 
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const { data: apiRequest, isValidating } = useSWR<Array<ApiRequest>>(
+    const { data: apiRequest, isValidating, mutate } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${props.pickupId}&partnerId=${props.partnerId}`,
         fetcher,
     );
@@ -52,7 +52,7 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => 
                 keycloak.token,
             );
             alert.show('Påmelding til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
-            mutate(`${apiUrl}/requests/?pickupId=${props.pickupId}&partnerId=${props.partnerId}`);
+            mutate();
         } catch {
             alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
         }
@@ -65,7 +65,7 @@ export const PartnerRequestForm: React.FC<PartnerRequestFormProps> = (props) => 
                 keycloak.token,
             );
             alert.show('Påmelding til ekstrauttak ble sletteet suksessfullt.', { type: types.SUCCESS });
-            mutate(`${apiUrl}/requests/?pickupId=${props.pickupId}&partnerId=${props.partnerId}`);
+            mutate();
         } catch {
             alert.show('Noe gikk galt, sletting av påmelding til ekstrauttaket ble ikke registrert.', {
                 type: types.ERROR,

@@ -4,7 +4,6 @@ import useSWR from 'swr';
 import { ApiRequest, apiUrl } from '../../types';
 import { fetcher } from '../../utils/fetcher';
 import { Request } from './Request';
-import { useEffect, useState } from 'react';
 
 const Wrapper = styled.div`
     display: flex;
