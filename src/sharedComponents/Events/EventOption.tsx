@@ -5,17 +5,9 @@ const Option = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-
-    &:not(:last-child) {
-        margin-bottom: 10px;
-    }
 `;
 
-interface Props {
-    icon?: React.ElementType;
-}
-
-const OptionInfo = styled.div<Props>`
+const OptionInfo = styled.div<{ icon?: React.ElementType }>`
     margin-left: ${(props) => (props.icon ? '36px' : '0')};
     display: flex;
     justify-content: center;

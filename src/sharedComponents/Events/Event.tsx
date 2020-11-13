@@ -16,24 +16,20 @@ import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQ
 
 const Body = styled.div`
     display: flex;
-    flex-direction: row;
-`;
 
-const Section = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-
-    &:nth-child(2) {
-        margin-left: 10px;
+    & > *:not(:last-child) {
+        margin-right: 0.75rem;
     }
 `;
 
-const Options = styled.div`
+const Section = styled.div`
     display: flex;
     flex-direction: column;
-    flex: 1;
+    width: 100%;
+
+    & > *:not(:first-child) {
+        margin-top: 0.75rem;
+    }
 `;
 
 interface Props {
@@ -216,21 +212,19 @@ export const Event: React.FC<Props> = (props) => {
         >
             <Body>
                 <Section>
-                    <Options>
-                        <EventOptionDateRange
-                            dateRange={dateRange}
-                            timeRange={timeRange}
-                            recurring={recurring}
-                            selectedDays={selectedDays}
-                            isEditing={isEditing}
-                            onDateRangeChange={handleDateRangeChange}
-                            onTimeRangeChange={handleTimeRangeChange}
-                            onRecurringChange={handleRecurringChange}
-                            onSelectedDaysChange={handleSelectedDaysChange}
-                            recurrenceEnabled={false}
-                        />
-                        <EventStationInfo station={props.event.resource.station} />
-                    </Options>
+                    <EventOptionDateRange
+                        dateRange={dateRange}
+                        timeRange={timeRange}
+                        recurring={recurring}
+                        selectedDays={selectedDays}
+                        isEditing={isEditing}
+                        onDateRangeChange={handleDateRangeChange}
+                        onTimeRangeChange={handleTimeRangeChange}
+                        onRecurringChange={handleRecurringChange}
+                        onSelectedDaysChange={handleSelectedDaysChange}
+                        recurrenceEnabled={false}
+                    />
+                    <EventStationInfo station={props.event.resource.station} />
                 </Section>
                 {!isEditing && (
                     <Section>
@@ -238,25 +232,18 @@ export const Event: React.FC<Props> = (props) => {
                         {(userIsAdmin ||
                             (userIsPartner && partnerOwnsEvent) ||
                             (userIsStation && stationOwnsEvent)) && (
-                            <>
-                                <Button
-                                    text="Avlys uttak"
-                                    onClick={handleDeleteConfirmationClick}
-                                    color="Red"
-                                    styling="margin-top: 10px;"
-                                />
-                                {isDeletionConfirmationVisible && (
-                                    <DeleteEvent
-                                        allowRangeDeletion={userIsAdmin || (userIsStation && stationOwnsEvent)}
-                                        onSubmit={handleDeleteEvent}
-                                        loading={deleteSingleEventLoading || deleteRangeEventLoading}
-                                    />
-                                )}
-                            </>
+                            <Button text="Avlys uttak" variant="negative" onClick={handleDeleteConfirmationClick} />
                         )}
                     </Section>
                 )}
             </Body>
+            {isDeletionConfirmationVisible && !isEditing && (
+                <DeleteEvent
+                    allowRangeDeletion={userIsAdmin || (userIsStation && stationOwnsEvent)}
+                    onSubmit={handleDeleteEvent}
+                    loading={deleteSingleEventLoading || deleteRangeEventLoading}
+                />
+            )}
             {isEditing && (
                 <EventSubmission
                     onSubmit={handleEditSubmission}

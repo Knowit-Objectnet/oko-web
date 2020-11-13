@@ -10,7 +10,7 @@ import theme from '../../src/theme';
 import { ThemeProvider } from 'styled-components';
 import fetch from 'jest-fetch-mock';
 import { apiUrl } from '../../src/types';
-import { PickUps } from '../../src/pages/pickUps/PickUps';
+import { Notifications } from '../../src/pages/notifications/Notifications';
 import { mockApiPickUps } from '../../__mocks__/mockPickUps';
 import { mockApiRequests } from '../../__mocks__/mockRequests';
 
@@ -51,7 +51,7 @@ describe('Provides a page to view a list of the stations', () => {
                 <ThemeProvider theme={theme}>
                     <ModalProvider>
                         <AlertProvider template={AlertTemplate} {...options}>
-                            <PickUps />
+                            <Notifications />
                         </AlertProvider>
                     </ModalProvider>
                 </ThemeProvider>

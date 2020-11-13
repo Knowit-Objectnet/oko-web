@@ -41,6 +41,10 @@ const Header = styled.div`
     align-items: center;
     margin-bottom: 45px;
     width: 100%;
+
+    & > *:last-child {
+        margin-left: auto;
+    }
 `;
 
 const DefaultProfilePicture = styled(Default)`
@@ -70,13 +74,7 @@ export const UserProfile: React.FC = () => {
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>
-                        <Button
-                            onClick={handleLogoutClick}
-                            text="Logg ut"
-                            color="DarkBlue"
-                            width={100}
-                            styling="margin-left: auto;"
-                        />
+                        <Button text="Logg ut" onClick={handleLogoutClick} />
                     </Header>
                     {userIsPartner && <AboutPartner />}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />

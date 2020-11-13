@@ -10,11 +10,12 @@ import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 
 const Textarea = styled.textarea`
-    min-height: 54px;
-    width: 100%;
+    min-height: 5rem;
+    width: 25rem;
     box-sizing: border-box;
-    padding: 5px;
+    padding: 0.5rem;
     resize: vertical;
+    margin: 1rem 0;
 `;
 
 interface Props {
@@ -104,7 +105,7 @@ export const ExtraEvent: React.FC<Props> = (props) => {
                 value={description}
                 onChange={onDescriptionChange}
             />
-            <Button onClick={onSubmit} text="Send" color="Green" height={35} width={350} styling="margin-top: 40px;" />
+            <Button onClick={onSubmit} text="Send" variant="positive" />
         </EventTemplateVertical>
     );
 };

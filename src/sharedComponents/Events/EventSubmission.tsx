@@ -2,16 +2,21 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Button } from '../Button';
 
-const Submission = styled.div`
+const ButtonRow = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin-top: 10px;
-`;
+    margin-top: 1rem;
 
-const Divider = styled.div`
-    width: 40px;
+    & > button {
+        flex-grow: 1;
+        min-width: 9rem;
+    }
+
+    & > button:not(:last-child) {
+        margin-right: 0.5rem;
+    }
 `;
 
 interface EventSubmissionProps {
@@ -41,17 +46,9 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
     };
 
     return (
-        <Submission>
-            <Button color="Red" name="cancelButton" onClick={onClick} text="Avbryt" width={108} />
-            <Divider />
-            <Button
-                color="Green"
-                name="submitButton"
-                onClick={onClick}
-                text="Godkjenn"
-                width={108}
-                loading={props.loading}
-            />
-        </Submission>
+        <ButtonRow>
+            <Button variant="negative" name="cancelButton" onClick={onClick} text="Avbryt" />
+            <Button variant="positive" name="submitButton" onClick={onClick} text="Godkjenn" loading={props.loading} />
+        </ButtonRow>
     );
 };

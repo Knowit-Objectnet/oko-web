@@ -1,6 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { Action } from 'ts-loader/dist/interfaces';
+import { Colors } from '../theme';
 
 const ButtonContainer = styled.div`
     display: flex;
@@ -18,25 +19,21 @@ const Label = styled.div`
     flex-grow: 1;
 `;
 
-const Button = styled.button<{ variant: ButtonVariant }>`
+const Button = styled.button<{ colors: ButtonColors }>`
     width: 50px;
     height: 50px;
     border-radius: 50%;
     padding: 10px;
     border: none;
-    background-color: ${(props) => {
-        switch (props.variant) {
-            case 'Positive':
-                return props.theme.colors.Green;
-            case 'Negative':
-                return props.theme.colors.Red;
-            default:
-                return props.theme.colors.DarkBlue;
-        }
-    }};
+    background-color: ${(props) => props.colors.bgColor};
+
+    & svg {
+        fill: ${(props) => props.colors.fgColor};
+    }
 `;
 
-type ButtonVariant = 'Positive' | 'Negative';
+type ButtonVariant = 'positive' | 'negative';
+type ButtonColors = Record<'bgColor' | 'fgColor', Colors>;
 
 interface Props {
     label: string;
@@ -45,11 +42,26 @@ interface Props {
     variant: ButtonVariant;
 }
 
-export const FloatingActionButton: React.FC<Props> = (props) => (
-    <ButtonContainer>
-        <Label>{props.label}</Label>
-        <Button onClick={props.onClick} aria-label={props.label} variant={props.variant}>
-            {props.icon}
-        </Button>
-    </ButtonContainer>
-);
+export const FloatingActionButton: React.FC<Props> = (props) => {
+    const theme = useTheme();
+
+    const buttonColors: Record<ButtonVariant, ButtonColors> = {
+        positive: {
+            bgColor: theme.colors.Green,
+            fgColor: theme.colors.Black,
+        },
+        negative: {
+            bgColor: theme.colors.Red,
+            fgColor: theme.colors.Black,
+        },
+    };
+
+    return (
+        <ButtonContainer>
+            <Label>{props.label}</Label>
+            <Button onClick={props.onClick} aria-label={props.label} colors={buttonColors[props.variant]}>
+                {props.icon}
+            </Button>
+        </ButtonContainer>
+    );
+};

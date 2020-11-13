@@ -68,7 +68,7 @@ export const Stations: React.FC = () => {
                             label="Ny stasjon"
                             icon={<Plus />}
                             onClick={handleNewStationClick}
-                            variant={'Positive'}
+                            variant="positive"
                         />
                     </AddStationButtonContainer>
                 )}

@@ -5,8 +5,8 @@ import { ApiStation } from '../../api/StationService';
 
 const Box = styled.div`
     background-color: ${(props) => props.theme.colors.LightBeige};
-    padding: 0 40px;
-    height: 45px;
+    padding: 0 3rem;
+    height: 3rem;
     flex: 1;
     display: flex;
     align-items: center;
@@ -14,7 +14,7 @@ const Box = styled.div`
 `;
 
 const Icon = styled(LocationIcon)`
-    margin-right: 15px;
+    margin-right: 0.75rem;
     height: 2rem;
 `;
 
@@ -23,7 +23,7 @@ const Row = styled.div`
     display: flex;
     align-items: center;
     &:not(:last-child) {
-        margin-bottom: 15px;
+        margin-bottom: 0.75rem;
     }
 `;
 

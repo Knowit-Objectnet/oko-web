@@ -46,20 +46,20 @@ export const UserProfileSideMenu: React.FC = () => {
                 label="Ny samarbeidspartner"
                 icon={<Plus />}
                 onClick={showNewPartnerModal}
-                variant="Positive"
+                variant="positive"
             />
-            <FloatingActionButton label="Ny stasjon" icon={<Plus />} onClick={showNewStationModal} variant="Positive" />
+            <FloatingActionButton label="Ny stasjon" icon={<Plus />} onClick={showNewStationModal} variant="positive" />
             <FloatingActionButton
                 label="Slett samarbeidspartner"
                 icon={<Minus />}
                 onClick={showDeletePartnerModal}
-                variant="Negative"
+                variant="negative"
             />
             <FloatingActionButton
                 label="Slett stasjon"
                 icon={<Minus />}
                 onClick={showDeleteStationModal}
-                variant="Negative"
+                variant="negative"
             />
         </Wrapper>
     );

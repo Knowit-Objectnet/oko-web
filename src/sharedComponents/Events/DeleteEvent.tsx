@@ -7,12 +7,15 @@ import { Button } from '../Button';
 const Wrapper = styled.div`
     position: absolute;
     top: 100%;
-    right: 0px;
+    right: 0;
     background-color: ${(props) => props.theme.colors.White};
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    box-sizing: border-box;
+    padding: 0.625rem;
+
+    & > *:not(:last-child) {
+        margin-bottom: 0.75rem;
+    }
 `;
 
 const RangeSelection = styled.div`
@@ -20,24 +23,14 @@ const RangeSelection = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2px;
-    box-sizing: border-box;
-    margin-bottom: 15px;
+    padding: 0.125rem;
 `;
 
-interface SelectionProps {
-    selected?: boolean;
-}
-
-const Selection = styled.div<SelectionProps>`
+const Selection = styled.div<{ selected?: boolean }>`
     background-color: ${(props) => props.selected && props.theme.colors.White};
-    padding: 5px;
+    padding: 0.5rem;
     box-sizing: border-box;
     user-select: none;
-
-    &:first-child {
-        margin-right: 5px;
-    }
 `;
 
 const StyledDateRangePicker = styled(DateRangePicker)`
@@ -86,14 +79,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                 </RangeSelection>
             )}
             {!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={setDateRange} value={dateRange} />}
-            <Button
-                onClick={handleSubmit}
-                text="Bekreft"
-                color="Green"
-                height={35}
-                width={props.allowRangeDeletion ? undefined : 250}
-                loading={props.loading}
-            />
+            <Button onClick={handleSubmit} text="Bekreft" variant="positive" loading={props.loading} />
         </Wrapper>
     );
 };
