@@ -41,12 +41,14 @@ const StyledButton = styled.button<{ colors: ButtonColors }>`
 
 interface Props {
     label: string;
+    /** Hiding the label must be done with caution, for UX and a11y reasons */
+    hideLabel?: boolean;
     icon: React.ReactNode;
     variant: ButtonVariant;
     onClick: Action;
 }
 
-export const FloatingActionButton: React.FC<Props> = ({ label, icon, variant, onClick }) => {
+export const FloatingActionButton: React.FC<Props> = ({ label, hideLabel = false, icon, variant, onClick }) => {
     const theme = useTheme();
     const buttonColors: Record<ButtonVariant, ButtonColors> = {
         positive: {
@@ -61,7 +63,7 @@ export const FloatingActionButton: React.FC<Props> = ({ label, icon, variant, on
 
     return (
         <ButtonContainer>
-            <Label>{label}</Label>
+            {!hideLabel && <Label>{label}</Label>}
             <StyledButton onClick={onClick} aria-label={label} colors={buttonColors[variant]}>
                 {icon}
             </StyledButton>

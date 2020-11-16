@@ -10,8 +10,7 @@ import Plus from '../../assets/Plus.svg';
 import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
 import useModal from '../Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
-import { ExtraEvent } from '../Events/ExtraEvent';
-import { types, useAlert } from 'react-alert';
+import { NewPickUp } from '../Events/NewPickUp';
 import { NewEvent } from '../Events/NewEvent';
 
 const duration = 500;
@@ -118,7 +117,7 @@ const Logo = styled(OsloKommuneLogo)`
     width: 100%;
 `;
 
-interface SideBarProps {
+interface Props {
     isVisible: boolean;
     onClick: () => void;
 }
@@ -126,43 +125,29 @@ interface SideBarProps {
 /**
  * SideBar for the animated side navigation
  */
-export const SideBar: React.FC<SideBarProps> = (props) => {
-    // Keycloak instance
+export const SideBar: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
-    // History instance
+    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
+    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
+
     const history = useHistory();
-    // Alert instance
-    const alert = useAlert();
-    // Modal instance
     const modal = useModal();
 
-    const onExtraEventClick = () => {
-        const { start, end } = getStartAndEndDateTime();
-        const afterSubmission = (successful: boolean) => {
-            if (successful) {
-                // Give user feedback and close modal
-                alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
-                modal.remove();
-            } else {
-                // Give user feedback
-                alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
-            }
+    const closeModalOnSuccess = (successful: boolean) => {
+        if (successful) {
+            modal.remove();
             props.onClick();
-        };
-
-        modal.show(<ExtraEvent end={end} afterSubmit={afterSubmission} start={start} />);
+        }
     };
 
-    const onNewEventClick = () => {
+    const handleNewPickUpClick = () => {
         const { start, end } = getStartAndEndDateTime();
-        const afterSubmission = (successful: boolean) => {
-            if (successful) {
-                modal.remove();
-            }
-            props.onClick();
-        };
+        modal.show(<NewPickUp end={end} afterSubmit={closeModalOnSuccess} start={start} />);
+    };
 
-        modal.show(<NewEvent end={end} afterSubmit={afterSubmission} start={start} />);
+    const handleNewEventClick = () => {
+        const { start, end } = getStartAndEndDateTime();
+        modal.show(<NewEvent end={end} afterSubmit={closeModalOnSuccess} start={start} />);
     };
 
     return (
@@ -193,13 +178,13 @@ export const SideBar: React.FC<SideBarProps> = (props) => {
                                         >
                                             <StyledLocation /> Stasjonene
                                         </Link>
-                                        {keycloak.hasRealmRole(Roles.Oslo) && (
-                                            <FakeLink onClick={onNewEventClick}>
+                                        {userIsAdmin && (
+                                            <FakeLink onClick={handleNewEventClick}>
                                                 <StyledPlus /> Opprett hendelse
                                             </FakeLink>
                                         )}
-                                        {keycloak.hasRealmRole(Roles.Ambassador) && (
-                                            <FakeLink onClick={onExtraEventClick}>
+                                        {userIsStation && (
+                                            <FakeLink onClick={handleNewPickUpClick}>
                                                 <StyledPlus /> Utlys ekstrauttak
                                             </FakeLink>
                                         )}

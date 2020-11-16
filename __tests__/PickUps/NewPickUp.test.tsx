@@ -11,7 +11,7 @@ import theme from '../../../src/theme';
 import { ThemeProvider } from 'styled-components';
 import add from 'date-fns/add';
 import { mockStations } from '../../../__mocks__/mockStations';
-import { ExtraEvent } from '../../../src/sharedComponents/Events/ExtraEvent';
+import { NewPickUp } from '../../../src/sharedComponents/Events/NewPickUp';
 
 // Fetch mock to intercept fetch requests.
 global.fetch = fetch;
@@ -68,7 +68,7 @@ describe('Provides an interface to create a pickup/Extra event', () => {
             <KeycloakProvider keycloak={keycloak}>
                 <ThemeProvider theme={theme}>
                     <AlertProvider template={AlertTemplate} {...options}>
-                        <ExtraEvent
+                        <NewPickUp
                             start={start}
                             end={end}
                             beforeSubmit={mockBeforeSubmit}

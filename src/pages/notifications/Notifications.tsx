@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Roles } from '../../types';
 import Plus from '../../assets/Plus.svg';
-import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
+import { NewPickUp } from '../../sharedComponents/Events/NewPickUp';
 import { useKeycloak } from '@react-keycloak/web';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
@@ -31,7 +31,7 @@ export const Notifications: React.FC = () => {
 
     const showNewPickUpModal = () => {
         const { start, end } = getStartAndEndDateTime();
-        modal.show(<ExtraEvent start={start} end={end} afterSubmit={closeModalOnSuccess} />);
+        modal.show(<NewPickUp start={start} end={end} afterSubmit={closeModalOnSuccess} />);
     };
 
     return (
