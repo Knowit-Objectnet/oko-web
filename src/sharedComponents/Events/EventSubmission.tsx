@@ -48,7 +48,13 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
     return (
         <ButtonRow>
             <Button variant="negative" name="cancelButton" onClick={onClick} text="Avbryt" />
-            <Button variant="positive" name="submitButton" onClick={onClick} text="Godkjenn" loading={props.loading} />
+            <Button
+                variant="positive"
+                name="submitButton"
+                onClick={onClick}
+                text="Godkjenn"
+                isLoading={props.loading}
+            />
         </ButtonRow>
     );
 };

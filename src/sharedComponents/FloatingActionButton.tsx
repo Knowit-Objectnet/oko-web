@@ -3,6 +3,13 @@ import styled, { useTheme } from 'styled-components';
 import { Action } from 'ts-loader/dist/interfaces';
 import { Colors } from '../theme';
 
+type ButtonVariant = 'positive' | 'negative';
+
+interface ButtonColors {
+    bgColor: Colors;
+    fgColor: Colors;
+}
+
 const ButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -19,11 +26,11 @@ const Label = styled.div`
     flex-grow: 1;
 `;
 
-const Button = styled.button<{ colors: ButtonColors }>`
+const StyledButton = styled.button<{ colors: ButtonColors }>`
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    padding: 10px;
+    padding: 0.625rem;
     border: none;
     background-color: ${(props) => props.colors.bgColor};
 
@@ -32,19 +39,15 @@ const Button = styled.button<{ colors: ButtonColors }>`
     }
 `;
 
-type ButtonVariant = 'positive' | 'negative';
-type ButtonColors = Record<'bgColor' | 'fgColor', Colors>;
-
 interface Props {
     label: string;
     icon: React.ReactNode;
-    onClick: Action;
     variant: ButtonVariant;
+    onClick: Action;
 }
 
-export const FloatingActionButton: React.FC<Props> = (props) => {
+export const FloatingActionButton: React.FC<Props> = ({ label, icon, variant, onClick }) => {
     const theme = useTheme();
-
     const buttonColors: Record<ButtonVariant, ButtonColors> = {
         positive: {
             bgColor: theme.colors.Green,
@@ -58,10 +61,10 @@ export const FloatingActionButton: React.FC<Props> = (props) => {
 
     return (
         <ButtonContainer>
-            <Label>{props.label}</Label>
-            <Button onClick={props.onClick} aria-label={props.label} colors={buttonColors[props.variant]}>
-                {props.icon}
-            </Button>
+            <Label>{label}</Label>
+            <StyledButton {...onClick} aria-label={label} colors={buttonColors[variant]}>
+                {icon}
+            </StyledButton>
         </ButtonContainer>
     );
 };

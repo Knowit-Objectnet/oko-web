@@ -93,7 +93,7 @@ export const NewPartner: React.FC<Props> = (props) => {
             <Title>Legg til ny samarbeidspartner</Title>
             <StyledForm onSubmit={handleNewPartnerSubmission}>
                 <Input type="text" placeholder="Navn på organisasjonen" value={name} onChange={handleNameChange} />
-                <Button text="Legg til samarbeidspartner" variant="positive" loading={addPartnerLoading} />
+                <Button text="Legg til samarbeidspartner" variant="positive" isLoading={addPartnerLoading} />
             </StyledForm>
         </Wrapper>
     );

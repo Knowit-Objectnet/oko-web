@@ -79,7 +79,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                 </RangeSelection>
             )}
             {!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={setDateRange} value={dateRange} />}
-            <Button onClick={handleSubmit} text="Bekreft" variant="positive" loading={props.loading} />
+            <Button onClick={handleSubmit} text="Bekreft" variant="positive" isLoading={props.loading} />
         </Wrapper>
     );
 };

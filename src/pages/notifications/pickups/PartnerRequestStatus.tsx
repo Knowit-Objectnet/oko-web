@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import useSWR from 'swr';
 import Cross from '../../../assets/Cross.svg';
 import { types, useAlert } from 'react-alert';
@@ -10,7 +10,6 @@ import { fetcher } from '../../../utils/fetcher';
 import { PostToAPI } from '../../../utils/PostToAPI';
 import { DeleteToAPI } from '../../../utils/DeleteToAPI';
 import { Button } from '../../../sharedComponents/Button';
-import { Colors } from '../../../theme';
 
 const Wrapper = styled.div`
     padding: 0.625rem;
@@ -36,23 +35,24 @@ const CancelButton = styled.button`
 const Status = styled.div`
     font-weight: bold;
     font-size: 0.875rem;
-    min-height: 45px;
+    min-height: 3rem;
     text-align: center;
     padding: 0.75rem 1rem;
     background: ${(props) => props.theme.colors.White};
     min-width: 200px;
+    border: 0.125rem solid;
 `;
 
 const AwaitingStatus = styled(Status)`
-    border: 2px solid ${(props) => props.theme.colors.Blue};
+    border-color: ${(props) => props.theme.colors.Blue};
 `;
 
 const ApprovedStatus = styled(Status)`
-    border: 2px solid ${(props) => props.theme.colors.Green};
+    border-color: ${(props) => props.theme.colors.Green};
 `;
 
 const RejectStatus = styled(Status)`
-    border: 2px solid ${(props) => props.theme.colors.Red};
+    border-color: ${(props) => props.theme.colors.Red};
 `;
 
 interface Props {
@@ -92,10 +92,6 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
         }
     };
 
-    if (!request && isValidating) {
-        return null;
-    }
-
     const getRequestStatusField = () => {
         const pickUpIsOpenForRequest = !pickUp.chosenPartner;
         const userHasRequest = !!request?.[0];
@@ -127,5 +123,5 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
         return <RejectStatus>Påmelding stengt</RejectStatus>;
     };
 
-    return <Wrapper>{getRequestStatusField()}</Wrapper>;
+    return !request && isValidating ? null : <Wrapper>{getRequestStatusField()}</Wrapper>;
 };

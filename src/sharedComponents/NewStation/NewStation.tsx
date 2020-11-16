@@ -329,7 +329,7 @@ export const NewStation: React.FC<Props> = (props) => {
                         />
                     </ContactWrapper>
                 </AmbassadorContactInfo>
-                <Button text="Legg til stasjon" onClick={onSubmit} variant="positive" loading={addStationLoading} />
+                <Button text="Legg til stasjon" onClick={onSubmit} variant="positive" isLoading={addStationLoading} />
             </Content>
         </Wrapper>
     );

@@ -5,7 +5,11 @@ import { ButtonHTMLAttributes } from 'react';
 import { Colors } from '../theme';
 
 type ButtonVariant = 'primary' | 'positive' | 'negative';
-type ButtonColors = Record<'bgColor' | 'fgColor', Colors>;
+
+interface ButtonColors {
+    bgColor: Colors;
+    fgColor: Colors;
+}
 
 const StyledButton = styled.button<{ buttonColors: ButtonColors }>`
     background-color: ${(props) => props.buttonColors.bgColor};
@@ -29,12 +33,11 @@ const LoadingSpinner = styled(DotsSpinner)<{ color: Colors }>`
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     text: string;
     variant?: ButtonVariant;
-    loading?: boolean;
+    isLoading?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({ text, loading = false, variant = 'primary', ...rest }) => {
+export const Button: React.FC<ButtonProps> = ({ text, isLoading = false, variant = 'primary', ...rest }) => {
     const theme = useTheme();
-
     const buttonColors: Record<ButtonVariant, ButtonColors> = {
         primary: {
             bgColor: theme.colors.DarkBlue,
@@ -54,13 +57,13 @@ export const Button: React.FC<ButtonProps> = ({ text, loading = false, variant =
         <StyledButton
             {...rest}
             buttonColors={buttonColors[variant]}
-            disabled={loading}
-            aria-disabled={loading}
+            disabled={isLoading}
+            aria-disabled={isLoading}
             aria-live="polite"
-            aria-busy={loading}
+            aria-busy={isLoading}
         >
             {text}
-            {loading && <LoadingSpinner color={buttonColors[variant].fgColor} />}
+            {isLoading && <LoadingSpinner color={buttonColors[variant].fgColor} />}
         </StyledButton>
     );
 };

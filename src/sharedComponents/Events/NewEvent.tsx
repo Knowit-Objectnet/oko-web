@@ -161,7 +161,7 @@ export const NewEvent: React.FC<Props> = (props) => {
                     onSelectedDaysChange={onSelectedDaysChange}
                     recurrenceEnabled={true}
                 />
-                <Button type="submit" text="Lagre" variant="positive" loading={addEventLoading} />
+                <Button type="submit" text="Lagre" variant="positive" isLoading={addEventLoading} />
             </StyledForm>
         </EventTemplateVertical>
     );

@@ -76,7 +76,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
             <Title>Slett stasjon</Title>
             <StyledForm onSubmit={handleDeleteStationSubmission}>
                 <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
-                <Button text="Slett" type="submit" variant="negative" loading={deleteStationLoading} />
+                <Button text="Slett" type="submit" variant="negative" isLoading={deleteStationLoading} />
             </StyledForm>
         </Wrapper>
     );
