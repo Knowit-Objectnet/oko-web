@@ -11,7 +11,7 @@ export interface ApiPickUp {
     endDateTime: string;
     description: string;
     station: ApiStation;
-    chosenPartner?: ApiPartner;
+    chosenPartner: ApiPartner | null;
 }
 
 export interface ApiPickUpPost {

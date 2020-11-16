@@ -1,44 +1,29 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { KeycloakProvider } from '@react-keycloak/web';
-import keycloak from '../../../src/keycloak';
-import fetch from 'jest-fetch-mock';
-import AlertTemplate from 'react-alert-template-basic';
-import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import { apiUrl } from '../../../src/types';
-import theme from '../../../src/theme';
-import { ThemeProvider } from 'styled-components';
 import add from 'date-fns/add';
-import { mockStations } from '../../../__mocks__/mockStations';
-import { NewPickUp } from '../../../src/sharedComponents/Events/NewPickUp';
-
-// Fetch mock to intercept fetch requests.
-global.fetch = fetch;
+import keycloak from '../../src/keycloak';
+import { render, cleanup, waitFor, fireEvent } from '../../utils/test-setup';
+import { NewPickUp } from '../../src/sharedComponents/Events/NewPickUp';
+import { mockStations } from '../../__mocks__/mockStations';
+import MockAdapter from 'axios-mock-adapter';
+import axios, { AxiosRequestConfig } from 'axios';
 
 describe('Provides an interface to create a pickup/Extra event', () => {
-    // Alert options
-    const options = {
-        position: positions.TOP_CENTER,
-        timeout: 5000,
-        offset: '30px',
-        transition: transitions.SCALE,
-    };
+    let axiosMock: MockAdapter;
 
     beforeEach(() => {
-        fetch.resetMocks();
-        fetch.mockResponse(async (req) => {
-            if (req.url.startsWith(`${apiUrl}/pickups`)) {
-                const data = await req.json();
-                return JSON.stringify({
+        axiosMock = new MockAdapter(axios);
+        axiosMock.onPost('/pickups').reply((config: AxiosRequestConfig) => {
+            return [
+                200,
+                JSON.stringify({
                     id: -1,
-                    startDateTime: data.startDateTime,
-                    endDateTime: data.endDateTime,
+                    startDateTime: config.data.startDateTime,
+                    endDateTime: config.data.endDateTime,
                     station: mockStations[0],
                     chosenPartner: null,
-                });
-            }
-            return '';
+                }),
+            ];
         });
 
         // Set needed keycloak data
@@ -48,6 +33,7 @@ describe('Provides an interface to create a pickup/Extra event', () => {
     });
 
     afterEach(() => {
+        axiosMock.reset();
         cleanup();
     });
 
@@ -60,67 +46,33 @@ describe('Provides an interface to create a pickup/Extra event', () => {
         const start = new Date(date.setHours(16, 0, 0, 0));
         const end = new Date(date.setHours(16, 30, 0, 0));
 
-        const mockBeforeSubmit = jest.fn();
         const mockAfterSubmit = jest.fn();
 
-        // Render
         const { findByText, findByPlaceholderText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
-                        <NewPickUp
-                            start={start}
-                            end={end}
-                            beforeSubmit={mockBeforeSubmit}
-                            afterSubmit={mockAfterSubmit}
-                        />
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
+            <NewPickUp start={start} end={end} afterSubmit={mockAfterSubmit} />,
         );
 
         const messageText = await findByPlaceholderText('Meldingstekst (maks 200 tegn)');
 
         // Set the message text
-        await waitFor(() => {
-            fireEvent.change(messageText, {
-                target: { value: 'Ting må hentes' },
-            });
+        fireEvent.change(messageText, {
+            target: { value: 'Ting må hentes' },
         });
 
         // Get the submit button
         const submitButton = await findByText('Send');
 
         // Click the submission button
-        await waitFor(() =>
-            fireEvent(
-                submitButton,
-                new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                }),
-            ),
+        fireEvent(
+            submitButton,
+            new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+            }),
         );
 
-        // Expect the beforeSubmit function to be called with the data
-        expect(mockBeforeSubmit).toHaveBeenCalledTimes(1);
-        expect(mockBeforeSubmit.mock.calls[0]).toEqual([
-            `${apiUrl}/pickups/`,
-            {
-                id: -1,
-                startDateTime: start.toISOString(),
-                endDateTime: end.toISOString(),
-                description: 'Ting må hentes',
-                chosenPartner: null,
-                station: {
-                    ...mockStations[0],
-                    hours: {},
-                },
-            },
-        ]);
-
         // Expect the afterSubmit function to be called with the data
-        expect(mockAfterSubmit).toHaveBeenCalledTimes(1);
-        expect(mockAfterSubmit.mock.calls[0]).toEqual([true, `${apiUrl}/pickups/`]);
+        await waitFor(() => expect(mockAfterSubmit).toHaveBeenCalledTimes(1));
+        expect(mockAfterSubmit.mock.calls[0]).toEqual([true]);
     });
 });
