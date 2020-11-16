@@ -6,19 +6,33 @@ import { Colors } from '../theme';
 
 type ButtonVariant = 'primary' | 'positive' | 'negative';
 
+type ButtonSize = 'normal' | 'small';
+
 interface ButtonColors {
     bgColor: Colors;
     fgColor: Colors;
 }
 
-const StyledButton = styled.button<{ buttonColors: ButtonColors }>`
+interface ButtonMeasures {
+    padding: string;
+    minHeight: string;
+}
+
+interface StyledButtonProps {
+    buttonColors: ButtonColors;
+    buttonMeasures: ButtonMeasures;
+    fillWidth?: boolean;
+}
+
+const StyledButton = styled.button<StyledButtonProps>`
     background-color: ${(props) => props.buttonColors.bgColor};
     color: ${(props) => props.buttonColors.fgColor};
-    min-height: 3rem;
+    min-height: ${(props) => props.buttonMeasures.minHeight};
     font-weight: bold;
     font-size: 0.875rem;
     border: none;
-    padding: 0.75rem 1rem;
+    padding: ${(props) => props.buttonMeasures.padding};
+    ${(props) => props.fillWidth && 'width: 100%;'}
 `;
 
 const LoadingSpinner = styled(DotsSpinner)<{ color: Colors }>`
@@ -33,10 +47,18 @@ const LoadingSpinner = styled(DotsSpinner)<{ color: Colors }>`
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     text: string;
     variant?: ButtonVariant;
+    size?: ButtonSize;
     isLoading?: boolean;
+    fillWidth?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({ text, isLoading = false, variant = 'primary', ...rest }) => {
+export const Button: React.FC<ButtonProps> = ({
+    text,
+    variant = 'primary',
+    size = 'normal',
+    isLoading = false,
+    ...rest
+}) => {
     const theme = useTheme();
     const buttonColors: Record<ButtonVariant, ButtonColors> = {
         primary: {
@@ -53,10 +75,22 @@ export const Button: React.FC<ButtonProps> = ({ text, isLoading = false, variant
         },
     };
 
+    const buttonMeasures: Record<ButtonSize, ButtonMeasures> = {
+        normal: {
+            padding: '0.75rem 1rem',
+            minHeight: '3rem',
+        },
+        small: {
+            padding: '0.5rem 1rem',
+            minHeight: '2.5rem',
+        },
+    };
+
     return (
         <StyledButton
             {...rest}
             buttonColors={buttonColors[variant]}
+            buttonMeasures={buttonMeasures[size]}
             disabled={isLoading}
             aria-disabled={isLoading}
             aria-live="polite"

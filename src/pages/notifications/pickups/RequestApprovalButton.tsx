@@ -43,12 +43,10 @@ export const RequestApprovalButton: React.FC<Props> = (props) => {
         <Button
             text="Godkjenn"
             variant="positive"
+            fillWidth
+            size="small"
             onClick={handleRequestApproval}
             isLoading={updatePickUpLoading}
-            style={
-                /*TODO: fix the local styles here*/
-                { padding: '0.5rem 1rem', minWidth: '8rem', minHeight: '2.5rem' }
-            }
         />
     );
 };

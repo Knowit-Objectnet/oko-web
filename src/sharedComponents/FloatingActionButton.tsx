@@ -62,7 +62,7 @@ export const FloatingActionButton: React.FC<Props> = ({ label, icon, variant, on
     return (
         <ButtonContainer>
             <Label>{label}</Label>
-            <StyledButton {...onClick} aria-label={label} colors={buttonColors[variant]}>
+            <StyledButton onClick={onClick} aria-label={label} colors={buttonColors[variant]}>
                 {icon}
             </StyledButton>
         </ButtonContainer>

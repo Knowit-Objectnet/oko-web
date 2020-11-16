@@ -32,6 +32,10 @@ const Notice = styled.div`
     justify-content: center;
 `;
 
+const StatusWrapper = styled.div`
+    min-width: 10rem;
+`;
+
 const Status = styled.div`
     display: flex;
     height: 100%;
@@ -42,8 +46,8 @@ const Status = styled.div`
     background: ${(props) => props.theme.colors.White};
     border: 0.125rem solid;
     padding: 0.5rem 1rem;
-    min-width: 8rem;
     min-height: 2.5rem;
+    width: 100%;
 `;
 
 const ApprovedStatus = styled(Status)`
@@ -98,7 +102,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
             {sortedRequests?.map((request) => (
                 <Request key={`${request.pickup.id}-${request.partner.id}`}>
                     <strong>{request.partner.name}</strong>
-                    {getStatusForRequest(request)}
+                    <StatusWrapper>{getStatusForRequest(request)}</StatusWrapper>
                 </Request>
             ))}
         </>

@@ -56,16 +56,22 @@ export const PickUpsList: React.FC = () => {
     ) : (
         <PickUps>
             <h2>Forespørsler</h2>
-            <HeaderRow>
-                <div>Sendt av:</div>
-                <div>Uttak:</div>
-                <div>{userIsStation ? 'Handlingsalternativer:' : 'Påmeldte:'}</div>
-            </HeaderRow>
-            <PickUpRows>
-                {sortedPickups?.map((pickUp) => (
-                    <PickUpDetails key={pickUp.id} pickUp={pickUp} />
-                ))}
-            </PickUpRows>
+            {sortedPickups?.length ? (
+                <>
+                    <HeaderRow>
+                        <div>Sendt av:</div>
+                        <div>Uttak:</div>
+                        <div>{userIsStation ? 'Handlingsalternativer:' : 'Påmeldte:'}</div>
+                    </HeaderRow>
+                    <PickUpRows>
+                        {sortedPickups.map((pickUp) => (
+                            <PickUpDetails key={pickUp.id} pickUp={pickUp} />
+                        ))}
+                    </PickUpRows>
+                </>
+            ) : (
+                <p>Det er ikke registrert noen ekstrauttak enda.</p>
+            )}
         </PickUps>
     );
 };
