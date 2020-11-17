@@ -10,9 +10,9 @@ import { GlobalStyle } from '../src/global-styles';
 import AlertTemplate from 'react-alert-template-basic';
 
 /*
- * This file sets up the common providers that wraps the real application (in `App.tsx`)
- * It re-exports the React Testing Library, but with a modified render-method that can be
- * used in place of the default render method.
+ * This file sets up the common providers that wraps the application (in `App.tsx`),
+ * in order to reduce boilerplate code in tests. It re-exports the React Testing Library,
+ * but with a modified render-method that can be used in place of the default render method.
  *
  * Requires that you replace the import in your test files as follows:
  * From `import { ... } from '@testing-library/react';`

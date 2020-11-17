@@ -57,9 +57,10 @@ export const Button: React.FC<ButtonProps> = ({
     variant = 'primary',
     size = 'normal',
     isLoading = false,
-    ...rest
+    ...otherProps
 }) => {
     const theme = useTheme();
+
     const buttonColors: Record<ButtonVariant, ButtonColors> = {
         primary: {
             bgColor: theme.colors.DarkBlue,
@@ -88,7 +89,7 @@ export const Button: React.FC<ButtonProps> = ({
 
     return (
         <StyledButton
-            {...rest}
+            {...otherProps}
             buttonColors={buttonColors[variant]}
             buttonMeasures={buttonMeasures[size]}
             disabled={isLoading}

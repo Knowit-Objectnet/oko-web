@@ -11,7 +11,7 @@ import { PostToAPI } from '../../../utils/PostToAPI';
 import { DeleteToAPI } from '../../../utils/DeleteToAPI';
 import { Button } from '../../../sharedComponents/Button';
 
-const RequestStatus = styled.div`
+const StatusWrapper = styled.div`
     display: flex;
     padding: 0.625rem;
 `;
@@ -128,5 +128,5 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
         return <RejectStatus>Påmelding stengt</RejectStatus>;
     };
 
-    return <RequestStatus>{renderRequestStatus()}</RequestStatus>;
+    return <StatusWrapper>{renderRequestStatus()}</StatusWrapper>;
 };

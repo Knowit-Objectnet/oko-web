@@ -19,15 +19,14 @@ const Wrapper = styled.div`
     height: 100%;
     width: 100%;
     padding: 40px;
-    box-sizing: border-box;
 `;
 
-const Content = styled.div<{ sideMenuVisible: boolean }>`
+const Content = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    width: ${(props) => (props.sideMenuVisible ? '100%' : '80%')};
+    flex-basis: 80%;
 `;
 
 const Header = styled.div`
@@ -66,7 +65,7 @@ export const UserProfile: React.FC = () => {
                 <title>Min side</title>
             </Helmet>
             <Wrapper>
-                <Content sideMenuVisible={userIsAdmin}>
+                <Content>
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>

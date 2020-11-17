@@ -75,7 +75,7 @@ export const DeletePartner: React.FC<Props> = (props) => {
             <Title>Fjern samarbeidspartner</Title>
             <StyledForm onSubmit={handleDeletePartnerSubmission}>
                 <PartnerSelect onSelectedPartnerChange={setSelectedPartner} selectedPartnerId={selectedPartner} />
-                <Button text="Slett" type="submit" variant="negative" isLoading={deletePartnerLoading} />
+                <Button text="Slett" variant="negative" isLoading={deletePartnerLoading} />
             </StyledForm>
         </Wrapper>
     );
