@@ -7,6 +7,11 @@ import { fetcher } from '../../../utils/fetcher';
 import { ApiPickUp } from '../../../api/PickUpService';
 import { useKeycloak } from '@react-keycloak/web';
 
+const RequestList = styled.div`
+    display: flex;
+    flex-flow: column;
+`;
+
 const Request = styled.div`
     display: flex;
     align-items: center;
@@ -56,8 +61,8 @@ const ApprovedStatus = styled(Status)`
 const RejectedStatus = styled(Status)`
     border-color: ${(props) => props.theme.colors.Red};
 `;
-const AwaitingStatus = styled(Notice)`
-    justify-content: flex-end;
+const AwaitingStatus = styled(Status)`
+    border-color: ${(props) => props.theme.colors.Blue};
 `;
 
 interface Props {
@@ -66,7 +71,6 @@ interface Props {
 
 export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
     const { keycloak } = useKeycloak();
-    const userCanApproveRequests = keycloak.hasRealmRole(Roles.Ambassador);
 
     const { data: requests, isValidating } = useSWR<Array<ApiRequest>>(
         `${apiUrl}/requests/?pickupId=${pickUp.id}`,
@@ -75,6 +79,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
     const sortedRequests = requests?.sort((requestA, requestB) => requestA.partner.id - requestB.partner.id);
 
     const getStatusForRequest = (request: ApiRequest) => {
+        const userCanApproveRequests = keycloak.hasRealmRole(Roles.Ambassador);
         const pickUpIsOpenForRequests = !pickUp.chosenPartner?.id;
         const thisRequestIsApproved = request.partner.id === pickUp.chosenPartner?.id;
 
@@ -98,13 +103,13 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
     }
 
     return (
-        <>
+        <RequestList>
             {sortedRequests?.map((request) => (
                 <Request key={`${request.pickup.id}-${request.partner.id}`}>
                     <strong>{request.partner.name}</strong>
                     <StatusWrapper>{getStatusForRequest(request)}</StatusWrapper>
                 </Request>
             ))}
-        </>
+        </RequestList>
     );
 };

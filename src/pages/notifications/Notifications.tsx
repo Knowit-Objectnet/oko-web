@@ -20,6 +20,14 @@ const AddPickUpButtonContainer = styled.div`
     right: 50px;
 `;
 
+const PageContent = styled.section`
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 40px 0 50px;
+`;
+
 export const Notifications: React.FC = () => {
     const modal = useModal();
 
@@ -50,7 +58,9 @@ export const Notifications: React.FC = () => {
                         />
                     </AddPickUpButtonContainer>
                 )}
-                <PickUpsList />
+                <PageContent>
+                    <PickUpsList />
+                </PageContent>
             </Wrapper>
         </>
     );

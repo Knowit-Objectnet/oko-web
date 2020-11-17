@@ -2,19 +2,9 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { PickUpDetails } from './PickUpDetails';
 import { useKeycloak } from '@react-keycloak/web';
-import { Loading } from '../../../sharedComponents/Loading';
 import { Roles } from '../../../types';
 import { usePickUps } from '../../../api/hooks/usePickUps';
 import { ApiPickUpParams } from '../../../api/PickUpService';
-import { format } from 'date-fns';
-
-const PickUps = styled.div`
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
-    padding: 40px 0 50px;
-`;
 
 const HeaderRow = styled.div`
     display: grid;
@@ -38,7 +28,6 @@ export const PickUpsList: React.FC = () => {
 
     const pickUpsFilter: ApiPickUpParams = {
         stationId: userIsStation ? userId : undefined,
-        // TODO startDateTime: `${format(new Date().setDate(1), 'yyyy-MM-dd')}T00:00:00Z`,
     };
     const { data: pickUps, isLoading } = usePickUps(pickUpsFilter);
     const sortedPickups = pickUps?.sort((pickUpA, pickUpB) => {
@@ -51,27 +40,33 @@ export const PickUpsList: React.FC = () => {
         }
     });
 
-    return isLoading ? (
-        <Loading text="Laster inn data..." />
-    ) : (
-        <PickUps>
+    const renderPickUpsList = () => {
+        if (isLoading) {
+            return <p>Laster inn...</p>;
+        }
+        if (!sortedPickups?.length) {
+            return <p>Det er ikke registrert noen ekstrauttak enda.</p>;
+        }
+        return (
+            <>
+                <HeaderRow>
+                    <div>Sendt av:</div>
+                    <div>Uttak:</div>
+                    <div>{userIsStation ? 'Handlingsalternativer:' : 'Påmeldte:'}</div>
+                </HeaderRow>
+                <PickUpRows>
+                    {sortedPickups.map((pickUp) => (
+                        <PickUpDetails key={pickUp.id} pickUp={pickUp} />
+                    ))}
+                </PickUpRows>
+            </>
+        );
+    };
+
+    return (
+        <>
             <h2>Forespørsler</h2>
-            {sortedPickups?.length ? (
-                <>
-                    <HeaderRow>
-                        <div>Sendt av:</div>
-                        <div>Uttak:</div>
-                        <div>{userIsStation ? 'Handlingsalternativer:' : 'Påmeldte:'}</div>
-                    </HeaderRow>
-                    <PickUpRows>
-                        {sortedPickups.map((pickUp) => (
-                            <PickUpDetails key={pickUp.id} pickUp={pickUp} />
-                        ))}
-                    </PickUpRows>
-                </>
-            ) : (
-                <p>Det er ikke registrert noen ekstrauttak enda.</p>
-            )}
-        </PickUps>
+            {renderPickUpsList()}
+        </>
     );
 };

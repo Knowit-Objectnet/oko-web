@@ -11,13 +11,13 @@ import { PostToAPI } from '../../../utils/PostToAPI';
 import { DeleteToAPI } from '../../../utils/DeleteToAPI';
 import { Button } from '../../../sharedComponents/Button';
 
-const Wrapper = styled.div`
-    padding: 0.625rem;
+const RequestStatus = styled.div`
     display: flex;
+    padding: 0.625rem;
 `;
 
 const CancelButton = styled.button`
-    margin-left: 10px;
+    margin-left: 0.625rem;
     display: flex;
     font-weight: bold;
     align-items: center;
@@ -39,7 +39,7 @@ const Status = styled.div`
     text-align: center;
     padding: 0.75rem 1rem;
     background: ${(props) => props.theme.colors.White};
-    min-width: 200px;
+    min-width: 12rem;
     border: 0.125rem solid;
 `;
 
@@ -92,11 +92,16 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
         }
     };
 
-    const getRequestStatusField = () => {
+    const renderRequestStatus = () => {
+        if (!request && isValidating) {
+            return null;
+        }
+
+        const userHasRequest = request?.[0] ? true : false;
         const pickUpIsOpenForRequest = !pickUp.chosenPartner;
-        const userHasRequest = !!request?.[0];
+
         const userCanMakeRequest = pickUpIsOpenForRequest && !userHasRequest;
-        const userRequestAwaiting = userHasRequest && pickUpIsOpenForRequest;
+        const userRequestAwaiting = pickUpIsOpenForRequest && userHasRequest;
         const userRequestApproved = pickUp.chosenPartner?.id === userId;
         // TODO: explicit rejection of a partner request is not supported by backend yet.
         //  When implemented, the following condition needs to be rewritten.
@@ -123,5 +128,5 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
         return <RejectStatus>Påmelding stengt</RejectStatus>;
     };
 
-    return !request && isValidating ? null : <Wrapper>{getRequestStatusField()}</Wrapper>;
+    return <RequestStatus>{renderRequestStatus()}</RequestStatus>;
 };

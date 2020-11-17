@@ -32,11 +32,6 @@ const Description = styled.div`
     padding: 0.625rem;
 `;
 
-const Requests = styled.div`
-    display: flex;
-    flex-flow: column;
-`;
-
 interface Props {
     pickUp: ApiPickUp;
 }
@@ -69,9 +64,7 @@ export const PickUpDetails: React.FC<Props> = ({ pickUp }) => {
                 <time dateTime={formatISO(endDateTime)}>{pickUpEndTime}</time>{' '}
                 <time dateTime={getMachineReadableDate(startDateTime)}>{pickUpDate}</time>
             </Details>
-            <Requests>
-                {userIsPartner ? <PartnerRequestStatus pickUp={pickUp} /> : <RequestsStatusList pickUp={pickUp} />}
-            </Requests>
+            {userIsPartner ? <PartnerRequestStatus pickUp={pickUp} /> : <RequestsStatusList pickUp={pickUp} />}
             {pickUp.description && (
                 <Description>
                     <strong>Merknad:</strong> {pickUp.description}
