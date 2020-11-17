@@ -9,7 +9,8 @@ import ModalProvider from '../src/sharedComponents/Modal/Provider';
 import { GlobalStyle } from '../src/global-styles';
 import AlertTemplate from 'react-alert-template-basic';
 
-/** This file sets up the common providers that wraps the real application (in `App.tsx`)
+/*
+ * This file sets up the common providers that wraps the real application (in `App.tsx`)
  * It re-exports the React Testing Library, but with a modified render-method that can be
  * used in place of the default render method.
  *
@@ -17,7 +18,8 @@ import AlertTemplate from 'react-alert-template-basic';
  * From `import { ... } from '@testing-library/react';`
  * To:  `import { ... } from 'path/to/this/test-setup';`
  *
- * For more information: https://testing-library.com/docs/react-testing-library/setup#custom-render */
+ * For more information: https://testing-library.com/docs/react-testing-library/setup#custom-render
+ */
 
 const alertOptions = {
     position: positions.TOP_CENTER,

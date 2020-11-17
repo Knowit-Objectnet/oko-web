@@ -7,7 +7,11 @@ const Option = styled.div`
     align-items: center;
 `;
 
-const OptionInfo = styled.div<{ icon?: React.ElementType }>`
+interface Props {
+    icon?: React.ElementType;
+}
+
+const OptionInfo = styled.div<Props>`
     margin-left: ${(props) => (props.icon ? '36px' : '0')};
     display: flex;
     justify-content: center;
@@ -15,14 +19,7 @@ const OptionInfo = styled.div<{ icon?: React.ElementType }>`
     flex: 1;
 `;
 
-interface EventOptionProps {
-    icon?: React.ElementType;
-}
-
-/**
- * A general Event option that can be specialized for a new event option
- */
-export const EventOption: React.FC<EventOptionProps> = (props) => (
+export const EventOption: React.FC<Props> = (props) => (
     <Option>
         {props.icon && <props.icon height="1.5em" />}
         <OptionInfo icon={props.icon}>{props.children}</OptionInfo>

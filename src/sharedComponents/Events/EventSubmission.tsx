@@ -9,17 +9,17 @@ const ButtonRow = styled.div`
     justify-content: space-between;
     margin-top: 1rem;
 
-    & > button {
-        flex-grow: 1;
-        min-width: 9rem;
-    }
-
     & > button:not(:last-child) {
         margin-right: 0.5rem;
     }
 `;
 
-interface EventSubmissionProps {
+const StyledButton = styled(Button)`
+    flex-grow: 1;
+    min-width: 9rem;
+`;
+
+interface Props {
     cancelText?: string;
     submitText?: string;
     onCancel: () => void;
@@ -30,7 +30,7 @@ interface EventSubmissionProps {
 /**
  * Event submission component, cancel and submit.
  */
-export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
+export const EventSubmission: React.FC<Props> = (props) => {
     const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.persist();
         switch (e.currentTarget.name) {
@@ -47,8 +47,8 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
 
     return (
         <ButtonRow>
-            <Button variant="negative" name="cancelButton" onClick={onClick} text="Avbryt" />
-            <Button
+            <StyledButton variant="negative" name="cancelButton" onClick={onClick} text="Avbryt" />
+            <StyledButton
                 variant="positive"
                 name="submitButton"
                 onClick={onClick}

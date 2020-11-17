@@ -17,10 +17,10 @@ const StyledForm = styled.form`
     flex-direction: column;
     flex: 1;
     width: 350px;
+`;
 
-    & > :last-child {
-        margin-top: 20px;
-    }
+const SubmitButton = styled(Button)`
+    margin-top: 20px;
 `;
 
 interface Props {
@@ -161,7 +161,7 @@ export const NewEvent: React.FC<Props> = (props) => {
                     onSelectedDaysChange={onSelectedDaysChange}
                     recurrenceEnabled={true}
                 />
-                <Button type="submit" text="Lagre" variant="positive" isLoading={addEventLoading} />
+                <SubmitButton type="submit" text="Lagre" variant="positive" isLoading={addEventLoading} />
             </StyledForm>
         </EventTemplateVertical>
     );

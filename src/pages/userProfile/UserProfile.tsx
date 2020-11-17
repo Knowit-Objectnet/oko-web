@@ -22,11 +22,7 @@ const Wrapper = styled.div`
     box-sizing: border-box;
 `;
 
-interface ContentProps {
-    sideMenuVisible: boolean;
-}
-
-const Content = styled.div<ContentProps>`
+const Content = styled.div<{ sideMenuVisible: boolean }>`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -41,10 +37,10 @@ const Header = styled.div`
     align-items: center;
     margin-bottom: 45px;
     width: 100%;
+`;
 
-    & > *:last-child {
-        margin-left: auto;
-    }
+const LogoutButton = styled(Button)`
+    margin-left: auto;
 `;
 
 const DefaultProfilePicture = styled(Default)`
@@ -74,7 +70,7 @@ export const UserProfile: React.FC = () => {
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>
-                        <Button text="Logg ut" onClick={handleLogoutClick} />
+                        <LogoutButton text="Logg ut" onClick={handleLogoutClick} />
                     </Header>
                     {userIsPartner && <AboutPartner />}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />
