@@ -34,10 +34,10 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId
         (request: ApiRequestParams) => deleteRequest(request, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Påmelding til ekstrauttak ble slettet suksessfullt.', { type: types.SUCCESS });
+                alert.show('Påmelding til ekstrauttaket ble slettet.', { type: types.SUCCESS });
             },
             onError: () => {
-                alert.show('Noe gikk galt, sletting av påmelding til ekstrauttaket ble ikke registrert.', {
+                alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
                     type: types.ERROR,
                 });
             },

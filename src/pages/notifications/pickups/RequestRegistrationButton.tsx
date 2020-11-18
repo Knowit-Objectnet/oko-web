@@ -18,7 +18,7 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId
         (newRequest: ApiRequestPost) => postRequest(newRequest, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Påmelding til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
+                alert.show('Påmelding til ekstrauttaket ble registrert.', { type: types.SUCCESS });
             },
             onError: () => {
                 alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });

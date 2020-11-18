@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import useSWR from 'swr';
 import { RequestApprovalButton } from './RequestApprovalButton';
-import { apiUrl, Roles } from '../../../types';
-import { fetcher } from '../../../utils/fetcher';
+import { Roles } from '../../../types';
 import { ApiPickUp } from '../../../api/PickUpService';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiRequest } from '../../../api/RequestService';
+import { useRequests } from '../../../api/hooks/useRequests';
 
 const RequestList = styled.div`
     display: flex;
@@ -73,11 +72,12 @@ interface Props {
 export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
     const { keycloak } = useKeycloak();
 
-    const { data: requests, isValidating } = useSWR<Array<ApiRequest>>(
-        `${apiUrl}/requests/?pickupId=${pickUp.id}`,
-        fetcher,
+    const { data: requests } = useRequests({
+        pickupId: pickUp.id,
+    });
+    const requestsSortedByPartner = (requests ?? []).sort(
+        (requestA, requestB) => requestA.partner.id - requestB.partner.id,
     );
-    const sortedRequests = (requests ?? []).sort((requestA, requestB) => requestA.partner.id - requestB.partner.id);
 
     const getStatusForRequest = (request: ApiRequest) => {
         const userCanApproveRequests = keycloak.hasRealmRole(Roles.Ambassador);
@@ -95,17 +95,13 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
         }
     };
 
-    if (sortedRequests.length === 0 && isValidating) {
-        return <Notice>Laster inn...</Notice>;
-    }
-
     if (sortedRequests.length === 0) {
         return <Notice>Ingen påmeldte enda</Notice>;
     }
 
     return (
         <RequestList>
-            {sortedRequests.map((request) => (
+            {requestsSortedByPartner.map((request) => (
                 <Request key={`${request.pickup.id}-${request.partner.id}`}>
                     <strong>{request.partner.name}</strong>
                     <StatusWrapper>{getStatusForRequest(request)}</StatusWrapper>
