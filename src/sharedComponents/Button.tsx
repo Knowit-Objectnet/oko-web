@@ -31,6 +31,7 @@ const useButtonColors = (variant: ButtonVariant) => {
 };
 
 type ButtonSize = 'normal' | 'small';
+
 interface ButtonMeasures {
     padding: string;
     minHeight: string;
@@ -54,6 +55,7 @@ interface StyledButtonProps {
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
+    position: relative;
     background-color: ${(props) => props.buttonColors.bgColor};
     color: ${(props) => props.buttonColors.fgColor};
     min-height: ${(props) => props.buttonMeasures.minHeight};
@@ -65,12 +67,18 @@ const StyledButton = styled.button<StyledButtonProps>`
 `;
 
 const LoadingSpinner = styled(DotsSpinner)<{ color: Colors }>`
-    vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
     height: 0.375rem;
-    transform: translateY(-20%);
     width: auto;
-    margin-left: 0.75rem;
     fill: ${(props) => props.color};
+`;
+
+const Content = styled.span<{ visible: boolean }>`
+    opacity: ${(props) => (props.visible ? 1 : 0)};
 `;
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -100,7 +108,7 @@ export const Button: React.FC<ButtonProps> = ({
             aria-live="polite"
             aria-busy={isLoading}
         >
-            {text}
+            <Content visible={!isLoading}>{text}</Content>
             {isLoading && <LoadingSpinner color={buttonColors.fgColor} />}
         </StyledButton>
     );
