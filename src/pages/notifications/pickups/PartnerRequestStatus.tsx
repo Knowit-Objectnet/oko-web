@@ -1,36 +1,18 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import useSWR from 'swr';
-import Cross from '../../../assets/Cross.svg';
-import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiPickUp } from '../../../api/PickUpService';
-import { apiUrl } from '../../../types';
-import { fetcher } from '../../../utils/fetcher';
-import { PostToAPI } from '../../../utils/PostToAPI';
-import { DeleteToAPI } from '../../../utils/DeleteToAPI';
-import { Button } from '../../../sharedComponents/Button';
-import { ApiRequest } from '../../../api/RequestService';
+import { useRequests } from '../../../api/hooks/useRequests';
+import { RequestRegistrationButton } from './RequestRegistrationButton';
+import { RequestCancellationButton } from './RequestCancellationButton';
 
 const StatusWrapper = styled.div`
     display: flex;
     align-items: center;
     padding: 0.625rem;
-`;
 
-const CancelButton = styled.button`
-    margin-left: 0.625rem;
-    display: flex;
-    font-weight: bold;
-    align-items: center;
-    border: none;
-    background: none;
-    min-height: 45px;
-    font-size: 0.875rem;
-
-    & > svg {
-        margin-right: 2px;
-        height: 1.5rem;
+    & > *:not(:last-child) {
+        margin-right: 0.625rem;
     }
 `;
 
@@ -65,37 +47,13 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
     const { keycloak } = useKeycloak();
     const userId = keycloak.tokenParsed?.GroupID;
 
-    const alert = useAlert();
-
-    const { data: request, isValidating, mutate } = useSWR<Array<ApiRequest>>(
-        `${apiUrl}/requests/?pickupId=${pickUp.id}&partnerId=${userId}`,
-        fetcher,
-    );
-
-    const handleRequestRegistrationClick = async () => {
-        try {
-            await PostToAPI(`${apiUrl}/requests`, { pickupId: pickUp.id, partnerId: userId }, keycloak.token);
-            alert.show('Påmelding til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
-            mutate();
-        } catch {
-            alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
-        }
-    };
-
-    const handleRequestCancellationClick = async () => {
-        try {
-            await DeleteToAPI(`${apiUrl}/requests?pickupId=${pickUp.id}&partnerId=${userId}`, keycloak.token);
-            alert.show('Påmelding til ekstrauttak ble slettet suksessfullt.', { type: types.SUCCESS });
-            mutate();
-        } catch {
-            alert.show('Noe gikk galt, sletting av påmelding til ekstrauttaket ble ikke registrert.', {
-                type: types.ERROR,
-            });
-        }
-    };
+    const { data: request, isLoading } = useRequests({
+        pickupId: pickUp.id,
+        partnerId: userId,
+    });
 
     const renderRequestStatus = () => {
-        if (!request && isValidating) {
+        if (isLoading) {
             return null;
         }
 
@@ -110,16 +68,12 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
         const userRequestRejected = userHasRequest && !userRequestApproved;
 
         if (userCanMakeRequest) {
-            return (
-                <Button text="Meld deg på ekstrauttak" variant="positive" onClick={handleRequestRegistrationClick} />
-            );
+            return <RequestRegistrationButton pickupId={pickUp.id} partnerId={userId} />;
         } else if (userRequestAwaiting) {
             return (
                 <>
                     <AwaitingStatus>Avventer svar</AwaitingStatus>
-                    <CancelButton onClick={handleRequestCancellationClick}>
-                        <Cross /> Meld av
-                    </CancelButton>
+                    <RequestCancellationButton pickupId={pickUp.id} partnerId={userId} />
                 </>
             );
         } else if (userRequestApproved) {
