@@ -76,7 +76,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
         `${apiUrl}/requests/?pickupId=${pickUp.id}`,
         fetcher,
     );
-    const sortedRequests = requests?.sort((requestA, requestB) => requestA.partner.id - requestB.partner.id);
+    const sortedRequests = (requests ?? []).sort((requestA, requestB) => requestA.partner.id - requestB.partner.id);
 
     const getStatusForRequest = (request: ApiRequest) => {
         const userCanApproveRequests = keycloak.hasRealmRole(Roles.Ambassador);
@@ -104,7 +104,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
 
     return (
         <RequestList>
-            {sortedRequests?.map((request) => (
+            {sortedRequests.map((request) => (
                 <Request key={`${request.pickup.id}-${request.partner.id}`}>
                     <strong>{request.partner.name}</strong>
                     <StatusWrapper>{getStatusForRequest(request)}</StatusWrapper>

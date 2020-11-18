@@ -6,17 +6,46 @@ import { Colors } from '../theme';
 
 type ButtonVariant = 'primary' | 'positive' | 'negative';
 
-type ButtonSize = 'normal' | 'small';
-
 interface ButtonColors {
     bgColor: Colors;
     fgColor: Colors;
 }
 
+const useButtonColors = (variant: ButtonVariant) => {
+    const theme = useTheme();
+    const BUTTON_COLORS: Record<ButtonVariant, ButtonColors> = {
+        primary: {
+            bgColor: theme.colors.DarkBlue,
+            fgColor: theme.colors.White,
+        },
+        positive: {
+            bgColor: theme.colors.Green,
+            fgColor: theme.colors.Black,
+        },
+        negative: {
+            bgColor: theme.colors.Red,
+            fgColor: theme.colors.Black,
+        },
+    };
+    return BUTTON_COLORS[variant];
+};
+
+type ButtonSize = 'normal' | 'small';
 interface ButtonMeasures {
     padding: string;
     minHeight: string;
 }
+
+const MUTTON_MEASURES: Record<ButtonSize, ButtonMeasures> = {
+    normal: {
+        padding: '0.75rem 1rem',
+        minHeight: '3rem',
+    },
+    small: {
+        padding: '0.5rem 1rem',
+        minHeight: '2.5rem',
+    },
+};
 
 interface StyledButtonProps {
     buttonColors: ButtonColors;
@@ -59,46 +88,20 @@ export const Button: React.FC<ButtonProps> = ({
     isLoading = false,
     ...otherProps
 }) => {
-    const theme = useTheme();
-
-    const buttonColors: Record<ButtonVariant, ButtonColors> = {
-        primary: {
-            bgColor: theme.colors.DarkBlue,
-            fgColor: theme.colors.White,
-        },
-        positive: {
-            bgColor: theme.colors.Green,
-            fgColor: theme.colors.Black,
-        },
-        negative: {
-            bgColor: theme.colors.Red,
-            fgColor: theme.colors.Black,
-        },
-    };
-
-    const buttonMeasures: Record<ButtonSize, ButtonMeasures> = {
-        normal: {
-            padding: '0.75rem 1rem',
-            minHeight: '3rem',
-        },
-        small: {
-            padding: '0.5rem 1rem',
-            minHeight: '2.5rem',
-        },
-    };
+    const buttonColors = useButtonColors(variant);
 
     return (
         <StyledButton
             {...otherProps}
-            buttonColors={buttonColors[variant]}
-            buttonMeasures={buttonMeasures[size]}
+            buttonColors={buttonColors}
+            buttonMeasures={MUTTON_MEASURES[size]}
             disabled={isLoading}
             aria-disabled={isLoading}
             aria-live="polite"
             aria-busy={isLoading}
         >
             {text}
-            {isLoading && <LoadingSpinner color={buttonColors[variant].fgColor} />}
+            {isLoading && <LoadingSpinner color={buttonColors.fgColor} />}
         </StyledButton>
     );
 };

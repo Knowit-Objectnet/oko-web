@@ -30,7 +30,7 @@ export const PickUpsList: React.FC = () => {
         stationId: userIsStation ? userId : undefined,
     };
     const { data: pickUps, isLoading } = usePickUps(pickUpsFilter);
-    const sortedPickups = pickUps?.sort((pickUpA, pickUpB) => {
+    const sortedPickups = (pickUps ?? []).sort((pickUpA, pickUpB) => {
         const timeA = new Date(pickUpA.startDateTime);
         const timeB = new Date(pickUpB.startDateTime);
         if (timeA == timeB) {
@@ -44,7 +44,7 @@ export const PickUpsList: React.FC = () => {
         if (isLoading) {
             return <p>Laster inn...</p>;
         }
-        if (!sortedPickups?.length) {
+        if (sortedPickups.length === 0) {
             return <p>Det er ikke registrert noen ekstrauttak enda.</p>;
         }
         return (

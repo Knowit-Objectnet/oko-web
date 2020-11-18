@@ -18,10 +18,10 @@ export const RequestApprovalButton: React.FC<Props> = (props) => {
         (updatedPickUp: ApiPickUpPatch) => patchPickUp(updatedPickUp, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Valg av sam.partner til ekstrauttak ble registrert suksessfullt.', { type: types.SUCCESS });
+                alert.show('Valg av samarbeidspartner til ekstrauttak ble registrert.', { type: types.SUCCESS });
             },
             onError: () => {
-                alert.show('Noe gikk galt, valg av sam.partner til ekstrauttak ble ikke registrert.', {
+                alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrauttak ble ikke registrert.', {
                     type: types.ERROR,
                 });
             },
