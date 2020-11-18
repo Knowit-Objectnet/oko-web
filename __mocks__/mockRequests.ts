@@ -1,4 +1,4 @@
-import { ApiRequest } from '../src/types';
+import {ApiRequest} from "../src/api/RequestService";
 
 export const mockApiRequests: Array<ApiRequest> = [
     {

@@ -5,11 +5,12 @@ import Cross from '../../../assets/Cross.svg';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiPickUp } from '../../../api/PickUpService';
-import { ApiRequest, apiUrl } from '../../../types';
+import { apiUrl } from '../../../types';
 import { fetcher } from '../../../utils/fetcher';
 import { PostToAPI } from '../../../utils/PostToAPI';
 import { DeleteToAPI } from '../../../utils/DeleteToAPI';
 import { Button } from '../../../sharedComponents/Button';
+import { ApiRequest } from '../../../api/RequestService';
 
 const StatusWrapper = styled.div`
     display: flex;

@@ -2,10 +2,11 @@ import * as React from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
 import { RequestApprovalButton } from './RequestApprovalButton';
-import { ApiRequest, apiUrl, Roles } from '../../../types';
+import { apiUrl, Roles } from '../../../types';
 import { fetcher } from '../../../utils/fetcher';
 import { ApiPickUp } from '../../../api/PickUpService';
 import { useKeycloak } from '@react-keycloak/web';
+import { ApiRequest } from '../../../api/RequestService';
 
 const RequestList = styled.div`
     display: flex;
