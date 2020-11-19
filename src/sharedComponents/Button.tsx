@@ -36,7 +36,7 @@ interface ButtonMeasures {
     minHeight: string;
 }
 
-const MUTTON_MEASURES: Record<ButtonSize, ButtonMeasures> = {
+const BUTTON_MEASURES: Record<ButtonSize, ButtonMeasures> = {
     normal: {
         padding: '0.75rem 1rem',
         minHeight: '3rem',
@@ -94,7 +94,7 @@ export const Button: React.FC<ButtonProps> = ({
         <StyledButton
             {...otherProps}
             buttonColors={buttonColors}
-            buttonMeasures={MUTTON_MEASURES[size]}
+            buttonMeasures={BUTTON_MEASURES[size]}
             disabled={isLoading}
             aria-disabled={isLoading}
             aria-live="polite"

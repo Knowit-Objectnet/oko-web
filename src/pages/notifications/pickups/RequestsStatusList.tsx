@@ -94,11 +94,11 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
         }
     };
 
-    if (!requests && isValidating) {
+    if (sortedRequests.length === 0 && isValidating) {
         return <Notice>Laster inn...</Notice>;
     }
 
-    if (requests?.length === 0) {
+    if (sortedRequests.length === 0) {
         return <Notice>Ingen påmeldte enda</Notice>;
     }
 
