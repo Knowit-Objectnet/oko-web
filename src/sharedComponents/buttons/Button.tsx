@@ -1,84 +1,75 @@
 import * as React from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled, { CSSObject, CSSProperties } from 'styled-components';
 import DotsSpinner from '../../assets/DotsSpinner.svg';
 import { ButtonHTMLAttributes } from 'react';
-import { Colors } from '../../theme';
+import { variant } from 'styled-system';
+import { ThemeType } from '../../theme';
 
 type ButtonVariant = 'primary' | 'positive' | 'negative' | 'text';
-
-interface ButtonColors {
-    bgColor: Colors | 'transparent';
-    fgColor: Colors;
-}
-
-const useButtonColors = (variant: ButtonVariant) => {
-    const theme = useTheme();
-    const BUTTON_COLORS: Record<ButtonVariant, ButtonColors> = {
-        primary: {
-            bgColor: theme.colors.DarkBlue,
-            fgColor: theme.colors.White,
-        },
-        positive: {
-            bgColor: theme.colors.Green,
-            fgColor: theme.colors.Black,
-        },
-        negative: {
-            bgColor: theme.colors.Red,
-            fgColor: theme.colors.Black,
-        },
-        text: {
-            bgColor: 'transparent',
-            fgColor: theme.colors.Black,
-        },
-    };
-    return BUTTON_COLORS[variant];
-};
-
-type ButtonSize = 'normal' | 'small';
-
-interface ButtonMeasures {
-    padding: string;
-    minHeight: string;
-}
-
-const BUTTON_MEASURES: Record<ButtonSize, ButtonMeasures> = {
-    normal: {
-        padding: '0.75rem 1rem',
-        minHeight: '3rem',
-    },
-    small: {
-        padding: '0.5rem 1rem',
-        minHeight: '2.5rem',
-    },
-};
+type ButtonSize = 'medium' | 'small';
 
 interface StyledButtonProps {
-    buttonColors: ButtonColors;
-    buttonMeasures: ButtonMeasures;
+    variant: ButtonVariant;
+    size: ButtonSize;
     fillWidth?: boolean;
 }
 
+const buttonSizes = variant<CSSProperties, ButtonSize, keyof StyledButtonProps>({
+    prop: 'size',
+    variants: {
+        medium: {
+            padding: '0.75rem 1rem',
+            minHeight: '3rem',
+        },
+        small: {
+            padding: '0.5rem 1rem',
+            minHeight: '2.5rem',
+        },
+    },
+});
+
+const buttonVariants = (theme: ThemeType) =>
+    variant<CSSObject, ButtonVariant, keyof StyledButtonProps>({
+        prop: 'variant',
+        variants: {
+            primary: {
+                backgroundColor: theme.colors.DarkBlue,
+                color: theme.colors.White,
+                '& svg': { fill: theme.colors.White },
+            },
+            positive: {
+                backgroundColor: theme.colors.Green,
+                color: theme.colors.Black,
+                '& svg': { fill: theme.colors.Black },
+            },
+            negative: {
+                backgroundColor: theme.colors.Red,
+                color: theme.colors.Black,
+                '& svg': { fill: theme.colors.Black },
+            },
+            text: {
+                backgroundColor: 'transparent',
+                color: theme.colors.Black,
+                cursor: 'pointer',
+                padding: '0.2rem',
+                '& svg': {
+                    fill: theme.colors.Black,
+                },
+                '&:hover': {
+                    textDecoration: 'underline',
+                },
+            },
+        },
+    });
+
 const StyledButton = styled.button<StyledButtonProps>`
     position: relative;
-    background-color: ${(props) => props.buttonColors.bgColor};
-    color: ${(props) => props.buttonColors.fgColor};
-    min-height: ${(props) => props.buttonMeasures.minHeight};
+    border: none;
     font-weight: bold;
     font-size: 0.875rem;
-    border: none;
-    padding: ${(props) => props.buttonMeasures.padding};
     ${(props) => props.fillWidth && 'width: 100%;'}
-`;
-
-const LoadingSpinner = styled(DotsSpinner)<{ color: Colors }>`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    height: 0.375rem;
-    width: auto;
-    fill: ${(props) => props.color};
+    ${buttonSizes}
+    ${(props) => buttonVariants(props.theme)}
 `;
 
 const Content = styled.span<{ visible: boolean }>`
@@ -86,12 +77,28 @@ const Content = styled.span<{ visible: boolean }>`
     align-items: center;
     justify-content: center;
     opacity: ${(props) => (props.visible ? 1 : 0)};
+`;
+
+const Icon = styled.span`
+    height: 1.5rem;
+
     & > * {
-        height: 1.5rem;
+        height: 100%;
     }
-    & > *:first-child {
-        margin-right: 0.125rem;
-    }
+`;
+
+const LeftIcon = styled(Icon)`
+    margin-right: 0.125rem;
+`;
+
+const LoadingSpinner = styled(DotsSpinner)`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    height: 0.375rem;
+    width: auto;
 `;
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -103,29 +110,28 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button: React.FC<ButtonProps> = ({
-    children,
     variant = 'primary',
-    size = 'normal',
+    size = 'medium',
     isLoading = false,
     leftIcon,
+    children,
     ...otherProps
 }) => {
-    const buttonColors = useButtonColors(variant);
     return (
         <StyledButton
-            {...otherProps}
-            buttonColors={buttonColors}
-            buttonMeasures={BUTTON_MEASURES[size]}
+            variant={variant}
+            size={size}
             disabled={isLoading}
             aria-disabled={isLoading}
             aria-live="polite"
             aria-busy={isLoading}
+            {...otherProps}
         >
             <Content visible={!isLoading}>
-                {leftIcon}
+                {leftIcon && <LeftIcon>{leftIcon}</LeftIcon>}
                 {children}
             </Content>
-            {isLoading && <LoadingSpinner color={buttonColors.fgColor} />}
+            {isLoading && <LoadingSpinner />}
         </StyledButton>
     );
 };
