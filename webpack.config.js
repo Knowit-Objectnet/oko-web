@@ -2,6 +2,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+// Provides the styled component names for run-time (so they are displayed in React DevTools)
+const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
+const styledComponentsTransformer = createStyledComponentsTransformer();
+
 module.exports = {
     mode: 'development',
     devtool: 'source-map',
@@ -14,11 +18,10 @@ module.exports = {
             {
                 test: /\.ts(x?)$/,
                 exclude: /node_modules/,
-                use: [
-                    {
-                        loader: 'ts-loader',
-                    },
-                ],
+                loader: 'ts-loader',
+                options: {
+                    getCustomTransformers: () => ({ before: [styledComponentsTransformer] })
+                }
             },
             {
                 enforce: 'pre',

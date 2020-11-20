@@ -33,7 +33,7 @@ const Row = styled.div`
     display: flex;
     align-items: center;
     &:not(:last-child) {
-        margin-bottom: 15px;
+        margin-bottom: 0.75rem;
     }
 `;
 
@@ -111,8 +111,8 @@ const BoxWrapper = styled.div`
 const TimeBox = styled.div`
     background-color: ${(props) => props.theme.colors.LightBeige};
     flex: 1;
-    padding: 0px 5px;
-    height: 45px;
+    padding: 0 0.5rem;
+    height: 3rem;
     align-items: center;
     justify-content: center;
     display: flex;
@@ -120,8 +120,9 @@ const TimeBox = styled.div`
 
 const Box = styled.div`
     background-color: ${(props) => props.theme.colors.LightBeige};
-    padding: 0px 40px;
-    height: 45px;
+    padding: 0 3rem;
+    width: 100%;
+    height: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;

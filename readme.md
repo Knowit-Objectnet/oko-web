@@ -30,7 +30,7 @@ can be used to check for authentication and roles in lower level components. See
 > 
 > | `Fetch` + `SWR`| `Axios` + `React Query` |
 > | --- | --- |
-> |`PickUp`, `Request`, `Report`|`Event`, `Station`, `Partner`|
+> |`Request`, `Report`|`Event`, `Station`, `Partner`, `PickUp`|
 
 * **[Axios](https://www.npmjs.com/package/axios)**: HTTP client library for doing REST API calls.
 * **[React Query](https://www.npmjs.com/package/react-query)**: library used for caching data fetched from REST API.

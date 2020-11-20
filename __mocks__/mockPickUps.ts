@@ -1,4 +1,4 @@
-import { ApiPickUp } from '../src/types';
+import {ApiPickUp} from "../src/api/PickUpService";
 
 export const mockApiPickUps: Array<ApiPickUp> = [
     {

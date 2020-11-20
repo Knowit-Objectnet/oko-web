@@ -1,5 +1,6 @@
 import { ApiStation } from './api/StationService';
 import { ApiPartner } from './api/PartnerService';
+import { ApiPickUp } from './api/PickUpService';
 
 export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
@@ -38,15 +39,6 @@ export interface ApiWithdrawal {
     endDateTime: string;
     weight: number | null;
     reportedDateTime: string | null;
-}
-
-export interface ApiPickUp {
-    id: number;
-    startDateTime: string;
-    endDateTime: string;
-    description: string;
-    station: ApiStation;
-    chosenPartner: ApiPartner | null;
 }
 
 export interface ApiRequest {

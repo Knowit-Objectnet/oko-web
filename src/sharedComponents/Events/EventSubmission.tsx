@@ -2,19 +2,24 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Button } from '../Button';
 
-const Submission = styled.div`
+const ButtonRow = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin-top: 10px;
+    margin-top: 1rem;
+
+    & > button:not(:last-child) {
+        margin-right: 0.5rem;
+    }
 `;
 
-const Divider = styled.div`
-    width: 40px;
+const StyledButton = styled(Button)`
+    flex-grow: 1;
+    min-width: 9rem;
 `;
 
-interface EventSubmissionProps {
+interface Props {
     cancelText?: string;
     submitText?: string;
     onCancel: () => void;
@@ -25,7 +30,7 @@ interface EventSubmissionProps {
 /**
  * Event submission component, cancel and submit.
  */
-export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
+export const EventSubmission: React.FC<Props> = (props) => {
     const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.persist();
         switch (e.currentTarget.name) {
@@ -41,17 +46,15 @@ export const EventSubmission: React.FC<EventSubmissionProps> = (props) => {
     };
 
     return (
-        <Submission>
-            <Button color="Red" name="cancelButton" onClick={onClick} text="Avbryt" width={108} />
-            <Divider />
-            <Button
-                color="Green"
+        <ButtonRow>
+            <StyledButton variant="negative" name="cancelButton" onClick={onClick} text="Avbryt" />
+            <StyledButton
+                variant="positive"
                 name="submitButton"
                 onClick={onClick}
                 text="Godkjenn"
-                width={108}
-                loading={props.loading}
+                isLoading={props.loading}
             />
-        </Submission>
+        </ButtonRow>
     );
 };
