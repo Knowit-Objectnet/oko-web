@@ -31,7 +31,7 @@ The frontend-web for Oslo REG knowit 2020 summer project.
 > 
 > | `Fetch` + `SWR`| `Axios` + `React Query` |
 > | --- | --- |
-> |`Request`, `Report`|`Event`, `Station`, `Partner`, `PickUp`|
+> |`Report`|`Event`, `Station`, `Partner`, `PickUp`, `Request`|
 
 * **[Axios](https://www.npmjs.com/package/axios)**: HTTP client library for doing REST API calls.
 * **[React Query](https://www.npmjs.com/package/react-query)**: library used for caching data fetched from REST API.
