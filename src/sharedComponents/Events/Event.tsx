@@ -10,7 +10,7 @@ import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
-import { Button } from '../Button';
+import { Button } from '../buttons/Button';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
 
@@ -232,7 +232,9 @@ export const Event: React.FC<Props> = (props) => {
                         {(userIsAdmin ||
                             (userIsPartner && partnerOwnsEvent) ||
                             (userIsStation && stationOwnsEvent)) && (
-                            <Button text="Avlys uttak" variant="negative" onClick={handleDeleteConfirmationClick} />
+                            <Button variant="negative" onClick={handleDeleteConfirmationClick}>
+                                Avlys uttak
+                            </Button>
                         )}
                     </Section>
                 )}

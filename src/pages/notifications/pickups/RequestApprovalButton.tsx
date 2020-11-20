@@ -2,7 +2,7 @@ import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
-import { Button } from '../../../sharedComponents/Button';
+import { Button } from '../../../sharedComponents/buttons/Button';
 import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../api/PickUpService';
 
 interface Props {
@@ -41,12 +41,13 @@ export const RequestApprovalButton: React.FC<Props> = (props) => {
 
     return (
         <Button
-            text="Godkjenn"
             variant="positive"
             fillWidth
             size="small"
             onClick={handleRequestApproval}
             isLoading={updatePickUpLoading}
-        />
+        >
+            Godkjenn
+        </Button>
     );
 };

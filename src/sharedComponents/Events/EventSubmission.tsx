@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Button } from '../Button';
+import { Button } from '../buttons/Button';
 
 const ButtonRow = styled.div`
     display: flex;
@@ -20,41 +20,30 @@ const StyledButton = styled(Button)`
 `;
 
 interface Props {
-    cancelText?: string;
-    submitText?: string;
     onCancel: () => void;
     onSubmit: () => void;
     loading: boolean;
 }
 
-/**
- * Event submission component, cancel and submit.
- */
 export const EventSubmission: React.FC<Props> = (props) => {
-    const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.persist();
-        switch (e.currentTarget.name) {
-            case 'cancelButton': {
-                props.onCancel();
-                break;
-            }
-            case 'submitButton': {
-                props.onSubmit();
-                break;
-            }
-        }
+    const handleCancelClick = (event: React.MouseEvent) => {
+        event.persist();
+        props.onCancel();
+    };
+
+    const handleSubmitClick = (event: React.MouseEvent) => {
+        event.persist();
+        props.onSubmit();
     };
 
     return (
         <ButtonRow>
-            <StyledButton variant="negative" name="cancelButton" onClick={onClick} text="Avbryt" />
-            <StyledButton
-                variant="positive"
-                name="submitButton"
-                onClick={onClick}
-                text="Godkjenn"
-                isLoading={props.loading}
-            />
+            <StyledButton variant="negative" onClick={handleCancelClick}>
+                Avbryt
+            </StyledButton>
+            <StyledButton variant="positive" onClick={handleSubmitClick} isLoading={props.loading}>
+                Godkjenn
+            </StyledButton>
         </ButtonRow>
     );
 };

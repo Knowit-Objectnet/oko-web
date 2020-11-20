@@ -4,7 +4,7 @@ import Calendar from '../../assets/Calendar.svg';
 import Plus from '../../assets/Plus.svg';
 import { Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
-import { FloatingActionButton } from '../../sharedComponents/FloatingActionButton';
+import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
 import { NewPickUp } from '../../sharedComponents/Events/NewPickUp';

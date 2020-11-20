@@ -9,7 +9,7 @@ import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import { Helmet } from 'react-helmet';
 import { useStations } from '../../api/hooks/useStations';
 import { useKeycloak } from '@react-keycloak/web';
-import { FloatingActionButton } from '../../sharedComponents/FloatingActionButton';
+import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
 
 const Wrapper = styled.div`
     display: flex;

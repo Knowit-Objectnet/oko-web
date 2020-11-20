@@ -5,7 +5,7 @@ import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { Button } from '../Button';
+import { Button } from '../buttons/Button';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
 import { WorkingWeekdays } from '../../types';
@@ -161,7 +161,9 @@ export const NewEvent: React.FC<Props> = (props) => {
                     onSelectedDaysChange={onSelectedDaysChange}
                     recurrenceEnabled={true}
                 />
-                <SubmitButton type="submit" text="Lagre" variant="positive" isLoading={addEventLoading} />
+                <SubmitButton variant="positive" isLoading={addEventLoading}>
+                    Lagre
+                </SubmitButton>
             </StyledForm>
         </EventTemplateVertical>
     );

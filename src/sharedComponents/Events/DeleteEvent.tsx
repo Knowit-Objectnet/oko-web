@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { useState } from 'react';
-import { Button } from '../Button';
+import { Button } from '../buttons/Button';
 
 const Wrapper = styled.div`
     position: absolute;
@@ -79,7 +79,9 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                 </RangeSelection>
             )}
             {!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={setDateRange} value={dateRange} />}
-            <Button onClick={handleSubmit} text="Bekreft" variant="positive" isLoading={props.loading} />
+            <Button variant="positive" onClick={handleSubmit} isLoading={props.loading}>
+                Bekreft
+            </Button>
         </Wrapper>
     );
 };

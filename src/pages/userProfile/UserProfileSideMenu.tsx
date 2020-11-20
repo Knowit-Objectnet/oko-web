@@ -7,7 +7,7 @@ import { DeleteStation } from '../../sharedComponents/DeleteStation';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { NewPartner } from '../../sharedComponents/NewPartner';
 import { DeletePartner } from '../../sharedComponents/DeletePartner';
-import { FloatingActionButton } from '../../sharedComponents/FloatingActionButton';
+import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
 
 const Wrapper = styled.div`
     display: flex;

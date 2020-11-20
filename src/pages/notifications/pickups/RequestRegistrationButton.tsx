@@ -2,7 +2,7 @@ import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
-import { Button } from '../../../sharedComponents/Button';
+import { Button } from '../../../sharedComponents/buttons/Button';
 import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
 
 interface Props {
@@ -38,11 +38,8 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId
     };
 
     return (
-        <Button
-            text="Meld deg på ekstrauttak"
-            variant="positive"
-            onClick={handleRequestRegistrationClick}
-            isLoading={addRequestLoading}
-        />
+        <Button variant="positive" onClick={handleRequestRegistrationClick} isLoading={addRequestLoading}>
+            Meld deg på ekstrauttak
+        </Button>
     );
 };

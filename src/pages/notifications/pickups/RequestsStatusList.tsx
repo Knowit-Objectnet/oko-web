@@ -95,7 +95,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
         }
     };
 
-    if (sortedRequests.length === 0) {
+    if (requestsSortedByPartner.length === 0) {
         return <Notice>Ingen påmeldte enda</Notice>;
     }
 

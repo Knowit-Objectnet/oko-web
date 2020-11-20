@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styled, { useTheme } from 'styled-components';
-import DotsSpinner from '../assets/DotsSpinner.svg';
+import DotsSpinner from '../../assets/DotsSpinner.svg';
 import { ButtonHTMLAttributes } from 'react';
-import { Colors } from '../theme';
+import { Colors } from '../../theme';
 
-type ButtonVariant = 'primary' | 'positive' | 'negative';
+type ButtonVariant = 'primary' | 'positive' | 'negative' | 'text';
 
 interface ButtonColors {
-    bgColor: Colors;
+    bgColor: Colors | 'transparent';
     fgColor: Colors;
 }
 
@@ -24,6 +24,10 @@ const useButtonColors = (variant: ButtonVariant) => {
         },
         negative: {
             bgColor: theme.colors.Red,
+            fgColor: theme.colors.Black,
+        },
+        text: {
+            bgColor: 'transparent',
             fgColor: theme.colors.Black,
         },
     };
@@ -78,26 +82,35 @@ const LoadingSpinner = styled(DotsSpinner)<{ color: Colors }>`
 `;
 
 const Content = styled.span<{ visible: boolean }>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     opacity: ${(props) => (props.visible ? 1 : 0)};
+    & > * {
+        height: 1.5rem;
+    }
+    & > *:first-child {
+        margin-right: 0.125rem;
+    }
 `;
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    text: string;
     variant?: ButtonVariant;
     size?: ButtonSize;
-    isLoading?: boolean;
     fillWidth?: boolean;
+    leftIcon?: React.ReactElement;
+    isLoading?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
-    text,
+    children,
     variant = 'primary',
     size = 'normal',
     isLoading = false,
+    leftIcon,
     ...otherProps
 }) => {
     const buttonColors = useButtonColors(variant);
-
     return (
         <StyledButton
             {...otherProps}
@@ -108,7 +121,10 @@ export const Button: React.FC<ButtonProps> = ({
             aria-live="polite"
             aria-busy={isLoading}
         >
-            <Content visible={!isLoading}>{text}</Content>
+            <Content visible={!isLoading}>
+                {leftIcon}
+                {children}
+            </Content>
             {isLoading && <LoadingSpinner color={buttonColors.fgColor} />}
         </StyledButton>
     );

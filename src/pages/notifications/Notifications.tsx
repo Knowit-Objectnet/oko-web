@@ -7,7 +7,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
-import { FloatingActionButton } from '../../sharedComponents/FloatingActionButton';
+import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
 import { PickUpsList } from './pickups/PickUpsList';
 
 const Wrapper = styled.div`

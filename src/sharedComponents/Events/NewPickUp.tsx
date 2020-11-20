@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { Button } from '../Button';
+import { Button } from '../buttons/Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { queryCache, useMutation } from 'react-query';
@@ -107,12 +107,9 @@ export const NewPickUp: React.FC<Props> = (props) => {
                 value={description}
                 onChange={onDescriptionChange}
             />
-            <Button
-                onClick={handleNewPickUpSubmission}
-                text="Send"
-                variant="positive"
-                isLoading={addPickUpMutationLoading}
-            />
+            <Button variant="positive" onClick={handleNewPickUpSubmission} isLoading={addPickUpMutationLoading}>
+                Send
+            </Button>
         </EventTemplateVertical>
     );
 };

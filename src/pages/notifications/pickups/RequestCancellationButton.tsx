@@ -5,6 +5,7 @@ import { queryCache, useMutation } from 'react-query';
 import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
 import Cross from '../../../assets/Cross.svg';
 import styled from 'styled-components';
+import { Button } from '../../../sharedComponents/buttons/Button';
 
 const CancelButton = styled.button`
     display: flex;
@@ -56,8 +57,13 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId
     };
 
     return (
-        <CancelButton onClick={handleRequestCancellationClick} disabled={deleteRequestLoading}>
-            <Cross /> Meld av
-        </CancelButton>
+        <Button
+            variant="text"
+            leftIcon={<Cross />}
+            onClick={handleRequestCancellationClick}
+            isLoading={deleteRequestLoading}
+        >
+            Meld av
+        </Button>
     );
 };

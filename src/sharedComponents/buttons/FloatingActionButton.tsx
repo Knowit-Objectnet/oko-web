@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
-import { Colors } from '../theme';
+import { Action } from 'ts-loader/dist/interfaces';
+import { Colors } from '../../theme';
 
 type ButtonVariant = 'positive' | 'negative';
 
@@ -44,7 +45,7 @@ interface Props {
     hideLabel?: boolean;
     icon: React.ReactNode;
     variant: ButtonVariant;
-    onClick: () => void;
+    onClick: Action;
 }
 
 export const FloatingActionButton: React.FC<Props> = ({ label, hideLabel = false, icon, variant, onClick }) => {

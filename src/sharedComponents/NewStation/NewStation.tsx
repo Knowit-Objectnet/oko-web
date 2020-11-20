@@ -6,7 +6,7 @@ import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
-import { Button } from '../Button';
+import { Button } from '../buttons/Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../api/StationService';
@@ -329,7 +329,9 @@ export const NewStation: React.FC<Props> = (props) => {
                         />
                     </ContactWrapper>
                 </AmbassadorContactInfo>
-                <Button text="Legg til stasjon" onClick={onSubmit} variant="positive" isLoading={addStationLoading} />
+                <Button variant="positive" onClick={onSubmit} isLoading={addStationLoading}>
+                    Legg til stasjon
+                </Button>
             </Content>
         </Wrapper>
     );
