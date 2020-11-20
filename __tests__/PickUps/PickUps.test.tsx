@@ -5,7 +5,7 @@ import { mockApiPickUps } from '../../__mocks__/mockPickUps';
 import { mockApiRequests } from '../../__mocks__/mockRequests';
 import { render, cleanup } from '../../utils/test-setup';
 import MockAdapter from 'axios-mock-adapter';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
 describe('Provides a page to view a list of PickUps', () => {
     let axiosMock: MockAdapter;

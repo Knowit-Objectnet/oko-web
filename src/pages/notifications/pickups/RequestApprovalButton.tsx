@@ -17,9 +17,6 @@ export const RequestApprovalButton: React.FC<Props> = (props) => {
     const [updatePickUpMutation, { isLoading: updatePickUpLoading }] = useMutation(
         (updatedPickUp: ApiPickUpPatch) => patchPickUp(updatedPickUp, keycloak.token),
         {
-            onSuccess: () => {
-                alert.show('Valg av samarbeidspartner til ekstrauttak ble registrert.', { type: types.SUCCESS });
-            },
             onError: () => {
                 alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrauttak ble ikke registrert.', {
                     type: types.ERROR,

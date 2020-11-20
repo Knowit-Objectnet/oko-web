@@ -34,9 +34,6 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId
     const [deleteRequestMutation, { isLoading: deleteRequestLoading }] = useMutation(
         (request: ApiRequestParams) => deleteRequest(request, keycloak.token),
         {
-            onSuccess: () => {
-                alert.show('Påmelding til ekstrauttaket ble slettet.', { type: types.SUCCESS });
-            },
             onError: () => {
                 alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
                     type: types.ERROR,
