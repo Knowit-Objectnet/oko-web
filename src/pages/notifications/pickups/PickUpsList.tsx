@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { PickUpDetails } from './PickUpDetails';
+import { PickUpListItem } from './PickUpListItem';
 import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from '../../../types';
 import { usePickUps } from '../../../api/hooks/usePickUps';
@@ -11,10 +11,13 @@ const HeaderRow = styled.div`
     grid-template-columns: minmax(150px, 1fr) 8fr minmax(350px, 3fr);
 `;
 
-const PickUpRows = styled.div`
+const PickUpRows = styled.ul`
     width: 100%;
     display: flex;
     flex-direction: column;
+    list-style: none;
+    padding-left: 0;
+    margin: 0.5rem 0 0;
 
     & > *:not(:last-child) {
         margin-bottom: 10px;
@@ -56,7 +59,7 @@ export const PickUpsList: React.FC = () => {
                 </HeaderRow>
                 <PickUpRows>
                     {sortedPickups.map((pickUp) => (
-                        <PickUpDetails key={pickUp.id} pickUp={pickUp} />
+                        <PickUpListItem key={pickUp.id} pickUp={pickUp} />
                     ))}
                 </PickUpRows>
             </>

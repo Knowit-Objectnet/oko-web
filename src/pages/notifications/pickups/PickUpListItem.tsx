@@ -8,7 +8,7 @@ import { RequestsStatusList } from './RequestsStatusList';
 import { Roles } from '../../../types';
 import { ApiPickUp } from '../../../api/PickUpService';
 
-const Wrapper = styled.div`
+const Wrapper = styled.li`
     width: 100%;
     display: grid;
     grid-template-columns: minmax(150px, 1fr) 8fr minmax(350px, 3fr);
@@ -36,7 +36,7 @@ interface Props {
     pickUp: ApiPickUp;
 }
 
-export const PickUpDetails: React.FC<Props> = ({ pickUp }) => {
+export const PickUpListItem: React.FC<Props> = ({ pickUp }) => {
     const { keycloak } = useKeycloak();
     const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
 

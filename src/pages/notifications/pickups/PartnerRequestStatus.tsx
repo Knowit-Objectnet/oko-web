@@ -13,6 +13,7 @@ import { Button } from '../../../sharedComponents/Button';
 
 const StatusWrapper = styled.div`
     display: flex;
+    align-items: center;
     padding: 0.625rem;
 `;
 
