@@ -1,34 +1,24 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import fetch from 'jest-fetch-mock';
-import { apiUrl } from '../../src/types';
 import { Notifications } from '../../src/pages/notifications/Notifications';
 import { mockApiPickUps } from '../../__mocks__/mockPickUps';
 import { mockApiRequests } from '../../__mocks__/mockRequests';
 import { render, cleanup } from '../../utils/test-setup';
 import MockAdapter from 'axios-mock-adapter';
-import axios from 'axios';
-
-// Fetch mock to intercept fetch requests.
-global.fetch = fetch;
+import axios, { AxiosRequestConfig } from 'axios';
 
 describe('Provides a page to view a list of PickUps', () => {
     let axiosMock: MockAdapter;
 
     beforeEach(() => {
-        fetch.resetMocks();
-        fetch.mockResponse(async ({ url }) => {
-            if (url.startsWith(`${apiUrl}/requests/?pickupId=`)) {
-                const id = parseInt(url.slice(`${apiUrl}/requests/?pickupId=`.length));
-                const filtered = mockApiRequests.filter((mockApiRequest) => mockApiRequest.pickup.id === id);
-                return JSON.stringify(filtered);
-            } else {
-                return JSON.stringify([]);
-            }
-        });
-
         axiosMock = new MockAdapter(axios);
         axiosMock.onGet('/pickups').reply(200, JSON.stringify(mockApiPickUps));
+        axiosMock.onGet('/requests').reply((config) => {
+            const filteredMockRequests = mockApiRequests.filter(
+                (mockApiRequest) => mockApiRequest.pickup.id === config.params?.pickupId,
+            );
+            return [200, JSON.stringify(filteredMockRequests)];
+        });
     });
 
     afterEach(() => {
@@ -36,7 +26,7 @@ describe('Provides a page to view a list of PickUps', () => {
         cleanup();
     });
 
-    it('Should render list of PickUps', async () => {
+    it('Should render list of PickUps with Requests', async () => {
         const { findAllByText } = render(<Notifications />);
 
         // Check that the correct amount of pickUps from the stations is rendered
