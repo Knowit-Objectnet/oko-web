@@ -2,9 +2,9 @@ import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
-import { Button } from '../../../sharedComponents/buttons/Button';
 import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
 import { useState } from 'react';
+import { PositiveButton } from '../../../sharedComponents/buttons/Buttons';
 
 interface Props {
     pickupId: number;
@@ -34,8 +34,8 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId
     };
 
     return (
-        <Button variant="positive" onClick={handleRequestRegistrationClick} isLoading={addRequestLoading}>
+        <PositiveButton onClick={handleRequestRegistrationClick} isLoading={addRequestLoading}>
             Meld deg på ekstrauttak
-        </Button>
+        </PositiveButton>
     );
 };

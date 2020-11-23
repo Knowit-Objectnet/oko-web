@@ -4,8 +4,8 @@ import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
 import Cross from '../../../assets/Cross.svg';
-import { Button } from '../../../sharedComponents/buttons/Button';
 import { useState } from 'react';
+import { ButtonIcon, TextButton } from '../../../sharedComponents/buttons/Buttons';
 
 interface Props {
     pickupId: number;
@@ -37,13 +37,11 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId
     };
 
     return (
-        <Button
-            variant="text"
-            leftIcon={<Cross />}
-            onClick={handleRequestCancellationClick}
-            isLoading={deleteRequestLoading}
-        >
+        <TextButton onClick={handleRequestCancellationClick} isLoading={deleteRequestLoading}>
+            <ButtonIcon>
+                <Cross />
+            </ButtonIcon>
             Meld av
-        </Button>
+        </TextButton>
     );
 };

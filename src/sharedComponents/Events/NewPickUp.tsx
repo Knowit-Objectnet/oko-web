@@ -3,11 +3,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { Button } from '../buttons/Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { queryCache, useMutation } from 'react-query';
 import { ApiPickUpPost, pickUpsDefaultQueryKey, postPickUp } from '../../api/PickUpService';
+import { PositiveButton } from '../buttons/Buttons';
 
 const Textarea = styled.textarea`
     min-height: 5rem;
@@ -31,7 +31,7 @@ export const NewPickUp: React.FC<Props> = (props) => {
         (newPickUp: ApiPickUpPost) => postPickUp(newPickUp, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Et nytt ekstrauttak ble lagt.', { type: types.SUCCESS });
+                alert.show('Et nytt ekstrauttak ble lagt til.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
@@ -107,9 +107,9 @@ export const NewPickUp: React.FC<Props> = (props) => {
                 value={description}
                 onChange={onDescriptionChange}
             />
-            <Button variant="positive" onClick={handleNewPickUpSubmission} isLoading={addPickUpMutationLoading}>
+            <PositiveButton onClick={handleNewPickUpSubmission} isLoading={addPickUpMutationLoading}>
                 Send
-            </Button>
+            </PositiveButton>
         </EventTemplateVertical>
     );
 };

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
-import { Button } from '../../../sharedComponents/buttons/Button';
 import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../api/PickUpService';
 import { useState } from 'react';
+import { PositiveButton } from '../../../sharedComponents/buttons/Buttons';
 
 interface Props {
     pickupId: number;
@@ -45,8 +45,7 @@ export const RequestApprovalButton: React.FC<Props> = (props) => {
     };
 
     return (
-        <Button
-            variant="positive"
+        <PositiveButton
             fillWidth
             size="small"
             onClick={handleRequestApproval}
@@ -54,6 +53,6 @@ export const RequestApprovalButton: React.FC<Props> = (props) => {
             disabled={props.requestApprovalLoading}
         >
             Godkjenn
-        </Button>
+        </PositiveButton>
     );
 };

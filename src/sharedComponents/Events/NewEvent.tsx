@@ -5,12 +5,12 @@ import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { Button } from '../buttons/Button';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
 import { WorkingWeekdays } from '../../types';
 import { StationSelect } from '../forms/StationSelect';
 import { PartnerSelect } from '../forms/PartnerSelect';
+import { PositiveButton } from '../buttons/Buttons';
 
 const StyledForm = styled.form`
     display: flex;
@@ -19,7 +19,7 @@ const StyledForm = styled.form`
     width: 350px;
 `;
 
-const SubmitButton = styled(Button)`
+const SubmitButton = styled(PositiveButton)`
     margin-top: 20px;
 `;
 
@@ -159,9 +159,7 @@ export const NewEvent: React.FC<Props> = (props) => {
                     onSelectedDaysChange={onSelectedDaysChange}
                     recurrenceEnabled={true}
                 />
-                <SubmitButton variant="positive" isLoading={addEventLoading}>
-                    Lagre
-                </SubmitButton>
+                <SubmitButton isLoading={addEventLoading}>Lagre</SubmitButton>
             </StyledForm>
         </EventTemplateVertical>
     );

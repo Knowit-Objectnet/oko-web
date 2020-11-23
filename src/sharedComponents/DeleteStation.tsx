@@ -5,8 +5,8 @@ import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
-import { Button } from './buttons/Button';
 import { StationSelect } from './forms/StationSelect';
+import { NegativeButton } from './buttons/Buttons';
 
 const Wrapper = styled.div`
     display: flex;
@@ -74,9 +74,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
             <Title>Slett stasjon</Title>
             <StyledForm onSubmit={handleDeleteStationSubmission}>
                 <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
-                <Button variant="negative" isLoading={deleteStationLoading}>
-                    Slett
-                </Button>
+                <NegativeButton isLoading={deleteStationLoading}>Slett</NegativeButton>
             </StyledForm>
         </Wrapper>
     );

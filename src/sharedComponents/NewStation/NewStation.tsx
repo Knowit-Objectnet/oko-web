@@ -6,11 +6,11 @@ import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
-import { Button } from '../buttons/Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../api/StationService';
 import { format } from 'date-fns';
+import { PositiveButton } from '../buttons/Buttons';
 
 const Wrapper = styled.div`
     display: flex;
@@ -329,9 +329,9 @@ export const NewStation: React.FC<Props> = (props) => {
                         />
                     </ContactWrapper>
                 </AmbassadorContactInfo>
-                <Button variant="positive" onClick={onSubmit} isLoading={addStationLoading}>
+                <PositiveButton onClick={onSubmit} isLoading={addStationLoading}>
                     Legg til stasjon
-                </Button>
+                </PositiveButton>
             </Content>
         </Wrapper>
     );

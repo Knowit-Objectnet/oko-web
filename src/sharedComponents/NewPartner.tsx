@@ -2,11 +2,10 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
-import { Button } from './buttons/Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
-import { ApiPartner, ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../api/PartnerService';
-import { AxiosError } from 'axios';
+import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../api/PartnerService';
+import { PositiveButton } from './buttons/Buttons';
 
 const Wrapper = styled.div`
     display: flex;
@@ -91,9 +90,7 @@ export const NewPartner: React.FC<Props> = (props) => {
             <Title>Legg til ny samarbeidspartner</Title>
             <StyledForm onSubmit={handleNewPartnerSubmission}>
                 <Input type="text" placeholder="Navn på organisasjonen" value={name} onChange={handleNameChange} />
-                <Button variant="positive" isLoading={addPartnerLoading}>
-                    Legg til samarbeidspartner
-                </Button>
+                <PositiveButton isLoading={addPartnerLoading}>Legg til samarbeidspartner</PositiveButton>
             </StyledForm>
         </Wrapper>
     );

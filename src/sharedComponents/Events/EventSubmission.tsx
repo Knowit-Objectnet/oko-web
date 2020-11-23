@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Button } from '../buttons/Button';
+import { NegativeButton, PositiveButton } from '../buttons/Buttons';
 
 const ButtonRow = styled.div`
     display: flex;
@@ -9,14 +9,14 @@ const ButtonRow = styled.div`
     justify-content: space-between;
     margin-top: 1rem;
 
+    & > button {
+        flex-grow: 1;
+        min-width: 9rem;
+    }
+
     & > button:not(:last-child) {
         margin-right: 0.5rem;
     }
-`;
-
-const StyledButton = styled(Button)`
-    flex-grow: 1;
-    min-width: 9rem;
 `;
 
 interface Props {
@@ -38,12 +38,10 @@ export const EventSubmission: React.FC<Props> = (props) => {
 
     return (
         <ButtonRow>
-            <StyledButton variant="negative" onClick={handleCancelClick}>
-                Avbryt
-            </StyledButton>
-            <StyledButton variant="positive" onClick={handleSubmitClick} isLoading={props.loading}>
+            <NegativeButton onClick={handleCancelClick}>Avbryt</NegativeButton>
+            <PositiveButton onClick={handleSubmitClick} isLoading={props.loading}>
                 Godkjenn
-            </StyledButton>
+            </PositiveButton>
         </ButtonRow>
     );
 };

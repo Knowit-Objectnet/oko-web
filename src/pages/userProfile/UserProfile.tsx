@@ -8,8 +8,8 @@ import { ContactInfo } from './ContactInfo';
 import { UserProfileSideMenu } from './UserProfileSideMenu';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
-import { Button } from '../../sharedComponents/buttons/Button';
 import { Helmet } from 'react-helmet';
+import { PrimaryButton } from '../../sharedComponents/buttons/Buttons';
 
 const Wrapper = styled.div`
     display: flex;
@@ -38,7 +38,7 @@ const Header = styled.div`
     width: 100%;
 `;
 
-const LogoutButton = styled(Button)`
+const LogoutButton = styled(PrimaryButton)`
     margin-left: auto;
 `;
 

@@ -6,7 +6,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { deletePartner, partnersDefaultQueryKey } from '../api/PartnerService';
 import { queryCache, useMutation } from 'react-query';
 import { PartnerSelect } from './forms/PartnerSelect';
-import { Button } from './buttons/Button';
+import { NegativeButton } from './buttons/Buttons';
 
 const Wrapper = styled.div`
     display: flex;
@@ -73,9 +73,7 @@ export const DeletePartner: React.FC<Props> = (props) => {
             <Title>Fjern samarbeidspartner</Title>
             <StyledForm onSubmit={handleDeletePartnerSubmission}>
                 <PartnerSelect onSelectedPartnerChange={setSelectedPartner} selectedPartnerId={selectedPartner} />
-                <Button variant="negative" isLoading={deletePartnerLoading}>
-                    Slett
-                </Button>
+                <NegativeButton isLoading={deletePartnerLoading}>Slett</NegativeButton>
             </StyledForm>
         </Wrapper>
     );
