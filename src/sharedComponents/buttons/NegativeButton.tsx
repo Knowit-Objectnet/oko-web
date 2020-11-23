@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import { ButtonBase } from './ButtonBase';
+import { ButtonBase, ButtonProps } from './ButtonBase';
+import React from 'react';
 
-export const NegativeButton = styled(ButtonBase)(
+export const NegativeButton: React.FC<ButtonProps> = styled(ButtonBase)(
     (props) => css`
         background-color: ${props.theme.colors.Red};
         color: ${props.theme.colors.Black};

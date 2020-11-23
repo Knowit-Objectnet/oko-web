@@ -8,7 +8,7 @@ import useModal from '../../sharedComponents/Modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
 import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
-import { PickUpsList } from './pickups/PickUpsList';
+import { PickUpList } from './pickups/PickUpList';
 
 const Wrapper = styled.div`
     position: relative;
@@ -59,7 +59,7 @@ export const Notifications: React.FC = () => {
                     </AddPickUpButtonContainer>
                 )}
                 <PageContent>
-                    <PickUpsList />
+                    <PickUpList />
                 </PageContent>
             </Wrapper>
         </>

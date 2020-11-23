@@ -39,7 +39,7 @@ const RejectStatus = styled(Status)`
     border-color: ${(props) => props.theme.colors.Red};
 `;
 
-const Fetching = styled.span`
+const Notice = styled.span`
     font-style: italic;
     font-size: 0.875rem;
 `;
@@ -59,11 +59,11 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
 
     const renderRequestStatus = () => {
         if (isLoading) {
-            return <Fetching>Laster inn...</Fetching>;
+            return <Notice>Laster inn...</Notice>;
         }
 
         if (isError) {
-            return <Fetching>Noe gikk galt, kunne ikke hente påmeldingsstatus.</Fetching>;
+            return <Notice>Noe gikk galt, kunne ikke hente påmeldingsstatus.</Notice>;
         }
 
         const userHasRequest = request?.[0] ? true : false;

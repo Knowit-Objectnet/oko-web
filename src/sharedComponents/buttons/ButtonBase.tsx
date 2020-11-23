@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { ButtonHTMLAttributes } from 'react';
-import styled, { css, FlattenSimpleInterpolation } from 'styled-components';
+import styled, { css, SimpleInterpolation } from 'styled-components';
 import DotsSpinner from '../../assets/DotsSpinner.svg';
 
 type ButtonSize = 'medium' | 'small';
 
-const BUTTON_SIZES: Record<ButtonSize, FlattenSimpleInterpolation> = {
+const BUTTON_SIZES: Record<ButtonSize, SimpleInterpolation> = {
     medium: css`
         padding: 0.75rem 1rem;
         min-height: 3rem;
@@ -80,7 +80,7 @@ const LoadingSpinner = styled(DotsSpinner)`
     width: auto;
 `;
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     size?: ButtonSize;
     fillWidth?: boolean;
     isLoading?: boolean;

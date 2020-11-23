@@ -24,7 +24,7 @@ const PickUpRows = styled.ul`
     }
 `;
 
-export const PickUpsList: React.FC = () => {
+export const PickUpList: React.FC = () => {
     const { keycloak } = useKeycloak();
     const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
     const userId = keycloak.tokenParsed?.GroupID;

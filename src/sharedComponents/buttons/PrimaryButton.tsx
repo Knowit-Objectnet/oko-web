@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import { ButtonBase } from './ButtonBase';
+import { ButtonBase, ButtonProps } from './ButtonBase';
+import React from 'react';
 
-export const PrimaryButton = styled(ButtonBase)(
+export const PrimaryButton: React.FC<ButtonProps> = styled(ButtonBase)(
     (props) => css`
         background-color: ${props.theme.colors.DarkBlue};
         color: ${props.theme.colors.White};

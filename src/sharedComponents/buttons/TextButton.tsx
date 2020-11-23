@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
-import { ButtonBase } from './ButtonBase';
+import { ButtonBase, ButtonProps } from './ButtonBase';
+import React from 'react';
 
-export const TextButton = styled(ButtonBase)(
+export const TextButton: React.FC<ButtonProps> = styled(ButtonBase)(
     (props) => css`
         background-color: transparent;
         color: ${props.theme.colors.Black};
