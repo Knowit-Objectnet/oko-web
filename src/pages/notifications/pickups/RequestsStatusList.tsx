@@ -6,13 +6,16 @@ import { ApiPickUp } from '../../../api/PickUpService';
 import { useKeycloak } from '@react-keycloak/web';
 import { ApiRequest } from '../../../api/RequestService';
 import { useRequests } from '../../../api/hooks/useRequests';
+import { useState } from 'react';
 
-const RequestList = styled.div`
+const RequestList = styled.ul`
     display: flex;
     flex-flow: column;
+    list-style: none;
+    padding-left: 0;
 `;
 
-const Request = styled.div`
+const Request = styled.li`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -35,6 +38,7 @@ const Notice = styled.div`
     width: 100%;
     align-items: center;
     justify-content: center;
+    padding: 0.5rem 1rem;
 `;
 
 const StatusWrapper = styled.div`
@@ -72,7 +76,9 @@ interface Props {
 export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
     const { keycloak } = useKeycloak();
 
-    const { data: requests } = useRequests({
+    const [requestApprovalLoading, setRequestApprovalLoading] = useState(false);
+
+    const { data: requests, isLoading, isError } = useRequests({
         pickupId: pickUp.id,
     });
     const requestsSortedByPartner = (requests ?? []).sort(
@@ -85,7 +91,14 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
         const thisRequestIsApproved = request.partner.id === pickUp.chosenPartner?.id;
 
         if (pickUpIsOpenForRequests && userCanApproveRequests) {
-            return <RequestApprovalButton pickupId={request.pickup.id} partnerId={request.partner.id} />;
+            return (
+                <RequestApprovalButton
+                    pickupId={request.pickup.id}
+                    partnerId={request.partner.id}
+                    requestApprovalLoading={requestApprovalLoading}
+                    onRequestApprovalLoading={setRequestApprovalLoading}
+                />
+            );
         } else if (pickUpIsOpenForRequests) {
             return <AwaitingStatus>Avventer svar</AwaitingStatus>;
         } else if (thisRequestIsApproved) {
@@ -95,6 +108,12 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
         }
     };
 
+    if (isLoading) {
+        return <Notice>Laster inn...</Notice>;
+    }
+    if (isError) {
+        return <Notice>Noe gikk galt, kunne ikke laste inn påmeldingsstatus.</Notice>;
+    }
     if (requestsSortedByPartner.length === 0) {
         return <Notice>Ingen påmeldte enda</Notice>;
     }
