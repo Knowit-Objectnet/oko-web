@@ -32,7 +32,7 @@ export const PickUpsList: React.FC = () => {
     const pickUpsFilter: ApiPickUpParams = {
         stationId: userIsStation ? userId : undefined,
     };
-    const { data: pickUps, isLoading } = usePickUps(pickUpsFilter);
+    const { data: pickUps, isLoading, isError } = usePickUps(pickUpsFilter);
     const sortedPickups = (pickUps ?? []).sort((pickUpA, pickUpB) => {
         const timeA = new Date(pickUpA.startDateTime);
         const timeB = new Date(pickUpB.startDateTime);
@@ -46,6 +46,9 @@ export const PickUpsList: React.FC = () => {
     const renderPickUpsList = () => {
         if (isLoading) {
             return <p>Laster inn...</p>;
+        }
+        if (isError) {
+            return <p>Noe gikk galt, kunne ikke laste inn ekstrauttak.</p>;
         }
         if (sortedPickups.length === 0) {
             return <p>Det er ikke registrert noen ekstrauttak enda.</p>;
