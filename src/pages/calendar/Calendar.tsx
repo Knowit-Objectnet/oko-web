@@ -16,8 +16,8 @@ import { useKeycloak } from '@react-keycloak/web';
 import { StationFilter } from './StationFilter';
 import useModal from '../../sharedComponents/Modal/useModal';
 import { Helmet } from 'react-helmet';
-import { useQuery } from 'react-query';
-import { ApiEvent, ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../api/EventService';
+import { ApiEvent } from '../../api/EventService';
+import { useEvents } from '../../api/hooks/useEvents';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -97,15 +97,10 @@ export const Calendar: React.FC = () => {
     const toDate = add(selectedDate, { weeks: 1 });
     toDate.setHours(24, 0, 0, 0);
 
-    const eventsFilter: ApiEventParams = {
+    const { data: apiEvents, isLoading } = useEvents({
         fromDate: fromDate.toISOString(),
         toDate: toDate.toISOString(),
         stationId: userIsStation ? userId : selectedStationId,
-    };
-
-    const { data: apiEvents, isLoading } = useQuery<Array<ApiEvent>>({
-        queryKey: [eventsDefaultQueryKey, eventsFilter, keycloak.token],
-        queryFn: getEvents,
     });
 
     const [events, setEvents] = useState<Array<EventInfo>>([]);
