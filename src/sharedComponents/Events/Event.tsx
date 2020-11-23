@@ -10,7 +10,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { queryCache, useMutation } from 'react-query';
-import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
+import { ApiEventPatch, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
 import { NegativeButton } from '../buttons/NegativeButton';
 import { PositiveButton } from '../buttons/PositiveButton';
 
@@ -65,43 +65,6 @@ export const Event: React.FC<Props> = (props) => {
     const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
     const partnerOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.partner.id;
 
-    const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
-        (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Avtalen ble slettet.', { type: types.SUCCESS });
-                props.afterDeleteSingleEvent?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
-                props.afterDeleteSingleEvent?.(false);
-            },
-            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
-        },
-    );
-
-    const [deleteRangeEventsMutation, { isLoading: deleteRangeEventLoading }] = useMutation(
-        ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
-            const apiParams: ApiEventParams = {
-                recurrenceRuleId: event.resource.recurrenceRule?.id,
-                fromDate: fromDate.toISOString(),
-                toDate: toDate.toISOString(),
-            };
-            return deleteEvents(apiParams, keycloak.token);
-        },
-        {
-            onSuccess: () => {
-                alert.show('Avtalen(e) ble slettet.', { type: types.SUCCESS });
-                props.afterDeleteRangeEvent?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
-                props.afterDeleteRangeEvent?.(false);
-            },
-            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
-        },
-    );
-
     const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
         (updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, keycloak.token),
         {
@@ -145,15 +108,6 @@ export const Event: React.FC<Props> = (props) => {
 
     const handleDeleteConfirmationClick = () => {
         setIsDeletionConfirmationVisible(!isDeletionConfirmationVisible);
-    };
-
-    const handleDeleteEvent = (isSingleDeletion: boolean, fromDate: Date, toDate: Date) => {
-        const eventIsNotRecurring = !props.event.resource.recurrenceRule;
-        if (isSingleDeletion || eventIsNotRecurring) {
-            deleteSingleEventMutation(props.event);
-        } else {
-            deleteRangeEventsMutation({ event: props.event, fromDate, toDate });
-        }
     };
 
     const handleEditCancelled = () => {
@@ -245,9 +199,9 @@ export const Event: React.FC<Props> = (props) => {
             </Body>
             {isDeletionConfirmationVisible && !isEditing && (
                 <DeleteEvent
-                    allowRangeDeletion={userIsAdmin || (userIsStation && stationOwnsEvent)}
-                    onSubmit={handleDeleteEvent}
-                    loading={deleteSingleEventLoading || deleteRangeEventLoading}
+                    event={props.event}
+                    afterDeleteSingleEvent={props.afterDeleteSingleEvent}
+                    afterDeleteRangeEvent={props.afterDeleteSingleEvent}
                 />
             )}
             {isEditing && (
