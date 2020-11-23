@@ -3,7 +3,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventSubmission } from './EventSubmission';
 import { EventInfo, Roles } from '../../types';
 import { EventStationInfo } from './EventStationInfo';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
@@ -13,6 +12,7 @@ import { DeleteEvent } from './DeleteEvent';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
 import { NegativeButton } from '../buttons/NegativeButton';
+import { PositiveButton } from '../buttons/PositiveButton';
 
 const Body = styled.div`
     display: flex;
@@ -29,6 +29,18 @@ const Section = styled.div`
 
     & > *:not(:first-child) {
         margin-top: 0.75rem;
+    }
+`;
+
+const ButtonRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+
+    & > button:not(:last-child) {
+        margin-right: 0.5rem;
     }
 `;
 
@@ -239,11 +251,14 @@ export const Event: React.FC<Props> = (props) => {
                 />
             )}
             {isEditing && (
-                <EventSubmission
-                    onSubmit={handleEditSubmission}
-                    onCancel={handleEditCancelled}
-                    loading={updateEventLoading}
-                />
+                <ButtonRow>
+                    <NegativeButton fillWidth onClick={handleEditCancelled}>
+                        Avbryt
+                    </NegativeButton>
+                    <PositiveButton fillWidth onClick={handleEditSubmission} isLoading={updateEventLoading}>
+                        Godkjenn
+                    </PositiveButton>
+                </ButtonRow>
             )}
         </EventTemplateHorizontal>
     );
