@@ -7,7 +7,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { queryCache, useMutation } from 'react-query';
 import { ApiPickUpPost, pickUpsDefaultQueryKey, postPickUp } from '../../api/PickUpService';
-import { PositiveButton } from '../buttons/Buttons';
+import { PositiveButton } from '../buttons/PositiveButton';
 
 const Textarea = styled.textarea`
     min-height: 5rem;

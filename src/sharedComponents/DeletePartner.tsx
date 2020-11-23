@@ -6,7 +6,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { deletePartner, partnersDefaultQueryKey } from '../api/PartnerService';
 import { queryCache, useMutation } from 'react-query';
 import { PartnerSelect } from './forms/PartnerSelect';
-import { NegativeButton } from './buttons/Buttons';
+import { NegativeButton } from './buttons/NegativeButton';
 
 const Wrapper = styled.div`
     display: flex;

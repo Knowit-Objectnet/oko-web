@@ -12,7 +12,7 @@ import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
-import { NegativeButton } from '../buttons/Buttons';
+import { NegativeButton } from '../buttons/NegativeButton';
 
 const Body = styled.div`
     display: flex;

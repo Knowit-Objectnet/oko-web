@@ -10,7 +10,7 @@ import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventS
 import { WorkingWeekdays } from '../../types';
 import { StationSelect } from '../forms/StationSelect';
 import { PartnerSelect } from '../forms/PartnerSelect';
-import { PositiveButton } from '../buttons/Buttons';
+import { PositiveButton } from '../buttons/PositiveButton';
 
 const StyledForm = styled.form`
     display: flex;

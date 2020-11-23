@@ -4,13 +4,13 @@ import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../api/PickUpService';
 import { useState } from 'react';
-import { PositiveButton } from '../../../sharedComponents/buttons/Buttons';
+import { PositiveButton } from '../../../sharedComponents/buttons/PositiveButton';
 
 interface Props {
     pickupId: number;
     partnerId: number;
     requestApprovalLoading: boolean;
-    onRequestApprovalLoading: (isLoading: boolean) => void;
+    onRequestApproval: (isLoading: boolean) => void;
 }
 
 export const RequestApprovalButton: React.FC<Props> = (props) => {
@@ -23,11 +23,11 @@ export const RequestApprovalButton: React.FC<Props> = (props) => {
         {
             onMutate: () => {
                 setUpdatePickUpLoading(true);
-                props.onRequestApprovalLoading(true);
+                props.onRequestApproval(true);
             },
             onError: () => {
                 setUpdatePickUpLoading(false);
-                props.onRequestApprovalLoading(false);
+                props.onRequestApproval(false);
                 alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrauttak ble ikke registrert.', {
                     type: types.ERROR,
                 });

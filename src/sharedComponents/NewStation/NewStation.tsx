@@ -10,7 +10,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../api/StationService';
 import { format } from 'date-fns';
-import { PositiveButton } from '../buttons/Buttons';
+import { PositiveButton } from '../buttons/PositiveButton';
 
 const Wrapper = styled.div`
     display: flex;

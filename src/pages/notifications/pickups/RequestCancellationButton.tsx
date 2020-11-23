@@ -3,9 +3,10 @@ import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
-import Cross from '../../../assets/Cross.svg';
+import CrossIcon from '../../../assets/Cross.svg';
 import { useState } from 'react';
-import { ButtonIcon, TextButton } from '../../../sharedComponents/buttons/Buttons';
+import { TextButton } from '../../../sharedComponents/buttons/TextButton';
+import { LeftButtonIcon } from '../../../sharedComponents/buttons/ButtonBase';
 
 interface Props {
     pickupId: number;
@@ -38,9 +39,9 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId
 
     return (
         <TextButton onClick={handleRequestCancellationClick} isLoading={deleteRequestLoading}>
-            <ButtonIcon>
-                <Cross />
-            </ButtonIcon>
+            <LeftButtonIcon>
+                <CrossIcon />
+            </LeftButtonIcon>
             Meld av
         </TextButton>
     );

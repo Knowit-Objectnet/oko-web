@@ -9,7 +9,7 @@ import { UserProfileSideMenu } from './UserProfileSideMenu';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { Helmet } from 'react-helmet';
-import { PrimaryButton } from '../../sharedComponents/buttons/Buttons';
+import { PrimaryButton } from '../../sharedComponents/buttons/PrimaryButton';
 
 const Wrapper = styled.div`
     display: flex;

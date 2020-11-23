@@ -5,7 +5,7 @@ import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../api/PartnerService';
-import { PositiveButton } from './buttons/Buttons';
+import { PositiveButton } from './buttons/PositiveButton';
 
 const Wrapper = styled.div`
     display: flex;

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { NegativeButton, PositiveButton } from '../buttons/Buttons';
+import { PositiveButton } from '../buttons/PositiveButton';
+import { NegativeButton } from '../buttons/NegativeButton';
 
 const ButtonRow = styled.div`
     display: flex;
@@ -8,11 +9,6 @@ const ButtonRow = styled.div`
     align-items: center;
     justify-content: space-between;
     margin-top: 1rem;
-
-    & > button {
-        flex-grow: 1;
-        min-width: 9rem;
-    }
 
     & > button:not(:last-child) {
         margin-right: 0.5rem;
@@ -38,8 +34,10 @@ export const EventSubmission: React.FC<Props> = (props) => {
 
     return (
         <ButtonRow>
-            <NegativeButton onClick={handleCancelClick}>Avbryt</NegativeButton>
-            <PositiveButton onClick={handleSubmitClick} isLoading={props.loading}>
+            <NegativeButton fillWidth onClick={handleCancelClick}>
+                Avbryt
+            </NegativeButton>
+            <PositiveButton fillWidth onClick={handleSubmitClick} isLoading={props.loading}>
                 Godkjenn
             </PositiveButton>
         </ButtonRow>

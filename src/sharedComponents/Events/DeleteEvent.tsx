@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { useState } from 'react';
-import { PositiveButton } from '../buttons/Buttons';
+import { PositiveButton } from '../buttons/PositiveButton';
 
 const Wrapper = styled.div`
     position: absolute;

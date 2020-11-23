@@ -4,7 +4,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
 import { useState } from 'react';
-import { PositiveButton } from '../../../sharedComponents/buttons/Buttons';
+import { PositiveButton } from '../../../sharedComponents/buttons/PositiveButton';
 
 interface Props {
     pickupId: number;

@@ -96,7 +96,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
                     pickupId={request.pickup.id}
                     partnerId={request.partner.id}
                     requestApprovalLoading={requestApprovalLoading}
-                    onRequestApprovalLoading={setRequestApprovalLoading}
+                    onRequestApproval={setRequestApprovalLoading}
                 />
             );
         } else if (pickUpIsOpenForRequests) {

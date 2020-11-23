@@ -6,7 +6,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
 import { StationSelect } from './forms/StationSelect';
-import { NegativeButton } from './buttons/Buttons';
+import { NegativeButton } from './buttons/NegativeButton';
 
 const Wrapper = styled.div`
     display: flex;
