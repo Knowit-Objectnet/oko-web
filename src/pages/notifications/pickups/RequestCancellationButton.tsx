@@ -4,23 +4,8 @@ import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
 import Cross from '../../../assets/Cross.svg';
-import styled from 'styled-components';
 import { Button } from '../../../sharedComponents/buttons/Button';
-
-const CancelButton = styled.button`
-    display: flex;
-    font-weight: bold;
-    align-items: center;
-    border: none;
-    background: none;
-    min-height: 45px;
-    font-size: 0.875rem;
-
-    & > svg {
-        margin-right: 2px;
-        height: 1.5rem;
-    }
-`;
+import { useState } from 'react';
 
 interface Props {
     pickupId: number;
@@ -30,20 +15,18 @@ interface Props {
 export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId }) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
+    const [deleteRequestLoading, setDeleteRequestLoading] = useState(false);
 
-    const [deleteRequestMutation, { isLoading: deleteRequestLoading }] = useMutation(
-        (request: ApiRequestParams) => deleteRequest(request, keycloak.token),
-        {
-            onError: () => {
-                alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
-                    type: types.ERROR,
-                });
-            },
-            onSettled: () => {
-                queryCache.invalidateQueries(requestsDefaultQueryKey);
-            },
+    const [deleteRequestMutation] = useMutation((request: ApiRequestParams) => deleteRequest(request, keycloak.token), {
+        onMutate: () => setDeleteRequestLoading(true),
+        onError: () => {
+            setDeleteRequestLoading(false);
+            alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
+                type: types.ERROR,
+            });
         },
-    );
+        onSettled: () => queryCache.invalidateQueries([requestsDefaultQueryKey, { pickupId, partnerId }]),
+    });
 
     const handleRequestCancellationClick = () => {
         const requestToCancel: ApiRequestParams = {

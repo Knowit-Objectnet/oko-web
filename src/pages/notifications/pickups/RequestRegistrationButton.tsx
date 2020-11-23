@@ -4,6 +4,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { Button } from '../../../sharedComponents/buttons/Button';
 import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
+import { useState } from 'react';
 
 interface Props {
     pickupId: number;
@@ -13,18 +14,16 @@ interface Props {
 export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId }) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
+    const [addRequestLoading, setAddRequestLoading] = useState(false);
 
-    const [addRequestMutation, { isLoading: addRequestLoading }] = useMutation(
-        (newRequest: ApiRequestPost) => postRequest(newRequest, keycloak.token),
-        {
-            onError: () => {
-                alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
-            },
-            onSettled: () => {
-                queryCache.invalidateQueries(requestsDefaultQueryKey);
-            },
+    const [addRequestMutation] = useMutation((newRequest: ApiRequestPost) => postRequest(newRequest, keycloak.token), {
+        onMutate: () => setAddRequestLoading(true),
+        onError: () => {
+            setAddRequestLoading(false);
+            alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
         },
-    );
+        onSettled: () => queryCache.invalidateQueries([requestsDefaultQueryKey, { pickupId, partnerId }]),
+    });
 
     const handleRequestRegistrationClick = () => {
         const newRequest: ApiRequestPost = {

@@ -39,6 +39,11 @@ const RejectStatus = styled(Status)`
     border-color: ${(props) => props.theme.colors.Red};
 `;
 
+const Fetching = styled.span`
+    font-style: italic;
+    font-size: 0.875rem;
+`;
+
 interface Props {
     pickUp: ApiPickUp;
 }
@@ -47,14 +52,18 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
     const { keycloak } = useKeycloak();
     const userId = keycloak.tokenParsed?.GroupID;
 
-    const { data: request, isLoading } = useRequests({
+    const { data: request, isLoading, isError } = useRequests({
         pickupId: pickUp.id,
         partnerId: userId,
     });
 
     const renderRequestStatus = () => {
         if (isLoading) {
-            return null;
+            return <Fetching>Laster inn...</Fetching>;
+        }
+
+        if (isError) {
+            return <Fetching>Noe gikk galt, kunne ikke hente påmeldingsstatus.</Fetching>;
         }
 
         const userHasRequest = request?.[0] ? true : false;
