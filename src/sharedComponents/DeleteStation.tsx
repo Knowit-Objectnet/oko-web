@@ -46,16 +46,14 @@ export const DeleteStation: React.FC<Props> = (props) => {
         (stationId: number) => deleteStation(stationId, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
+                alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, stasjonen ble ikke slettet.', { type: types.ERROR });
                 props.afterSubmit?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(stationsDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(stationsDefaultQueryKey),
         },
     );
 

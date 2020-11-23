@@ -57,16 +57,14 @@ export const Event: React.FC<Props> = (props) => {
         (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
+                alert.show('Avtalen ble slettet.', { type: types.SUCCESS });
                 props.afterDeleteSingleEvent?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
                 props.afterDeleteSingleEvent?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(eventsDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
         },
     );
 
@@ -81,16 +79,14 @@ export const Event: React.FC<Props> = (props) => {
         },
         {
             onSuccess: () => {
-                alert.show('Avtalen(e) ble slettet suksessfullt.', { type: types.SUCCESS });
+                alert.show('Avtalen(e) ble slettet.', { type: types.SUCCESS });
                 props.afterDeleteRangeEvent?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
                 props.afterDeleteRangeEvent?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(eventsDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
         },
     );
 
@@ -98,15 +94,13 @@ export const Event: React.FC<Props> = (props) => {
         (updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
+                alert.show('Avtalen ble oppdatert.', { type: types.SUCCESS });
                 setIsEditing(false);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(eventsDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
         },
     );
 

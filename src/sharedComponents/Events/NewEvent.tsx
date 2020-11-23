@@ -39,16 +39,14 @@ export const NewEvent: React.FC<Props> = (props) => {
         (newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
+                alert.show('Avtalen ble lagt til.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
                 props.afterSubmit?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(eventsDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
         },
     );
 

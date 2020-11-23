@@ -31,7 +31,7 @@ export const NewPickUp: React.FC<Props> = (props) => {
         (newPickUp: ApiPickUpPost) => postPickUp(newPickUp, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
+                alert.show('Et nytt ekstrauttak ble lagt.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {

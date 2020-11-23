@@ -56,16 +56,14 @@ export const NewPartner: React.FC<Props> = (props) => {
         (newPartner: ApiPartnerPost) => postPartner(newPartner, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
+                alert.show('Ny partner ble lagt til.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
                 props.afterSubmit?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(partnersDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(partnersDefaultQueryKey),
         },
     );
 

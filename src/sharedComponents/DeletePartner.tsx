@@ -46,16 +46,14 @@ export const DeletePartner: React.FC<Props> = (props) => {
         (partnerId: number) => deletePartner(partnerId, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
+                alert.show('Samarbeidspartneren ble slettet.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
                 props.afterSubmit?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(partnersDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(partnersDefaultQueryKey),
         },
     );
 

@@ -105,7 +105,7 @@ export const NewStation: React.FC<Props> = (props) => {
         (newStation: ApiStationPost) => postStation(newStation, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Stasjonen ble lagt til suksessfullt.', { type: types.SUCCESS });
+                alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
