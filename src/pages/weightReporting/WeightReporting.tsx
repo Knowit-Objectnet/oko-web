@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import { useCallback, useEffect, useState } from 'react';
 import { WithdrawalSubmission } from './WithdrawalSubmission';
-import { apiUrl, Withdrawal } from '../../types';
+import { apiUrl } from '../../types';
 import useSWR from 'swr';
 import { fetcher } from '../../utils/fetcher';
 import { Loading } from '../../sharedComponents/Loading';
 import { PatchToAPI } from '../../utils/PatchToAPI';
 import { useAlert, types } from 'react-alert';
 import { Helmet } from 'react-helmet';
+import { Withdrawal } from '../../api/ReportService';
 
 const Wrapper = styled.div`
     display: flex;

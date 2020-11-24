@@ -29,31 +29,9 @@ interface EventInfoResource {
     };
 }
 
-export interface ApiWithdrawal {
-    reportId: number;
-    eventId: number;
-    partnerId: number;
-    station: ApiStation;
-    startDateTime: string;
-    endDateTime: string;
-    weight: number | null;
-    reportedDateTime: string | null;
-}
-
 export interface SlotInfo {
     start: Date;
     end: Date;
-}
-
-export interface Withdrawal {
-    reportId: number;
-    eventId: number;
-    partnerId: number;
-    station: ApiStation;
-    startDateTime: Date;
-    endDateTime: Date;
-    weight: number | null;
-    reportedDateTime: Date | null;
 }
 
 // Roles

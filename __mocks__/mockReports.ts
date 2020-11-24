@@ -1,12 +1,12 @@
-import { ApiWithdrawal } from "../src/types";
 import add from 'date-fns/add';
+import { ApiReport } from "../src/api/ReportService";
 
 const now = new Date();
 now.setHours(10, 0, 0, 0);
 const futureStart = add(now, { days: 1 });
 const futureEnd = add(now, { days: 1, hours: 1 });
 
-export const mockWithdrawals: Array<ApiWithdrawal> = [
+export const mockReports: Array<ApiReport> = [
     {
         reportId: 1,
         partnerId: 1,
