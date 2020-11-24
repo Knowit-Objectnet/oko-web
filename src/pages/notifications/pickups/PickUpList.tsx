@@ -34,12 +34,12 @@ export const PickUpList: React.FC = () => {
     };
     const { data: pickUps, isLoading, isError } = usePickUps(pickUpsFilter);
     const sortedPickups = (pickUps ?? []).sort((pickUpA, pickUpB) => {
-        const timeA = new Date(pickUpA.startDateTime);
-        const timeB = new Date(pickUpB.startDateTime);
-        if (timeA == timeB) {
+        const timeA = new Date(pickUpA.startDateTime).getTime();
+        const timeB = new Date(pickUpB.startDateTime).getTime();
+        if (timeA === timeB) {
             return pickUpB.id - pickUpA.id;
         } else {
-            return timeB.getTime() - timeA.getTime();
+            return timeB - timeA;
         }
     });
 
