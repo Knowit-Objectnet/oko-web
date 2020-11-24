@@ -16,33 +16,21 @@ const BUTTON_SIZES: Record<ButtonSize, SimpleInterpolation> = {
     `,
 };
 
-const FULL_BUTTON_WIDTH = css`
-    width: 100%;
-    flex-grow: 1;
-`;
-
 interface StyledButtonProps {
     size: ButtonSize;
     fillWidth?: boolean;
 }
 
-const StyledButton = styled.button<StyledButtonProps>`
+const Button = styled.button<StyledButtonProps>`
     position: relative;
     border: none;
     font-weight: bold;
     font-size: 0.875rem;
     ${(props) => BUTTON_SIZES[props.size]}
-    ${(props) => props.fillWidth && FULL_BUTTON_WIDTH}
+    ${(props) => props.fillWidth && 'width: 100%; flex-grow: 1;'}
     
     &:disabled span {
         opacity: 0.6;
-    }
-`;
-
-/** Hiding text content with opacity preserves a11y (screen readers can read transparent content) */
-const HIDE_ELEMENT = css`
-    &&& {
-        opacity: 0;
     }
 `;
 
@@ -50,23 +38,23 @@ const Content = styled.span<{ hidden: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    ${(props) => props.hidden && HIDE_ELEMENT};
+
+    /** Hiding text content with opacity preserves a11y (screen readers can read transparent content) */
+    ${(props) => props.hidden && '&&& { opacity: 0; }'};
 `;
 
-const ButtonIcon = styled.span`
+const Icon = styled.span`
     height: 1.25rem;
     & * {
         height: 100%;
     }
 `;
 
-/** Wrap left-aligned icons in this component to get the correct size and padding */
-export const LeftButtonIcon = styled(ButtonIcon)`
+const LeftIcon = styled(Icon)`
     margin-right: 0.25rem;
 `;
 
-/** Wrap right-aligned icons in this component to get the correct size and padding */
-export const RightButtonIcon = styled(ButtonIcon)`
+const RightIcon = styled(Icon)`
     margin-left: 0.25rem;
 `;
 
@@ -84,10 +72,20 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     size?: ButtonSize;
     fillWidth?: boolean;
     isLoading?: boolean;
+    leftIcon?: React.ReactElement;
+    rightIcon?: React.ReactElement;
 }
 
-export const ButtonBase: React.FC<ButtonProps> = ({ size = 'medium', isLoading = false, children, ...otherProps }) => (
-    <StyledButton
+/** Not meant to be used directly, use/create a styled button variant instead (e.g. `<PrimaryButton>`) */
+export const BaseButton: React.FC<ButtonProps> = ({
+    size = 'medium',
+    isLoading = false,
+    leftIcon,
+    rightIcon,
+    children,
+    ...otherProps
+}) => (
+    <Button
         size={size}
         disabled={isLoading}
         aria-disabled={isLoading}
@@ -95,7 +93,11 @@ export const ButtonBase: React.FC<ButtonProps> = ({ size = 'medium', isLoading =
         aria-busy={isLoading}
         {...otherProps}
     >
-        <Content hidden={isLoading}>{children}</Content>
+        <Content hidden={isLoading}>
+            {leftIcon ? <LeftIcon>{leftIcon}</LeftIcon> : null}
+            {children}
+            {rightIcon ? <RightIcon>{rightIcon}</RightIcon> : null}
+        </Content>
         {isLoading ? <LoadingSpinner /> : null}
-    </StyledButton>
+    </Button>
 );

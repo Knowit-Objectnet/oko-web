@@ -6,7 +6,6 @@ import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../
 import CrossIcon from '../../../assets/Cross.svg';
 import { useState } from 'react';
 import { TextButton } from '../../../sharedComponents/buttons/TextButton';
-import { LeftButtonIcon } from '../../../sharedComponents/buttons/ButtonBase';
 
 interface Props {
     pickupId: number;
@@ -38,10 +37,7 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId
     };
 
     return (
-        <TextButton onClick={handleRequestCancellationClick} isLoading={deleteRequestLoading}>
-            <LeftButtonIcon>
-                <CrossIcon />
-            </LeftButtonIcon>
+        <TextButton leftIcon={<CrossIcon />} onClick={handleRequestCancellationClick} isLoading={deleteRequestLoading}>
             Meld av
         </TextButton>
     );
