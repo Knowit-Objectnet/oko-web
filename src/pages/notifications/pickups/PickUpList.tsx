@@ -8,7 +8,7 @@ import { ApiPickUpParams } from '../../../api/PickUpService';
 
 const HeaderRow = styled.div`
     display: grid;
-    grid-template-columns: minmax(150px, 1fr) 8fr minmax(350px, 3fr);
+    grid-template-columns: minmax(150px, 1fr) 8fr minmax(300px, 3fr);
 `;
 
 const PickUpRows = styled.ul`

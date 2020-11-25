@@ -11,7 +11,7 @@ import { ApiPickUp } from '../../../api/PickUpService';
 const Wrapper = styled.li`
     width: 100%;
     display: grid;
-    grid-template-columns: minmax(150px, 1fr) 8fr minmax(350px, 3fr);
+    grid-template-columns: minmax(150px, 1fr) 8fr minmax(300px, 3fr);
     grid-column-gap: 0.125rem;
 
     & > * {

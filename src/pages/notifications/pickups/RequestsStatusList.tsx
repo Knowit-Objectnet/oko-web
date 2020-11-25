@@ -7,7 +7,8 @@ import { useKeycloak } from '@react-keycloak/web';
 import { ApiRequest } from '../../../api/RequestService';
 import { useRequests } from '../../../api/hooks/useRequests';
 import { useState } from 'react';
-import DotsSpinner from '../../../assets/DotsSpinner.svg';
+import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../sharedComponents/StatusBadge';
+import { Spinner } from '../../../sharedComponents/Spinner';
 
 const RequestList = styled.ul`
     display: flex;
@@ -47,34 +48,6 @@ const StatusWrapper = styled.div`
     min-height: 2.5rem;
 `;
 
-const Status = styled.div`
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 0.875rem;
-    background: ${(props) => props.theme.colors.White};
-    border: 0.125rem solid;
-    padding: 0.5rem 1rem;
-    width: 100%;
-`;
-
-const ApprovedStatus = styled(Status)`
-    border-color: ${(props) => props.theme.colors.Green};
-`;
-const RejectedStatus = styled(Status)`
-    border-color: ${(props) => props.theme.colors.Red};
-`;
-const AwaitingStatus = styled(Status)`
-    border-color: ${(props) => props.theme.colors.Blue};
-`;
-
-const LoadingSpinner = styled(DotsSpinner)`
-    height: 0.375rem;
-    width: auto;
-`;
-
 interface Props {
     pickUp: ApiPickUp;
 }
@@ -97,7 +70,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
         const thisRequestIsApproved = request.partner.id === pickUp.chosenPartner?.id;
 
         if (requestApprovalLoading) {
-            return <LoadingSpinner />;
+            return <Spinner />;
         } else if (pickUpIsOpenForRequests && userCanApproveRequests) {
             return (
                 <RequestApprovalButton
@@ -107,16 +80,16 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
                 />
             );
         } else if (pickUpIsOpenForRequests) {
-            return <AwaitingStatus>Avventer svar</AwaitingStatus>;
+            return <NeutralStatusBadge fillWidth>Avventer svar</NeutralStatusBadge>;
         } else if (thisRequestIsApproved) {
-            return <ApprovedStatus>Godkjent</ApprovedStatus>;
+            return <PositiveStatusBadge fillWidth>Godkjent</PositiveStatusBadge>;
         } else if (!thisRequestIsApproved) {
-            return <RejectedStatus>Avvist</RejectedStatus>;
+            return <NegativeStatusBadge fillWidth>Avvist</NegativeStatusBadge>;
         }
     };
 
     if (isLoading) {
-        return <LoadingSpinner />;
+        return <Spinner />;
     }
     if (isError) {
         return <Notice>Noe gikk galt, kunne ikke laste inn påmeldingsstatus.</Notice>;

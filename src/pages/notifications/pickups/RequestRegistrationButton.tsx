@@ -32,5 +32,9 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId
         onRequestRegistration(false);
     };
 
-    return <PositiveButton onClick={handleRequestRegistrationClick}>Meld deg på ekstrauttak</PositiveButton>;
+    return (
+        <PositiveButton onClick={handleRequestRegistrationClick} fillWidth>
+            Meld deg på ekstrauttak
+        </PositiveButton>
+    );
 };

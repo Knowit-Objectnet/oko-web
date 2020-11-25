@@ -38,6 +38,7 @@ const Content = styled.span<{ hidden: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
+    white-space: nowrap;
 
     /** Hiding text content with opacity preserves a11y (screen readers can read transparent content) */
     ${(props) => props.hidden && '&&& { opacity: 0; }'};

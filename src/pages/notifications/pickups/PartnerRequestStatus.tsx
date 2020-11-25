@@ -6,38 +6,19 @@ import { useRequests } from '../../../api/hooks/useRequests';
 import { RequestRegistrationButton } from './RequestRegistrationButton';
 import { RequestCancellationButton } from './RequestCancellationButton';
 import { useState } from 'react';
+import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../sharedComponents/StatusBadge';
+import { Spinner } from '../../../sharedComponents/Spinner';
 
 const StatusWrapper = styled.div`
     display: flex;
     align-items: center;
+    flex-wrap: nowrap;
     padding: 0.625rem;
+    min-height: 4.25rem;
 
     & > *:not(:last-child) {
         margin-right: 0.625rem;
     }
-`;
-
-const Status = styled.div`
-    font-weight: bold;
-    font-size: 0.875rem;
-    min-height: 3rem;
-    text-align: center;
-    padding: 0.75rem 1rem;
-    background: ${(props) => props.theme.colors.White};
-    min-width: 12rem;
-    border: 0.125rem solid;
-`;
-
-const AwaitingStatus = styled(Status)`
-    border-color: ${(props) => props.theme.colors.Blue};
-`;
-
-const ApprovedStatus = styled(Status)`
-    border-color: ${(props) => props.theme.colors.Green};
-`;
-
-const RejectStatus = styled(Status)`
-    border-color: ${(props) => props.theme.colors.Red};
 `;
 
 const Notice = styled.span`
@@ -62,7 +43,7 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
 
     const renderRequestStatus = () => {
         if (requestLoading || requestStatusLoading) {
-            return <Notice>Laster inn...</Notice>;
+            return <Spinner />;
         }
 
         if (requestLoadingError) {
@@ -90,7 +71,7 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
         } else if (userRequestAwaiting) {
             return (
                 <>
-                    <AwaitingStatus>Avventer svar</AwaitingStatus>
+                    <NeutralStatusBadge fillWidth>Avventer svar</NeutralStatusBadge>
                     <RequestCancellationButton
                         pickupId={pickUp.id}
                         partnerId={userId}
@@ -99,11 +80,11 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
                 </>
             );
         } else if (userRequestApproved) {
-            return <ApprovedStatus>Forespørsel godkjent</ApprovedStatus>;
+            return <PositiveStatusBadge fillWidth>Forespørsel godkjent</PositiveStatusBadge>;
         } else if (userRequestRejected) {
-            return <RejectStatus>Forespørsel avvist</RejectStatus>;
+            return <NegativeStatusBadge fillWidth>Forespørsel avvist</NegativeStatusBadge>;
         }
-        return <RejectStatus>Påmelding stengt</RejectStatus>;
+        return <NegativeStatusBadge fillWidth>Påmelding stengt</NegativeStatusBadge>;
     };
 
     return <StatusWrapper>{renderRequestStatus()}</StatusWrapper>;
