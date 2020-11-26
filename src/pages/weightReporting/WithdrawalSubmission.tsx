@@ -1,10 +1,15 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { PropsWithChildren, useState } from 'react';
+import { useState } from 'react';
 import Pencil from '../../assets/Pencil.svg';
-import { ApiStation } from '../../api/StationService';
+import { queryCache, useMutation } from 'react-query';
+import { ApiReport, ApiReportPatch, patchReport, reportsDefaultQueryKey } from '../../api/ReportService';
+import { types, useAlert } from 'react-alert';
+import { useKeycloak } from '@react-keycloak/web';
+import { format, formatISO } from 'date-fns';
+import { nb } from 'date-fns/locale';
 
-const Wrapper = styled.div`
+const Wrapper = styled.li`
     display: flex;
     margin-bottom: 2px;
 `;
@@ -142,22 +147,29 @@ const EditIcon = styled(Pencil)`
     margin-right: 20px;
 `;
 
-interface WithdrawalProps {
-    id: number;
-    weight: number | null;
-    start: Date;
-    end: Date;
-    location: ApiStation;
-    onSubmit: (weight: number, id: number) => void;
+interface Props {
+    report: ApiReport;
 }
 
-/**
- * Event option that allows the user to choose a weight for the event.
- */
-export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
-    // State
-    const [weight, setWeight] = useState<number | ''>(props.weight || '');
-    const [editing, setEditing] = useState(props.weight === null);
+export const WithdrawalSubmission: React.FC<Props> = ({ report }) => {
+    const { keycloak } = useKeycloak();
+    const alert = useAlert();
+
+    const [weight, setWeight] = useState<number | ''>(report.weight || '');
+    const [editing, setEditing] = useState(report.weight === null);
+
+    const [updateReportMutation, { isLoading: updateReportLoading }] = useMutation(
+        (updatedReport: ApiReportPatch) => patchReport(updatedReport, keycloak.token),
+        {
+            onSuccess: () => {
+                alert.show('Vekt ble registrert på uttaket.', { type: types.SUCCESS });
+                queryCache.invalidateQueries(reportsDefaultQueryKey);
+            },
+            onError: () => {
+                alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
+            },
+        },
+    );
 
     // On change function for the input element
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -177,12 +189,16 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
     const onSubmitClick = async () => {
         // If the new weight is the same as the old weight then turn off editing
         // without sending an api request as nothing is changed
-        if (weight === props.weight) {
+        if (weight === report.weight) {
             setEditing(false);
             // If the weight isnt an empty string or the old weight then send an
             // api request as the weight has changed
         } else if (weight) {
-            await props.onSubmit(weight, props.id);
+            updateReportMutation({
+                id: report.reportId,
+                weight,
+            });
+
             setEditing(false);
         }
     };
@@ -192,44 +208,29 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
         setEditing(true);
     };
 
+    const startDateTime = new Date(report.startDateTime);
+    const endDateTime = new Date(report.endDateTime);
+
+    const reportStartTime = format(startDateTime, 'HH:mm');
+    const reportEndTime = format(endDateTime, 'HH:mm');
+    const reportDate = format(startDateTime, ' eee. d. MMMM yyyy', { locale: nb });
+
+    const getMachineReadableDate = (date: Date) => format(date, 'yyyy-MM-dd');
+
     return (
         <Wrapper>
-            <WithdrawalDate weight={props.weight}>
+            <WithdrawalDate weight={report.weight}>
                 <DateTime>
                     <b>Dato: </b>
-                    {props.start
-                        .toLocaleString('nb-NO', {
-                            month: 'long',
-                            day: 'numeric',
-                            year: 'numeric',
-                            weekday: 'short',
-                        })
-                        .slice(0, 1)
-                        .toUpperCase() +
-                        props.start
-                            .toLocaleString('nb-NO', {
-                                month: 'long',
-                                day: 'numeric',
-                                year: 'numeric',
-                                weekday: 'short',
-                            })
-                            .slice(1)}
+                    <time dateTime={getMachineReadableDate(startDateTime)}>{reportDate}</time>
                 </DateTime>
                 <DateTime>
                     <b>Klokken: </b>
-                    {`${props.start
-                        .getHours()
-                        .toString()
-                        .padStart(2, '0')}:${props.start
-                        .getMinutes()
-                        .toString()
-                        .padStart(2, '0')} - ${props.end
-                        .getHours()
-                        .toString()
-                        .padStart(2, '0')}:${props.end.getMinutes().toString().padStart(2, '0')}`}
+                    <time dateTime={formatISO(startDateTime)}>{reportStartTime}</time>&ndash;
+                    <time dateTime={formatISO(endDateTime)}>{reportEndTime}</time>
                 </DateTime>
             </WithdrawalDate>
-            <WithdrawalLocation weight={props.weight}>{props.location.name}</WithdrawalLocation>
+            <WithdrawalLocation weight={report.weight}>{report.station.name}</WithdrawalLocation>
             {editing ? (
                 <InputWrapper>
                     <Suffix>
@@ -251,26 +252,10 @@ export const MemoWithdrawalSubmission: React.FC<WithdrawalProps> = (props) => {
                 </InputWrapper>
             ) : (
                 <Box>
-                    <BoxText>{props.weight} kg</BoxText>
+                    <BoxText>{report.weight} kg</BoxText>
                     <EditIcon onClick={onEditButtonClick} />
                 </Box>
             )}
         </Wrapper>
     );
 };
-
-const areEqual = (
-    prevProps: Readonly<PropsWithChildren<WithdrawalProps>>,
-    nextProps: Readonly<PropsWithChildren<WithdrawalProps>>,
-) => {
-    return (
-        prevProps.weight === nextProps.weight &&
-        prevProps.id === nextProps.id &&
-        prevProps.start.getTime() === nextProps.start.getTime() &&
-        prevProps.end.getTime() === nextProps.end.getTime() &&
-        prevProps.location.id === nextProps.location.id &&
-        prevProps.onSubmit === nextProps.onSubmit
-    );
-};
-
-export const WithdrawalSubmission = React.memo(MemoWithdrawalSubmission, areEqual);
