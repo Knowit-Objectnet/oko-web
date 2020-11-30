@@ -31,7 +31,7 @@ export const postRequest = (newRequest: ApiRequestPost, token: string): Promise<
         .post<ApiRequest>(endpoint, newRequest)
         .then((response) => response.data);
 
-export const deleteRequest = (params: ApiRequestParams, token: string): Promise<ApiRequest> =>
+export const deleteRequest = (params: ApiRequestParams, token: string): Promise<number> =>
     httpClient(token)
-        .delete<ApiRequest>(endpoint, { params })
+        .delete<number>(endpoint, { params })
         .then((response) => response.data);
