@@ -79,4 +79,4 @@ export enum Roles {
 }
 
 // Url to API
-export const apiUrl = 'https://cl54bup835.execute-api.eu-central-1.amazonaws.com/production/';
+export const apiUrl = 'https://cl54bup835.execute-api.eu-central-1.amazonaws.com/production';
