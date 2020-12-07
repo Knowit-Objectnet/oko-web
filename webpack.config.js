@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -7,9 +6,20 @@ const createStyledComponentsTransformer = require('typescript-plugin-styled-comp
 const styledComponentsTransformer = createStyledComponentsTransformer();
 
 module.exports = {
+    entry: './src/index.tsx',
     mode: 'development',
     devtool: 'source-map',
-
+    devServer: {
+        host: "0.0.0.0",
+        port: 8080,
+        open: true,
+        contentBase: './dist',
+        historyApiFallback: true
+    },
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].[fullhash].js',
+    },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
