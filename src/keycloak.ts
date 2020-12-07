@@ -1,9 +1,8 @@
 import Keycloak from 'keycloak-js';
 
-// Setup Keycloak instance as needed
-// Pass initialization options as required or leave blank to load from 'keycloak.json'
+// Setup Keycloak instance
 const keycloak = new Keycloak({
-    realm: 'staging',
+    realm: process.env.KEYCLOAK_REALM,
     url: process.env.KEYCLOAK_URL,
     sslRequired: 'external',
     resource: 'react-app',
