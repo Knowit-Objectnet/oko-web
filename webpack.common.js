@@ -1,24 +1,16 @@
-const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const path = require('path');
 
 // Provides the styled component names for run-time (so they are displayed in React DevTools)
 const createStyledComponentsTransformer = require('typescript-plugin-styled-components').default;
 const styledComponentsTransformer = createStyledComponentsTransformer();
 
 module.exports = {
-    entry: './src/index.tsx',
-    mode: 'development',
-    devtool: 'source-map',
-    devServer: {
-        host: "0.0.0.0",
-        port: 8080,
-        open: true,
-        contentBase: './dist',
-        historyApiFallback: true
-    },
+    entry: path.resolve(__dirname, 'src', 'index.tsx'),
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[fullhash].js',
+        filename: '[name].[fullhash].bundle.js',
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
@@ -27,15 +19,15 @@ module.exports = {
         rules: [
             {
                 test: /\.ts(x?)$/,
-                exclude: /node_modules/,
                 loader: 'ts-loader',
+                exclude: /node_modules/,
                 options: {
-                    getCustomTransformers: () => ({ before: [styledComponentsTransformer] })
-                }
+                    getCustomTransformers: () => ({ before: [styledComponentsTransformer] }),
+                },
             },
             {
-                enforce: 'pre',
                 test: /\.js$/,
+                enforce: 'pre',
                 loader: 'source-map-loader',
             },
             {
@@ -44,17 +36,25 @@ module.exports = {
             },
             {
                 test: /\.(woff2|woff|eot|ttf|otf)$/,
-                use: ["file-loader"],
+                use: ['file-loader'],
             },
             {
                 test: /\.svg$/,
-                use: ['svg-react-loader']
+                use: ['svg-react-loader'],
             },
         ],
     },
     plugins: [
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'public', 'index.html'),
+            template: path.resolve(__dirname, 'src', 'index.html'),
         }),
     ],
+    devServer: {
+        host: '0.0.0.0',
+        port: 8080,
+        open: true,
+        contentBase: path.resolve(__dirname, 'dist'),
+        historyApiFallback: true,
+    },
 };

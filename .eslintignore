@@ -2,8 +2,8 @@
 .idea
 __mocks__
 container
+dist
 node_modules
-public
 jest.config.js
 .prettierrc.js
-webpack.config.js
+webpack.*.js

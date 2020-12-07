@@ -79,4 +79,4 @@ export enum Roles {
 }
 
 // Url to API
-export const apiUrl = 'https://ci3y3hbbfa.execute-api.eu-central-1.amazonaws.com/test';
+export const apiUrl = process.env.API_URL;
