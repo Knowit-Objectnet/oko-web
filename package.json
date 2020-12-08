@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.tsx",
   "scripts": {
-    "start": "webpack serve --config webpack.staging.js ",
-    "build:test": "webpack --config webpack.test.js",
-    "build:staging": "webpack --config webpack.staging.js",
-    "build:production": "webpack --config webpack.production.js",
+    "start": "webpack serve --config webpack.config.js ",
+    "build": "webpack --config webpack.config.js",
     "lint": "eslint --fix --ignore-path .eslintignore --ext js,jsx,ts,tsx,mdx .",
     "check-types": "tsc",
     "test": "jest",
