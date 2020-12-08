@@ -96,7 +96,7 @@ The cache (a `QueryCache` instance) has utility methods (like `invalidateQueries
 > in the browser. If possible, this should preferably be done by adding a specific rule to allow all cookies from 
 > the domain of the Keycloak URL ([instructions for Google Chrome](https://support.google.com/chrome/answer/95647)).
 
-### Deployment
+### Build and deployment
 
 The source code is built and deployed to AWS S3 with CI/CD, configured in Bamboo 
 ([byggmester.knowit.no](https://byggmester.knowit.no/browse/OKO-WB)).
@@ -111,13 +111,18 @@ The environments/branches:
 * `staging` – for pre-production testing purposes. Only pull requests from `test` shall be made to this branch.
 * `production` – running application. Only pull requests from `staging` shall be made to this branch.
 
-#### Building locally
-It is possible to build the application locally by executing `npm run build:<environment-name>`, where 
-`<environment-name>` must be substituted with the name of one of the three environments mentioned above.
+#### Building and environment variables
 
-> The build configurations are set up with separate Webpack configuration files, one for each of the three environments 
-> (`webpack.test.js`, `webpack.staging.js` and `webpack.production.js`). These files read environment variables from
-> corresponding `.env`-files. 
+The building process is dependent on a set of environment variables (e.g. the correct REST API URL). 
+Webpack is configured with the [`dotenv-webpack`](https://www.npmjs.com/package/dotenv-webpack) plugin, and the process works as follows:
+
+1. The plugin looks for an `.env` file in the root project folder. If this is present, environment variables defined here 
+   is loaded into `process.env.{ENV_VAR_NAME}`. There is a default `.env` file in the project, that is used for 
+   running/building the project locally.
+2. Webpack loads environment variables from the executing system/CLI session. System variables with matching names
+   takes presedence over those loaded from the `.env`-file. This makes it possible to set/override the environment variables
+   in the Bamboo build plan (CI/CD).
+3. References to `process.env.{ENV_VAR_NAME}` in the source code is substituted with the environment variable values at build time.
 
 ## Documentation
 
