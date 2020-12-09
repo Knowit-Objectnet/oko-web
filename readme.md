@@ -103,7 +103,8 @@ The source code is built and deployed to AWS S3 with CI/CD, configured in Bamboo
 
 Three environments are configured in AWS. Each environment is linked to a corresponding branch in the Bitbucket repository.
 The building process in Bamboo is automatically triggered by creating a pull request to one of these branches. When a pull
-request is merged, the project is automatically rebuilt and deployed to the correct environment.
+request is merged, the project is automatically rebuilt and deployed to the correct environment. An exception here is
+that deployment to the `production` environment must be triggered manually.
 
 The environments/branches:
 
@@ -116,10 +117,9 @@ The environments/branches:
 The building process is dependent on a set of environment variables (e.g. the correct REST API URL). 
 Webpack is configured with the [`dotenv-webpack`](https://www.npmjs.com/package/dotenv-webpack) plugin, and the process works as follows:
 
-1. The plugin looks for an `.env` file in the root project folder. If this is present, environment variables defined here 
-   is loaded into `process.env.{ENV_VAR_NAME}`. There is a default `.env` file in the project, that is used for 
-   running/building the project locally.
-2. Webpack loads environment variables from the executing system/CLI session. System variables with matching names
+1. The plugin loads variables from an `.env` file in the root project folder into the global `process.env` object. 
+   There is a default `.env` file in the project, meant for running/building the project locally.
+2. The plugin loads environment variables from the executing system/CLI session. System variables with matching names
    takes presedence over those loaded from the `.env`-file. This makes it possible to set/override the environment variables
    in the Bamboo build plan (CI/CD).
 3. References to `process.env.{ENV_VAR_NAME}` in the source code is substituted with the environment variable values at build time.
