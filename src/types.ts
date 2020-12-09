@@ -78,5 +78,5 @@ export enum Roles {
     Ambassador = 'reuse_station',
 }
 
-// Url to API
-export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging';
+// TODO: Remove when migration to Axios is complete
+export const apiUrl = process.env.API_URL || 'https://dummy-for-testing.com';

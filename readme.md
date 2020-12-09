@@ -20,8 +20,9 @@ The frontend-web for Oslo REG knowit 2020 summer project.
 * **[keycloak-js](https://www.npmjs.com/package/keycloak-js)**: client-side adapter for communicating with the Keycloak server. 
 [Documentation can be found here.](https://www.keycloak.org/docs/latest/securing_apps/index.html#_javascript_adapter)
 * **[@react-keycloak/web](https://www.npmjs.com/package/@react-keycloak/web)**: Provides a `KeycloakProvider` component 
-that wraps the entire React application (see `App.tsx`). The component holds an instance of a `Keycloak` object (from `keaycloak-js`), and provides a `useKeycloak()` hook that 
-can be used to check for authentication and roles in lower level components. See [package documentation for details](https://www.npmjs.com/package/@react-keycloak/web).
+  that wraps the entire React application (see `App.tsx`). The component holds an instance of a `Keycloak`
+  object (from `keaycloak-js`), and provides a `useKeycloak()` hook that can be used to check for authentication and 
+  roles in lower level components. See [package documentation for details](https://www.npmjs.com/package/@react-keycloak/web).
 
 ### Data fetching and caching
 
@@ -82,18 +83,51 @@ The cache (a `QueryCache` instance) has utility methods (like `invalidateQueries
 * Git Hooks: **Husky**
 
 ## Getting it up
-### Production
-#### App
-To get the app ready for production simply execute ```npm run-script build``` and then host the static files from the 'public' folder.
 
-#### Documentation
-Follow docz documentation to get the documentation website up for production: [https://www.docz.site/docs/deploying-your-docs](https://www.docz.site/docs/deploying-your-docs)
+### Local development
 
-### Development
-#### App
-To start the development server simply execute ```npm run-script start``` or start the docker container by going into the folder 'container' and executing ```docker-compose up```
+* To start the development server simply execute `npm start`. 
+* Alternatively, start the provided docker container by going into the folder `container` and executing `docker-compose up`.
 
-> **Note:** There might be an issue when running the app locally (in the 0.0.0.0 or localhost domain), and connecting to an external Keycloak server. A logged in user might wrongfully be redirected to a logged out page after a certain amount of time. The problem can be solved by disabling the blocking of third-party cookies in the browser. This should preferably be done by adding a specific rule to allow all cookies from the domain of the Keycloak server ([instructions for Google Chrome](https://support.google.com/chrome/answer/95647)).   
+> **Note:** There might be an issue when running the app locally (in the 0.0.0.0 or localhost domain), 
+> and connecting to an external Keycloak server. A logged in user might wrongfully be redirected to a logged out page 
+> after a certain amount of time. This happens because the web browser identifies the cookie set by Keycloak as 
+> from a third party. The problem is solved by disabling the blocking of third-party cookies 
+> in the browser. If possible, this should preferably be done by adding a specific rule to allow all cookies from 
+> the domain of the Keycloak URL ([instructions for Google Chrome](https://support.google.com/chrome/answer/95647)).
 
-#### Documentation
+### Build and deployment
+
+The source code is built and deployed to AWS S3 with CI/CD, configured in Bamboo 
+([byggmester.knowit.no](https://byggmester.knowit.no/browse/OKO-WB)).
+
+Three environments are configured in AWS. Each environment is linked to a corresponding branch in the Bitbucket repository.
+The building process in Bamboo is automatically triggered by creating a pull request to one of these branches. When a pull
+request is merged, the project is automatically rebuilt and deployed to the correct environment.
+
+The environments/branches:
+
+* `test` – for development testing purposes. **Pull requests from development branches shall always be made to the `test` branch.**
+* `staging` – for pre-production testing purposes. Only pull requests from `test` shall be made to this branch.
+* `production` – running application. Only pull requests from `staging` shall be made to this branch.
+
+#### Building and environment variables
+
+The building process is dependent on a set of environment variables (e.g. the correct REST API URL). 
+Webpack is configured with the [`dotenv-webpack`](https://www.npmjs.com/package/dotenv-webpack) plugin, and the process works as follows:
+
+1. The plugin looks for an `.env` file in the root project folder. If this is present, environment variables defined here 
+   is loaded into `process.env.{ENV_VAR_NAME}`. There is a default `.env` file in the project, that is used for 
+   running/building the project locally.
+2. Webpack loads environment variables from the executing system/CLI session. System variables with matching names
+   takes presedence over those loaded from the `.env`-file. This makes it possible to set/override the environment variables
+   in the Bamboo build plan (CI/CD).
+3. References to `process.env.{ENV_VAR_NAME}` in the source code is substituted with the environment variable values at build time.
+
+## Documentation
+
+### Local development
 To start the development server simply execute ```yarn docz dev```
+
+### For deployment
+Follow docz documentation to get the documentation website up for production: [https://www.docz.site/docs/deploying-your-docs](https://www.docz.site/docs/deploying-your-docs)
