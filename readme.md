@@ -86,6 +86,9 @@ The cache (a `QueryCache` instance) has utility methods (like `invalidateQueries
 
 ### Local development
 
+Before running/building locally the first time, copy the file `.env-sample` and rename to `.env`. The file provides the 
+environment variables required. See "Building and environment variables" below.
+
 * To start the development server simply execute `npm start`. 
 * Alternatively, start the provided docker container by going into the folder `container` and executing `docker-compose up`.
 
@@ -117,11 +120,11 @@ The environments/branches:
 The building process is dependent on a set of environment variables (e.g. the correct REST API URL). 
 Webpack is configured with the [`dotenv-webpack`](https://www.npmjs.com/package/dotenv-webpack) plugin, and the process works as follows:
 
-1. The plugin loads variables from an `.env` file in the root project folder into the global `process.env` object. 
-   There is a default `.env` file in the project, meant for running/building the project locally.
-2. The plugin loads environment variables from the executing system/CLI session. System variables with matching names
-   takes presedence over those loaded from the `.env`-file. This makes it possible to set/override the environment variables
-   in the Bamboo build plan (CI/CD).
+1. Variables defined in an optional `.env` file in the root project folder is loaded into the global `process.env` object.
+   Using `.env` files are intended for running and building locally.
+2. Environment variables from the executing system/CLI session is loaded into the same global object. Matching
+   names with variables from the `.env`-file is overwritten. Using system environment variables is intended for CI/CD
+   tools (Bamboo).
 3. References to `process.env.{ENV_VAR_NAME}` in the source code is substituted with the environment variable values at build time.
 
 ## Documentation
