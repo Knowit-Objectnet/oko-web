@@ -1,9 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
-import { apiUrl } from '../types';
 
 export const httpClient = (token?: string): AxiosInstance => {
     return axios.create({
-        baseURL: apiUrl,
+        baseURL: process.env.REACT_APP_API_URL,
         headers: {
             Authorization: `Bearer ${token}`,
         },

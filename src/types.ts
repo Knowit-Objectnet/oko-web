@@ -78,5 +78,5 @@ export enum Roles {
     Ambassador = 'reuse_station',
 }
 
-// Url to API
-export const apiUrl = 'https://cl54bup835.execute-api.eu-central-1.amazonaws.com/production';
+// TODO: Remove when migration to Axios is complete (this is only used by SWR)
+export const apiUrl = process.env.REACT_APP_API_URL || 'https://dummy-for-testing.com';
