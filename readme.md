@@ -87,7 +87,7 @@ The cache (a `QueryCache` instance) has utility methods (like `invalidateQueries
 ### Local development
 
 Before running/building locally the first time, copy the file `.env-sample` and rename to `.env`. The file provides the 
-environment variables required. See [Building and environment variables](#building-and-environment-variables).
+environment variables required. See "Building and environment variables" below.
 
 * To start the development server simply execute `npm start`. 
 * Alternatively, start the provided docker container by going into the folder `container` and executing `docker-compose up`.
