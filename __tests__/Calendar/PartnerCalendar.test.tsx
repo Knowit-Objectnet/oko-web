@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import fetch from 'jest-fetch-mock';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
@@ -12,9 +11,6 @@ import { ThemeProvider } from 'styled-components';
 // Component to test
 import { PartnerCalendar } from '../../src/pages/calendar/PartnerCalendar/PartnerCalendar';
 import { ApiEvent } from '../../src/api/EventService';
-
-// Fetch mock to intercept fetch requests.
-global.fetch = fetch;
 
 describe('Provides a page for partners to view the calendar', () => {
     const events: EventInfo[] = mockApiEvents

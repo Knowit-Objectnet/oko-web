@@ -26,22 +26,12 @@ The frontend-web for Oslo REG knowit 2020 summer project.
 
 ### Data fetching and caching
 
-> The project is in the process of being migrated from `Fetch` + `SWR` to `Axios` + `React Query`.
-> <br/>Current status for resource entities:
-> 
-> | `Fetch` + `SWR`| `Axios` + `React Query` |
-> | --- | --- |
-> |`Report`|`Event`, `Station`, `Partner`, `PickUp`, `Request`|
-
 * **[Axios](https://www.npmjs.com/package/axios)**: HTTP client library for doing REST API calls.
 * **[React Query](https://www.npmjs.com/package/react-query)**: library used for caching data fetched from REST API.
 Provides a `useQuery()` hook for the fetching and caching, and a `useMutation()` hook to update the data. 
 The cache (a `QueryCache` instance) has utility methods (like `invalidateQueries()`) that can be used for interacting with the cache. 
 [Documentation can be found here.](https://react-query.tanstack.com/docs)
 
-**⚠ Will be replaced:**
-
-* **[swr](https://swr.vercel.app/)**: caching library
 ---
 
 ### Alert system

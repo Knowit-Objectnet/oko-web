@@ -1,10 +1,7 @@
 import '@testing-library/jest-dom';
-import fetch from 'jest-fetch-mock';
 import add from 'date-fns/add';
 
 import { getStartAndEndDateTime } from '../../src/utils/getStartAndEndDateTime';
-
-global.fetch = fetch;
 
 describe('Provides utility functions', () => {
     it('Should give a start equal to closest quarter and end equal to closest quarter+1 hour if date is less than 1 hour away from max', async () => {

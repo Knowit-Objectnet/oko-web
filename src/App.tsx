@@ -3,7 +3,6 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from './keycloak';
 import { RouterComponent } from './router/router';
 import { GlobalStyle } from './global-styles';
-import { SWRConfig } from 'swr';
 import ModalProvider from './sharedComponents/Modal/Provider';
 import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
@@ -24,20 +23,12 @@ export const App: React.FC = () => {
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...alertOptions}>
                     <ModalProvider>
-                        <SWRConfig
-                            value={{
-                                refreshInterval: 0,
-                                revalidateOnFocus: true,
-                                revalidateOnReconnect: true,
-                            }}
-                        >
-                            <Helmet titleTemplate="Oslo kommune REG | %s">
-                                <html lang="no" />
-                                <meta name="description" content="Oslo kommune REG" />
-                            </Helmet>
-                            <RouterComponent />
-                            <GlobalStyle />
-                        </SWRConfig>
+                        <Helmet titleTemplate="Oslo kommune REG | %s">
+                            <html lang="no" />
+                            <meta name="description" content="Oslo kommune REG" />
+                        </Helmet>
+                        <RouterComponent />
+                        <GlobalStyle />
                     </ModalProvider>
                 </AlertProvider>
             </ThemeProvider>
