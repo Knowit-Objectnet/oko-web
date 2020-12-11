@@ -18,7 +18,7 @@ const Body = styled.div`
     overflow: hidden;
 `;
 
-const Page = styled.div`
+const Page = styled.main`
     flex: 1;
     overflow-y: auto;
 `;
