@@ -116,7 +116,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
     };
 
     if (isLoading) {
-        return <Notice>Laster inn...</Notice>;
+        return <LoadingSpinner />;
     }
     if (isError) {
         return <Notice>Noe gikk galt, kunne ikke laste inn påmeldingsstatus.</Notice>;

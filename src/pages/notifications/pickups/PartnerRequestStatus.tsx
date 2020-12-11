@@ -5,6 +5,7 @@ import { ApiPickUp } from '../../../api/PickUpService';
 import { useRequests } from '../../../api/hooks/useRequests';
 import { RequestRegistrationButton } from './RequestRegistrationButton';
 import { RequestCancellationButton } from './RequestCancellationButton';
+import { useState } from 'react';
 
 const StatusWrapper = styled.div`
     display: flex;
@@ -52,17 +53,19 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
     const { keycloak } = useKeycloak();
     const userId = keycloak.tokenParsed?.GroupID;
 
-    const { data: request, isLoading, isError } = useRequests({
+    const [requestStatusLoading, setRequestStatusLoading] = useState(false);
+
+    const { data: request, isLoading: requestLoading, isError: requestLoadingError } = useRequests({
         pickupId: pickUp.id,
         partnerId: userId,
     });
 
     const renderRequestStatus = () => {
-        if (isLoading) {
+        if (requestLoading || requestStatusLoading) {
             return <Notice>Laster inn...</Notice>;
         }
 
-        if (isError) {
+        if (requestLoadingError) {
             return <Notice>Noe gikk galt, kunne ikke hente påmeldingsstatus.</Notice>;
         }
 
@@ -77,12 +80,22 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
         const userRequestRejected = userHasRequest && !userRequestApproved;
 
         if (userCanMakeRequest) {
-            return <RequestRegistrationButton pickupId={pickUp.id} partnerId={userId} />;
+            return (
+                <RequestRegistrationButton
+                    pickupId={pickUp.id}
+                    partnerId={userId}
+                    onRequestRegistration={setRequestStatusLoading}
+                />
+            );
         } else if (userRequestAwaiting) {
             return (
                 <>
                     <AwaitingStatus>Avventer svar</AwaitingStatus>
-                    <RequestCancellationButton pickupId={pickUp.id} partnerId={userId} />
+                    <RequestCancellationButton
+                        pickupId={pickUp.id}
+                        partnerId={userId}
+                        onRequestCancellation={setRequestStatusLoading}
+                    />
                 </>
             );
         } else if (userRequestApproved) {

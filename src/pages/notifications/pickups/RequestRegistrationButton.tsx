@@ -3,39 +3,34 @@ import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
-import { useState } from 'react';
 import { PositiveButton } from '../../../sharedComponents/buttons/PositiveButton';
 
 interface Props {
     pickupId: number;
     partnerId: number;
+    onRequestRegistration: (isLoading: boolean) => void;
 }
 
-export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId }) => {
+export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId, onRequestRegistration }) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
-    const [addRequestLoading, setAddRequestLoading] = useState(false);
 
     const [addRequestMutation] = useMutation((newRequest: ApiRequestPost) => postRequest(newRequest, keycloak.token), {
-        onMutate: () => setAddRequestLoading(true),
+        onSuccess: () => queryCache.invalidateQueries([requestsDefaultQueryKey, { pickupId, partnerId }]),
         onError: () => {
-            setAddRequestLoading(false);
             alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
         },
-        onSettled: () => queryCache.invalidateQueries([requestsDefaultQueryKey, { pickupId, partnerId }]),
     });
 
-    const handleRequestRegistrationClick = () => {
+    const handleRequestRegistrationClick = async () => {
+        onRequestRegistration(true);
         const newRequest: ApiRequestPost = {
             pickupId,
             partnerId,
         };
-        addRequestMutation(newRequest);
+        await addRequestMutation(newRequest);
+        onRequestRegistration(false);
     };
 
-    return (
-        <PositiveButton onClick={handleRequestRegistrationClick} isLoading={addRequestLoading}>
-            Meld deg på ekstrauttak
-        </PositiveButton>
-    );
+    return <PositiveButton onClick={handleRequestRegistrationClick}>Meld deg på ekstrauttak</PositiveButton>;
 };
