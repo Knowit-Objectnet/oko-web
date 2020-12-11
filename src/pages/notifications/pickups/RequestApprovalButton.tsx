@@ -24,17 +24,17 @@ export const RequestApprovalButton: React.FC<Props> = (props) => {
                     type: types.ERROR,
                 });
             },
-            onSettled: () => props.onRequestApproval(false),
         },
     );
 
-    const handleRequestApproval = () => {
+    const handleRequestApproval = async () => {
         props.onRequestApproval(true);
         const updatedPickUp: ApiPickUpPatch = {
             id: props.pickupId,
             chosenPartnerId: props.partnerId,
         };
-        updatePickUpMutation(updatedPickUp);
+        await updatePickUpMutation(updatedPickUp);
+        props.onRequestApproval(false);
     };
 
     return (
