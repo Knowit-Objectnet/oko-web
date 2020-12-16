@@ -31,12 +31,10 @@ const Request = styled.li`
 
 const Notice = styled.div`
     display: flex;
-    height: 100%;
-    font-style: italic;
-    font-size: 0.875rem;
-    width: 100%;
     align-items: center;
     justify-content: center;
+    font-style: italic;
+    font-size: 0.875rem;
     padding: 0.5rem 1rem;
 `;
 
@@ -80,11 +78,23 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
                 />
             );
         } else if (pickUpIsOpenForRequests) {
-            return <NeutralStatusBadge fillWidth>Avventer svar</NeutralStatusBadge>;
+            return (
+                <NeutralStatusBadge fillWidth size="small">
+                    Avventer svar
+                </NeutralStatusBadge>
+            );
         } else if (thisRequestIsApproved) {
-            return <PositiveStatusBadge fillWidth>Godkjent</PositiveStatusBadge>;
+            return (
+                <PositiveStatusBadge fillWidth size="small">
+                    Godkjent
+                </PositiveStatusBadge>
+            );
         } else if (!thisRequestIsApproved) {
-            return <NegativeStatusBadge fillWidth>Avvist</NegativeStatusBadge>;
+            return (
+                <NegativeStatusBadge fillWidth size="small">
+                    Avvist
+                </NegativeStatusBadge>
+            );
         }
     };
 
