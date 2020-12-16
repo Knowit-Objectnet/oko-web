@@ -8,8 +8,8 @@ import { ContactInfo } from './ContactInfo';
 import { UserProfileSideMenu } from './UserProfileSideMenu';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
-import { Button } from '../../sharedComponents/Button';
 import { Helmet } from 'react-helmet';
+import { PrimaryButton } from '../../sharedComponents/buttons/PrimaryButton';
 
 const Wrapper = styled.div`
     display: flex;
@@ -38,7 +38,7 @@ const Header = styled.div`
     width: 100%;
 `;
 
-const LogoutButton = styled(Button)`
+const LogoutButton = styled(PrimaryButton)`
     margin-left: auto;
 `;
 
@@ -69,7 +69,7 @@ export const UserProfile: React.FC = () => {
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>
-                        <LogoutButton text="Logg ut" onClick={handleLogoutClick} />
+                        <LogoutButton onClick={handleLogoutClick}>Logg ut</LogoutButton>
                     </Header>
                     {userIsPartner && <AboutPartner />}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />

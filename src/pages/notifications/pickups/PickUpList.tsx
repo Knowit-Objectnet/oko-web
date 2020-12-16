@@ -8,7 +8,7 @@ import { ApiPickUpParams } from '../../../api/PickUpService';
 
 const HeaderRow = styled.div`
     display: grid;
-    grid-template-columns: minmax(150px, 1fr) 8fr minmax(350px, 3fr);
+    grid-template-columns: minmax(150px, 1fr) 8fr minmax(300px, 3fr);
 `;
 
 const PickUpRows = styled.ul`
@@ -24,7 +24,7 @@ const PickUpRows = styled.ul`
     }
 `;
 
-export const PickUpsList: React.FC = () => {
+export const PickUpList: React.FC = () => {
     const { keycloak } = useKeycloak();
     const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
     const userId = keycloak.tokenParsed?.GroupID;
@@ -32,20 +32,23 @@ export const PickUpsList: React.FC = () => {
     const pickUpsFilter: ApiPickUpParams = {
         stationId: userIsStation ? userId : undefined,
     };
-    const { data: pickUps, isLoading } = usePickUps(pickUpsFilter);
+    const { data: pickUps, isLoading, isError } = usePickUps(pickUpsFilter);
     const sortedPickups = (pickUps ?? []).sort((pickUpA, pickUpB) => {
-        const timeA = new Date(pickUpA.startDateTime);
-        const timeB = new Date(pickUpB.startDateTime);
-        if (timeA == timeB) {
+        const timeA = new Date(pickUpA.startDateTime).getTime();
+        const timeB = new Date(pickUpB.startDateTime).getTime();
+        if (timeA === timeB) {
             return pickUpB.id - pickUpA.id;
         } else {
-            return timeB.getTime() - timeA.getTime();
+            return timeB - timeA;
         }
     });
 
     const renderPickUpsList = () => {
         if (isLoading) {
             return <p>Laster inn...</p>;
+        }
+        if (isError) {
+            return <p>Noe gikk galt, kunne ikke laste inn ekstrauttak.</p>;
         }
         if (sortedPickups.length === 0) {
             return <p>Det er ikke registrert noen ekstrauttak enda.</p>;

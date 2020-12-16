@@ -2,11 +2,10 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
-import { Button } from './Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
-import { ApiPartner, ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../api/PartnerService';
-import { AxiosError } from 'axios';
+import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../api/PartnerService';
+import { PositiveButton } from './buttons/PositiveButton';
 
 const Wrapper = styled.div`
     display: flex;
@@ -56,16 +55,14 @@ export const NewPartner: React.FC<Props> = (props) => {
         (newPartner: ApiPartnerPost) => postPartner(newPartner, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Ny partner ble lagt til suksessfullt.', { type: types.SUCCESS });
+                alert.show('Ny partner ble lagt til.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
                 props.afterSubmit?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(partnersDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(partnersDefaultQueryKey),
         },
     );
 
@@ -93,7 +90,7 @@ export const NewPartner: React.FC<Props> = (props) => {
             <Title>Legg til ny samarbeidspartner</Title>
             <StyledForm onSubmit={handleNewPartnerSubmission}>
                 <Input type="text" placeholder="Navn på organisasjonen" value={name} onChange={handleNameChange} />
-                <Button text="Legg til samarbeidspartner" variant="positive" isLoading={addPartnerLoading} />
+                <PositiveButton isLoading={addPartnerLoading}>Legg til samarbeidspartner</PositiveButton>
             </StyledForm>
         </Wrapper>
     );

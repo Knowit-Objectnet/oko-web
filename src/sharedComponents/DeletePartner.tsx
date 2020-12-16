@@ -6,7 +6,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { deletePartner, partnersDefaultQueryKey } from '../api/PartnerService';
 import { queryCache, useMutation } from 'react-query';
 import { PartnerSelect } from './forms/PartnerSelect';
-import { Button } from './Button';
+import { NegativeButton } from './buttons/NegativeButton';
 
 const Wrapper = styled.div`
     display: flex;
@@ -46,16 +46,14 @@ export const DeletePartner: React.FC<Props> = (props) => {
         (partnerId: number) => deletePartner(partnerId, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Samarbeidspartneren ble slettet suksessfullt.', { type: types.SUCCESS });
+                alert.show('Samarbeidspartneren ble slettet.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
                 props.afterSubmit?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(partnersDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(partnersDefaultQueryKey),
         },
     );
 
@@ -75,7 +73,7 @@ export const DeletePartner: React.FC<Props> = (props) => {
             <Title>Fjern samarbeidspartner</Title>
             <StyledForm onSubmit={handleDeletePartnerSubmission}>
                 <PartnerSelect onSelectedPartnerChange={setSelectedPartner} selectedPartnerId={selectedPartner} />
-                <Button text="Slett" variant="negative" isLoading={deletePartnerLoading} />
+                <NegativeButton isLoading={deletePartnerLoading}>Slett</NegativeButton>
             </StyledForm>
         </Wrapper>
     );

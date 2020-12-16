@@ -5,12 +5,12 @@ import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { Button } from '../Button';
 import { queryCache, useMutation } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
 import { WorkingWeekdays } from '../../types';
 import { StationSelect } from '../forms/StationSelect';
 import { PartnerSelect } from '../forms/PartnerSelect';
+import { PositiveButton } from '../buttons/PositiveButton';
 
 const StyledForm = styled.form`
     display: flex;
@@ -19,7 +19,7 @@ const StyledForm = styled.form`
     width: 350px;
 `;
 
-const SubmitButton = styled(Button)`
+const SubmitButton = styled(PositiveButton)`
     margin-top: 20px;
 `;
 
@@ -39,16 +39,14 @@ export const NewEvent: React.FC<Props> = (props) => {
         (newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Avtalen ble lagt til suksessfullt.', { type: types.SUCCESS });
+                alert.show('Avtalen ble lagt til.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
                 props.afterSubmit?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(eventsDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
         },
     );
 
@@ -161,7 +159,7 @@ export const NewEvent: React.FC<Props> = (props) => {
                     onSelectedDaysChange={onSelectedDaysChange}
                     recurrenceEnabled={true}
                 />
-                <SubmitButton type="submit" text="Lagre" variant="positive" isLoading={addEventLoading} />
+                <SubmitButton isLoading={addEventLoading}>Lagre</SubmitButton>
             </StyledForm>
         </EventTemplateVertical>
     );

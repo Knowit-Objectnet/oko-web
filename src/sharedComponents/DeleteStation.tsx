@@ -5,8 +5,8 @@ import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
-import { Button } from './Button';
 import { StationSelect } from './forms/StationSelect';
+import { NegativeButton } from './buttons/NegativeButton';
 
 const Wrapper = styled.div`
     display: flex;
@@ -46,16 +46,14 @@ export const DeleteStation: React.FC<Props> = (props) => {
         (stationId: number) => deleteStation(stationId, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
+                alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, stasjonen ble ikke slettet.', { type: types.ERROR });
                 props.afterSubmit?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(stationsDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(stationsDefaultQueryKey),
         },
     );
 
@@ -76,7 +74,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
             <Title>Slett stasjon</Title>
             <StyledForm onSubmit={handleDeleteStationSubmission}>
                 <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
-                <Button text="Slett" variant="negative" isLoading={deleteStationLoading} />
+                <NegativeButton isLoading={deleteStationLoading}>Slett</NegativeButton>
             </StyledForm>
         </Wrapper>
     );
