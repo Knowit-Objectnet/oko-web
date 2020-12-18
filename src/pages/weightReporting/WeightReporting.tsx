@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import { useReports } from '../../api/hooks/useReports';
 import { formatISO } from 'date-fns';
 import { WeightReportList } from './WeightReportList';
+import { compareAsc } from 'date-fns/fp';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -39,13 +40,11 @@ export const WeightReporting: React.FC = () => {
             return new Date(report.startDateTime) < new Date();
         })
         .sort((reportA, reportB) => {
-            const timeA = new Date(reportA.startDateTime).getTime();
-            const timeB = new Date(reportB.startDateTime).getTime();
-
-            if (timeA === timeB) {
+            const dateTimeComparisonAsc = compareAsc(new Date(reportA.startDateTime), new Date(reportB.startDateTime));
+            if (dateTimeComparisonAsc === 0) {
                 return reportB.reportId - reportA.reportId;
             }
-            return timeB - timeA;
+            return dateTimeComparisonAsc;
         });
 
     const renderReports = () => {
