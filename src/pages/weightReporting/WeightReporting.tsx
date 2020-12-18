@@ -1,19 +1,22 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { WeightReportList } from './WeightReportList';
 import { Loading } from '../../sharedComponents/Loading';
 import { Helmet } from 'react-helmet';
 import { useReports } from '../../api/hooks/useReports';
 import { formatISO } from 'date-fns';
+import { WeightReportList } from './WeightReportList';
 
-const Wrapper = styled.section`
-    margin: 25px auto;
-    width: 60%;
+const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+`;
 
-    & h2 {
-        font-size: 1.2rem;
-    }
+const Content = styled.section`
+    padding: 25px;
+    max-width: 100%;
 `;
 
 export const WeightReporting: React.FC = () => {
@@ -58,11 +61,17 @@ export const WeightReporting: React.FC = () => {
             <Helmet>
                 <title>Vektuttak</title>
             </Helmet>
-            <h1>Vektuttak</h1>
-            <h2>Ikke rapportert</h2>
-            <WeightReportList reports={pastReportsByStartTime.filter((report) => !report.weight)} />
-            <h2>Tidligere uttak</h2>
-            <WeightReportList reports={pastReportsByStartTime.filter((report) => report.weight !== null)} />
+            <Content>
+                <h1>Vektuttak</h1>
+                <WeightReportList
+                    header="Ikke rapportert"
+                    reports={pastReportsByStartTime.filter((report) => report.weight === null)}
+                />
+                <WeightReportList
+                    header="Tidligere uttak"
+                    reports={pastReportsByStartTime.filter((report) => report.weight !== null)}
+                />
+            </Content>
         </Wrapper>
     );
 };

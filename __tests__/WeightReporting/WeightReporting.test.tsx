@@ -47,7 +47,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
             expect(withdrawal).toBeInTheDocument();
         });
 
-        const withdrawalsWithoutWeight = await findAllByPlaceholderText('Skriv inn vektuttak (kg)');
+        const withdrawalsWithoutWeight = await findAllByPlaceholderText('Skriv inn vekt i kg');
         withdrawalsWithoutWeight.forEach((withdrawal) => {
             expect(withdrawal).toBeInTheDocument();
         });

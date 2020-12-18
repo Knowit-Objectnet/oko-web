@@ -2,10 +2,10 @@ import React from 'react';
 import { fireEvent, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { render } from '../../utils/test-setup';
-import { WeightReportList } from '../../src/pages/weightReporting/WeightReportList';
 import { mockReports } from '../../__mocks__/mockReports';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
+import { WeightReportList } from '../../src/pages/weightReporting/WeightReportList';
 
 describe('Provides a component to update a single weight withdrawal', () => {
     let axiosMock: MockAdapter;
@@ -23,9 +23,8 @@ describe('Provides a component to update a single weight withdrawal', () => {
     it('Should display the weight from the withdrawal which contains weight', async () => {
         const singleReportWithWeigth = [mockReports[0]];
 
-        const { findByText } = render(<WeightReportList reports={singleReportWithWeigth} />);
+        const { findByText } = render(<WeightReportList header="" reports={singleReportWithWeigth} />);
 
-        // Find the box that displays the weight
         const weight = await findByText('200 kg');
         expect(weight).toBeInTheDocument();
     });
@@ -34,11 +33,11 @@ describe('Provides a component to update a single weight withdrawal', () => {
         const singleReportWithoutWeigth = [mockReports[1]];
 
         const { findByText, findByPlaceholderText, findByDisplayValue } = render(
-            <WeightReportList reports={singleReportWithoutWeigth} />,
+            <WeightReportList header="" reports={singleReportWithoutWeigth} />,
         );
 
         // Find the input where we can write in a weight
-        const input = await findByPlaceholderText('Skriv inn vektuttak (kg)');
+        const input = await findByPlaceholderText('Skriv inn vekt i kg');
         expect(input).toBeInTheDocument();
 
         fireEvent.change(input, {
