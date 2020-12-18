@@ -15,18 +15,6 @@ export interface ApiReport {
     reportedDateTime: string | null;
 }
 
-// TODO: remove when all uses are replaced by ApiReport
-export interface Withdrawal {
-    reportId: number;
-    eventId: number;
-    partnerId: number;
-    station: ApiStation;
-    startDateTime: Date;
-    endDateTime: Date;
-    weight: number | null;
-    reportedDateTime: Date | null;
-}
-
 export interface ApiReportPatch {
     id: number;
     weight: number;
