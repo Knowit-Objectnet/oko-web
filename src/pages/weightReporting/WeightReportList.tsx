@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const WeightReportList: React.FC<Props> = ({ reports, header }) => {
-    return (
+    return reports.length > 0 ? (
         <ReportTable>
             <ReportTableHeader>{header}</ReportTableHeader>
             <VisuallyHidden as="thead">
@@ -41,5 +41,5 @@ export const WeightReportList: React.FC<Props> = ({ reports, header }) => {
                 ))}
             </tbody>
         </ReportTable>
-    );
+    ) : null;
 };

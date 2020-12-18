@@ -19,6 +19,10 @@ const Content = styled.section`
     max-width: 100%;
 `;
 
+const Notice = styled.p`
+    min-width: 80vw;
+`;
+
 export const WeightReporting: React.FC = () => {
     const { keycloak } = useKeycloak();
     const userId = keycloak.tokenParsed?.GroupID;
@@ -44,25 +48,21 @@ export const WeightReporting: React.FC = () => {
             return timeB - timeA;
         });
 
-    if (isLoading) {
-        return <Loading />;
-    }
+    const renderReports = () => {
+        if (isLoading) {
+            return <Loading />;
+        }
 
-    if (isError) {
-        return <p>Kunne ikke laste vektuttak</p>;
-    }
+        if (isError) {
+            return <Notice>Kunne ikke laste vektuttak.</Notice>;
+        }
 
-    if (pastReportsByStartTime.length === 0) {
-        return <p>Ingen registrerte vektuttak</p>;
-    }
+        if (pastReportsByStartTime.length === 0) {
+            return <Notice>Ingen registrerte vektuttak.</Notice>;
+        }
 
-    return (
-        <Wrapper>
-            <Helmet>
-                <title>Vektuttak</title>
-            </Helmet>
-            <Content>
-                <h1>Vektuttak</h1>
+        return (
+            <>
                 <WeightReportList
                     header="Ikke rapportert"
                     reports={pastReportsByStartTime.filter((report) => report.weight === null)}
@@ -71,6 +71,18 @@ export const WeightReporting: React.FC = () => {
                     header="Tidligere uttak"
                     reports={pastReportsByStartTime.filter((report) => report.weight !== null)}
                 />
+            </>
+        );
+    };
+
+    return (
+        <Wrapper>
+            <Helmet>
+                <title>Vektuttak</title>
+            </Helmet>
+            <Content>
+                <h1>Vektuttak</h1>
+                {renderReports()}
             </Content>
         </Wrapper>
     );
