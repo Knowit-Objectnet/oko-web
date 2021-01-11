@@ -5,7 +5,7 @@ import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiPickUpPost, pickUpsDefaultQueryKey, postPickUp } from '../../api/PickUpService';
 import { PositiveButton } from '../buttons/PositiveButton';
 
@@ -27,22 +27,20 @@ export const NewPickUp: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const [addPickUpMutation, { isLoading: addPickUpMutationLoading }] = useMutation(
-        (newPickUp: ApiPickUpPost) => postPickUp(newPickUp, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Et nytt ekstrauttak ble lagt til.', { type: types.SUCCESS });
-                props.afterSubmit?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
-                props.afterSubmit?.(false);
-            },
-            onSettled: () => {
-                queryCache.invalidateQueries(pickUpsDefaultQueryKey);
-            },
+    const queryClient = useQueryClient();
+    const addPickUpMutation = useMutation((newPickUp: ApiPickUpPost) => postPickUp(newPickUp, keycloak.token), {
+        onSuccess: () => {
+            alert.show('Et nytt ekstrauttak ble lagt til.', { type: types.SUCCESS });
+            props.afterSubmit?.(true);
         },
-    );
+        onError: () => {
+            alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
+            props.afterSubmit?.(false);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(pickUpsDefaultQueryKey);
+        },
+    });
 
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
@@ -84,7 +82,7 @@ export const NewPickUp: React.FC<Props> = (props) => {
             stationId: keycloak.tokenParsed.GroupID,
         };
 
-        addPickUpMutation(newPickUp);
+        addPickUpMutation.mutate(newPickUp);
     };
 
     return (
@@ -107,7 +105,7 @@ export const NewPickUp: React.FC<Props> = (props) => {
                 value={description}
                 onChange={onDescriptionChange}
             />
-            <PositiveButton onClick={handleNewPickUpSubmission} isLoading={addPickUpMutationLoading}>
+            <PositiveButton onClick={handleNewPickUpSubmission} isLoading={addPickUpMutation.isLoading}>
                 Send
             </PositiveButton>
         </EventTemplateVertical>

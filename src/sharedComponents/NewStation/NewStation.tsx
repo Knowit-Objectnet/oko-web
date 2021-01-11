@@ -7,7 +7,7 @@ import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../api/StationService';
 import { format } from 'date-fns';
 import { PositiveButton } from '../buttons/PositiveButton';
@@ -101,20 +101,20 @@ export const NewStation: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const [addStationMutation, { isLoading: addStationLoading }] = useMutation(
-        (newStation: ApiStationPost) => postStation(newStation, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
-                props.afterSubmit?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
-                props.afterSubmit?.(false);
-            },
-            onSettled: () => queryCache.invalidateQueries(stationsDefaultQueryKey),
+    const queryClient = useQueryClient();
+    const addStationMutation = useMutation((newStation: ApiStationPost) => postStation(newStation, keycloak.token), {
+        onSuccess: () => {
+            alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
+            props.afterSubmit?.(true);
         },
-    );
+        onError: () => {
+            alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
+            props.afterSubmit?.(false);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(stationsDefaultQueryKey);
+        },
+    });
 
     // General info
     const [name, setName] = useState('');
@@ -230,7 +230,7 @@ export const NewStation: React.FC<Props> = (props) => {
             },
         };
 
-        addStationMutation(newStation);
+        addStationMutation.mutate(newStation);
     };
 
     return (
@@ -329,7 +329,7 @@ export const NewStation: React.FC<Props> = (props) => {
                         />
                     </ContactWrapper>
                 </AmbassadorContactInfo>
-                <PositiveButton onClick={onSubmit} isLoading={addStationLoading}>
+                <PositiveButton onClick={onSubmit} isLoading={addStationMutation.isLoading}>
                     Legg til stasjon
                 </PositiveButton>
             </Content>

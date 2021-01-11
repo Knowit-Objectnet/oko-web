@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../api/PartnerService';
 import { PositiveButton } from './buttons/PositiveButton';
 
@@ -51,20 +51,20 @@ export const NewPartner: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const [addPartnerMutation, { isLoading: addPartnerLoading }] = useMutation(
-        (newPartner: ApiPartnerPost) => postPartner(newPartner, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Ny partner ble lagt til.', { type: types.SUCCESS });
-                props.afterSubmit?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
-                props.afterSubmit?.(false);
-            },
-            onSettled: () => queryCache.invalidateQueries(partnersDefaultQueryKey),
+    const queryClient = useQueryClient();
+    const addPartnerMutation = useMutation((newPartner: ApiPartnerPost) => postPartner(newPartner, keycloak.token), {
+        onSuccess: () => {
+            alert.show('Ny partner ble lagt til.', { type: types.SUCCESS });
+            props.afterSubmit?.(true);
         },
-    );
+        onError: () => {
+            alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
+            props.afterSubmit?.(false);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(partnersDefaultQueryKey);
+        },
+    });
 
     const [name, setName] = useState('');
 
@@ -82,7 +82,7 @@ export const NewPartner: React.FC<Props> = (props) => {
         const newPartner: ApiPartnerPost = {
             name,
         };
-        addPartnerMutation(newPartner);
+        addPartnerMutation.mutate(newPartner);
     };
 
     return (
@@ -90,7 +90,7 @@ export const NewPartner: React.FC<Props> = (props) => {
             <Title>Legg til ny samarbeidspartner</Title>
             <StyledForm onSubmit={handleNewPartnerSubmission}>
                 <Input type="text" placeholder="Navn på organisasjonen" value={name} onChange={handleNameChange} />
-                <PositiveButton isLoading={addPartnerLoading}>Legg til samarbeidspartner</PositiveButton>
+                <PositiveButton isLoading={addPartnerMutation.isLoading}>Legg til samarbeidspartner</PositiveButton>
             </StyledForm>
         </Wrapper>
     );

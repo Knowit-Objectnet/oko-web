@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ApiReport, ApiReportPatch, patchReport, reportsDefaultQueryKey } from '../../api/ReportService';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import VisuallyHidden from '@reach/visually-hidden';
 import styled from 'styled-components';
 import { NegativeButton } from '../../sharedComponents/buttons/NegativeButton';
@@ -35,15 +35,18 @@ export const WeightReportForm: React.FC<Props> = ({ report, onSubmit }) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const [updateReportMutation, { isLoading: updateReportLoading }] = useMutation(
+    const queryClient = useQueryClient();
+    const updateReportMutation = useMutation(
         (updatedReport: ApiReportPatch) => patchReport(updatedReport, keycloak.token),
         {
             onSuccess: () => {
                 alert.show('Vekt ble registrert på uttaket.', { type: types.SUCCESS });
-                queryCache.invalidateQueries(reportsDefaultQueryKey);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
+            },
+            onSettled: () => {
+                return queryClient.invalidateQueries(reportsDefaultQueryKey);
             },
         },
     );
@@ -66,7 +69,7 @@ export const WeightReportForm: React.FC<Props> = ({ report, onSubmit }) => {
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (weight !== report.weight && typeof weight === 'number') {
-            await updateReportMutation({
+            await updateReportMutation.mutateAsync({
                 id: report.reportId,
                 weight,
             });
@@ -89,7 +92,7 @@ export const WeightReportForm: React.FC<Props> = ({ report, onSubmit }) => {
                 onChange={onChange}
                 onKeyPress={onKeyDown}
             />
-            <SubmitButton disabled={weight === null} aria-label="Lagre vekt" isLoading={updateReportLoading}>
+            <SubmitButton disabled={weight === null} aria-label="Lagre vekt" isLoading={updateReportMutation.isLoading}>
                 OK
             </SubmitButton>
         </StyledForm>

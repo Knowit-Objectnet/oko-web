@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
 import CrossIcon from '../../../assets/Cross.svg';
 import { TextButton } from '../../../sharedComponents/buttons/TextButton';
@@ -16,12 +16,15 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const [deleteRequestMutation] = useMutation((request: ApiRequestParams) => deleteRequest(request, keycloak.token), {
-        onSuccess: () => queryCache.invalidateQueries([requestsDefaultQueryKey, { pickupId, partnerId }]),
+    const queryClient = useQueryClient();
+    const deleteRequestMutation = useMutation((request: ApiRequestParams) => deleteRequest(request, keycloak.token), {
         onError: () => {
             alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
                 type: types.ERROR,
             });
+        },
+        onSettled: () => {
+            return queryClient.invalidateQueries([requestsDefaultQueryKey, { pickupId, partnerId }]);
         },
     });
 
@@ -31,7 +34,7 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId
             pickupId,
             partnerId,
         };
-        await deleteRequestMutation(requestToCancel);
+        await deleteRequestMutation.mutateAsync(requestToCancel);
         onRequestCancellation(false);
     };
 

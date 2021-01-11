@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { useState } from 'react';
 import { PositiveButton } from '../buttons/PositiveButton';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { EventInfo, Roles } from '../../types';
 import { ApiEventParams, deleteEvents, eventsDefaultQueryKey } from '../../api/EventService';
 import { types, useAlert } from 'react-alert';
@@ -77,7 +77,8 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
         setIsSingleDeletion(false);
     };
 
-    const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
+    const queryClient = useQueryClient();
+    const deleteSingleEventMutation = useMutation(
         (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }, keycloak.token),
         {
             onSuccess: () => {
@@ -88,11 +89,13 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                 alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
                 props.afterDeleteSingleEvent?.(false);
             },
-            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
+            onSettled: () => {
+                queryClient.invalidateQueries(eventsDefaultQueryKey);
+            },
         },
     );
 
-    const [deleteRangeEventsMutation, { isLoading: deleteRangeEventLoading }] = useMutation(
+    const deleteRangeEventsMutation = useMutation(
         ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
             const apiParams: ApiEventParams = {
                 recurrenceRuleId: event.resource.recurrenceRule?.id,
@@ -110,15 +113,17 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                 alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
                 props.afterDeleteRangeEvent?.(false);
             },
-            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
+            onSettled: () => {
+                queryClient.invalidateQueries(eventsDefaultQueryKey);
+            },
         },
     );
 
     const handleDeleteEvent = () => {
         if (isSingleDeletion || !eventIsRecurring) {
-            deleteSingleEventMutation(props.event);
+            deleteSingleEventMutation.mutate(props.event);
         } else {
-            deleteRangeEventsMutation({ event: props.event, fromDate: dateRange[0], toDate: dateRange[1] });
+            deleteRangeEventsMutation.mutate({ event: props.event, fromDate: dateRange[0], toDate: dateRange[1] });
         }
     };
 
@@ -135,7 +140,10 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                 </RangeSelection>
             )}
             {!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={setDateRange} value={dateRange} />}
-            <PositiveButton onClick={handleDeleteEvent} isLoading={deleteSingleEventLoading || deleteRangeEventLoading}>
+            <PositiveButton
+                onClick={handleDeleteEvent}
+                isLoading={deleteSingleEventMutation.isLoading || deleteRangeEventsMutation.isLoading}
+            >
                 Bekreft
             </PositiveButton>
         </Wrapper>
