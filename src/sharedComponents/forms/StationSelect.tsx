@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const StationSelect: React.FC<Props> = (props) => {
-    const { data: stations, isLoading, isError } = useStations();
+    const { data: stations, isLoading, isLoadingError } = useStations();
 
     const handleSelectedStationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         props.onSelectedStationChange(parseInt(event.currentTarget.value));
@@ -24,11 +24,11 @@ export const StationSelect: React.FC<Props> = (props) => {
     return (
         <Select
             onChange={handleSelectedStationChange}
-            disabled={isLoading || isError}
+            disabled={isLoading || isLoadingError}
             value={props.selectedStationId ?? 'default'}
         >
             <option value="default" disabled>
-                {(isLoading && 'Laster inn...') || (isError && 'Kunne ikke laste stasjoner') || 'Velg stasjon'}
+                {(isLoading && 'Laster inn...') || (isLoadingError && 'Kunne ikke laste stasjoner') || 'Velg stasjon'}
             </option>
             {stations?.map((station) => (
                 <option value={station.id} key={station.id}>
