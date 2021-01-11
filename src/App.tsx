@@ -9,6 +9,7 @@ import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import { ThemeProvider } from 'styled-components';
 import theme from './theme';
 import { Helmet } from 'react-helmet';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const alertOptions = {
     position: positions.TOP_CENTER,
@@ -17,19 +18,23 @@ const alertOptions = {
     transition: transitions.SCALE,
 };
 
+const queryClient = new QueryClient();
+
 export const App: React.FC = () => {
     return (
         <KeycloakProvider keycloak={keycloak}>
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...alertOptions}>
-                    <ModalProvider>
-                        <Helmet titleTemplate="Oslo kommune REG | %s">
-                            <html lang="no" />
-                            <meta name="description" content="Oslo kommune REG" />
-                        </Helmet>
-                        <RouterComponent />
-                        <GlobalStyle />
-                    </ModalProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <ModalProvider>
+                            <Helmet titleTemplate="Oslo kommune REG | %s">
+                                <html lang="no" />
+                                <meta name="description" content="Oslo kommune REG" />
+                            </Helmet>
+                            <RouterComponent />
+                            <GlobalStyle />
+                        </ModalProvider>
+                    </QueryClientProvider>
                 </AlertProvider>
             </ThemeProvider>
         </KeycloakProvider>
