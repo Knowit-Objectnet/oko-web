@@ -6,7 +6,7 @@ export const usePartners = (): QueryResult<Array<ApiPartner>> => {
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiPartner>>({
-        queryKey: [partnersDefaultQueryKey, keycloak.token],
-        queryFn: getPartners,
+        queryKey: [partnersDefaultQueryKey],
+        queryFn: () => getPartners(keycloak.token),
     });
 };

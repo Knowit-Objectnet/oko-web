@@ -28,14 +28,12 @@ export interface ApiReportParams {
     toDate?: string;
 }
 
-// First parameter is the query key passed by react-query
-export const getReports = (_: string, params: ApiReportParams, token: string): Promise<Array<ApiReport>> =>
+export const getReports = (params: ApiReportParams, token: string): Promise<Array<ApiReport>> =>
     httpClient(token)
         .get<Array<ApiReport>>(endpoint, { params })
         .then((response) => response.data);
 
-// First parameter is the query key passed by react-query
-export const getReportById = (_: string, reportId: number, token: string): Promise<ApiReport> =>
+export const getReportById = (reportId: number, token: string): Promise<ApiReport> =>
     httpClient(token)
         .get<ApiReport>(`${endpoint}/${reportId}`)
         .then((response) => response.data);

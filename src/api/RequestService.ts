@@ -20,8 +20,7 @@ export interface ApiRequestParams {
     partnerId?: number;
 }
 
-// First parameter is the query key passed by react-query
-export const getRequests = (_: string, params: ApiRequestParams, token: string): Promise<Array<ApiRequest>> =>
+export const getRequests = (params: ApiRequestParams, token: string): Promise<Array<ApiRequest>> =>
     httpClient(token)
         .get<Array<ApiRequest>>(endpoint, { params })
         .then((response) => response.data);

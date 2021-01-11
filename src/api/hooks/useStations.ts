@@ -6,7 +6,7 @@ export const useStations = (): QueryResult<Array<ApiStation>> => {
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiStation>>({
-        queryKey: [stationsDefaultQueryKey, keycloak.token],
-        queryFn: getStations,
+        queryKey: [stationsDefaultQueryKey],
+        queryFn: () => getStations(keycloak.token),
     });
 };

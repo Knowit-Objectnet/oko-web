@@ -6,7 +6,7 @@ export const useEvents = (params: ApiEventParams = {}): QueryResult<Array<ApiEve
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiEvent>>({
-        queryKey: [eventsDefaultQueryKey, params, keycloak.token],
-        queryFn: getEvents,
+        queryKey: [eventsDefaultQueryKey, params],
+        queryFn: () => getEvents(params, keycloak.token),
     });
 };

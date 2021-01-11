@@ -6,7 +6,7 @@ export const useReports = (params: ApiReportParams = {}): QueryResult<Array<ApiR
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiReport>>({
-        queryKey: [reportsDefaultQueryKey, params, keycloak.token],
-        queryFn: getReports,
+        queryKey: [reportsDefaultQueryKey, params],
+        queryFn: () => getReports(params, keycloak.token),
     });
 };

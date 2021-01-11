@@ -6,7 +6,7 @@ export const usePickUps = (params: ApiPickUpParams = {}): QueryResult<Array<ApiP
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiPickUp>>({
-        queryKey: [pickUpsDefaultQueryKey, params, keycloak.token],
-        queryFn: getPickUps,
+        queryKey: [pickUpsDefaultQueryKey, params],
+        queryFn: () => getPickUps(params, keycloak.token),
     });
 };

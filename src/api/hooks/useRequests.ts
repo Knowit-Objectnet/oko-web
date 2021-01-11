@@ -6,7 +6,7 @@ export const useRequests = (params: ApiRequestParams = {}): QueryResult<Array<Ap
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiRequest>>({
-        queryKey: [requestsDefaultQueryKey, params, keycloak.token],
-        queryFn: getRequests,
+        queryKey: [requestsDefaultQueryKey, params],
+        queryFn: () => getRequests(params, keycloak.token),
     });
 };
