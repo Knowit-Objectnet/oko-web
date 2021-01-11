@@ -21,6 +21,8 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId
             alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
         },
         onSettled: () => {
+            // The Promise from `invalidateQueries` will resolve when matched queries are done refetching.
+            // We return this Promise so that `mutateAsync` can be used to await refetching.
             return queryClient.invalidateQueries([requestsDefaultQueryKey, { pickupId, partnerId }]);
         },
     });
