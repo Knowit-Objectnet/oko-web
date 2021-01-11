@@ -1,8 +1,8 @@
 import { useKeycloak } from '@react-keycloak/web';
-import { QueryResult, useQuery } from 'react-query';
+import { QueryObserverResult, useQuery } from 'react-query';
 import { ApiStation, getStations, stationsDefaultQueryKey } from '../StationService';
 
-export const useStations = (): QueryResult<Array<ApiStation>> => {
+export const useStations = (): QueryObserverResult<Array<ApiStation>> => {
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiStation>>({

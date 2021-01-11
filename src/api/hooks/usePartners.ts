@@ -1,8 +1,8 @@
 import { useKeycloak } from '@react-keycloak/web';
-import { QueryResult, useQuery } from 'react-query';
+import { QueryObserverResult, useQuery } from 'react-query';
 import { ApiPartner, getPartners, partnersDefaultQueryKey } from '../PartnerService';
 
-export const usePartners = (): QueryResult<Array<ApiPartner>> => {
+export const usePartners = (): QueryObserverResult<Array<ApiPartner>> => {
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiPartner>>({

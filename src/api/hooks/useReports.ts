@@ -1,8 +1,8 @@
 import { useKeycloak } from '@react-keycloak/web';
-import { QueryResult, useQuery } from 'react-query';
+import { QueryObserverResult, useQuery } from 'react-query';
 import { ApiReport, ApiReportParams, getReports, reportsDefaultQueryKey } from '../ReportService';
 
-export const useReports = (params: ApiReportParams = {}): QueryResult<Array<ApiReport>> => {
+export const useReports = (params: ApiReportParams = {}): QueryObserverResult<Array<ApiReport>> => {
     const [keycloak] = useKeycloak();
 
     return useQuery<Array<ApiReport>>({
