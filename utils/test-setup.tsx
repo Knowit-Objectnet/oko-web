@@ -8,6 +8,7 @@ import theme from '../src/theme';
 import ModalProvider from '../src/sharedComponents/Modal/Provider';
 import { GlobalStyle } from '../src/global-styles';
 import AlertTemplate from 'react-alert-template-basic';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 /*
  * This file sets up the common providers that wraps the application (in `App.tsx`),
@@ -28,15 +29,19 @@ const alertOptions = {
     transition: transitions.SCALE,
 };
 
+const queryClient = new QueryClient();
+
 const GlobalProviders: React.FC = ({ children }) => {
     return (
         <KeycloakProvider keycloak={keycloak}>
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...alertOptions}>
-                    <ModalProvider>
-                        {children}
-                        <GlobalStyle />
-                    </ModalProvider>
+                    <QueryClientProvider client={queryClient}>
+                        <ModalProvider>
+                            {children}
+                            <GlobalStyle />
+                        </ModalProvider>
+                    </QueryClientProvider>
                 </AlertProvider>
             </ThemeProvider>
         </KeycloakProvider>
