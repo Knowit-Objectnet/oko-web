@@ -1,29 +1,14 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '@testing-library/react';
+import { render, cleanup, waitFor, fireEvent } from '../../utils/test-setup';
 import '@testing-library/jest-dom';
 import { Router } from 'react-router-dom';
-import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
-
 import { UserProfile } from '../../src/pages/userProfile/UserProfile';
-import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import AlertTemplate from 'react-alert-template-basic';
-import ModalProvider from '../../src/sharedComponents/Modal/Provider';
-import theme from '../../src/theme';
-import { ThemeProvider } from 'styled-components';
 
 describe('Provides a page to view contact info', () => {
     // router history
     let history: MemoryHistory;
-
-    // Alert options
-    const options = {
-        position: positions.TOP_CENTER,
-        timeout: 5000,
-        offset: '30px',
-        transition: transitions.SCALE,
-    };
 
     beforeEach(() => {
         history = createMemoryHistory();
@@ -39,17 +24,9 @@ describe('Provides a page to view contact info', () => {
 
     it('Should render working logout button', async () => {
         const { findByText } = render(
-            <ThemeProvider theme={theme}>
-                <AlertProvider template={AlertTemplate} {...options}>
-                    <ModalProvider>
-                        <KeycloakProvider keycloak={keycloak}>
-                            <Router history={history}>
-                                <UserProfile />
-                            </Router>
-                        </KeycloakProvider>
-                    </ModalProvider>
-                </AlertProvider>
-            </ThemeProvider>,
+            <Router history={history}>
+                <UserProfile />
+            </Router>,
         );
 
         // Find logout button
@@ -73,17 +50,9 @@ describe('Provides a page to view contact info', () => {
 
     it("Should render the user's contact info ", async () => {
         const { findByText } = render(
-            <ThemeProvider theme={theme}>
-                <AlertProvider template={AlertTemplate} {...options}>
-                    <ModalProvider>
-                        <KeycloakProvider keycloak={keycloak}>
-                            <Router history={history}>
-                                <UserProfile />
-                            </Router>
-                        </KeycloakProvider>
-                    </ModalProvider>
-                </AlertProvider>
-            </ThemeProvider>,
+            <Router history={history}>
+                <UserProfile />
+            </Router>,
         );
 
         // Find thee name, email and placeholder text for phone number as non is set in the users credentials
