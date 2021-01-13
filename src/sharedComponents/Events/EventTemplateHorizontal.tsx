@@ -8,6 +8,7 @@ const Wrapper = styled.div`
     box-sizing: border-box;
     background-color: ${(props) => props.theme.colors.White};
     overflow: visible;
+    min-width: 20rem;
 `;
 
 const Title = styled.div`

@@ -5,7 +5,6 @@ import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
-import { Button } from '../Button';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../api/StationService';
@@ -18,6 +17,7 @@ import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
 import format from 'date-fns/format';
 import Input from '../forms/Input';
+import { PositiveButton } from '../buttons/PositiveButton';
 
 const Wrapper = styled.div`
     display: flex;
@@ -188,7 +188,7 @@ export const NewStation: React.FC<Props> = (props) => {
         (newStation: ApiStationPost) => postStation(newStation, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Stasjonen ble lagt til suksessfullt.', { type: types.SUCCESS });
+                alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
@@ -289,13 +289,9 @@ export const NewStation: React.FC<Props> = (props) => {
                             />
                         </ContactWrapper>
                     </AmbassadorContactInfo>
-                    <Button
-                        type="submit"
-                        text="Legg til stasjon"
-                        color="Green"
-                        height={35}
-                        loading={addStationLoading}
-                    />
+                    <PositiveButton type="submit" isLoading={addStationLoading}>
+                        Legg til stasjon
+                    </PositiveButton>
                 </Form>
             </FormProvider>
         </Wrapper>

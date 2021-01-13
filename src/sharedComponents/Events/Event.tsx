@@ -3,37 +3,45 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventSubmission } from './EventSubmission';
 import { EventInfo, Roles } from '../../types';
 import { EventStationInfo } from './EventStationInfo';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
-import { Button } from '../Button';
 import { queryCache, useMutation } from 'react-query';
-import { ApiEventParams, ApiEventPatch, deleteEvents, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
+import { ApiEventPatch, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
+import { NegativeButton } from '../buttons/NegativeButton';
+import { PositiveButton } from '../buttons/PositiveButton';
 
 const Body = styled.div`
     display: flex;
-    flex-direction: row;
-`;
 
-const Section = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-
-    &:nth-child(2) {
-        margin-left: 10px;
+    & > *:not(:last-child) {
+        margin-right: 0.75rem;
     }
 `;
 
-const Options = styled.div`
+const Section = styled.div`
     display: flex;
     flex-direction: column;
-    flex: 1;
+    width: 100%;
+
+    & > *:not(:first-child) {
+        margin-top: 0.75rem;
+    }
+`;
+
+const ButtonRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+
+    & > button:not(:last-child) {
+        margin-right: 0.5rem;
+    }
 `;
 
 interface Props {
@@ -57,60 +65,17 @@ export const Event: React.FC<Props> = (props) => {
     const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
     const partnerOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.partner.id;
 
-    const [deleteSingleEventMutation, { isLoading: deleteSingleEventLoading }] = useMutation(
-        (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Avtalen ble slettet suksessfullt.', { type: types.SUCCESS });
-                props.afterDeleteSingleEvent?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
-                props.afterDeleteSingleEvent?.(false);
-            },
-            onSettled: () => {
-                queryCache.invalidateQueries(eventsDefaultQueryKey);
-            },
-        },
-    );
-
-    const [deleteRangeEventsMutation, { isLoading: deleteRangeEventLoading }] = useMutation(
-        ({ event, fromDate, toDate }: { event: EventInfo; fromDate: Date; toDate: Date }) => {
-            const apiParams: ApiEventParams = {
-                recurrenceRuleId: event.resource.recurrenceRule?.id,
-                fromDate: fromDate.toISOString(),
-                toDate: toDate.toISOString(),
-            };
-            return deleteEvents(apiParams, keycloak.token);
-        },
-        {
-            onSuccess: () => {
-                alert.show('Avtalen(e) ble slettet suksessfullt.', { type: types.SUCCESS });
-                props.afterDeleteRangeEvent?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
-                props.afterDeleteRangeEvent?.(false);
-            },
-            onSettled: () => {
-                queryCache.invalidateQueries(eventsDefaultQueryKey);
-            },
-        },
-    );
-
     const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
         (updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Avtalen ble oppdatert suksessfullt.', { type: types.SUCCESS });
+                alert.show('Avtalen ble oppdatert.', { type: types.SUCCESS });
                 setIsEditing(false);
             },
             onError: () => {
                 alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(eventsDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
         },
     );
 
@@ -143,15 +108,6 @@ export const Event: React.FC<Props> = (props) => {
 
     const handleDeleteConfirmationClick = () => {
         setIsDeletionConfirmationVisible(!isDeletionConfirmationVisible);
-    };
-
-    const handleDeleteEvent = (isSingleDeletion: boolean, fromDate: Date, toDate: Date) => {
-        const eventIsNotRecurring = !props.event.resource.recurrenceRule;
-        if (isSingleDeletion || eventIsNotRecurring) {
-            deleteSingleEventMutation(props.event);
-        } else {
-            deleteRangeEventsMutation({ event: props.event, fromDate, toDate });
-        }
     };
 
     const handleEditCancelled = () => {
@@ -216,21 +172,19 @@ export const Event: React.FC<Props> = (props) => {
         >
             <Body>
                 <Section>
-                    <Options>
-                        <EventOptionDateRange
-                            dateRange={dateRange}
-                            timeRange={timeRange}
-                            recurring={recurring}
-                            selectedDays={selectedDays}
-                            isEditing={isEditing}
-                            onDateRangeChange={handleDateRangeChange}
-                            onTimeRangeChange={handleTimeRangeChange}
-                            onRecurringChange={handleRecurringChange}
-                            onSelectedDaysChange={handleSelectedDaysChange}
-                            recurrenceEnabled={false}
-                        />
-                        <EventStationInfo station={props.event.resource.station} />
-                    </Options>
+                    <EventOptionDateRange
+                        dateRange={dateRange}
+                        timeRange={timeRange}
+                        recurring={recurring}
+                        selectedDays={selectedDays}
+                        isEditing={isEditing}
+                        onDateRangeChange={handleDateRangeChange}
+                        onTimeRangeChange={handleTimeRangeChange}
+                        onRecurringChange={handleRecurringChange}
+                        onSelectedDaysChange={handleSelectedDaysChange}
+                        recurrenceEnabled={false}
+                    />
+                    <EventStationInfo station={props.event.resource.station} />
                 </Section>
                 {!isEditing && (
                     <Section>
@@ -238,31 +192,27 @@ export const Event: React.FC<Props> = (props) => {
                         {(userIsAdmin ||
                             (userIsPartner && partnerOwnsEvent) ||
                             (userIsStation && stationOwnsEvent)) && (
-                            <>
-                                <Button
-                                    text="Avlys uttak"
-                                    onClick={handleDeleteConfirmationClick}
-                                    color="Red"
-                                    styling="margin-top: 10px;"
-                                />
-                                {isDeletionConfirmationVisible && (
-                                    <DeleteEvent
-                                        allowRangeDeletion={userIsAdmin || (userIsStation && stationOwnsEvent)}
-                                        onSubmit={handleDeleteEvent}
-                                        loading={deleteSingleEventLoading || deleteRangeEventLoading}
-                                    />
-                                )}
-                            </>
+                            <NegativeButton onClick={handleDeleteConfirmationClick}>Avlys uttak</NegativeButton>
                         )}
                     </Section>
                 )}
             </Body>
-            {isEditing && (
-                <EventSubmission
-                    onSubmit={handleEditSubmission}
-                    onCancel={handleEditCancelled}
-                    loading={updateEventLoading}
+            {isDeletionConfirmationVisible && !isEditing && (
+                <DeleteEvent
+                    event={props.event}
+                    afterDeleteSingleEvent={props.afterDeleteSingleEvent}
+                    afterDeleteRangeEvent={props.afterDeleteSingleEvent}
                 />
+            )}
+            {isEditing && (
+                <ButtonRow>
+                    <NegativeButton fillWidth onClick={handleEditCancelled}>
+                        Avbryt
+                    </NegativeButton>
+                    <PositiveButton fillWidth onClick={handleEditSubmission} isLoading={updateEventLoading}>
+                        Godkjenn
+                    </PositiveButton>
+                </ButtonRow>
             )}
         </EventTemplateHorizontal>
     );

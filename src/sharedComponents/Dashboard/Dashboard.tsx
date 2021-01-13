@@ -9,28 +9,25 @@ const Wrapper = styled.div`
     flex-direction: column;
     height: 100%;
     width: 100%;
-    overflow: hidden;
 `;
 
 const Body = styled.div`
     height: Calc(100% - 125px);
     display: flex;
     position: relative;
+    overflow: hidden;
 `;
 
 const Page = styled.div`
     flex: 1;
+    overflow-y: auto;
 `;
-
-interface DashboardProps {
-    children: React.ReactNode;
-}
 
 /**
  * Component that wraps around the page components.
  * It's the general portal wrapper, with navigation and such.
  */
-export const Dashboard: React.FC<DashboardProps> = (props) => {
+export const Dashboard: React.FC = (props) => {
     // State for if the side navigation is visible
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     // Function to toggle the side navigation

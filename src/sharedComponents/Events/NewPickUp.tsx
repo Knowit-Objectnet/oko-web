@@ -3,32 +3,46 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { ApiPickUp, apiUrl } from '../../types';
-import { Button } from '../Button';
-import { PostToAPI } from '../../utils/PostToAPI';
 import { useKeycloak } from '@react-keycloak/web';
+import { types, useAlert } from 'react-alert';
+import { queryCache, useMutation } from 'react-query';
+import { ApiPickUpPost, pickUpsDefaultQueryKey, postPickUp } from '../../api/PickUpService';
+import { PositiveButton } from '../buttons/PositiveButton';
 
 const Textarea = styled.textarea`
-    min-height: 54px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px;
+    min-height: 5rem;
+    width: 25rem;
+    padding: 0.5rem;
     resize: vertical;
+    margin: 1rem 0;
 `;
 
 interface Props {
     start: Date;
     end: Date;
-    beforeSubmit?: (key: string, newPickup: ApiPickUp) => void;
-    afterSubmit?: (successful: boolean, key: string) => void;
+    afterSubmit?: (successful: boolean) => void;
 }
 
-/**
- * Component shown when applying for an extra event (ekstra henting)
- * Should only be visible for ambassadors (ombruksstasjon ambasadør).
- */
-export const ExtraEvent: React.FC<Props> = (props) => {
+export const NewPickUp: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
+    const alert = useAlert();
+
+    const [addPickUpMutation, { isLoading: addPickUpMutationLoading }] = useMutation(
+        (newPickUp: ApiPickUpPost) => postPickUp(newPickUp, keycloak.token),
+        {
+            onSuccess: () => {
+                alert.show('Et nytt ekstrauttak ble lagt til.', { type: types.SUCCESS });
+                props.afterSubmit?.(true);
+            },
+            onError: () => {
+                alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
+                props.afterSubmit?.(false);
+            },
+            onSettled: () => {
+                queryCache.invalidateQueries(pickUpsDefaultQueryKey);
+            },
+        },
+    );
 
     const [dateRange, setDateRange] = useState<[Date, Date]>([props.start, props.end]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([props.start, props.end]);
@@ -36,7 +50,6 @@ export const ExtraEvent: React.FC<Props> = (props) => {
     const [selectedDays, setSelectedDays] = useState([1]);
     const [description, setDescription] = useState('');
 
-    // On change functions for DateRange
     const onDateRangeChange = (range: [Date, Date]) => {
         setDateRange(range);
     };
@@ -53,57 +66,25 @@ export const ExtraEvent: React.FC<Props> = (props) => {
         setSelectedDays(num);
     };
 
-    // On change function for Description
     const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         e.persist();
         setDescription(e.currentTarget.value);
     };
 
-    // Function called on submission of new extra event
-    const onSubmit = async () => {
+    const handleNewPickUpSubmission = () => {
         const start = dateRange[0];
         const end = dateRange[1];
         start.setHours(timeRange[0].getHours(), timeRange[0].getMinutes(), 0, 0);
         end.setHours(timeRange[1].getHours(), timeRange[1].getMinutes(), 0, 0);
 
-        try {
-            // Data for new extra event
-            const data = {
-                startDateTime: start,
-                endDateTime: end,
-                description: description,
-                stationId: keycloak.tokenParsed.GroupID,
-            };
+        const newPickUp: ApiPickUpPost = {
+            startDateTime: start.toISOString(),
+            endDateTime: end.toISOString(),
+            description: description,
+            stationId: keycloak.tokenParsed.GroupID,
+        };
 
-            // Local state update data
-            const newExtraEvent = {
-                id: -1,
-                startDateTime: start.toISOString(),
-                endDateTime: end.toISOString(),
-                description: description,
-                station: {
-                    id: parseInt(keycloak.tokenParsed.GroupID),
-                    name: keycloak.tokenParsed.groups[0],
-                    hours: {},
-                },
-                chosenPartner: null,
-            };
-
-            if (props.beforeSubmit) {
-                props.beforeSubmit(`${apiUrl}/pickups/`, newExtraEvent);
-            }
-
-            // Post extra event to API
-            await PostToAPI(`${apiUrl}/pickups`, data, keycloak.token);
-            // Give userfeedback and close modal
-            if (props.afterSubmit) {
-                props.afterSubmit(true, `${apiUrl}/pickups/`);
-            }
-        } catch {
-            if (props.afterSubmit) {
-                props.afterSubmit(false, `${apiUrl}/pickups/`);
-            }
-        }
+        addPickUpMutation(newPickUp);
     };
 
     return (
@@ -126,7 +107,9 @@ export const ExtraEvent: React.FC<Props> = (props) => {
                 value={description}
                 onChange={onDescriptionChange}
             />
-            <Button onClick={onSubmit} text="Send" color="Green" height={35} width={350} styling="margin-top: 40px;" />
+            <PositiveButton onClick={handleNewPickUpSubmission} isLoading={addPickUpMutationLoading}>
+                Send
+            </PositiveButton>
         </EventTemplateVertical>
     );
 };

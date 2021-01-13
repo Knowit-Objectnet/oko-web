@@ -17,7 +17,7 @@ import { Logout } from '../pages/logout/Logout';
 import { Calendar } from '../pages/calendar/Calendar';
 import { WeightReporting } from '../pages/weightReporting/WeightReporting';
 import { UserProfile } from '../pages/userProfile/UserProfile';
-import { PickUps } from '../pages/pickUps/PickUps';
+import { Notifications } from '../pages/notifications/Notifications';
 import { Stations } from '../pages/stations/Stations';
 
 export const RouterComponent: React.FC = () => {
@@ -43,7 +43,7 @@ export const RouterComponent: React.FC = () => {
                                 path={`${props.match.url}`}
                                 authenticatedRoles={[Roles.Oslo]}
                                 not={<Redirect to="/calendar" />}
-                                is={<PickUps />}
+                                is={<Notifications />}
                             />
                             <Route exact path={`${props.match.url}calendar`} component={Calendar} />
                             <AuthenticatedRoute
@@ -75,7 +75,7 @@ export const RouterComponent: React.FC = () => {
                                 path={`${props.match.url}notifications`}
                                 authenticatedRoles={[Roles.Partner, Roles.Ambassador]}
                                 not={<Redirect to="/" />}
-                                is={<PickUps />}
+                                is={<Notifications />}
                             />
                             <AuthenticatedRoute
                                 exact={true}

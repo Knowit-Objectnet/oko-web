@@ -4,11 +4,11 @@ import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { queryCache, useMutation } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
-import { Button } from './Button';
 import { StationSelectNew } from './forms/StationSelectNew';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { NegativeButton } from './buttons/NegativeButton';
 
 const Wrapper = styled.div`
     display: flex;
@@ -54,16 +54,14 @@ export const DeleteStation: React.FC<Props> = (props) => {
         (stationId: number) => deleteStation(stationId, keycloak.token),
         {
             onSuccess: () => {
-                alert.show('Stasjonen ble slettet suksessfullt.', { type: types.SUCCESS });
+                alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
                 props.afterSubmit?.(true);
             },
             onError: () => {
                 alert.show('Noe gikk galt, stasjonen ble ikke slettet.', { type: types.ERROR });
                 props.afterSubmit?.(false);
             },
-            onSettled: () => {
-                queryCache.invalidateQueries(stationsDefaultQueryKey);
-            },
+            onSettled: () => queryCache.invalidateQueries(stationsDefaultQueryKey),
         },
     );
 
@@ -77,7 +75,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
             <FormProvider {...formMethods}>
                 <StyledForm onSubmit={handleDeleteStationSubmission}>
                     <StationSelectNew />
-                    <Button text="Slett" type="submit" loading={deleteStationLoading} color="Red" />
+                    <NegativeButton type="submit" isLoading={deleteStationLoading}>Slett</NegativeButton>
                 </StyledForm>
             </FormProvider>
         </Wrapper>

@@ -40,20 +40,6 @@ export interface ApiWithdrawal {
     reportedDateTime: string | null;
 }
 
-export interface ApiPickUp {
-    id: number;
-    startDateTime: string;
-    endDateTime: string;
-    description: string;
-    station: ApiStation;
-    chosenPartner: ApiPartner | null;
-}
-
-export interface ApiRequest {
-    pickup: ApiPickUp;
-    partner: ApiPartner;
-}
-
 export interface SlotInfo {
     start: Date;
     end: Date;
@@ -70,15 +56,6 @@ export interface Withdrawal {
     reportedDateTime: Date | null;
 }
 
-export interface PickUp {
-    id: number;
-    startDateTime: Date;
-    endDateTime: Date;
-    description: string;
-    station: ApiStation;
-    chosenPartner: ApiPartner | null;
-}
-
 // Roles
 export enum Roles {
     Oslo = 'reg_employee',
@@ -86,5 +63,5 @@ export enum Roles {
     Ambassador = 'reuse_station',
 }
 
-// Url to API
-export const apiUrl = 'https://tcuk58u5ge.execute-api.eu-central-1.amazonaws.com/staging';
+// TODO: Remove when migration to Axios is complete (this is only used by SWR)
+export const apiUrl = process.env.REACT_APP_API_URL || 'https://dummy-for-testing.com';

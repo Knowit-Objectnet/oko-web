@@ -4,22 +4,20 @@ import styled from 'styled-components';
 import { default as DateCalendar } from 'react-calendar';
 import { RegCalendar } from './RegCalendar/RegCalendar';
 import { Event } from '../../sharedComponents/Events/Event';
-import { ExtraEvent } from '../../sharedComponents/Events/ExtraEvent';
+import { NewPickUp } from '../../sharedComponents/Events/NewPickUp';
 import { NewEvent } from '../../sharedComponents/Events/NewEvent';
-import { SideMenu } from './SideMenu';
+import { CalendarSideMenu } from './CalendarSideMenu';
 import { EventInfo, Roles } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
 import add from 'date-fns/add';
 import { Loading } from '../../sharedComponents/Loading';
 import { useKeycloak } from '@react-keycloak/web';
-import { types, useAlert } from 'react-alert';
 import { StationFilter } from './StationFilter';
 import useModal from '../../sharedComponents/Modal/useModal';
-import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
-import { useQuery } from 'react-query';
-import { ApiEvent, ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../api/EventService';
+import { ApiEvent } from '../../api/EventService';
+import { useEvents } from '../../api/hooks/useEvents';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -79,7 +77,6 @@ const Sidebar = styled.div`
  * The page component for the calendar view
  */
 export const Calendar: React.FC = () => {
-    const alert = useAlert();
     const modal = useModal();
 
     const { keycloak } = useKeycloak();
@@ -100,15 +97,10 @@ export const Calendar: React.FC = () => {
     const toDate = add(selectedDate, { weeks: 1 });
     toDate.setHours(24, 0, 0, 0);
 
-    const eventsFilter: ApiEventParams = {
+    const { data: apiEvents, isLoading } = useEvents({
         fromDate: fromDate.toISOString(),
         toDate: toDate.toISOString(),
         stationId: userIsStation ? userId : selectedStationId,
-    };
-
-    const { data: apiEvents, isLoading } = useQuery<Array<ApiEvent>>({
-        queryKey: [eventsDefaultQueryKey, eventsFilter, keycloak.token],
-        queryFn: getEvents,
     });
 
     const [events, setEvents] = useState<Array<EventInfo>>([]);
@@ -142,16 +134,6 @@ export const Calendar: React.FC = () => {
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
-    const showNewEventModal = () => {
-        const { start, end } = getStartAndEndDateTime();
-        modal.show(<NewEvent start={start} end={end} afterSubmit={closeModalOnSuccess} />);
-    };
-
-    const showNewExtraEventModal = () => {
-        const { start, end } = getStartAndEndDateTime();
-        modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
-    };
-
     const showEventInfoModal = (event: EventInfo) => {
         modal.show(
             <Event
@@ -165,9 +147,9 @@ export const Calendar: React.FC = () => {
     // On slot selection function to display new or extra event
     const onSelectSlot = (start: Date, end: Date) => {
         if (userIsAdmin) {
-            modal.show(<NewEvent start={start} end={end} />);
+            modal.show(<NewEvent start={start} end={end} afterSubmit={closeModalOnSuccess} />);
         } else {
-            modal.show(<ExtraEvent start={start} end={end} afterSubmit={afterExtraEventSubmission} />);
+            modal.show(<NewPickUp start={start} end={end} afterSubmit={closeModalOnSuccess} />);
         }
     };
 
@@ -178,17 +160,6 @@ export const Calendar: React.FC = () => {
     const handleWeekChange = (delta: -1 | 1) => {
         const dayOfDeltaWeek = add(selectedDate, { weeks: delta });
         setSelectedDate(dayOfDeltaWeek);
-    };
-
-    const afterExtraEventSubmission = (successful: boolean) => {
-        if (successful) {
-            // Give user feedback and close modal
-            alert.show('Et nytt ekstrauttak ble lagt til suksessfullt.', { type: types.SUCCESS });
-            modal.remove();
-        } else {
-            // Give user feedback
-            alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
-        }
     };
 
     // Function to decide which calendar to render depending on role
@@ -247,11 +218,7 @@ export const Calendar: React.FC = () => {
                     <ModuleCalendar>{getCalendar()}</ModuleCalendar>
                 )}
                 <Sidebar>
-                    <SideMenu
-                        onCalendarToggleClick={toggleShowCalendar}
-                        onNewEventClick={showNewEventModal}
-                        onExtraEventClick={showNewExtraEventModal}
-                    />
+                    <CalendarSideMenu onCalendarToggleClick={toggleShowCalendar} />
                 </Sidebar>
             </Wrapper>
         </>
