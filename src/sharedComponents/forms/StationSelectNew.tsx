@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useStations } from '../../api/hooks/useStations';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 import ErrorText from './ErrorText';
 
 const Wrapper = styled.div`
@@ -22,7 +23,6 @@ export const StationSelectNew: React.FC = () => {
 
     return (
         <Wrapper>
-            {errors.selectedStation && <ErrorText error={errors.selectedStation?.message} />}
             <Select name="selectedStation" ref={register} disabled={isLoading || isError} defaultValue={-1}>
                 <option value={-1} disabled>
                     {(isLoading && 'Laster inn...') || (isError && 'Kunne ikke laste stasjoner') || 'Velg stasjon'}
@@ -33,6 +33,7 @@ export const StationSelectNew: React.FC = () => {
                     </option>
                 ))}
             </Select>
+            <ErrorMessage errors={errors} name='selectedStation' as={ErrorText} />
         </Wrapper>
     );
 };

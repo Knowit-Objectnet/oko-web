@@ -79,6 +79,7 @@
     "webpack-merge": "^5.4.0"
   },
   "dependencies": {
+    "@hookform/error-message": "^0.0.5",
     "@hookform/resolvers": "^1.0.0",
     "@react-keycloak/web": "^2.1.1",
     "@wojtekmaj/react-daterange-picker": "^3.0.0",

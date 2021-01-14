@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import ErrorText from '../../sharedComponents/forms/ErrorText';
-import format from 'date-fns/format';
+import { ErrorMessage } from '@hookform/error-message';
+import ErrorText from '../forms/ErrorText';
 
 const Wrapper = styled.div`
     display: flex;
@@ -36,8 +36,6 @@ const ClosedInput = styled.input`
 interface Props {
     day: string;
     closed: boolean;
-    min: Date;
-    max: Date;
 }
 
 export const OpeningHours: React.FC<Props> = (props) => {
@@ -45,15 +43,6 @@ export const OpeningHours: React.FC<Props> = (props) => {
 
     return (
         <Wrapper>
-            {(errors[`${props.day}Start`] || errors[`${props.day}Slutt`] || errors[`${props.day}Stengt`]) && (
-                <ErrorText
-                    error={
-                        errors[`${props.day}Start`]?.message ||
-                        errors[`${props.day}Slutt`]?.message ||
-                        errors[`${props.day}Stengt`]?.message
-                    }
-                />
-            )}
             <InputRow>
                 <Day>{`${props.day.slice(0, 1).toUpperCase()}${props.day.slice(1, 3)}`}</Day>
                 {props.closed ? (
@@ -64,19 +53,20 @@ export const OpeningHours: React.FC<Props> = (props) => {
                             type="time"
                             name={`${props.day}Start`}
                             ref={register}
-                            defaultValue={format(props.min, 'HH:mm')}
                         />
                         <TimeDivider>-</TimeDivider>
                         <input
                             type="time"
                             name={`${props.day}Slutt`}
                             ref={register}
-                            defaultValue={format(props.max, 'HH:mm')}
                         />
                     </div>
                 )}
                 <ClosedInput type="checkbox" name={`${props.day}Stengt`} ref={register} />
             </InputRow>
+            <ErrorMessage errors={errors} name={`${props.day}Start`} as={ErrorText} />
+            <ErrorMessage errors={errors} name={`${props.day}Slutt`} as={ErrorText} />
+            <ErrorMessage errors={errors} name={`${props.day}Stengt`} as={ErrorText} />
         </Wrapper>
     );
 };

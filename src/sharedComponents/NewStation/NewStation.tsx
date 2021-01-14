@@ -48,7 +48,6 @@ const Form = styled.form`
 const StyledInput = styled(Input)`
     width: 350px;
     height: 45px;
-    margin-bottom: 20px;
 
     &::placeholder {
         text-align: center;
@@ -81,7 +80,6 @@ const ContactWrapper = styled.div`
 const ContactInput = styled(Input)`
     height: 45px;
     width: 100%;
-    margin-bottom: 10px;
     box-sizing: border-box;
 `;
 
@@ -102,15 +100,43 @@ const StyledMail = styled(Mail)`
 
 // Date
 const date = new Date();
-// Min max
-const max = new Date(date.setHours(20, 0, 0, 0));
-const min = new Date(date.setHours(7, 0, 0, 0));
+
+// Min and max time for openingHours default values
+const maxTime = "20:00";
+const minTime = "07:00";
+
+// The type of the form data for the form
+type FormData = {
+    navn: string;
+    adresse: string;
+    ambassadoerNavn: string;
+    ambassadoerTelefon: string;
+    ambassadoerEmail: string;
+    mandagStart: Date;
+    mandagSlutt: Date;
+    mandagStengt: boolean;
+    tirsdagStart: Date;
+    tirsdagSlutt: Date;
+    tirsdagStengt: boolean;
+    onsdagStart: Date;
+    onsdagSlutt: Date;
+    onsdagStengt: boolean;
+    torsdagStart: Date;
+    torsdagSlutt: Date;
+    torsdagStengt: boolean;
+    fredagStart: Date;
+    fredagSlutt: Date;
+    fredagStengt: boolean;
+};
 
 // Set the locale errors for yup
 yup.setLocale({
+    mixed: {
+        required: '${label} er påkrevd',
+    },
     string: {
-        min: '${path} må være minst ${min} bokstaver langt',
-        max: '${path} må være ikke være mer enn ${max} bokstaver langt',
+        min: '${label} må være minst ${min} bokstaver langt',
+        max: '${label} må være ikke være mer enn ${max} bokstaver langt',
     },
 });
 
@@ -120,57 +146,58 @@ const transformTime = function (value: Date, originalvalue: string) {
         return value;
     }
     const parsed = parse(originalvalue, 'HH:mm', new Date());
-    return isValid(parsed) ? parsed : undefined;
+    return isValid(parsed) ? parsed : null;
 };
 
 // Schema for the validation of the <day> start time input
 const dayStartSchema = (day: string) =>
     yup
         .date()
+        .nullable()
         .transform(transformTime)
-        .min(min, `Åpningstid kan ikke være før ${format(min, 'HH:mm')}`)
         .max(yup.ref(`${day}Slutt`), 'Åpningstid kan ikke være etter stengetid')
         .when(`${day}Stengt`, {
             is: false,
-            then: yup.date().required(`Åpningstid for ${day} er påkrevd`),
+            then: yup.date().label(`Åpningstid for ${day}`).required(),
         });
 
 // Schema for the validation of the <day> end time input
 const dayEndSchema = (day: string) =>
     yup
         .date()
+        .nullable()
         .transform(transformTime)
-        .max(max, `Stengningstid kan ikke være etter ${format(max, 'HH:mm')}`)
         .when(`${day}Stengt`, {
             is: false,
-            then: yup.date().required(`Stengningstid for ${day} er påkrevd`),
+            then: yup.date().label(`Stengningstid for ${day}`).required(),
         });
 
 // validation schema for the form
 const validationSchema = yup.object().shape({
-    navn: yup.string().min(2).max(50).required('Navn er påkrevd'),
-    adresse: yup.string().min(2).max(100).required('Adresse er påkrevd'),
-    ambassadoerNavn: yup.string().min(2).max(50).required('Ambassadør Navn er påkrevd'),
+    navn: yup.string().label('Navn for stasjon').required().min(2).max(50),
+    adresse: yup.string().label('Adresse for stasjonen').required().min(2).max(100),
+    ambassadoerNavn: yup.string().label('Navn for ambassadør').required().min(2).max(50),
     ambassadoerTelefon: yup
         .string()
-        .phone('NO', true, '${path} er ikke et gyldig tlf. nummer')
-        .required('Ambassadør tlf. nummer er påkrevd'),
-    ambassadoerEmail: yup.string().email().required('Ambassadør email er påkrevd'),
+        .label('Tlf. Nummer for ambassadør')
+        .required()
+        .phone('NO', true, '${label} er ikke et gyldig Tlf. Nummer'),
+    ambassadoerEmail: yup.string().label('Epost adresse for ambassadør').required().email(),
     mandagStart: dayStartSchema('mandag'),
     mandagSlutt: dayEndSchema('mandag'),
-    mandagStengt: yup.boolean().required().default(false),
+    mandagStengt: yup.boolean().required(),
     tirsdagStart: dayStartSchema('tirsdag'),
     tirsdagSlutt: dayEndSchema('tirsdag'),
-    tirsdagStengt: yup.boolean().required().default(false),
+    tirsdagStengt: yup.boolean().required(),
     onsdagStart: dayStartSchema('onsdag'),
     onsdagSlutt: dayEndSchema('onsdag'),
-    onsdagStengt: yup.boolean().required().default(false),
+    onsdagStengt: yup.boolean().required(),
     torsdagStart: dayStartSchema('torsdag'),
     torsdagSlutt: dayEndSchema('torsdag'),
-    torsdagStengt: yup.boolean().required().default(false),
+    torsdagStengt: yup.boolean().required(),
     fredagStart: dayStartSchema('fredag'),
     fredagSlutt: dayEndSchema('fredag'),
-    fredagStengt: yup.boolean().required().default(false),
+    fredagStengt: yup.boolean().required(),
 });
 
 interface Props {
@@ -182,7 +209,26 @@ export const NewStation: React.FC<Props> = (props) => {
     const alert = useAlert();
 
     // form methods from reaect-hook-forms used in the form provider and inputs
-    const formMethods = useForm({ resolver: yupResolver(validationSchema) });
+    const formMethods = useForm<FormData>({ 
+        resolver: yupResolver(validationSchema),
+        defaultValues: {
+            mandagStart: minTime,
+            mandagSlutt: maxTime,
+            mandagStengt: false,
+            tirsdagStart: minTime,
+            tirsdagSlutt: maxTime,
+            tirsdagStengt: false,
+            onsdagStart: minTime,
+            onsdagSlutt: maxTime,
+            onsdagStengt: false,
+            torsdagStart: minTime,
+            torsdagSlutt: maxTime,
+            torsdagStengt: false,
+            fredagStart: minTime,
+            fredagSlutt: maxTime,
+            fredagStengt: false,
+        }
+    });
 
     const [addStationMutation, { isLoading: addStationLoading }] = useMutation(
         (newStation: ApiStationPost) => postStation(newStation, keycloak.token),
@@ -234,27 +280,23 @@ export const NewStation: React.FC<Props> = (props) => {
                     <StyledInput
                         type="text"
                         name="navn"
-                        placeholder="Navn på stasjon"
-                        ref={formMethods.register}
-                        error={formMethods.errors.navn?.message}
+                        label="Navn på stasjon"
                     />
                     <StyledInput
                         type="text"
                         name="adresse"
-                        placeholder="Adressen til stasjonen"
-                        ref={formMethods.register}
-                        error={formMethods.errors.adresse?.message}
+                        label="Adressen til stasjonen"
                     />
                     <OpeningTimes>
                         <OpeningTimesText>
                             <p>Åpningstid</p>
                             <span>stengt</span>
                         </OpeningTimesText>
-                        <OpeningHours day="mandag" max={max} min={min} closed={formMethods.watch('mandagStengt')} />
-                        <OpeningHours day="tirsdag" max={max} min={min} closed={formMethods.watch('tirsdagStengt')} />
-                        <OpeningHours day="onsdag" max={max} min={min} closed={formMethods.watch('onsdagStengt')} />
-                        <OpeningHours day="torsdag" max={max} min={min} closed={formMethods.watch('torsdagStengt')} />
-                        <OpeningHours day="fredag" max={max} min={min} closed={formMethods.watch('fredagStengt')} />
+                        <OpeningHours day="mandag" closed={formMethods.watch('mandagStengt')} />
+                        <OpeningHours day="tirsdag" closed={formMethods.watch('tirsdagStengt')} />
+                        <OpeningHours day="onsdag" closed={formMethods.watch('onsdagStengt')} />
+                        <OpeningHours day="torsdag" closed={formMethods.watch('torsdagStengt')} />
+                        <OpeningHours day="fredag" closed={formMethods.watch('fredagStengt')} />
                     </OpeningTimes>
                     <AmbassadorContactInfo>
                         <p>Kontaktinformasjon til ombruksambassadør</p>
@@ -263,9 +305,7 @@ export const NewStation: React.FC<Props> = (props) => {
                             <ContactInput
                                 type="text"
                                 name="ambassadoerNavn"
-                                placeholder="Navn"
-                                ref={formMethods.register}
-                                error={formMethods.errors.ambassadoerNavn?.message}
+                                label="Navn"
                             />
                         </ContactWrapper>
                         <ContactWrapper>
@@ -273,9 +313,7 @@ export const NewStation: React.FC<Props> = (props) => {
                             <ContactInput
                                 type="tel"
                                 name="ambassadoerTelefon"
-                                placeholder="Telefonnummer"
-                                ref={formMethods.register}
-                                error={formMethods.errors.ambassadoerTelefon?.message}
+                                label="Telefonnummer"
                             />
                         </ContactWrapper>
                         <ContactWrapper>
@@ -283,9 +321,7 @@ export const NewStation: React.FC<Props> = (props) => {
                             <ContactInput
                                 type="mail"
                                 name="ambassadoerEmail"
-                                placeholder="Mail adresse"
-                                ref={formMethods.register}
-                                error={formMethods.errors.ambassadoerEmail?.message}
+                                label="Mail adresse"
                             />
                         </ContactWrapper>
                     </AmbassadorContactInfo>
