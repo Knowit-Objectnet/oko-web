@@ -5,6 +5,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from '../../../types';
 import { usePickUps } from '../../../api/hooks/usePickUps';
 import { ApiPickUpParams } from '../../../api/PickUpService';
+import { compareAsc } from 'date-fns/fp';
 
 const HeaderRow = styled.div`
     display: grid;
@@ -34,13 +35,11 @@ export const PickUpList: React.FC = () => {
     };
     const { data: pickUps, isLoading, isError } = usePickUps(pickUpsFilter);
     const sortedPickups = (pickUps ?? []).sort((pickUpA, pickUpB) => {
-        const timeA = new Date(pickUpA.startDateTime).getTime();
-        const timeB = new Date(pickUpB.startDateTime).getTime();
-        if (timeA === timeB) {
+        const dateTimeComparisonAsc = compareAsc(new Date(pickUpA.startDateTime), new Date(pickUpB.startDateTime));
+        if (dateTimeComparisonAsc === 0) {
             return pickUpB.id - pickUpA.id;
-        } else {
-            return timeB - timeA;
         }
+        return dateTimeComparisonAsc;
     });
 
     const renderPickUpsList = () => {

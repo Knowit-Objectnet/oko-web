@@ -34,14 +34,14 @@ const Button = styled.button<StyledButtonProps>`
     }
 `;
 
-const Content = styled.span<{ hidden: boolean }>`
+const Content = styled.span<{ isHidden: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
     white-space: nowrap;
 
     /** Hiding text content with opacity preserves a11y (screen readers can read transparent content) */
-    ${(props) => props.hidden && '&&& { opacity: 0; }'};
+    ${(props) => props.isHidden && '&&& { opacity: 0; }'};
 `;
 
 const Icon = styled.span`
@@ -86,18 +86,11 @@ export const BaseButton: React.FC<ButtonProps> = ({
     children,
     ...otherProps
 }) => (
-    <Button
-        size={size}
-        disabled={isLoading}
-        aria-disabled={isLoading}
-        aria-live="polite"
-        aria-busy={isLoading}
-        {...otherProps}
-    >
-        <Content hidden={isLoading}>
-            {leftIcon ? <LeftIcon>{leftIcon}</LeftIcon> : null}
+    <Button size={size} disabled={isLoading} aria-live="polite" aria-busy={isLoading} {...otherProps}>
+        <Content isHidden={isLoading}>
+            {leftIcon ? <LeftIcon aria-hidden={true}>{leftIcon}</LeftIcon> : null}
             {children}
-            {rightIcon ? <RightIcon>{rightIcon}</RightIcon> : null}
+            {rightIcon ? <RightIcon aria-hidden={true}>{rightIcon}</RightIcon> : null}
         </Content>
         {isLoading ? <LoadingSpinner /> : null}
     </Button>

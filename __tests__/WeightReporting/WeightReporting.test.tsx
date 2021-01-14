@@ -1,53 +1,30 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
+import { render } from '../../utils/test-setup';
 import '@testing-library/jest-dom';
-import fetch from 'jest-fetch-mock';
-import { Router } from 'react-router-dom';
-import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
-import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { WeightReporting } from '../../src/pages/weightReporting/WeightReporting';
 import { Roles } from '../../src/types';
-import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import AlertTemplate from 'react-alert-template-basic';
-import theme from '../../src/theme';
-import { ThemeProvider } from 'styled-components';
-import { mockWithdrawals } from '../../__mocks__/mockWithdrawals';
-
-// Fetch mock to intercept fetch requests.
-global.fetch = fetch;
+import { mockReports } from '../../__mocks__/mockReports';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 
 describe('Provides a page provide and update weight of withdrawals', () => {
-    // router history
-    let history: MemoryHistory;
-
-    // Alert options
-    const options = {
-        position: positions.TOP_CENTER,
-        timeout: 5000,
-        offset: '30px',
-        transition: transitions.SCALE,
-    };
+    let axiosMock: MockAdapter;
 
     beforeEach(() => {
-        fetch.resetMocks();
-        fetch.mockResponse(async ({ url }) => {
-            const parsedUrl = new URL(url);
-            if (parsedUrl.pathname.endsWith('/reports/') && parsedUrl.searchParams.get('partnerId') === '1') {
-                const queryToDateFilter = parsedUrl.searchParams.get('toDate');
-                if (queryToDateFilter) {
-                    const withdrawals = mockWithdrawals.filter(
-                        (w) => new Date(w.endDateTime) <= new Date(queryToDateFilter),
-                    );
-                    return JSON.stringify(withdrawals);
-                }
-
-                return JSON.stringify(mockWithdrawals);
+        axiosMock = new MockAdapter(axios);
+        axiosMock.onGet('/reports').reply((config) => {
+            const queryToDateFilter = config.params?.toDate;
+            if (queryToDateFilter) {
+                const filteredMockReports = mockReports.filter(
+                    (mockReport) => new Date(mockReport.endDateTime) <= new Date(queryToDateFilter),
+                );
+                return [200, JSON.stringify(filteredMockReports)];
             }
-            return '';
+            return [200, ''];
         });
-        history = createMemoryHistory();
 
         keycloak.hasRealmRole = jest.fn((role: string) => {
             return role === Roles.Ambassador;
@@ -58,28 +35,19 @@ describe('Provides a page provide and update weight of withdrawals', () => {
     });
 
     afterEach(() => {
+        axiosMock.reset();
         cleanup();
     });
 
     it('Should render all withdrawals', async () => {
-        const { findAllByText, findAllByPlaceholderText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
-                        <Router history={history}>
-                            <WeightReporting />
-                        </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
-        );
+        const { findAllByText, findAllByPlaceholderText } = render(<WeightReporting />);
 
         const withdrawalsWithWeight = await findAllByText('200 kg');
         withdrawalsWithWeight.forEach((withdrawal) => {
             expect(withdrawal).toBeInTheDocument();
         });
 
-        const withdrawalsWithoutWeight = await findAllByPlaceholderText('Skriv inn vektuttak');
+        const withdrawalsWithoutWeight = await findAllByPlaceholderText('Skriv inn vekt i kg');
         withdrawalsWithoutWeight.forEach((withdrawal) => {
             expect(withdrawal).toBeInTheDocument();
         });

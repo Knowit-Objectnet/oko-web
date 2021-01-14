@@ -1,11 +1,10 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import fetch from 'jest-fetch-mock';
 import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
-import { apiUrl, EventInfo, Roles } from '../../src/types';
+import { EventInfo, Roles } from '../../src/types';
 
 // Component to test
 import { RegCalendar } from '../../src/pages/calendar/RegCalendar/RegCalendar';
@@ -15,9 +14,6 @@ import { ThemeProvider } from 'styled-components';
 import { ApiEvent } from '../../src/api/EventService';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-
-// Fetch mock to intercept fetch requests.
-global.fetch = fetch;
 
 describe('Provides a page for REG to view the calendar', () => {
     const events: EventInfo[] = mockApiEvents.map((event: ApiEvent) => {
@@ -38,16 +34,9 @@ describe('Provides a page for REG to view the calendar', () => {
     let axiosMock: MockAdapter;
 
     beforeEach(() => {
-        fetch.resetMocks();
-        fetch.mockResponse(async ({ url }) => {
-            if (url.startsWith(`${apiUrl}/events`)) {
-                return JSON.stringify(mockApiEvents);
-            }
-            return '';
-        });
-
         axiosMock = new MockAdapter(axios);
         axiosMock.onGet('/stations').reply(200, mockStations);
+        axiosMock.onGet('/events').reply(200, mockApiEvents);
 
         // Set the role to ambassador
         keycloak.hasRealmRole = jest.fn((role: string) => {
