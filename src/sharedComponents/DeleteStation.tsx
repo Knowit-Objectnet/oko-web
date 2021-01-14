@@ -59,8 +59,8 @@ export const DeleteStation: React.FC<Props> = (props) => {
 
     const [selectedStationId, setSelectedStationId] = useState<number>();
 
-    const handleDeleteStationSubmission = (event: React.FormEvent) => {
-        event.preventDefault();
+    const handleDeleteStationSubmission = (submitEvent: React.FormEvent) => {
+        submitEvent.preventDefault();
         if (!selectedStationId) {
             // TODO: show this alert as inline error message in form
             alert.show('Vennligst velg en stasjon.', { type: types.ERROR });
