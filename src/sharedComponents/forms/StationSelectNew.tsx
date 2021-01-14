@@ -33,7 +33,7 @@ export const StationSelectNew: React.FC = () => {
                     </option>
                 ))}
             </Select>
-            <ErrorMessage errors={errors} name='selectedStation' as={ErrorText} />
+            <ErrorMessage errors={errors} name="selectedStation" as={ErrorText} />
         </Wrapper>
     );
 };

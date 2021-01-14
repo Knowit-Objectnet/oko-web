@@ -49,17 +49,9 @@ export const OpeningHours: React.FC<Props> = (props) => {
                     <Divider></Divider>
                 ) : (
                     <div>
-                        <input
-                            type="time"
-                            name={`${props.day}Start`}
-                            ref={register}
-                        />
+                        <input type="time" name={`${props.day}Start`} ref={register} />
                         <TimeDivider>-</TimeDivider>
-                        <input
-                            type="time"
-                            name={`${props.day}Slutt`}
-                            ref={register}
-                        />
+                        <input type="time" name={`${props.day}Slutt`} ref={register} />
                     </div>
                 )}
                 <ClosedInput type="checkbox" name={`${props.day}Stengt`} ref={register} />

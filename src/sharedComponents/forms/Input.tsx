@@ -15,14 +15,14 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
 }
 
-const Input: React.FC<Props> = ({name, label, ...rest}) => {
+const Input: React.FC<Props> = ({ name, label, ...rest }) => {
     const { register, errors } = useFormContext();
     return (
         <Wrapper>
             <input {...rest} placeholder={label} name={name} ref={register} />
             <ErrorMessage errors={errors} name={name} as={ErrorText} />
         </Wrapper>
-    )
+    );
 };
 
 export default Input;

@@ -102,8 +102,8 @@ const StyledMail = styled(Mail)`
 const date = new Date();
 
 // Min and max time for openingHours default values
-const maxTime = "20:00";
-const minTime = "07:00";
+const maxTime = '20:00';
+const minTime = '07:00';
 
 // The type of the form data for the form
 type FormData = {
@@ -209,7 +209,7 @@ export const NewStation: React.FC<Props> = (props) => {
     const alert = useAlert();
 
     // form methods from reaect-hook-forms used in the form provider and inputs
-    const formMethods = useForm<FormData>({ 
+    const formMethods = useForm<FormData>({
         resolver: yupResolver(validationSchema),
         defaultValues: {
             mandagStart: minTime,
@@ -227,7 +227,7 @@ export const NewStation: React.FC<Props> = (props) => {
             fredagStart: minTime,
             fredagSlutt: maxTime,
             fredagStengt: false,
-        }
+        },
     });
 
     const [addStationMutation, { isLoading: addStationLoading }] = useMutation(
@@ -277,16 +277,8 @@ export const NewStation: React.FC<Props> = (props) => {
             <Title>Legg til ny stasjon</Title>
             <FormProvider {...formMethods}>
                 <Form onSubmit={onSubmit}>
-                    <StyledInput
-                        type="text"
-                        name="navn"
-                        label="Navn på stasjon"
-                    />
-                    <StyledInput
-                        type="text"
-                        name="adresse"
-                        label="Adressen til stasjonen"
-                    />
+                    <StyledInput type="text" name="navn" label="Navn på stasjon" />
+                    <StyledInput type="text" name="adresse" label="Adressen til stasjonen" />
                     <OpeningTimes>
                         <OpeningTimesText>
                             <p>Åpningstid</p>
@@ -302,27 +294,15 @@ export const NewStation: React.FC<Props> = (props) => {
                         <p>Kontaktinformasjon til ombruksambassadør</p>
                         <ContactWrapper>
                             <StyledPerson height="2em" />
-                            <ContactInput
-                                type="text"
-                                name="ambassadoerNavn"
-                                label="Navn"
-                            />
+                            <ContactInput type="text" name="ambassadoerNavn" label="Navn" />
                         </ContactWrapper>
                         <ContactWrapper>
                             <StyledPhone height="2em" />
-                            <ContactInput
-                                type="tel"
-                                name="ambassadoerTelefon"
-                                label="Telefonnummer"
-                            />
+                            <ContactInput type="tel" name="ambassadoerTelefon" label="Telefonnummer" />
                         </ContactWrapper>
                         <ContactWrapper>
                             <StyledMail height="2em" />
-                            <ContactInput
-                                type="mail"
-                                name="ambassadoerEmail"
-                                label="Mail adresse"
-                            />
+                            <ContactInput type="mail" name="ambassadoerEmail" label="Mail adresse" />
                         </ContactWrapper>
                     </AmbassadorContactInfo>
                     <PositiveButton type="submit" isLoading={addStationLoading}>
