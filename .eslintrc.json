@@ -1,9 +1,27 @@
 {
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  },
   "extends": [
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
+    "eslint:recommended", // General syntax/logical errors, and some best practices
+    "plugin:@typescript-eslint/recommended", // Specifically for TypeScript
+    "plugin:react/recommended", // Specifically for React
+    "plugin:react-hooks/recommended", // Specifically for React Hooks
+    "plugin:jsx-a11y/recommended", // Checks for possible a11y issues with JSX
+    "plugin:testing-library/recommended", // Testing Library common mistakes and best practices
+    "prettier", // Turns off rules that might conflict with prettier
+                // (must be listed before all prettier configs, but after all other configs)
+    "prettier/@typescript-eslint", // Prettier formatting for TypeScript
+    "plugin:prettier/recommended" // General prettier formatting
   ],
   "overrides": [
     {
@@ -20,18 +38,6 @@
       }
     }
   ],
-  "env": {
-    "browser": true,
-    "jest": true
-  },
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module",
-    "ecmaFeatures": {
-        "jsx": true
-      }
-  },
   "rules": {
     "react/prop-types": 0,
     "semi": 2
