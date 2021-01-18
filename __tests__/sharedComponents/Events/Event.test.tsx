@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '../../../utils/test-setup';
+import { render, cleanup, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Router } from 'react-router-dom';
 import keycloak from '../../../src/keycloak';
@@ -487,7 +487,7 @@ describe('Provides an interface to view and edit an Event', () => {
         const optionButton1 = queryByText('Engangstilfelle');
         const optionButton2 = queryByText('Over en periode');
 
-        expect(optionButton1).toBeNull();
-        expect(optionButton2).toBeNull();
+        expect(optionButton1).not.toBeInTheDocument();
+        expect(optionButton2).not.toBeInTheDocument();
     });
 });

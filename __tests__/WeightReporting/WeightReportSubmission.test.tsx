@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { render, fireEvent, cleanup, waitForElementToBeRemoved } from '../../utils/test-setup';
+import { render, fireEvent, cleanup, waitForElementToBeRemoved } from '../../test-utils';
 import { mockReports } from '../../__mocks__/mockReports';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';

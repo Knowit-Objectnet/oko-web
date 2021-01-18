@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import { Calendar } from '../../src/pages/calendar/Calendar';
-import { render, cleanup } from '../../utils/test-setup';
+import { render, cleanup } from '../../test-utils';
 
 describe('Provides a page to view the calendar', () => {
     let history: MemoryHistory;

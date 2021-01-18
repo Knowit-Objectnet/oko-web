@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup } from '../../utils/test-setup';
+import { render, cleanup } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Stations } from '../../src/pages/stations/Stations';
 import axios from 'axios';

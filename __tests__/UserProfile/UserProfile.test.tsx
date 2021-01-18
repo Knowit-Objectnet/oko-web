@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '../../utils/test-setup';
+import { render, cleanup, waitFor, fireEvent } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Router } from 'react-router-dom';
 import keycloak from '../../src/keycloak';

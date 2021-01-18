@@ -3,10 +3,10 @@ import { KeycloakProvider } from '@react-keycloak/web';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
-import keycloak from '../src/keycloak';
-import theme from '../src/theme';
-import ModalProvider from '../src/sharedComponents/Modal/Provider';
-import { GlobalStyle } from '../src/global-styles';
+import keycloak from './src/keycloak';
+import theme from './src/theme';
+import ModalProvider from './src/sharedComponents/Modal/Provider';
+import { GlobalStyle } from './src/global-styles';
 import AlertTemplate from 'react-alert-template-basic';
 import { QueryClient, QueryClientProvider } from 'react-query';
 

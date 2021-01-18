@@ -3,7 +3,10 @@ jest.mock('./src/keycloak', () => ({
     __esModule: true,
     default: {
         constructor: jest.fn(),
-        init: jest.fn(),
+        init: jest.fn(() => {
+            // KeycloakProvider expects a Promise returned, so we pass one that's always resolving
+            return Promise.resolve();
+        }),
         login: jest.fn(),
         createLoginUrl: jest.fn(),
         logout: jest.fn(),

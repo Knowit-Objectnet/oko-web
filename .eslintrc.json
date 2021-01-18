@@ -17,6 +17,7 @@
     "plugin:react/recommended", // Specifically for React
     "plugin:react-hooks/recommended", // Specifically for React Hooks
     "plugin:jsx-a11y/recommended", // Checks for possible a11y issues with JSX
+    "plugin:jest-dom/recommended", // Common mistakes and best practices for tests using jest-dom
     "plugin:testing-library/recommended", // Testing Library common mistakes and best practices
     "prettier", // Turns off rules that might conflict with prettier
                 // (must be listed before all prettier configs, but after all other configs)
