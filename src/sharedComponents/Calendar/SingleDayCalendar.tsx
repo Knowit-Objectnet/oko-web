@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { EventInfo, SlotInfo } from '../../types';
 import { Gutter } from './Gutter';
 import { TimeSlotColumn } from './TimeSlotColumn';
-import { useMemo } from 'react';
 
 const Wrapper = styled.div`
     box-sizing: border-box;

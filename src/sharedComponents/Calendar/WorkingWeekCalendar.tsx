@@ -5,7 +5,6 @@ import { Gutter } from './Gutter';
 import { TimeSlotColumn } from './TimeSlotColumn';
 import { WorkingWeekCalendarTitle } from './WorkingWeekCalendarTitle';
 import add from 'date-fns/add';
-import { useMemo } from 'react';
 import isSameDay from 'date-fns/isSameDay';
 
 const Wrapper = styled.div`
