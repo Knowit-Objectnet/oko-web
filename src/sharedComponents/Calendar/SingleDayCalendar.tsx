@@ -75,28 +75,23 @@ export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({
                     showTitleGroup={props.columns.every((col) => col)}
                 />
                 <Columns>
-                    {props.columns.map((column, index) =>
-                        useMemo(
-                            () => (
-                                <TimeSlotColumn
-                                    key={column ? column : 'col' + index}
-                                    date={props.date}
-                                    title={column}
-                                    colNum={index}
-                                    events={events[index]}
-                                    min={props.min}
-                                    max={props.max}
-                                    step={step}
-                                    selectable={selectable}
-                                    selectedEvent={props.selectedEvent}
-                                    onSelectSlot={props.onSelectSlot}
-                                    onSelecting={props.onSelecting}
-                                    onSelectEvent={props.onSelectEvent}
-                                />
-                            ),
-                            [events[index], props.selectedEvent],
-                        ),
-                    )}
+                    {props.columns.map((column, index) => (
+                        <TimeSlotColumn
+                            key={column ? column : 'col' + index}
+                            date={props.date}
+                            title={column}
+                            colNum={index}
+                            events={events[index]}
+                            min={props.min}
+                            max={props.max}
+                            step={step}
+                            selectable={selectable}
+                            selectedEvent={props.selectedEvent}
+                            onSelectSlot={props.onSelectSlot}
+                            onSelecting={props.onSelecting}
+                            onSelectEvent={props.onSelectEvent}
+                        />
+                    ))}
                 </Columns>
             </Content>
         </Wrapper>

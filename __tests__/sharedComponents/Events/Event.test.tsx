@@ -484,8 +484,8 @@ describe('Provides an interface to view and edit an Event', () => {
         );
 
         // Make sure the options buttons for single or period deletion is hidden
-        const optionButton1 = await queryByText('Engangstilfelle');
-        const optionButton2 = await queryByText('Over en periode');
+        const optionButton1 = queryByText('Engangstilfelle');
+        const optionButton2 = queryByText('Over en periode');
 
         expect(optionButton1).toBeNull();
         expect(optionButton2).toBeNull();
