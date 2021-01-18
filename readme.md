@@ -119,8 +119,5 @@ Webpack is configured with the [`dotenv-webpack`](https://www.npmjs.com/package/
 
 ## Documentation
 
-### Local development
-To start the development server simply execute ```yarn docz dev```
-
-### For deployment
-Follow docz documentation to get the documentation website up for production: [https://www.docz.site/docs/deploying-your-docs](https://www.docz.site/docs/deploying-your-docs)
+An incomplete setup of a [Docz](https://www.docz.site) documentation has been (temporarily) archived in the `docs` folder. 
+See Readme file in that folder for more information.
