@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { render, fireEvent, cleanup } from '../../utils/test-setup';
+import { render, fireEvent, cleanup, waitForElementToBeRemoved } from '../../utils/test-setup';
 import { mockReports } from '../../__mocks__/mockReports';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
@@ -60,6 +60,6 @@ describe('Provides a component to update a single weight withdrawal', () => {
             }),
         );
 
-        // TODO: missing a way to assert that withdrawal was submitted
+        await waitForElementToBeRemoved(weigthInput);
     });
 });
