@@ -79,7 +79,7 @@
   },
   "dependencies": {
     "@reach/visually-hidden": "^0.12.0",
-    "@react-keycloak/web": "^2.1.4",
+    "@react-keycloak/web": "^3.4.0",
     "@wojtekmaj/react-daterange-picker": "^3.0.0",
     "@wojtekmaj/react-timerange-picker": "^3.0.0",
     "axios": "^0.21.1",

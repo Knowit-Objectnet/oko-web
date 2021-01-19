@@ -21,7 +21,7 @@ import { Notifications } from '../pages/notifications/Notifications';
 import { Stations } from '../pages/stations/Stations';
 
 export const RouterComponent: React.FC = () => {
-    const [, initialized] = useKeycloak();
+    const { initialized } = useKeycloak();
 
     if (!initialized) {
         return <Loading />;

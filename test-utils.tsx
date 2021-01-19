@@ -1,5 +1,5 @@
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import { KeycloakProvider } from '@react-keycloak/web';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
@@ -33,7 +33,7 @@ const queryClient = new QueryClient();
 
 const GlobalProviders: React.FC = ({ children }) => {
     return (
-        <KeycloakProvider keycloak={keycloak}>
+        <ReactKeycloakProvider authClient={keycloak}>
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...alertOptions}>
                     <QueryClientProvider client={queryClient}>
@@ -44,7 +44,7 @@ const GlobalProviders: React.FC = ({ children }) => {
                     </QueryClientProvider>
                 </AlertProvider>
             </ThemeProvider>
-        </KeycloakProvider>
+        </ReactKeycloakProvider>
     );
 };
 

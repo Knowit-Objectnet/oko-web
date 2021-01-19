@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { KeycloakProvider } from '@react-keycloak/web';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
 import { EventInfo, Roles } from '../../src/types';
@@ -76,7 +76,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         date.setHours(7, 0, 0, 0);
 
         render(
-            <KeycloakProvider keycloak={keycloak}>
+            <ReactKeycloakProvider authClient={keycloak}>
                 <ThemeProvider theme={theme}>
                     <AmbassadorCalendar
                         date={date}
@@ -86,7 +86,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
                         events={events}
                     />
                 </ThemeProvider>
-            </KeycloakProvider>,
+            </ReactKeycloakProvider>,
         );
     });
 
@@ -100,7 +100,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         date.setHours(7, 0, 0, 0);
 
         const { findAllByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
+            <ReactKeycloakProvider authClient={keycloak}>
                 <ThemeProvider theme={theme}>
                     <AmbassadorCalendar
                         date={date}
@@ -110,7 +110,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
                         events={events}
                     />
                 </ThemeProvider>
-            </KeycloakProvider>,
+            </ReactKeycloakProvider>,
         );
 
         const fretexGroups = await findAllByText('Fretex');

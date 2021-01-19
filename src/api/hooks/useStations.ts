@@ -3,7 +3,7 @@ import { QueryObserverResult, useQuery } from 'react-query';
 import { ApiStation, getStations, stationsDefaultQueryKey } from '../StationService';
 
 export const useStations = (): QueryObserverResult<Array<ApiStation>> => {
-    const [keycloak] = useKeycloak();
+    const { keycloak } = useKeycloak();
 
     return useQuery<Array<ApiStation>>({
         queryKey: [stationsDefaultQueryKey],

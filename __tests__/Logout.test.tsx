@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Router } from 'react-router-dom';
-import { KeycloakProvider } from '@react-keycloak/web';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
@@ -18,11 +18,11 @@ describe('Provides a logout page', () => {
 
     it('Should show logout text and call logout function', async () => {
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
+            <ReactKeycloakProvider authClient={keycloak}>
                 <Router history={history}>
                     <Logout />
                 </Router>
-            </KeycloakProvider>,
+            </ReactKeycloakProvider>,
         );
 
         // Check that the logout text is showing while waiting for keycloak to log the user out.
