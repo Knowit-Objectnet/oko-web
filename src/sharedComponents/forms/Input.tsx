@@ -12,7 +12,7 @@ const Wrapper = styled.span`
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
     name: string;
-    label?: string;
+    label: string;
 }
 
 const Input: React.FC<Props> = ({ name, label, ...rest }) => {

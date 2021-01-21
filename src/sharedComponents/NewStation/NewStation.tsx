@@ -98,9 +98,6 @@ const StyledMail = styled(Mail)`
     margin-right: 5px;
 `;
 
-// Date
-const date = new Date();
-
 // Min and max time for openingHours default values
 const maxTime = '20:00';
 const minTime = '07:00';
@@ -135,6 +132,7 @@ yup.setLocale({
         required: '${label} er påkrevd',
     },
     string: {
+        email: '${label} må være en gyldig e-postadresse', 
         min: '${label} må være minst ${min} bokstaver langt',
         max: '${label} må være ikke være mer enn ${max} bokstaver langt',
     },
@@ -182,7 +180,7 @@ const validationSchema = yup.object().shape({
         .label('Tlf. Nummer for ambassadør')
         .required()
         .phone('NO', true, '${label} er ikke et gyldig Tlf. Nummer'),
-    ambassadoerEmail: yup.string().label('Epost adresse for ambassadør').required().email(),
+    ambassadoerEmail: yup.string().label('E-postadresse for ambassadør').required().email(),
     mandagStart: dayStartSchema('mandag'),
     mandagSlutt: dayEndSchema('mandag'),
     mandagStengt: yup.boolean().required(),
@@ -302,7 +300,7 @@ export const NewStation: React.FC<Props> = (props) => {
                         </ContactWrapper>
                         <ContactWrapper>
                             <StyledMail height="2em" />
-                            <ContactInput type="mail" name="ambassadoerEmail" label="Mail adresse" />
+                            <ContactInput type="mail" name="ambassadoerEmail" label="E-postadresse" />
                         </ContactWrapper>
                     </AmbassadorContactInfo>
                     <PositiveButton type="submit" isLoading={addStationLoading}>

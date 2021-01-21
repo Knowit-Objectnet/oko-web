@@ -82,7 +82,7 @@ describe('Provides an interface to submit a new station', () => {
         });
 
         // Find the text input for the ambassador mail
-        const ambassadorMailInput = await findByPlaceholderText('Mail adresse');
+        const ambassadorMailInput = await findByPlaceholderText('E-postadresse');
         expect(ambassadorMailInput).toBeInTheDocument();
 
         // Write in the ambassador email olaRegTest@knowit.no
