@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
 import { OpeningHours } from './OpeningHours';
 import Person from '../../assets/Person.svg';
 import Phone from '../../assets/Phone.svg';
@@ -9,7 +8,15 @@ import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../api/StationService';
-import { format } from 'date-fns';
+import { useForm, FormProvider } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import 'yup-phone';
+import parse from 'date-fns/parse';
+import isDate from 'date-fns/isDate';
+import isValid from 'date-fns/isValid';
+import format from 'date-fns/format';
+import Input from '../forms/Input';
 import { PositiveButton } from '../buttons/PositiveButton';
 
 const Wrapper = styled.div`
@@ -32,16 +39,15 @@ const Title = styled.div`
     box-sizing: border-box;
 `;
 
-const Content = styled.div`
+const Form = styled.form`
     padding: 0 50px 50px;
     display: flex;
     flex-direction: column;
 `;
 
-const Input = styled.input`
+const StyledInput = styled(Input)`
     width: 350px;
     height: 45px;
-    margin-bottom: 20px;
 
     &::placeholder {
         text-align: center;
@@ -67,14 +73,13 @@ const ContactWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 350px;
     box-sizing: border-box;
 `;
 
-const ContactInput = styled.input`
+const ContactInput = styled(Input)`
     height: 45px;
     width: 100%;
-    margin-bottom: 10px;
     box-sizing: border-box;
 `;
 
@@ -93,6 +98,106 @@ const StyledMail = styled(Mail)`
     margin-right: 5px;
 `;
 
+// Min and max time for openingHours default values
+const maxTime = '20:00';
+const minTime = '07:00';
+
+// The type of the form data for the form
+type FormData = {
+    navn: string;
+    adresse: string;
+    ambassadoerNavn: string;
+    ambassadoerTelefon: string;
+    ambassadoerEmail: string;
+    mandagStart: Date;
+    mandagSlutt: Date;
+    mandagStengt: boolean;
+    tirsdagStart: Date;
+    tirsdagSlutt: Date;
+    tirsdagStengt: boolean;
+    onsdagStart: Date;
+    onsdagSlutt: Date;
+    onsdagStengt: boolean;
+    torsdagStart: Date;
+    torsdagSlutt: Date;
+    torsdagStengt: boolean;
+    fredagStart: Date;
+    fredagSlutt: Date;
+    fredagStengt: boolean;
+};
+
+// Set the locale errors for yup
+yup.setLocale({
+    mixed: {
+        required: '${label} er påkrevd',
+    },
+    string: {
+        email: '${label} må være en gyldig e-postadresse',
+        min: '${label} må være minst ${min} bokstaver langt',
+        max: '${label} må være ikke være mer enn ${max} bokstaver langt',
+    },
+});
+
+// Function to transform the time string from the input to a date for the yup validation and state
+const transformTime = function (value: Date, originalvalue: string) {
+    if (isDate(value) && isValid(value)) {
+        return value;
+    }
+    const parsed = parse(originalvalue, 'HH:mm', new Date());
+    return isValid(parsed) ? parsed : null;
+};
+
+// Schema for the validation of the <day> start time input
+const dayStartSchema = (day: string) =>
+    yup
+        .date()
+        .nullable()
+        .transform(transformTime)
+        .max(yup.ref(`${day}Slutt`), 'Åpningstid kan ikke være etter stengetid')
+        .when(`${day}Stengt`, {
+            is: false,
+            then: yup.date().label(`Åpningstid for ${day}`).required(),
+        });
+
+// Schema for the validation of the <day> end time input
+const dayEndSchema = (day: string) =>
+    yup
+        .date()
+        .nullable()
+        .transform(transformTime)
+        .when(`${day}Stengt`, {
+            is: false,
+            then: yup.date().label(`Stengningstid for ${day}`).required(),
+        });
+
+// validation schema for the form
+const validationSchema = yup.object().shape({
+    navn: yup.string().label('Navn for stasjon').required().min(2).max(50),
+    adresse: yup.string().label('Adresse for stasjonen').required().min(2).max(100),
+    ambassadoerNavn: yup.string().label('Navn for ambassadør').required().min(2).max(50),
+    ambassadoerTelefon: yup
+        .string()
+        .label('Tlf. Nummer for ambassadør')
+        .required()
+        .phone('NO', true, '${label} er ikke et gyldig Tlf. Nummer'),
+    ambassadoerEmail: yup.string().label('E-postadresse for ambassadør').required().email(),
+    mandagStart: dayStartSchema('mandag'),
+    mandagSlutt: dayEndSchema('mandag'),
+    mandagStengt: yup.boolean().required(),
+    tirsdagStart: dayStartSchema('tirsdag'),
+    tirsdagSlutt: dayEndSchema('tirsdag'),
+    tirsdagStengt: yup.boolean().required(),
+    onsdagStart: dayStartSchema('onsdag'),
+    onsdagSlutt: dayEndSchema('onsdag'),
+    onsdagStengt: yup.boolean().required(),
+    torsdagStart: dayStartSchema('torsdag'),
+    torsdagSlutt: dayEndSchema('torsdag'),
+    torsdagStengt: yup.boolean().required(),
+    fredagStart: dayStartSchema('fredag'),
+    fredagSlutt: dayEndSchema('fredag'),
+    fredagStengt: yup.boolean().required(),
+});
+
 interface Props {
     afterSubmit?: (successful: boolean) => void;
 }
@@ -100,6 +205,28 @@ interface Props {
 export const NewStation: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
+
+    // form methods from reaect-hook-forms used in the form provider and inputs
+    const formMethods = useForm<FormData>({
+        resolver: yupResolver(validationSchema),
+        defaultValues: {
+            mandagStart: minTime,
+            mandagSlutt: maxTime,
+            mandagStengt: false,
+            tirsdagStart: minTime,
+            tirsdagSlutt: maxTime,
+            tirsdagStengt: false,
+            onsdagStart: minTime,
+            onsdagSlutt: maxTime,
+            onsdagStengt: false,
+            torsdagStart: minTime,
+            torsdagSlutt: maxTime,
+            torsdagStengt: false,
+            fredagStart: minTime,
+            fredagSlutt: maxTime,
+            fredagStengt: false,
+        },
+    });
 
     const queryClient = useQueryClient();
     const addStationMutation = useMutation((newStation: ApiStationPost) => postStation(newStation, keycloak.token), {
@@ -116,98 +243,8 @@ export const NewStation: React.FC<Props> = (props) => {
         },
     });
 
-    // General info
-    const [name, setName] = useState('');
-    const [address, setAddress] = useState('');
-    // Ambassador info
-    const [ambassadorName, setAmbassadorName] = useState('');
-    const [ambassadorPhone, SetAmbassadorPhone] = useState('');
-    const [ambassadorEmail, SetAmbassadorEmail] = useState('');
-    // Date
-    const date = new Date();
-    // Min max
-    const max = new Date(date.setHours(20, 0, 0, 0));
-    const min = new Date(date.setHours(7, 0, 0, 0));
-    // Time ranges
-    const [mondayRange, setMondayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
-    const [tuesdayRange, setTuesdayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
-    const [wednesdayRange, setWednesdayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
-    const [thursdayRange, setThursdayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
-    const [fridayRange, setFridayRange] = useState<[Date, Date]>([new Date(min), new Date(max)]);
-    // Closed or not
-    const [mondayClosed, setMondayClosed] = useState(false);
-    const [tuesdayClosed, setTuesdayClosed] = useState(false);
-    const [wednesdayClosed, setWednesdayClosed] = useState(false);
-    const [thursdayClosed, setThursdayClosed] = useState(false);
-    const [fridayClosed, setFridayClosed] = useState(false);
-
-    // Changee function for the inputs. Uses the name tag to figure out which input is calling it
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-
-        const name = e.currentTarget.name;
-        const value = e.currentTarget.value;
-
-        switch (name) {
-            case 'name': {
-                setName(value);
-                break;
-            }
-            case 'address': {
-                setAddress(value);
-                break;
-            }
-            case 'ambassadorName': {
-                setAmbassadorName(value);
-                break;
-            }
-            case 'ambassadorPhone': {
-                SetAmbassadorPhone(value);
-                break;
-            }
-            case 'ambassadorEmail': {
-                SetAmbassadorEmail(value);
-                break;
-            }
-        }
-    };
-
     // Submit function for when the location is to be submitted to the backend
-    const onSubmit = (e: React.SyntheticEvent) => {
-        e.preventDefault();
-        e.persist();
-
-        // If any of the values are nullable then return as its not valid
-        if (!name || !address) {
-            alert.show('Stasjon navn og adresse kan ikke være tomme.', { type: types.ERROR });
-            return;
-        }
-        if (!ambassadorName || !ambassadorPhone || !ambassadorEmail) {
-            alert.show('Kontaktinformasjon til ombruksambassadør kan ikke være tom.', { type: types.ERROR });
-            return;
-        }
-        // If any of the start times are less than the end times then return as its not valid
-        if (mondayRange[0] > mondayRange[1]) {
-            alert.show('Sluttiden kan ikke være før starttiden på mandager.', { type: types.ERROR });
-            return;
-        }
-        if (tuesdayRange[0] > tuesdayRange[1]) {
-            alert.show('Sluttiden kan ikke være før starttiden på tirsdager.', { type: types.ERROR });
-            return;
-        }
-        if (wednesdayRange[0] > wednesdayRange[1]) {
-            alert.show('Sluttiden kan ikke være før starttiden på ondager.', { type: types.ERROR });
-            return;
-        }
-        if (thursdayRange[0] > thursdayRange[1]) {
-            alert.show('Sluttiden kan ikke være før starttiden på torsdager.', { type: types.ERROR });
-            return;
-        }
-        if (fridayRange[0] > fridayRange[1]) {
-            alert.show('Sluttiden kan ikke være før starttiden på fredager.', { type: types.ERROR });
-            return;
-        }
-
+    const onSubmit = formMethods.handleSubmit((data) => {
         const getOpeningHours = (dayIsClosed: boolean, openingHours: [Date, Date]) => {
             if (dayIsClosed) {
                 return undefined;
@@ -220,119 +257,57 @@ export const NewStation: React.FC<Props> = (props) => {
         };
 
         const newStation: ApiStationPost = {
-            name,
+            name: data.navn,
             hours: {
-                MONDAY: getOpeningHours(mondayClosed, mondayRange),
-                TUESDAY: getOpeningHours(tuesdayClosed, tuesdayRange),
-                WEDNESDAY: getOpeningHours(wednesdayClosed, wednesdayRange),
-                THURSDAY: getOpeningHours(thursdayClosed, thursdayRange),
-                FRIDAY: getOpeningHours(fridayClosed, fridayRange),
+                MONDAY: getOpeningHours(data.mandagStengt, [data.mandagStart, data.mandagSlutt]),
+                TUESDAY: getOpeningHours(data.tirsdagStengt, [data.tirsdagStart, data.tirsdagSlutt]),
+                WEDNESDAY: getOpeningHours(data.onsdagStengt, [data.onsdagStart, data.onsdagSlutt]),
+                THURSDAY: getOpeningHours(data.torsdagStengt, [data.torsdagStart, data.torsdagSlutt]),
+                FRIDAY: getOpeningHours(data.fredagStengt, [data.fredagStart, data.fredagSlutt]),
             },
         };
 
         addStationMutation.mutate(newStation);
-    };
+    });
 
     return (
         <Wrapper>
             <Title>Legg til ny stasjon</Title>
-            <Content>
-                <Input type="text" name="name" placeholder="Navn på stasjon" value={name} onChange={onChange} />
-                <Input
-                    type="text"
-                    name="address"
-                    placeholder="Adressen til stasjonen"
-                    value={address}
-                    onChange={onChange}
-                />
-                <OpeningTimes>
-                    <OpeningTimesText>
-                        <p>Åpningstid</p>
-                        <span>stengt</span>
-                    </OpeningTimesText>
-                    <OpeningHours
-                        day="Man"
-                        range={mondayRange}
-                        closed={mondayClosed}
-                        max={max}
-                        min={min}
-                        setRange={setMondayRange}
-                        setClosed={setMondayClosed}
-                    />
-                    <OpeningHours
-                        day="Tir"
-                        range={tuesdayRange}
-                        closed={tuesdayClosed}
-                        max={max}
-                        min={min}
-                        setRange={setTuesdayRange}
-                        setClosed={setTuesdayClosed}
-                    />
-                    <OpeningHours
-                        day="Ons"
-                        range={wednesdayRange}
-                        closed={wednesdayClosed}
-                        max={max}
-                        min={min}
-                        setRange={setWednesdayRange}
-                        setClosed={setWednesdayClosed}
-                    />
-                    <OpeningHours
-                        day="Tor"
-                        range={thursdayRange}
-                        closed={thursdayClosed}
-                        max={max}
-                        min={min}
-                        setRange={setThursdayRange}
-                        setClosed={setThursdayClosed}
-                    />
-                    <OpeningHours
-                        day="Fre"
-                        range={fridayRange}
-                        closed={fridayClosed}
-                        max={max}
-                        min={min}
-                        setRange={setFridayRange}
-                        setClosed={setFridayClosed}
-                    />
-                </OpeningTimes>
-                <AmbassadorContactInfo>
-                    <p>Kontaktinformasjon til ombruksambassadør</p>
-                    <ContactWrapper>
-                        <StyledPerson height="2em" />
-                        <ContactInput
-                            type="text"
-                            name="ambassadorName"
-                            placeholder="Navn"
-                            value={ambassadorName}
-                            onChange={onChange}
-                        />
-                    </ContactWrapper>
-                    <ContactWrapper>
-                        <StyledPhone height="2em" />
-                        <ContactInput
-                            type="tel"
-                            name="ambassadorPhone"
-                            placeholder="Telefonnummer"
-                            value={ambassadorPhone}
-                            onChange={onChange}
-                        />
-                    </ContactWrapper>
-                    <ContactWrapper>
-                        <StyledMail height="2em" />
-                        <ContactInput
-                            type="mail"
-                            name="ambassadorEmail"
-                            placeholder="Mail adresse"
-                            value={ambassadorEmail}
-                            onChange={onChange}
-                        />
-                    </ContactWrapper>
-                </AmbassadorContactInfo>
-                <PositiveButton onClick={onSubmit} isLoading={addStationMutation.isLoading}>
-                    Legg til stasjon
-                </PositiveButton>
-            </Content>
+            <FormProvider {...formMethods}>
+                <Form onSubmit={onSubmit}>
+                    <StyledInput type="text" name="navn" label="Navn på stasjon" />
+                    <StyledInput type="text" name="adresse" label="Adressen til stasjonen" />
+                    <OpeningTimes>
+                        <OpeningTimesText>
+                            <p>Åpningstid</p>
+                            <span>stengt</span>
+                        </OpeningTimesText>
+                        <OpeningHours day="mandag" closed={formMethods.watch('mandagStengt')} />
+                        <OpeningHours day="tirsdag" closed={formMethods.watch('tirsdagStengt')} />
+                        <OpeningHours day="onsdag" closed={formMethods.watch('onsdagStengt')} />
+                        <OpeningHours day="torsdag" closed={formMethods.watch('torsdagStengt')} />
+                        <OpeningHours day="fredag" closed={formMethods.watch('fredagStengt')} />
+                    </OpeningTimes>
+                    <AmbassadorContactInfo>
+                        <p>Kontaktinformasjon til ombruksambassadør</p>
+                        <ContactWrapper>
+                            <StyledPerson height="2em" />
+                            <ContactInput type="text" name="ambassadoerNavn" label="Navn" />
+                        </ContactWrapper>
+                        <ContactWrapper>
+                            <StyledPhone height="2em" />
+                            <ContactInput type="tel" name="ambassadoerTelefon" label="Telefonnummer" />
+                        </ContactWrapper>
+                        <ContactWrapper>
+                            <StyledMail height="2em" />
+                            <ContactInput type="mail" name="ambassadoerEmail" label="E-postadresse" />
+                        </ContactWrapper>
+                    </AmbassadorContactInfo>
+                    <PositiveButton type="submit" isLoading={addStationMutation.isLoading}>
+                        Legg til stasjon
+                    </PositiveButton>
+                </Form>
+            </FormProvider>
         </Wrapper>
     );
 };
