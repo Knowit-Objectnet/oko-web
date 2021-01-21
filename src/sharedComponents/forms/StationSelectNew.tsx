@@ -25,7 +25,9 @@ export const StationSelectNew: React.FC = () => {
         <Wrapper>
             <Select name="selectedStation" ref={register} disabled={isLoading || isLoadingError} defaultValue={-1}>
                 <option value={-1} disabled>
-                    {(isLoading && 'Laster inn...') || (isLoadingError && 'Kunne ikke laste stasjoner') || 'Velg stasjon'}
+                    {(isLoading && 'Laster inn...') ||
+                        (isLoadingError && 'Kunne ikke laste stasjoner') ||
+                        'Velg stasjon'}
                 </option>
                 {stations?.map((station) => (
                     <option value={station.id} key={station.id}>

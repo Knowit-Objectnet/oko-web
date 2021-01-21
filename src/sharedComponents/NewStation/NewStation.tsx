@@ -132,7 +132,7 @@ yup.setLocale({
         required: '${label} er påkrevd',
     },
     string: {
-        email: '${label} må være en gyldig e-postadresse', 
+        email: '${label} må være en gyldig e-postadresse',
         min: '${label} må være minst ${min} bokstaver langt',
         max: '${label} må være ikke være mer enn ${max} bokstaver langt',
     },
