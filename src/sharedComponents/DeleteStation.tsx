@@ -1,11 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
-import { StationSelect } from './forms/StationSelect';
+import { StationSelectNew } from './forms/StationSelectNew';
+import { useForm, FormProvider } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { NegativeButton } from './buttons/NegativeButton';
 
 const Wrapper = styled.div`
@@ -34,6 +36,10 @@ const StyledForm = styled.form`
     flex-direction: column;
 `;
 
+const validationSchema = yup.object().shape({
+    selectedStation: yup.number().min(0, 'Vennligst velg en stasjon').required('Vennligst velg en stasjon').default(-1),
+});
+
 interface Props {
     afterSubmit?: (successful: boolean) => void;
 }
@@ -41,6 +47,8 @@ interface Props {
 export const DeleteStation: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
+
+    const formMethods = useForm({ resolver: yupResolver(validationSchema) });
 
     const queryClient = useQueryClient();
     const deleteStationMutation = useMutation((stationId: number) => deleteStation(stationId, keycloak.token), {
@@ -57,25 +65,21 @@ export const DeleteStation: React.FC<Props> = (props) => {
         },
     });
 
-    const [selectedStationId, setSelectedStationId] = useState<number>();
-
-    const handleDeleteStationSubmission = (submitEvent: React.FormEvent) => {
-        submitEvent.preventDefault();
-        if (!selectedStationId) {
-            // TODO: show this alert as inline error message in form
-            alert.show('Vennligst velg en stasjon.', { type: types.ERROR });
-            return;
-        }
-        deleteStationMutation.mutate(selectedStationId);
-    };
+    const handleDeleteStationSubmission = formMethods.handleSubmit((data) =>
+        deleteStationMutation.mutate(data.selectedStation),
+    );
 
     return (
         <Wrapper>
             <Title>Slett stasjon</Title>
-            <StyledForm onSubmit={handleDeleteStationSubmission}>
-                <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
-                <NegativeButton isLoading={deleteStationMutation.isLoading}>Slett</NegativeButton>
-            </StyledForm>
+            <FormProvider {...formMethods}>
+                <StyledForm onSubmit={handleDeleteStationSubmission}>
+                    <StationSelectNew />
+                    <NegativeButton type="submit" isLoading={deleteStationMutation.isLoading}>
+                        Slett
+                    </NegativeButton>
+                </StyledForm>
+            </FormProvider>
         </Wrapper>
     );
 };
