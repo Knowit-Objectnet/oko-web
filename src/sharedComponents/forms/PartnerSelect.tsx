@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const PartnerSelect: React.FC<Props> = (props) => {
-    const { data: partners, isLoading, isError } = usePartners();
+    const { data: partners, isLoading, isLoadingError } = usePartners();
 
     const handleSelectedPartnerChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         props.onSelectedPartnerChange(parseInt(event.currentTarget.value));
@@ -24,12 +24,12 @@ export const PartnerSelect: React.FC<Props> = (props) => {
     return (
         <Select
             onChange={handleSelectedPartnerChange}
-            disabled={isLoading || isError}
+            disabled={isLoading || isLoadingError}
             value={props.selectedPartnerId ?? 'default'}
         >
             <option value="default" disabled>
                 {(isLoading && 'Laster inn...') ||
-                    (isError && 'Kunne ikke laste samarbeidspartnere') ||
+                    (isLoadingError && 'Kunne ikke laste samarbeidspartnere') ||
                     'Velg samarbeidspartner'}
             </option>
             {partners?.map((partner) => (

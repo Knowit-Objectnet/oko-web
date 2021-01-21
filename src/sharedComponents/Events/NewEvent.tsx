@@ -5,7 +5,7 @@ import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../api/EventService';
 import { WorkingWeekdays } from '../../types';
 import { StationSelect } from '../forms/StationSelect';
@@ -35,20 +35,20 @@ export const NewEvent: React.FC<Props> = (props) => {
     const alert = useAlert();
     const { keycloak } = useKeycloak();
 
-    const [addEventMutation, { isLoading: addEventLoading }] = useMutation(
-        (newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Avtalen ble lagt til.', { type: types.SUCCESS });
-                props.afterSubmit?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
-                props.afterSubmit?.(false);
-            },
-            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
+    const queryClient = useQueryClient();
+    const addEventMutation = useMutation((newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token), {
+        onSuccess: () => {
+            alert.show('Avtalen ble lagt til.', { type: types.SUCCESS });
+            props.afterSubmit?.(true);
         },
-    );
+        onError: () => {
+            alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
+            props.afterSubmit?.(false);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(eventsDefaultQueryKey);
+        },
+    });
 
     const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
     const [timeRange, setTimeRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
@@ -139,7 +139,7 @@ export const NewEvent: React.FC<Props> = (props) => {
             };
         }
 
-        addEventMutation(newEvent);
+        addEventMutation.mutate(newEvent);
     };
 
     return (
@@ -159,7 +159,7 @@ export const NewEvent: React.FC<Props> = (props) => {
                     onSelectedDaysChange={onSelectedDaysChange}
                     recurrenceEnabled={true}
                 />
-                <SubmitButton isLoading={addEventLoading}>Lagre</SubmitButton>
+                <SubmitButton isLoading={addEventMutation.isLoading}>Lagre</SubmitButton>
             </StyledForm>
         </EventTemplateVertical>
     );

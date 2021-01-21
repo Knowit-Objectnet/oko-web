@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
 import { StationSelect } from './forms/StationSelect';
 import { NegativeButton } from './buttons/NegativeButton';
@@ -42,31 +42,31 @@ export const DeleteStation: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const [deleteStationMutation, { isLoading: deleteStationLoading }] = useMutation(
-        (stationId: number) => deleteStation(stationId, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
-                props.afterSubmit?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk galt, stasjonen ble ikke slettet.', { type: types.ERROR });
-                props.afterSubmit?.(false);
-            },
-            onSettled: () => queryCache.invalidateQueries(stationsDefaultQueryKey),
+    const queryClient = useQueryClient();
+    const deleteStationMutation = useMutation((stationId: number) => deleteStation(stationId, keycloak.token), {
+        onSuccess: () => {
+            alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
+            props.afterSubmit?.(true);
         },
-    );
+        onError: () => {
+            alert.show('Noe gikk galt, stasjonen ble ikke slettet.', { type: types.ERROR });
+            props.afterSubmit?.(false);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(stationsDefaultQueryKey);
+        },
+    });
 
     const [selectedStationId, setSelectedStationId] = useState<number>();
 
-    const handleDeleteStationSubmission = (event: React.FormEvent) => {
-        event.preventDefault();
+    const handleDeleteStationSubmission = (submitEvent: React.FormEvent) => {
+        submitEvent.preventDefault();
         if (!selectedStationId) {
             // TODO: show this alert as inline error message in form
             alert.show('Vennligst velg en stasjon.', { type: types.ERROR });
             return;
         }
-        deleteStationMutation(selectedStationId);
+        deleteStationMutation.mutate(selectedStationId);
     };
 
     return (
@@ -74,7 +74,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
             <Title>Slett stasjon</Title>
             <StyledForm onSubmit={handleDeleteStationSubmission}>
                 <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
-                <NegativeButton isLoading={deleteStationLoading}>Slett</NegativeButton>
+                <NegativeButton isLoading={deleteStationMutation.isLoading}>Slett</NegativeButton>
             </StyledForm>
         </Wrapper>
     );

@@ -25,14 +25,12 @@ export interface ApiStationPatch {
     hours?: StationOpeningHours;
 }
 
-// First parameter is the query key passed by react-query
-export const getStations = (_: string, token: string): Promise<Array<ApiStation>> =>
+export const getStations = (token: string): Promise<Array<ApiStation>> =>
     httpClient(token)
         .get<Array<ApiStation>>(endpoint)
         .then((response) => response.data);
 
-// First parameter is the query key passed by react-query
-export const getStationById = (_: string, stationId: number, token: string): Promise<ApiStation> =>
+export const getStationById = (stationId: number, token: string): Promise<ApiStation> =>
     httpClient(token)
         .get<ApiStation>(`${endpoint}/${stationId}`)
         .then((response) => response.data);

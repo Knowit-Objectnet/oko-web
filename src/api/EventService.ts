@@ -53,8 +53,7 @@ export interface ApiEventParams {
 const endpoint = '/events';
 export const eventsDefaultQueryKey = 'getEvents';
 
-// First parameter is the query key passed by react-query
-export const getEvents = (_: string, params: ApiEventParams, token: string): Promise<Array<ApiEvent>> =>
+export const getEvents = (params: ApiEventParams, token: string): Promise<Array<ApiEvent>> =>
     httpClient(token)
         .get<Array<ApiEvent>>(endpoint, { params })
         .then((response) => response.data);

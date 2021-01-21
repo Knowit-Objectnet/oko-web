@@ -9,7 +9,7 @@ import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiEventPatch, patchEvent, eventsDefaultQueryKey } from '../../api/EventService';
 import { NegativeButton } from '../buttons/NegativeButton';
 import { PositiveButton } from '../buttons/PositiveButton';
@@ -65,19 +65,19 @@ export const Event: React.FC<Props> = (props) => {
     const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
     const partnerOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.partner.id;
 
-    const [updateEventMutation, { isLoading: updateEventLoading }] = useMutation(
-        (updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Avtalen ble oppdatert.', { type: types.SUCCESS });
-                setIsEditing(false);
-            },
-            onError: () => {
-                alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
-            },
-            onSettled: () => queryCache.invalidateQueries(eventsDefaultQueryKey),
+    const queryClient = useQueryClient();
+    const updateEventMutation = useMutation((updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, keycloak.token), {
+        onSuccess: () => {
+            alert.show('Avtalen ble oppdatert.', { type: types.SUCCESS });
+            setIsEditing(false);
         },
-    );
+        onError: () => {
+            alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(eventsDefaultQueryKey);
+        },
+    });
 
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(props.event.start), new Date(props.event.end)]);
@@ -159,7 +159,7 @@ export const Event: React.FC<Props> = (props) => {
             endDateTime: end.toISOString(),
         };
 
-        updateEventMutation(updatedEvent);
+        updateEventMutation.mutate(updatedEvent);
     };
 
     return (
@@ -209,7 +209,7 @@ export const Event: React.FC<Props> = (props) => {
                     <NegativeButton fillWidth onClick={handleEditCancelled}>
                         Avbryt
                     </NegativeButton>
-                    <PositiveButton fillWidth onClick={handleEditSubmission} isLoading={updateEventLoading}>
+                    <PositiveButton fillWidth onClick={handleEditSubmission} isLoading={updateEventMutation.isLoading}>
                         Godkjenn
                     </PositiveButton>
                 </ButtonRow>

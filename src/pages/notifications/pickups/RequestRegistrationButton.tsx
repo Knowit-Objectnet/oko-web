@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
 import { PositiveButton } from '../../../sharedComponents/buttons/PositiveButton';
 
@@ -15,10 +15,15 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const [addRequestMutation] = useMutation((newRequest: ApiRequestPost) => postRequest(newRequest, keycloak.token), {
-        onSuccess: () => queryCache.invalidateQueries([requestsDefaultQueryKey, { pickupId, partnerId }]),
+    const queryClient = useQueryClient();
+    const addRequestMutation = useMutation((newRequest: ApiRequestPost) => postRequest(newRequest, keycloak.token), {
         onError: () => {
             alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
+        },
+        onSettled: () => {
+            // The Promise from `invalidateQueries` will resolve when matched queries are done refetching.
+            // We return this Promise so that `mutateAsync` can be used to await refetching.
+            return queryClient.invalidateQueries([requestsDefaultQueryKey, { pickupId, partnerId }]);
         },
     });
 
@@ -28,7 +33,7 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId
             pickupId,
             partnerId,
         };
-        await addRequestMutation(newRequest);
+        await addRequestMutation.mutateAsync(newRequest);
         onRequestRegistration(false);
     };
 

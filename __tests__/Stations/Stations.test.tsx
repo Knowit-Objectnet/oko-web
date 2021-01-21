@@ -1,25 +1,11 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup } from '../../utils/test-setup';
 import '@testing-library/jest-dom';
-import { KeycloakProvider } from '@react-keycloak/web';
-import keycloak from '../../src/keycloak';
-import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import AlertTemplate from 'react-alert-template-basic';
-import ModalProvider from '../../src/sharedComponents/Modal/Provider';
-import theme from '../../src/theme';
-import { ThemeProvider } from 'styled-components';
 import { Stations } from '../../src/pages/stations/Stations';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 describe('Provides a page to view a list of the stations', () => {
-    const alertOptions = {
-        position: positions.TOP_CENTER,
-        timeout: 5000,
-        offset: '30px',
-        transition: transitions.SCALE,
-    };
-
     let axiosMock: MockAdapter;
 
     beforeEach(() => {
@@ -56,17 +42,7 @@ describe('Provides a page to view a list of the stations', () => {
     });
 
     it('Should render list of stations', async () => {
-        const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <ModalProvider>
-                        <AlertProvider template={AlertTemplate} {...alertOptions}>
-                            <Stations />
-                        </AlertProvider>
-                    </ModalProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
-        );
+        const { findByText } = render(<Stations />);
 
         const Haraldrud = await findByText('Haraldrud');
         const Smestad = await findByText('Smestad');
