@@ -18,6 +18,7 @@ import isValid from 'date-fns/isValid';
 import format from 'date-fns/format';
 import Input from '../forms/Input';
 import { PositiveButton } from '../buttons/PositiveButton';
+import { AnySchema } from 'yup';
 
 const Wrapper = styled.div`
     display: flex;
@@ -147,28 +148,27 @@ const transformTime = function (value: Date, originalvalue: string) {
     return isValid(parsed) ? parsed : null;
 };
 
+// Helper function for yup .when(): setting a field to required if a given condition is false
+const fieldRequiredIfFalse = (condition: boolean, schema: AnySchema) => (!condition ? schema.required() : schema);
+
 // Schema for the validation of the <day> start time input
 const dayStartSchema = (day: string) =>
     yup
         .date()
-        .nullable()
+        .label(`Åpningstid for ${day}`)
         .transform(transformTime)
         .max(yup.ref(`${day}Slutt`), 'Åpningstid kan ikke være etter stengetid')
-        .when(`${day}Stengt`, {
-            is: false,
-            then: yup.date().label(`Åpningstid for ${day}`).required(),
-        });
+        .when(`${day}Stengt`, fieldRequiredIfFalse)
+        .nullable();
 
 // Schema for the validation of the <day> end time input
 const dayEndSchema = (day: string) =>
     yup
         .date()
-        .nullable()
+        .label(`Stengetid for ${day}`)
         .transform(transformTime)
-        .when(`${day}Stengt`, {
-            is: false,
-            then: yup.date().label(`Stengningstid for ${day}`).required(),
-        });
+        .when(`${day}Stengt`, fieldRequiredIfFalse)
+        .nullable();
 
 // validation schema for the form
 const validationSchema = yup.object().shape({
