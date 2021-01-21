@@ -1,6 +1,5 @@
 import React from 'react';
-import { cleanup } from '@testing-library/react';
-import { render } from '../../utils/test-setup';
+import { render, cleanup } from '../../utils/test-setup';
 import '@testing-library/jest-dom';
 import keycloak from '../../src/keycloak';
 

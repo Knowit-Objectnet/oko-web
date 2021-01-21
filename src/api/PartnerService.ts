@@ -26,14 +26,12 @@ export interface ApiPartnerPatch {
     email?: string;
 }
 
-// First parameter is the query key passed by react-query
-export const getPartners = (_: string, token: string): Promise<Array<ApiPartner>> =>
+export const getPartners = (token: string): Promise<Array<ApiPartner>> =>
     httpClient(token)
         .get<Array<ApiPartner>>(endpoint)
         .then((response) => response.data);
 
-// First parameter is the query key passed by react-query
-export const getPartnerById = (_: string, partnerId: number, token: string): Promise<ApiPartner> =>
+export const getPartnerById = (partnerId: number, token: string): Promise<ApiPartner> =>
     httpClient(token)
         .get<ApiPartner>(`${endpoint}/${partnerId}`)
         .then((response) => response.data);

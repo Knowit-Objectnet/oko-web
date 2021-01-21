@@ -1,26 +1,12 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '@testing-library/react';
+import { render, cleanup, waitFor, fireEvent } from '../../../utils/test-setup';
 import '@testing-library/jest-dom';
-import { KeycloakProvider } from '@react-keycloak/web';
-import keycloak from '../../../src/keycloak';
-import AlertTemplate from 'react-alert-template-basic';
-import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import theme from '../../../src/theme';
-import { ThemeProvider } from 'styled-components';
 import { NewEvent } from '../../../src/sharedComponents/Events/NewEvent';
 import add from 'date-fns/add';
 import { mockStations } from '../../../__mocks__/mockStations';
 import { mockPartners } from '../../../__mocks__/mockPartners';
 
 describe('Provides an interface to create a new Event', () => {
-    // Alert options
-    const options = {
-        position: positions.TOP_CENTER,
-        timeout: 5000,
-        offset: '30px',
-        transition: transitions.SCALE,
-    };
-
     beforeEach(() => {
         // TODO: need to mock Axios if tests require API-requests
     });

@@ -1,30 +1,17 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '@testing-library/react';
+import { render, cleanup, fireEvent } from '../../../utils/test-setup';
 import '@testing-library/jest-dom';
 import { Router } from 'react-router-dom';
-import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../../src/keycloak';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { Event } from '../../../src/sharedComponents/Events/Event';
 import { mockEvents } from '../../../__mocks__/mockEvents';
-import AlertTemplate from 'react-alert-template-basic';
-import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import { Roles } from '../../../src/types';
-import theme from '../../../src/theme';
-import { ThemeProvider } from 'styled-components';
 
 describe('Provides an interface to view and edit an Event', () => {
     // router history
     let history: MemoryHistory;
-
-    // Alert options
-    const options = {
-        position: positions.TOP_CENTER,
-        timeout: 5000,
-        offset: '30px',
-        transition: transitions.SCALE,
-    };
 
     beforeEach(() => {
         // TODO: need to mock Axios if tests requires API-requests
@@ -45,19 +32,13 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
-                        <Router history={history}>
-                            <Event
-                                event={mockEvents[0]}
-                                afterDeleteSingleEvent={afterDeleteSingleEvent}
-                                afterDeleteRangeEvent={afterDeleteRangeEvent}
-                            />
-                        </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
+            <Router history={history}>
+                <Event
+                    event={mockEvents[0]}
+                    afterDeleteSingleEvent={afterDeleteSingleEvent}
+                    afterDeleteRangeEvent={afterDeleteRangeEvent}
+                />
+            </Router>,
         );
 
         // Find the title of the event
@@ -78,19 +59,13 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.station.id;
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
-                        <Router history={history}>
-                            <Event
-                                event={mockEvents[0]}
-                                afterDeleteSingleEvent={afterDeleteSingleEvent}
-                                afterDeleteRangeEvent={afterDeleteRangeEvent}
-                            />
-                        </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
+            <Router history={history}>
+                <Event
+                    event={mockEvents[0]}
+                    afterDeleteSingleEvent={afterDeleteSingleEvent}
+                    afterDeleteRangeEvent={afterDeleteRangeEvent}
+                />
+            </Router>,
         );
 
         // Find the title of the event
@@ -111,19 +86,13 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
-                        <Router history={history}>
-                            <Event
-                                event={mockEvents[0]}
-                                afterDeleteSingleEvent={afterDeleteSingleEvent}
-                                afterDeleteRangeEvent={afterDeleteRangeEvent}
-                            />
-                        </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
+            <Router history={history}>
+                <Event
+                    event={mockEvents[0]}
+                    afterDeleteSingleEvent={afterDeleteSingleEvent}
+                    afterDeleteRangeEvent={afterDeleteRangeEvent}
+                />
+            </Router>,
         );
 
         // Find the title of the event
@@ -144,19 +113,13 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = undefined;
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
-                        <Router history={history}>
-                            <Event
-                                event={mockEvents[0]}
-                                afterDeleteSingleEvent={afterDeleteSingleEvent}
-                                afterDeleteRangeEvent={afterDeleteRangeEvent}
-                            />
-                        </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
+            <Router history={history}>
+                <Event
+                    event={mockEvents[0]}
+                    afterDeleteSingleEvent={afterDeleteSingleEvent}
+                    afterDeleteRangeEvent={afterDeleteRangeEvent}
+                />
+            </Router>,
         );
 
         // Find the title of the event
@@ -175,9 +138,6 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
                         <Router history={history}>
                             <Event
                                 event={mockEvents[0]}
@@ -185,9 +145,6 @@ describe('Provides an interface to view and edit an Event', () => {
                                 afterDeleteRangeEvent={afterDeleteRangeEvent}
                             />
                         </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
         );
 
         // Find the title of the event
@@ -232,9 +189,6 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
                         <Router history={history}>
                             <Event
                                 event={mockEvents[0]}
@@ -242,9 +196,6 @@ describe('Provides an interface to view and edit an Event', () => {
                                 afterDeleteRangeEvent={afterDeleteRangeEvent}
                             />
                         </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
         );
 
         // Find the delete button
@@ -290,9 +241,6 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.location.id;
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
                         <Router history={history}>
                             <Event
                                 event={mockEvents[0]}
@@ -300,9 +248,6 @@ describe('Provides an interface to view and edit an Event', () => {
                                 afterDeleteRangeEvent={afterDeleteRangeEvent}
                             />
                         </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
         );
 
         // Find the delete button
@@ -348,9 +293,6 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
                         <Router history={history}>
                             <Event
                                 event={mockEvents[0]}
@@ -358,9 +300,6 @@ describe('Provides an interface to view and edit an Event', () => {
                                 afterDeleteRangeEvent={afterDeleteRangeEvent}
                             />
                         </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
         );
 
         // Find the delete button
@@ -403,9 +342,6 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
                         <Router history={history}>
                             <Event
                                 event={mockEvents[0]}
@@ -413,9 +349,6 @@ describe('Provides an interface to view and edit an Event', () => {
                                 afterDeleteRangeEvent={afterDeleteRangeEvent}
                             />
                         </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
         );
 
         // Find the delete button
@@ -473,9 +406,6 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.location.id;
 
         const { findByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
                         <Router history={history}>
                             <Event
                                 event={mockEvents[0]}
@@ -483,9 +413,6 @@ describe('Provides an interface to view and edit an Event', () => {
                                 afterDeleteRangeEvent={afterDeleteRangeEvent}
                             />
                         </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
         );
 
         // Find the delete button
@@ -539,15 +466,9 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
 
         const { findByText, queryByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider template={AlertTemplate} {...options}>
-                        <Router history={history}>
-                            <Event event={mockEvents[1]} />
-                        </Router>
-                    </AlertProvider>
-                </ThemeProvider>
-            </KeycloakProvider>,
+            <Router history={history}>
+                <Event event={mockEvents[1]} />
+            </Router>,
         );
 
         // Find the delete button

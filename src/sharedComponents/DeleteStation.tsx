@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
-import { queryCache, useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
 import { StationSelectNew } from './forms/StationSelectNew';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -50,23 +50,23 @@ export const DeleteStation: React.FC<Props> = (props) => {
 
     const formMethods = useForm({ resolver: yupResolver(validationSchema) });
 
-    const [deleteStationMutation, { isLoading: deleteStationLoading }] = useMutation(
-        (stationId: number) => deleteStation(stationId, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
-                props.afterSubmit?.(true);
-            },
-            onError: () => {
-                alert.show('Noe gikk galt, stasjonen ble ikke slettet.', { type: types.ERROR });
-                props.afterSubmit?.(false);
-            },
-            onSettled: () => queryCache.invalidateQueries(stationsDefaultQueryKey),
+    const queryClient = useQueryClient();
+    const deleteStationMutation = useMutation((stationId: number) => deleteStation(stationId, keycloak.token), {
+        onSuccess: () => {
+            alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
+            props.afterSubmit?.(true);
         },
-    );
+        onError: () => {
+            alert.show('Noe gikk galt, stasjonen ble ikke slettet.', { type: types.ERROR });
+            props.afterSubmit?.(false);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(stationsDefaultQueryKey);
+        },
+    });
 
     const handleDeleteStationSubmission = formMethods.handleSubmit((data) =>
-        deleteStationMutation(data.selectedStation),
+        deleteStationMutation.mutate(data.selectedStation),
     );
 
     return (
@@ -75,7 +75,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
             <FormProvider {...formMethods}>
                 <StyledForm onSubmit={handleDeleteStationSubmission}>
                     <StationSelectNew />
-                    <NegativeButton type="submit" isLoading={deleteStationLoading}>
+                    <NegativeButton type="submit" isLoading={deleteStationMutation.isLoading}>
                         Slett
                     </NegativeButton>
                 </StyledForm>

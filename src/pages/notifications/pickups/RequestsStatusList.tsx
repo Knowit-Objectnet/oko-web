@@ -38,7 +38,7 @@ const Notice = styled.div`
     padding: 0.5rem 1rem;
 `;
 
-const StatusWrapper = styled.div`
+const RequestStatus = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -113,7 +113,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
             {requestsSortedByPartner.map((request) => (
                 <Request key={`${request.pickup.id}-${request.partner.id}`}>
                     <strong>{request.partner.name}</strong>
-                    <StatusWrapper>{getStatusForRequest(request)}</StatusWrapper>
+                    <RequestStatus>{getStatusForRequest(request)}</RequestStatus>
                 </Request>
             ))}
         </RequestList>

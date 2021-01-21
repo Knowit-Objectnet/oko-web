@@ -17,15 +17,15 @@ const Select = styled.select`
 `;
 
 export const StationSelectNew: React.FC = () => {
-    const { data: stations, isLoading, isError } = useStations();
+    const { data: stations, isLoading, isLoadingError } = useStations();
 
     const { register, errors } = useFormContext();
 
     return (
         <Wrapper>
-            <Select name="selectedStation" ref={register} disabled={isLoading || isError} defaultValue={-1}>
+            <Select name="selectedStation" ref={register} disabled={isLoading || isLoadingError} defaultValue={-1}>
                 <option value={-1} disabled>
-                    {(isLoading && 'Laster inn...') || (isError && 'Kunne ikke laste stasjoner') || 'Velg stasjon'}
+                    {(isLoading && 'Laster inn...') || (isLoadingError && 'Kunne ikke laste stasjoner') || 'Velg stasjon'}
                 </option>
                 {stations?.map((station) => (
                     <option value={station.id} key={station.id}>

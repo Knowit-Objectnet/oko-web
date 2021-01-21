@@ -98,7 +98,7 @@
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^6.9.6",
-    "react-query": "^2.23.1",
+    "react-query": "^3.5.11",
     "react-router-dom": "^5.2.0",
     "react-switch": "^5.0.1",
     "react-transition-group": "^4.4.1",
