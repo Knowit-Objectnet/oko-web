@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
-import ErrorText from './ErrorText';
+import { ErrorMessage } from './ErrorMessage';
 
 const Wrapper = styled.span`
     display: block;
@@ -16,11 +15,11 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input: React.FC<Props> = ({ name, label, ...rest }) => {
-    const { register, errors } = useFormContext();
+    const { register } = useFormContext();
     return (
         <Wrapper>
             <input {...rest} placeholder={label} name={name} ref={register} />
-            <ErrorMessage errors={errors} name={name} as={ErrorText} />
+            <ErrorMessage name={name} />
         </Wrapper>
     );
 };

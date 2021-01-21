@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
-import ErrorText from '../forms/ErrorText';
+import { ErrorMessage } from '../forms/ErrorMessage';
 
 const Wrapper = styled.div`
     display: flex;
@@ -39,7 +38,7 @@ interface Props {
 }
 
 export const OpeningHours: React.FC<Props> = (props) => {
-    const { register, errors } = useFormContext();
+    const { register } = useFormContext();
 
     return (
         <Wrapper>
@@ -56,9 +55,9 @@ export const OpeningHours: React.FC<Props> = (props) => {
                 )}
                 <ClosedInput type="checkbox" name={`${props.day}Stengt`} ref={register} />
             </InputRow>
-            <ErrorMessage errors={errors} name={`${props.day}Start`} as={ErrorText} />
-            <ErrorMessage errors={errors} name={`${props.day}Slutt`} as={ErrorText} />
-            <ErrorMessage errors={errors} name={`${props.day}Stengt`} as={ErrorText} />
+            <ErrorMessage name={`${props.day}Start`} />
+            <ErrorMessage name={`${props.day}Slutt`} />
+            <ErrorMessage name={`${props.day}Stengt`} />
         </Wrapper>
     );
 };

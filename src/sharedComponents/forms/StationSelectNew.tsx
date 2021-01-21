@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useStations } from '../../api/hooks/useStations';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
-import ErrorText from './ErrorText';
+import { ErrorMessage } from '../forms/ErrorMessage';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -19,7 +18,7 @@ const Select = styled.select`
 export const StationSelectNew: React.FC = () => {
     const { data: stations, isLoading, isLoadingError } = useStations();
 
-    const { register, errors } = useFormContext();
+    const { register } = useFormContext();
 
     return (
         <Wrapper>
@@ -35,7 +34,7 @@ export const StationSelectNew: React.FC = () => {
                     </option>
                 ))}
             </Select>
-            <ErrorMessage errors={errors} name="selectedStation" as={ErrorText} />
+            <ErrorMessage name="selectedStation" />
         </Wrapper>
     );
 };
