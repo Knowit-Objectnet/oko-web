@@ -37,7 +37,11 @@ const StyledForm = styled.form`
 `;
 
 const validationSchema = yup.object().shape({
-    selectedPartner: yup.number().min(0, 'Vennligst velg en samarbeidspartner').required('Vennligst velg en samarbeidspartner').default(-1),
+    selectedPartner: yup
+        .number()
+        .min(0, 'Vennligst velg en samarbeidspartner')
+        .required('Vennligst velg en samarbeidspartner')
+        .default(-1),
 });
 
 interface Props {
