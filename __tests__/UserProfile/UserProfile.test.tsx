@@ -1,18 +1,13 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '../../utils/test-setup';
+import { cleanup, fireEvent, render, waitFor } from '../../test-utils';
 import '@testing-library/jest-dom';
-import { Router } from 'react-router-dom';
+import { Router, MemoryRouter } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import keycloak from '../../src/keycloak';
-import { createMemoryHistory, MemoryHistory } from 'history';
 import { UserProfile } from '../../src/pages/userProfile/UserProfile';
 
 describe('Provides a page to view contact info', () => {
-    // router history
-    let history: MemoryHistory;
-
     beforeEach(() => {
-        history = createMemoryHistory();
-
         // Set the keycloak users credentials
         keycloak.tokenParsed.email = 'test@test.com';
         keycloak.tokenParsed.name = 'Test test';
@@ -23,8 +18,10 @@ describe('Provides a page to view contact info', () => {
     });
 
     it('Should render working logout button', async () => {
+        const memoryHistory = createMemoryHistory();
+
         const { findByText } = render(
-            <Router history={history}>
+            <Router history={memoryHistory}>
                 <UserProfile />
             </Router>,
         );
@@ -45,14 +42,14 @@ describe('Provides a page to view contact info', () => {
         });
 
         // Expect the location to now be /logout as we should've gotten redirected to the logout page
-        expect(history.location.pathname).toBe('/logout');
+        expect(memoryHistory.location.pathname).toBe('/logout');
     });
 
     it("Should render the user's contact info ", async () => {
         const { findByText } = render(
-            <Router history={history}>
+            <MemoryRouter>
                 <UserProfile />
-            </Router>,
+            </MemoryRouter>,
         );
 
         // Find thee name, email and placeholder text for phone number as non is set in the users credentials

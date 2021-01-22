@@ -1,4 +1,8 @@
+# TODO: Remove the following lines if/when Docz docs are taken into use again
+docs
 .docz
+doczrc.js
+
 .idea
 __mocks__
 container

@@ -31,7 +31,7 @@ export const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = (props) => 
     return (
         <Route
             {...rest}
-            render={(props) => {
+            render={() => {
                 /* Check if the user is authenticated and has the required role for the route.
                  * If they have access then return is, if not return not
                  *

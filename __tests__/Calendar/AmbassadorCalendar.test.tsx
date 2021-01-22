@@ -1,12 +1,9 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { cleanup, render } from '../../test-utils';
 import '@testing-library/jest-dom';
-import { KeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
 import { EventInfo, Roles } from '../../src/types';
-import theme from '../../src/theme';
-import { ThemeProvider } from 'styled-components';
 
 // Component to test
 import { AmbassadorCalendar } from '../../src/pages/calendar/AmbassadorCalendar/AmbassadorCalendar';
@@ -76,17 +73,13 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         date.setHours(7, 0, 0, 0);
 
         render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AmbassadorCalendar
-                        date={date}
-                        isToggled={isToggled}
-                        onSelectEvent={onSelectEventMock}
-                        onWeekChange={onWeekChangeMock}
-                        events={events}
-                    />
-                </ThemeProvider>
-            </KeycloakProvider>,
+            <AmbassadorCalendar
+                date={date}
+                isToggled={isToggled}
+                onSelectEvent={onSelectEventMock}
+                onWeekChange={onWeekChangeMock}
+                events={events}
+            />,
         );
     });
 
@@ -100,17 +93,13 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         date.setHours(7, 0, 0, 0);
 
         const { findAllByText } = render(
-            <KeycloakProvider keycloak={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <AmbassadorCalendar
-                        date={date}
-                        isToggled={isToggled}
-                        onSelectEvent={onSelectEventMock}
-                        onWeekChange={onWeekChangeMock}
-                        events={events}
-                    />
-                </ThemeProvider>
-            </KeycloakProvider>,
+            <AmbassadorCalendar
+                date={date}
+                isToggled={isToggled}
+                onSelectEvent={onSelectEventMock}
+                onWeekChange={onWeekChangeMock}
+                events={events}
+            />,
         );
 
         const fretexGroups = await findAllByText('Fretex');

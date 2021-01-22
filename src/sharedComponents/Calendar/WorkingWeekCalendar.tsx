@@ -5,7 +5,6 @@ import { Gutter } from './Gutter';
 import { TimeSlotColumn } from './TimeSlotColumn';
 import { WorkingWeekCalendarTitle } from './WorkingWeekCalendarTitle';
 import add from 'date-fns/add';
-import { useMemo } from 'react';
 import isSameDay from 'date-fns/isSameDay';
 
 const Wrapper = styled.div`
@@ -97,29 +96,24 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
             <Content>
                 <Gutter start={props.min} step={step} end={props.max} showTitleGroup={true} titleComponentHeight={70} />
                 <Columns>
-                    {dates.map((date, index) =>
-                        useMemo(
-                            () => (
-                                <TimeSlotColumn
-                                    key={date.toString()}
-                                    date={dates[index]}
-                                    title={date.toLocaleString('nb-NO', {
-                                        weekday: 'long',
-                                        day: 'numeric',
-                                    })}
-                                    titleComponent={WorkingWeekCalendarTitle}
-                                    colNum={index}
-                                    events={daysSortedEvents[index]}
-                                    min={props.min}
-                                    max={props.max}
-                                    step={step}
-                                    selectable={selectable}
-                                    onSelectEvent={props.onSelectEvent}
-                                />
-                            ),
-                            [daysSortedEvents[index], props.date],
-                        ),
-                    )}
+                    {dates.map((date, index) => (
+                        <TimeSlotColumn
+                            key={date.toString()}
+                            date={dates[index]}
+                            title={date.toLocaleString('nb-NO', {
+                                weekday: 'long',
+                                day: 'numeric',
+                            })}
+                            titleComponent={WorkingWeekCalendarTitle}
+                            colNum={index}
+                            events={daysSortedEvents[index]}
+                            min={props.min}
+                            max={props.max}
+                            step={step}
+                            selectable={selectable}
+                            onSelectEvent={props.onSelectEvent}
+                        />
+                    ))}
                 </Columns>
             </Content>
         </Wrapper>

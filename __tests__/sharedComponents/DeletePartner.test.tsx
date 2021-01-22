@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '../../utils/test-setup';
+import { render, cleanup, waitFor, fireEvent } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { DeletePartner } from '../../src/sharedComponents/DeletePartner';
 import MockAdapter from 'axios-mock-adapter';
@@ -23,10 +23,10 @@ describe('Provides an interface to submit a new partner', () => {
     it('Should submit partner on input change and button click', async () => {
         const afterSubmitMock = jest.fn();
 
-        const { findByText, getByDisplayValue } = render(<DeletePartner afterSubmit={afterSubmitMock} />);
+        const { findByText, findByDisplayValue } = render(<DeletePartner afterSubmit={afterSubmitMock} />);
 
         // Get the selector for selecting which partner to delete
-        const select = await waitFor(() => getByDisplayValue('Velg samarbeidspartner'));
+        const select = await findByDisplayValue('Velg samarbeidspartner');
 
         // Select Fretex
         fireEvent.change(select, {

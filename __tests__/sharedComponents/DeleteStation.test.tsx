@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '../../utils/test-setup';
+import { render, cleanup, waitFor, fireEvent } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { DeleteStation } from '../../src/sharedComponents/DeleteStation';
 import MockAdapter from 'axios-mock-adapter';
@@ -32,10 +32,10 @@ describe('Provides an interface to submit a new station', () => {
 
     it('Should delete station on input change and button click', async () => {
         const afterSubmitMock = jest.fn();
-        const { findByText, getByDisplayValue } = render(<DeleteStation afterSubmit={afterSubmitMock} />);
+        const { findByText, findByDisplayValue } = render(<DeleteStation afterSubmit={afterSubmitMock} />);
 
         // Get the selector for selecting which partner to delete
-        const select = await waitFor(() => getByDisplayValue('Velg stasjon'));
+        const select = await findByDisplayValue('Velg stasjon');
 
         // Select Fretex
         fireEvent.change(select, {

@@ -18,7 +18,7 @@ const Title = styled.h3`
 `;
 
 export const AboutPartner: React.FC = () => {
-    const [keycloak] = useKeycloak();
+    const { keycloak } = useKeycloak();
     const userId: number = keycloak.tokenParsed?.GroupID;
 
     const { data: partnerInfo, isLoading } = usePartnerById(userId);

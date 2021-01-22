@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import { Notifications } from '../../src/pages/notifications/Notifications';
 import { mockApiPickUps } from '../../__mocks__/mockPickUps';
 import { mockApiRequests } from '../../__mocks__/mockRequests';
-import { render, cleanup } from '../../utils/test-setup';
+import { render, cleanup } from '../../test-utils';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 
