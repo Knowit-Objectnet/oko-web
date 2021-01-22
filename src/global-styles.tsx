@@ -1,5 +1,8 @@
 import { createGlobalStyle } from 'styled-components';
 
+// Importing the webfonts (webpack + css-loader + file-loader handles the bundling of the css and font files)
+import './assets/font/fonts.css';
+
 const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
