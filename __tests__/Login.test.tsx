@@ -1,28 +1,17 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render } from '../test-utils';
 import '@testing-library/jest-dom';
-import { Router } from 'react-router-dom';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
+import { MemoryRouter } from 'react-router-dom';
 import keycloak from '../src/keycloak';
-import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { Login } from '../src/pages/login/Login';
 
 describe('Provides a login page', () => {
-    // router history
-    let history: MemoryHistory;
-
-    beforeEach(() => {
-        history = createMemoryHistory();
-    });
-
     it('Should show login button and call login function when clicked', async () => {
         const { findByText } = render(
-            <ReactKeycloakProvider authClient={keycloak}>
-                <Router history={history}>
-                    <Login />
-                </Router>
-            </ReactKeycloakProvider>,
+            <MemoryRouter>
+                <Login />
+            </MemoryRouter>,
         );
 
         // Check that the login text is showing while waiting for keycloak to log the user in.

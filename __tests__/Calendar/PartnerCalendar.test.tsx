@@ -1,12 +1,9 @@
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { cleanup, render } from '../../test-utils';
 import '@testing-library/jest-dom';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
 import { EventInfo, Roles } from '../../src/types';
-import theme from '../../src/theme';
-import { ThemeProvider } from 'styled-components';
 
 // Component to test
 import { PartnerCalendar } from '../../src/pages/calendar/PartnerCalendar/PartnerCalendar';
@@ -54,17 +51,13 @@ describe('Provides a page for partners to view the calendar', () => {
         date.setHours(7, 0, 0, 0);
 
         render(
-            <ReactKeycloakProvider authClient={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <PartnerCalendar
-                        date={date}
-                        showCalendar={isToggled}
-                        onSelectEvent={onSelectEventMock}
-                        onWeekChange={onWeekChangeMock}
-                        events={events}
-                    />
-                </ThemeProvider>
-            </ReactKeycloakProvider>,
+            <PartnerCalendar
+                date={date}
+                showCalendar={isToggled}
+                onSelectEvent={onSelectEventMock}
+                onWeekChange={onWeekChangeMock}
+                events={events}
+            />,
         );
     });
 
@@ -78,17 +71,13 @@ describe('Provides a page for partners to view the calendar', () => {
         date.setHours(7, 0, 0, 0);
 
         const { findAllByText } = render(
-            <ReactKeycloakProvider authClient={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <PartnerCalendar
-                        date={date}
-                        showCalendar={isToggled}
-                        onSelectEvent={onSelectEventMock}
-                        onWeekChange={onWeekChangeMock}
-                        events={events}
-                    />
-                </ThemeProvider>
-            </ReactKeycloakProvider>,
+            <PartnerCalendar
+                date={date}
+                showCalendar={isToggled}
+                onSelectEvent={onSelectEventMock}
+                onWeekChange={onWeekChangeMock}
+                events={events}
+            />,
         );
 
         const haraldrudGroups = await findAllByText('Haraldrud');
@@ -107,17 +96,13 @@ describe('Provides a page for partners to view the calendar', () => {
         date.setHours(7, 0, 0, 0);
 
         const { findAllByText } = render(
-            <ReactKeycloakProvider authClient={keycloak}>
-                <ThemeProvider theme={theme}>
-                    <PartnerCalendar
-                        date={date}
-                        showCalendar={isToggled}
-                        onSelectEvent={onSelectEventMock}
-                        onWeekChange={onWeekChangeMock}
-                        events={events}
-                    />
-                </ThemeProvider>
-            </ReactKeycloakProvider>,
+            <PartnerCalendar
+                date={date}
+                showCalendar={isToggled}
+                onSelectEvent={onSelectEventMock}
+                onWeekChange={onWeekChangeMock}
+                events={events}
+            />,
         );
 
         const haraldrudGroups = await findAllByText('Haraldrud');

@@ -87,7 +87,7 @@
     "@wojtekmaj/react-timerange-picker": "^3.0.0",
     "axios": "^0.21.1",
     "date-fns": "^2.16.1",
-    "history": "^4.10.1",
+    "history": "^5.0.0",
     "keycloak-js": "^10.0.2",
     "lodash.groupby": "^4.6.0",
     "react": "^16.14.0",

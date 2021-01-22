@@ -1,23 +1,13 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '../../../test-utils';
+import { cleanup, fireEvent, render } from '../../../test-utils';
 import '@testing-library/jest-dom';
-import { Router } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import keycloak from '../../../src/keycloak';
-import { createMemoryHistory, MemoryHistory } from 'history';
-
 import { Event } from '../../../src/sharedComponents/Events/Event';
 import { mockEvents } from '../../../__mocks__/mockEvents';
 import { Roles } from '../../../src/types';
 
 describe('Provides an interface to view and edit an Event', () => {
-    // router history
-    let history: MemoryHistory;
-
-    beforeEach(() => {
-        // TODO: need to mock Axios if tests requires API-requests
-        history = createMemoryHistory();
-    });
-
     afterEach(() => {
         cleanup();
     });
@@ -32,13 +22,13 @@ describe('Provides an interface to view and edit an Event', () => {
         });
 
         const { findByText } = render(
-            <Router history={history}>
+            <MemoryRouter>
                 <Event
                     event={mockEvents[0]}
                     afterDeleteSingleEvent={afterDeleteSingleEvent}
                     afterDeleteRangeEvent={afterDeleteRangeEvent}
                 />
-            </Router>,
+            </MemoryRouter>,
         );
 
         // Find the title of the event
@@ -59,13 +49,13 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.station.id;
 
         const { findByText } = render(
-            <Router history={history}>
+            <MemoryRouter>
                 <Event
                     event={mockEvents[0]}
                     afterDeleteSingleEvent={afterDeleteSingleEvent}
                     afterDeleteRangeEvent={afterDeleteRangeEvent}
                 />
-            </Router>,
+            </MemoryRouter>,
         );
 
         // Find the title of the event
@@ -86,13 +76,13 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
 
         const { findByText } = render(
-            <Router history={history}>
+            <MemoryRouter>
                 <Event
                     event={mockEvents[0]}
                     afterDeleteSingleEvent={afterDeleteSingleEvent}
                     afterDeleteRangeEvent={afterDeleteRangeEvent}
                 />
-            </Router>,
+            </MemoryRouter>,
         );
 
         // Find the title of the event
@@ -113,13 +103,13 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = undefined;
 
         const { findByText } = render(
-            <Router history={history}>
+            <MemoryRouter>
                 <Event
                     event={mockEvents[0]}
                     afterDeleteSingleEvent={afterDeleteSingleEvent}
                     afterDeleteRangeEvent={afterDeleteRangeEvent}
                 />
-            </Router>,
+            </MemoryRouter>,
         );
 
         // Find the title of the event
@@ -466,9 +456,9 @@ describe('Provides an interface to view and edit an Event', () => {
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
 
         const { findByText, queryByText } = render(
-            <Router history={history}>
+            <MemoryRouter>
                 <Event event={mockEvents[1]} />
-            </Router>,
+            </MemoryRouter>,
         );
 
         // Find the delete button
