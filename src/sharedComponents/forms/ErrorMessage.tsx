@@ -7,6 +7,7 @@ const StyledError = styled.span`
     display: flex;
     flex-wrap: wrap;
     font-size: 0.8em;
+    max-width: fit-content;
 `;
 
 type Props = React.ComponentPropsWithoutRef<typeof HookFormErrorMessage>;
