@@ -3,7 +3,7 @@ import { QueryObserverResult, useQuery } from 'react-query';
 import { ApiPickUp, ApiPickUpParams, getPickUps, pickUpsDefaultQueryKey } from '../PickUpService';
 
 export const usePickUps = (params: ApiPickUpParams = {}): QueryObserverResult<Array<ApiPickUp>> => {
-    const [keycloak] = useKeycloak();
+    const { keycloak } = useKeycloak();
 
     return useQuery<Array<ApiPickUp>>({
         queryKey: [pickUpsDefaultQueryKey, params],

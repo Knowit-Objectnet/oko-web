@@ -1,5 +1,5 @@
 import React from 'react';
-import { KeycloakProvider } from '@react-keycloak/web';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
 import keycloak from './keycloak';
 import { RouterComponent } from './router/router';
 import { GlobalStyle } from './global-styles';
@@ -22,7 +22,7 @@ const queryClient = new QueryClient();
 
 export const App: React.FC = () => {
     return (
-        <KeycloakProvider keycloak={keycloak}>
+        <ReactKeycloakProvider authClient={keycloak}>
             <ThemeProvider theme={theme}>
                 <AlertProvider template={AlertTemplate} {...alertOptions}>
                     <QueryClientProvider client={queryClient}>
@@ -37,7 +37,7 @@ export const App: React.FC = () => {
                     </QueryClientProvider>
                 </AlertProvider>
             </ThemeProvider>
-        </KeycloakProvider>
+        </ReactKeycloakProvider>
     );
 };
 

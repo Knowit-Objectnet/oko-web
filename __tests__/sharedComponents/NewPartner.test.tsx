@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '../../utils/test-setup';
+import { render, cleanup, waitFor, fireEvent } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { NewPartner } from '../../src/sharedComponents/NewPartner';
 import MockAdapter from 'axios-mock-adapter';

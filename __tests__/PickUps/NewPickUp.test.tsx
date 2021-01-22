@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import add from 'date-fns/add';
 import keycloak from '../../src/keycloak';
-import { render, cleanup, waitFor, fireEvent } from '../../utils/test-setup';
+import { render, cleanup, waitFor, fireEvent } from '../../test-utils';
 import { NewPickUp } from '../../src/sharedComponents/Events/NewPickUp';
 import { mockStations } from '../../__mocks__/mockStations';
 import MockAdapter from 'axios-mock-adapter';
