@@ -4,7 +4,7 @@ import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../api/StationService';
-import { StationSelectNew } from './forms/StationSelectNew';
+import { StationSelect } from './forms/StationSelect';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -74,7 +74,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
             <Title>Slett stasjon</Title>
             <FormProvider {...formMethods}>
                 <StyledForm onSubmit={handleDeleteStationSubmission}>
-                    <StationSelectNew />
+                    <StationSelect />
                     <NegativeButton type="submit" isLoading={deleteStationMutation.isLoading}>
                         Slett
                     </NegativeButton>

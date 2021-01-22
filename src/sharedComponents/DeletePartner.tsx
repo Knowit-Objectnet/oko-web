@@ -1,12 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
 import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { deletePartner, partnersDefaultQueryKey } from '../api/PartnerService';
 import { useMutation, useQueryClient } from 'react-query';
 import { PartnerSelect } from './forms/PartnerSelect';
 import { NegativeButton } from './buttons/NegativeButton';
+import { useForm, FormProvider } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const Wrapper = styled.div`
     display: flex;
@@ -34,6 +36,14 @@ const StyledForm = styled.form`
     flex-direction: column;
 `;
 
+const validationSchema = yup.object().shape({
+    selectedPartner: yup
+        .number()
+        .min(0, 'Vennligst velg en samarbeidspartner')
+        .required('Vennligst velg en samarbeidspartner')
+        .default(-1),
+});
+
 interface Props {
     afterSubmit?: (successful: boolean) => void;
 }
@@ -41,6 +51,8 @@ interface Props {
 export const DeletePartner: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
+
+    const formMethods = useForm({ resolver: yupResolver(validationSchema) });
 
     const queryClient = useQueryClient();
     const deletePartnerMutation = useMutation((partnerId: number) => deletePartner(partnerId, keycloak.token), {
@@ -57,25 +69,19 @@ export const DeletePartner: React.FC<Props> = (props) => {
         },
     });
 
-    const [selectedPartnerId, setSelectedPartnerId] = useState<number>();
-
-    const handleDeletePartnerSubmission = (submitEvent: React.FormEvent) => {
-        submitEvent.preventDefault();
-        if (!selectedPartnerId) {
-            // TODO: show this alert as inline error message in form
-            alert.show('Vennligst velg en samarbeidspartner.', { type: types.ERROR });
-            return;
-        }
-        deletePartnerMutation.mutate(selectedPartnerId);
-    };
+    const handleDeletePartnerSubmission = formMethods.handleSubmit((data) => {
+        deletePartnerMutation.mutate(data.selectedPartner);
+    });
 
     return (
         <Wrapper>
             <Title>Fjern samarbeidspartner</Title>
-            <StyledForm onSubmit={handleDeletePartnerSubmission}>
-                <PartnerSelect onSelectedPartnerChange={setSelectedPartnerId} selectedPartnerId={selectedPartnerId} />
-                <NegativeButton isLoading={deletePartnerMutation.isLoading}>Slett</NegativeButton>
-            </StyledForm>
+            <FormProvider {...formMethods}>
+                <StyledForm onSubmit={handleDeletePartnerSubmission}>
+                    <PartnerSelect />
+                    <NegativeButton isLoading={deletePartnerMutation.isLoading}>Slett</NegativeButton>
+                </StyledForm>
+            </FormProvider>
         </Wrapper>
     );
 };
