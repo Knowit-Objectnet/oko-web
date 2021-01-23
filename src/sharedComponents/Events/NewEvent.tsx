@@ -55,24 +55,6 @@ const transformTime = function (value: Date, originalvalue: string) {
     return isValid(parsed) ? parsed : null;
 };
 
-// Helper function for yup .when(): setting a field to required if a given condition is false
-const fieldRequiredIfRecurringWeekly = (condition: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
-    console.log(condition);
-    return condition == 'Weekly' ? yup.array().of(yup.number()).label(`something`).min(1).max(5).required() : schema;
-};
-
-// Helper function for yup .when(): setting a field to required if a given condition is false
-const fieldRequiredIfRecurringDailyOrWeekly = (condition: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
-    console.log(condition);
-    return condition === 'None' || condition === 'Daily' ? yup.date().required() : schema;
-};
-
-// Helper function for yup .when(): setting a field to required if a given condition is false
-const fieldRequiredIfRecurringNone = (condition: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
-    console.log(condition);
-    return condition === 'None' ? yup.date().required() : schema;
-};
-
 // validation schema for the form
 const validationSchema = yup.object().shape({
     selectedPartner: yup
@@ -84,22 +66,34 @@ const validationSchema = yup.object().shape({
         .string()
         .matches(/(None|Daily|Weekly)/)
         .required(),
-    nonRecurringDate: yup.date().label(`test1`).when(`recurring`, fieldRequiredIfRecurringNone).nullable(),
-    selectedDays: yup.array().of(yup.number()).label(`something`).when('recurring', fieldRequiredIfRecurringWeekly),
-    dateRange: yup.object().shape({
-        start: yup
-            .date()
-            .label(`startdato`)
-            .transform(transformTime)
-            .max(yup.ref(`dateRange.end`), 'Åpningstid kan ikke være etter stengetid')
-            //.when(`recurring`, fieldRequiredIfRecurringDailyOrWeekly)
-            .nullable(),
-        end: yup
-            .date()
-            .label(`sluttdato`)
-            .transform(transformTime)
-            //.when(`recurring`, fieldRequiredIfRecurringDailyOrWeekly)
-            .nullable(),
+    nonRecurringDate: yup
+        .date()
+        .label(`test1`)
+        .when(`recurring`, {
+            is: 'None',
+            then: yup.date().required(),
+        })
+        .nullable(),
+    selectedDays: yup
+        .array()
+        .of(yup.number())
+        .label(`something`)
+        .when('recurring', {
+            is: 'Weekly',
+            then: yup.array().of(yup.number()).label(`something`).min(1).max(5).required(),
+        }),
+    dateRange: yup.object().when('recurring', {
+        is: (value: 'None' | 'Daily' | 'Weekly') => value === 'Daily' || value === 'Weekly',
+        then: yup.object().shape({
+            start: yup
+                .date()
+                .label(`startdato`)
+                .transform(transformTime)
+                .max(yup.ref(`dateRange.end`), 'Åpningstid kan ikke være etter stengetid')
+                .required()
+                .nullable(),
+            end: yup.date().label(`sluttdato`).transform(transformTime).required().nullable(),
+        }),
     }),
     timeRange: yup.object().shape({
         start: yup
