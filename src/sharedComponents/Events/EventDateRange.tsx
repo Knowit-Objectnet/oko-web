@@ -23,18 +23,13 @@ const Span = styled.span`
     padding: 0px 15px;
 `;
 
-interface Props {
-    start: Date;
-    end: Date;
-}
-
-export const EventDateRange: React.FC<Props> = (props) => {
+export const EventDateRange: React.FC = () => {
     return (
         <Wrapper>
             <Range>
-                <DatePicker name="dateRange.start" defaultValue={props.start} />
+                <DatePicker name="dateRange.start" />
                 <Span>til</Span>
-                <DatePicker name="dateRange.end" defaultValue={props.end} />
+                <DatePicker name="dateRange.end" />
             </Range>
             <ErrorMessage name="dateRange.start" />
             <ErrorMessage name="dateRange.end" />

@@ -78,12 +78,12 @@ export const EventOptionDateRangeNew: React.FC<EventOptionDateRangeProps> = (pro
                 {props.recurring !== 'None' && (
                     <TimePickerWrapper>
                         <Span>Velg periode</Span>
-                        <EventDateRange start={new Date()} end={new Date()} />
+                        <EventDateRange />
                     </TimePickerWrapper>
                 )}
                 {props.recurring === 'None' && (
                     <DatePickerWrapper>
-                        <DatePicker name="nonRecurringDate" defaultValue={new Date()} />
+                        <DatePicker name="nonRecurringDate" />
                         <ErrorMessage name="nonRecurringDate" />
                     </DatePickerWrapper>
                 )}

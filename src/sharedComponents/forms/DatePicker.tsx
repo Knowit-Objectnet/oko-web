@@ -10,10 +10,9 @@ const StyledDatePicker = styled(DatePicker)`
 
 interface Props {
     name: string;
-    defaultValue: Date;
 }
 
-const _DatePicker: React.FC<Props> = ({ name, defaultValue }) => {
+const _DatePicker: React.FC<Props> = ({ name }) => {
     const { control } = useFormContext();
 
     // Function to disable weekends in the date and date-range pickers
@@ -25,7 +24,6 @@ const _DatePicker: React.FC<Props> = ({ name, defaultValue }) => {
         <Controller
             control={control}
             name={name}
-            defaultValue={defaultValue}
             render={({ onChange, value, name }) => (
                 <StyledDatePicker
                     clearIcon={null}

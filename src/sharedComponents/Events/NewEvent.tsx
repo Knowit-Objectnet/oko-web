@@ -133,6 +133,11 @@ export const NewEvent: React.FC<Props> = (props) => {
             selectedStation: -1,
             recurring: 'None',
             selectedDays: [],
+            nonRecurringDate: new Date(),
+            dateRange: {
+                start: new Date(),
+                end: new Date(),
+            },
             timeRange: {
                 start: '08:00',
                 end: '10:00',
