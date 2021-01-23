@@ -16,6 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import parse from 'date-fns/parse';
 import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
+import set from 'date-fns/set';
 
 const StyledForm = styled.form`
     display: flex;
@@ -27,6 +28,13 @@ const StyledForm = styled.form`
 const SubmitButton = styled(PositiveButton)`
     margin-top: 20px;
 `;
+
+// Set the locale errors for yup
+yup.setLocale({
+    mixed: {
+        required: '${label} er påkrevd',
+    },
+});
 
 // The type of the form data for the form
 type FormData = {
@@ -85,33 +93,38 @@ const validationSchema = yup.object().shape({
     selectedDays: yup
         .array()
         .of(yup.number())
-        .label(`something`)
         .when('recurring', {
             is: 'Weekly',
-            then: yup.array().of(yup.number()).label(`something`).min(1).max(5).required(),
+            then: yup
+                .array()
+                .of(yup.number())
+                .label(`Ukedager`)
+                .min(1, 'Minst en ukedag må være valgt')
+                .max(5, 'Bare ukedagene mandag-fredag kan bli valgt')
+                .required(),
         }),
     dateRange: yup.object().when('recurring', {
         is: (value: 'None' | 'Daily' | 'Weekly') => value === 'Daily' || value === 'Weekly',
         then: yup.object().shape({
             start: yup
                 .date()
-                .label(`startdato`)
+                .label(`Startdato`)
                 .transform(transformTime)
                 .max(yup.ref(`end`), 'Åpningstid kan ikke være etter stengetid')
                 .required()
                 .nullable(),
-            end: yup.date().label(`sluttdato`).transform(transformTime).required().nullable(),
+            end: yup.date().label(`Sluttdato`).transform(transformTime).required().nullable(),
         }),
     }),
     timeRange: yup.object().shape({
         start: yup
             .date()
-            .label(`starttidspunkt`)
+            .label(`Starttidspunkt`)
             .transform(transformTime)
             .max(yup.ref(`end`), 'Åpningstid kan ikke være etter stengetid')
             .required()
             .nullable(),
-        end: yup.date().label(`slutttidspunkt`).transform(transformTime).required().nullable(),
+        end: yup.date().label(`Slutttidspunkt`).transform(transformTime).required().nullable(),
     }),
 });
 
@@ -170,21 +183,42 @@ export const NewEvent: React.FC<Props> = (props) => {
         // @ts-ignore
         alert.removeAll();
 
+        // Set the date of the time to the first date in the range (or the only date if a non-recurring event), this is needed
+        // as the time's date will be today while the user can choose another date.
+        const date = data.recurring === 'None' ? data.nonRecurringDate : data.dateRange.start;
+        const startTime = set(data.timeRange.start, {
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            date: date.getDate(),
+        });
+        const endTime = set(data.timeRange.end, {
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            date: date.getDate(),
+        });
+        // This is needed because the DatePicker's date's are set to 00:00 meaning that when it's converted to ISO it will be -1 og -2 hours
+        // leading the date to be on the previous date, making the reccurenceRule not adding the last day
+        const endDate = set(data.timeRange.end, {
+            year: data.dateRange.end.getFullYear(),
+            month: data.dateRange.end.getMonth(),
+            date: data.dateRange.end.getDate(),
+        });
+
         const newEvent: ApiEventPost = {
-            startDateTime: data.timeRange.start.toISOString(),
-            endDateTime: data.timeRange.end.toISOString(),
+            startDateTime: startTime.toISOString(),
+            endDateTime: endTime.toISOString(),
             stationId: data.selectedStation,
             partnerId: data.selectedPartner,
         };
 
         if (data.recurring === 'Daily') {
             newEvent.recurrenceRule = {
-                until: data.dateRange.end.toISOString(),
+                until: endDate.toISOString(),
                 days: WEEKDAYS,
             };
         } else if (data.recurring === 'Weekly') {
             newEvent.recurrenceRule = {
-                until: data.dateRange.end.toISOString(),
+                until: endDate.toISOString(),
                 days: data.selectedDays.map((index) => WEEKDAYS[index - 1]),
             };
         }
