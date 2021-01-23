@@ -47,10 +47,6 @@ const Select = styled.select`
     height: 30px;
 `;
 
-interface DayProps {
-    selected: boolean;
-}
-
 interface EventOptionDateRangeProps {
     recurrenceEnabled: boolean;
     recurring: 'None' | 'Daily' | 'Weekly';

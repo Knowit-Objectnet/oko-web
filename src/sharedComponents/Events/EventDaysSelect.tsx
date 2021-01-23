@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useFormContext, Controller } from 'react-hook-form';
+import { ErrorMessage } from '../forms/ErrorMessage';
 
 const Label = styled.label`
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
     margin-bottom: 20px;
 `;
@@ -21,15 +21,7 @@ const DaySelection = styled.div`
     justify-content: space-between;
 `;
 
-interface DayProps {
-    selected: boolean;
-}
-
-const Checkbox = styled.div``;
-
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
-    // Hide checkbox visually but remain accessible to screen readers.
-    // Source: https://polished.js.org/docs/#hidevisually
     border: 0;
     clip: rect(0 0 0 0);
     clippath: inset(50%);
@@ -42,7 +34,11 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
     width: 1px;
 `;
 
-const Day = styled.div<DayProps>`
+interface DayProps {
+    selected: boolean;
+}
+
+const Day = styled.span<DayProps>`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -71,41 +67,38 @@ const _EventDaysSelect: React.FC<_Props> = (props) => {
     };
 
     return (
-        <Label>
-            <Span>Velg ukedag(er)</Span>
-            <DaySelection>
-                <Checkbox>
-                    <HiddenCheckbox type="checkbox" name="monday" />
-                    <Day data-index={1} selected={props.value.includes(1)} onClick={onClick}>
-                        M
-                    </Day>
-                </Checkbox>
-                <Checkbox>
-                    <HiddenCheckbox type="checkbox" name="tuesday" />
-                    <Day data-index={2} selected={props.value.includes(2)} onClick={onClick}>
-                        Ti
-                    </Day>
-                </Checkbox>
-                <Checkbox>
-                    <HiddenCheckbox type="checkbox" name="wednesday" />
-                    <Day data-index={3} selected={props.value.includes(3)} onClick={onClick}>
-                        O
-                    </Day>
-                </Checkbox>
-                <Checkbox>
-                    <HiddenCheckbox type="checkbox" name="thursday" />
-                    <Day data-index={4} selected={props.value.includes(4)} onClick={onClick}>
-                        To
-                    </Day>
-                </Checkbox>
-                <Checkbox>
-                    <HiddenCheckbox type="checkbox" name="friday" />
-                    <Day data-index={5} selected={props.value.includes(5)} onClick={onClick}>
-                        F
-                    </Day>
-                </Checkbox>
-            </DaySelection>
-        </Label>
+        <DaySelection>
+            <label htmlFor="monday">
+                <HiddenCheckbox type="checkbox" name="monday" id="monday" />
+                <Day data-index={1} selected={props.value.includes(1)} onClick={onClick}>
+                    M
+                </Day>
+            </label>
+            <label htmlFor="tuesday">
+                <HiddenCheckbox type="checkbox" name="tuesday" id="tuesday" />
+                <Day data-index={2} selected={props.value.includes(2)} onClick={onClick}>
+                    Ti
+                </Day>
+            </label>
+            <label htmlFor="wednesday">
+                <HiddenCheckbox type="checkbox" name="wednesday" id="wednesday" />
+                <Day data-index={3} selected={props.value.includes(3)} onClick={onClick}>
+                    O
+                </Day>
+            </label>
+            <label htmlFor="thursday">
+                <HiddenCheckbox type="checkbox" name="thursday" id="thursday" />
+                <Day data-index={4} selected={props.value.includes(4)} onClick={onClick}>
+                    To
+                </Day>
+            </label>
+            <label htmlFor="friday">
+                <HiddenCheckbox type="checkbox" name="friday" id="firday" />
+                <Day data-index={5} selected={props.value.includes(5)} onClick={onClick}>
+                    F
+                </Day>
+            </label>
+        </DaySelection>
     );
 };
 
@@ -117,26 +110,28 @@ export const EventDaysSelect: React.FC<Props> = ({ name }) => {
     const { control } = useFormContext();
 
     return (
-        <Controller
-            control={control}
-            name={name}
-            //defaultValue={defaultValue}
-            render={({ onChange, value, name }) => (
-                <_EventDaysSelect
-                    value={value}
-                    onChange={(index: string) => {
-                        //const stringValue = e.currentTarget.dataset['index'];
-                        if (index && parseInt(index) > 0 && parseInt(index) < 6) {
-                            if (value.includes(parseInt(index))) {
-                                const newSelection = value.filter((val: number) => val !== parseInt(index));
-                                onChange(newSelection);
-                            } else {
-                                onChange([...value, parseInt(index)]);
+        <Label>
+            <Span>Velg ukedag(er)</Span>
+            <Controller
+                control={control}
+                name={name}
+                render={({ onChange, value }) => (
+                    <_EventDaysSelect
+                        value={value}
+                        onChange={(index: string) => {
+                            if (index && parseInt(index) > 0 && parseInt(index) < 6) {
+                                if (value.includes(parseInt(index))) {
+                                    const newSelection = value.filter((val: number) => val !== parseInt(index));
+                                    onChange(newSelection);
+                                } else {
+                                    onChange([...value, parseInt(index)]);
+                                }
                             }
-                        }
-                    }}
-                />
-            )}
-        />
+                        }}
+                    />
+                )}
+            />
+            <ErrorMessage name={name} />
+        </Label>
     );
 };

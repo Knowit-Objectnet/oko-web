@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
 import { EventOptionDateRangeNew } from './EventOptionDateRangeNew';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { useKeycloak } from '@react-keycloak/web';
@@ -52,7 +51,26 @@ const transformTime = function (value: Date, originalvalue: string) {
         return value;
     }
     const parsed = parse(originalvalue, 'HH:mm', new Date());
+    console.log(parsed);
     return isValid(parsed) ? parsed : null;
+};
+
+// Helper function for yup .when(): setting a field to required if a given condition is false
+const fieldRequiredIfRecurringWeekly = (condition: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
+    console.log(condition);
+    return condition == 'Weekly' ? yup.array().of(yup.number()).label(`something`).min(1).max(5).required() : schema;
+};
+
+// Helper function for yup .when(): setting a field to required if a given condition is false
+const fieldRequiredIfRecurringDailyOrWeekly = (condition: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
+    console.log(condition);
+    return condition === 'None' || condition === 'Daily' ? yup.date().required() : schema;
+};
+
+// Helper function for yup .when(): setting a field to required if a given condition is false
+const fieldRequiredIfRecurringNone = (condition: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
+    console.log(condition);
+    return condition === 'None' ? yup.date().required() : schema;
 };
 
 // validation schema for the form
@@ -66,32 +84,32 @@ const validationSchema = yup.object().shape({
         .string()
         .matches(/(None|Daily|Weekly)/)
         .required(),
-    nonRecurringDate: yup.date().label(`test1`).required().nullable(),
-    selectedDays: yup.array().of(yup.number()).min(1).max(5).required(),
+    nonRecurringDate: yup.date().label(`test1`).when(`recurring`, fieldRequiredIfRecurringNone).nullable(),
+    selectedDays: yup.array().of(yup.number()).label(`something`).when('recurring', fieldRequiredIfRecurringWeekly),
     dateRange: yup.object().shape({
         start: yup
             .date()
-            .label(`test1`)
-            //.transform(transformTime)
-            .max(yup.ref(`end`), 'Åpningstid kan ikke være etter stengetid')
-            //.when(`${day}Stengt`, fieldRequiredIfFalse)
+            .label(`startdato`)
+            .transform(transformTime)
+            .max(yup.ref(`dateRange.end`), 'Åpningstid kan ikke være etter stengetid')
+            //.when(`recurring`, fieldRequiredIfRecurringDailyOrWeekly)
             .nullable(),
         end: yup
             .date()
-            .label(`test2`)
-            //.transform(transformTime)
-            //.when(`${day}Stengt`, fieldRequiredIfFalse)
+            .label(`sluttdato`)
+            .transform(transformTime)
+            //.when(`recurring`, fieldRequiredIfRecurringDailyOrWeekly)
             .nullable(),
     }),
     timeRange: yup.object().shape({
         start: yup
             .date()
-            .label(`test1`)
+            .label(`starttidspunkt`)
             .transform(transformTime)
-            .max(yup.ref(`end`), 'Åpningstid kan ikke være etter stengetid')
+            .max(yup.ref(`timeRange.end`), 'Åpningstid kan ikke være etter stengetid')
             .required()
             .nullable(),
-        end: yup.date().label(`test2`).transform(transformTime).required().nullable(),
+        end: yup.date().label(`slutttidspunkt`).transform(transformTime).required().nullable(),
     }),
 });
 
@@ -115,8 +133,13 @@ export const NewEvent: React.FC<Props> = (props) => {
             selectedStation: -1,
             recurring: 'None',
             selectedDays: [],
+            timeRange: {
+                start: '08:00',
+                end: '10:00',
+            },
         },
     });
+    console.log(formMethods.errors);
 
     const queryClient = useQueryClient();
     const addEventMutation = useMutation((newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token), {
