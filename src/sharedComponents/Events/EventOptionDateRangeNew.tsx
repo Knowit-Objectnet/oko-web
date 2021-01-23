@@ -16,6 +16,7 @@ const Wrapper = styled.div`
 
 const DatePickerWrapper = styled.div`
     display: flex;
+    flex-direction: column;
 `;
 
 const TimePickerWrapper = styled.div`

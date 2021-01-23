@@ -51,8 +51,18 @@ const transformTime = function (value: Date, originalvalue: string) {
         return value;
     }
     const parsed = parse(originalvalue, 'HH:mm', new Date());
-    console.log(parsed);
     return isValid(parsed) ? parsed : null;
+};
+
+const transformDate = function (value: Date) {
+    if (isDate(value) && isValid(value)) {
+        return value;
+    }
+    return isValid(value) ? value : null;
+};
+
+const fieldRequiredIfFalse = (condition: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
+    return condition === 'None' ? schema.required() : schema;
 };
 
 // validation schema for the form
@@ -68,11 +78,9 @@ const validationSchema = yup.object().shape({
         .required(),
     nonRecurringDate: yup
         .date()
-        .label(`test1`)
-        .when(`recurring`, {
-            is: 'None',
-            then: yup.date().required(),
-        })
+        .label(`Dato`)
+        .transform(transformDate)
+        .when(`recurring`, fieldRequiredIfFalse)
         .nullable(),
     selectedDays: yup
         .array()
