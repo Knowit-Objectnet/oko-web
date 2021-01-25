@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
 import Default from '../../assets/Default_profile_pic.svg';
 import { Roles } from '../../types';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ContactInfo } from './ContactInfo';
 import { UserProfileSideMenu } from './UserProfileSideMenu';
 import { ShareContactInfo } from './ShareContactInfo';
 import { AboutPartner } from './AboutPartner';
 import { Helmet } from 'react-helmet';
 import { PrimaryButton } from '../../sharedComponents/buttons/PrimaryButton';
+import { Dashboard } from '../../sharedComponents/Dashboard/Dashboard';
 
 const Wrapper = styled.div`
     display: flex;
@@ -38,7 +39,7 @@ const Header = styled.div`
     width: 100%;
 `;
 
-const LogoutButton = styled(PrimaryButton)`
+const LogoutLink = styled(Link)`
     margin-left: auto;
 `;
 
@@ -53,12 +54,6 @@ export const UserProfile: React.FC = () => {
     const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
     const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
 
-    const history = useHistory();
-
-    const handleLogoutClick = () => {
-        history.push('/logout');
-    };
-
     return (
         <>
             <Helmet>
@@ -69,7 +64,9 @@ export const UserProfile: React.FC = () => {
                     <Header>
                         <DefaultProfilePicture />
                         <h2>Min side</h2>
-                        <LogoutButton onClick={handleLogoutClick}>Logg ut</LogoutButton>
+                        <LogoutLink to="/loggut">
+                            <PrimaryButton>Logg ut</PrimaryButton>
+                        </LogoutLink>
                     </Header>
                     {userIsPartner && <AboutPartner />}
                     <ContactInfo info={{ name: keycloak.tokenParsed.name, mail: keycloak.tokenParsed.email }} />

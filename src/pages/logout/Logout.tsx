@@ -1,35 +1,30 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { Loading } from '../../sharedComponents/Loading';
+import { useEffect } from 'react';
 
-const Wrapper = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    font-size: xxx-large;
-`;
-
-/**
- * Login component that redirects to keycloak for login
- */
 export const Logout: React.FC = () => {
-    // Getting Keycloak instance
     const { keycloak } = useKeycloak();
 
-    useEffect(() => {
-        keycloak.logout();
-    });
+    // The user will be redirected to this URL after logout is completed
+    // We need to strip path from URL in order to prevent redirect back to logout in case of re-login
+    const redirectUri = location.href.slice(0, location.href.indexOf(location.pathname));
+
+    useEffect(
+        () =>
+            keycloak.logout({
+                redirectUri,
+            }),
+        [],
+    );
 
     return (
         <>
             <Helmet>
-                <title>Utlogging</title>
+                <title>Logger deg ut...</title>
             </Helmet>
-            <Wrapper>Logger deg ut...</Wrapper>
+            <Loading text="Logger ut..." />
         </>
     );
 };

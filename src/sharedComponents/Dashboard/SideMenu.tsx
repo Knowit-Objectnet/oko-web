@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import Hamburger from '../../assets/Hamburger.svg';
 import Cross from '../../assets/Cross.svg';
 import Default from '../../assets/Default_profile_pic.svg';
-import { useKeycloak } from '@react-keycloak/web';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
     display: flex;
@@ -53,8 +52,6 @@ const MyLink = styled(Link)`
     color: ${(props) => props.theme.colors.White};
 `;
 
-const ProfilePicture = styled.img``;
-
 const DefaultProfilePicture = styled(Default)`
     width: 50px;
     height: 50px;
@@ -66,39 +63,19 @@ interface SideMenuProps {
     toggleSidebar: () => void;
 }
 
-/**
- * Side menu for quick-naviagtion and user icon
- */
-export const SideMenu: React.FC<SideMenuProps> = (props) => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
-    // History instance
-    const history = useHistory();
-    // Profile picture url. Empty for now as there is no way to get a profile picture
-    const profilePicUrl = '';
-    // On click function for the login button
-    const onButtonClick = () => {
-        history.push('login');
-    };
-
-    return (
-        <Wrapper>
-            <Menu>
-                <MenuText>Meny</MenuText>
-                {props.isSidebarVisible ? (
-                    <StyledCross onClick={props.toggleSidebar} />
-                ) : (
-                    <StyledHamburger onClick={props.toggleSidebar} />
-                )}
-            </Menu>
-            {keycloak.authenticated ? (
-                <Profile>
-                    <MyLink to="/profile">Min side</MyLink>
-                    {profilePicUrl ? <ProfilePicture /> : <DefaultProfilePicture />}
-                </Profile>
+export const SideMenu: React.FC<SideMenuProps> = (props) => (
+    <Wrapper>
+        <Menu>
+            <MenuText>Meny</MenuText>
+            {props.isSidebarVisible ? (
+                <StyledCross onClick={props.toggleSidebar} />
             ) : (
-                <button onClick={onButtonClick}>Login</button>
+                <StyledHamburger onClick={props.toggleSidebar} />
             )}
-        </Wrapper>
-    );
-};
+        </Menu>
+        <Profile>
+            <MyLink to="/minside">Min side</MyLink>
+            <DefaultProfilePicture />
+        </Profile>
+    </Wrapper>
+);
