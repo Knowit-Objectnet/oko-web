@@ -62,14 +62,14 @@ const Label = styled.span`
     margin-left: 10px;
 `;
 
-export interface NavItemProps {
+interface Props {
     path: string;
     icon: React.ReactNode;
     label: string;
     exact?: boolean;
 }
 
-export const NavItem: React.FC<NavItemProps> = (props) => (
+export const NavItem: React.FC<Props> = (props) => (
     <StyledNavLink to={props.path} exact={props.exact} activeClassName="activeNavLink">
         <Center>
             <Icon>{props.icon}</Icon>
