@@ -1,10 +1,8 @@
 import React from 'react';
-import { Switch, Route, Router, Redirect } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from '../types';
 
-// History
-import { historyObj } from './historyObj';
 import { AuthenticatedRoute } from './AuthenticatedRoute';
 
 // Dashboard wrapper
@@ -28,7 +26,7 @@ export const RouterComponent: React.FC = () => {
     }
 
     return (
-        <Router history={historyObj}>
+        <Router>
             <Switch>
                 <AuthenticatedRoute path="/login" not={<Login />} is={<Redirect to="/" />} />
                 <AuthenticatedRoute path="/logout" not={<Redirect to="/" />} is={<Logout />} />
