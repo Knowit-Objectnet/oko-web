@@ -28,7 +28,7 @@ export const Navigation: React.FC = () => {
         if (userIsAdmin)
             return (
                 <>
-                    <NavItem path="/" icon={<List />} label="Oversikt" exact />
+                    <NavItem path="/oversikt" icon={<List />} label="Oversikt" />
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
                     <NavItem path="/statistikk" icon={<Chart />} label="Statistikk" />
                 </>

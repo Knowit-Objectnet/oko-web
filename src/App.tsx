@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import keycloak from './keycloak';
-import { PageRouter } from './router/PageRouter';
+import { MainRouter } from './router/MainRouter';
 import { GlobalStyle } from './global-styles';
 import ModalProvider from './sharedComponents/Modal/Provider';
 import AlertTemplate from 'react-alert-template-basic';
@@ -38,7 +38,7 @@ export const App: React.FC = () => {
                                 {/* TODO write a SEO-friendly description: */}
                                 <meta name="description" content="Oslo kommune REG" />{' '}
                             </Helmet>
-                            <PageRouter />
+                            <MainRouter />
                         </ModalProvider>
                     </QueryClientProvider>
                 </AlertProvider>
