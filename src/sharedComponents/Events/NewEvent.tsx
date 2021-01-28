@@ -64,13 +64,6 @@ const transformTime = function (value: Date, originalvalue: string) {
     return isValid(parsed) ? parsed : null;
 };
 
-const transformDate = function (value: Date) {
-    if (isDate(value) && isValid(value)) {
-        return value;
-    }
-    return isValid(value) ? value : null;
-};
-
 // validation schema for the form
 const validationSchema = yup.object().shape({
     selectedPartner: yup
@@ -85,7 +78,6 @@ const validationSchema = yup.object().shape({
     nonRecurringDate: yup
         .date()
         .label(`Dato`)
-        .transform(transformDate)
         .when(`recurring`, (recurring: RecurrenceType, schema: yup.AnySchema) => {
             return recurring === 'None' ? schema.required() : schema;
         })
