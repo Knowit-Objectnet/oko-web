@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import keycloak from './keycloak';
-import { RouterComponent } from './router/router';
+import { MainRouter } from './router/MainRouter';
 import { GlobalStyle } from './global-styles';
 import ModalProvider from './sharedComponents/Modal/Provider';
 import AlertTemplate from 'react-alert-template-basic';
@@ -22,22 +22,28 @@ const queryClient = new QueryClient();
 
 export const App: React.FC = () => {
     return (
-        <ReactKeycloakProvider authClient={keycloak}>
-            <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <ReactKeycloakProvider
+                authClient={keycloak}
+                initOptions={{
+                    onLoad: 'login-required',
+                }}
+            >
                 <AlertProvider template={AlertTemplate} {...alertOptions}>
                     <QueryClientProvider client={queryClient}>
                         <ModalProvider>
                             <Helmet titleTemplate="Oslo kommune REG | %s">
                                 <html lang="no" />
-                                <meta name="description" content="Oslo kommune REG" />
+                                {/* TODO write a SEO-friendly description: */}
+                                <meta name="description" content="Oslo kommune REG" />{' '}
                             </Helmet>
-                            <RouterComponent />
-                            <GlobalStyle />
+                            <MainRouter />
                         </ModalProvider>
                     </QueryClientProvider>
                 </AlertProvider>
-            </ThemeProvider>
-        </ReactKeycloakProvider>
+            </ReactKeycloakProvider>
+        </ThemeProvider>
     );
 };
 

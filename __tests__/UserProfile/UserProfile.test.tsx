@@ -42,7 +42,7 @@ describe('Provides a page to view contact info', () => {
         });
 
         // Expect the location to now be /logout as we should've gotten redirected to the logout page
-        expect(memoryHistory.location.pathname).toBe('/logout');
+        expect(memoryHistory.location.pathname).toBe('/loggut');
     });
 
     it("Should render the user's contact info ", async () => {

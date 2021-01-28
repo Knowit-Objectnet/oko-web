@@ -15,7 +15,7 @@ describe('Provides a logout page', () => {
         );
 
         // Check that the logout text is showing while waiting for keycloak to log the user out.
-        const message = await findByText('Logger deg ut...');
+        const message = await findByText('Logger ut...');
         expect(message).toBeInTheDocument();
 
         // Check that the logout function is called on page load.

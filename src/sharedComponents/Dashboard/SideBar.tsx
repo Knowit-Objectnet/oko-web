@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Transition } from 'react-transition-group';
-import { Link as LocalLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
 import People from '../../assets/People.svg';
@@ -59,20 +59,26 @@ const Links = styled.div`
     flex-direction: column;
 `;
 
-interface LinkProps {
-    current: string;
-    to: string;
-}
-
-const Link = styled(LocalLink)<LinkProps>`
+const Link = styled(NavLink).attrs({
+    activeClassName: 'activeNavLink',
+})`
     display: flex;
     align-items: center;
-    color: ${(props) => (props.to !== props.current ? props.theme.colors.White : props.theme.colors.Blue)};
-    fill: ${(props) => (props.to !== props.current ? props.theme.colors.White : props.theme.colors.Blue)};
+    color: ${(props) => props.theme.colors.White};
+    fill: ${(props) => props.theme.colors.White};
     margin-bottom: 15px;
     width: fit-content;
     white-space: nowrap;
     font-weight: bold;
+
+    &.activeNavLink {
+        color: ${(props) => props.theme.colors.Blue};
+        border-bottom-color: ${(props) => props.theme.colors.Blue};
+
+        svg {
+            fill: ${(props) => props.theme.colors.Blue};
+        }
+    }
 `;
 
 const FakeLink = styled.div`
@@ -130,7 +136,6 @@ export const SideBar: React.FC<Props> = (props) => {
     const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
     const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
 
-    const history = useHistory();
     const modal = useModal();
 
     const closeModalOnSuccess = (successful: boolean) => {
@@ -164,18 +169,10 @@ export const SideBar: React.FC<Props> = (props) => {
                                             ...linkTransitionStyles[state],
                                         }}
                                     >
-                                        <Link
-                                            current={history.location.pathname}
-                                            to="/partners"
-                                            onClick={props.onClick}
-                                        >
+                                        <Link to="/partnere" onClick={props.onClick}>
                                             <StyledPeople /> Samarbeidspartnere
                                         </Link>
-                                        <Link
-                                            current={history.location.pathname}
-                                            to="/stations"
-                                            onClick={props.onClick}
-                                        >
+                                        <Link to="/stasjoner" onClick={props.onClick}>
                                             <StyledLocation /> Stasjonene
                                         </Link>
                                         {userIsAdmin && (
