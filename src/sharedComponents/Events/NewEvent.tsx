@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventOptionDateRangeNew } from './EventOptionDateRangeNew';
+import { EventDateTimePicker } from './EventDateTimePicker';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
@@ -227,7 +227,7 @@ export const NewEvent: React.FC<Props> = (props) => {
                 <StyledForm onSubmit={handleEditEventSubmission}>
                     <PartnerSelect />
                     <StationSelect />
-                    <EventOptionDateRangeNew recurring={formMethods.watch('recurring')} recurrenceEnabled={true} />
+                    <EventDateTimePicker recurring={formMethods.watch('recurring')} recurrenceEnabled={true} />
                     <SubmitButton type="submit" isLoading={addEventMutation.isLoading}>
                         Lagre
                     </SubmitButton>

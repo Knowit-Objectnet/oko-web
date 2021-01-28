@@ -55,7 +55,7 @@ interface EventOptionDateRangeProps {
 /**
  * Event option that allows the user to choose a start and end date for the event.
  */
-export const EventOptionDateRangeNew: React.FC<EventOptionDateRangeProps> = (props) => {
+export const EventDateTimePicker: React.FC<EventOptionDateRangeProps> = (props) => {
     const { register } = useFormContext();
 
     return (
