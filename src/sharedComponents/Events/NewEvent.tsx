@@ -29,6 +29,8 @@ const SubmitButton = styled(PositiveButton)`
     margin-top: 20px;
 `;
 
+type RecurrenceType = 'None' | 'Daily' | 'Weekly';
+
 // Set the locale errors for yup
 yup.setLocale({
     mixed: {
@@ -40,7 +42,7 @@ yup.setLocale({
 type FormData = {
     selectedPartner: number;
     selectedStation: number;
-    recurring: 'None' | 'Daily' | 'Weekly';
+    recurring: RecurrenceType;
     nonRecurringDate: Date;
     selectedDays: Array<number>;
     timeRange: {
@@ -84,7 +86,7 @@ const validationSchema = yup.object().shape({
         .date()
         .label(`Dato`)
         .transform(transformDate)
-        .when(`recurring`, (recurring: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
+        .when(`recurring`, (recurring: RecurrenceType, schema: yup.AnySchema) => {
             return recurring === 'None' ? schema.required() : schema;
         })
         .nullable(),
@@ -102,7 +104,7 @@ const validationSchema = yup.object().shape({
                 .required(),
         }),
     dateRange: yup.object().when('recurring', {
-        is: (value: 'None' | 'Daily' | 'Weekly') => value === 'Daily' || value === 'Weekly',
+        is: (value: RecurrenceType) => value === 'Daily' || value === 'Weekly',
         then: yup.object().shape({
             start: yup
                 .date()
