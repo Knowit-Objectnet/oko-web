@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { EventOption } from './EventOption';
 import styled from 'styled-components';
 import { DatePicker } from '../forms/DatePicker';
 import { EventDaysSelect } from './EventDaysSelect';
@@ -60,35 +59,33 @@ export const EventOptionDateRangeNew: React.FC<EventOptionDateRangeProps> = (pro
     const { register } = useFormContext();
 
     return (
-        <EventOption>
-            <Wrapper>
-                {props.recurrenceEnabled && (
-                    <Label>
-                        <Select name="recurring" ref={register}>
-                            <option value="None">Gjentas ikke</option>
-                            <option value="Daily">Daglig</option>
-                            <option value="Weekly">Ukentlig</option>
-                        </Select>
-                    </Label>
-                )}
-                {props.recurring === 'Weekly' && <EventDaysSelect name="selectedDays" />}
+        <Wrapper>
+            {props.recurrenceEnabled && (
+                <Label>
+                    <Select name="recurring" ref={register}>
+                        <option value="None">Gjentas ikke</option>
+                        <option value="Daily">Daglig</option>
+                        <option value="Weekly">Ukentlig</option>
+                    </Select>
+                </Label>
+            )}
+            {props.recurring === 'Weekly' && <EventDaysSelect name="selectedDays" />}
+            <TimePickerWrapper>
+                <Span>Velg tidspunkt</Span>
+                <EventTimeRange />
+            </TimePickerWrapper>
+            {props.recurring !== 'None' && (
                 <TimePickerWrapper>
-                    <Span>Velg tidspunkt</Span>
-                    <EventTimeRange />
+                    <Span>Velg periode</Span>
+                    <EventDateRange />
                 </TimePickerWrapper>
-                {props.recurring !== 'None' && (
-                    <TimePickerWrapper>
-                        <Span>Velg periode</Span>
-                        <EventDateRange />
-                    </TimePickerWrapper>
-                )}
-                {props.recurring === 'None' && (
-                    <DatePickerWrapper>
-                        <DatePicker name="nonRecurringDate" />
-                        <ErrorMessage name="nonRecurringDate" />
-                    </DatePickerWrapper>
-                )}
-            </Wrapper>
-        </EventOption>
+            )}
+            {props.recurring === 'None' && (
+                <DatePickerWrapper>
+                    <DatePicker name="nonRecurringDate" />
+                    <ErrorMessage name="nonRecurringDate" />
+                </DatePickerWrapper>
+            )}
+        </Wrapper>
     );
 };
