@@ -159,7 +159,6 @@ export const NewEvent: React.FC<Props> = (props) => {
             },
         },
     });
-    console.log(formMethods.errors);
 
     const queryClient = useQueryClient();
     const addEventMutation = useMutation((newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token), {
@@ -177,6 +176,7 @@ export const NewEvent: React.FC<Props> = (props) => {
     });
 
     const handleEditEventSubmission = formMethods.handleSubmit((data) => {
+        console.log(data);
         // Remove all alerts to not multiple alerts from earlier tries.
         // The ts-ignore is needed as for some reason the @types for the library forgot to add removeAll to the interface
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -196,13 +196,6 @@ export const NewEvent: React.FC<Props> = (props) => {
             month: date.getMonth(),
             date: date.getDate(),
         });
-        // This is needed because the DatePicker's date's are set to 00:00 meaning that when it's converted to ISO it will be -1 og -2 hours
-        // leading the date to be on the previous date, making the reccurenceRule not adding the last day
-        const endDate = set(data.timeRange.end, {
-            year: data.dateRange.end.getFullYear(),
-            month: data.dateRange.end.getMonth(),
-            date: data.dateRange.end.getDate(),
-        });
 
         const newEvent: ApiEventPost = {
             startDateTime: startTime.toISOString(),
@@ -211,15 +204,18 @@ export const NewEvent: React.FC<Props> = (props) => {
             partnerId: data.selectedPartner,
         };
 
-        if (data.recurring === 'Daily') {
+        if (data.recurring !== 'None') {
+            // This is needed because the DatePicker's date's are set to 00:00 meaning that when it's converted to ISO it will be -1 og -2 hours
+            // leading the date to be on the previous date, making the reccurenceRule not adding the last day
+            const endDate = set(data.timeRange.end, {
+                year: data.dateRange.end.getFullYear(),
+                month: data.dateRange.end.getMonth(),
+                date: data.dateRange.end.getDate(),
+            });
+
             newEvent.recurrenceRule = {
                 until: endDate.toISOString(),
-                days: WEEKDAYS,
-            };
-        } else if (data.recurring === 'Weekly') {
-            newEvent.recurrenceRule = {
-                until: endDate.toISOString(),
-                days: data.selectedDays.map((index) => WEEKDAYS[index - 1]),
+                days: data.recurring === 'Daily' ? WEEKDAYS : data.selectedDays.map((index) => WEEKDAYS[index - 1]),
             };
         }
 
