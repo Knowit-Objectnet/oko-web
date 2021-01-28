@@ -110,7 +110,7 @@ const validationSchema = yup.object().shape({
                 .date()
                 .label(`Startdato`)
                 .transform(transformTime)
-                .max(yup.ref(`end`), 'Åpningstid kan ikke være etter stengetid')
+                .max(yup.ref(`end`), 'Startdato kan ikke være etter sluttdato')
                 .required()
                 .nullable(),
             end: yup.date().label(`Sluttdato`).transform(transformTime).required().nullable(),
@@ -121,7 +121,7 @@ const validationSchema = yup.object().shape({
             .date()
             .label(`Starttidspunkt`)
             .transform(transformTime)
-            .max(yup.ref(`end`), 'Åpningstid kan ikke være etter stengetid')
+            .max(yup.ref(`end`), 'Starttidspunkt kan ikke være etter sluttidspunkt')
             .required()
             .nullable(),
         end: yup.date().label(`Slutttidspunkt`).transform(transformTime).required().nullable(),
