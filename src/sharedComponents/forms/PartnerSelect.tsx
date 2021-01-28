@@ -2,7 +2,7 @@ import * as React from 'react';
 import { usePartners } from '../../api/hooks/usePartners';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { ErrorMessage } from '../forms/ErrorMessage';
+import { ErrorMessage } from './ErrorMessage';
 
 const Wrapper = styled.div`
     width: 100%;
