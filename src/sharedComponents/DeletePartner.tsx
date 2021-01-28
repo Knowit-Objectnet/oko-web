@@ -36,12 +36,16 @@ const StyledForm = styled.form`
     flex-direction: column;
 `;
 
+// The type of the form data for the form
+type FormData = {
+    selectedPartner: number;
+};
+
 const validationSchema = yup.object().shape({
     selectedPartner: yup
         .number()
         .min(0, 'Vennligst velg en samarbeidspartner')
-        .required('Vennligst velg en samarbeidspartner')
-        .default(-1),
+        .required('Vennligst velg en samarbeidspartner'),
 });
 
 interface Props {
@@ -52,7 +56,12 @@ export const DeletePartner: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const formMethods = useForm({ resolver: yupResolver(validationSchema) });
+    const formMethods = useForm<FormData>({
+        resolver: yupResolver(validationSchema),
+        defaultValues: {
+            selectedPartner: -1,
+        },
+    });
 
     const queryClient = useQueryClient();
     const deletePartnerMutation = useMutation((partnerId: number) => deletePartner(partnerId, keycloak.token), {
