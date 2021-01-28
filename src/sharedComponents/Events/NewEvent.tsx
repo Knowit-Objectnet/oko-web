@@ -176,7 +176,6 @@ export const NewEvent: React.FC<Props> = (props) => {
     });
 
     const handleEditEventSubmission = formMethods.handleSubmit((data) => {
-        console.log(data);
         // Remove all alerts to not multiple alerts from earlier tries.
         // The ts-ignore is needed as for some reason the @types for the library forgot to add removeAll to the interface
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
