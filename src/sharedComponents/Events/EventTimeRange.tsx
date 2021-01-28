@@ -21,6 +21,7 @@ const Range = styled.div`
 
 const Input = styled.input`
     flex: 1;
+    height: 30px;
 `;
 
 const Span = styled.span`

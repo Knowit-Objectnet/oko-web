@@ -74,17 +74,16 @@ export const EventDateTimePicker: React.FC<EventOptionDateRangeProps> = (props) 
                 <Span>Velg tidspunkt</Span>
                 <EventTimeRange />
             </TimePickerWrapper>
-            {props.recurring !== 'None' && (
-                <TimePickerWrapper>
-                    <Span>Velg periode</Span>
-                    <EventDateRange />
-                </TimePickerWrapper>
-            )}
-            {props.recurring === 'None' && (
+            {props.recurring === 'None' ? (
                 <DatePickerWrapper>
                     <DatePicker name="nonRecurringDate" />
                     <ErrorMessage name="nonRecurringDate" />
                 </DatePickerWrapper>
+            ) : (
+                <TimePickerWrapper>
+                    <Span>Velg periode</Span>
+                    <EventDateRange />
+                </TimePickerWrapper>
             )}
         </Wrapper>
     );

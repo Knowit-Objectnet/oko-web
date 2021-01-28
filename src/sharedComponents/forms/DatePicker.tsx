@@ -23,6 +23,7 @@ const StyledDatePicker = styled(DayPickerInputClassInjection)`
     flex-direction: column;
 
     & > input {
+        height: 30px;
         width: 100%;
     }
 `;
