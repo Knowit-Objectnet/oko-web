@@ -36,8 +36,13 @@ const StyledForm = styled.form`
     flex-direction: column;
 `;
 
+// The type of the form data for the form
+type FormData = {
+    selectedStation: number;
+};
+
 const validationSchema = yup.object().shape({
-    selectedStation: yup.number().min(0, 'Vennligst velg en stasjon').required('Vennligst velg en stasjon').default(-1),
+    selectedStation: yup.number().min(0, 'Vennligst velg en stasjon').required('Vennligst velg en stasjon'),
 });
 
 interface Props {
@@ -48,7 +53,12 @@ export const DeleteStation: React.FC<Props> = (props) => {
     const { keycloak } = useKeycloak();
     const alert = useAlert();
 
-    const formMethods = useForm({ resolver: yupResolver(validationSchema) });
+    const formMethods = useForm<FormData>({
+        resolver: yupResolver(validationSchema),
+        defaultValues: {
+            selectedStation: -1,
+        },
+    });
 
     const queryClient = useQueryClient();
     const deleteStationMutation = useMutation((stationId: number) => deleteStation(stationId, keycloak.token), {
