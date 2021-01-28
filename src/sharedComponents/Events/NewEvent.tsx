@@ -69,10 +69,6 @@ const transformDate = function (value: Date) {
     return isValid(value) ? value : null;
 };
 
-const fieldRequiredIfFalse = (condition: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
-    return condition === 'None' ? schema.required() : schema;
-};
-
 // validation schema for the form
 const validationSchema = yup.object().shape({
     selectedPartner: yup
@@ -88,7 +84,9 @@ const validationSchema = yup.object().shape({
         .date()
         .label(`Dato`)
         .transform(transformDate)
-        .when(`recurring`, fieldRequiredIfFalse)
+        .when(`recurring`, (recurring: 'None' | 'Daily' | 'Weekly', schema: yup.AnySchema) => {
+            return recurring === 'None' ? schema.required() : schema;
+        })
         .nullable(),
     selectedDays: yup
         .array()
