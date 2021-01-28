@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useFormContext, Controller } from 'react-hook-form';
-import DatePicker from 'react-date-picker';
+import ReactDatePicker from 'react-date-picker';
 
-const StyledDatePicker = styled(DatePicker)`
+const StyledDatePicker = styled(ReactDatePicker)`
     background-color: ${(props) => props.theme.colors.White};
     flex: 1;
 `;
@@ -12,7 +12,7 @@ interface Props {
     name: string;
 }
 
-const _DatePicker: React.FC<Props> = ({ name }) => {
+export const DatePicker: React.FC<Props> = ({ name }) => {
     const { control } = useFormContext();
 
     // Function to disable weekends in the date and date-range pickers
@@ -36,5 +36,3 @@ const _DatePicker: React.FC<Props> = ({ name }) => {
         />
     );
 };
-
-export { _DatePicker as DatePicker };
