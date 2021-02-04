@@ -67,7 +67,15 @@ export const DatePicker: React.FC<Props> = ({ name }) => {
                             daysOfWeek: [0, 6],
                         },
                     }}
-                    onDayChange={(day: Date | undefined) => onChange(day)}
+                    onDayChange={(day: Date | undefined, _: unknown, dayPickerInput: DayPickerInput) => {
+                        const input = dayPickerInput.getInput();
+                        const inputStringValue = input.value;
+                        if (day === undefined && !(inputStringValue === '')) {
+                            onChange(inputStringValue);
+                        } else {
+                            onChange(day);
+                        }
+                    }}
                 />
             )}
         />

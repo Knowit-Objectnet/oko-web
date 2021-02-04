@@ -64,6 +64,16 @@ const transformTime = function (value: Date, originalvalue: string) {
     return isValid(parsed) ? parsed : null;
 };
 
+const checkDateValidity = function (value?: Date | string) {
+    if (isDate(value) && isValid(value)) {
+        return value;
+    } else if (value === undefined) {
+        return value;
+    }
+
+    return yup.mixed().typeError('Invalid date');
+};
+
 // validation schema for the form
 const validationSchema = yup.object().shape({
     selectedPartner: yup
@@ -78,6 +88,8 @@ const validationSchema = yup.object().shape({
     nonRecurringDate: yup
         .date()
         .label(`Dato`)
+        .transform(checkDateValidity)
+        .typeError('Ugyldig dato')
         .when(`recurring`, (recurring: RecurrenceType, schema: yup.AnySchema) => {
             return recurring === 'None' ? schema.required() : schema;
         })
@@ -101,11 +113,18 @@ const validationSchema = yup.object().shape({
             start: yup
                 .date()
                 .label(`Startdato`)
-                .transform(transformTime)
+                .transform(checkDateValidity)
+                .typeError('${label} er en ugyldig dato')
                 .max(yup.ref(`end`), 'Startdato kan ikke være etter sluttdato')
                 .required()
                 .nullable(),
-            end: yup.date().label(`Sluttdato`).transform(transformTime).required().nullable(),
+            end: yup
+                .date()
+                .label(`Sluttdato`)
+                .transform(checkDateValidity)
+                .typeError('${label} er en ugyldig dato')
+                .required()
+                .nullable(),
         }),
     }),
     timeRange: yup.object().shape({
