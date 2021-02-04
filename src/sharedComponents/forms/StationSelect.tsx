@@ -1,40 +1,40 @@
 import * as React from 'react';
 import { useStations } from '../../api/hooks/useStations';
 import styled from 'styled-components';
+import { useFormContext } from 'react-hook-form';
+import { ErrorMessage } from './ErrorMessage';
 
-const Select = styled.select`
+const Wrapper = styled.div`
     width: 100%;
     min-width: 250px;
-    height: 30px;
     margin-bottom: 10px;
 `;
 
-interface Props {
-    selectedStationId?: number;
-    onSelectedStationChange: (stationId: number) => void;
-}
+const Select = styled.select`
+    width: 100%;
+    height: 30px;
+`;
 
-export const StationSelect: React.FC<Props> = (props) => {
+export const StationSelect: React.FC = () => {
     const { data: stations, isLoading, isLoadingError } = useStations();
 
-    const handleSelectedStationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        props.onSelectedStationChange(parseInt(event.currentTarget.value));
-    };
+    const { register } = useFormContext();
 
     return (
-        <Select
-            onChange={handleSelectedStationChange}
-            disabled={isLoading || isLoadingError}
-            value={props.selectedStationId ?? 'default'}
-        >
-            <option value="default" disabled>
-                {(isLoading && 'Laster inn...') || (isLoadingError && 'Kunne ikke laste stasjoner') || 'Velg stasjon'}
-            </option>
-            {stations?.map((station) => (
-                <option value={station.id} key={station.id}>
-                    {station.name}
+        <Wrapper>
+            <Select name="selectedStation" ref={register} disabled={isLoading || isLoadingError} defaultValue={-1}>
+                <option value={-1} disabled>
+                    {(isLoading && 'Laster inn...') ||
+                        (isLoadingError && 'Kunne ikke laste stasjoner') ||
+                        'Velg stasjon'}
                 </option>
-            ))}
-        </Select>
+                {stations?.map((station) => (
+                    <option value={station.id} key={station.id}>
+                        {station.name}
+                    </option>
+                ))}
+            </Select>
+            <ErrorMessage name="selectedStation" />
+        </Wrapper>
     );
 };

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useState } from 'react';
-import { EventOptionDateRange } from './EventOptionDateRange';
+import { EventDateTimePicker } from './EventDateTimePicker';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
@@ -11,6 +10,13 @@ import { WorkingWeekdays } from '../../types';
 import { StationSelect } from '../forms/StationSelect';
 import { PartnerSelect } from '../forms/PartnerSelect';
 import { PositiveButton } from '../buttons/PositiveButton';
+import { useForm, FormProvider } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import parse from 'date-fns/parse';
+import isDate from 'date-fns/isDate';
+import isValid from 'date-fns/isValid';
+import set from 'date-fns/set';
 
 const StyledForm = styled.form`
     display: flex;
@@ -23,6 +29,116 @@ const SubmitButton = styled(PositiveButton)`
     margin-top: 20px;
 `;
 
+type RecurrenceType = 'None' | 'Daily' | 'Weekly';
+
+// Set the locale errors for yup
+yup.setLocale({
+    mixed: {
+        required: '${label} er påkrevd',
+    },
+});
+
+// The type of the form data for the form
+type FormData = {
+    selectedPartner: number;
+    selectedStation: number;
+    recurring: RecurrenceType;
+    nonRecurringDate: Date;
+    selectedDays: Array<number>;
+    timeRange: {
+        start: Date;
+        end: Date;
+    };
+    dateRange: {
+        start: Date;
+        end: Date;
+    };
+};
+
+// Function to transform the time string from the input to a date for the yup validation and state
+const transformTime = function (value: Date, originalvalue: string) {
+    if (isDate(value) && isValid(value)) {
+        return value;
+    }
+    const parsed = parse(originalvalue, 'HH:mm', new Date());
+    return isValid(parsed) ? parsed : null;
+};
+
+const checkDateValidity = function (value?: Date | string) {
+    if (isDate(value) && isValid(value)) {
+        return value;
+    } else if (value === undefined) {
+        return value;
+    }
+
+    return yup.mixed().typeError('Invalid date');
+};
+
+// validation schema for the form
+const validationSchema = yup.object().shape({
+    selectedPartner: yup
+        .number()
+        .min(0, 'Vennligst velg en samarbeidspartner')
+        .required('Vennligst velg en samarbeidspartner'),
+    selectedStation: yup.number().min(0, 'Vennligst velg en stasjon').required('Vennligst velg en stasjon'),
+    recurring: yup
+        .string()
+        .matches(/(None|Daily|Weekly)/)
+        .required(),
+    nonRecurringDate: yup
+        .date()
+        .label(`Dato`)
+        .transform(checkDateValidity)
+        .typeError('Ugyldig dato')
+        .when(`recurring`, (recurring: RecurrenceType, schema: yup.AnySchema) => {
+            return recurring === 'None' ? schema.required() : schema;
+        })
+        .nullable(),
+    selectedDays: yup
+        .array()
+        .of(yup.number())
+        .when('recurring', {
+            is: 'Weekly',
+            then: yup
+                .array()
+                .of(yup.number())
+                .label(`Ukedager`)
+                .min(1, 'Minst en ukedag må være valgt')
+                .max(5, 'Bare ukedagene mandag-fredag kan bli valgt')
+                .required(),
+        }),
+    dateRange: yup.object().when('recurring', {
+        is: (value: RecurrenceType) => value === 'Daily' || value === 'Weekly',
+        then: yup.object().shape({
+            start: yup
+                .date()
+                .label(`Startdato`)
+                .transform(checkDateValidity)
+                .typeError('${label} er en ugyldig dato')
+                .max(yup.ref(`end`), 'Startdato kan ikke være etter sluttdato')
+                .required()
+                .nullable(),
+            end: yup
+                .date()
+                .label(`Sluttdato`)
+                .transform(checkDateValidity)
+                .typeError('${label} er en ugyldig dato')
+                .required()
+                .nullable(),
+        }),
+    }),
+    timeRange: yup.object().shape({
+        start: yup
+            .date()
+            .label(`Starttidspunkt`)
+            .transform(transformTime)
+            .max(yup.ref(`end`), 'Starttidspunkt kan ikke være etter sluttidspunkt')
+            .required()
+            .nullable(),
+        end: yup.date().label(`Slutttidspunkt`).transform(transformTime).required().nullable(),
+    }),
+});
+
 interface Props {
     start: Date;
     end: Date;
@@ -34,6 +150,26 @@ const WEEKDAYS: Array<WorkingWeekdays> = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THU
 export const NewEvent: React.FC<Props> = (props) => {
     const alert = useAlert();
     const { keycloak } = useKeycloak();
+
+    // form methods from reaect-hook-forms used in the form provider and inputs
+    const formMethods = useForm<FormData>({
+        resolver: yupResolver(validationSchema),
+        defaultValues: {
+            selectedPartner: -1,
+            selectedStation: -1,
+            recurring: 'None',
+            selectedDays: [],
+            nonRecurringDate: new Date(),
+            dateRange: {
+                start: new Date(),
+                end: new Date(),
+            },
+            timeRange: {
+                start: '08:00',
+                end: '10:00',
+            },
+        },
+    });
 
     const queryClient = useQueryClient();
     const addEventMutation = useMutation((newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token), {
@@ -50,117 +186,64 @@ export const NewEvent: React.FC<Props> = (props) => {
         },
     });
 
-    const [dateRange, setDateRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
-    const [timeRange, setTimeRange] = useState<[Date, Date]>([new Date(props.start), new Date(props.end)]);
-    const [recurring, setReccuring] = useState<'None' | 'Daily' | 'Weekly'>('None');
-    const [selectedDays, setSelectedDays] = useState([1]);
-    const [selectedPartnerId, setSelectedPartnerId] = useState<number>();
-    const [selectedStationId, setSelectedStationId] = useState<number>();
-
-    const onDateRangeChange = (range: [Date, Date]) => {
-        setDateRange(range);
-    };
-
-    const onTimeRangeChange = (range: [Date, Date]) => {
-        setTimeRange(range);
-    };
-
-    const onRecurringChange = (value: 'None' | 'Daily' | 'Weekly') => {
-        setReccuring(value);
-    };
-
-    const onSelectedDaysChange = (num: Array<number>) => {
-        setSelectedDays(num);
-    };
-
-    const handleEditEventSubmission = (submitEvent: React.FormEvent) => {
-        submitEvent.preventDefault();
-
+    const handleEditEventSubmission = formMethods.handleSubmit((data) => {
         // Remove all alerts to not multiple alerts from earlier tries.
         // The ts-ignore is needed as for some reason the @types for the library forgot to add removeAll to the interface
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         alert.removeAll();
 
-        // Cancel submission if token doesn't exist as they are not logged in
-        if (!keycloak?.token) {
-            alert.show('Noe er galt med brukeren din, logg inn på nytt og prøv igjen.', { type: types.ERROR });
-            return;
-        }
-
-        // Cancel submission if no partner is selected
-        if (!selectedPartnerId) {
-            alert.show('Du må velge en samarbeidspartner for avtalen.', { type: types.ERROR });
-            return;
-        }
-
-        // Cancel submission if no station is selected
-        if (!selectedStationId) {
-            alert.show('Du må velge en stasjon for avtalen.', { type: types.ERROR });
-            return;
-        }
-
-        // Cancel submission if start time is bigger than end time
-        if (timeRange[0] > timeRange[1]) {
-            alert.show('Start tiden kan ikke vøre etter slutt tiden.', { type: types.ERROR });
-            return;
-        }
-        // Cancel submission if the start time is less than the min time
-        const min = new Date(timeRange[0]);
-        min.setHours(8, 0, 0, 0);
-        if (timeRange[0] < min) {
-            alert.show('Starttiden kan ikke være før 08:00', { type: types.ERROR });
-            return;
-        }
-        // Cancel submission if the end time is less than the min time
-        const max = new Date(timeRange[1]);
-        max.setHours(20, 0, 0, 0);
-        if (timeRange[1] > max) {
-            alert.show('Sluttiden kan ikke være etter 20:00', { type: types.ERROR });
-            return;
-        }
+        // Set the date of the time to the first date in the range (or the only date if a non-recurring event), this is needed
+        // as the time's date will be today while the user can choose another date.
+        const date = data.recurring === 'None' ? data.nonRecurringDate : data.dateRange.start;
+        const startTime = set(data.timeRange.start, {
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            date: date.getDate(),
+        });
+        const endTime = set(data.timeRange.end, {
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            date: date.getDate(),
+        });
 
         const newEvent: ApiEventPost = {
-            startDateTime: timeRange[0].toISOString(),
-            endDateTime: timeRange[1].toISOString(),
-            stationId: selectedStationId,
-            partnerId: selectedPartnerId,
+            startDateTime: startTime.toISOString(),
+            endDateTime: endTime.toISOString(),
+            stationId: data.selectedStation,
+            partnerId: data.selectedPartner,
         };
 
-        if (recurring === 'Daily') {
+        if (data.recurring !== 'None') {
+            // This is needed because the DatePicker's date's are set to 00:00 meaning that when it's converted to ISO it will be -1 og -2 hours
+            // leading the date to be on the previous date, making the reccurenceRule not adding the last day
+            const endDate = set(data.timeRange.end, {
+                year: data.dateRange.end.getFullYear(),
+                month: data.dateRange.end.getMonth(),
+                date: data.dateRange.end.getDate(),
+            });
+
             newEvent.recurrenceRule = {
-                until: dateRange[1].toISOString(),
-                days: WEEKDAYS,
-            };
-        } else if (recurring === 'Weekly') {
-            newEvent.recurrenceRule = {
-                until: dateRange[1].toISOString(),
-                days: selectedDays.map((index) => WEEKDAYS[index - 1]),
+                until: endDate.toISOString(),
+                days: data.recurring === 'Daily' ? WEEKDAYS : data.selectedDays.map((index) => WEEKDAYS[index - 1]),
             };
         }
 
         addEventMutation.mutate(newEvent);
-    };
+    });
 
     return (
         <EventTemplateVertical title="Opprett ny avtale" showEditSymbol={false} isEditing={false}>
-            <StyledForm onSubmit={handleEditEventSubmission}>
-                <PartnerSelect onSelectedPartnerChange={setSelectedPartnerId} selectedPartnerId={selectedPartnerId} />
-                <StationSelect onSelectedStationChange={setSelectedStationId} selectedStationId={selectedStationId} />
-                <EventOptionDateRange
-                    dateRange={dateRange}
-                    timeRange={timeRange}
-                    recurring={recurring}
-                    selectedDays={selectedDays}
-                    isEditing={true}
-                    onDateRangeChange={onDateRangeChange}
-                    onTimeRangeChange={onTimeRangeChange}
-                    onRecurringChange={onRecurringChange}
-                    onSelectedDaysChange={onSelectedDaysChange}
-                    recurrenceEnabled={true}
-                />
-                <SubmitButton isLoading={addEventMutation.isLoading}>Lagre</SubmitButton>
-            </StyledForm>
+            <FormProvider {...formMethods}>
+                <StyledForm onSubmit={handleEditEventSubmission}>
+                    <PartnerSelect />
+                    <StationSelect />
+                    <EventDateTimePicker recurring={formMethods.watch('recurring')} recurrenceEnabled={true} />
+                    <SubmitButton type="submit" isLoading={addEventMutation.isLoading}>
+                        Lagre
+                    </SubmitButton>
+                </StyledForm>
+            </FormProvider>
         </EventTemplateVertical>
     );
 };

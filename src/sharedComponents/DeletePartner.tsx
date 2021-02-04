@@ -4,7 +4,7 @@ import { useAlert, types } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { deletePartner, partnersDefaultQueryKey } from '../api/PartnerService';
 import { useMutation, useQueryClient } from 'react-query';
-import { PartnerSelectNew } from './forms/PartnerSelectNew';
+import { PartnerSelect } from './forms/PartnerSelect';
 import { NegativeButton } from './buttons/NegativeButton';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
@@ -87,7 +87,7 @@ export const DeletePartner: React.FC<Props> = (props) => {
             <Title>Fjern samarbeidspartner</Title>
             <FormProvider {...formMethods}>
                 <StyledForm onSubmit={handleDeletePartnerSubmission}>
-                    <PartnerSelectNew />
+                    <PartnerSelect />
                     <NegativeButton isLoading={deletePartnerMutation.isLoading}>Slett</NegativeButton>
                 </StyledForm>
             </FormProvider>

@@ -1,42 +1,40 @@
 import * as React from 'react';
 import { usePartners } from '../../api/hooks/usePartners';
 import styled from 'styled-components';
+import { useFormContext } from 'react-hook-form';
+import { ErrorMessage } from './ErrorMessage';
 
-const Select = styled.select`
+const Wrapper = styled.div`
     width: 100%;
     min-width: 250px;
-    height: 30px;
     margin-bottom: 10px;
 `;
 
-interface Props {
-    selectedPartnerId?: number;
-    onSelectedPartnerChange: (partnerId: number) => void;
-}
+const Select = styled.select`
+    width: 100%;
+    height: 30px;
+`;
 
-export const PartnerSelect: React.FC<Props> = (props) => {
+export const PartnerSelect: React.FC = () => {
     const { data: partners, isLoading, isLoadingError } = usePartners();
 
-    const handleSelectedPartnerChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        props.onSelectedPartnerChange(parseInt(event.currentTarget.value));
-    };
+    const { register } = useFormContext();
 
     return (
-        <Select
-            onChange={handleSelectedPartnerChange}
-            disabled={isLoading || isLoadingError}
-            value={props.selectedPartnerId ?? 'default'}
-        >
-            <option value="default" disabled>
-                {(isLoading && 'Laster inn...') ||
-                    (isLoadingError && 'Kunne ikke laste samarbeidspartnere') ||
-                    'Velg samarbeidspartner'}
-            </option>
-            {partners?.map((partner) => (
-                <option value={partner.id} key={partner.id}>
-                    {partner.name}
+        <Wrapper>
+            <Select name="selectedPartner" ref={register} disabled={isLoading || isLoadingError} defaultValue={-1}>
+                <option value={-1} disabled>
+                    {(isLoading && 'Laster inn...') ||
+                        (isLoadingError && 'Kunne ikke laste samarbeidspartnere') ||
+                        'Velg samarbeidspartner'}
                 </option>
-            ))}
-        </Select>
+                {partners?.map((partner) => (
+                    <option value={partner.id} key={partner.id}>
+                        {partner.name}
+                    </option>
+                ))}
+            </Select>
+            <ErrorMessage name="selectedPartner" />
+        </Wrapper>
     );
 };
