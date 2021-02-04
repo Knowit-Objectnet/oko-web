@@ -44,7 +44,7 @@ export const DatePicker: React.FC<Props> = ({ name }) => {
         return undefined;
     }
 
-    function formatDate(date: number | Date, formatString: string, localeString: string) {
+    function formatDate(date: number | Date, formatString: string, localeString?: string) {
         const locale = (localeString as unknown) as Locale;
         return format(date, formatString, { locale });
     }
@@ -61,6 +61,7 @@ export const DatePicker: React.FC<Props> = ({ name }) => {
                     format={FORMAT}
                     parseDate={parseDate}
                     value={value}
+                    placeholder={`mm/dd/åååå`}
                     dayPickerProps={{
                         disabledDays: {
                             daysOfWeek: [0, 6],
