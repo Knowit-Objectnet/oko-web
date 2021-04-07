@@ -105,5 +105,8 @@
     "styled-components": "^5.2.1",
     "yup": "^0.32.8",
     "yup-phone": "^1.2.19"
+  },
+  "resolutions": {
+    "y18n": "^5.0.7"
   }
 }
