@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -33,15 +34,21 @@ module.exports = {
             // Next line also enables loading of environment variables from executing CLI session (for CI/CD purposes).
             // System environment variables takes presedence over those loaded from `.env` files.
             systemvars: true
-        })
+        }),
+        new BundleAnalyzerPlugin()
     ],
     optimization: {
         splitChunks: {
             chunks: "all",
             cacheGroups: {
+                formlibs: {
+                    test: /[\\/]node_modules[\\/](react-hook-form|yup|@hookform)/,
+                    name: "formlibs"
+                },
                 vendors: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: "vendors"
+                    name: "vendors",
+                    priority: -10
                 }
             }
         }
