@@ -8,7 +8,7 @@ module.exports = merge(common, {
     mode: 'production',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[fullhash].bundle.js',
+        filename: '[name].[contenthash].bundle.js',
     },
     module: {
         rules: [
