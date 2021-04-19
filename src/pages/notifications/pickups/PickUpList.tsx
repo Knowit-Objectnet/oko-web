@@ -5,7 +5,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from '../../../types';
 import { usePickUps } from '../../../api/hooks/usePickUps';
 import { ApiPickUpParams } from '../../../api/PickUpService';
-import { compareAsc } from 'date-fns/fp';
+import compareAsc from 'date-fns/compareAsc';
 
 const HeaderRow = styled.div`
     display: grid;

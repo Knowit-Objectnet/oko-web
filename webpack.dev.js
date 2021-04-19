@@ -32,7 +32,7 @@ module.exports = merge(common, {
         ]
     },
     devServer: {
-        host: '0.0.0.0',
+        host: 'localhost',
         port: 8080,
         open: true,
         historyApiFallback: true,

@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -24,6 +25,8 @@ module.exports = {
         ],
     },
     plugins: [
+        // Uncomment next line to run bundle analytics on build/run (https://www.npmjs.com/package/webpack-bundle-analyzer)
+        // new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src', 'index.html'),
         }),
@@ -35,4 +38,24 @@ module.exports = {
             systemvars: true
         })
     ],
+    optimization: {
+        splitChunks: {
+            chunks: "all",
+            cacheGroups: {
+                keycloak: {
+                    test: /[\\/]node_modules[\\/](@react-keycloak|keycloak-js)/,
+                    name: "keycloak"
+                },
+                formlibs: {
+                    test: /[\\/]node_modules[\\/](react-hook-form|yup|@hookform)/,
+                    name: "formlibs"
+                },
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "vendors",
+                    priority: -10
+                }
+            }
+        }
+    },
 };

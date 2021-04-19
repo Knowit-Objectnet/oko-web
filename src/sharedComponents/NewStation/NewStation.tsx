@@ -11,7 +11,6 @@ import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../api/
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import 'yup-phone';
 import parse from 'date-fns/parse';
 import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
@@ -177,9 +176,12 @@ const validationSchema = yup.object().shape({
     ambassadoerNavn: yup.string().label('Navn for ambassadør').required().min(2).max(50),
     ambassadoerTelefon: yup
         .string()
-        .label('Tlf. Nummer for ambassadør')
-        .required()
-        .phone('NO', true, '${label} er ikke et gyldig Tlf. Nummer'),
+        .label('Telefonummer for ambassadør')
+        .transform(function (value: string) {
+            return value.replace(/\s+/g, '');
+        })
+        .matches(/^(\+?(00)?(47))?[2-9]\d{7}$/, '${label} er ikke et gyldig telefonummer')
+        .required(),
     ambassadoerEmail: yup.string().label('E-postadresse for ambassadør').required().email(),
     mandagStart: dayStartSchema('mandag'),
     mandagSlutt: dayEndSchema('mandag'),

@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet';
 import { useReports } from '../../api/hooks/useReports';
 import { formatISO } from 'date-fns';
 import { WeightReportList } from './WeightReportList';
-import { compareAsc } from 'date-fns/fp';
+import compareAsc from 'date-fns/compareAsc';
 
 const Wrapper = styled.div`
     width: 100%;
