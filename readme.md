@@ -4,16 +4,19 @@ The frontend-web for Oslo Kommune REG Knowit 2020 summer project.
 
 The frontend is an SPA (single page application) written in React with TypeScript. The project uses webpack as build tool. 
 
-## Getting it up
+## Local development
 
-### Local development
+### Prerequisites
 
-Local development requires that you install [Node.js](https://nodejs.org/en/).
+* [Node, LTS version](https://nodejs.org/en/) (currently v14.16.1)
+* [Yarn, classic version](https://classic.yarnpkg.com/en/) (v1.22.5 or greater)
+
+### Running locally
 
 Before running/building locally the first time, copy the file `.env-sample` and rename to `.env`. The file provides the
 environment variables required. See ["Building and environment variables"](#building-and-environment-variables) below.
 
-* To start the development server simply execute `npm start`.
+* To start the development server simply execute `yarn start`.
 * Alternatively, start the provided docker container by going into the folder `container` and executing `docker-compose up`.
 
 > **Note:** There might be an issue when running the app locally (in the 0.0.0.0 or localhost domain),
@@ -23,7 +26,7 @@ environment variables required. See ["Building and environment variables"](#buil
 > in the browser. If possible, this should preferably be done by adding a specific rule to allow all cookies from
 > the domain of the Keycloak URL ([instructions for Google Chrome](https://support.google.com/chrome/answer/95647)).
 
-### Build and deployment
+## Build and deployment
 
 The source code is built and deployed to AWS S3 with CI/CD, configured in Bamboo
 ([byggmester.knowit.no](https://byggmester.knowit.no/browse/OKO-WB)).
@@ -60,7 +63,6 @@ Webpack is configured with the [`dotenv-webpack`](https://www.npmjs.com/package/
 
 ### Routing
 * [react-router-dom](https://reactrouter.com/web)
-* history
 
 ### Authentication & Role Based Access Control
 
@@ -68,7 +70,7 @@ Webpack is configured with the [`dotenv-webpack`](https://www.npmjs.com/package/
 
 * **[`keycloak-js`](https://www.npmjs.com/package/keycloak-js)**: client-side adapter for communicating with the Keycloak server.
   [Documentation can be found here.](https://www.keycloak.org/docs/latest/securing_apps/index.html#_javascript_adapter)
-  > **Note:** The version of the `keycloak-js` library is linked to the version of Keycloak that is running server-side.
+  > **Note:** The version of the `keycloak-js` library is tightly coupled to the version of Keycloak that is running server-side.
   > This means that [this library must be updated (only) if the Keycloak server software is updated](https://www.keycloak.org/docs/latest/upgrading/#upgrading-keycloak-adapters).
 * **[`@react-keycloak/web`](https://www.npmjs.com/package/@react-keycloak/web)**: Provides a `KeycloakProvider` component 
   that wraps the entire React application (see `App.tsx`). The component holds an instance of a `Keycloak`
