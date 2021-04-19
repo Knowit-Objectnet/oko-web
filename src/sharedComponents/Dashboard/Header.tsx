@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Navigation } from './Navigation';
-import { SideMenu } from './SideMenu';
 import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
 import { Link } from 'react-router-dom';
 
@@ -10,38 +9,37 @@ const StyledHeader = styled.header`
     height: 125px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: ${(props) => props.theme.colors.DarkBlue};
+    padding-right: 40px;
 `;
 
-const LogoWrapper = styled(Link)`
+const HomeLink = styled(Link)`
     height: 100%;
     margin-right: 115px;
-
-    @media screen and (max-width: 1200px) {
-        display: none;
-    }
 `;
 
 const Logo = styled(OsloKommuneLogo)`
     height: 100%;
 `;
 
-interface HeaderProps {
-    isSidebarVisible: boolean;
-    toggleSidebar: () => void;
-}
+const LogoutLink = styled(Link)`
+    padding: 16px;
+    font-size: 20px;
+    font-weight: normal;
+    min-height: 3rem;
+    border: 2px solid ${(props) => props.theme.colors.White};
+    color: ${(props) => props.theme.colors.White};
+`;
 
-/**
- * Header component for the Dashboard
- */
-export const Header: React.FC<HeaderProps> = (props) => {
+export const Header: React.FC = () => {
     return (
         <StyledHeader>
-            <LogoWrapper to="/">
+            <HomeLink to="/">
                 <Logo />
-            </LogoWrapper>
+            </HomeLink>
             <Navigation />
-            <SideMenu isSidebarVisible={props.isSidebarVisible} toggleSidebar={props.toggleSidebar} />
+            <LogoutLink to="/loggut">Logg ut</LogoutLink>
         </StyledHeader>
     );
 };

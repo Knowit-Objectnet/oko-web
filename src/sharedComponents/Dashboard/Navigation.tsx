@@ -5,17 +5,13 @@ import List from '../../assets/List.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Weight from '../../assets/Weight.svg';
 import Bell from '../../assets/Bell.svg';
-import Chart from '../../assets/Chart.svg';
 import { Roles } from '../../types';
 import { NavItem } from './NavItem';
 
 const Nav = styled.nav`
     display: flex;
     flex: 1;
-
-    @media screen and (max-width: 1200px) {
-        margin-left: 20px;
-    }
+    height: 100%;
 `;
 
 export const Navigation: React.FC = () => {
@@ -30,10 +26,11 @@ export const Navigation: React.FC = () => {
                 <>
                     <NavItem path="/oversikt" icon={<List />} label="Oversikt" />
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
-                    <NavItem path="/statistikk" icon={<Chart />} label="Statistikk" />
+                    <NavItem path="/stasjoner" icon={<List />} label="Stasjoner" />
+                    <NavItem path="/partnere" icon={<List />} label="Partnere" />
                 </>
             );
-        if (userIsPartner)
+        else if (userIsPartner)
             return (
                 <>
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
@@ -41,7 +38,7 @@ export const Navigation: React.FC = () => {
                     <NavItem path="/varsler" icon={<Bell />} label="Varsler" />
                 </>
             );
-        if (userIsStation)
+        else if (userIsStation)
             return (
                 <>
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />

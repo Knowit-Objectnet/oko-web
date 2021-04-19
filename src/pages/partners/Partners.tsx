@@ -1,17 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Roles } from '../../types';
-import { Station } from './Station';
 import { Loading } from '../../sharedComponents/Loading';
 import Plus from '../../assets/Plus.svg';
 import useModal from '../../sharedComponents/Modal/useModal';
-import { NewStation } from '../../sharedComponents/NewStation/NewStation';
 import { Helmet } from 'react-helmet';
-import { useStations } from '../../api/hooks/useStations';
 import { useKeycloak } from '@react-keycloak/web';
 import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
-import { DeleteStation } from '../../sharedComponents/DeleteStation';
 import Minus from '../../assets/Minus.svg';
+import { NewPartner } from '../../sharedComponents/NewPartner';
+import { DeletePartner } from '../../sharedComponents/DeletePartner';
+import { usePartners } from '../../api/hooks/usePartners';
 
 const Wrapper = styled.div`
     display: flex;
@@ -24,7 +23,7 @@ const Wrapper = styled.div`
     background-color: ${(props) => props.theme.colors.White};
 `;
 
-const StationAdminButtons = styled.div`
+const PartnerAdminButtons = styled.div`
     position: absolute;
     top: 40px;
     right: 50px;
@@ -45,22 +44,22 @@ const Content = styled.div`
     overflow: auto;
 `;
 
-export const Stations: React.FC = () => {
+export const Partners: React.FC = () => {
     const { keycloak } = useKeycloak();
     const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
 
     const modal = useModal();
 
-    const { data: stations, isLoading } = useStations();
+    const { data: partners, isLoading } = usePartners();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
-    const showNewStationModal = () => {
-        modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
+    const showNewPartnerModal = () => {
+        modal.show(<NewPartner afterSubmit={closeModalOnSuccess} />);
     };
 
-    const showDeleteStationModal = () => {
-        modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
+    const showDeletePartnerModal = () => {
+        modal.show(<DeletePartner afterSubmit={closeModalOnSuccess} />);
     };
 
     if (isLoading) {
@@ -70,29 +69,32 @@ export const Stations: React.FC = () => {
     return (
         <>
             <Helmet>
-                <title>Stasjonene</title>
+                <title>Samarbeidspartnere</title>
             </Helmet>
             <Wrapper>
                 {userIsAdmin && (
-                    <StationAdminButtons>
+                    <PartnerAdminButtons>
                         <FloatingActionButton
-                            label="Ny stasjon"
+                            label="Ny samarbeidspartner"
                             icon={<Plus />}
-                            onClick={showNewStationModal}
+                            onClick={showNewPartnerModal}
                             variant="positive"
                         />
                         <FloatingActionButton
-                            label="Slett stasjon"
+                            label="Slett samarbeidspartner"
                             icon={<Minus />}
-                            onClick={showDeleteStationModal}
+                            onClick={showDeletePartnerModal}
                             variant="negative"
                         />
-                    </StationAdminButtons>
+                    </PartnerAdminButtons>
                 )}
                 <Content>
-                    {stations?.map((station) => (
-                        <Station key={station.id} station={station} />
-                    ))}
+                    <h2>Registrerte samarbeidspartnere</h2>
+                    <ul>
+                        {partners?.map((partner) => (
+                            <li key={partner.id}>{partner.name}</li>
+                        ))}
+                    </ul>
                 </Content>
             </Wrapper>
         </>
