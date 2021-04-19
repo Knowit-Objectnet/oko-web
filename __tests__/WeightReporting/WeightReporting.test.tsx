@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup } from '../../test-utils';
+import { render, cleanup, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
 import keycloak from '../../src/keycloak';
 
@@ -39,14 +39,14 @@ describe('Provides a page provide and update weight of withdrawals', () => {
     });
 
     it('Should render all withdrawals', async () => {
-        const { findAllByText, findAllByPlaceholderText } = render(<WeightReporting />);
+        render(<WeightReporting />);
 
-        const withdrawalsWithWeight = await findAllByText('200 kg');
+        const withdrawalsWithWeight = await screen.findAllByText('200 kg');
         withdrawalsWithWeight.forEach((withdrawal) => {
             expect(withdrawal).toBeInTheDocument();
         });
 
-        const withdrawalsWithoutWeight = await findAllByPlaceholderText('Skriv inn vekt i kg');
+        const withdrawalsWithoutWeight = await screen.findAllByPlaceholderText('Skriv inn vekt i kg');
         withdrawalsWithoutWeight.forEach((withdrawal) => {
             expect(withdrawal).toBeInTheDocument();
         });

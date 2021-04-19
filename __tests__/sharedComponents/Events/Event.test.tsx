@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, fireEvent, render } from '../../../test-utils';
+import { cleanup, fireEvent, render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import keycloak from '../../../src/keycloak';
@@ -21,7 +21,7 @@ describe('Provides an interface to view and edit an Event', () => {
             return role === Roles.Oslo;
         });
 
-        const { findByText } = render(
+        render(
             <MemoryRouter>
                 <Event
                     event={mockEvents[0]}
@@ -32,8 +32,7 @@ describe('Provides an interface to view and edit an Event', () => {
         );
 
         // Find the title of the event
-        const title = await findByText(mockEvents[0].title);
-        expect(title.parentElement?.children.length).toBe(2);
+        expect(screen.getByLabelText('Rediger avtale')).toBeInTheDocument();
     });
 
     it('Should show edit symbol on Event if user is logged in as a station that has the event', async () => {
@@ -48,7 +47,7 @@ describe('Provides an interface to view and edit an Event', () => {
         // Set the stations groupID
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.station.id;
 
-        const { findByText } = render(
+        render(
             <MemoryRouter>
                 <Event
                     event={mockEvents[0]}
@@ -58,9 +57,7 @@ describe('Provides an interface to view and edit an Event', () => {
             </MemoryRouter>,
         );
 
-        // Find the title of the event
-        const title = await findByText(mockEvents[0].title);
-        expect(title.parentElement?.children.length).toBe(2);
+        expect(screen.getByLabelText('Rediger avtale')).toBeInTheDocument();
     });
 
     it('Should not show edit symbol on Event if user is logged in as Partner', async () => {
@@ -75,7 +72,7 @@ describe('Provides an interface to view and edit an Event', () => {
         // Set the partners groupID
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
 
-        const { findByText } = render(
+        render(
             <MemoryRouter>
                 <Event
                     event={mockEvents[0]}
@@ -85,9 +82,7 @@ describe('Provides an interface to view and edit an Event', () => {
             </MemoryRouter>,
         );
 
-        // Find the title of the event
-        const title = await findByText(mockEvents[0].title);
-        expect(title.parentElement?.children.length).toBe(1);
+        expect(screen.queryByLabelText('Rediger avtale')).not.toBeInTheDocument();
     });
 
     it('Should not show edit symbol on Event if user is not logged in', async () => {
@@ -102,7 +97,7 @@ describe('Provides an interface to view and edit an Event', () => {
         // Set the groupID to nothing
         keycloak.tokenParsed.GroupID = undefined;
 
-        const { findByText } = render(
+        render(
             <MemoryRouter>
                 <Event
                     event={mockEvents[0]}
@@ -112,9 +107,7 @@ describe('Provides an interface to view and edit an Event', () => {
             </MemoryRouter>,
         );
 
-        // Find the title of the event
-        const title = await findByText(mockEvents[0].title);
-        expect(title.parentElement?.children.length).toBe(1);
+        expect(screen.queryByLabelText('Rediger avtale')).not.toBeInTheDocument();
     });
 
     /* TODO: test disabled for now
@@ -455,14 +448,14 @@ describe('Provides an interface to view and edit an Event', () => {
         // Set the partners groupID
         keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
 
-        const { findByText, queryByText } = render(
+        render(
             <MemoryRouter>
                 <Event event={mockEvents[1]} />
             </MemoryRouter>,
         );
 
         // Find the delete button
-        const deleteButton = await findByText('Avlys uttak');
+        const deleteButton = await screen.findByText('Avlys uttak');
 
         // Click the delete button
         fireEvent(
@@ -474,8 +467,8 @@ describe('Provides an interface to view and edit an Event', () => {
         );
 
         // Make sure the options buttons for single or period deletion is hidden
-        const optionButton1 = queryByText('Engangstilfelle');
-        const optionButton2 = queryByText('Over en periode');
+        const optionButton1 = screen.queryByText('Engangstilfelle');
+        const optionButton2 = screen.queryByText('Over en periode');
 
         expect(optionButton1).not.toBeInTheDocument();
         expect(optionButton2).not.toBeInTheDocument();

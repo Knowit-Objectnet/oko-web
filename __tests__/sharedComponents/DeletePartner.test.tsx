@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '../../test-utils';
+import { render, cleanup, screen, waitFor, fireEvent } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { DeletePartner } from '../../src/sharedComponents/DeletePartner';
 import MockAdapter from 'axios-mock-adapter';
@@ -23,10 +23,10 @@ describe('Provides an interface to submit a new partner', () => {
     it('Should submit partner on input change and button click', async () => {
         const afterSubmitMock = jest.fn();
 
-        const { findByText, findByDisplayValue } = render(<DeletePartner afterSubmit={afterSubmitMock} />);
+        render(<DeletePartner afterSubmit={afterSubmitMock} />);
 
         // Get the selector for selecting which partner to delete
-        const select = await findByDisplayValue('Velg samarbeidspartner');
+        const select = await screen.findByDisplayValue('Velg samarbeidspartner');
 
         // Select Fretex
         fireEvent.change(select, {
@@ -34,7 +34,7 @@ describe('Provides an interface to submit a new partner', () => {
         });
 
         // Find the submission button
-        const submitButton = await findByText('Slett');
+        const submitButton = await screen.findByText('Slett');
 
         // Click the submission button
         fireEvent(

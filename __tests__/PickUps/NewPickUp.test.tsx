@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import add from 'date-fns/add';
 import keycloak from '../../src/keycloak';
-import { render, cleanup, waitFor, fireEvent } from '../../test-utils';
+import { render, screen, cleanup, waitFor, fireEvent } from '../../test-utils';
 import { NewPickUp } from '../../src/sharedComponents/Events/NewPickUp';
 import { mockStations } from '../../__mocks__/mockStations';
 import MockAdapter from 'axios-mock-adapter';
@@ -48,11 +48,9 @@ describe('Provides an interface to create a pickup/Extra event', () => {
 
         const mockAfterSubmit = jest.fn();
 
-        const { findByText, findByPlaceholderText } = render(
-            <NewPickUp start={start} end={end} afterSubmit={mockAfterSubmit} />,
-        );
+        render(<NewPickUp start={start} end={end} afterSubmit={mockAfterSubmit} />);
 
-        const messageText = await findByPlaceholderText('Meldingstekst (maks 200 tegn)');
+        const messageText = await screen.findByPlaceholderText('Meldingstekst (maks 200 tegn)');
 
         // Set the message text
         fireEvent.change(messageText, {
@@ -60,7 +58,7 @@ describe('Provides an interface to create a pickup/Extra event', () => {
         });
 
         // Get the submit button
-        const submitButton = await findByText('Send');
+        const submitButton = await screen.findByText('Send');
 
         // Click the submission button
         fireEvent(

@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render } from '../../test-utils';
+import { cleanup, render, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
@@ -70,7 +70,7 @@ describe('Provides a page for partners to view the calendar', () => {
         date.setFullYear(2020, 6, 13);
         date.setHours(7, 0, 0, 0);
 
-        const { findAllByText } = render(
+        render(
             <PartnerCalendar
                 date={date}
                 showCalendar={isToggled}
@@ -80,9 +80,9 @@ describe('Provides a page for partners to view the calendar', () => {
             />,
         );
 
-        const haraldrudGroups = await findAllByText('Haraldrud');
+        const haraldrudGroups = await screen.findAllByText('Haraldrud');
         expect(haraldrudGroups.length).toBe(5);
-        const smestadGroups = await findAllByText('Smestad');
+        const smestadGroups = await screen.findAllByText('Smestad');
         expect(smestadGroups.length).toBe(1);
     });
 
@@ -95,7 +95,7 @@ describe('Provides a page for partners to view the calendar', () => {
         date.setFullYear(2020, 6, 15);
         date.setHours(7, 0, 0, 0);
 
-        const { findAllByText } = render(
+        render(
             <PartnerCalendar
                 date={date}
                 showCalendar={isToggled}
@@ -105,9 +105,9 @@ describe('Provides a page for partners to view the calendar', () => {
             />,
         );
 
-        const haraldrudGroups = await findAllByText('Haraldrud');
+        const haraldrudGroups = await screen.findAllByText('Haraldrud');
         expect(haraldrudGroups.length).toBe(3);
-        const smestadGroups = await findAllByText('Smestad');
+        const smestadGroups = await screen.findAllByText('Smestad');
         expect(smestadGroups.length).toBe(1);
     });
 });

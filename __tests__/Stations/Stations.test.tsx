@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup } from '../../test-utils';
+import { render, screen, cleanup } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { Stations } from '../../src/pages/stations/Stations';
 import axios from 'axios';
@@ -42,10 +42,10 @@ describe('Provides a page to view a list of the stations', () => {
     });
 
     it('Should render list of stations', async () => {
-        const { findByText } = render(<Stations />);
+        render(<Stations />);
 
-        const Haraldrud = await findByText('Haraldrud');
-        const Smestad = await findByText('Smestad');
+        const Haraldrud = await screen.findByText('Haraldrud');
+        const Smestad = await screen.findByText('Smestad');
 
         expect(Haraldrud).toBeInTheDocument();
         expect(Smestad).toBeInTheDocument();

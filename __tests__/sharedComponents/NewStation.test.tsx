@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '../../test-utils';
+import { render, screen, cleanup, waitFor, fireEvent } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { NewStation } from '../../src/sharedComponents/NewStation/NewStation';
 import MockAdapter from 'axios-mock-adapter';
@@ -21,10 +21,10 @@ describe('Provides an interface to submit a new station', () => {
     it('Should submit station on input changes and button click', async () => {
         // mock function for the submission
         const afterSubmitMock = jest.fn();
-        const { findByText, findByPlaceholderText } = render(<NewStation afterSubmit={afterSubmitMock} />);
+        render(<NewStation afterSubmit={afterSubmitMock} />);
 
         // Find the text input for the name
-        const nameInput = await findByPlaceholderText('Navn på stasjon');
+        const nameInput = await screen.findByPlaceholderText('Navn på stasjon');
         expect(nameInput).toBeInTheDocument();
 
         // Write in the station name Test
@@ -33,7 +33,7 @@ describe('Provides an interface to submit a new station', () => {
         });
 
         // Find the text input for the address
-        const addressInput = await findByPlaceholderText('Adressen til stasjonen');
+        const addressInput = await screen.findByPlaceholderText('Adressen til stasjonen');
         expect(addressInput).toBeInTheDocument();
 
         // Write in the station address Test adresse
@@ -42,7 +42,7 @@ describe('Provides an interface to submit a new station', () => {
         });
 
         // Find the text input for the ambassador name
-        const ambassadorNameInput = await findByPlaceholderText('Navn');
+        const ambassadorNameInput = await screen.findByPlaceholderText('Navn');
         expect(ambassadorNameInput).toBeInTheDocument();
 
         // Write in the ambassador name Ola
@@ -51,7 +51,7 @@ describe('Provides an interface to submit a new station', () => {
         });
 
         // Find the text input for the ambassador phone
-        const ambassadorPhoneInput = await findByPlaceholderText('Telefonnummer');
+        const ambassadorPhoneInput = await screen.findByPlaceholderText('Telefonnummer');
         expect(ambassadorPhoneInput).toBeInTheDocument();
 
         // Write in the ambassador phone number 40404040
@@ -60,7 +60,7 @@ describe('Provides an interface to submit a new station', () => {
         });
 
         // Find the text input for the ambassador mail
-        const ambassadorMailInput = await findByPlaceholderText('E-postadresse');
+        const ambassadorMailInput = await screen.findByPlaceholderText('E-postadresse');
         expect(ambassadorMailInput).toBeInTheDocument();
 
         // Write in the ambassador email olaRegTest@knowit.no
@@ -69,7 +69,7 @@ describe('Provides an interface to submit a new station', () => {
         });
 
         // Find the submit button
-        const submitButton = await findByText('Legg til stasjon');
+        const submitButton = await screen.findByText('Legg til stasjon');
         expect(submitButton).toBeInTheDocument();
 
         // Click the submission button

@@ -18,26 +18,9 @@
     "plugin:react-hooks/recommended", // Specifically for React Hooks
     "plugin:jsx-a11y/recommended", // Checks for possible a11y issues with JSX
     "plugin:jest-dom/recommended", // Common mistakes and best practices for tests using jest-dom
-    "plugin:testing-library/recommended", // Testing Library common mistakes and best practices
-    "prettier", // Turns off rules that might conflict with prettier
-                // (must be listed before all prettier configs, but after all other configs)
-    "prettier/@typescript-eslint", // Prettier formatting for TypeScript
-    "plugin:prettier/recommended" // General prettier formatting
-  ],
-  "overrides": [
-    {
-      "files": "*.mdx",
-      "extends": "plugin:mdx/recommended",
-      "rules": {
-        "prettier/prettier": [
-          2,
-          {
-            "parser": "markdown"
-          }
-        ],
-        "semi": 0
-      }
-    }
+    "plugin:testing-library/react", // Testing Library common mistakes and best practices
+    // NOTE: plugin:prettier/recommended must be listed last!
+    "plugin:prettier/recommended" // Prettier config, disables all rules conflicting with prettier
   ],
   "rules": {
     "react/prop-types": 0,

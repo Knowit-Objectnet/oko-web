@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render } from '../../test-utils';
+import { cleanup, render, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
 import keycloak from '../../src/keycloak';
 import { mockApiEvents } from '../../__mocks__/mockEvents';
@@ -92,7 +92,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
         date.setFullYear(2020, 6, 13);
         date.setHours(7, 0, 0, 0);
 
-        const { findAllByText } = render(
+        render(
             <AmbassadorCalendar
                 date={date}
                 isToggled={isToggled}
@@ -102,7 +102,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
             />,
         );
 
-        const fretexGroups = await findAllByText('Fretex');
+        const fretexGroups = await screen.findAllByText('Fretex');
         expect(fretexGroups.length).toBe(5);
 
         // Find all the agenda groups with fretex which should be 5 as there's 5 days and
