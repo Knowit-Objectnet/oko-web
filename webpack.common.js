@@ -25,6 +25,8 @@ module.exports = {
         ],
     },
     plugins: [
+        // Uncomment next line to run bundle analytics on build/run (https://www.npmjs.com/package/webpack-bundle-analyzer)
+        // new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'src', 'index.html'),
         }),
@@ -34,8 +36,7 @@ module.exports = {
             // Next line also enables loading of environment variables from executing CLI session (for CI/CD purposes).
             // System environment variables takes presedence over those loaded from `.env` files.
             systemvars: true
-        }),
-        new BundleAnalyzerPlugin()
+        })
     ],
     optimization: {
         splitChunks: {
