@@ -27,6 +27,7 @@ export const Navigation: React.FC = () => {
                     <NavItem path="/oversikt" icon={<List />} label="Oversikt" />
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
                     <NavItem path="/stasjoner" icon={<List />} label="Stasjoner" />
+                    <NavItem path="/partnere" icon={<List />} label="Partnere" />
                 </>
             );
         else if (userIsPartner)

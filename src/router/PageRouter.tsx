@@ -7,6 +7,7 @@ import { Notifications } from '../pages/notifications/Notifications';
 import { Calendar } from '../pages/calendar/Calendar';
 import { WeightReporting } from '../pages/weightReporting/WeightReporting';
 import { Stations } from '../pages/stations/Stations';
+import { Partners } from '../pages/partners/Partners';
 
 const HomePage: React.FC = () => {
     const { keycloak } = useKeycloak();
@@ -30,6 +31,9 @@ export const PageRouter: React.FC = () => (
         </ProtectedRoute>
         <ProtectedRoute path="/stasjoner" requiredRoles={[Roles.Oslo]}>
             <Stations />
+        </ProtectedRoute>
+        <ProtectedRoute path="/partnere" requiredRoles={[Roles.Oslo]}>
+            <Partners />
         </ProtectedRoute>
         <Route path="/">
             <HomePage />
