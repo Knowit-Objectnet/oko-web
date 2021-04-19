@@ -5,9 +5,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../types';
 import { Notifications } from '../pages/notifications/Notifications';
 import { Calendar } from '../pages/calendar/Calendar';
-import { Stations } from '../pages/stations/Stations';
 import { WeightReporting } from '../pages/weightReporting/WeightReporting';
-import { UserProfile } from '../pages/userProfile/UserProfile';
 
 const HomePage: React.FC = () => {
     const { keycloak } = useKeycloak();
@@ -29,18 +27,6 @@ export const PageRouter: React.FC = () => (
         <ProtectedRoute path="/vektuttak" requiredRoles={[Roles.Partner]}>
             <WeightReporting />
         </ProtectedRoute>
-        <ProtectedRoute path="/statistikk" requiredRoles={[Roles.Oslo]}>
-            <h1>Statistikk</h1>
-        </ProtectedRoute>
-        <Route path="/partnere">
-            <h1>Samarbeidspartnere</h1>
-        </Route>
-        <Route path="/stasjoner">
-            <Stations />
-        </Route>
-        <Route path="/minside">
-            <UserProfile />
-        </Route>
         <Route path="/">
             <HomePage />
         </Route>
