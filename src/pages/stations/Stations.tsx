@@ -10,6 +10,8 @@ import { Helmet } from 'react-helmet';
 import { useStations } from '../../api/hooks/useStations';
 import { useKeycloak } from '@react-keycloak/web';
 import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
+import { DeleteStation } from '../../sharedComponents/DeleteStation';
+import Minus from '../../assets/Minus.svg';
 
 const Wrapper = styled.div`
     display: flex;
@@ -22,10 +24,15 @@ const Wrapper = styled.div`
     background-color: ${(props) => props.theme.colors.White};
 `;
 
-const AddStationButtonContainer = styled.div`
+const StationAdminButtons = styled.div`
     position: absolute;
     top: 40px;
     right: 50px;
+    display: flex;
+    flex-direction: column;
+    & > *:not(:last-child) {
+        margin-bottom: 25px;
+    }
 `;
 
 const Content = styled.div`
@@ -48,8 +55,12 @@ export const Stations: React.FC = () => {
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
-    const handleNewStationClick = () => {
+    const showNewStationModal = () => {
         modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
+    };
+
+    const showDeleteStationModal = () => {
+        modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
     if (isLoading) {
@@ -63,14 +74,20 @@ export const Stations: React.FC = () => {
             </Helmet>
             <Wrapper>
                 {userIsAdmin && (
-                    <AddStationButtonContainer>
+                    <StationAdminButtons>
                         <FloatingActionButton
                             label="Ny stasjon"
                             icon={<Plus />}
-                            onClick={handleNewStationClick}
+                            onClick={showNewStationModal}
                             variant="positive"
                         />
-                    </AddStationButtonContainer>
+                        <FloatingActionButton
+                            label="Slett stasjon"
+                            icon={<Minus />}
+                            onClick={showDeleteStationModal}
+                            variant="negative"
+                        />
+                    </StationAdminButtons>
                 )}
                 <Content>
                     {stations?.map((station) => (
