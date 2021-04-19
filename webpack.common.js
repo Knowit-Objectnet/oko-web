@@ -41,6 +41,10 @@ module.exports = {
         splitChunks: {
             chunks: "all",
             cacheGroups: {
+                keycloak: {
+                    test: /[\\/]node_modules[\\/](@react-keycloak|keycloak-js)/,
+                    name: "keycloak"
+                },
                 formlibs: {
                     test: /[\\/]node_modules[\\/](react-hook-form|yup|@hookform)/,
                     name: "formlibs"
