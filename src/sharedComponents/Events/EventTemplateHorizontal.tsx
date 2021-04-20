@@ -49,7 +49,7 @@ export const EventTemplateHorizontal: React.FC<HorizontalEventTemplateProps> = (
                 <h2>{props.title}</h2>
                 {!props.isEditing && props.showEditSymbol && (
                     <EditTitle>
-                        <Pencil height="1em" onClick={props.onEditClick} />
+                        <Pencil height="1em" onClick={props.onEditClick} aria-label="Rediger avtale" />
                     </EditTitle>
                 )}
             </Title>

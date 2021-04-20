@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, waitFor, fireEvent } from '../../test-utils';
+import { render, cleanup, screen, waitFor, fireEvent } from '../../test-utils';
 import '@testing-library/jest-dom';
 import { NewPartner } from '../../src/sharedComponents/NewPartner';
 import MockAdapter from 'axios-mock-adapter';
@@ -21,10 +21,10 @@ describe('Provides an interface to submit a new partner', () => {
     test('Should submit partner on input change and button click', async () => {
         const afterSubmitMock = jest.fn();
 
-        const { findByText, findByPlaceholderText } = render(<NewPartner afterSubmit={afterSubmitMock} />);
+        render(<NewPartner afterSubmit={afterSubmitMock} />);
 
         // Find the text input for the name
-        const input = await findByPlaceholderText('Navn på organisasjonen');
+        const input = await screen.findByPlaceholderText('Navn på organisasjonen');
         expect(input).toBeInTheDocument();
 
         // Write in the partner name Test
@@ -33,7 +33,7 @@ describe('Provides an interface to submit a new partner', () => {
         });
 
         // Find the submission button
-        const submitButton = await findByText('Legg til samarbeidspartner');
+        const submitButton = await screen.findByText('Legg til samarbeidspartner');
 
         fireEvent(
             submitButton,

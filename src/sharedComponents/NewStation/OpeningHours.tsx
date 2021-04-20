@@ -25,7 +25,7 @@ const Divider = styled.div`
 `;
 
 const TimeDivider = styled.span`
-    margin: 0px 20px;
+    margin: 0 20px;
 `;
 
 const ClosedInput = styled.input`
@@ -45,15 +45,15 @@ export const OpeningHours: React.FC<Props> = (props) => {
             <InputRow>
                 <Day>{`${props.day.slice(0, 1).toUpperCase()}${props.day.slice(1, 3)}`}</Day>
                 {props.closed ? (
-                    <Divider></Divider>
+                    <Divider />
                 ) : (
                     <div>
-                        <input type="time" name={`${props.day}Start`} ref={register} />
+                        <input type="time" {...register(`${props.day}Start`)} />
                         <TimeDivider>-</TimeDivider>
-                        <input type="time" name={`${props.day}Slutt`} ref={register} />
+                        <input type="time" {...register(`${props.day}Slutt`)} />
                     </div>
                 )}
-                <ClosedInput type="checkbox" name={`${props.day}Stengt`} ref={register} />
+                <ClosedInput type="checkbox" {...register(`${props.day}Stengt`)} />
             </InputRow>
             <ErrorMessage name={`${props.day}Start`} />
             <ErrorMessage name={`${props.day}Slutt`} />

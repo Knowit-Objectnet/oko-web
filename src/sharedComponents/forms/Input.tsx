@@ -18,7 +18,7 @@ const Input: React.FC<Props> = ({ name, label, ...rest }) => {
     const { register } = useFormContext();
     return (
         <Wrapper>
-            <input {...rest} placeholder={label} name={name} ref={register} />
+            <input {...rest} placeholder={label} {...register(name)} />
             <ErrorMessage name={name} />
         </Wrapper>
     );

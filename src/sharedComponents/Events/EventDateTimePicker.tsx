@@ -62,7 +62,7 @@ export const EventDateTimePicker: React.FC<EventOptionDateRangeProps> = (props) 
         <Wrapper>
             {props.recurrenceEnabled && (
                 <Label>
-                    <Select name="recurring" ref={register}>
+                    <Select {...register('recurring')}>
                         <option value="None">Gjentas ikke</option>
                         <option value="Daily">Daglig</option>
                         <option value="Weekly">Ukentlig</option>
