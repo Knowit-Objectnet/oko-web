@@ -109,8 +109,5 @@
     "react-router-dom": "^5.2.0",
     "styled-components": "^5.2.1",
     "yup": "^0.32.8"
-  },
-  "resolutions": {
-    "y18n": "^5.0.7"
   }
 }
