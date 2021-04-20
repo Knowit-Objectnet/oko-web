@@ -59,7 +59,6 @@ Webpack is configured with the [`dotenv-webpack`](https://www.npmjs.com/package/
 ### General
 * [React](https://reactjs.org/) / react-dom – only using functional components and [hooks](https://reactjs.org/docs/hooks-intro.html)
 * [Typescript](https://www.typescriptlang.org/)
-* [styled-components](https://styled-components.com/)
 
 ### Routing
 * [react-router-dom](https://reactrouter.com/web)
@@ -86,12 +85,16 @@ The cache (contained in a `QueryClient` instance) has utility methods (like `inv
 [Documentation can be found here.](https://react-query.tanstack.com/docs)
 
 ### User interface
+
+> UI components are in the process of being migrated from `styled-components` to `Chakra UI`
+
+* [styled-components](https://styled-components.com/)
+* [Chakra UI](https://chakra-ui.com/)
 * [react-alert](https://www.npmjs.com/package/react-alert) and react-alert-template-basic for toast-style alerts
 * [react-calendar](https://www.npmjs.com/package/react-calendar)
 * [react-date-picker](https://projects.wojtekmaj.pl/react-date-picker/)
 * [@wojtekmaj/react-daterange-picker](https://projects.wojtekmaj.pl/react-daterange-picker/)
 * [@wojtekmaj/react-timerange-picker](https://projects.wojtekmaj.pl/react-timerange-picker/)
-* [react-transition-group](https://reactcommunity.org/react-transition-group/)
 
 #### Forms 
 
