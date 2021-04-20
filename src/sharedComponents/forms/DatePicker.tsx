@@ -55,7 +55,7 @@ export const DatePicker: React.FC<Props> = ({ name }) => {
         <Controller
             control={control}
             name={name}
-            render={({ onChange, value }) => (
+            render={({ field: { onChange, value } }) => (
                 <StyledDatePicker
                     formatDate={formatDate}
                     format={FORMAT}

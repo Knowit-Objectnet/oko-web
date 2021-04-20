@@ -25,7 +25,7 @@ const Input = styled.input`
 `;
 
 const Span = styled.span`
-    padding: 0px 15px;
+    padding: 0 15px;
 `;
 
 export const EventTimeRange: React.FC = () => {
@@ -34,9 +34,9 @@ export const EventTimeRange: React.FC = () => {
     return (
         <Wrapper>
             <Range>
-                <Input type="time" name="timeRange.start" ref={register} />
+                <Input type="time" {...register('timeRange.start')} />
                 <Span>til</Span>
-                <Input type="time" name="timeRange.end" ref={register} />
+                <Input type="time" {...register('timeRange.end')} />
             </Range>
             <ErrorMessage name="timeRange.start" />
             <ErrorMessage name="timeRange.end" />

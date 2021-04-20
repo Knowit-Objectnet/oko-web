@@ -22,7 +22,7 @@ export const PartnerSelect: React.FC = () => {
 
     return (
         <Wrapper>
-            <Select name="selectedPartner" ref={register} disabled={isLoading || isLoadingError} defaultValue={-1}>
+            <Select {...register('selectedPartner')} disabled={isLoading || isLoadingError} defaultValue={-1}>
                 <option value={-1} disabled>
                     {(isLoading && 'Laster inn...') ||
                         (isLoadingError && 'Kunne ikke laste samarbeidspartnere') ||

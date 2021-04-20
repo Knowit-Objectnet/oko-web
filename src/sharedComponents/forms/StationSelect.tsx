@@ -22,7 +22,7 @@ export const StationSelect: React.FC = () => {
 
     return (
         <Wrapper>
-            <Select name="selectedStation" ref={register} disabled={isLoading || isLoadingError} defaultValue={-1}>
+            <Select {...register('selectedStation')} disabled={isLoading || isLoadingError} defaultValue={-1}>
                 <option value={-1} disabled>
                     {(isLoading && 'Laster inn...') ||
                         (isLoadingError && 'Kunne ikke laste stasjoner') ||

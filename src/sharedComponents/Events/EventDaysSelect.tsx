@@ -115,7 +115,7 @@ export const EventDaysSelect: React.FC<Props> = ({ name }) => {
             <Controller
                 control={control}
                 name={name}
-                render={({ onChange, value }) => (
+                render={({ field: { onChange, value } }) => (
                     <_EventDaysSelect
                         value={value}
                         onChange={(index: string) => {
