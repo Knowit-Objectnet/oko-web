@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { Loading } from '../../sharedComponents/Loading';
+import { Loading } from '../../components/Loading';
 import { Helmet } from 'react-helmet';
-import { useReports } from '../../api/hooks/useReports';
+import { useReports } from '../../services/hooks/useReports';
 import { formatISO } from 'date-fns';
 import { WeightReportList } from './WeightReportList';
 import compareAsc from 'date-fns/compareAsc';

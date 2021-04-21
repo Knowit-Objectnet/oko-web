@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { PickUpListItem } from './PickUpListItem';
 import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from '../../../types';
-import { usePickUps } from '../../../api/hooks/usePickUps';
-import { ApiPickUpParams } from '../../../api/PickUpService';
+import { usePickUps } from '../../../services/hooks/usePickUps';
+import { ApiPickUpParams } from '../../../services/PickUpService';
 import compareAsc from 'date-fns/compareAsc';
 
 const HeaderRow = styled.div`

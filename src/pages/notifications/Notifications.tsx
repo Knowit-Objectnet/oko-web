@@ -2,12 +2,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Roles } from '../../types';
 import Plus from '../../assets/Plus.svg';
-import { NewPickUp } from '../../sharedComponents/Events/NewPickUp';
+import { NewPickUp } from '../../components/events/NewPickUp';
 import { useKeycloak } from '@react-keycloak/web';
-import useModal from '../../sharedComponents/Modal/useModal';
+import useModal from '../../components/modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
-import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
+import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
 import { PickUpList } from './pickups/PickUpList';
 
 const Wrapper = styled.div`

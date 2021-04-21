@@ -1,9 +1,9 @@
 import React from 'react';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import keycloak from './keycloak';
-import { MainRouter } from './router/MainRouter';
+import keycloak from './auth/keycloak';
+import { MainRouter } from './routing/MainRouter';
 import { GlobalStyle } from './global-styles';
-import ModalProvider from './sharedComponents/Modal/Provider';
+import ModalProvider from './components/modal/Provider';
 import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import { ThemeProvider } from 'styled-components';

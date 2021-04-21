@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventInfo } from '../../../types';
 import { WeekMenu } from '../WeekMenu';
-import { WorkingWeekCalendar } from '../../../sharedComponents/Calendar/WorkingWeekCalendar';
+import { WorkingWeekCalendar } from '../../../components/calendar/WorkingWeekCalendar';
 import { ListView } from './ListView';
 
 interface Props {

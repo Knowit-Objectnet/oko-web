@@ -4,11 +4,11 @@ import Calendar from '../../assets/Calendar.svg';
 import Plus from '../../assets/Plus.svg';
 import { Roles } from '../../types';
 import { useKeycloak } from '@react-keycloak/web';
-import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
+import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
-import { NewEvent } from '../../sharedComponents/Events/NewEvent';
-import { NewPickUp } from '../../sharedComponents/Events/NewPickUp';
-import useModal from '../../sharedComponents/Modal/useModal';
+import { NewEvent } from '../../components/events/NewEvent';
+import { NewPickUp } from '../../components/events/NewPickUp';
+import useModal from '../../components/modal/useModal';
 
 const Wrapper = styled.div`
     display: flex;

@@ -1,4 +1,4 @@
-import {ApiPartner} from "../src/api/PartnerService";
+import { ApiPartner } from '../src/services/PartnerService';
 
 export const mockPartners: Array<ApiPartner> = [
     {
@@ -22,4 +22,4 @@ export const mockPartners: Array<ApiPartner> = [
         phone: '004712345679',
         email: 'example@example.com',
     },
-]
+];

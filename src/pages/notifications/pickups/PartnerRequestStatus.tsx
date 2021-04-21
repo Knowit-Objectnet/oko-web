@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
-import { ApiPickUp } from '../../../api/PickUpService';
-import { useRequests } from '../../../api/hooks/useRequests';
+import { ApiPickUp } from '../../../services/PickUpService';
+import { useRequests } from '../../../services/hooks/useRequests';
 import { RequestRegistrationButton } from './RequestRegistrationButton';
 import { RequestCancellationButton } from './RequestCancellationButton';
 import { useState } from 'react';
-import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../sharedComponents/StatusBadge';
-import { Spinner } from '../../../sharedComponents/Spinner';
+import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../components/StatusBadge';
+import { Spinner } from '../../../components/Spinner';
 
 const StatusWrapper = styled.div`
     display: flex;

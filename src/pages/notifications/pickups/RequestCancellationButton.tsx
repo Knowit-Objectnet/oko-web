@@ -2,9 +2,9 @@ import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
+import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../services/RequestService';
 import CrossIcon from '../../../assets/Cross.svg';
-import { TextButton } from '../../../sharedComponents/buttons/TextButton';
+import { TextButton } from '../../../components/buttons/TextButton';
 
 interface Props {
     pickupId: number;

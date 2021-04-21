@@ -2,16 +2,16 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Roles } from '../../types';
 import { Station } from './Station';
-import { Loading } from '../../sharedComponents/Loading';
+import { Loading } from '../../components/Loading';
 import Plus from '../../assets/Plus.svg';
-import useModal from '../../sharedComponents/Modal/useModal';
-import { NewStation } from '../../sharedComponents/NewStation/NewStation';
+import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
-import { useStations } from '../../api/hooks/useStations';
+import { useStations } from '../../services/hooks/useStations';
 import { useKeycloak } from '@react-keycloak/web';
-import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
-import { DeleteStation } from '../../sharedComponents/DeleteStation';
+import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
+import { DeleteStation } from './DeleteStation';
 import Minus from '../../assets/Minus.svg';
+import { NewStation } from './NewStation';
 
 const Wrapper = styled.div`
     display: flex;

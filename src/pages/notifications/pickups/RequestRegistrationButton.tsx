@@ -2,8 +2,8 @@ import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../api/RequestService';
-import { PositiveButton } from '../../../sharedComponents/buttons/PositiveButton';
+import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../services/RequestService';
+import { PositiveButton } from '../../../components/buttons/PositiveButton';
 
 interface Props {
     pickupId: number;

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { EventInfo } from '../../../types';
-import { SingleDayCalendar } from '../../../sharedComponents/Calendar/SingleDayCalendar';
+import { SingleDayCalendar } from '../../../components/calendar/SingleDayCalendar';
 import { useState } from 'react';
 import add from 'date-fns/add';
 import { useKeycloak } from '@react-keycloak/web';
-import { Event } from '../../../sharedComponents/Events/Event';
+import { Event } from '../../../components/events/Event';
 
 const Wrapper = styled.div`
     width: 100%;

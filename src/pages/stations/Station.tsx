@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { StationAddress } from './StationAddress';
 import { StationOpeningTimes } from './StationOpeningTimes';
 import { StationAmbassador } from './StationAmbassador';
-import { ApiStation } from '../../api/StationService';
+import { ApiStation } from '../../services/StationService';
 
 const Wrapper = styled.div`
     width: 100%;
