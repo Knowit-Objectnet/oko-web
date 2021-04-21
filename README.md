@@ -130,8 +130,3 @@ The cache (contained in a `QueryClient` instance) has utility methods (like `inv
 * [Husky](https://www.npmjs.com/package/husky)
   * pre-commit: lint-staged
   * pre-push: linting and testing
-
-## Documentation
-
-An incomplete setup of a [Docz](https://www.docz.site) documentation has been (temporarily) archived in the `docs` folder. 
-See Readme file in that folder for more information.
