@@ -7,7 +7,7 @@ import ModalProvider from './components/modal/Provider';
 import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import { ThemeProvider } from 'styled-components';
-import theme from './theme';
+import oldTheme, { theme } from './theme';
 import { Helmet } from 'react-helmet';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
@@ -21,10 +21,12 @@ const alertOptions = {
 
 const queryClient = new QueryClient();
 
+console.log(theme);
+
 export const App: React.FC = () => {
     return (
-        <ChakraProvider>
-            <ThemeProvider theme={theme}>
+        <ChakraProvider theme={theme}>
+            <ThemeProvider theme={oldTheme}>
                 <GlobalStyle />
                 <ReactKeycloakProvider
                     authClient={keycloak}
