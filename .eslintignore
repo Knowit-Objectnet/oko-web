@@ -4,7 +4,7 @@ docs
 doczrc.js
 
 .idea
-__mocks__
+__mocks__/fileMock.js
 container
 dist
 node_modules

@@ -1,5 +1,5 @@
-import { ApiStation } from './api/StationService';
-import { ApiPartner } from './api/PartnerService';
+import { ApiStation } from './services/StationService';
+import { ApiPartner } from './services/PartnerService';
 
 export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
