@@ -1,5 +1,5 @@
 // Keycloak mock to intercept function calls
-jest.mock('./src/keycloak', () => ({
+jest.mock('./src/auth/keycloak', () => ({
     __esModule: true,
     default: {
         constructor: jest.fn(),
