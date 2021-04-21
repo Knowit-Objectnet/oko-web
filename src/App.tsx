@@ -21,8 +21,6 @@ const alertOptions = {
 
 const queryClient = new QueryClient();
 
-console.log(theme);
-
 export const App: React.FC = () => {
     return (
         <ChakraProvider theme={theme}>
