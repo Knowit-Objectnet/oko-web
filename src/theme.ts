@@ -37,9 +37,7 @@ const oldTheme = {
 
 export type ThemeType = typeof oldTheme;
 
-export default oldTheme;
-
-export const theme = extendTheme({
+const theme = extendTheme({
     colors: {
         primary: {
             default: Colors.DarkBlue,
@@ -60,19 +58,7 @@ export const theme = extendTheme({
         onSurface: Colors.Black,
         onError: Colors.Black,
 
-        DarkBlue: Colors.DarkBlue,
-        Blue: Colors.Blue,
-        LightBlue: Colors.LightBlue,
-        LightBlue50: Colors.LightBlue50,
-        DarkGreen: Colors.DarkGreen,
-        Green: Colors.Green,
-        LightGreen: Colors.LightGreen,
-        Red: Colors.Red,
-        Yellow: Colors.Yellow,
-        LightBeige: Colors.LightBeige,
-        DarkBegie: Colors.DarkBegie,
-        Black: Colors.Black,
-        White: Colors.White,
+        ...oldTheme.colors,
     },
     space: {
         sm: '0.5rem',
@@ -81,3 +67,5 @@ export const theme = extendTheme({
         xl: '4rem',
     },
 });
+
+export { oldTheme, theme };
