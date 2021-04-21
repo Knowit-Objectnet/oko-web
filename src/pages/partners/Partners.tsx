@@ -1,16 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Roles } from '../../types';
-import { Loading } from '../../sharedComponents/Loading';
+import { Loading } from '../../components/Loading';
 import Plus from '../../assets/Plus.svg';
-import useModal from '../../sharedComponents/Modal/useModal';
+import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
 import { useKeycloak } from '@react-keycloak/web';
-import { FloatingActionButton } from '../../sharedComponents/buttons/FloatingActionButton';
+import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
 import Minus from '../../assets/Minus.svg';
-import { NewPartner } from '../../sharedComponents/NewPartner';
-import { DeletePartner } from '../../sharedComponents/DeletePartner';
-import { usePartners } from '../../api/hooks/usePartners';
+import { NewPartner } from './NewPartner';
+import { DeletePartner } from './DeletePartner';
+import { usePartners } from '../../services/hooks/usePartners';
 
 const Wrapper = styled.div`
     display: flex;

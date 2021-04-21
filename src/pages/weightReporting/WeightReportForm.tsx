@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { ApiReport, ApiReportPatch, patchReport, reportsDefaultQueryKey } from '../../api/ReportService';
+import { ApiReport, ApiReportPatch, patchReport, reportsDefaultQueryKey } from '../../services/ReportService';
 import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import VisuallyHidden from '@reach/visually-hidden';
 import styled from 'styled-components';
-import { NegativeButton } from '../../sharedComponents/buttons/NegativeButton';
+import { NegativeButton } from '../../components/buttons/NegativeButton';
 
 const StyledForm = styled.form`
     display: flex;

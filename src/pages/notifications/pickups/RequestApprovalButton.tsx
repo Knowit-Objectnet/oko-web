@@ -2,8 +2,8 @@ import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../api/PickUpService';
-import { PositiveButton } from '../../../sharedComponents/buttons/PositiveButton';
+import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../services/PickUpService';
+import { PositiveButton } from '../../../components/buttons/PositiveButton';
 
 interface Props {
     pickupId: number;

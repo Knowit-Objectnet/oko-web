@@ -2,13 +2,13 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { RequestApprovalButton } from './RequestApprovalButton';
 import { Roles } from '../../../types';
-import { ApiPickUp } from '../../../api/PickUpService';
+import { ApiPickUp } from '../../../services/PickUpService';
 import { useKeycloak } from '@react-keycloak/web';
-import { ApiRequest } from '../../../api/RequestService';
-import { useRequests } from '../../../api/hooks/useRequests';
+import { ApiRequest } from '../../../services/RequestService';
+import { useRequests } from '../../../services/hooks/useRequests';
 import { useState } from 'react';
-import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../sharedComponents/StatusBadge';
-import { Spinner } from '../../../sharedComponents/Spinner';
+import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../components/StatusBadge';
+import { Spinner } from '../../../components/Spinner';
 
 const RequestList = styled.ul`
     display: flex;

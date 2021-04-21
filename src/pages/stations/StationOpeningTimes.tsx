@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Clock from '../../assets/Clock.svg';
-import { Dropdown } from '../../sharedComponents/Dropdown';
-import { StationOpeningHours } from '../../api/StationService';
+import { Dropdown } from './Dropdown';
+import { StationOpeningHours } from '../../services/StationService';
 
 const Wrapper = styled.div`
     flex: 1;

@@ -4,7 +4,7 @@ import Filter from '../../assets/Filter.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
 import ArrowUp from '../../assets/ArrowUp.svg';
 import { useState } from 'react';
-import { useStations } from '../../api/hooks/useStations';
+import { useStations } from '../../services/hooks/useStations';
 
 const Wrapper = styled.div`
     display: flex;

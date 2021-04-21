@@ -2,22 +2,22 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { default as DateCalendar } from 'react-calendar';
-import { RegCalendar } from './RegCalendar/RegCalendar';
-import { Event } from '../../sharedComponents/Events/Event';
-import { NewPickUp } from '../../sharedComponents/Events/NewPickUp';
-import { NewEvent } from '../../sharedComponents/Events/NewEvent';
+import { AdminCalendar } from './AdminCalendar/AdminCalendar';
+import { Event } from '../../components/events/Event';
+import { NewPickUp } from '../../components/events/NewPickUp';
+import { NewEvent } from '../../components/events/NewEvent';
 import { CalendarSideMenu } from './CalendarSideMenu';
 import { EventInfo, Roles } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
-import { AmbassadorCalendar } from './AmbassadorCalendar/AmbassadorCalendar';
+import { StationCalendar } from './StationCalendar/StationCalendar';
 import add from 'date-fns/add';
-import { Loading } from '../../sharedComponents/Loading';
+import { Loading } from '../../components/Loading';
 import { useKeycloak } from '@react-keycloak/web';
 import { StationFilter } from './StationFilter';
-import useModal from '../../sharedComponents/Modal/useModal';
+import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
-import { ApiEvent } from '../../api/EventService';
-import { useEvents } from '../../api/hooks/useEvents';
+import { ApiEvent } from '../../services/EventService';
+import { useEvents } from '../../services/hooks/useEvents';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -176,7 +176,7 @@ export const Calendar: React.FC = () => {
             );
         } else if (userIsStation) {
             return (
-                <AmbassadorCalendar
+                <StationCalendar
                     onSelectEvent={showEventInfoModal}
                     date={selectedDate}
                     isToggled={showingCalendar}
@@ -186,7 +186,7 @@ export const Calendar: React.FC = () => {
             );
         }
         return (
-            <RegCalendar
+            <AdminCalendar
                 onSelectEvent={showEventInfoModal}
                 onSelectSlot={onSelectSlot}
                 date={selectedDate}

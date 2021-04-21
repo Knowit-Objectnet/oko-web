@@ -6,7 +6,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { PartnerRequestStatus } from './PartnerRequestStatus';
 import { RequestsStatusList } from './RequestsStatusList';
 import { Roles } from '../../../types';
-import { ApiPickUp } from '../../../api/PickUpService';
+import { ApiPickUp } from '../../../services/PickUpService';
 
 const Wrapper = styled.li`
     width: 100%;
