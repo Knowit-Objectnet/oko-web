@@ -10,6 +10,7 @@ import { ThemeProvider } from 'styled-components';
 import theme from './theme';
 import { Helmet } from 'react-helmet';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ChakraProvider } from '@chakra-ui/react';
 
 const alertOptions = {
     position: positions.TOP_CENTER,
@@ -22,28 +23,30 @@ const queryClient = new QueryClient();
 
 export const App: React.FC = () => {
     return (
-        <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <ReactKeycloakProvider
-                authClient={keycloak}
-                initOptions={{
-                    onLoad: 'login-required',
-                }}
-            >
-                <AlertProvider template={AlertTemplate} {...alertOptions}>
-                    <QueryClientProvider client={queryClient}>
-                        <ModalProvider>
-                            <Helmet titleTemplate="Oslo kommune REG | %s">
-                                <html lang="no" />
-                                {/* TODO write a SEO-friendly description: */}
-                                <meta name="description" content="Oslo kommune REG" />{' '}
-                            </Helmet>
-                            <MainRouter />
-                        </ModalProvider>
-                    </QueryClientProvider>
-                </AlertProvider>
-            </ReactKeycloakProvider>
-        </ThemeProvider>
+        <ChakraProvider>
+            <ThemeProvider theme={theme}>
+                <GlobalStyle />
+                <ReactKeycloakProvider
+                    authClient={keycloak}
+                    initOptions={{
+                        onLoad: 'login-required',
+                    }}
+                >
+                    <AlertProvider template={AlertTemplate} {...alertOptions}>
+                        <QueryClientProvider client={queryClient}>
+                            <ModalProvider>
+                                <Helmet titleTemplate="Oslo kommune REG | %s">
+                                    <html lang="no" />
+                                    {/* TODO write a SEO-friendly description: */}
+                                    <meta name="description" content="Oslo kommune REG" />{' '}
+                                </Helmet>
+                                <MainRouter />
+                            </ModalProvider>
+                        </QueryClientProvider>
+                    </AlertProvider>
+                </ReactKeycloakProvider>
+            </ThemeProvider>
+        </ChakraProvider>
     );
 };
 
