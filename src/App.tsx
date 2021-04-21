@@ -1,6 +1,4 @@
 import React from 'react';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
-import keycloak from './auth/keycloak';
 import { MainRouter } from './routing/MainRouter';
 import { GlobalStyle } from './global-styles';
 import ModalProvider from './components/modal/Provider';
@@ -11,6 +9,7 @@ import { oldTheme, theme } from './theme';
 import { Helmet } from 'react-helmet';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
+import { AuthProvider } from './auth/AuthProvider';
 
 const alertOptions = {
     position: positions.TOP_CENTER,
@@ -26,12 +25,7 @@ export const App: React.FC = () => {
         <ChakraProvider theme={theme}>
             <ThemeProvider theme={oldTheme}>
                 <GlobalStyle />
-                <ReactKeycloakProvider
-                    authClient={keycloak}
-                    initOptions={{
-                        onLoad: 'login-required',
-                    }}
-                >
+                <AuthProvider>
                     <AlertProvider template={AlertTemplate} {...alertOptions}>
                         <QueryClientProvider client={queryClient}>
                             <ModalProvider>
@@ -44,7 +38,7 @@ export const App: React.FC = () => {
                             </ModalProvider>
                         </QueryClientProvider>
                     </AlertProvider>
-                </ReactKeycloakProvider>
+                </AuthProvider>
             </ThemeProvider>
         </ChakraProvider>
     );

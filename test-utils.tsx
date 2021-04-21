@@ -1,15 +1,14 @@
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
-import keycloak from './src/auth/keycloak';
 import { oldTheme, theme } from './src/theme';
 import ModalProvider from './src/components/modal/Provider';
 import { GlobalStyle } from './src/global-styles';
 import AlertTemplate from 'react-alert-template-basic';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
+import { AuthProvider } from './src/auth/AuthProvider';
 
 /*
  * This file sets up the common providers that wraps the application (in `App.tsx`),
@@ -34,9 +33,9 @@ const queryClient = new QueryClient();
 
 const GlobalProviders: React.FC = ({ children }) => {
     return (
-        <ReactKeycloakProvider authClient={keycloak}>
-            <ChakraProvider theme={theme}>
-                <ThemeProvider theme={oldTheme}>
+        <ChakraProvider theme={theme}>
+            <ThemeProvider theme={oldTheme}>
+                <AuthProvider>
                     <AlertProvider template={AlertTemplate} {...alertOptions}>
                         <QueryClientProvider client={queryClient}>
                             <ModalProvider>
@@ -45,9 +44,9 @@ const GlobalProviders: React.FC = ({ children }) => {
                             </ModalProvider>
                         </QueryClientProvider>
                     </AlertProvider>
-                </ThemeProvider>
-            </ChakraProvider>
-        </ReactKeycloakProvider>
+                </AuthProvider>
+            </ThemeProvider>
+        </ChakraProvider>
     );
 };
 
