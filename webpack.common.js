@@ -28,7 +28,7 @@ module.exports = {
         // Uncomment next line to run bundle analytics on build/run (https://www.npmjs.com/package/webpack-bundle-analyzer)
         // new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, 'src', 'index.html'),
+            template: path.resolve(__dirname, 'public', 'index.html'),
         }),
         new Dotenv({
             // Loading environment variables from `.env`-file, if present. These variables can be referenced in
