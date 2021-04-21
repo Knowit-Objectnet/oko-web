@@ -7,9 +7,10 @@ import ModalProvider from './components/modal/Provider';
 import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import { ThemeProvider } from 'styled-components';
-import theme from './theme';
+import { oldTheme, theme } from './theme';
 import { Helmet } from 'react-helmet';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ChakraProvider } from '@chakra-ui/react';
 
 const alertOptions = {
     position: positions.TOP_CENTER,
@@ -22,28 +23,30 @@ const queryClient = new QueryClient();
 
 export const App: React.FC = () => {
     return (
-        <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <ReactKeycloakProvider
-                authClient={keycloak}
-                initOptions={{
-                    onLoad: 'login-required',
-                }}
-            >
-                <AlertProvider template={AlertTemplate} {...alertOptions}>
-                    <QueryClientProvider client={queryClient}>
-                        <ModalProvider>
-                            <Helmet titleTemplate="Oslo kommune REG | %s">
-                                <html lang="no" />
-                                {/* TODO write a SEO-friendly description: */}
-                                <meta name="description" content="Oslo kommune REG" />{' '}
-                            </Helmet>
-                            <MainRouter />
-                        </ModalProvider>
-                    </QueryClientProvider>
-                </AlertProvider>
-            </ReactKeycloakProvider>
-        </ThemeProvider>
+        <ChakraProvider theme={theme}>
+            <ThemeProvider theme={oldTheme}>
+                <GlobalStyle />
+                <ReactKeycloakProvider
+                    authClient={keycloak}
+                    initOptions={{
+                        onLoad: 'login-required',
+                    }}
+                >
+                    <AlertProvider template={AlertTemplate} {...alertOptions}>
+                        <QueryClientProvider client={queryClient}>
+                            <ModalProvider>
+                                <Helmet titleTemplate="Oslo kommune REG | %s">
+                                    <html lang="no" />
+                                    {/* TODO write a SEO-friendly description: */}
+                                    <meta name="description" content="Oslo kommune REG" />{' '}
+                                </Helmet>
+                                <MainRouter />
+                            </ModalProvider>
+                        </QueryClientProvider>
+                    </AlertProvider>
+                </ReactKeycloakProvider>
+            </ThemeProvider>
+        </ChakraProvider>
     );
 };
 
