@@ -1,5 +1,4 @@
 import React from 'react';
-import { useKeycloak } from '@react-keycloak/web';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../types';
@@ -8,11 +7,11 @@ import { Calendar } from '../pages/calendar/Calendar';
 import { WeightReporting } from '../pages/weightReporting/WeightReporting';
 import { Stations } from '../pages/stations/Stations';
 import { Partners } from '../pages/partners/Partners';
+import { useAuth } from '../auth/useAuth';
 
 const HomePage: React.FC = () => {
-    const { keycloak } = useKeycloak();
-    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
-    return userIsAdmin ? <Redirect to="/oversikt" /> : <Redirect to="/kalender" />;
+    const { user } = useAuth();
+    return user.isAdmin ? <Redirect to="/oversikt" /> : <Redirect to="/kalender" />;
 };
 
 export const PageRouter: React.FC = () => (
