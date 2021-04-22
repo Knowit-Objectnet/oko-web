@@ -12,6 +12,7 @@ interface UserProfile {
     isAdmin: boolean;
     isStasjon: boolean;
     isPartner: boolean;
+    hasRole: (role: Roles) => boolean;
     ownsResource: (ownerId: number) => boolean;
 }
 
@@ -44,6 +45,7 @@ export const useAuth = (): AuthContext => {
         isStasjon: keycloak.hasRealmRole(Roles.Ambassador),
         isPartner: keycloak.hasRealmRole(Roles.Partner),
         ownsResource: (ownerId) => ownerId === tokenParsed?.GroupID,
+        hasRole: (role) => keycloak.hasRealmRole(role),
     };
 
     const logout = (options: LogoutOptions) => {
