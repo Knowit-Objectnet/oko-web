@@ -61,7 +61,7 @@ export const DatePicker: React.FC<Props> = ({ name }) => {
                     format={FORMAT}
                     parseDate={parseDate}
                     value={value}
-                    placeholder={`mm/dd/åååå`}
+                    placeholder="mm/dd/åååå"
                     dayPickerProps={{
                         disabledDays: {
                             daysOfWeek: [0, 6],

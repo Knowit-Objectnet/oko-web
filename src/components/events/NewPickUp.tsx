@@ -87,7 +87,7 @@ export const NewPickUp: React.FC<Props> = (props) => {
     };
 
     return (
-        <EventTemplateVertical title={'Utlys ekstrauttak'} showEditSymbol={false} isEditing={false}>
+        <EventTemplateVertical title="Utlys ekstrauttak" showEditSymbol={false} isEditing={false}>
             <EventOptionDateRange
                 dateRange={dateRange}
                 timeRange={timeRange}
