@@ -37,27 +37,27 @@ export interface ApiPickUpParams {
     endDateTime?: string;
 }
 
-export const getPickUps = (params: ApiPickUpParams, token?: string): Promise<Array<ApiPickUp>> =>
-    httpClient(token)
+export const getPickUps = (params: ApiPickUpParams): Promise<Array<ApiPickUp>> =>
+    httpClient()
         .get<Array<ApiPickUp>>(endpoint, { params })
         .then((response) => response.data);
 
-export const getPickUpById = (pickUpId: number, token?: string): Promise<ApiPickUp> =>
-    httpClient(token)
+export const getPickUpById = (pickUpId: number): Promise<ApiPickUp> =>
+    httpClient()
         .get<ApiPickUp>(`${endpoint}/${pickUpId}`)
         .then((response) => response.data);
 
-export const postPickUp = (newPickUp: ApiPickUpPost, token?: string): Promise<ApiPickUp> =>
-    httpClient(token)
+export const postPickUp = (newPickUp: ApiPickUpPost): Promise<ApiPickUp> =>
+    httpClient()
         .post<ApiPickUp>(endpoint, newPickUp)
         .then((response) => response.data);
 
-export const deletePickUp = (pickUpId: number, token?: string): Promise<ApiPickUp> =>
-    httpClient(token)
+export const deletePickUp = (pickUpId: number): Promise<ApiPickUp> =>
+    httpClient()
         .delete<ApiPickUp>(`${endpoint}/${pickUpId}`)
         .then((response) => response.data);
 
-export const patchPickUp = (updatedPickUp: ApiPickUpPatch, token?: string): Promise<ApiPickUp> =>
-    httpClient(token)
+export const patchPickUp = (updatedPickUp: ApiPickUpPatch): Promise<ApiPickUp> =>
+    httpClient()
         .patch<ApiPickUp>(endpoint, updatedPickUp)
         .then((response) => response.data);

@@ -16,7 +16,6 @@ import parse from 'date-fns/parse';
 import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
 import set from 'date-fns/set';
-import { useAuth } from '../../auth/useAuth';
 
 const StyledForm = styled.form`
     display: flex;
@@ -149,7 +148,6 @@ const WEEKDAYS: Array<WorkingWeekdays> = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THU
 
 export const NewEvent: React.FC<Props> = (props) => {
     const alert = useAlert();
-    const { authToken } = useAuth();
 
     // form methods from reaect-hook-forms used in the form provider and inputs
     const formMethods = useForm<FormData>({
@@ -172,7 +170,7 @@ export const NewEvent: React.FC<Props> = (props) => {
     });
 
     const queryClient = useQueryClient();
-    const addEventMutation = useMutation((newEvent: ApiEventPost) => postEvent(newEvent, authToken), {
+    const addEventMutation = useMutation((newEvent: ApiEventPost) => postEvent(newEvent), {
         onSuccess: () => {
             alert.show('Avtalen ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);

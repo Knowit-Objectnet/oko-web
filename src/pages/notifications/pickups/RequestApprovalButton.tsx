@@ -3,7 +3,6 @@ import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../services/PickUpService';
 import { PositiveButton } from '../../../components/buttons/PositiveButton';
-import { useAuth } from '../../../auth/useAuth';
 
 interface Props {
     pickupId: number;
@@ -12,11 +11,10 @@ interface Props {
 }
 
 export const RequestApprovalButton: React.FC<Props> = ({ pickupId, partnerId, onRequestApproval }) => {
-    const { authToken } = useAuth();
     const alert = useAlert();
 
     const queryClient = useQueryClient();
-    const updatePickUpMutation = useMutation((updatedPickUp: ApiPickUpPatch) => patchPickUp(updatedPickUp, authToken), {
+    const updatePickUpMutation = useMutation((updatedPickUp: ApiPickUpPatch) => patchPickUp(updatedPickUp), {
         onError: () => {
             alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrauttak ble ikke registrert.', {
                 type: types.ERROR,

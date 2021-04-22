@@ -3,12 +3,6 @@ import { ApiPartner } from './services/PartnerService';
 
 export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
-export enum Roles {
-    Oslo = 'reg_employee',
-    Partner = 'partner',
-    Ambassador = 'reuse_station',
-}
-
 export interface EventInfo {
     title: string;
     start: Date;

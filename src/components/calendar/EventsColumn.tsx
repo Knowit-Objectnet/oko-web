@@ -28,7 +28,6 @@ interface EventsColumnProps {
  * Events column component to render events in the calendar
  */
 export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
-    // Keycloak instance
     const { user } = useAuth();
     // Ref to the events column (used to get the height of the calendar)
     const eventsRef = useRef<HTMLDivElement>(null);

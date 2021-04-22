@@ -56,7 +56,7 @@ interface DeleteEventProps {
 export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
     const alert = useAlert();
 
-    const { user, authToken } = useAuth();
+    const { user } = useAuth();
 
     const eventIsRecurring = props.event.resource.recurrenceRule != null;
     const allowRangeDeletion =
@@ -77,7 +77,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
 
     const queryClient = useQueryClient();
     const deleteSingleEventMutation = useMutation(
-        (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }, authToken),
+        (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }),
         {
             onSuccess: () => {
                 alert.show('Avtalen ble slettet.', { type: types.SUCCESS });
@@ -100,7 +100,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                 fromDate: fromDate.toISOString(),
                 toDate: toDate.toISOString(),
             };
-            return deleteEvents(apiParams, authToken);
+            return deleteEvents(apiParams);
         },
         {
             onSuccess: () => {

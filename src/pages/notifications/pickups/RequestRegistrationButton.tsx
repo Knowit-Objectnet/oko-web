@@ -11,12 +11,12 @@ interface Props {
 }
 
 export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, onRequestRegistration }) => {
-    const { user, authToken } = useAuth();
+    const { user } = useAuth();
     const partnerId = user.aktorId;
     const alert = useAlert();
 
     const queryClient = useQueryClient();
-    const addRequestMutation = useMutation((newRequest: ApiRequestPost) => postRequest(newRequest, authToken), {
+    const addRequestMutation = useMutation((newRequest: ApiRequestPost) => postRequest(newRequest), {
         onError: () => {
             alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
         },

@@ -25,27 +25,27 @@ export interface ApiStationPatch {
     hours?: StationOpeningHours;
 }
 
-export const getStations = (token?: string): Promise<Array<ApiStation>> =>
-    httpClient(token)
+export const getStations = (): Promise<Array<ApiStation>> =>
+    httpClient()
         .get<Array<ApiStation>>(endpoint)
         .then((response) => response.data);
 
-export const getStationById = (stationId: number, token?: string): Promise<ApiStation> =>
-    httpClient(token)
+export const getStationById = (stationId: number): Promise<ApiStation> =>
+    httpClient()
         .get<ApiStation>(`${endpoint}/${stationId}`)
         .then((response) => response.data);
 
-export const postStation = (newStation: ApiStationPost, token?: string): Promise<ApiStation> =>
-    httpClient(token)
+export const postStation = (newStation: ApiStationPost): Promise<ApiStation> =>
+    httpClient()
         .post<ApiStation>(endpoint, newStation)
         .then((response) => response.data);
 
-export const deleteStation = (stationId: number, token?: string): Promise<ApiStation> =>
-    httpClient(token)
+export const deleteStation = (stationId: number): Promise<ApiStation> =>
+    httpClient()
         .delete<ApiStation>(`${endpoint}/${stationId}`)
         .then((response) => response.data);
 
-export const patchStation = (updatedStation: ApiStationPatch, token?: string): Promise<ApiStation> =>
-    httpClient(token)
+export const patchStation = (updatedStation: ApiStationPatch): Promise<ApiStation> =>
+    httpClient()
         .patch<ApiStation>(endpoint, updatedStation)
         .then((response) => response.data);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
-import { Roles } from '../types';
 import { useAuth } from '../auth/useAuth';
+import { Roles } from '../auth/Roles';
 
 interface Props extends RouteProps {
     requiredRoles: Array<Roles>;

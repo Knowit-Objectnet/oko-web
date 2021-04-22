@@ -12,12 +12,12 @@ interface Props {
 }
 
 export const RequestCancellationButton: React.FC<Props> = ({ pickupId, onRequestCancellation }) => {
-    const { user, authToken } = useAuth();
+    const { user } = useAuth();
     const partnerId = user.aktorId;
     const alert = useAlert();
 
     const queryClient = useQueryClient();
-    const deleteRequestMutation = useMutation((request: ApiRequestParams) => deleteRequest(request, authToken), {
+    const deleteRequestMutation = useMutation((request: ApiRequestParams) => deleteRequest(request), {
         onError: () => {
             alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
                 type: types.ERROR,

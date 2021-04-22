@@ -3,12 +3,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiPickUpPost, pickUpsDefaultQueryKey, postPickUp } from '../../services/PickUpService';
 import { PositiveButton } from '../buttons/PositiveButton';
-import { AuthTokenParsed } from '../../auth/useAuth';
+import { useAuth } from '../../auth/useAuth';
 
 const Textarea = styled.textarea`
     min-height: 5rem;
@@ -25,11 +24,11 @@ interface Props {
 }
 
 export const NewPickUp: React.FC<Props> = (props) => {
-    const { keycloak } = useKeycloak();
+    const { user } = useAuth();
     const alert = useAlert();
 
     const queryClient = useQueryClient();
-    const addPickUpMutation = useMutation((newPickUp: ApiPickUpPost) => postPickUp(newPickUp, keycloak.token), {
+    const addPickUpMutation = useMutation((newPickUp: ApiPickUpPost) => postPickUp(newPickUp), {
         onSuccess: () => {
             alert.show('Et nytt ekstrauttak ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
@@ -80,7 +79,7 @@ export const NewPickUp: React.FC<Props> = (props) => {
             startDateTime: start.toISOString(),
             endDateTime: end.toISOString(),
             description: description,
-            stationId: (keycloak.tokenParsed as AuthTokenParsed).GroupID as number,
+            stationId: user.aktorId,
         };
 
         addPickUpMutation.mutate(newPickUp);

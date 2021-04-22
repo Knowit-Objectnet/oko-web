@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
-import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../../services/PartnerService';
 import { PositiveButton } from '../../components/buttons/PositiveButton';
@@ -59,13 +58,12 @@ interface Props {
 }
 
 export const NewPartner: React.FC<Props> = (props) => {
-    const { keycloak } = useKeycloak();
     const alert = useAlert();
 
     const formMethods = useForm<FormData>({ resolver: yupResolver(validationSchema) });
 
     const queryClient = useQueryClient();
-    const addPartnerMutation = useMutation((newPartner: ApiPartnerPost) => postPartner(newPartner, keycloak.token), {
+    const addPartnerMutation = useMutation((newPartner: ApiPartnerPost) => postPartner(newPartner), {
         onSuccess: () => {
             alert.show('Ny partner ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
