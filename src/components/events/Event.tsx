@@ -58,12 +58,12 @@ interface Props {
 export const Event: React.FC<Props> = (props) => {
     const alert = useAlert();
 
-    const { user, token } = useAuth();
+    const { user, authToken } = useAuth();
     const stationOwnsEvent = user.ownsResource(props.event.resource.station.id);
     const partnerOwnsEvent = user.ownsResource(props.event.resource.partner.id);
 
     const queryClient = useQueryClient();
-    const updateEventMutation = useMutation((updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, token), {
+    const updateEventMutation = useMutation((updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, authToken), {
         onSuccess: () => {
             alert.show('Avtalen ble oppdatert.', { type: types.SUCCESS });
             setIsEditing(false);

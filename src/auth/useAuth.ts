@@ -16,9 +16,13 @@ interface UserProfile {
 }
 
 interface AuthContext {
-    token?: string;
+    authToken?: string;
     user: UserProfile;
-    logout: () => void;
+    logout: (options: LogoutOptions) => void;
+}
+
+interface LogoutOptions {
+    returnUrl: string;
 }
 
 export interface AuthTokenParsed extends KeycloakTokenParsed {
@@ -29,20 +33,26 @@ export const useAuth = (): AuthContext => {
     const { keycloak } = useKeycloak();
     const tokenParsed = keycloak.tokenParsed as AuthTokenParsed | undefined;
 
+    const user: UserProfile = {
+        username: keycloak.profile?.username,
+        firstname: keycloak.profile?.firstName,
+        lastname: keycloak.profile?.lastName,
+        email: keycloak.profile?.email,
+        aktorId: tokenParsed?.GroupID,
+        isAuthenticated: keycloak.authenticated,
+        isAdmin: keycloak.hasRealmRole(Roles.Oslo),
+        isStasjon: keycloak.hasRealmRole(Roles.Ambassador),
+        isPartner: keycloak.hasRealmRole(Roles.Partner),
+        ownsResource: (ownerId) => ownerId === tokenParsed?.GroupID,
+    };
+
+    const logout = (options: LogoutOptions) => {
+        keycloak.logout({ redirectUri: options.returnUrl });
+    };
+
     return {
-        token: keycloak.token,
-        user: {
-            username: keycloak.profile?.username,
-            firstname: keycloak.profile?.firstName,
-            lastname: keycloak.profile?.lastName,
-            email: keycloak.profile?.email,
-            aktorId: tokenParsed?.GroupID,
-            isAuthenticated: keycloak.authenticated,
-            isAdmin: keycloak.hasRealmRole(Roles.Oslo),
-            isStasjon: keycloak.hasRealmRole(Roles.Ambassador),
-            isPartner: keycloak.hasRealmRole(Roles.Partner),
-            ownsResource: (ownerId) => ownerId === tokenParsed?.GroupID,
-        },
-        logout: keycloak.logout,
+        authToken: keycloak.token,
+        user,
+        logout,
     };
 };
