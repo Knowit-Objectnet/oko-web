@@ -28,17 +28,17 @@ export interface ApiReportParams {
     toDate?: string;
 }
 
-export const getReports = (params: ApiReportParams, token: string): Promise<Array<ApiReport>> =>
+export const getReports = (params: ApiReportParams, token?: string): Promise<Array<ApiReport>> =>
     httpClient(token)
         .get<Array<ApiReport>>(endpoint, { params })
         .then((response) => response.data);
 
-export const getReportById = (reportId: number, token: string): Promise<ApiReport> =>
+export const getReportById = (reportId: number, token?: string): Promise<ApiReport> =>
     httpClient(token)
         .get<ApiReport>(`${endpoint}/${reportId}`)
         .then((response) => response.data);
 
-export const patchReport = (updatedReport: ApiReportPatch, token: string): Promise<ApiReport> =>
+export const patchReport = (updatedReport: ApiReportPatch, token?: string): Promise<ApiReport> =>
     httpClient(token)
         .patch<ApiReport>(endpoint, updatedReport)
         .then((response) => response.data);

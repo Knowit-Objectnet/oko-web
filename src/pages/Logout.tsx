@@ -12,10 +12,11 @@ export const Logout: React.FC = () => {
     const redirectUri = location.href.slice(0, location.href.indexOf(location.pathname));
 
     useEffect(
-        () =>
+        () => {
             keycloak.logout({
                 redirectUri,
-            }),
+            });
+        },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
     );

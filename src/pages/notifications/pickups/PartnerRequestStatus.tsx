@@ -8,6 +8,7 @@ import { RequestCancellationButton } from './RequestCancellationButton';
 import { useState } from 'react';
 import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../components/StatusBadge';
 import { Spinner } from '../../../components/Spinner';
+import { AuthTokenParsed } from '../../../auth/useAuth';
 
 const StatusWrapper = styled.div`
     display: flex;
@@ -32,7 +33,7 @@ interface Props {
 
 export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
     const { keycloak } = useKeycloak();
-    const userId = keycloak.tokenParsed?.GroupID;
+    const userId = (keycloak.tokenParsed as AuthTokenParsed).GroupID as number;
 
     const [requestStatusLoading, setRequestStatusLoading] = useState(false);
 

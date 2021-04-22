@@ -18,6 +18,7 @@ import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
 import { ApiEvent } from '../../services/EventService';
 import { useEvents } from '../../services/hooks/useEvents';
+import { AuthTokenParsed } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -83,7 +84,7 @@ export const Calendar: React.FC = () => {
     const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
     const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
     const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
-    const userId = keycloak.tokenParsed?.GroupID;
+    const userId = (keycloak.tokenParsed as AuthTokenParsed)?.GroupID;
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedStationId, setSelectedStationId] = useState<number | undefined>();

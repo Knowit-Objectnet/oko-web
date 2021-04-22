@@ -8,6 +8,7 @@ import { EventInfo, Roles } from '../../types';
 import { ApiEventParams, deleteEvents, eventsDefaultQueryKey } from '../../services/EventService';
 import { types, useAlert } from 'react-alert';
 import { useKeycloak } from '@react-keycloak/web';
+import { AuthTokenParsed } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     position: absolute;
@@ -59,7 +60,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
     const { keycloak } = useKeycloak();
     const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
     const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const stationOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.station.id;
+    const stationOwnsEvent = (keycloak.tokenParsed as AuthTokenParsed)?.GroupID === props.event.resource.station.id;
 
     const eventIsRecurring = props.event.resource.recurrenceRule != null;
     const allowRangeDeletion = eventIsRecurring && (userIsAdmin || (userIsStation && stationOwnsEvent));

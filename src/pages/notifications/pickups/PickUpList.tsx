@@ -6,6 +6,7 @@ import { Roles } from '../../../types';
 import { usePickUps } from '../../../services/hooks/usePickUps';
 import { ApiPickUpParams } from '../../../services/PickUpService';
 import compareAsc from 'date-fns/compareAsc';
+import { AuthTokenParsed } from '../../../auth/useAuth';
 
 const HeaderRow = styled.div`
     display: grid;
@@ -28,7 +29,7 @@ const PickUpRows = styled.ul`
 export const PickUpList: React.FC = () => {
     const { keycloak } = useKeycloak();
     const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const userId = keycloak.tokenParsed?.GroupID;
+    const userId = (keycloak.tokenParsed as AuthTokenParsed)?.GroupID;
 
     const pickUpsFilter: ApiPickUpParams = {
         stationId: userIsStation ? userId : undefined,

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useKeycloak } from '@react-keycloak/web';
 import { Loading } from '../../components/Loading';
 import { Helmet } from 'react-helmet';
 import { useReports } from '../../services/hooks/useReports';
 import { formatISO } from 'date-fns';
 import { WeightReportList } from './WeightReportList';
 import compareAsc from 'date-fns/compareAsc';
+import { useAuth } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -25,11 +25,10 @@ const Notice = styled.p`
 `;
 
 export const WeightReporting: React.FC = () => {
-    const { keycloak } = useKeycloak();
-    const userId = keycloak.tokenParsed?.GroupID;
+    const { user } = useAuth();
 
     const { data: reports, isLoading, isError } = useReports({
-        partnerId: userId,
+        partnerId: user.aktorId,
         /* Fetching all reports for today, until midnight. */
         toDate: formatISO(new Date().setHours(24, 0, 0, 0)),
     });

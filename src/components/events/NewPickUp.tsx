@@ -8,6 +8,7 @@ import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiPickUpPost, pickUpsDefaultQueryKey, postPickUp } from '../../services/PickUpService';
 import { PositiveButton } from '../buttons/PositiveButton';
+import { AuthTokenParsed } from '../../auth/useAuth';
 
 const Textarea = styled.textarea`
     min-height: 5rem;
@@ -79,7 +80,7 @@ export const NewPickUp: React.FC<Props> = (props) => {
             startDateTime: start.toISOString(),
             endDateTime: end.toISOString(),
             description: description,
-            stationId: keycloak.tokenParsed.GroupID,
+            stationId: (keycloak.tokenParsed as AuthTokenParsed).GroupID as number,
         };
 
         addPickUpMutation.mutate(newPickUp);

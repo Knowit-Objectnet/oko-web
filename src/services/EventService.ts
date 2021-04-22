@@ -53,22 +53,22 @@ export interface ApiEventParams {
 const endpoint = '/events';
 export const eventsDefaultQueryKey = 'getEvents';
 
-export const getEvents = (params: ApiEventParams, token: string): Promise<Array<ApiEvent>> =>
+export const getEvents = (params: ApiEventParams, token?: string): Promise<Array<ApiEvent>> =>
     httpClient(token)
         .get<Array<ApiEvent>>(endpoint, { params })
         .then((response) => response.data);
 
-export const postEvent = (newEvent: ApiEventPost, token: string): Promise<ApiEvent> =>
+export const postEvent = (newEvent: ApiEventPost, token?: string): Promise<ApiEvent> =>
     httpClient(token)
         .post<ApiEvent>(endpoint, newEvent)
         .then((response) => response.data);
 
-export const deleteEvents = (params: ApiEventParams, token: string): Promise<Array<ApiEvent>> =>
+export const deleteEvents = (params: ApiEventParams, token?: string): Promise<Array<ApiEvent>> =>
     httpClient(token)
         .delete<Array<ApiEvent>>(endpoint, { params })
         .then((response) => response.data);
 
-export const patchEvent = (updatedEvent: ApiEventPatch, token: string): Promise<ApiEvent> =>
+export const patchEvent = (updatedEvent: ApiEventPatch, token?: string): Promise<ApiEvent> =>
     httpClient(token)
         .patch<ApiEvent>(endpoint, updatedEvent)
         .then((response) => response.data);

@@ -7,6 +7,7 @@ import pickBy from 'lodash/pickBy';
 import { ListItem } from './ListItem';
 import styled from 'styled-components';
 import { useKeycloak } from '@react-keycloak/web';
+import { AuthTokenParsed } from '../../../auth/useAuth';
 const Wrapper = styled.div``;
 
 const Header = styled.div`
@@ -40,7 +41,9 @@ export const ListView: React.FC<ListViewProps> = (props) => {
         const eventsForDate = props.events.filter((event) => isSameDay(event.start, date));
         const groupedEvents = groupBy(eventsForDate, (event): string => event.resource.station.name);
         const filteredAndGroupedEvents = pickBy(groupedEvents, (eventsInGroup) =>
-            eventsInGroup.some((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID),
+            eventsInGroup.some(
+                (event) => event.resource.partner.id === (keycloak.tokenParsed as AuthTokenParsed)?.GroupID,
+            ),
         );
         return Object.entries(filteredAndGroupedEvents).map(([label, events]) => (
             <ListItem key={label} date={date} title={label} events={events} />

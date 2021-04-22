@@ -20,17 +20,17 @@ export interface ApiRequestParams {
     partnerId?: number;
 }
 
-export const getRequests = (params: ApiRequestParams, token: string): Promise<Array<ApiRequest>> =>
+export const getRequests = (params: ApiRequestParams, token?: string): Promise<Array<ApiRequest>> =>
     httpClient(token)
         .get<Array<ApiRequest>>(endpoint, { params })
         .then((response) => response.data);
 
-export const postRequest = (newRequest: ApiRequestPost, token: string): Promise<ApiRequest> =>
+export const postRequest = (newRequest: ApiRequestPost, token?: string): Promise<ApiRequest> =>
     httpClient(token)
         .post<ApiRequest>(endpoint, newRequest)
         .then((response) => response.data);
 
-export const deleteRequest = (params: ApiRequestParams, token: string): Promise<number> =>
+export const deleteRequest = (params: ApiRequestParams, token?: string): Promise<number> =>
     httpClient(token)
         .delete<number>(endpoint, { params })
         .then((response) => response.data);
