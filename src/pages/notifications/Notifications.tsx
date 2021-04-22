@@ -1,14 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Roles } from '../../types';
 import Plus from '../../assets/Plus.svg';
 import { NewPickUp } from '../../components/events/NewPickUp';
-import { useKeycloak } from '@react-keycloak/web';
 import useModal from '../../components/modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
 import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
 import { PickUpList } from './pickups/PickUpList';
+import { useAuth } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     position: relative;
@@ -31,9 +30,7 @@ const PageContent = styled.section`
 export const Notifications: React.FC = () => {
     const modal = useModal();
 
-    const { keycloak } = useKeycloak();
-    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
+    const { user } = useAuth();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
@@ -45,10 +42,10 @@ export const Notifications: React.FC = () => {
     return (
         <>
             <Helmet>
-                <title>{userIsAdmin ? 'Oversikt' : 'Varsler'}</title>
+                <title>{user.isAdmin ? 'Oversikt' : 'Varsler'}</title>
             </Helmet>
             <Wrapper>
-                {userIsStation && (
+                {user.isStasjon && (
                     <AddPickUpButtonContainer>
                         <FloatingActionButton
                             variant="positive"

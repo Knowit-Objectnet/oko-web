@@ -2,13 +2,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Calendar from '../../assets/Calendar.svg';
 import Plus from '../../assets/Plus.svg';
-import { Roles } from '../../types';
-import { useKeycloak } from '@react-keycloak/web';
 import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { NewEvent } from '../../components/events/NewEvent';
 import { NewPickUp } from '../../components/events/NewPickUp';
 import useModal from '../../components/modal/useModal';
+import { useAuth } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     display: flex;
@@ -24,10 +23,7 @@ interface Props {
 }
 
 export const CalendarSideMenu: React.FC<Props> = (props) => {
-    const { keycloak } = useKeycloak();
-    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
-    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
-    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
+    const { user } = useAuth();
 
     const modal = useModal();
 
@@ -45,7 +41,7 @@ export const CalendarSideMenu: React.FC<Props> = (props) => {
 
     return (
         <Wrapper>
-            {userIsAdmin && (
+            {user.isAdmin && (
                 <FloatingActionButton
                     label="Ny avtale"
                     hideLabel
@@ -54,7 +50,7 @@ export const CalendarSideMenu: React.FC<Props> = (props) => {
                     onClick={showNewEventModal}
                 />
             )}
-            {userIsStation && (
+            {user.isStasjon && (
                 <FloatingActionButton
                     label="Nytt ekstrauttak"
                     hideLabel
@@ -63,7 +59,7 @@ export const CalendarSideMenu: React.FC<Props> = (props) => {
                     onClick={showNewPickUpModal}
                 />
             )}
-            {userIsPartner && (
+            {user.isPartner && (
                 <FloatingActionButton
                     label="Endre visning"
                     hideLabel

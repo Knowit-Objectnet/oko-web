@@ -3,11 +3,11 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Agenda } from './Agenda';
 import { SingleDayCalendar } from '../../../components/calendar/SingleDayCalendar';
-import { useKeycloak } from '@react-keycloak/web';
 import { EventInfo, SlotInfo } from '../../../types';
 import ArrowUp from '../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../assets/ArrowDown.svg';
 import { useStations } from '../../../services/hooks/useStations';
+import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.div``;
 
@@ -35,7 +35,7 @@ interface Props {
  * Agenda component that expands into a week calendar
  */
 export const ExpandableAgenda: React.FC<Props> = (props) => {
-    const { keycloak } = useKeycloak();
+    const { user } = useAuth();
 
     // State for handling expansion of the agenda/calendar
     const [expanded, setExpanded] = useState(false);
@@ -105,7 +105,7 @@ export const ExpandableAgenda: React.FC<Props> = (props) => {
                     events={eventsByStation}
                     onSelectSlot={onSelectSlot}
                     onSelectEvent={handleSelectEvent}
-                    selectable={keycloak.authenticated}
+                    selectable={user.isAuthenticated}
                     step={15}
                     min={min}
                     max={max}

@@ -1,16 +1,15 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Roles } from '../../types';
 import { Loading } from '../../components/Loading';
 import Plus from '../../assets/Plus.svg';
 import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
-import { useKeycloak } from '@react-keycloak/web';
 import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
 import Minus from '../../assets/Minus.svg';
 import { NewPartner } from './NewPartner';
 import { DeletePartner } from './DeletePartner';
 import { usePartners } from '../../services/hooks/usePartners';
+import { useAuth } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     display: flex;
@@ -45,8 +44,7 @@ const Content = styled.div`
 `;
 
 export const Partners: React.FC = () => {
-    const { keycloak } = useKeycloak();
-    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
+    const { user } = useAuth();
 
     const modal = useModal();
 
@@ -72,7 +70,7 @@ export const Partners: React.FC = () => {
                 <title>Samarbeidspartnere</title>
             </Helmet>
             <Wrapper>
-                {userIsAdmin && (
+                {user.isAdmin && (
                     <PartnerAdminButtons>
                         <FloatingActionButton
                             label="Ny samarbeidspartner"

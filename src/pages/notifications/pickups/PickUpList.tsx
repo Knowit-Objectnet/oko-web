@@ -1,12 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { PickUpListItem } from './PickUpListItem';
-import { useKeycloak } from '@react-keycloak/web';
-import { Roles } from '../../../types';
 import { usePickUps } from '../../../services/hooks/usePickUps';
 import { ApiPickUpParams } from '../../../services/PickUpService';
-import compareAsc from 'date-fns/compareAsc';
-import { AuthTokenParsed } from '../../../auth/useAuth';
+import { useAuth } from '../../../auth/useAuth';
+import compareDesc from 'date-fns/compareDesc';
 
 const HeaderRow = styled.div`
     display: grid;
@@ -27,16 +25,14 @@ const PickUpRows = styled.ul`
 `;
 
 export const PickUpList: React.FC = () => {
-    const { keycloak } = useKeycloak();
-    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const userId = (keycloak.tokenParsed as AuthTokenParsed)?.GroupID;
+    const { user } = useAuth();
 
     const pickUpsFilter: ApiPickUpParams = {
-        stationId: userIsStation ? userId : undefined,
+        stationId: user.isStasjon ? user.aktorId : undefined,
     };
     const { data: pickUps, isLoading, isError } = usePickUps(pickUpsFilter);
     const sortedPickups = (pickUps ?? []).sort((pickUpA, pickUpB) => {
-        const dateTimeComparisonAsc = compareAsc(new Date(pickUpA.startDateTime), new Date(pickUpB.startDateTime));
+        const dateTimeComparisonAsc = compareDesc(new Date(pickUpA.startDateTime), new Date(pickUpB.startDateTime));
         if (dateTimeComparisonAsc === 0) {
             return pickUpB.id - pickUpA.id;
         }
@@ -58,7 +54,7 @@ export const PickUpList: React.FC = () => {
                 <HeaderRow>
                     <div>Sendt av:</div>
                     <div>Uttak:</div>
-                    <div>{userIsStation ? 'Handlingsalternativer:' : 'Påmeldte:'}</div>
+                    <div>{user.isStasjon ? 'Handlingsalternativer:' : 'Påmeldte:'}</div>
                 </HeaderRow>
                 <PickUpRows>
                     {sortedPickups.map((pickUp) => (

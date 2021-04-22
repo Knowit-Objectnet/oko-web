@@ -7,8 +7,8 @@ interface UserProfile {
     // firstname?: string;
     // lastname?: string;
     // email?: string;
-    aktorId?: number;
-    // isAuthenticated?: boolean;
+    aktorId: number;
+    isAuthenticated: boolean;
     isAdmin: boolean;
     isStasjon: boolean;
     isPartner: boolean;
@@ -40,8 +40,9 @@ export const useAuth = (): AuthContext => {
         // firstname: keycloak.profile?.firstName,
         // lastname: keycloak.profile?.lastName,
         // email: keycloak.profile?.email,
-        aktorId: tokenParsed?.GroupID,
-        // isAuthenticated: keycloak.authenticated,
+        // TODO: remove type assertion below? Causes issues in function calls that require aktorId to be defined
+        aktorId: tokenParsed?.GroupID as number,
+        isAuthenticated: keycloak.authenticated ?? false,
         isAdmin: keycloak.hasRealmRole(Roles.Oslo),
         isStasjon: keycloak.hasRealmRole(Roles.Ambassador),
         isPartner: keycloak.hasRealmRole(Roles.Partner),
