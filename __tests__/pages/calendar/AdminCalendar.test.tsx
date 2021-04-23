@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, cleanup, screen } from '../../../test-utils';
+import { render, cleanup, screen, setupUseAuthMock } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { mockApiEvents } from '../../../__mocks__/mockEvents';
 import { EventInfo } from '../../../src/types';
@@ -8,6 +8,7 @@ import { mockStations } from '../../../__mocks__/mockStations';
 import { ApiEvent } from '../../../src/services/EventService';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
+import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides a page for REG to view the calendar', () => {
     const events: EventInfo[] = mockApiEvents.map((event: ApiEvent) => {
@@ -31,14 +32,17 @@ describe('Provides a page for REG to view the calendar', () => {
         axiosMock = new MockAdapter(axios);
         axiosMock.onGet('/stations').reply(200, mockStations);
         axiosMock.onGet('/events').reply(200, mockApiEvents);
+
+        setupUseAuthMock({ isAdmin: true });
     });
 
     afterEach(() => {
         axiosMock.reset();
+        resetAllMocks();
         cleanup();
     });
 
-    it('Should render without errors', async () => {
+    it('Should render agenda without errors', async () => {
         // set up props for the calendar
         const onSelectEventMock = jest.fn();
         const onSelectSlot = jest.fn();
@@ -54,6 +58,27 @@ describe('Provides a page for REG to view the calendar', () => {
                 onSelectSlot={onSelectSlot}
                 events={events}
                 isToggled={false}
+                onWeekChange={onWeekChange}
+            />,
+        );
+    });
+
+    it('Should render working week view without errors', async () => {
+        // set up props for the calendar
+        const onSelectEventMock = jest.fn();
+        const onSelectSlot = jest.fn();
+        const onWeekChange = jest.fn();
+        const date = new Date();
+        date.setFullYear(2020, 6, 13);
+        date.setHours(7, 0, 0, 0);
+
+        render(
+            <AdminCalendar
+                date={date}
+                onSelectEvent={onSelectEventMock}
+                onSelectSlot={onSelectSlot}
+                events={events}
+                isToggled={true}
                 onWeekChange={onWeekChange}
             />,
         );
