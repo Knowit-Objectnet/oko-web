@@ -4,7 +4,6 @@ import { Roles } from './Roles';
 
 export interface UserProfile {
     aktorId?: number;
-    isAuthenticated: boolean;
     isAdmin: boolean;
     isStasjon: boolean;
     isPartner: boolean;
@@ -34,7 +33,6 @@ export const useAuth = (): AuthContext => {
 
     const user: UserProfile = {
         aktorId: tokenParsed.GroupID,
-        isAuthenticated: keycloak.authenticated ?? false,
         isAdmin: keycloak.hasRealmRole(Roles.Admin),
         isStasjon: keycloak.hasRealmRole(Roles.Stasjon),
         isPartner: keycloak.hasRealmRole(Roles.Partner),

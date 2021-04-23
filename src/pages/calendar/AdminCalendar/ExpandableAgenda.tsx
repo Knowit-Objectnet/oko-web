@@ -7,7 +7,6 @@ import { EventInfo, SlotInfo } from '../../../types';
 import ArrowUp from '../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../assets/ArrowDown.svg';
 import { useStations } from '../../../services/hooks/useStations';
-import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.div``;
 
@@ -35,8 +34,6 @@ interface Props {
  * Agenda component that expands into a week calendar
  */
 export const ExpandableAgenda: React.FC<Props> = (props) => {
-    const { user } = useAuth();
-
     // State for handling expansion of the agenda/calendar
     const [expanded, setExpanded] = useState(false);
 
@@ -48,32 +45,6 @@ export const ExpandableAgenda: React.FC<Props> = (props) => {
 
     const handleSelectEvent = (event: EventInfo) => {
         props.onSelectEvent(event);
-    };
-
-    // Function that handles time range selection in the calendar
-    const onSelectSlot = (slotInfo: SlotInfo) => {
-        // Create max and min times on the slotInfo date
-        const minTime = new Date(slotInfo.start);
-        minTime.setHours(7, 0);
-        const maxTime = new Date(slotInfo.end);
-        maxTime.setHours(20, 0);
-
-        // If the start is less than the allowed minimum then set the start to minimum
-        if (slotInfo.start < minTime) {
-            slotInfo.start = minTime;
-            // If the start is more than the allowed maximum then set the start to maximum
-        } else if (slotInfo.start > maxTime) {
-            slotInfo.start = maxTime;
-        }
-        // If the end is less than the start time then set it to the start time
-        if (slotInfo.end < slotInfo.start) {
-            slotInfo.end = slotInfo.start;
-            // If the end is more than the allowed maximum then set the end to maximum
-        } else if (slotInfo.end > maxTime) {
-            slotInfo.end = maxTime;
-        }
-
-        props.onSelectSlot(slotInfo);
     };
 
     // On expansion button click
@@ -103,9 +74,7 @@ export const ExpandableAgenda: React.FC<Props> = (props) => {
                 <SingleDayCalendar
                     columns={stationNames}
                     events={eventsByStation}
-                    onSelectSlot={onSelectSlot}
                     onSelectEvent={handleSelectEvent}
-                    selectable={user.isAuthenticated}
                     step={15}
                     min={min}
                     max={max}

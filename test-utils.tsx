@@ -70,7 +70,6 @@ type MockUseAuthArgs = Partial<UserProfile & Pick<AuthContext, 'logout'>>;
 export const setupUseAuthMock = ({
     logout = jest.fn(),
     aktorId = undefined,
-    isAuthenticated = false,
     isAdmin = false,
     isStasjon = false,
     isPartner = false,
@@ -80,7 +79,6 @@ export const setupUseAuthMock = ({
     const mockedAuthContext = {
         user: {
             aktorId,
-            isAuthenticated,
             isAdmin,
             isStasjon,
             isPartner,

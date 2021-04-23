@@ -36,20 +36,12 @@ interface SingleDayCalendarProps {
     events?: Array<Array<EventInfo>>;
     min: Date;
     max: Date;
-    selectable?: boolean;
     step?: number;
     selectedEvent?: number;
     onSelectEvent?: (eventInfo: EventInfo) => void;
-    onSelectSlot?: (slotInfo: SlotInfo) => void;
-    onSelecting?: (range: { start?: Date; end?: Date }) => boolean;
 }
 
-export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({
-    selectable = false,
-    step = 15,
-    events = [],
-    ...props
-}) => {
+export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({ step = 15, events = [], ...props }) => {
     // Function to set a date to the props.date's year, month, date
     const setDate = (date: Date) => {
         return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
@@ -84,10 +76,7 @@ export const SingleDayCalendar: React.FC<SingleDayCalendarProps> = ({
                             min={props.min}
                             max={props.max}
                             step={step}
-                            selectable={selectable}
                             selectedEvent={props.selectedEvent}
-                            onSelectSlot={props.onSelectSlot}
-                            onSelecting={props.onSelecting}
                             onSelectEvent={props.onSelectEvent}
                         />
                     ))}
