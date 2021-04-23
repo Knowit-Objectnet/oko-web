@@ -1,17 +1,13 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import List from '../../assets/List.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Weight from '../../assets/Weight.svg';
 import Bell from '../../assets/Bell.svg';
 import { NavItem } from './NavItem';
 import { useAuth } from '../../auth/useAuth';
+import { Flex } from '@chakra-ui/react';
 
-const Nav = styled.nav`
-    display: flex;
-    flex: 1;
-    height: 100%;
-`;
+const Nav: React.FC = (props) => <Flex as="nav" height="100%" justifyContent="space-evenly" flex="1" {...props} />;
 
 export const Navigation: React.FC = () => {
     const { user } = useAuth();
