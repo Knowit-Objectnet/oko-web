@@ -79,7 +79,7 @@ export const NewPickUp: React.FC<Props> = (props) => {
             startDateTime: start.toISOString(),
             endDateTime: end.toISOString(),
             description: description,
-            stationId: user.aktorId,
+            stationId: user.aktorId as number, // TODO: find a way to handle undefined so we can remove this type assertion
         };
 
         addPickUpMutation.mutate(newPickUp);

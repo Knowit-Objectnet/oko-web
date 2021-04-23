@@ -58,13 +58,14 @@ export * from '@testing-library/react';
 // override render method
 export { customRender as render };
 
-type MockUseAuthArgs = Partial<UserProfile & { logout: () => void }>;
+type MockUseAuthArgs = Partial<UserProfile & Pick<AuthContext, 'logout'>>;
 
 /**
  * Method for initializing a mocked instance of the authorization mechanism used in the application (the `useAuth` hook).
  * Must be called in all tests that renders (sub)components that calls the `useAuth` hook.
  * The mock will be instantiated with default values listed below.
  * To override any of these values, pass an object as argument with the properties you want to override.
+ * Remember to call `jest.resetAllMocks()` after running a test calling this method.
  */
 export const setupUseAuthMock = ({
     logout = jest.fn(),

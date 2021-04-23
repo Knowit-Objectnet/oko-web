@@ -3,10 +3,6 @@ import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from './Roles';
 
 export interface UserProfile {
-    // username?: string;
-    // firstname?: string;
-    // lastname?: string;
-    // email?: string;
     aktorId?: number;
     isAuthenticated: boolean;
     isAdmin: boolean;
@@ -33,11 +29,10 @@ export const useAuth = (): AuthContext => {
     const { keycloak } = useKeycloak();
     const tokenParsed = keycloak.tokenParsed as AuthTokenParsed;
 
+    console.log(keycloak.tokenParsed);
+    console.log(tokenParsed.GroupID);
+
     const user: UserProfile = {
-        // username: keycloak.profile?.username,
-        // firstname: keycloak.profile?.firstName,
-        // lastname: keycloak.profile?.lastName,
-        // email: keycloak.profile?.email,
         aktorId: tokenParsed.GroupID,
         isAuthenticated: keycloak.authenticated ?? false,
         isAdmin: keycloak.hasRealmRole(Roles.Admin),
