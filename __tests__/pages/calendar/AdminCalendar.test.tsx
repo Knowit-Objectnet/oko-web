@@ -1,16 +1,14 @@
 import React from 'react';
-import { render, cleanup, screen } from '../../../test-utils';
+import { render, cleanup, screen, setupUseAuthMock } from '../../../test-utils';
 import '@testing-library/jest-dom';
-import keycloak from '../../../src/auth/keycloak';
 import { mockApiEvents } from '../../../__mocks__/mockEvents';
-import { EventInfo, Roles } from '../../../src/types';
-
-// Component to test
+import { EventInfo } from '../../../src/types';
 import { AdminCalendar } from '../../../src/pages/calendar/AdminCalendar/AdminCalendar';
 import { mockStations } from '../../../__mocks__/mockStations';
 import { ApiEvent } from '../../../src/services/EventService';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
+import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides a page for REG to view the calendar', () => {
     const events: EventInfo[] = mockApiEvents.map((event: ApiEvent) => {
@@ -35,14 +33,12 @@ describe('Provides a page for REG to view the calendar', () => {
         axiosMock.onGet('/stations').reply(200, mockStations);
         axiosMock.onGet('/events').reply(200, mockApiEvents);
 
-        // Set the role to ambassador
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Oslo;
-        });
+        setupUseAuthMock({ isAuthenticated: true });
     });
 
     afterEach(() => {
         axiosMock.reset();
+        resetAllMocks();
         cleanup();
     });
 

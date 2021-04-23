@@ -1,13 +1,14 @@
 import React from 'react';
-import { render, screen } from '../../test-utils';
 import '@testing-library/jest-dom';
+import { setupUseAuthMock, render, screen } from '../../test-utils';
 import { MemoryRouter } from 'react-router-dom';
-import keycloak from '../../src/auth/keycloak';
-
 import { Logout } from '../../src/pages/Logout';
 
 describe('Provides a logout page', () => {
     it('Should show logout text and call logout function', async () => {
+        const logoutFunction = jest.fn();
+        setupUseAuthMock({ logout: logoutFunction });
+
         render(
             <MemoryRouter>
                 <Logout />
@@ -19,6 +20,6 @@ describe('Provides a logout page', () => {
         expect(message).toBeInTheDocument();
 
         // Check that the logout function is called on page load.
-        expect(keycloak.logout.mock.calls.length).toBe(1);
+        expect(logoutFunction).toHaveBeenCalledTimes(1);
     });
 });

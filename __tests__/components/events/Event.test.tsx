@@ -1,25 +1,22 @@
 import React from 'react';
-import { cleanup, fireEvent, render, screen } from '../../../test-utils';
+import { cleanup, fireEvent, setupUseAuthMock, render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
-import keycloak from '../../../src/auth/keycloak';
 import { Event } from '../../../src/components/events/Event';
 import { mockEvents } from '../../../__mocks__/mockEvents';
-import { Roles } from '../../../src/types';
+import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides an interface to view and edit an Event', () => {
     afterEach(() => {
+        resetAllMocks();
         cleanup();
     });
 
     it('Should show edit symbol on Event if user is logged in as REG', async () => {
+        setupUseAuthMock({ isAdmin: true });
+
         const afterDeleteSingleEvent = jest.fn();
         const afterDeleteRangeEvent = jest.fn();
-
-        // Change the keycloak instance to be logged in as REG
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Oslo;
-        });
 
         render(
             <MemoryRouter>
@@ -36,21 +33,19 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should show edit symbol on Event if user is logged in as a station that has the event', async () => {
-        const afterDeleteSingleEvent = jest.fn();
-        const afterDeleteRangeEvent = jest.fn();
-
-        // Change the keycloak instance to be logged in as REG
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Ambassador;
+        const mockEvent = mockEvents[0];
+        setupUseAuthMock({
+            isStasjon: true,
+            ownsResource: (eventOwnerId: number) => eventOwnerId === mockEvent.resource.station.id,
         });
 
-        // Set the stations groupID
-        keycloak.tokenParsed.GroupID = mockEvents[0].resource.station.id;
+        const afterDeleteSingleEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
 
         render(
             <MemoryRouter>
                 <Event
-                    event={mockEvents[0]}
+                    event={mockEvent}
                     afterDeleteSingleEvent={afterDeleteSingleEvent}
                     afterDeleteRangeEvent={afterDeleteRangeEvent}
                 />
@@ -61,21 +56,19 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should not show edit symbol on Event if user is logged in as Partner', async () => {
-        const afterDeleteSingleEvent = jest.fn();
-        const afterDeleteRangeEvent = jest.fn();
-
-        // Change the keycloak instance to be logged in as Partner
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Partner;
+        const mockEvent = mockEvents[0];
+        setupUseAuthMock({
+            isPartner: true,
+            ownsResource: (eventOwnerId: number) => eventOwnerId === mockEvent.resource.partner.id,
         });
 
-        // Set the partners groupID
-        keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
+        const afterDeleteSingleEvent = jest.fn();
+        const afterDeleteRangeEvent = jest.fn();
 
         render(
             <MemoryRouter>
                 <Event
-                    event={mockEvents[0]}
+                    event={mockEvent}
                     afterDeleteSingleEvent={afterDeleteSingleEvent}
                     afterDeleteRangeEvent={afterDeleteRangeEvent}
                 />
@@ -86,16 +79,10 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should not show edit symbol on Event if user is not logged in', async () => {
+        setupUseAuthMock();
+
         const afterDeleteSingleEvent = jest.fn();
         const afterDeleteRangeEvent = jest.fn();
-
-        // Change the keycloak instance to be nothing
-        keycloak.hasRealmRole = jest.fn(() => {
-            return false;
-        });
-
-        // Set the groupID to nothing
-        keycloak.tokenParsed.GroupID = undefined;
 
         render(
             <MemoryRouter>
@@ -111,17 +98,15 @@ describe('Provides an interface to view and edit an Event', () => {
     });
 
     it('Should NOT allow range deletion of event if logged in as Partner', async () => {
-        // Change the keycloak instance to be logged in as Partner
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Partner;
+        const mockEvent = mockEvents[1];
+        setupUseAuthMock({
+            isPartner: true,
+            ownsResource: (eventOwnerId: number) => eventOwnerId === mockEvent.resource.partner.id,
         });
-
-        // Set the partners groupID
-        keycloak.tokenParsed.GroupID = mockEvents[0].resource.partner.id;
 
         render(
             <MemoryRouter>
-                <Event event={mockEvents[1]} />
+                <Event event={mockEvent} />
             </MemoryRouter>,
         );
 

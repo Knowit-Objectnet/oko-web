@@ -1,16 +1,21 @@
 import React from 'react';
-import { render, screen, cleanup } from '../../../test-utils';
+import { render, screen, cleanup, setupUseAuthMock } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { Stations } from '../../../src/pages/stations/Stations';
-import axios from 'axios';
+import resetAllMocks = jest.resetAllMocks;
 import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
 
 describe('Provides a page to view a list of the stations', () => {
-    let axiosMock: MockAdapter;
+    afterEach(() => {
+        resetAllMocks();
+        cleanup();
+    });
 
-    beforeEach(() => {
-        axiosMock = new MockAdapter(axios);
-        axiosMock.onGet('/stations').reply(200, [
+    it('Should render list of stations', async () => {
+        setupUseAuthMock();
+
+        new MockAdapter(axios).onGet('/stations').reply(200, [
             {
                 id: 1,
                 name: 'Haraldrud',
@@ -34,14 +39,7 @@ describe('Provides a page to view a list of the stations', () => {
                 },
             },
         ]);
-    });
 
-    afterEach(() => {
-        axiosMock.restore();
-        cleanup();
-    });
-
-    it('Should render list of stations', async () => {
         render(<Stations />);
 
         const Haraldrud = await screen.findByText('Haraldrud');

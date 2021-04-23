@@ -2,12 +2,12 @@ import { KeycloakTokenParsed } from 'keycloak-js';
 import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from './Roles';
 
-interface UserProfile {
+export interface UserProfile {
     // username?: string;
     // firstname?: string;
     // lastname?: string;
     // email?: string;
-    aktorId: number;
+    aktorId?: number;
     isAuthenticated: boolean;
     isAdmin: boolean;
     isStasjon: boolean;
@@ -20,20 +20,17 @@ interface LogoutOptions {
     returnUrl: string;
 }
 
-interface AuthContext {
+export interface AuthContext {
     user: UserProfile;
     logout: (options: LogoutOptions) => void;
 }
 
 interface AuthTokenParsed extends KeycloakTokenParsed {
-    GroupID: number;
+    GroupID?: number;
 }
 
 export const useAuth = (): AuthContext => {
     const { keycloak } = useKeycloak();
-
-    // TODO: remove type assertion and fix issues with the fact that
-    //  the token and its parsed properties will be undefined if Keycloak isn't ready yet?
     const tokenParsed = keycloak.tokenParsed as AuthTokenParsed;
 
     const user: UserProfile = {

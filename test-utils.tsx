@@ -8,7 +8,8 @@ import { GlobalStyle } from './src/global-styles';
 import AlertTemplate from 'react-alert-template-basic';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
-import { AuthProvider } from './src/auth/AuthProvider';
+import { mocked } from 'ts-jest/utils';
+import { AuthContext, useAuth, UserProfile } from './src/auth/useAuth';
 
 /*
  * This file sets up the common providers that wraps the application (in `App.tsx`),
@@ -35,16 +36,14 @@ const GlobalProviders: React.FC = ({ children }) => {
     return (
         <ChakraProvider theme={theme}>
             <ThemeProvider theme={oldTheme}>
-                <AuthProvider>
-                    <AlertProvider template={AlertTemplate} {...alertOptions}>
-                        <QueryClientProvider client={queryClient}>
-                            <ModalProvider>
-                                {children}
-                                <GlobalStyle />
-                            </ModalProvider>
-                        </QueryClientProvider>
-                    </AlertProvider>
-                </AuthProvider>
+                <AlertProvider template={AlertTemplate} {...alertOptions}>
+                    <QueryClientProvider client={queryClient}>
+                        <ModalProvider>
+                            {children}
+                            <GlobalStyle />
+                        </ModalProvider>
+                    </QueryClientProvider>
+                </AlertProvider>
             </ThemeProvider>
         </ChakraProvider>
     );
@@ -58,3 +57,37 @@ export * from '@testing-library/react';
 
 // override render method
 export { customRender as render };
+
+type MockUseAuthArgs = Partial<UserProfile & { logout: () => void }>;
+
+/**
+ * Method for initializing a mocked instance of the authorization mechanism used in the application (the `useAuth` hook).
+ * Must be called in all tests that renders (sub)components that calls the `useAuth` hook.
+ * The mock will be instantiated with default values listed below.
+ * To override any of these values, pass an object as argument with the properties you want to override.
+ */
+export const setupUseAuthMock = ({
+    logout = jest.fn(),
+    aktorId = undefined,
+    isAuthenticated = false,
+    isAdmin = false,
+    isStasjon = false,
+    isPartner = false,
+    hasRole = () => false,
+    ownsResource = () => false,
+}: MockUseAuthArgs = {}): void => {
+    const mockedAuthContext = {
+        user: {
+            aktorId,
+            isAuthenticated,
+            isAdmin,
+            isStasjon,
+            isPartner,
+            hasRole,
+            ownsResource,
+        },
+        logout,
+    };
+
+    mocked(useAuth, true).mockReturnValue(mockedAuthContext);
+};

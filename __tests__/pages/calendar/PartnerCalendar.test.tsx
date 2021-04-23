@@ -1,13 +1,11 @@
 import React from 'react';
-import { cleanup, render, screen } from '../../../test-utils';
+import { cleanup, setupUseAuthMock, render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
-import keycloak from '../../../src/auth/keycloak';
 import { mockApiEvents } from '../../../__mocks__/mockEvents';
-import { EventInfo, Roles } from '../../../src/types';
-
-// Component to test
+import { EventInfo } from '../../../src/types';
 import { PartnerCalendar } from '../../../src/pages/calendar/PartnerCalendar/PartnerCalendar';
 import { ApiEvent } from '../../../src/services/EventService';
+import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides a page for partners to view the calendar', () => {
     const events: EventInfo[] = mockApiEvents
@@ -28,16 +26,11 @@ describe('Provides a page for partners to view the calendar', () => {
         .filter((event) => event.resource.partner.id === 1);
 
     beforeEach(() => {
-        // Set the role to ambassador
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Partner;
-        });
-
-        // Set the groupID to 1 (Fretex)
-        keycloak.tokenParsed.GroupID = 1;
+        setupUseAuthMock({ isPartner: true, ownsResource: (ownerId: number) => ownerId === 1 });
     });
 
     afterEach(() => {
+        resetAllMocks();
         cleanup();
     });
 
