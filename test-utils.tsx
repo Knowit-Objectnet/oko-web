@@ -9,7 +9,7 @@ import AlertTemplate from 'react-alert-template-basic';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import { mocked } from 'ts-jest/utils';
-import { AuthContext, useAuth, UserProfile } from './src/auth/useAuth';
+import { AuthContext, useAuth, UserInfo } from './src/auth/useAuth';
 
 /*
  * This file sets up the common providers that wraps the application (in `App.tsx`),
@@ -58,7 +58,7 @@ export * from '@testing-library/react';
 // override render method
 export { customRender as render };
 
-type MockUseAuthArgs = Partial<UserProfile & Pick<AuthContext, 'logout'>>;
+type MockUseAuthArgs = Partial<UserInfo & Pick<AuthContext, 'logout'>>;
 
 /**
  * Method for initializing a mocked instance of the authorization mechanism used in the application (the `useAuth` hook).

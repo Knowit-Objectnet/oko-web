@@ -2,7 +2,7 @@ import { KeycloakTokenParsed } from 'keycloak-js';
 import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from './Roles';
 
-export interface UserProfile {
+export interface UserInfo {
     aktorId?: number;
     isAdmin: boolean;
     isStasjon: boolean;
@@ -16,7 +16,7 @@ interface LogoutOptions {
 }
 
 export interface AuthContext {
-    user: UserProfile;
+    user: UserInfo;
     logout: (options: LogoutOptions) => void;
 }
 
@@ -28,10 +28,7 @@ export const useAuth = (): AuthContext => {
     const { keycloak } = useKeycloak();
     const tokenParsed = keycloak.tokenParsed as AuthTokenParsed;
 
-    console.log(keycloak.tokenParsed);
-    console.log(tokenParsed.GroupID);
-
-    const user: UserProfile = {
+    const user: UserInfo = {
         aktorId: tokenParsed.GroupID,
         isAdmin: keycloak.hasRealmRole(Roles.Admin),
         isStasjon: keycloak.hasRealmRole(Roles.Stasjon),
