@@ -46,7 +46,6 @@ const iconStyle = {
     },
 };
 
-//const NewIcon: React.FC = (props) => <Icon height="1em" sx={{"svg":{fill:"White"}}} {...props}/>
 
 interface Props {
     path: string;
