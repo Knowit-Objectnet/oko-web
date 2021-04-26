@@ -28,7 +28,6 @@ const Center: React.FC = (props) => (
         justifyContent="flex-end"
         height={{ base: '100%', sm: 'auto' }}
         flexDirection={{ base: 'column', lg: 'row' }}
-        _activeLink={{ color: 'red.500' }}
         {...props}
     />
 );
