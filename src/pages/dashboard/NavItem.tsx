@@ -18,6 +18,10 @@ const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
             borderBottomColor: 'secondary.light',
             svg: { fill: 'secondary.light' },
         }}
+        _hover={{
+            textDecoration: 'none',
+            borderBottomColor: 'white',
+        }}
         {...props}
     />
 );
