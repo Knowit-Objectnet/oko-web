@@ -1,4 +1,8 @@
-// Keycloak mock to intercept function calls
+// Mock of authentication hook. For tests that renders components that calls the `useAuth` hook,
+// it is also necessary to instantiate the hook with the `setupUseAuthMock()` method.
+jest.mock('./src/auth/useAuth');
+
+// Keycloak mock for testing of KeycloakProvider
 jest.mock('./src/auth/keycloak', () => ({
     __esModule: true,
     default: {

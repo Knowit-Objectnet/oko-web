@@ -111,7 +111,8 @@ The cache (contained in a `QueryClient` instance) has utility methods (like `inv
 ### Quality Assurance
 
 #### Testing
-* [Jest](https://jestjs.io/)
+* [Jest](https://jestjs.io/): testing framework
+* `ts-jest`: [transforms `.ts` and `.tsx` test files to CommonJS](https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#the-presets) so that Jest can run them. Also provides a [`mocked()` test helper function](https://kulshekhar.github.io/ts-jest/docs/guides/test-helpers#mockedtitem-t-deep--false) for fixing typing issues with mocks.
 * [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and [jest-dom](https://github.com/testing-library/jest-dom)
 * [Axios Mock Adapter](https://www.npmjs.com/package/axios-mock-adapter) ([should probably be replaced with Mock Service Worker](https://testing-library.com/docs/react-testing-library/example-intro/))
 

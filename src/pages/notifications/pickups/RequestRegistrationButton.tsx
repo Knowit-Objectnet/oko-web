@@ -1,22 +1,22 @@
 import * as React from 'react';
 import { types, useAlert } from 'react-alert';
-import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../services/RequestService';
 import { PositiveButton } from '../../../components/buttons/PositiveButton';
+import { useAuth } from '../../../auth/useAuth';
 
 interface Props {
     pickupId: number;
-    partnerId: number;
     onRequestRegistration: (isLoading: boolean) => void;
 }
 
-export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, partnerId, onRequestRegistration }) => {
-    const { keycloak } = useKeycloak();
+export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, onRequestRegistration }) => {
+    const { user } = useAuth();
+    const partnerId = user.aktorId as number; // TODO: find a way to handle undefined so we can remove this type assertion
     const alert = useAlert();
 
     const queryClient = useQueryClient();
-    const addRequestMutation = useMutation((newRequest: ApiRequestPost) => postRequest(newRequest, keycloak.token), {
+    const addRequestMutation = useMutation((newRequest: ApiRequestPost) => postRequest(newRequest), {
         onError: () => {
             alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
         },

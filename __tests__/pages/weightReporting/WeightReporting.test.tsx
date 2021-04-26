@@ -1,20 +1,20 @@
 import React from 'react';
-import { render, cleanup, screen } from '../../../test-utils';
+import { render, cleanup, screen, setupUseAuthMock } from '../../../test-utils';
 import '@testing-library/jest-dom';
-import keycloak from '../../../src/auth/keycloak';
-
 import { WeightReporting } from '../../../src/pages/weightReporting/WeightReporting';
-import { Roles } from '../../../src/types';
 import { mockReports } from '../../../__mocks__/mockReports';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
+import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides a page provide and update weight of withdrawals', () => {
-    let axiosMock: MockAdapter;
+    afterEach(() => {
+        resetAllMocks();
+        cleanup();
+    });
 
-    beforeEach(() => {
-        axiosMock = new MockAdapter(axios);
-        axiosMock.onGet('/reports').reply((config) => {
+    it('Should render all withdrawals', async () => {
+        new MockAdapter(axios).onGet('/reports').reply((config) => {
             const queryToDateFilter = config.params?.toDate;
             if (queryToDateFilter) {
                 const filteredMockReports = mockReports.filter(
@@ -25,20 +25,8 @@ describe('Provides a page provide and update weight of withdrawals', () => {
             return [200, ''];
         });
 
-        keycloak.hasRealmRole = jest.fn((role: string) => {
-            return role === Roles.Ambassador;
-        });
+        setupUseAuthMock({ isStasjon: true, aktorId: 1 });
 
-        // Set the groupID to 1 (Fretex)
-        keycloak.tokenParsed.GroupID = 1;
-    });
-
-    afterEach(() => {
-        axiosMock.reset();
-        cleanup();
-    });
-
-    it('Should render all withdrawals', async () => {
         render(<WeightReporting />);
 
         const withdrawalsWithWeight = await screen.findAllByText('200 kg');

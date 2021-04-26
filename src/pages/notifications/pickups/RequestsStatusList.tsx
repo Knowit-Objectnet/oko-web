@@ -1,14 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { RequestApprovalButton } from './RequestApprovalButton';
-import { Roles } from '../../../types';
 import { ApiPickUp } from '../../../services/PickUpService';
-import { useKeycloak } from '@react-keycloak/web';
 import { ApiRequest } from '../../../services/RequestService';
 import { useRequests } from '../../../services/hooks/useRequests';
 import { useState } from 'react';
 import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../components/StatusBadge';
 import { Spinner } from '../../../components/Spinner';
+import { useAuth } from '../../../auth/useAuth';
 
 const RequestList = styled.ul`
     display: flex;
@@ -51,7 +50,7 @@ interface Props {
 }
 
 export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
-    const { keycloak } = useKeycloak();
+    const { user } = useAuth();
 
     const [requestApprovalLoading, setRequestApprovalLoading] = useState(false);
 
@@ -63,7 +62,7 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
     );
 
     const getStatusForRequest = (request: ApiRequest) => {
-        const userCanApproveRequests = keycloak.hasRealmRole(Roles.Ambassador);
+        const userCanApproveRequests = user.isStasjon;
         const pickUpIsOpenForRequests = !pickUp.chosenPartner?.id;
         const thisRequestIsApproved = request.partner.id === pickUp.chosenPartner?.id;
 

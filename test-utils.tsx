@@ -1,15 +1,15 @@
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
-import keycloak from './src/auth/keycloak';
 import { oldTheme, theme } from './src/theme';
 import ModalProvider from './src/components/modal/Provider';
 import { GlobalStyle } from './src/global-styles';
 import AlertTemplate from 'react-alert-template-basic';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
+import { mocked } from 'ts-jest/utils';
+import { AuthContext, useAuth, UserInfo } from './src/auth/useAuth';
 
 /*
  * This file sets up the common providers that wraps the application (in `App.tsx`),
@@ -34,20 +34,18 @@ const queryClient = new QueryClient();
 
 const GlobalProviders: React.FC = ({ children }) => {
     return (
-        <ReactKeycloakProvider authClient={keycloak}>
-            <ChakraProvider theme={theme}>
-                <ThemeProvider theme={oldTheme}>
-                    <AlertProvider template={AlertTemplate} {...alertOptions}>
-                        <QueryClientProvider client={queryClient}>
-                            <ModalProvider>
-                                {children}
-                                <GlobalStyle />
-                            </ModalProvider>
-                        </QueryClientProvider>
-                    </AlertProvider>
-                </ThemeProvider>
-            </ChakraProvider>
-        </ReactKeycloakProvider>
+        <ChakraProvider theme={theme}>
+            <ThemeProvider theme={oldTheme}>
+                <AlertProvider template={AlertTemplate} {...alertOptions}>
+                    <QueryClientProvider client={queryClient}>
+                        <ModalProvider>
+                            {children}
+                            <GlobalStyle />
+                        </ModalProvider>
+                    </QueryClientProvider>
+                </AlertProvider>
+            </ThemeProvider>
+        </ChakraProvider>
     );
 };
 
@@ -59,3 +57,36 @@ export * from '@testing-library/react';
 
 // override render method
 export { customRender as render };
+
+type MockUseAuthArgs = Partial<UserInfo & Pick<AuthContext, 'logout'>>;
+
+/**
+ * Method for initializing a mocked instance of the authorization mechanism used in the application (the `useAuth` hook).
+ * Must be called in all tests that renders (sub)components that calls the `useAuth` hook.
+ * The mock will be instantiated with default values listed below.
+ * To override any of these values, pass an object as argument with the properties you want to override.
+ * Remember to call `jest.resetAllMocks()` after running a test calling this method.
+ */
+export const setupUseAuthMock = ({
+    logout = jest.fn(),
+    aktorId = undefined,
+    isAdmin = false,
+    isStasjon = false,
+    isPartner = false,
+    hasRole = () => false,
+    ownsResource = () => false,
+}: MockUseAuthArgs = {}): void => {
+    const mockedAuthContext = {
+        user: {
+            aktorId,
+            isAdmin,
+            isStasjon,
+            isPartner,
+            hasRole,
+            ownsResource,
+        },
+        logout,
+    };
+
+    mocked(useAuth, true).mockReturnValue(mockedAuthContext);
+};

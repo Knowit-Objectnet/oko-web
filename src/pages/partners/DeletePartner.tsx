@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
-import { useKeycloak } from '@react-keycloak/web';
 import { deletePartner, partnersDefaultQueryKey } from '../../services/PartnerService';
 import { useMutation, useQueryClient } from 'react-query';
 import { PartnerSelect } from '../../components/forms/PartnerSelect';
@@ -53,7 +52,6 @@ interface Props {
 }
 
 export const DeletePartner: React.FC<Props> = (props) => {
-    const { keycloak } = useKeycloak();
     const alert = useAlert();
 
     const formMethods = useForm<FormData>({
@@ -64,7 +62,7 @@ export const DeletePartner: React.FC<Props> = (props) => {
     });
 
     const queryClient = useQueryClient();
-    const deletePartnerMutation = useMutation((partnerId: number) => deletePartner(partnerId, keycloak.token), {
+    const deletePartnerMutation = useMutation((partnerId: number) => deletePartner(partnerId), {
         onSuccess: () => {
             alert.show('Samarbeidspartneren ble slettet.', { type: types.SUCCESS });
             props.afterSubmit?.(true);

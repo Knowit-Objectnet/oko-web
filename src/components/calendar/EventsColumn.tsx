@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { EventInfo, Roles } from '../../types';
+import { EventInfo } from '../../types';
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import add from 'date-fns/add';
-import { useKeycloak } from '@react-keycloak/web';
 import { Event } from './Event';
+import { useAuth } from '../../auth/useAuth';
 
 const Events = styled.div`
     top: 0;
@@ -28,8 +28,7 @@ interface EventsColumnProps {
  * Events column component to render events in the calendar
  */
 export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
+    const { user } = useAuth();
     // Ref to the events column (used to get the height of the calendar)
     const eventsRef = useRef<HTMLDivElement>(null);
     // List of the rendered events
@@ -200,10 +199,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
                                 ? undefined
                                 : props.selectedEvent === event.resource.eventId
                         }
-                        userIsOwner={
-                            keycloak.hasRealmRole(Roles.Partner) &&
-                            event.resource.partner.id === keycloak.tokenParsed.GroupID
-                        }
+                        userIsOwner={user.isPartner && user.ownsResource(event.resource.partner.id)}
                     />,
                 );
             });

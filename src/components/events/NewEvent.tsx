@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { EventDateTimePicker } from './EventDateTimePicker';
 import { EventTemplateVertical } from './EventTemplateVertical';
-import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../services/EventService';
@@ -149,7 +148,6 @@ const WEEKDAYS: Array<WorkingWeekdays> = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THU
 
 export const NewEvent: React.FC<Props> = (props) => {
     const alert = useAlert();
-    const { keycloak } = useKeycloak();
 
     // form methods from reaect-hook-forms used in the form provider and inputs
     const formMethods = useForm<FormData>({
@@ -172,7 +170,7 @@ export const NewEvent: React.FC<Props> = (props) => {
     });
 
     const queryClient = useQueryClient();
-    const addEventMutation = useMutation((newEvent: ApiEventPost) => postEvent(newEvent, keycloak.token), {
+    const addEventMutation = useMutation((newEvent: ApiEventPost) => postEvent(newEvent), {
         onSuccess: () => {
             alert.show('Avtalen ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);

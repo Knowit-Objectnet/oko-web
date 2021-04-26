@@ -3,9 +3,10 @@ import '@testing-library/jest-dom';
 import { Notifications } from '../../../src/pages/notifications/Notifications';
 import { mockApiPickUps } from '../../../__mocks__/mockPickUps';
 import { mockApiRequests } from '../../../__mocks__/mockRequests';
-import { render, cleanup, screen } from '../../../test-utils';
+import { render, cleanup, screen, setupUseAuthMock } from '../../../test-utils';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
+import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides a page to view a list of PickUps', () => {
     let axiosMock: MockAdapter;
@@ -23,10 +24,13 @@ describe('Provides a page to view a list of PickUps', () => {
 
     afterEach(() => {
         axiosMock.reset();
+        resetAllMocks();
         cleanup();
     });
 
-    it('Should render list of PickUps with Requests', async () => {
+    it('Should render list of PickUps with Requests for Admin', async () => {
+        setupUseAuthMock({ isAdmin: true });
+
         render(<Notifications />);
 
         // Check that the correct amount of pickUps from the stations is rendered

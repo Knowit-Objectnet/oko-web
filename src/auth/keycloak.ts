@@ -1,14 +1,7 @@
 import Keycloak from 'keycloak-js';
 
-// Setup Keycloak instance
-const keycloak = new Keycloak({
-    realm: process.env.REACT_APP_KEYCLOAK_REALM,
+export default Keycloak({
     url: process.env.REACT_APP_KEYCLOAK_URL,
-    sslRequired: 'external',
-    resource: 'react-app',
+    realm: process.env.REACT_APP_KEYCLOAK_REALM as string,
     clientId: 'react-app',
-    publicClient: true,
-    confidentialPort: 0,
 });
-
-export default keycloak;

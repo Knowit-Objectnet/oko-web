@@ -3,16 +3,16 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventInfo, Roles } from '../../types';
+import { EventInfo } from '../../types';
 import { EventStationInfo } from './EventStationInfo';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
-import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiEventPatch, patchEvent, eventsDefaultQueryKey } from '../../services/EventService';
 import { NegativeButton } from '../buttons/NegativeButton';
 import { PositiveButton } from '../buttons/PositiveButton';
+import { useAuth } from '../../auth/useAuth';
 
 const Body = styled.div`
     display: flex;
@@ -58,15 +58,12 @@ interface Props {
 export const Event: React.FC<Props> = (props) => {
     const alert = useAlert();
 
-    const { keycloak } = useKeycloak();
-    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
-    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const stationOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.station.id;
-    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
-    const partnerOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.partner.id;
+    const { user } = useAuth();
+    const stationOwnsEvent = user.ownsResource(props.event.resource.station.id);
+    const partnerOwnsEvent = user.ownsResource(props.event.resource.partner.id);
 
     const queryClient = useQueryClient();
-    const updateEventMutation = useMutation((updatedEvent: ApiEventPatch) => patchEvent(updatedEvent, keycloak.token), {
+    const updateEventMutation = useMutation((updatedEvent: ApiEventPatch) => patchEvent(updatedEvent), {
         onSuccess: () => {
             alert.show('Avtalen ble oppdatert.', { type: types.SUCCESS });
             setIsEditing(false);
@@ -166,7 +163,7 @@ export const Event: React.FC<Props> = (props) => {
         <EventTemplateHorizontal
             title={props.event.title}
             hideTitleBar={props.hideTitleBar}
-            showEditSymbol={userIsAdmin || (userIsStation && stationOwnsEvent)}
+            showEditSymbol={user.isAdmin || (user.isStasjon && stationOwnsEvent)}
             isEditing={isEditing}
             onEditClick={handleEditClick}
         >
@@ -189,9 +186,9 @@ export const Event: React.FC<Props> = (props) => {
                 {!isEditing && (
                     <Section>
                         <EventMessageBox {...props.event.resource.message} />
-                        {(userIsAdmin ||
-                            (userIsPartner && partnerOwnsEvent) ||
-                            (userIsStation && stationOwnsEvent)) && (
+                        {(user.isAdmin ||
+                            (user.isPartner && partnerOwnsEvent) ||
+                            (user.isStasjon && stationOwnsEvent)) && (
                             <NegativeButton onClick={handleDeleteConfirmationClick}>Avlys uttak</NegativeButton>
                         )}
                     </Section>

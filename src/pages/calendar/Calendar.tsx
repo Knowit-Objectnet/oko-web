@@ -7,17 +7,17 @@ import { Event } from '../../components/events/Event';
 import { NewPickUp } from '../../components/events/NewPickUp';
 import { NewEvent } from '../../components/events/NewEvent';
 import { CalendarSideMenu } from './CalendarSideMenu';
-import { EventInfo, Roles } from '../../types';
+import { EventInfo } from '../../types';
 import { PartnerCalendar } from './PartnerCalendar/PartnerCalendar';
 import { StationCalendar } from './StationCalendar/StationCalendar';
 import add from 'date-fns/add';
 import { Loading } from '../../components/Loading';
-import { useKeycloak } from '@react-keycloak/web';
 import { StationFilter } from './StationFilter';
 import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
 import { ApiEvent } from '../../services/EventService';
 import { useEvents } from '../../services/hooks/useEvents';
+import { useAuth } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -79,11 +79,7 @@ const Sidebar = styled.div`
 export const Calendar: React.FC = () => {
     const modal = useModal();
 
-    const { keycloak } = useKeycloak();
-    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
-    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
-    const userId = keycloak.tokenParsed?.GroupID;
+    const { user } = useAuth();
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedStationId, setSelectedStationId] = useState<number | undefined>();
@@ -100,7 +96,7 @@ export const Calendar: React.FC = () => {
     const { data: apiEvents, isLoading } = useEvents({
         fromDate: fromDate.toISOString(),
         toDate: toDate.toISOString(),
-        stationId: userIsStation ? userId : selectedStationId,
+        stationId: user.isStasjon ? user.aktorId : selectedStationId,
     });
 
     const [events, setEvents] = useState<Array<EventInfo>>([]);
@@ -146,7 +142,7 @@ export const Calendar: React.FC = () => {
 
     // On slot selection function to display new or extra event
     const onSelectSlot = (start: Date, end: Date) => {
-        if (userIsAdmin) {
+        if (user.isAdmin) {
             modal.show(<NewEvent start={start} end={end} afterSubmit={closeModalOnSuccess} />);
         } else {
             modal.show(<NewPickUp start={start} end={end} afterSubmit={closeModalOnSuccess} />);
@@ -164,7 +160,7 @@ export const Calendar: React.FC = () => {
 
     // Function to decide which calendar to render depending on role
     const getCalendar = () => {
-        if (userIsPartner) {
+        if (user.isPartner) {
             return (
                 <PartnerCalendar
                     onSelectEvent={showEventInfoModal}
@@ -174,7 +170,7 @@ export const Calendar: React.FC = () => {
                     events={events}
                 />
             );
-        } else if (userIsStation) {
+        } else if (user.isStasjon) {
             return (
                 <StationCalendar
                     onSelectEvent={showEventInfoModal}
@@ -205,7 +201,7 @@ export const Calendar: React.FC = () => {
             <Wrapper>
                 <ModuleDateCalendar>
                     <DateCalendar locale="nb-NO" value={selectedDate} onChange={onDateChange} />
-                    {(userIsAdmin || (userIsPartner && showingCalendar)) && (
+                    {(user.isAdmin || (user.isPartner && showingCalendar)) && (
                         <StationFilter
                             selectedStationId={selectedStationId}
                             onSelectedStationChange={setSelectedStationId}

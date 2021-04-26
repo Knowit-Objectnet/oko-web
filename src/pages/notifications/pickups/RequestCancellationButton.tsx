@@ -1,23 +1,23 @@
 import * as React from 'react';
 import { types, useAlert } from 'react-alert';
-import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../services/RequestService';
 import CrossIcon from '../../../assets/Cross.svg';
 import { TextButton } from '../../../components/buttons/TextButton';
+import { useAuth } from '../../../auth/useAuth';
 
 interface Props {
     pickupId: number;
-    partnerId: number;
     onRequestCancellation: (isLoading: boolean) => void;
 }
 
-export const RequestCancellationButton: React.FC<Props> = ({ pickupId, partnerId, onRequestCancellation }) => {
-    const { keycloak } = useKeycloak();
+export const RequestCancellationButton: React.FC<Props> = ({ pickupId, onRequestCancellation }) => {
+    const { user } = useAuth();
+    const partnerId = user.aktorId;
     const alert = useAlert();
 
     const queryClient = useQueryClient();
-    const deleteRequestMutation = useMutation((request: ApiRequestParams) => deleteRequest(request, keycloak.token), {
+    const deleteRequestMutation = useMutation((request: ApiRequestParams) => deleteRequest(request), {
         onError: () => {
             alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
                 type: types.ERROR,

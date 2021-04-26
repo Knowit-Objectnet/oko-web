@@ -4,8 +4,8 @@ import { EventInfo } from '../../../types';
 import { SingleDayCalendar } from '../../../components/calendar/SingleDayCalendar';
 import { useState } from 'react';
 import add from 'date-fns/add';
-import { useKeycloak } from '@react-keycloak/web';
 import { Event } from '../../../components/events/Event';
+import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -38,19 +38,17 @@ interface ListItemDropdownProps {
  * Dropdown component for list items container a singleday calendar and event info view
  */
 export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
-    // Keycloak instance
-    const { keycloak } = useKeycloak();
+    const { user } = useAuth();
     // Select the first event that is owned by the logged in partner. It should never be undefined, but if it is
     // then it should cause problems as it simply won't open the sideview with event info.
-    const firstOwnedEvent = () =>
-        props.events.find((event) => event.resource.partner.id === keycloak.tokenParsed.GroupID);
+    const firstOwnedEvent = () => props.events.find((event) => user.ownsResource(event.resource.partner.id));
     // State for handling the selected event to view info of
     const [selectedEvent, setSelectedEvent] = useState<EventInfo | undefined>(firstOwnedEvent());
     const selectedEventResource = selectedEvent && selectedEvent.resource;
 
     // On event click function
     const onSelectEvent = (event: EventInfo) => {
-        if (event.resource.partner.id === keycloak.tokenParsed.GroupID) {
+        if (user.ownsResource(event.resource.partner.id)) {
             setSelectedEvent(event);
         }
     };

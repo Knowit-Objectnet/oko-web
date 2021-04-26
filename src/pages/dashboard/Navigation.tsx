@@ -1,12 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useKeycloak } from '@react-keycloak/web';
 import List from '../../assets/List.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Weight from '../../assets/Weight.svg';
 import Bell from '../../assets/Bell.svg';
-import { Roles } from '../../types';
 import { NavItem } from './NavItem';
+import { useAuth } from '../../auth/useAuth';
 
 const Nav = styled.nav`
     display: flex;
@@ -15,13 +14,10 @@ const Nav = styled.nav`
 `;
 
 export const Navigation: React.FC = () => {
-    const { keycloak } = useKeycloak();
-    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
-    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
-    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
+    const { user } = useAuth();
 
     const getNavItemsForRole = () => {
-        if (userIsAdmin)
+        if (user.isAdmin)
             return (
                 <>
                     <NavItem path="/oversikt" icon={<List />} label="Oversikt" />
@@ -30,7 +26,7 @@ export const Navigation: React.FC = () => {
                     <NavItem path="/partnere" icon={<List />} label="Partnere" />
                 </>
             );
-        else if (userIsPartner)
+        else if (user.isPartner)
             return (
                 <>
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
@@ -38,7 +34,7 @@ export const Navigation: React.FC = () => {
                     <NavItem path="/varsler" icon={<Bell />} label="Varsler" />
                 </>
             );
-        else if (userIsStation)
+        else if (user.isStasjon)
             return (
                 <>
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />

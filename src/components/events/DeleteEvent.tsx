@@ -4,10 +4,10 @@ import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { useState } from 'react';
 import { PositiveButton } from '../buttons/PositiveButton';
 import { useMutation, useQueryClient } from 'react-query';
-import { EventInfo, Roles } from '../../types';
+import { EventInfo } from '../../types';
 import { ApiEventParams, deleteEvents, eventsDefaultQueryKey } from '../../services/EventService';
 import { types, useAlert } from 'react-alert';
-import { useKeycloak } from '@react-keycloak/web';
+import { useAuth } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     position: absolute;
@@ -56,13 +56,11 @@ interface DeleteEventProps {
 export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
     const alert = useAlert();
 
-    const { keycloak } = useKeycloak();
-    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
-    const userIsStation = keycloak.hasRealmRole(Roles.Ambassador);
-    const stationOwnsEvent = keycloak.tokenParsed?.GroupID === props.event.resource.station.id;
+    const { user } = useAuth();
 
     const eventIsRecurring = props.event.resource.recurrenceRule != null;
-    const allowRangeDeletion = eventIsRecurring && (userIsAdmin || (userIsStation && stationOwnsEvent));
+    const allowRangeDeletion =
+        eventIsRecurring && (user.isAdmin || (user.isStasjon && user.ownsResource(props.event.resource.station.id)));
 
     const date = new Date();
     date.setHours(2, 0, 0, 0);
@@ -79,7 +77,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
 
     const queryClient = useQueryClient();
     const deleteSingleEventMutation = useMutation(
-        (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }, keycloak.token),
+        (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }),
         {
             onSuccess: () => {
                 alert.show('Avtalen ble slettet.', { type: types.SUCCESS });
@@ -102,7 +100,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                 fromDate: fromDate.toISOString(),
                 toDate: toDate.toISOString(),
             };
-            return deleteEvents(apiParams, keycloak.token);
+            return deleteEvents(apiParams);
         },
         {
             onSuccess: () => {

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useKeycloak } from '@react-keycloak/web';
 import { ApiPickUp } from '../../../services/PickUpService';
 import { useRequests } from '../../../services/hooks/useRequests';
 import { RequestRegistrationButton } from './RequestRegistrationButton';
@@ -8,6 +7,7 @@ import { RequestCancellationButton } from './RequestCancellationButton';
 import { useState } from 'react';
 import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../components/StatusBadge';
 import { Spinner } from '../../../components/Spinner';
+import { useAuth } from '../../../auth/useAuth';
 
 const StatusWrapper = styled.div`
     display: flex;
@@ -31,14 +31,13 @@ interface Props {
 }
 
 export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
-    const { keycloak } = useKeycloak();
-    const userId = keycloak.tokenParsed?.GroupID;
+    const { user } = useAuth();
 
     const [requestStatusLoading, setRequestStatusLoading] = useState(false);
 
     const { data: request, isLoading: requestLoading, isError: requestLoadingError } = useRequests({
         pickupId: pickUp.id,
-        partnerId: userId,
+        partnerId: user.aktorId,
     });
 
     const renderRequestStatus = () => {
@@ -50,33 +49,23 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
             return <Notice>Noe gikk galt, kunne ikke hente påmeldingsstatus.</Notice>;
         }
 
-        const userHasRequest = request?.[0] ? true : false;
+        const userHasRequest = !!request?.[0];
         const pickUpIsOpenForRequest = !pickUp.chosenPartner;
 
         const userCanMakeRequest = pickUpIsOpenForRequest && !userHasRequest;
         const userRequestAwaiting = pickUpIsOpenForRequest && userHasRequest;
-        const userRequestApproved = pickUp.chosenPartner?.id === userId;
+        const userRequestApproved = pickUp.chosenPartner?.id === user.aktorId;
         // TODO: explicit rejection of a partner request is not supported by backend yet.
         //  When implemented, the following condition needs to be rewritten.
         const userRequestRejected = userHasRequest && !userRequestApproved;
 
         if (userCanMakeRequest) {
-            return (
-                <RequestRegistrationButton
-                    pickupId={pickUp.id}
-                    partnerId={userId}
-                    onRequestRegistration={setRequestStatusLoading}
-                />
-            );
+            return <RequestRegistrationButton pickupId={pickUp.id} onRequestRegistration={setRequestStatusLoading} />;
         } else if (userRequestAwaiting) {
             return (
                 <>
                     <NeutralStatusBadge fillWidth>Avventer svar</NeutralStatusBadge>
-                    <RequestCancellationButton
-                        pickupId={pickUp.id}
-                        partnerId={userId}
-                        onRequestCancellation={setRequestStatusLoading}
-                    />
+                    <RequestCancellationButton pickupId={pickUp.id} onRequestCancellation={setRequestStatusLoading} />
                 </>
             );
         } else if (userRequestApproved) {

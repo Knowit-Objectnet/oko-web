@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { ApiReport, ApiReportPatch, patchReport, reportsDefaultQueryKey } from '../../services/ReportService';
-import { useKeycloak } from '@react-keycloak/web';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import VisuallyHidden from '@reach/visually-hidden';
@@ -32,24 +31,20 @@ interface Props {
 export const WeightReportForm: React.FC<Props> = ({ report, onSubmit }) => {
     const [weight, setWeight] = useState<number | null>(report.weight);
 
-    const { keycloak } = useKeycloak();
     const alert = useAlert();
 
     const queryClient = useQueryClient();
-    const updateReportMutation = useMutation(
-        (updatedReport: ApiReportPatch) => patchReport(updatedReport, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Vekt ble registrert på uttaket.', { type: types.SUCCESS });
-            },
-            onError: () => {
-                alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
-            },
-            onSettled: () => {
-                return queryClient.invalidateQueries(reportsDefaultQueryKey);
-            },
+    const updateReportMutation = useMutation((updatedReport: ApiReportPatch) => patchReport(updatedReport), {
+        onSuccess: () => {
+            alert.show('Vekt ble registrert på uttaket.', { type: types.SUCCESS });
         },
-    );
+        onError: () => {
+            alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
+        },
+        onSettled: () => {
+            return queryClient.invalidateQueries(reportsDefaultQueryKey);
+        },
+    });
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.persist();

@@ -1,24 +1,22 @@
 import * as React from 'react';
-import { useKeycloak } from '@react-keycloak/web';
 import { Helmet } from 'react-helmet';
 import { Loading } from '../components/Loading';
 import { useEffect } from 'react';
+import { useAuth } from '../auth/useAuth';
 
 export const Logout: React.FC = () => {
-    const { keycloak } = useKeycloak();
+    const { logout } = useAuth();
 
     // The user will be redirected to this URL after logout is completed
     // We need to strip path from URL in order to prevent redirect back to logout in case of re-login
-    const redirectUri = location.href.slice(0, location.href.indexOf(location.pathname));
+    const returnUrl = location.href.slice(0, location.href.indexOf(location.pathname));
 
-    useEffect(
-        () =>
-            keycloak.logout({
-                redirectUri,
-            }),
+    useEffect(() => {
+        logout({
+            returnUrl,
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
-    );
+    }, []);
 
     return (
         <>

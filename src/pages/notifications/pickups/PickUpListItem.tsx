@@ -2,11 +2,10 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { format, formatISO } from 'date-fns';
 import { nb } from 'date-fns/locale';
-import { useKeycloak } from '@react-keycloak/web';
 import { PartnerRequestStatus } from './PartnerRequestStatus';
 import { RequestsStatusList } from './RequestsStatusList';
-import { Roles } from '../../../types';
 import { ApiPickUp } from '../../../services/PickUpService';
+import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.li`
     width: 100%;
@@ -37,8 +36,7 @@ interface Props {
 }
 
 export const PickUpListItem: React.FC<Props> = ({ pickUp }) => {
-    const { keycloak } = useKeycloak();
-    const userIsPartner = keycloak.hasRealmRole(Roles.Partner);
+    const { user } = useAuth();
 
     const startDateTime = new Date(pickUp.startDateTime);
     const endDateTime = new Date(pickUp.endDateTime);
@@ -64,7 +62,7 @@ export const PickUpListItem: React.FC<Props> = ({ pickUp }) => {
                 <time dateTime={formatISO(endDateTime)}>{pickUpEndTime}</time>{' '}
                 <time dateTime={getMachineReadableDate(startDateTime)}>{pickUpDate}</time>
             </Details>
-            {userIsPartner ? <PartnerRequestStatus pickUp={pickUp} /> : <RequestsStatusList pickUp={pickUp} />}
+            {user.isPartner ? <PartnerRequestStatus pickUp={pickUp} /> : <RequestsStatusList pickUp={pickUp} />}
             {pickUp.description && (
                 <Description>
                     <strong>Merknad:</strong> {pickUp.description}

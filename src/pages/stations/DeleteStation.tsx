@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
-import { useKeycloak } from '@react-keycloak/web';
 import { useMutation, useQueryClient } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../../services/StationService';
 import { StationSelect } from '../../components/forms/StationSelect';
@@ -50,7 +49,6 @@ interface Props {
 }
 
 export const DeleteStation: React.FC<Props> = (props) => {
-    const { keycloak } = useKeycloak();
     const alert = useAlert();
 
     const formMethods = useForm<FormData>({
@@ -61,7 +59,7 @@ export const DeleteStation: React.FC<Props> = (props) => {
     });
 
     const queryClient = useQueryClient();
-    const deleteStationMutation = useMutation((stationId: number) => deleteStation(stationId, keycloak.token), {
+    const deleteStationMutation = useMutation((stationId: number) => deleteStation(stationId), {
         onSuccess: () => {
             alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
             props.afterSubmit?.(true);

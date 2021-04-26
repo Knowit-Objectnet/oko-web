@@ -1,19 +1,23 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import add from 'date-fns/add';
-import keycloak from '../../../src/auth/keycloak';
-import { render, screen, cleanup, waitFor, fireEvent } from '../../../test-utils';
+import { render, screen, cleanup, waitFor, fireEvent, setupUseAuthMock } from '../../../test-utils';
 import { NewPickUp } from '../../../src/components/events/NewPickUp';
 import { mockStations } from '../../../__mocks__/mockStations';
 import MockAdapter from 'axios-mock-adapter';
 import axios, { AxiosRequestConfig } from 'axios';
+import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides an interface to create a pickup/Extra event', () => {
-    let axiosMock: MockAdapter;
+    afterEach(() => {
+        resetAllMocks();
+        cleanup();
+    });
 
-    beforeEach(() => {
-        axiosMock = new MockAdapter(axios);
-        axiosMock.onPost('/pickups').reply((config: AxiosRequestConfig) => {
+    it('should be possible to add pickup/extra event', async () => {
+        setupUseAuthMock({ aktorId: mockStations[0].id });
+
+        new MockAdapter(axios).onPost('/pickups').reply((config: AxiosRequestConfig) => {
             return [
                 200,
                 JSON.stringify({
@@ -26,18 +30,6 @@ describe('Provides an interface to create a pickup/Extra event', () => {
             ];
         });
 
-        // Set needed keycloak data
-        keycloak.token = 'FakeToken';
-        keycloak.tokenParsed.GroupID = mockStations[0].id;
-        keycloak.tokenParsed.groups = [mockStations[0].name];
-    });
-
-    afterEach(() => {
-        axiosMock.reset();
-        cleanup();
-    });
-
-    it('should be possible to add pickup/extra event', async () => {
         // Get a start end end date that isnt a saturday or sunday
         let date = new Date();
         if (date.getDay() === 0 || date.getDay() === 6) {

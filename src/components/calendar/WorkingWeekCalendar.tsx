@@ -39,7 +39,6 @@ interface WorkingWeekCalendarProps {
     min: Date;
     max: Date;
     step?: number;
-    selectable?: boolean;
     onSelectEvent?: (eventInfo: EventInfo) => void;
 }
 
@@ -47,12 +46,7 @@ interface WorkingWeekCalendarProps {
  * Calendar component that displays a working week monday-friday
  * Step size defaults to 15 and selectable defaults to false
  */
-export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
-    step = 15,
-    events = [],
-    selectable = false,
-    ...props
-}) => {
+export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({ step = 15, events = [], ...props }) => {
     // Function to set a date to the props.date's year, month, date
     const setDate = (date: Date) => {
         return date.setFullYear(props.date.getFullYear(), props.date.getMonth(), props.date.getDate());
@@ -110,7 +104,6 @@ export const WorkingWeekCalendar: React.FC<WorkingWeekCalendarProps> = ({
                             min={props.min}
                             max={props.max}
                             step={step}
-                            selectable={selectable}
                             onSelectEvent={props.onSelectEvent}
                         />
                     ))}
