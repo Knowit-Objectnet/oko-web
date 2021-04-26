@@ -1012,6 +1012,86 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@fullcalendar/common@~5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/common/-/common-5.6.0.tgz#27206084df07fbab33a67478b0d9b05542b09b79"
+  integrity sha512-4i4kZDVpRvfdKoJHRljDHsoYu466Odor9FhekP+67dIUoNnXSDTnQRmGfURwiF4RwaTsdWKe2+B7gors9G7zZA==
+  dependencies:
+    tslib "^2.0.3"
+
+"@fullcalendar/daygrid@^5.6.0", "@fullcalendar/daygrid@~5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.6.0.tgz#705508a7e7c5d560d01877485283f370c3c70780"
+  integrity sha512-UaNn6/vKQ3zI4/sDhrMACkIHOSZb/MA0JGlvvw3OTYFULqE5TISuYYnDbo9S1Wdz3AbTBvCzYy5Qk1vZQFsGwg==
+  dependencies:
+    "@fullcalendar/common" "~5.6.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/list@^5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/list/-/list-5.6.0.tgz#bfae6a8c6b5ddb5b9279b3d260c868db03ab973c"
+  integrity sha512-cpMjW9yUGrKkkoTWBKgo6MWH5P3MWCs3HjFxZd79oeXUY1/6ltyM2rwlSwbV8cCfEUaO+ovsRWzyh0mvSpaGDA==
+  dependencies:
+    "@fullcalendar/common" "~5.6.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/premium-common@~5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/premium-common/-/premium-common-5.6.0.tgz#d8dba80dbf09a664184d061928d1ad9ace079238"
+  integrity sha512-AtcoKphdGasBHNlN9DD7Kxc/7EmCUpIRu7JVRJYnrm4cR8rM3gCUCMMoPt8pyEfy4P/GN/4wGko54kgPkLzUTg==
+  dependencies:
+    "@fullcalendar/common" "~5.6.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/react@^5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-5.6.0.tgz#3ca8afe0284581f870fa29d44e178102103a4e25"
+  integrity sha512-g6U3bFnJZH+dT4N+SqdXVEIV/FCI1ShZedCRCjKXdG2VpvhkcOPeUVRp9gHMKTsy2S4W76f/B/W3r9Av5Ebxdg==
+  dependencies:
+    "@fullcalendar/common" "~5.6.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/resource-common@~5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource-common/-/resource-common-5.6.0.tgz#e9f5688f366ea4ec10e7756485a2ab25d957513c"
+  integrity sha512-9FTGQcUO+ER6U44Tj32c+pSvsJ+5CrGs1RDxRyei8UIvUwY6SxQySgdAozW3yxwozEoc5TZ7xLrlLw7vKAwN6w==
+  dependencies:
+    "@fullcalendar/common" "~5.6.0"
+    "@fullcalendar/premium-common" "~5.6.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/resource-daygrid@~5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource-daygrid/-/resource-daygrid-5.6.0.tgz#537468cdc3910557586fa0d335bcd1bd7b5bdc77"
+  integrity sha512-KWV61gxtgFoaFTPi6b/MP/FaROMtu8c2ijzznMY5VPjQzjU5CSaWLpPht1T2ZOije3QTiDZ8Gx4M4yLFKMHCAg==
+  dependencies:
+    "@fullcalendar/common" "~5.6.0"
+    "@fullcalendar/daygrid" "~5.6.0"
+    "@fullcalendar/premium-common" "~5.6.0"
+    "@fullcalendar/resource-common" "~5.6.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/resource-timegrid@^5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/resource-timegrid/-/resource-timegrid-5.6.0.tgz#5461026d085f64297d7507980a7ed069c29002a7"
+  integrity sha512-BAiSTeuL8P0YwG2o6roavDP2dlA5cXFrxcYhx4qvEyqxscmGunI5NnxhmXafpnWO60PgvwHO++EoJvAsR3WSSg==
+  dependencies:
+    "@fullcalendar/common" "~5.6.0"
+    "@fullcalendar/premium-common" "~5.6.0"
+    "@fullcalendar/resource-common" "~5.6.0"
+    "@fullcalendar/resource-daygrid" "~5.6.0"
+    "@fullcalendar/timegrid" "~5.6.0"
+    tslib "^2.0.3"
+
+"@fullcalendar/timegrid@^5.6.0", "@fullcalendar/timegrid@~5.6.0":
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-5.6.0.tgz#0e489d60f224042211e688d3273154964aab6b54"
+  integrity sha512-NG55pzPvrzZEuVq+/Vn1ZbyKARVjsE6PzhiOHvJuyt3gzVPeWjXGUWjDN3BSDZ8p/4dthbF6H9mCPia977aV1g==
+  dependencies:
+    "@fullcalendar/common" "~5.6.0"
+    "@fullcalendar/daygrid" "~5.6.0"
+    tslib "^2.0.3"
+
 "@hookform/error-message@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@hookform/error-message/-/error-message-2.0.0.tgz#9b1b037fd816ea9b1531c06aa7fab5f5154aa740"
@@ -4204,6 +4284,11 @@ focus-lock@^0.8.1:
   integrity sha512-/LFZOIo82WDsyyv7h7oc0MJF9ACOvDRdx9rWPZ2pgMfNWu/z8hQDBtOchuB/0BVLmuFOZjV02YwUVzNsWx/EzA==
   dependencies:
     tslib "^1.9.3"
+
+focus-visible@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/focus-visible/-/focus-visible-5.2.0.tgz#3a9e41fccf587bd25dcc2ef045508284f0a4d6b3"
+  integrity sha512-Rwix9pBtC1Nuy5wysTmKy+UjbDJpIfg8eHjw0rjZ1mX4GNLz1Bmd16uDpI3Gk1i70Fgcs8Csg2lPm8HULFg9DQ==
 
 follow-redirects@^1.0.0, follow-redirects@^1.10.0:
   version "1.13.3"

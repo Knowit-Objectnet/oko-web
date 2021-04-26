@@ -11,6 +11,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { AuthProvider } from './auth/AuthProvider';
 import { Loading } from './components/Loading';
 import { GlobalStyle } from './global-styles';
+import 'focus-visible/dist/focus-visible';
 
 const alertOptions = {
     position: positions.TOP_CENTER,
