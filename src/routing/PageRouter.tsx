@@ -8,6 +8,7 @@ import { Stations } from '../pages/stations/Stations';
 import { Partners } from '../pages/partners/Partners';
 import { useAuth } from '../auth/useAuth';
 import { Roles } from '../auth/Roles';
+import { Kalender } from '../pages/kalender/Kalender';
 
 const HomePage: React.FC = () => {
     const { user } = useAuth();
@@ -17,6 +18,9 @@ const HomePage: React.FC = () => {
 export const PageRouter: React.FC = () => (
     <Switch>
         <Route path="/kalender">
+            <Kalender />
+        </Route>
+        <Route path="/calendar">
             <Calendar />
         </Route>
         <ProtectedRoute path="/oversikt" requiredRoles={[Roles.Admin]}>

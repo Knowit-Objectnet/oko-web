@@ -18,6 +18,7 @@ export const Navigation: React.FC = () => {
                 <>
                     <NavItem path="/oversikt" icon={<List />} label="Oversikt" />
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
+                    <NavItem path="/calendar" icon={<Calendar />} label="Calendar" />
                     <NavItem path="/stasjoner" icon={<List />} label="Stasjoner" />
                     <NavItem path="/partnere" icon={<List />} label="Partnere" />
                 </>
@@ -26,6 +27,7 @@ export const Navigation: React.FC = () => {
             return (
                 <>
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
+                    <NavItem path="/calendar" icon={<Calendar />} label="Calendar" />
                     <NavItem path="/vektuttak" icon={<Weight />} label="Vektuttak" />
                     <NavItem path="/varsler" icon={<Bell />} label="Varsler" />
                 </>
@@ -34,6 +36,7 @@ export const Navigation: React.FC = () => {
             return (
                 <>
                     <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
+                    <NavItem path="/calendar" icon={<Calendar />} label="Calendar" />
                     <NavItem path="/varsler" icon={<Bell />} label="Varsler" />
                 </>
             );
