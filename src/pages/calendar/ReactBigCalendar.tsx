@@ -7,6 +7,7 @@ import { useEvents } from '../../services/hooks/useEvents';
 
 // TODO: write our own CSS for the calendar
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Toolbar } from './Toolbar';
 
 export const ReactBigCalendar: React.FC = () => {
     const { state, dispatch } = useCalendar();
@@ -54,6 +55,9 @@ export const ReactBigCalendar: React.FC = () => {
             onView={handleViewChange}
             view={state.selectedView}
             dayLayoutAlgorithm="no-overlap"
+            components={{
+                toolbar: Toolbar,
+            }}
         />
     );
 };
