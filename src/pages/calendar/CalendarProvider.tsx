@@ -1,6 +1,6 @@
 import React, { Dispatch, Reducer, useContext, useReducer } from 'react';
 import { View } from 'react-big-calendar';
-import { add } from 'date-fns';
+import { add, endOfDay, endOfISOWeek, endOfMonth, startOfDay, startOfISOWeek, startOfMonth } from 'date-fns';
 
 export type CalendarView = View; // TODO extend with custom view types
 
@@ -32,17 +32,43 @@ interface CalendarContext {
 
 const CalendarContext = React.createContext<CalendarContext | undefined>(undefined);
 
+const calculateDateRange = (date: Date, view: CalendarView) => {
+    switch (view) {
+        case 'day':
+            return {
+                start: startOfDay(date),
+                end: endOfDay(date),
+            };
+        case 'week':
+        case 'agenda':
+        case 'work_week':
+            return {
+                start: startOfISOWeek(date),
+                end: endOfISOWeek(date),
+            };
+        case 'month':
+            return {
+                start: startOfMonth(date),
+                end: endOfMonth(date),
+            };
+        default:
+            throw new Error('Illegal view name provided when calculating date range');
+    }
+};
+
 const calendarStateReducer: Reducer<CalendarState, CalendarAction> = (state, action) => {
     switch (action.type) {
         case 'SET_VIEW':
             return {
                 ...state,
                 selectedView: action.view,
+                viewDateRange: calculateDateRange(state.selectedDate, action.view),
             };
         case 'SET_DATE':
             return {
                 ...state,
                 selectedDate: action.date,
+                viewDateRange: calculateDateRange(action.date, state.selectedView),
             };
         case 'SET_FILTER':
             return {

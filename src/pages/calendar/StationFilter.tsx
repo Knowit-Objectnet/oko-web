@@ -1,12 +1,11 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Filter from '../../assets/Filter.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
-import { useState } from 'react';
 import { useStations } from '../../services/hooks/useStations';
 import { useCalendar } from './CalendarProvider';
-import { useAuth } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     display: flex;
@@ -62,10 +61,6 @@ export const StationFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
     const { state, dispatch } = useCalendar();
     const { data: stations } = useStations();
-    const { user } = useAuth();
-
-    const viewIsNotAgenda = state.selectedView !== 'agenda';
-    const shouldShowFilter = (user.isAdmin || user.isPartner) && viewIsNotAgenda;
 
     const onToggleClick = () => {
         setToggled(!toggled);
@@ -78,7 +73,7 @@ export const StationFilter: React.FC = () => {
         dispatch({ type: 'SET_FILTER', filters: { stasjonId } });
     };
 
-    return shouldShowFilter ? (
+    return (
         <Wrapper>
             <Header>
                 <StyledFilter />
@@ -112,5 +107,5 @@ export const StationFilter: React.FC = () => {
                 </Stations>
             )}
         </Wrapper>
-    ) : null;
+    );
 };
