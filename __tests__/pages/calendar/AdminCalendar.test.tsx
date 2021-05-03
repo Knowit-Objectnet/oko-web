@@ -3,7 +3,7 @@ import { render, cleanup, screen, setupUseAuthMock } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { mockApiEvents } from '../../../__mocks__/mockEvents';
 import { EventInfo } from '../../../src/types';
-import { AdminCalendar } from '../../../src/pages/calendar/AdminCalendar/AdminCalendar';
+import { AdminCalendar } from '../../../src/pages/calendar/deprecated/AdminCalendar/AdminCalendar';
 import { mockStations } from '../../../__mocks__/mockStations';
 import { ApiEvent } from '../../../src/services/EventService';
 import MockAdapter from 'axios-mock-adapter';

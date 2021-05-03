@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { EventInfo } from '../../../types';
-import { createNDaysFromDate } from '../../../utils/createNDaysFromDate';
+import { EventInfo } from '../../../../types';
+import { createNDaysFromDate } from '../../../../utils/createNDaysFromDate';
 import isSameDay from 'date-fns/isSameDay';
 import groupBy from 'lodash/groupBy';
 import pickBy from 'lodash/pickBy';
 import { ListItem } from './ListItem';
 import styled from 'styled-components';
-import { useAuth } from '../../../auth/useAuth';
+import { useAuth } from '../../../../auth/useAuth';
 const Wrapper = styled.div``;
 
 const Header = styled.div`

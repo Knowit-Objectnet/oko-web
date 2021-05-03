@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Agenda } from './Agenda';
-import { SingleDayCalendar } from '../../../components/calendar/SingleDayCalendar';
-import { EventInfo, SlotInfo } from '../../../types';
-import ArrowUp from '../../../assets/ArrowUp.svg';
-import ArrowDown from '../../../assets/ArrowDown.svg';
-import { useStations } from '../../../services/hooks/useStations';
+import { SingleDayCalendar } from '../../../../components/calendar/SingleDayCalendar';
+import { EventInfo, SlotInfo } from '../../../../types';
+import ArrowUp from '../../../../assets/ArrowUp.svg';
+import ArrowDown from '../../../../assets/ArrowDown.svg';
+import { useStations } from '../../../../services/hooks/useStations';
 
 const Wrapper = styled.div``;
 

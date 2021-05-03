@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import getISOWeek from 'date-fns/getISOWeek';
-import ArrowRight from '../../assets/ArrowRight.svg';
-import ArrowLeft from '../../assets/ArrowLeft.svg';
+import ArrowRight from '../../../assets/ArrowRight.svg';
+import ArrowLeft from '../../../assets/ArrowLeft.svg';
 
 const Wrapper = styled.div`
     display: flex;

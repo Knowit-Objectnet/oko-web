@@ -1,6 +1,7 @@
 import React, { Dispatch, Reducer, useContext, useReducer } from 'react';
-import { View } from 'react-big-calendar';
+import { DateRange, View } from 'react-big-calendar';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
+import { viewProperties } from './CalendarConfig';
 
 export type CalendarView = View; // TODO extend with custom view types
 
@@ -32,26 +33,6 @@ interface CalendarContext {
 
 const CalendarContext = React.createContext<CalendarContext | undefined>(undefined);
 
-export const calculateDateRange = (date: Date, view: CalendarView) => {
-    switch (view) {
-        case 'day':
-        case 'week':
-        case 'agenda':
-        case 'work_week':
-            return {
-                start: startOfISOWeek(date),
-                end: endOfISOWeek(date),
-            };
-        case 'month':
-            return {
-                start: startOfMonth(date),
-                end: endOfMonth(date),
-            };
-        default:
-            throw new Error('Unsupported calendar view name provided when calculating date range');
-    }
-};
-
 const calendarStateReducer: Reducer<CalendarState, CalendarAction> = (state, action) => {
     switch (action.type) {
         case 'SET_VIEW':
@@ -79,15 +60,33 @@ const calendarStateReducer: Reducer<CalendarState, CalendarAction> = (state, act
     }
 };
 
+export const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
+    const fetchInterval = viewProperties[view].fetchInterval;
+    switch (fetchInterval) {
+        case 'weeks':
+            return {
+                start: startOfISOWeek(date),
+                end: endOfISOWeek(date),
+            };
+        case 'months':
+            return {
+                start: startOfMonth(date),
+                end: endOfMonth(date),
+            };
+        default:
+            throw new Error('Unsupported calendar view name provided when calculating date range');
+    }
+};
+
 export const CalendarProvider: React.FC = ({ children }) => {
     const initialState: CalendarState = {
         filters: {},
-        selectedView: 'week', // TODO: get from route/params or persisted view
+        selectedView: 'work_week', // TODO: get from route/params or persisted view
         selectedDate: new Date(),
-        viewDateRange: calculateDateRange(new Date(), 'week'), // TODO: get view from "selectedView"
+        viewDateRange: calculateDateRange(new Date(), 'work_week'), // TODO: get view from "selectedView"
     };
 
-    const [state, dispatch] = useReducer(calendarStateReducer, initialState); // TODO Use initializer here?
+    const [state, dispatch] = useReducer(calendarStateReducer, initialState);
 
     const value = {
         state,

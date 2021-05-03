@@ -4,6 +4,7 @@ import { Button, ButtonGroup, Heading, Icon, IconButton, Stack } from '@chakra-u
 import { CalendarView, useCalendar } from './CalendarProvider';
 import ArrowLeft from '../../assets/ArrowLeft.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
+import { viewProperties } from './CalendarConfig';
 
 const ViewToggleButton: React.FC<{ label: string; view: CalendarView }> = ({ label, view }) => {
     const { state, dispatch } = useCalendar();
@@ -20,7 +21,7 @@ const ViewToggleButton: React.FC<{ label: string; view: CalendarView }> = ({ lab
     );
 };
 
-export const Toolbar: React.FC<ToolbarProps> = ({ onNavigate, label }) => (
+export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, views }) => (
     <Stack direction="row" justifyContent="space-between" marginBottom={5}>
         <Button
             fontWeight="normal"
@@ -54,10 +55,9 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onNavigate, label }) => (
         </Stack>
         {/* TODO: change to useRadioGroup() in stead of ButtonGroup */}
         <ButtonGroup isAttached size="sm">
-            <ViewToggleButton label="Måned" view="month" />
-            <ViewToggleButton label="Uke" view="week" />
-            <ViewToggleButton label="Liste" view="agenda" />
-            <ViewToggleButton label="Oversikt" view="day" />
+            {Object.values(views).map((view: CalendarView) => (
+                <ViewToggleButton key={view} label={viewProperties[view].label} view={view} />
+            ))}
         </ButtonGroup>
     </Stack>
 );

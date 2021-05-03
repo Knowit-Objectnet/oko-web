@@ -5,7 +5,7 @@ import { mockApiEvents } from '../../../__mocks__/mockEvents';
 import { EventInfo } from '../../../src/types';
 
 // Component to test
-import { StationCalendar } from '../../../src/pages/calendar/StationCalendar/StationCalendar';
+import { StationCalendar } from '../../../src/pages/calendar/deprecated/StationCalendar/StationCalendar';
 import { ApiEvent } from '../../../src/services/EventService';
 import resetAllMocks = jest.resetAllMocks;
 

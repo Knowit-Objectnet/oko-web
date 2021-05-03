@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo, SlotInfo } from '../../../types';
+import { EventInfo, SlotInfo } from '../../../../types';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import isSameDay from 'date-fns/isSameDay';
-import { WorkingWeekCalendar } from '../../../components/calendar/WorkingWeekCalendar';
+import { WorkingWeekCalendar } from '../../../../components/calendar/WorkingWeekCalendar';
 import { WeekMenu } from '../WeekMenu';
-import { createNDaysFromDate } from '../../../utils/createNDaysFromDate';
+import { createNDaysFromDate } from '../../../../utils/createNDaysFromDate';
 
 const CalendarWrapper = styled.div`
     overflow: auto;

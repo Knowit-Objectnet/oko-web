@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo } from '../../../types';
-import { SingleDayCalendar } from '../../../components/calendar/SingleDayCalendar';
+import { EventInfo } from '../../../../types';
+import { SingleDayCalendar } from '../../../../components/calendar/SingleDayCalendar';
 import { useState } from 'react';
 import add from 'date-fns/add';
-import { Event } from '../../../components/events/Event';
-import { useAuth } from '../../../auth/useAuth';
+import { Event } from '../../../../components/events/Event';
+import { useAuth } from '../../../../auth/useAuth';
 
 const Wrapper = styled.div`
     width: 100%;
