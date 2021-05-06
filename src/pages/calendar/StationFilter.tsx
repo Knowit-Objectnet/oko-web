@@ -5,7 +5,6 @@ import Filter from '../../assets/Filter.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
 import { useStations } from '../../services/hooks/useStations';
-import { useCalendar } from './useCalendar';
 
 const Wrapper = styled.div`
     display: flex;
@@ -57,9 +56,13 @@ const Input = styled.input`
     margin-right: 15px;
 `;
 
-export const StationFilter: React.FC = () => {
+interface Props {
+    selectedStationId?: number;
+    onStationIdChange: (stationId?: number) => void;
+}
+
+export const StationFilter: React.FC<Props> = ({ selectedStationId, onStationIdChange }) => {
     const [toggled, setToggled] = useState(true);
-    const { state, dispatch } = useCalendar();
     const { data: stations } = useStations();
 
     const onToggleClick = () => {
@@ -69,8 +72,8 @@ export const StationFilter: React.FC = () => {
     const handleStationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         const value = e.currentTarget.value;
-        const stasjonId = value === 'default' ? undefined : parseInt(value);
-        dispatch({ type: 'SET_FILTER', filters: { stasjonId } });
+        const stasjonId = value === 'default' ? undefined : Number(value);
+        onStationIdChange(stasjonId);
     };
 
     return (
@@ -88,7 +91,7 @@ export const StationFilter: React.FC = () => {
                                 type="radio"
                                 name="station-selector"
                                 value={station.id}
-                                checked={station.id === state.filters.stasjonId}
+                                checked={station.id === selectedStationId}
                                 onChange={handleStationChange}
                             />
                             {station.name}
@@ -99,7 +102,7 @@ export const StationFilter: React.FC = () => {
                             type="radio"
                             name="station-selector"
                             value="default"
-                            checked={state.filters.stasjonId === undefined}
+                            checked={selectedStationId === undefined}
                             onChange={handleStationChange}
                         />
                         Alle

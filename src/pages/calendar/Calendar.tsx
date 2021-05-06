@@ -6,10 +6,13 @@ import { Box } from '@chakra-ui/layout';
 import { DatePicker } from './DatePicker';
 import { useState } from 'react';
 import { View } from 'react-big-calendar';
+import { StationFilter } from './StationFilter';
 
 export const Calendar: React.FC = () => {
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [selectedView, setSelectedView] = useState<View>('work_week');
+    const [selectedStationId, setSelectedStation] = useState<number | undefined>();
+
     return (
         <>
             <Helmet>
@@ -19,12 +22,13 @@ export const Calendar: React.FC = () => {
             <HStack spacing={5} padding={5} alignItems="flex-start" width="100%" height="100%">
                 <VStack alignItems="flex-start" spacing={5}>
                     <DatePicker selectedDate={selectedDate} onDateChange={setSelectedDate} />
-                    {/*<StationFilter />*/}
+                    <StationFilter selectedStationId={selectedStationId} onStationIdChange={setSelectedStation} />
                 </VStack>
                 <Box flex="1" width="100%" height="100%">
                     <ReactBigCalendar
                         selectedDate={selectedDate}
                         selectedView={selectedView}
+                        selectedStationId={selectedStationId}
                         onDateChange={setSelectedDate}
                         onViewChange={setSelectedView}
                     />

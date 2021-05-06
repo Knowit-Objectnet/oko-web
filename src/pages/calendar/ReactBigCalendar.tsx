@@ -12,13 +12,20 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 interface Props {
     selectedDate: Date;
     selectedView: View;
+    selectedStationId?: number;
     onDateChange: (date: Date) => void;
     onViewChange: (view: View) => void;
 }
 
-export const ReactBigCalendar: React.FC<Props> = ({ selectedDate, selectedView, onDateChange, onViewChange }) => {
+export const ReactBigCalendar: React.FC<Props> = ({
+    selectedDate,
+    selectedView,
+    onDateChange,
+    onViewChange,
+    selectedStationId,
+}) => {
     // TODO: get loading-status for displaying in calendar
-    const events = useCalendarEvents(selectedDate, selectedView);
+    const events = useCalendarEvents(selectedDate, selectedView, selectedStationId);
 
     const bigCalendarLocalizer = dateFnsLocalizer({
         format,

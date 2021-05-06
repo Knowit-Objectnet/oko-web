@@ -4,7 +4,11 @@ import { calculateDateRange } from '../CalendarProvider';
 import { usePrefetchEvents } from './usePrefetchEvents';
 import { calendarConfig } from '../CalendarConfig';
 
-export const useCalendarEvents = (selectedDate: Date, selectedView: View): CalendarEvent[] => {
+export const useCalendarEvents = (
+    selectedDate: Date,
+    selectedView: View,
+    selectedStationId?: number,
+): CalendarEvent[] => {
     const intervalToFetch: DateRange = calculateDateRange(selectedDate, selectedView);
 
     // TODO: wrap in LazyResult in order to return loading/error status?
@@ -21,13 +25,11 @@ export const useCalendarEvents = (selectedDate: Date, selectedView: View): Calen
 
     usePrefetchEvents(intervalToFetch, selectedView);
 
-    return (
-        (events ?? [])
-            // TODO: .filter((event) => applyFilters(event, state.filters))
-            .map((event) => ({
-                start: new Date(event.startDateTime),
-                end: new Date(event.endDateTime),
-                title: `${event.partner.name} - ${event.station.name}`,
-            }))
-    );
+    return (events ?? [])
+        .filter((event) => selectedStationId === undefined || event.station.id === selectedStationId)
+        .map((event) => ({
+            start: new Date(event.startDateTime),
+            end: new Date(event.endDateTime),
+            title: `${event.partner.name} - ${event.station.name}`,
+        }));
 };
