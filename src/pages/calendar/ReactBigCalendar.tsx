@@ -2,14 +2,13 @@ import React from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { nb } from 'date-fns/locale';
 import { format, getDay, parse, set, startOfWeek } from 'date-fns';
-import { CalendarView, useCalendar } from './CalendarProvider';
 import { CalendarToolbar } from './CalendarToolbar';
 import { useCalendarEvents } from './hooks/useCalendarEvents';
+import { useCalendar } from './useCalendar';
+import { calendarConfig, CalendarView } from './CalendarConfig';
 
 // TODO: write our own CSS for the calendar
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-
-const MIN_DISPLAY_HOUR = set(new Date(), { hours: 6, minutes: 0 });
 
 export const ReactBigCalendar: React.FC = () => {
     const { state, dispatch } = useCalendar();
@@ -39,15 +38,15 @@ export const ReactBigCalendar: React.FC = () => {
             culture="nb-no"
             events={events}
             date={state.selectedDate}
-            onNavigate={handleDateChange}
-            views={{ month: true, work_week: true, agenda: true, day: true }} // TODO: add custom view component here
+            views={calendarConfig.visibleViews}
             view={state.selectedView}
+            onNavigate={handleDateChange}
             onView={handleViewChange}
             dayLayoutAlgorithm="no-overlap"
             components={{
                 toolbar: CalendarToolbar,
             }}
-            min={MIN_DISPLAY_HOUR}
+            min={set(new Date(), { hours: calendarConfig.minDisplayHour, minutes: 0 })}
         />
     );
 };

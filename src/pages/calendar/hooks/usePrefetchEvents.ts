@@ -1,11 +1,12 @@
 import { QueryClient, useQueryClient } from 'react-query';
-import { CalendarState, useCalendar } from '../CalendarProvider';
+import { CalendarState } from '../CalendarProvider';
 import { add } from 'date-fns';
 import { ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../../services/EventService';
-import { viewProperties } from '../CalendarConfig';
+import { calendarConfig } from '../CalendarConfig';
+import { useCalendar } from '../useCalendar';
 
 const calculateInterval = (state: CalendarState, offset: 1 | -1): ApiEventParams => {
-    const fetchInterval = viewProperties[state.selectedView].fetchInterval;
+    const fetchInterval = calendarConfig.viewProperties[state.selectedView].fetchInterval;
     return {
         fromDate: add(state.viewDateRange.start, { [fetchInterval]: offset }).toISOString(),
         toDate: add(state.viewDateRange.end, { [fetchInterval]: offset }).toISOString(),

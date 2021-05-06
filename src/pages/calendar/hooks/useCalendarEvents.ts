@@ -1,8 +1,9 @@
 import { useEvents } from '../../../services/hooks/useEvents';
 import { Event as CalendarEvent } from 'react-big-calendar';
-import { CalendarFilters, useCalendar } from '../CalendarProvider';
+import { CalendarFilters } from '../CalendarProvider';
 import { ApiEvent } from '../../../services/EventService';
 import { usePrefetchEvents } from './usePrefetchEvents';
+import { useCalendar } from '../useCalendar';
 
 const REFETCH_INTERVAL_MS = 30_000;
 

@@ -5,7 +5,7 @@ import Filter from '../../assets/Filter.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
 import { useStations } from '../../services/hooks/useStations';
-import { useCalendar } from './CalendarProvider';
+import { useCalendar } from './useCalendar';
 
 const Wrapper = styled.div`
     display: flex;

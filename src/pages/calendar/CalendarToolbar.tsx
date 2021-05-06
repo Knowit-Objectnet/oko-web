@@ -1,10 +1,10 @@
 import React from 'react';
 import { ToolbarProps } from 'react-big-calendar';
 import { Button, ButtonGroup, Heading, Icon, IconButton, Stack } from '@chakra-ui/react';
-import { CalendarView, useCalendar } from './CalendarProvider';
 import ArrowLeft from '../../assets/ArrowLeft.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
-import { viewProperties } from './CalendarConfig';
+import { calendarConfig, CalendarView } from './CalendarConfig';
+import { useCalendar } from './useCalendar';
 
 const ViewToggleButton: React.FC<{ label: string; view: CalendarView }> = ({ label, view }) => {
     const { state, dispatch } = useCalendar();
@@ -56,7 +56,7 @@ export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, vie
         {/* TODO: change to useRadioGroup() in stead of ButtonGroup */}
         <ButtonGroup isAttached size="sm">
             {Object.values(views).map((view: CalendarView) => (
-                <ViewToggleButton key={view} label={viewProperties[view].label} view={view} />
+                <ViewToggleButton key={view} label={calendarConfig.viewProperties[view].label} view={view} />
             ))}
         </ButtonGroup>
     </Stack>

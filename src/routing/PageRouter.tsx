@@ -16,7 +16,7 @@ const HomePage: React.FC = () => {
 
 export const PageRouter: React.FC = () => (
     <Switch>
-        <Route path="/kalender">
+        <Route path="/kalender/:viewKey?">
             <Calendar />
         </Route>
         <ProtectedRoute path="/oversikt" requiredRoles={[Roles.Admin]}>
