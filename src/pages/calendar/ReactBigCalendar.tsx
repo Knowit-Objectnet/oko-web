@@ -8,24 +8,19 @@ import { calendarConfig } from './CalendarConfig';
 
 // TODO: write our own CSS for the calendar
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     selectedDate: Date;
     selectedView: View;
     selectedStationId?: number;
     onDateChange: (date: Date) => void;
-    onViewChange: (view: View) => void;
 }
 
-export const ReactBigCalendar: React.FC<Props> = ({
-    selectedDate,
-    selectedView,
-    onDateChange,
-    onViewChange,
-    selectedStationId,
-}) => {
+export const ReactBigCalendar: React.FC<Props> = ({ selectedDate, selectedView, onDateChange, selectedStationId }) => {
     // TODO: get loading-status for displaying in calendar
     const events = useCalendarEvents(selectedDate, selectedView, selectedStationId);
+    const history = useHistory();
 
     const bigCalendarLocalizer = dateFnsLocalizer({
         format,
@@ -34,6 +29,11 @@ export const ReactBigCalendar: React.FC<Props> = ({
         getDay,
         locales: { 'nb-no': nb },
     });
+
+    const handleViewChange = (view: View) => {
+        const viewPathKey = calendarConfig.viewProperties[view].pathKey;
+        history.replace(`/kalender/${viewPathKey}`);
+    };
 
     return (
         <Calendar
@@ -44,7 +44,7 @@ export const ReactBigCalendar: React.FC<Props> = ({
             views={calendarConfig.visibleViews}
             view={selectedView}
             onNavigate={onDateChange}
-            onView={onViewChange}
+            onView={handleViewChange}
             dayLayoutAlgorithm="no-overlap"
             components={{
                 toolbar: CalendarToolbar,
