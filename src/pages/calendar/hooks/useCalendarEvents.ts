@@ -5,7 +5,7 @@ import { calendarConfig, CalendarView } from '../CalendarConfig';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
 import { useCalendarState } from './useCalendarState';
 import { ApiEvent } from '../../../services/EventService';
-import { CalendarFilters, CalendarState } from '../CalendarProvider';
+import { CalendarFilters } from '../CalendarProvider';
 
 const applyFilters = (event: ApiEvent, filters: CalendarFilters): boolean => {
     if (filters.stasjonId !== undefined) {
