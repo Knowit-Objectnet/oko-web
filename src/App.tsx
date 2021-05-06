@@ -31,7 +31,7 @@ export const App: React.FC = () => {
                         <QueryClientProvider client={queryClient}>
                             <ModalProvider>
                                 <Helmet titleTemplate="Oslo kommune REG | %s">
-                                    <html lang="no" />
+                                    <html lang="nb" />
                                     {/* TODO write a SEO-friendly description: */}
                                     <meta name="description" content="Oslo kommune REG" />{' '}
                                 </Helmet>
