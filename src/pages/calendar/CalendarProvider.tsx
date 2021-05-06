@@ -59,7 +59,7 @@ const calendarStateReducer: Reducer<CalendarState, CalendarAction> = (state, act
     }
 };
 
-const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
+export const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const fetchInterval = calendarConfig.viewProperties[view].fetchInterval;
     switch (fetchInterval) {
         case 'weeks':

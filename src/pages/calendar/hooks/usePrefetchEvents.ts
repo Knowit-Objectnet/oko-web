@@ -1,15 +1,14 @@
 import { QueryClient, useQueryClient } from 'react-query';
-import { CalendarState } from '../CalendarProvider';
 import { add } from 'date-fns';
 import { ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../../services/EventService';
 import { calendarConfig } from '../CalendarConfig';
-import { useCalendar } from '../useCalendar';
+import { DateRange, View } from 'react-big-calendar';
 
-const calculateInterval = (state: CalendarState, offset: 1 | -1): ApiEventParams => {
-    const fetchInterval = calendarConfig.viewProperties[state.selectedView].fetchInterval;
+const calculateInterval = (intervalToFetch: DateRange, selectedView: View, offset: 1 | -1): ApiEventParams => {
+    const fetchInterval = calendarConfig.viewProperties[selectedView].fetchInterval;
     return {
-        fromDate: add(state.viewDateRange.start, { [fetchInterval]: offset }).toISOString(),
-        toDate: add(state.viewDateRange.end, { [fetchInterval]: offset }).toISOString(),
+        fromDate: add(intervalToFetch.start, { [fetchInterval]: offset }).toISOString(),
+        toDate: add(intervalToFetch.end, { [fetchInterval]: offset }).toISOString(),
     };
 };
 
@@ -20,13 +19,12 @@ const prefetchEvents = (queryClient: QueryClient, queryParams: ApiEventParams) =
     });
 };
 
-export const usePrefetchEvents = () => {
-    const { state } = useCalendar();
+export const usePrefetchEvents = (intervalToFetch: DateRange, selectedView: View) => {
     const queryClient = useQueryClient();
 
-    const previousInterval = calculateInterval(state, -1);
+    const previousInterval = calculateInterval(intervalToFetch, selectedView, -1);
     prefetchEvents(queryClient, previousInterval);
 
-    const nextInterval = calculateInterval(state, 1);
+    const nextInterval = calculateInterval(intervalToFetch, selectedView, 1);
     prefetchEvents(queryClient, nextInterval);
 };
