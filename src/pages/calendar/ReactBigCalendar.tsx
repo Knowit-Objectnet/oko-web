@@ -39,8 +39,8 @@ export const ReactBigCalendar: React.FC = () => {
             culture="nb-no"
             events={events}
             date={state.selectedDate}
-            views={Object.values(VIEWS).map((viewProperties) => viewProperties.viewType)} // TODO: add custom view component here
-            view={VIEWS[selectedView].viewType}
+            views={Object.values(VIEWS).map((viewProperties) => viewProperties.type)} // TODO: add custom view component here
+            view={VIEWS[selectedView].type}
             onNavigate={handleDateChange}
             onView={handleViewChange}
             dayLayoutAlgorithm="no-overlap"

@@ -15,9 +15,9 @@ const ViewToggleButton: React.FC<Props> = ({ view, currentView, onViewChange }) 
     <Button
         fontWeight="normal"
         onClick={() => {
-            onViewChange(view.viewType);
+            onViewChange(view.type);
         }}
-        isActive={view.viewType === currentView}
+        isActive={view.type === currentView}
     >
         {view.label}
     </Button>
@@ -58,7 +58,7 @@ export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, vie
         {/* TODO: change to useRadioGroup() in stead of ButtonGroup */}
         <ButtonGroup isAttached size="sm">
             {Object.values(VIEWS).map((view: ViewProperties) => (
-                <ViewToggleButton key={view.viewType} view={view} currentView={currentView} onViewChange={onView} />
+                <ViewToggleButton key={view.type} view={view} currentView={currentView} onViewChange={onView} />
             ))}
         </ButtonGroup>
     </Stack>

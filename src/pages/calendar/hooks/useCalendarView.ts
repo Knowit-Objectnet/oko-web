@@ -11,7 +11,7 @@ const DEFAULT_VIEW: CalendarView = 'uke';
 
 export type ViewProperties = {
     label: string;
-    viewType: View; // Extend with custom views when needed
+    type: View; // Extend with custom views when needed
     fetchInterval: keyof Duration;
     customComponent?: React.ReactNode; // For custom views only
 };
@@ -19,30 +19,30 @@ export type ViewProperties = {
 export const VIEWS: Record<CalendarView, ViewProperties> = {
     maned: {
         label: 'Måned',
-        viewType: 'month',
+        type: 'month',
         fetchInterval: 'months',
     },
     uke: {
         label: 'Arbeidsuke',
-        viewType: 'work_week',
+        type: 'work_week',
         fetchInterval: 'weeks',
     },
     dag: {
         label: 'Dag',
-        viewType: 'day',
+        type: 'day',
         fetchInterval: 'weeks',
     },
     liste: {
         label: 'Liste',
-        viewType: 'agenda',
+        type: 'agenda',
         fetchInterval: 'months',
     },
 };
 
 export const isValidView = (view?: string): view is CalendarView => (view ? Object.keys(VIEWS).includes(view) : false);
 
-export const getCalendarViewFromType = (view: View): CalendarView => {
-    const calendarView = findKey(VIEWS, (viewProperties) => viewProperties.viewType === view);
+export const getCalendarViewFromType = (viewType: View): CalendarView => {
+    const calendarView = findKey(VIEWS, (viewProperties) => viewProperties.type === viewType);
     if (isValidView(calendarView)) {
         return calendarView;
     } else {
