@@ -10,7 +10,7 @@ import { useCalendarState } from './CalendarProvider';
 // TODO: write our own CSS for the calendar
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-export const ReactBigCalendar: React.FC = () => {
+export const CalendarComponent: React.FC = () => {
     const { selectedView, setSelectedView, selectedDate, setSelectedDate } = useCalendarState();
 
     // TODO: get loading-status for displaying in calendar

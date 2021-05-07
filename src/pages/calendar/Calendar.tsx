@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { ReactBigCalendar } from './ReactBigCalendar';
+import { CalendarComponent } from './CalendarComponent';
 import { HStack, VStack } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/layout';
-import { DatePicker } from './DatePicker';
-import { StationFilter } from './StationFilter';
+import { CalendarDatePicker } from './CalendarDatePicker';
+import { CalendarStationFilter } from './CalendarStationFilter';
 import { CalendarProvider } from './CalendarProvider';
 
 export const Calendar: React.FC = () => (
@@ -15,11 +15,11 @@ export const Calendar: React.FC = () => (
         </Helmet>
         <HStack spacing={5} padding={5} alignItems="flex-start" width="100%" height="100%">
             <VStack alignItems="flex-start" spacing={5}>
-                <DatePicker />
-                <StationFilter />
+                <CalendarDatePicker />
+                <CalendarStationFilter />
             </VStack>
             <Box flex="1" width="100%" height="100%">
-                <ReactBigCalendar />
+                <CalendarComponent />
             </Box>
         </HStack>
     </CalendarProvider>

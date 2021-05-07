@@ -47,6 +47,7 @@ export const useCalendarEvents = (): CalendarEvent[] => {
         },
     );
 
+    // Fetching events for previous and next interval as well
     usePrefetchEvents(intervalToFetch);
 
     const filteredEvents = (events ?? []).filter((event) =>

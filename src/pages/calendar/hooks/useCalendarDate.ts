@@ -7,6 +7,7 @@ const parseDate = (date?: string) => {
 };
 
 export const useCalendarDate = (): [Date, (date: Date) => void] => {
+    // Getting "dato" value from URL query, if present
     const [queryDate, setQueryDate] = useQueryStringKey('dato');
 
     const date = parseDate(queryDate);

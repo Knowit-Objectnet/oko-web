@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/layout';
 import { default as DateCalendar } from 'react-calendar';
 import { useCalendarState } from './CalendarProvider';
 
-export const DatePicker: React.FC = () => {
+export const CalendarDatePicker: React.FC = () => {
     const { selectedDate, setSelectedDate } = useCalendarState();
 
     const handleDateChange = (date: Date | Date[]) => {

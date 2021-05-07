@@ -57,7 +57,7 @@ const Input = styled.input`
     margin-right: 15px;
 `;
 
-export const StationFilter: React.FC = () => {
+export const CalendarStationFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
     const { data: stations } = useStations();
     const { filters, setFilters } = useCalendarState();
