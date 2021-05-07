@@ -4,15 +4,7 @@ import { usePrefetchEvents } from './usePrefetchEvents';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
 import { ApiEvent } from '../../../services/EventService';
 import { CalendarView, VIEWS } from './useCalendarView';
-import { CalendarFilter } from './useCalendarFilter';
 import { useCalendarState } from '../CalendarProvider';
-
-const applyFilter = (event: ApiEvent, filter: CalendarFilter): boolean => {
-    if (filter.stasjonId !== undefined) {
-        return event.station.id === filter.stasjonId;
-    }
-    return true;
-};
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;
@@ -39,7 +31,7 @@ const transformToCalendarEvent = () => (event: ApiEvent): CalendarEvent => ({
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
-    const { selectedView, selectedDate, filter } = useCalendarState();
+    const { selectedView, selectedDate, filterFns } = useCalendarState();
 
     const intervalToFetch = calculateDateRange(selectedDate, selectedView);
 
@@ -57,5 +49,9 @@ export const useCalendarEvents = (): CalendarEvent[] => {
 
     usePrefetchEvents(intervalToFetch);
 
-    return (events ?? []).filter((event) => applyFilter(event, filter)).map(transformToCalendarEvent());
+    const filteredEvents = (events ?? []).filter((event) =>
+        filterFns.reduce((result: boolean, filterFn) => filterFn(event), true),
+    );
+
+    return filteredEvents.map(transformToCalendarEvent());
 };
