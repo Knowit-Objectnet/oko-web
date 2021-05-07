@@ -4,8 +4,8 @@ import { nb } from 'date-fns/locale';
 import { format, getDay, parse, setHours, startOfWeek } from 'date-fns';
 import { CalendarToolbar } from './CalendarToolbar';
 import { useCalendarEvents } from './hooks/useCalendarEvents';
-import { useCalendarState } from './hooks/useCalendarState';
 import { getCalendarViewFromType, VIEWS } from './hooks/useCalendarView';
+import { useCalendarState } from './CalendarProvider';
 
 // TODO: write our own CSS for the calendar
 import 'react-big-calendar/lib/css/react-big-calendar.css';

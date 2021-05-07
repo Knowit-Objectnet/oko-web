@@ -2,14 +2,14 @@ import { useEvents } from '../../../services/hooks/useEvents';
 import { DateRange, Event as CalendarEvent } from 'react-big-calendar';
 import { usePrefetchEvents } from './usePrefetchEvents';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
-import { useCalendarState } from './useCalendarState';
 import { ApiEvent } from '../../../services/EventService';
-import { CalendarFilters } from '../CalendarProvider';
 import { CalendarView, VIEWS } from './useCalendarView';
+import { CalendarFilter } from './useCalendarFilter';
+import { useCalendarState } from '../CalendarProvider';
 
-const applyFilters = (event: ApiEvent, filters: CalendarFilters): boolean => {
-    if (filters.stasjonId !== undefined) {
-        return event.station.id === filters.stasjonId;
+const applyFilter = (event: ApiEvent, filter: CalendarFilter): boolean => {
+    if (filter.stasjonId !== undefined) {
+        return event.station.id === filter.stasjonId;
     }
     return true;
 };
@@ -39,7 +39,7 @@ const transformToCalendarEvent = () => (event: ApiEvent): CalendarEvent => ({
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
-    const { selectedView, selectedDate } = useCalendarState();
+    const { selectedView, selectedDate, filter } = useCalendarState();
 
     const intervalToFetch = calculateDateRange(selectedDate, selectedView);
 
@@ -57,9 +57,5 @@ export const useCalendarEvents = (): CalendarEvent[] => {
 
     usePrefetchEvents(intervalToFetch);
 
-    return (
-        (events ?? [])
-            // .filter((event) => applyFilters(event, state.filters))
-            .map(transformToCalendarEvent())
-    );
+    return (events ?? []).filter((event) => applyFilter(event, filter)).map(transformToCalendarEvent());
 };

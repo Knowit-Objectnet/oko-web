@@ -1,8 +1,8 @@
 import { QueryClient, useQueryClient } from 'react-query';
 import { add, Duration } from 'date-fns';
 import { ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../../services/EventService';
-import { useCalendarState } from './useCalendarState';
 import { VIEWS } from './useCalendarView';
+import { useCalendarState } from '../CalendarProvider';
 
 const calculateInterval = (
     intervalToFetch: Interval,
