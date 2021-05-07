@@ -25,35 +25,37 @@ const ViewToggleButton: React.FC<Props> = ({ view, currentView, onViewChange }) 
 
 export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, view: currentView, onView }) => (
     <Stack direction="row" justifyContent="space-between" marginBottom={5}>
-        <Button
-            fontWeight="normal"
-            size="sm"
-            onClick={() => {
-                onNavigate('TODAY');
-            }}
-        >
-            I dag
-        </Button>
-        <Stack direction="row" spacing={4} marginX="auto">
+        <ButtonGroup size="sm">
             <IconButton
-                isRound
+                // isRound
                 icon={<Icon as={ArrowLeft} />}
                 aria-label="Gå til forrige periode"
                 onClick={() => {
                     onNavigate('PREV');
                 }}
             />
-            <Heading as="h2" fontSize="1.75rem">
-                {label}
-            </Heading>
+            <Button
+                fontWeight="normal"
+                size="sm"
+                onClick={() => {
+                    onNavigate('TODAY');
+                }}
+            >
+                I dag
+            </Button>
             <IconButton
-                isRound
+                // isRound
                 icon={<Icon as={ArrowRight} />}
                 aria-label="Gå til neste periode"
                 onClick={() => {
                     onNavigate('NEXT');
                 }}
             />
+        </ButtonGroup>
+        <Stack direction="row" spacing={4} marginX="auto">
+            <Heading as="h2" fontSize="1.75rem">
+                {label}
+            </Heading>
         </Stack>
         {/* TODO: change to useRadioGroup() in stead of ButtonGroup */}
         <ButtonGroup isAttached size="sm">
