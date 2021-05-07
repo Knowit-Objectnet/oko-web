@@ -1,6 +1,5 @@
 import React, { Dispatch, Reducer, useReducer } from 'react';
-import { CalendarView } from './CalendarConfig';
-import { useCalendarView } from './hooks/useCalendarView';
+import { CalendarView, useCalendarView } from './hooks/useCalendarView';
 
 export interface CalendarFilters {
     stasjonId?: number;

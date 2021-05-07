@@ -1,11 +1,11 @@
 import { useEvents } from '../../../services/hooks/useEvents';
 import { DateRange, Event as CalendarEvent } from 'react-big-calendar';
 import { usePrefetchEvents } from './usePrefetchEvents';
-import { calendarConfig, CalendarView } from '../CalendarConfig';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
 import { useCalendarState } from './useCalendarState';
 import { ApiEvent } from '../../../services/EventService';
 import { CalendarFilters } from '../CalendarProvider';
+import { CalendarView, VIEWS } from './useCalendarView';
 
 const applyFilters = (event: ApiEvent, filters: CalendarFilters): boolean => {
     if (filters.stasjonId !== undefined) {
@@ -15,7 +15,7 @@ const applyFilters = (event: ApiEvent, filters: CalendarFilters): boolean => {
 };
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
-    const intervalSize = calendarConfig.viewProperties[view].fetchInterval;
+    const intervalSize = VIEWS[view].fetchInterval;
     switch (intervalSize) {
         case 'weeks':
             return {
@@ -51,7 +51,7 @@ export const useCalendarEvents = (): CalendarEvent[] => {
         },
         {
             keepPreviousData: true,
-            refetchInterval: calendarConfig.refetchIntervalMs,
+            refetchInterval: 30_000,
         },
     );
 

@@ -1,42 +1,67 @@
 import { useHistory, useParams } from 'react-router-dom';
-import { calendarConfig, CalendarView, ViewPathKey } from '../CalendarConfig';
+import { View } from 'react-big-calendar';
+import { Duration } from 'date-fns';
+import React, { useEffect } from 'react';
+import { usePersistedState } from '../../../utils/usePersistedState';
 
-// TODO: make changes to the calendarConfig to make this prettier
-const isValidPathKey = (viewId: string): viewId is ViewPathKey =>
-    Object.values(calendarConfig.viewProperties).some((viewProperties) => viewProperties.pathKey === viewId.trim());
+export type CalendarView = 'dag' | 'uke' | 'liste' | 'maned';
 
-// TODO: make changes to the calendarConfig to make this prettier
-const getViewFromPathKey = (viewKey: ViewPathKey) =>
-    Object.keys(calendarConfig.viewProperties).find(
-        (key) => calendarConfig.viewProperties[key as CalendarView].pathKey === viewKey,
-    ) as CalendarView;
+const DEFAULT_VIEW: CalendarView = 'uke';
 
-const getPersistedView = (key: string): CalendarView | undefined => {
-    const localStorageItem = localStorage.getItem(key);
-    return localStorageItem ? JSON.parse(localStorageItem) : undefined;
+export type ViewProperties = {
+    label: string;
+    viewType: View; // Extend with custom views when needed
+    fetchInterval: keyof Duration;
+    customComponent?: React.ReactNode; // For custom views only
 };
 
-const setPersistedView = (key: string, view: CalendarView) => {
-    localStorage.setItem(key, JSON.stringify(view));
+export const VIEWS: Record<CalendarView, ViewProperties> = {
+    maned: {
+        label: 'Måned',
+        viewType: 'month',
+        fetchInterval: 'months',
+    },
+    uke: {
+        label: 'Arbeidsuke',
+        viewType: 'work_week',
+        fetchInterval: 'weeks',
+    },
+    dag: {
+        label: 'Dag',
+        viewType: 'day',
+        fetchInterval: 'weeks',
+    },
+    liste: {
+        label: 'Liste',
+        viewType: 'agenda',
+        fetchInterval: 'months',
+    },
 };
+
+const isValidView = (view?: string): view is CalendarView => (view ? Object.keys(VIEWS).includes(view) : false);
+
+interface CalendarParams {
+    view?: string;
+}
 
 export const useCalendarView = (): CalendarView => {
+    // TODO: validate view name from localstorage?
+    const [view, setView] = usePersistedState<CalendarView>('OKOcalView', DEFAULT_VIEW);
+
+    // Getting view name from path (URL)
+    const { view: viewFromPath } = useParams<CalendarParams>();
     const history = useHistory();
-    const { viewKey } = useParams<{ viewKey?: string }>();
 
-    const localStorageKey = 'OKOcalView';
-    let view = getPersistedView(localStorageKey) ?? calendarConfig.defaultView;
-
-    // TODO: ideally make this more elegant
-    if (viewKey !== undefined) {
-        if (isValidPathKey(viewKey)) {
-            const newView = getViewFromPathKey(viewKey);
-            setPersistedView(localStorageKey, newView);
-            view = newView;
-        } else {
+    useEffect(() => {
+        if (isValidView(viewFromPath)) {
+            setView(viewFromPath);
+        } else if (viewFromPath !== undefined) {
+            // Redirecting if view name from path is invalid
             history.replace('/kalender');
         }
-    }
+    }, [viewFromPath, history, setView]);
+
+    console.log(view);
 
     return view;
 };

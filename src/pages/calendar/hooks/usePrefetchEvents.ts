@@ -1,17 +1,17 @@
 import { QueryClient, useQueryClient } from 'react-query';
-import { add } from 'date-fns';
+import { add, Duration } from 'date-fns';
 import { ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../../services/EventService';
-import { calendarConfig } from '../CalendarConfig';
-import { DateRange, View } from 'react-big-calendar';
 import { useCalendarState } from './useCalendarState';
+import { VIEWS } from './useCalendarView';
 
-const calculateInterval = (intervalToFetch: DateRange, selectedView: View, offset: 1 | -1): ApiEventParams => {
-    const fetchInterval = calendarConfig.viewProperties[selectedView].fetchInterval;
-    return {
-        fromDate: add(intervalToFetch.start, { [fetchInterval]: offset }).toISOString(),
-        toDate: add(intervalToFetch.end, { [fetchInterval]: offset }).toISOString(),
-    };
-};
+const calculateInterval = (
+    intervalToFetch: Interval,
+    intervalSize: keyof Duration,
+    offset: 1 | -1,
+): ApiEventParams => ({
+    fromDate: add(intervalToFetch.start, { [intervalSize]: offset }).toISOString(),
+    toDate: add(intervalToFetch.end, { [intervalSize]: offset }).toISOString(),
+});
 
 const prefetchEvents = (queryClient: QueryClient, queryParams: ApiEventParams) =>
     queryClient.prefetchQuery({
@@ -19,13 +19,13 @@ const prefetchEvents = (queryClient: QueryClient, queryParams: ApiEventParams) =
         queryFn: () => getEvents(queryParams),
     });
 
-export const usePrefetchEvents = (intervalToFetch: DateRange): void => {
+export const usePrefetchEvents = (currentInterval: Interval): void => {
     const { selectedView } = useCalendarState();
+    const intervalSize = VIEWS[selectedView].fetchInterval;
+    const previousInterval = calculateInterval(currentInterval, intervalSize, -1);
+    const nextInterval = calculateInterval(currentInterval, intervalSize, 1);
+
     const queryClient = useQueryClient();
-
-    const previousInterval = calculateInterval(intervalToFetch, selectedView, -1);
     prefetchEvents(queryClient, previousInterval);
-
-    const nextInterval = calculateInterval(intervalToFetch, selectedView, 1);
     prefetchEvents(queryClient, nextInterval);
 };

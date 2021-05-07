@@ -3,28 +3,27 @@ import { ToolbarProps, View } from 'react-big-calendar';
 import { Button, ButtonGroup, Heading, Icon, IconButton, Stack } from '@chakra-ui/react';
 import ArrowLeft from '../../assets/ArrowLeft.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
-import { calendarConfig, CalendarView } from './CalendarConfig';
+import { ViewProperties, VIEWS } from './hooks/useCalendarView';
 
 interface Props {
-    label: string;
-    view: View;
+    view: ViewProperties;
     currentView: View;
     onViewChange: (view: View) => void;
 }
 
-const ViewToggleButton: React.FC<Props> = ({ label, view, currentView, onViewChange }) => (
+const ViewToggleButton: React.FC<Props> = ({ view, currentView, onViewChange }) => (
     <Button
         fontWeight="normal"
         onClick={() => {
-            onViewChange(view);
+            onViewChange(view.viewType);
         }}
-        isActive={view === currentView}
+        isActive={view.viewType === currentView}
     >
-        {label}
+        {view.label}
     </Button>
 );
 
-export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, views, view: currentView, onView }) => (
+export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, view: currentView, onView }) => (
     <Stack direction="row" justifyContent="space-between" marginBottom={5}>
         <Button
             fontWeight="normal"
@@ -58,14 +57,8 @@ export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, vie
         </Stack>
         {/* TODO: change to useRadioGroup() in stead of ButtonGroup */}
         <ButtonGroup isAttached size="sm">
-            {Object.values(views).map((view: CalendarView) => (
-                <ViewToggleButton
-                    key={view}
-                    label={calendarConfig.viewProperties[view].label}
-                    view={view}
-                    currentView={currentView}
-                    onViewChange={onView}
-                />
+            {Object.values(VIEWS).map((view: ViewProperties) => (
+                <ViewToggleButton key={view.viewType} view={view} currentView={currentView} onViewChange={onView} />
             ))}
         </ButtonGroup>
     </Stack>
