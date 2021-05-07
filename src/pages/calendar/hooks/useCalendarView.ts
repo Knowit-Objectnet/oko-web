@@ -3,6 +3,7 @@ import { View } from 'react-big-calendar';
 import { Duration } from 'date-fns';
 import React, { useEffect } from 'react';
 import { usePersistedState } from '../../../utils/usePersistedState';
+import findKey from 'lodash/findKey';
 
 export type CalendarView = 'dag' | 'uke' | 'liste' | 'maned';
 
@@ -38,15 +39,24 @@ export const VIEWS: Record<CalendarView, ViewProperties> = {
     },
 };
 
-const isValidView = (view?: string): view is CalendarView => (view ? Object.keys(VIEWS).includes(view) : false);
+export const isValidView = (view?: string): view is CalendarView => (view ? Object.keys(VIEWS).includes(view) : false);
+
+export const getCalendarViewFromType = (view: View): CalendarView => {
+    const calendarView = findKey(VIEWS, (viewProperties) => viewProperties.viewType === view);
+    if (isValidView(calendarView)) {
+        return calendarView;
+    } else {
+        throw new Error('View identifier string is invalid');
+    }
+};
 
 interface CalendarParams {
     view?: string;
 }
 
-export const useCalendarView = (): CalendarView => {
-    // TODO: validate view name from localstorage?
-    const [view, setView] = usePersistedState<CalendarView>('OKOcalView', DEFAULT_VIEW);
+export const useCalendarView = (): [CalendarView, (view: CalendarView) => void] => {
+    // TODO: validate view name from localstorage, in case user has manipulated it?
+    const [persistedView, setPersistedView] = usePersistedState<CalendarView>('OKOcalView', DEFAULT_VIEW);
 
     // Getting view name from path (URL)
     const { view: viewFromPath } = useParams<CalendarParams>();
@@ -54,14 +64,16 @@ export const useCalendarView = (): CalendarView => {
 
     useEffect(() => {
         if (isValidView(viewFromPath)) {
-            setView(viewFromPath);
+            setPersistedView(viewFromPath);
         } else if (viewFromPath !== undefined) {
             // Redirecting if view name from path is invalid
             history.replace('/kalender');
         }
-    }, [viewFromPath, history, setView]);
+    }, [viewFromPath, history, setPersistedView]);
 
-    console.log(view);
+    const setView = (view: CalendarView) => {
+        history.replace(`/kalender/${view}`);
+    };
 
-    return view;
+    return [persistedView, setView];
 };

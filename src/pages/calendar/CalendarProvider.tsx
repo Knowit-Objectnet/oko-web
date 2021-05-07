@@ -14,6 +14,7 @@ type CalendarAction = { type: 'SET_DATE'; date: Date } | { type: 'SET_FILTER'; f
 
 export interface CalendarContext {
     selectedView: CalendarView;
+    setSelectedView: (view: CalendarView) => void;
     state: CalendarState;
     dispatch: Dispatch<CalendarAction>;
 }
@@ -50,10 +51,11 @@ export const CalendarProvider: React.FC = ({ children }) => {
 
     // TODO: find a way to merge view state into reducer above?
     //  or going with useState in stead of reducer pattern?
-    const selectedView = useCalendarView();
+    const [selectedView, setSelectedView] = useCalendarView();
 
     const value = {
         selectedView,
+        setSelectedView,
         state,
         dispatch,
     };

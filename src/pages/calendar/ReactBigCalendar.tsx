@@ -5,19 +5,16 @@ import { format, getDay, parse, setHours, startOfWeek } from 'date-fns';
 import { CalendarToolbar } from './CalendarToolbar';
 import { useCalendarEvents } from './hooks/useCalendarEvents';
 import { useCalendarState } from './hooks/useCalendarState';
-import { useHistory } from 'react-router-dom';
-import { VIEWS } from './hooks/useCalendarView';
-import findKey from 'lodash/findkey';
+import { getCalendarViewFromType, VIEWS } from './hooks/useCalendarView';
 
 // TODO: write our own CSS for the calendar
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 export const ReactBigCalendar: React.FC = () => {
-    const { selectedView, state, dispatch } = useCalendarState();
+    const { selectedView, setSelectedView, state, dispatch } = useCalendarState();
 
     // TODO: get loading-status for displaying in calendar
     const events = useCalendarEvents();
-    const history = useHistory();
 
     const bigCalendarLocalizer = dateFnsLocalizer({
         format,
@@ -32,8 +29,8 @@ export const ReactBigCalendar: React.FC = () => {
     };
 
     const handleViewChange = (view: View) => {
-        const calendarView = findKey(VIEWS, (viewProperties) => viewProperties.viewType === view);
-        history.replace(`/kalender/${calendarView}`);
+        const calendarView = getCalendarViewFromType(view);
+        setSelectedView(calendarView);
     };
 
     return (
