@@ -1,9 +1,10 @@
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { View } from 'react-big-calendar';
 import { Duration } from 'date-fns';
 import React, { useEffect } from 'react';
 import { usePersistedState } from '../../../utils/usePersistedState';
 import findKey from 'lodash/findKey';
+import { useCalendarRedirect } from './useCalendarRedirect';
 
 export type CalendarView = 'dag' | 'uke' | 'liste' | 'maned';
 
@@ -60,19 +61,20 @@ export const useCalendarView = (): [CalendarView, (view: CalendarView) => void] 
 
     // Getting view name from path (URL)
     const { view: viewFromPath } = useParams<CalendarParams>();
-    const history = useHistory();
+
+    const redirectToCalendar = useCalendarRedirect();
 
     useEffect(() => {
         if (isValidView(viewFromPath)) {
             setPersistedView(viewFromPath);
         } else if (viewFromPath !== undefined) {
             // Redirecting if view name from path is invalid
-            history.replace('/kalender');
+            redirectToCalendar();
         }
-    }, [viewFromPath, history, setPersistedView]);
+    }, [viewFromPath, setPersistedView, redirectToCalendar]);
 
     const setView = (view: CalendarView) => {
-        history.replace(`/kalender/${view}`);
+        redirectToCalendar({ view });
     };
 
     return [persistedView, setView];

@@ -39,9 +39,9 @@ const transformToCalendarEvent = () => (event: ApiEvent): CalendarEvent => ({
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
-    const { selectedView, state } = useCalendarState();
+    const { selectedView, selectedDate } = useCalendarState();
 
-    const intervalToFetch = calculateDateRange(state.selectedDate, selectedView);
+    const intervalToFetch = calculateDateRange(selectedDate, selectedView);
 
     // TODO: wrap in LazyResult in order to return loading/error status?
     const { data: events } = useEvents(
@@ -57,5 +57,9 @@ export const useCalendarEvents = (): CalendarEvent[] => {
 
     usePrefetchEvents(intervalToFetch);
 
-    return (events ?? []).filter((event) => applyFilters(event, state.filters)).map(transformToCalendarEvent());
+    return (
+        (events ?? [])
+            // .filter((event) => applyFilters(event, state.filters))
+            .map(transformToCalendarEvent())
+    );
 };

@@ -11,7 +11,7 @@ import { getCalendarViewFromType, VIEWS } from './hooks/useCalendarView';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 export const ReactBigCalendar: React.FC = () => {
-    const { selectedView, setSelectedView, state, dispatch } = useCalendarState();
+    const { selectedView, setSelectedView, selectedDate, setSelectedDate } = useCalendarState();
 
     // TODO: get loading-status for displaying in calendar
     const events = useCalendarEvents();
@@ -24,10 +24,6 @@ export const ReactBigCalendar: React.FC = () => {
         locales: { 'nb-no': nb },
     });
 
-    const handleDateChange = (date: Date) => {
-        dispatch({ type: 'SET_DATE', date });
-    };
-
     const handleViewChange = (view: View) => {
         const calendarView = getCalendarViewFromType(view);
         setSelectedView(calendarView);
@@ -38,10 +34,10 @@ export const ReactBigCalendar: React.FC = () => {
             localizer={bigCalendarLocalizer}
             culture="nb-no"
             events={events}
-            date={state.selectedDate}
+            date={selectedDate}
             views={Object.values(VIEWS).map((viewProperties) => viewProperties.type)} // TODO: add custom view component here
             view={VIEWS[selectedView].type}
-            onNavigate={handleDateChange}
+            onNavigate={setSelectedDate}
             onView={handleViewChange}
             dayLayoutAlgorithm="no-overlap"
             components={{

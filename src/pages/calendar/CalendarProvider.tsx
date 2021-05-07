@@ -1,63 +1,35 @@
-import React, { Dispatch, Reducer, useReducer } from 'react';
+import React from 'react';
 import { CalendarView, useCalendarView } from './hooks/useCalendarView';
+import { useCalendarDate } from './hooks/useCalendarDate';
 
 export interface CalendarFilters {
     stasjonId?: number;
 }
 
-export interface CalendarState {
-    filters: CalendarFilters;
-    selectedDate: Date;
-}
-
-type CalendarAction = { type: 'SET_DATE'; date: Date } | { type: 'SET_FILTER'; filters: CalendarFilters };
-
 export interface CalendarContext {
     selectedView: CalendarView;
     setSelectedView: (view: CalendarView) => void;
-    state: CalendarState;
-    dispatch: Dispatch<CalendarAction>;
+    selectedDate: Date;
+    setSelectedDate: (date: Date) => void;
+    // filters: CalendarFilters;
+    // setFilters: (filter: CalendarFilters) => void;
 }
 
 export const CalendarContext = React.createContext<CalendarContext | undefined>(undefined);
 
-const calendarStateReducer: Reducer<CalendarState, CalendarAction> = (state, action) => {
-    switch (action.type) {
-        case 'SET_DATE':
-            return {
-                ...state,
-                selectedDate: action.date,
-            };
-        case 'SET_FILTER':
-            return {
-                ...state,
-                filters: {
-                    ...state.filters,
-                    ...action.filters,
-                },
-            };
-        default:
-            throw new Error('Illegal calendar state action');
-    }
-};
-
 export const CalendarProvider: React.FC = ({ children }) => {
-    const initialState: CalendarState = {
-        selectedDate: new Date(),
-        filters: {},
-    };
-
-    const [state, dispatch] = useReducer(calendarStateReducer, initialState);
-
-    // TODO: find a way to merge view state into reducer above?
-    //  or going with useState in stead of reducer pattern?
     const [selectedView, setSelectedView] = useCalendarView();
+
+    const [selectedDate, setSelectedDate] = useCalendarDate();
+    // const [filters, setFilters] = useCalendarFilters();
 
     const value = {
         selectedView,
         setSelectedView,
-        state,
-        dispatch,
+        selectedDate,
+        setSelectedDate,
+        // filters,
+        // setFilters,
     };
 
     return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;

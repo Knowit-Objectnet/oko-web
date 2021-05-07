@@ -60,7 +60,7 @@ const Input = styled.input`
 export const StationFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
     const { data: stations } = useStations();
-    const { state, dispatch } = useCalendarState();
+    // const { filters, setFilters } = useCalendarState();
 
     const onToggleClick = () => {
         setToggled(!toggled);
@@ -68,9 +68,9 @@ export const StationFilter: React.FC = () => {
 
     const handleStationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
-        const value = e.currentTarget.value;
-        const stasjonId = value === 'default' ? undefined : Number(value);
-        dispatch({ type: 'SET_FILTER', filters: { stasjonId } });
+        const stasjonId = Number(e.currentTarget.value) ?? undefined;
+        console.log(stasjonId);
+        // setFilters({ stasjonId });
     };
 
     return (
@@ -88,7 +88,7 @@ export const StationFilter: React.FC = () => {
                                 type="radio"
                                 name="station-selector"
                                 value={station.id}
-                                checked={station.id === state.filters.stasjonId}
+                                // checked={station.id === filters.stasjonId}
                                 onChange={handleStationChange}
                             />
                             {station.name}
@@ -99,7 +99,7 @@ export const StationFilter: React.FC = () => {
                             type="radio"
                             name="station-selector"
                             value="default"
-                            checked={state.filters.stasjonId === undefined}
+                            // checked={filters.stasjonId === undefined}
                             onChange={handleStationChange}
                         />
                         Alle
