@@ -1,10 +1,9 @@
-import { useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { View } from 'react-big-calendar';
 import { Duration } from 'date-fns';
 import React, { useEffect } from 'react';
 import { usePersistedState } from '../../../utils/usePersistedState';
 import findKey from 'lodash/findKey';
-import { useCalendarRedirect } from './useCalendarRedirect';
 
 export type CalendarView = 'dag' | 'uke' | 'liste' | 'maned';
 
@@ -55,15 +54,28 @@ interface CalendarParams {
     view?: string;
 }
 
-export const useCalendarView = (): [CalendarView, (view: CalendarView) => void] => {
-    // TODO: validate view name from localstorage, in case user has manipulated it?
-    const [persistedView, setPersistedView] = usePersistedState<CalendarView>('OKOcalView', DEFAULT_VIEW);
+const useCalendarRedirect = () => {
+    const history = useHistory();
+    const { search: queryString } = useLocation();
 
+    return (params?: CalendarParams) => {
+        const redirectView = params?.view ? `/${params.view}` : '';
+        const redirectUrl = `/kalender${redirectView}${queryString}`;
+        history.replace(redirectUrl);
+    };
+};
+
+export const useCalendarView = (): [CalendarView, (view: CalendarView) => void] => {
     // Getting view name from path (URL)
     const { view: viewFromPath } = useParams<CalendarParams>();
 
+    // View name is persisted to localstorage, with a default value if not provided in path (URL)
+    // TODO: validate view name from localstorage, in case user has manipulated it?
+    const [persistedView, setPersistedView] = usePersistedState<CalendarView>('OKOcalView', DEFAULT_VIEW);
+
     const redirectToCalendar = useCalendarRedirect();
 
+    // If the view name from path (URL) changes
     useEffect(() => {
         if (isValidView(viewFromPath)) {
             setPersistedView(viewFromPath);
