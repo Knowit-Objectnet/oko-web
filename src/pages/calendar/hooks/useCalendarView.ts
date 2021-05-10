@@ -23,7 +23,7 @@ export const VIEWS: Record<CalendarView, ViewProperties> = {
         fetchInterval: 'months',
     },
     uke: {
-        label: 'Arbeidsuke',
+        label: 'Uke',
         type: 'work_week',
         fetchInterval: 'weeks',
     },

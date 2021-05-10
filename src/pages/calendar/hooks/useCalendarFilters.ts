@@ -9,16 +9,14 @@ export interface CalendarFilters {
 
 export type CalendarFilterFn = (event: ApiEvent) => boolean;
 
-interface CalendarHook {
-    filters: CalendarFilters;
-    filterFns: Array<CalendarFilterFn>;
-    setFilters: (updatedFilters: CalendarFilters) => void;
-}
-
 const isValidStasjon = (stasjonName: string, stasjoner?: Array<ApiStation>) =>
     (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.name === stasjonName ? true : result), false);
 
-export const useCalendarFilters = (): CalendarHook => {
+export const useCalendarFilters = (): {
+    filters: CalendarFilters;
+    filterFns: Array<CalendarFilterFn>;
+    setFilters: (updatedFilters: CalendarFilters) => void;
+} => {
     // Getting all key=value query pairs from URL
     const [queryFilters, setQueryFilters] = useQueryString();
 

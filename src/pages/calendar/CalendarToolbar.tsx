@@ -57,8 +57,7 @@ export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, vie
                 {label}
             </Heading>
         </Stack>
-        {/* TODO: change to useRadioGroup() in stead of ButtonGroup */}
-        <ButtonGroup isAttached size="sm">
+        <ButtonGroup isAttached size="sm" aria-label="Visningsmodus">
             {Object.values(VIEWS).map((view: ViewProperties) => (
                 <ViewToggleButton key={view.type} view={view} currentView={currentView} onViewChange={onView} />
             ))}

@@ -6,6 +6,8 @@ const parseDate = (date?: string) => {
     return isValid(parsedDate) ? parsedDate : new Date();
 };
 
+export const formatDate = (date: Date): string => formatISO(date, { representation: 'date' });
+
 export const useCalendarDate = (): [Date, (date: Date) => void] => {
     // Getting "dato" value from URL query, if present
     const [queryDate, setQueryDate] = useQueryStringKey('dato');
@@ -13,8 +15,7 @@ export const useCalendarDate = (): [Date, (date: Date) => void] => {
     const date = parseDate(queryDate);
 
     const setDate = (date: Date) => {
-        const newDate = formatISO(date, { representation: 'date' });
-        setQueryDate(newDate);
+        setQueryDate(formatDate(date));
     };
 
     return [date, setDate];
