@@ -6,7 +6,7 @@ import './assets/font/fonts.css';
 const GlobalStyle = createGlobalStyle`
     * {
         box-sizing: border-box;
-        font-family: 'Oslo Sans Office', 'Roboto', sans-serif !important;
+        font-family: 'Oslo Sans Office', 'Arial', sans-serif;
     }
     body, html {
         font-size: 16px;
