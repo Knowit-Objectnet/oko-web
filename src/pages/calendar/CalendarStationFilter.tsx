@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import Filter from '../../assets/Filter.svg';
+import ArrowRight from '../../assets/ArrowRight.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
-import ArrowUp from '../../assets/ArrowUp.svg';
-import { useState } from 'react';
 import { useStations } from '../../services/hooks/useStations';
+import { useCalendarState } from './CalendarProvider';
 
 const Wrapper = styled.div`
     display: flex;
@@ -36,12 +37,12 @@ const StyledFilter = styled(Filter)`
     margin-right: 10px;
 `;
 
-const StyledArrowDown = styled(ArrowDown)`
+const StyledArrowRight = styled(ArrowRight)`
     height: 1em;
     margin-left: 10px;
 `;
 
-const StyledArrowUp = styled(ArrowUp)`
+const StyledArrowDown = styled(ArrowDown)`
     height: 1em;
     margin-left: 10px;
 `;
@@ -56,30 +57,20 @@ const Input = styled.input`
     margin-right: 15px;
 `;
 
-interface Props {
-    selectedStationId?: number;
-    onSelectedStationChange: (index?: number) => void;
-}
-
-/*
- * Component for filtering by station
- */
-export const StationFilter: React.FC<Props> = (props) => {
+export const CalendarStationFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
     const { data: stations } = useStations();
+    const { filters, setFilters } = useCalendarState();
 
     const onToggleClick = () => {
         setToggled(!toggled);
     };
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleStationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
         const value = e.currentTarget.value;
-        if (value === 'default') {
-            props.onSelectedStationChange(undefined);
-        } else {
-            props.onSelectedStationChange(parseInt(value));
-        }
+        const stasjon = value === 'default' ? undefined : value;
+        setFilters({ stasjon });
     };
 
     return (
@@ -87,18 +78,18 @@ export const StationFilter: React.FC<Props> = (props) => {
             <Header>
                 <StyledFilter />
                 Velg enkelte stasjoner
-                {toggled ? <StyledArrowDown onClick={onToggleClick} /> : <StyledArrowUp onClick={onToggleClick} />}
+                {toggled ? <StyledArrowDown onClick={onToggleClick} /> : <StyledArrowRight onClick={onToggleClick} />}
             </Header>
             {toggled && (
                 <Stations>
                     {stations?.map((station) => (
-                        <Label key={station.name + station.id}>
+                        <Label key={station.id}>
                             <Input
                                 type="radio"
                                 name="station-selector"
-                                value={station.id}
-                                checked={station.id === props.selectedStationId}
-                                onChange={onChange}
+                                value={station.name}
+                                checked={station.name === filters.stasjon}
+                                onChange={handleStationChange}
                             />
                             {station.name}
                         </Label>
@@ -108,8 +99,8 @@ export const StationFilter: React.FC<Props> = (props) => {
                             type="radio"
                             name="station-selector"
                             value="default"
-                            checked={props.selectedStationId === undefined}
-                            onChange={onChange}
+                            checked={filters.stasjon === undefined}
+                            onChange={handleStationChange}
                         />
                         Alle
                     </Label>

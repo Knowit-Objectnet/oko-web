@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo } from '../../../types';
-import ArrowUp from '../../../assets/ArrowUp.svg';
-import ArrowDown from '../../../assets/ArrowDown.svg';
+import { EventInfo } from '../../../../types';
+import ArrowUp from '../../../../assets/ArrowUp.svg';
+import ArrowDown from '../../../../assets/ArrowDown.svg';
 import { useState } from 'react';
 import { ListItemDropdown } from './ListItemDropdown';
 

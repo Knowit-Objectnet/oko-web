@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Calendar from '../../assets/Calendar.svg';
-import Plus from '../../assets/Plus.svg';
-import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
-import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
-import { NewEvent } from '../../components/events/NewEvent';
-import { NewPickUp } from '../../components/events/NewPickUp';
-import useModal from '../../components/modal/useModal';
-import { useAuth } from '../../auth/useAuth';
+import Calendar from '../../../assets/Calendar.svg';
+import Plus from '../../../assets/Plus.svg';
+import { FloatingActionButton } from '../../../components/buttons/FloatingActionButton';
+import { getStartAndEndDateTime } from '../../../utils/getStartAndEndDateTime';
+import { NewEvent } from '../../../components/events/NewEvent';
+import { NewPickUp } from '../../../components/events/NewPickUp';
+import useModal from '../../../components/modal/useModal';
+import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.div`
     display: flex;

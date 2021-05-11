@@ -5,6 +5,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
+    output: {
+        publicPath: "/"
+    },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },

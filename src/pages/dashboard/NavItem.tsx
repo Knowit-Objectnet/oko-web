@@ -46,7 +46,6 @@ const iconStyle = {
     },
 };
 
-
 interface Props {
     path: string;
     icon: React.ReactNode;

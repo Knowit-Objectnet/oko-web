@@ -10,8 +10,4 @@ module.exports = {
     "<rootDir>/jest.setup.ts",
     'jest-canvas-mock'
   ],
-  // Only including tests located in `__tests__` directory
-  testMatch: [
-    "**/__tests__/**/*.[jt]s?(x)"
-  ]
 };
