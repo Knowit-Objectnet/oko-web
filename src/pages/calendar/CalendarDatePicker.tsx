@@ -15,9 +15,10 @@ export const CalendarDatePicker: React.FC = () => {
 
     return (
         <Box
-            css={{
-                '& > .react-calendar': {
+            sx={{
+                '.react-calendar': {
                     border: 'none',
+                    fontFamily: 'body',
                 },
             }}
         >

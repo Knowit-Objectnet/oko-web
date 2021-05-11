@@ -17,7 +17,7 @@
     "coverage": "jest --coverage",
     "coverage-summary": "jest --coverage --coverageReporters=\"text-summary\"",
     "cypress": "cypress run",
-    "gen:theme-typings": "yarn chakra-cli tokens src/theme.ts",
+    "gen:theme-typings": "yarn chakra-cli tokens src/theme/index.ts",
     "postinstall": "yarn run gen:theme-typings"
   },
   "engines": {

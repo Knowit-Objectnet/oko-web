@@ -13,7 +13,6 @@ interface Props {
 
 const ViewToggleButton: React.FC<Props> = ({ view, currentView, onViewChange }) => (
     <Button
-        fontWeight="normal"
         onClick={() => {
             onViewChange(view.type);
         }}
@@ -35,7 +34,6 @@ export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, vie
                 }}
             />
             <Button
-                fontWeight="normal"
                 size="sm"
                 onClick={() => {
                     onNavigate('TODAY');

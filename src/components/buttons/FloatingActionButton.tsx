@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
-import { Colors } from '../../theme';
+import { Colors } from '../../theme/foundations/colors';
 
 type ButtonVariant = 'positive' | 'negative';
 

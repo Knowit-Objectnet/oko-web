@@ -4,13 +4,13 @@ import ModalProvider from './components/modal/Provider';
 import AlertTemplate from 'react-alert-template-basic';
 import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import { ThemeProvider } from 'styled-components';
-import { oldTheme, theme } from './theme';
+import { oldTheme } from './theme/theme';
+import { theme } from './theme';
 import { Helmet } from 'react-helmet';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import { AuthProvider } from './auth/AuthProvider';
 import { Loading } from './components/Loading';
-import { GlobalStyle } from './global-styles';
 
 const alertOptions = {
     position: positions.TOP_CENTER,
@@ -27,10 +27,12 @@ export const App: React.FC = () => {
     return (
         <AuthProvider fallback={<Loading />}>
             <ChakraProvider theme={theme}>
+                {/* TODO: remove ThemeProvider when migration from styled-components is complete */}
                 <ThemeProvider theme={oldTheme}>
-                    <GlobalStyle />
+                    {/* TODO: remove AlertProvider when migration to Chakra-UI alerts is complete */}
                     <AlertProvider template={AlertTemplate} {...alertOptions}>
                         <QueryClientProvider client={queryClient}>
+                            {/* TODO: remove ModalProvider when migration to Chakra-UI modals is complete */}
                             <ModalProvider>
                                 <Helmet titleTemplate="Oslo kommune REG | %s">
                                     <html lang="nb" />
