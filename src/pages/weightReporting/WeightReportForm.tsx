@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { ApiReport, ApiReportPatch, patchReport, reportsDefaultQueryKey } from '../../services/ReportService';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import VisuallyHidden from '@reach/visually-hidden';
 import styled from 'styled-components';
+import { VisuallyHidden } from '@chakra-ui/react';
 import { NegativeButton } from '../../components/buttons/NegativeButton';
 
 const StyledForm = styled.form`

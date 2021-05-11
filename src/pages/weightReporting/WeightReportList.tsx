@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { ApiReport } from '../../services/ReportService';
 import { WeightReportListItem } from './WeightReportListItem';
-import VisuallyHidden from '@reach/visually-hidden';
 import styled from 'styled-components';
+import { VisuallyHidden } from '@chakra-ui/react';
 
 const ReportTable = styled.table`
     width: 100%;

@@ -19,6 +19,8 @@ const alertOptions = {
     transition: transitions.SCALE,
 };
 
+import 'focus-visible/dist/focus-visible';
+
 const queryClient = new QueryClient();
 
 export const App: React.FC = () => {
