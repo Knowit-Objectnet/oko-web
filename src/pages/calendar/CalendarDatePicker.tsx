@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Box } from '@chakra-ui/layout';
-import { default as DateCalendar } from 'react-calendar';
 import { useCalendarState } from './CalendarProvider';
+import DayPicker from 'react-day-picker';
+
+import 'react-day-picker/lib/style.css';
 
 export const CalendarDatePicker: React.FC = () => {
     const { selectedDate, setSelectedDate } = useCalendarState();
@@ -13,16 +14,5 @@ export const CalendarDatePicker: React.FC = () => {
         setSelectedDate(date);
     };
 
-    return (
-        <Box
-            sx={{
-                '.react-calendar': {
-                    border: 'none',
-                    fontFamily: 'body',
-                },
-            }}
-        >
-            <DateCalendar locale="nb-NO" value={selectedDate} onChange={handleDateChange} />
-        </Box>
-    );
+    return <DayPicker onDayClick={handleDateChange} selectedDays={selectedDate} showOutsideDays />;
 };
