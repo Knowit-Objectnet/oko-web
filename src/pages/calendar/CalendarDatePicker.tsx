@@ -3,6 +3,7 @@ import { useCalendarState } from './CalendarProvider';
 import DayPicker from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css';
+import { Box } from '@chakra-ui/layout';
 
 export const CalendarDatePicker: React.FC = () => {
     const { selectedDate, setSelectedDate } = useCalendarState();
@@ -14,5 +15,18 @@ export const CalendarDatePicker: React.FC = () => {
         setSelectedDate(date);
     };
 
-    return <DayPicker onDayClick={handleDateChange} selectedDays={selectedDate} showOutsideDays />;
+    return (
+        <Box
+            sx={{
+                '.DayPicker-Day--today': {
+                    color: 'primary',
+                },
+                '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)': {
+                    backgroundColor: 'primary',
+                },
+            }}
+        >
+            <DayPicker onDayClick={handleDateChange} selectedDays={selectedDate} showOutsideDays />
+        </Box>
+    );
 };

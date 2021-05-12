@@ -12,7 +12,7 @@ const oldTheme = {
         Red: Colors.Red,
         Yellow: Colors.Yellow,
         LightBeige: Colors.LightBeige,
-        DarkBegie: Colors.DarkBegie,
+        DarkBeige: Colors.DarkBeige,
         Black: Colors.Black,
         White: Colors.White,
     },

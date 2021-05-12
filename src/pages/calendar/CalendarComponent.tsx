@@ -6,6 +6,7 @@ import { CalendarToolbar } from './CalendarToolbar';
 import { useCalendarEvents } from './hooks/useCalendarEvents';
 import { getCalendarViewFromType, VIEWS } from './hooks/useCalendarView';
 import { useCalendarState } from './CalendarProvider';
+import { Box } from '@chakra-ui/layout';
 
 // TODO: write our own CSS for the calendar
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -30,20 +31,44 @@ export const CalendarComponent: React.FC = () => {
     };
 
     return (
-        <Calendar
-            localizer={bigCalendarLocalizer}
-            culture="nb-no"
-            events={events}
-            date={selectedDate}
-            views={Object.values(VIEWS).map((viewProperties) => viewProperties.type)} // TODO: add custom view component here
-            view={VIEWS[selectedView].type}
-            onNavigate={setSelectedDate}
-            onView={handleViewChange}
-            dayLayoutAlgorithm="no-overlap"
-            components={{
-                toolbar: CalendarToolbar,
+        <Box
+            sx={{
+                '.rbc-event': {
+                    backgroundColor: 'surface',
+                    color: 'onSurface',
+                    borderRadius: '4px',
+                    border: '1px solid',
+                    borderColor: 'DarkBeige',
+                },
+                '.rbc-day-slot .rbc-event': {
+                    margin: '-1px 2px 0 -1px',
+                },
+                '.rbc-day-slot .rbc-events-container': {
+                    marginRight: '2px',
+                },
+                '.rbc-event-content': {
+                    fontSize: 'sm',
+                    fontWeight: 'medium',
+                },
             }}
-            min={set(new Date(), { hours: 6, minutes: 0 })}
-        />
+            height="100%"
+        >
+            <Calendar
+                localizer={bigCalendarLocalizer}
+                culture="nb-no"
+                events={events}
+                date={selectedDate}
+                showAllEvents
+                views={Object.values(VIEWS).map((viewProperties) => viewProperties.type)} // TODO: add custom view component here
+                view={VIEWS[selectedView].type}
+                onNavigate={setSelectedDate}
+                onView={handleViewChange}
+                dayLayoutAlgorithm="no-overlap"
+                components={{
+                    toolbar: CalendarToolbar,
+                }}
+                min={set(new Date(), { hours: 6, minutes: 0 })}
+            />
+        </Box>
     );
 };
