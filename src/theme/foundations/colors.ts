@@ -16,16 +16,8 @@ export enum Colors {
 }
 
 export const colors = {
-    primary: {
-        default: Colors.DarkBlue,
-        dark: '#02002f',
-        light: '#565086',
-    },
-    secondary: {
-        default: Colors.Green,
-        dark: '#00c486',
-        light: '#84ffe8',
-    },
+    primary: Colors.DarkBlue,
+    secondary: Colors.Blue,
     background: Colors.White,
     surface: Colors.LightBeige,
     error: Colors.Red,

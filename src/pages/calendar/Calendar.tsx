@@ -14,11 +14,11 @@ export const Calendar: React.FC = () => (
             <title>Kalender</title>
         </Helmet>
         <HStack spacing={5} padding={5} alignItems="flex-start" width="100%" height="100%">
-            <VStack alignItems="flex-start" spacing={5}>
+            <VStack alignItems="flex-start" spacing={5} flex="0">
                 <CalendarDatePicker />
                 <CalendarStationFilter />
             </VStack>
-            <Box flex="1" width="100%" height="100%">
+            <Box flex="1" minHeight="100%" height="100%">
                 <CalendarComponent />
             </Box>
         </HStack>

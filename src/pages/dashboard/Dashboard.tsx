@@ -1,34 +1,13 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { Header } from './Header';
 import { PageRouter } from '../../routing/PageRouter';
-import { Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/layout';
 
-const Wrapper: React.FC = (props) => (
-    <Flex flexDirection={{ base: 'column-reverse', sm: 'column' }} height="100%" width="100%" {...props} />
+export const Dashboard: React.FC = () => (
+    <Flex direction="column" minHeight="100vh" width="100vw">
+        <Header />
+        <Box as="main" flex="1" overflow="auto" paddingBottom={{ base: '64px', md: 0 }}>
+            <PageRouter />
+        </Box>
+    </Flex>
 );
-
-const Body = styled.div`
-    height: 100%;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-`;
-
-const Page = styled.main`
-    flex: 1;
-    overflow-y: auto;
-`;
-
-export const Dashboard: React.FC = () => {
-    return (
-        <Wrapper>
-            <Header />
-            <Body>
-                <Page>
-                    <PageRouter />
-                </Page>
-            </Body>
-        </Wrapper>
-    );
-};

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
 import { nb } from 'date-fns/locale';
-import { format, getDay, parse, set, setHours, startOfWeek } from 'date-fns';
+import { format, getDay, parse, set, startOfWeek } from 'date-fns';
 import { CalendarToolbar } from './CalendarToolbar';
 import { useCalendarEvents } from './hooks/useCalendarEvents';
 import { getCalendarViewFromType, VIEWS } from './hooks/useCalendarView';

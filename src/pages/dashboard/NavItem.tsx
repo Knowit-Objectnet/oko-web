@@ -6,17 +6,20 @@ import Icon from '@chakra-ui/icon';
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link
         as={NavLink}
-        color="White"
-        borderBottom={{ base: 'none', sm: 'solid 4px transparent' }}
+        color="white"
+        flexGrow={0}
+        height="100%"
+        borderBottom="solid 6px transparent"
+        paddingTop={3}
         display="flex"
         alignItems="flex-end"
         userSelect="none"
-        fontWeight="bold"
-        fontSize={{ base: 'md', sm: 'xl' }}
+        fontWeight="normal"
+        fontSize={{ base: '1rem', md: '20px' }}
         _activeLink={{
-            color: 'secondary.light',
-            borderBottomColor: 'secondary.light',
-            svg: { fill: 'secondary.light' },
+            color: 'secondary',
+            borderBottomColor: 'secondary',
+            svg: { fill: 'secondary' },
         }}
         _hover={{
             textDecoration: 'none',
@@ -28,21 +31,23 @@ const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
 
 const Center: React.FC = (props) => (
     <Flex
+        textStyle="menuItem"
         alignItems="center"
-        justifyContent="flex-end"
-        height={{ base: '100%', sm: 'auto' }}
-        flexDirection={{ base: 'column', lg: 'row' }}
+        justifyContent="center"
+        height="100%"
+        flex={1}
+        flexDirection={{ base: 'column', md: 'row' }}
         {...props}
     />
 );
 
 const iconStyle = {
-    height: { base: 'auto', sm: '1em' },
-    width: { base: 'auto', sm: '2rem' },
+    height: { base: 'auto', md: '1em' },
+    width: { base: 'auto', md: '2rem' },
     maxWidth: '100%',
     flex: '1',
     sx: {
-        svg: { fill: 'White' },
+        svg: { fill: 'white' },
     },
 };
 
@@ -57,7 +62,7 @@ export const NavItem: React.FC<Props> = (props) => (
     <StyledNavLink to={props.path} exact={props.exact}>
         <Center>
             <Icon {...iconStyle}>{props.icon}</Icon>
-            <Box as="span" marginLeft={{ base: '0', lg: 'sm' }}>
+            <Box as="span" marginLeft={{ base: 0, md: 1 }}>
                 {props.label}
             </Box>
         </Center>
