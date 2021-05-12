@@ -11,6 +11,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import { AuthProvider } from './auth/AuthProvider';
 import { Loading } from './components/Loading';
+import { prefetchStations } from './services/hooks/useStations';
+import 'focus-visible/dist/focus-visible';
 
 const alertOptions = {
     position: positions.TOP_CENTER,
@@ -19,9 +21,10 @@ const alertOptions = {
     transition: transitions.SCALE,
 };
 
-import 'focus-visible/dist/focus-visible';
-
 const queryClient = new QueryClient();
+
+// We do prefetching here so that these entities are available for faster rendering
+prefetchStations(queryClient);
 
 export const App: React.FC = () => {
     return (
