@@ -86,10 +86,45 @@ The cache (contained in a `QueryClient` instance) has utility methods (like `inv
 
 ### User interface
 
-> UI components are in the process of being migrated from `styled-components` to `Chakra UI`
+> The prototype used [styled-components](https://styled-components.com/) to create the visual appearance of components.
+> For the MVP and final product, the project will be migrated to `Chakra UI` (and `emotion`, when absolutely necessary)
 
-* [styled-components](https://styled-components.com/)
-* [Chakra UI](https://chakra-ui.com/)
+
+#### Chakra UI
+
+[Chakra UI](https://chakra-ui.com/) is chosen as the underlying UI component library, which is based on the following benefits:
+
+* Provides common components with base functionality (layout/container elements, form elements, modals, alerts, etc.)
+* Components are easily customizable and styleable (using ["style props"](https://chakra-ui.com/docs/features/style-props) and theming)
+* Simple system for creating [responsive styles](https://chakra-ui.com/docs/features/responsive-styles)
+* Handles accessibility (for most components - check for "Accessibility" in doc for each component)
+* Theming system
+* Global CSS reset
+* Well documented
+
+**Recommended reading:**
+
+* [Design principles](https://chakra-ui.com/docs/principles)
+* [Style Props](https://chakra-ui.com/docs/features/style-props)
+* [Responsive styles](https://chakra-ui.com/docs/features/responsive-styles)
+* [Theming](https://chakra-ui.com/docs/theming/theme)
+  * [Customizing theme](https://chakra-ui.com/docs/theming/customize-theme)
+  * [Styling components](https://chakra-ui.com/docs/theming/component-style)
+  * [Text and Layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles)
+  * [Global styles](https://chakra-ui.com/docs/features/global-styles)
+* [The `sx` Prop](https://chakra-ui.com/docs/features/the-sx-prop)
+* The full list of available components can be found [in the documentation](https://chakra-ui.com/docs)
+
+**Guidelines:**
+* We're using fully qualified CSS property names, not the abbreviations (e.g. `backgroundColor`, not `bgColor`)
+* To customize the styling of predefined library components, we're using [the theme system](https://chakra-ui.com/docs/theming/component-style) 
+  (if possible). Theme files are located in the `theme` folder. 
+
+> Chakra UI relies on [`emotion`](https://emotion.sh/docs/introduction) and [`framer/motion`](https://www.framer.com/motion/).
+> If necessary, these libraries can be used (rather than `styled-components` and `react-transition-group`).
+
+#### Soon to be deprecated: 
+
 * [react-alert](https://www.npmjs.com/package/react-alert) and react-alert-template-basic for toast-style alerts
 * [react-calendar](https://www.npmjs.com/package/react-calendar)
 * [react-date-picker](https://projects.wojtekmaj.pl/react-date-picker/)
