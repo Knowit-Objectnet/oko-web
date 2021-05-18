@@ -5,9 +5,10 @@ import Plus from '../../assets/Plus.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import React from 'react';
 import { ApiAvtale } from '../../services-new/AvtaleService';
-import { isFuture, isPast, isWithinInterval, parseISO } from 'date-fns';
+import { format, isFuture, isPast, isWithinInterval, parseISO } from 'date-fns';
 import { motion } from 'framer-motion';
 import { HenteplanTable } from './HenteplanTable';
+import { nb } from 'date-fns/locale';
 
 interface Props {
     avtale: ApiAvtale;
@@ -30,6 +31,8 @@ const getAvtaleTitle = (avtale: ApiAvtale) => {
         return 'Avtale med udefinert tidsrom';
     }
 };
+
+const formatDate = (date: string): string => format(parseISO(date), 'd. MMM yyyy', { locale: nb });
 
 export const AvtaleInfo: React.FC<Props> = ({ avtale, isExpanded }) => (
     <Flex direction="column" width="100%" border="4px solid" borderColor="gray.200" padding={5}>
@@ -65,7 +68,7 @@ export const AvtaleInfo: React.FC<Props> = ({ avtale, isExpanded }) => (
             </ButtonGroup>
         </Flex>
         <Text>
-            Varighet: <time>{avtale.startDato}</time> til <time>{avtale.sluttDato}</time>
+            Varighet: <time>{formatDate(avtale.startDato)}</time> til <time>{formatDate(avtale.sluttDato)}</time>
         </Text>
         <Text>Type: {avtale.type}</Text>
         <AccordionPanel padding={0}>
