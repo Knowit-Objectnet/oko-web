@@ -24,10 +24,6 @@ const alertOptions = {
 
 const queryClient = new QueryClient();
 
-// We do prefetching here so that these entities are available for faster rendering when needed
-prefetchStations(queryClient);
-prefetchPartners(queryClient);
-
 export const App: React.FC = () => {
     return (
         <AuthProvider fallback={<Loading />}>
@@ -39,7 +35,7 @@ export const App: React.FC = () => {
                         <QueryClientProvider client={queryClient}>
                             {/* TODO: remove ModalProvider when migration to Chakra-UI modals is complete */}
                             <ModalProvider>
-                                <Helmet titleTemplate="Oslo kommune REG | %s">
+                                <Helmet titleTemplate="%s – Oslo kommune REG">
                                     <html lang="nb" />
                                     {/* TODO write a SEO-friendly description: */}
                                     <meta name="description" content="Oslo kommune REG" />{' '}

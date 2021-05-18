@@ -9,8 +9,8 @@ const getNavItemsForRole = (user: UserInfo) => {
     if (user.isAdmin)
         return (
             <>
-                <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
                 <NavItem path="/avtaler" icon={<List />} label="Avtaler" />
+                <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
             </>
         );
     else if (user.isPartner) return <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />;
