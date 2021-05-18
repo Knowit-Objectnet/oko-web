@@ -31,6 +31,12 @@ export const mockKontakter: Array<ApiKontakt> = [
         telefon: '004712345678',
         rolle: 'Kjøpsanvarlig',
     },
+    {
+        id: '9ac829d8-0272-4f3f-agse-3536576ca979',
+        navn: 'Ola Nordmann',
+        telefon: '004743892712',
+        rolle: 'Sjåfør',
+    },
 ];
 
 export const mockPartnere: Array<ApiPartner> = [
@@ -62,7 +68,13 @@ export const mockPartnere: Array<ApiPartner> = [
                 id: '9ac829d8-0272-4f3f-b9db-3536576ca979',
                 navn: 'Kunde Kundesen jr',
                 telefon: '004712345678',
-                rolle: 'Kjøpsanvarlig',
+                rolle: 'Sjåfør',
+            },
+            {
+                id: '9ac829d8-0272-4f3f-agse-3536576ca979',
+                navn: 'Ola Nordmann',
+                telefon: '004743892712',
+                rolle: 'Sjåfør',
             },
         ],
         storrelse: 'MIDDELS',

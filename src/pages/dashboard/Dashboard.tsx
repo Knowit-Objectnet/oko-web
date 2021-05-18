@@ -14,7 +14,7 @@ export const Dashboard: React.FC = () => {
     prefetchPartners(queryClient);
 
     return (
-        <Flex direction="column" minHeight="100vh" width="100vw">
+        <Flex direction="column" minHeight="100vh" width="100%">
             <Header />
             <Box flex="1" overflowY="auto" paddingBottom={{ base: '64px', md: 0 }}>
                 <PageRouter />

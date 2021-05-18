@@ -6,7 +6,7 @@ interface ApiHentingBase {
     startTidspunkt: string; //LocalTimeDate
     sluttTidspunkt: string; //LocalTimeDate
     merknad: string | null;
-    avlyst: string; //LocalTimeDate
+    avlyst: string | null; //LocalTimeDate
 }
 
 export interface ApiHenting extends ApiHentingBase {

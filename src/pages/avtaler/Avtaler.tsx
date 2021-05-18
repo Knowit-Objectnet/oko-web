@@ -1,51 +1,83 @@
 import React from 'react';
-import { usePartners } from '../../services/hooks/usePartners';
-import { Breadcrumb, BreadcrumbLink, Heading, HStack, Link, List, ListItem, VStack } from '@chakra-ui/react';
-import { NavLink, useRouteMatch, Link as RouterLink, useLocation, Route } from 'react-router-dom';
-import { usePartnerById } from '../../services/hooks/usePartnerById';
-import { useQueryStringKey } from 'use-route-as-state';
+import { Button, Heading, HStack, Icon, Link, List, ListItem } from '@chakra-ui/react';
+import { NavLink, Route, useRouteMatch } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import { Flex } from '@chakra-ui/layout';
+import Plus from '../../assets/Plus.svg';
+import { mockPartnere as partnere } from '../../../__mocks__/mocks-new/mockAktor';
+import { ApiPartner } from '../../services-new/AktorService';
+import { PartnerInfo } from './PartnerInfo';
 
-const PartnerInfo: React.FC = () => {
-    const { url, params } = useRouteMatch<{ partnerId: string }>();
-
-    // TODO: handle invalid partner Id
-    const { data: partner } = usePartnerById(Number(params.partnerId));
-
-    return partner ? (
-        <VStack alignItems="flex-start">
-            <Breadcrumb>
-                <BreadcrumbLink as={RouterLink} to={`${url}`}>
-                    Partnere
-                </BreadcrumbLink>
-            </Breadcrumb>
-            <Heading>{partner.name}</Heading>
-        </VStack>
-    ) : (
-        <>Laster data...</>
+const PartnerNavList: React.FC = () => {
+    const { url } = useRouteMatch();
+    return (
+        <List spacing={2}>
+            {(partnere ?? []).map((partner: ApiPartner) => (
+                <ListItem key={partner.id}>
+                    <Link
+                        as={NavLink}
+                        to={`${url}/${partner.id}`}
+                        _activeLink={{
+                            fontWeight: 'bold',
+                            '&:before': {
+                                content: `""`,
+                                display: 'block',
+                                width: '8px',
+                                height: '8px',
+                                backgroundColor: 'onSurface',
+                                borderRadius: '50%',
+                                position: 'absolute',
+                                transform: 'translate(-20px, 80%)',
+                            },
+                        }}
+                        display="block"
+                        paddingLeft="20px"
+                        position="relative"
+                    >
+                        {partner.navn}
+                    </Link>
+                </ListItem>
+            ))}
+        </List>
     );
 };
 
 export const Avtaler: React.FC = () => {
     const { url } = useRouteMatch();
-    const { data: partners } = usePartners();
 
     return (
-        <HStack alignItems="flex-start">
-            <VStack as="nav" alignItems="flex-start">
-                <Heading as="h2">Partnere</Heading>
-                <List>
-                    {(partners ?? []).map((partner) => (
-                        <ListItem key={partner.id}>
-                            <Link as={NavLink} to={`${url}/partner/${partner.id}`}>
-                                {partner.name}
-                            </Link>
-                        </ListItem>
-                    ))}
-                </List>
-            </VStack>
-            <Route path={`${url}/partner/:partnerId`}>
-                <PartnerInfo />
-            </Route>
-        </HStack>
+        <>
+            <Helmet>
+                <title>Avtaler</title>
+            </Helmet>
+            <HStack alignItems="stretch" padding={5} spacing={10} height="100%" marginX="auto">
+                <Flex
+                    direction="column"
+                    as="nav"
+                    alignItems="flex-start"
+                    backgroundColor="surface"
+                    height="100%"
+                    padding={5}
+                    minWidth="300px"
+                >
+                    <Heading as="h2" fontSize="2xl" paddingBottom={3}>
+                        Partnere
+                    </Heading>
+                    <PartnerNavList />
+                    <Button
+                        leftIcon={<Icon as={Plus} />}
+                        variant="outline"
+                        width="100%"
+                        borderColor="Black"
+                        marginTop={10}
+                    >
+                        Legg til partner
+                    </Button>
+                </Flex>
+                <Route path={`${url}/:partnerId`}>
+                    <PartnerInfo />
+                </Route>
+            </HStack>
+        </>
     );
 };
