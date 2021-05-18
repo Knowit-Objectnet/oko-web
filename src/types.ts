@@ -3,6 +3,14 @@ import { ApiPartner } from './services/PartnerService';
 
 export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
+export type HenteplanFrekvenser = 'ENKELT' | 'UKENTLIG' | 'ANNENHVER';
+
+export type AvtaleTyper = 'FAST' | 'ANNEN' | 'OMBRUKSARRANGEMENT' | 'INTERNTRANSPORT';
+
+export type StasjonTyper = 'GJENBRUK' | 'MINI';
+
+export type PartnerStorrelse = 'STOR' | 'MIDDELS' | 'LITEN';
+
 export interface EventInfo {
     title: string;
     start: Date;
