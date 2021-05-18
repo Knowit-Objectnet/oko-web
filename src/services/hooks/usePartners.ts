@@ -1,10 +1,11 @@
-import { QueryClient, QueryObserverResult, useQuery } from 'react-query';
+import { QueryClient, useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
 import { ApiPartner, getPartners, partnersDefaultQueryKey } from '../PartnerService';
 
-export const usePartners = (): QueryObserverResult<Array<ApiPartner>> => {
+export const usePartners = (queryOptions?: UseQueryOptions<Array<ApiPartner>>): UseQueryResult<Array<ApiPartner>> => {
     return useQuery<Array<ApiPartner>>({
         queryKey: [partnersDefaultQueryKey],
         queryFn: () => getPartners(),
+        ...queryOptions,
     });
 };
 
