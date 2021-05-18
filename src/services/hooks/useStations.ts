@@ -8,7 +8,7 @@ export const useStations = (): QueryObserverResult<Array<ApiStation>> => {
     });
 };
 
-export const prefetchStations = (queryClient: QueryClient) => {
+export const prefetchStations = (queryClient: QueryClient): void => {
     queryClient.prefetchQuery({
         queryKey: [stationsDefaultQueryKey],
         queryFn: () => getStations(),
