@@ -16,7 +16,7 @@ export const Header: React.FC = () => {
             <HStack
                 as="nav"
                 backgroundColor="primary"
-                height={{ base: '64px', sm: '100px' }}
+                height={{ base: '64px', md: '100px' }}
                 spacing={{ base: 0, md: 10 }}
                 paddingRight="4"
                 justifyContent="space-between"
@@ -40,8 +40,8 @@ export const Header: React.FC = () => {
                 </Box>
                 <RouterLink
                     to="/loggut"
-                    padding={{ base: '2', sm: '4' }}
-                    fontSize={{ base: 'sm', sm: 'lg' }}
+                    padding={{ base: '2', md: '4' }}
+                    fontSize={{ base: 'sm', md: 'lg' }}
                     fontWeight="normal"
                     minHeight="3"
                     border="2px solid White"
