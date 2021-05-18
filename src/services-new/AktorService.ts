@@ -13,10 +13,7 @@ export interface ApiAktor {
     kontaktPersoner: Array<ApiKontakt>;
 }
 
-export interface ApiStasjon {
-    id: string;
-    navn: string;
-    kontaktPersoner: Array<ApiKontakt>;
+export interface ApiStasjon extends ApiAktor {
     type: StasjonTyper;
 }
 
@@ -37,10 +34,7 @@ export interface ApiStasjonParams {
     type?: StasjonTyper;
 }
 
-export interface ApiPartner {
-    id: string;
-    navn: string;
-    kontaktPersoner: Array<ApiKontakt>;
+export interface ApiPartner extends ApiAktor {
     storrelse: PartnerStorrelse;
     ideell: boolean;
 }

@@ -1,9 +1,20 @@
-import { ApiAvtale } from '../../src/services-new/AvtaleService';
+import { ApiAvtale, ApiAvtaleUpstream } from '../../src/services-new/AvtaleService';
 
 export const mockAvtaler: Array<ApiAvtale> = [
     {
         id: '0067d96e-f7bf-4228-bca0-6f41462fe92c',
-        aktorId: 'ebde26e5-bb66-4c6c-8cd7-e11d6cbd00f2',
+        aktor: {
+            id: 'ebde26e5-bb66-4c6c-8cd7-e11d6cbd00f2',
+            navn: 'Fretex',
+            kontaktPersoner: [
+                {
+                    id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
+                    navn: 'Kunde Kundesen',
+                    telefon: '004712345678',
+                    rolle: 'Kjøpsanvarlig',
+                },
+            ],
+        },
         type: 'FAST',
         startDato: '2021-01-01T',
         sluttDato: '2022-01-01T',
@@ -45,7 +56,24 @@ export const mockAvtaler: Array<ApiAvtale> = [
     },
     {
         id: '1bb86d8c-f5cc-476e-852c-39c50fd29ce4',
-        aktorId: '20aafe35-eb86-4fe4-a9a8-6432e2109638',
+        aktor: {
+            id: '20aafe35-eb86-4fe4-a9a8-6432e2109638',
+            navn: 'Maritastiftelsen',
+            kontaktPersoner: [
+                {
+                    id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
+                    navn: 'Kunde Kundesen',
+                    telefon: '004712345678',
+                    rolle: 'Kjøpsanvarlig',
+                },
+                {
+                    id: '9ac829d8-0272-4f3f-b9db-3536576ca979',
+                    navn: 'Kunde Kundesen jr',
+                    telefon: '004712345678',
+                    rolle: 'Kjøpsanvarlig',
+                },
+            ],
+        },
         type: 'FAST',
         startDato: '2021-01-01T',
         sluttDato: '2022-01-01T',
@@ -87,7 +115,11 @@ export const mockAvtaler: Array<ApiAvtale> = [
     },
     {
         id: 'f2b43dd4-7afd-4199-b92c-2cb236017ffa',
-        aktorId: 'b370a928-f5f9-48d6-b9f3-52533123fc4a',
+        aktor: {
+            id: 'b370a928-f5f9-48d6-b9f3-52533123fc4a',
+            navn: 'Jobben',
+            kontaktPersoner: [],
+        },
         type: 'ANNEN',
         startDato: '2021-01-01T',
         sluttDato: '2022-01-01T',

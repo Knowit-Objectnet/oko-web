@@ -1,13 +1,26 @@
 import { AvtaleTyper } from '../types';
-import { ApiHenteplan, ApiHenteplanPost } from './HenteplanService';
+import { ApiAktor, ApiPartner } from './AktorService';
+import { ApiHenteplan, ApiHenteplanDownstream, ApiHenteplanPost } from './HenteplanService';
 
-export interface ApiAvtale {
+interface ApiAvtaleBase {
     id: string;
-    aktorId: string;
     type: AvtaleTyper;
     startDato: string; //LocalDate
     sluttDato: string; //LocalDate
-    henteplaner: Array<ApiHenteplan>;
+}
+
+export interface ApiAvtaleDownstream extends ApiAvtaleBase {
+    aktorId: string;
+    henteplaner: Array<ApiHenteplanDownstream>;
+}
+
+export interface ApiAvtaleUpstream extends ApiAvtaleBase {
+    aktor: ApiAktor;
+}
+
+export interface ApiAvtale extends ApiAvtaleBase {
+    aktor: ApiAktor;
+    henteplaner: Array<ApiHenteplanDownstream>;
 }
 
 export interface ApiAvtalePost {

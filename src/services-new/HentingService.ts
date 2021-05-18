@@ -1,10 +1,19 @@
-export interface ApiHenting {
+import { ApiHenteplanUpstream } from './HenteplanService';
+
+interface ApiHentingBase {
     id: string; //UUID
     startTidspunkt: string; //LocalTimeDate
     sluttTidspunkt: string; //LocalTimeDate
     merknad: string | null;
-    henteplanId: string; //UUID
     avlyst: string; //LocalTimeDate
+}
+
+export interface ApiHenting extends ApiHentingBase {
+    henteplan: ApiHenteplanUpstream; //UUID
+}
+
+export interface ApiHentingDownstream extends ApiHentingBase {
+    henteplanId: string;
 }
 
 export interface ApiHentingParams {

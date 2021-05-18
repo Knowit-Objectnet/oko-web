@@ -1,16 +1,32 @@
 import { HenteplanFrekvenser, WorkingWeekdays } from '../types';
-import { ApiHenting } from './HentingService';
+import { ApiStasjon } from './AktorService';
+import { ApiAvtaleUpstream } from './AvtaleService';
+import { ApiHenting, ApiHentingDownstream } from './HentingService';
 
-export interface ApiHenteplan {
+interface ApiHenteplanBase {
     id: string;
-    avtaleId: string;
-    stasjonId: string;
     frekvens: HenteplanFrekvenser;
     startTidspunkt: string; //LocalTimeDate: Time used for Henting time
     sluttTidspunkt: string; //LocalTimeDate: Time used for Henting time
     ukedag: WorkingWeekdays;
     merknad: string | null;
-    planlagteHentinger: Array<ApiHenting>;
+}
+
+export interface ApiHenteplan extends ApiHenteplanBase {
+    avtale: ApiAvtaleUpstream;
+    stasjon: ApiStasjon;
+    planlagteHentinger: Array<ApiHentingDownstream>;
+}
+
+export interface ApiHenteplanDownstream extends ApiHenteplanBase {
+    avtaleId: string;
+    stasjonId: string;
+    planlagteHentinger: Array<ApiHentingDownstream>;
+}
+
+export interface ApiHenteplanUpstream extends ApiHenteplanBase {
+    avtale: ApiAvtaleUpstream;
+    stasjon: ApiStasjon;
 }
 
 export interface ApiHenteplanPost {
