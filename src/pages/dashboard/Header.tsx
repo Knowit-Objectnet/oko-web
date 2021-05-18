@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Navigation } from './Navigation';
 import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
 import { RouterLink } from '../../routing/RouterLink';
-import { Box, HStack } from '@chakra-ui/react';
+import { Box, HStack, Icon } from '@chakra-ui/react';
+import Profile from '../../assets/Default_profile_pic.svg';
 
 const Logo: React.FC = (props) => (
     <Box height="100%" sx={{ svg: { height: '100%' } }} {...props}>
@@ -40,13 +41,23 @@ export const Header: React.FC = () => {
                 </Box>
                 <RouterLink
                     to="/loggut"
-                    padding={{ base: '2', md: '4' }}
+                    padding={{ base: '2', md: '3' }}
                     fontSize={{ base: 'sm', md: 'lg' }}
                     fontWeight="normal"
                     minHeight="3"
                     border="2px solid White"
                     color="White"
+                    display="block"
+                    verticalAlign="center"
                 >
+                    <Icon
+                        as={Profile}
+                        marginRight={{ base: '2', md: '3' }}
+                        fill="White"
+                        height={{ base: '20px', md: '32px' }}
+                        width="auto"
+                        aria-hidden
+                    />
                     Logg ut
                 </RouterLink>
             </HStack>
