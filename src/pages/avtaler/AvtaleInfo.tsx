@@ -5,10 +5,10 @@ import Plus from '../../assets/Plus.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import React from 'react';
 import { ApiAvtale } from '../../services-new/AvtaleService';
-import { format, isFuture, isPast, isWithinInterval, parseISO } from 'date-fns';
+import { isFuture, isPast, isWithinInterval, parseISO } from 'date-fns';
 import { motion } from 'framer-motion';
 import { HenteplanTable } from './HenteplanTable';
-import { nb } from 'date-fns/locale';
+import { formatDate } from '../../utils/formatDateTime';
 
 interface Props {
     avtale: ApiAvtale;
@@ -31,8 +31,6 @@ const getAvtaleTitle = (avtale: ApiAvtale) => {
         return 'Avtale med udefinert tidsrom';
     }
 };
-
-const formatDate = (date: string): string => format(parseISO(date), 'd. MMM yyyy', { locale: nb });
 
 export const AvtaleInfo: React.FC<Props> = ({ avtale, isExpanded }) => (
     <Flex direction="column" width="100%" border="4px solid" borderColor="gray.200" padding={5}>
