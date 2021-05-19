@@ -1,3 +1,5 @@
+import { httpClient } from '../services/httpClient';
+
 export interface ApiHenting {
     id: string; //UUID
     startTidspunkt: string; //LocalTimeDate
@@ -23,3 +25,26 @@ export interface ApiHentingPatch {
     merknad?: string;
     avlyst?: string; //LocalTimeDate
 }
+
+const hentingEndpoint = '/planlagte-hentinger';
+export const hentingDefaultQueryKey = 'getHentinger';
+
+export const getHentinger = (params: ApiHentingParams): Promise<Array<ApiHenting>> =>
+    httpClient()
+        .get<Array<ApiHenting>>(hentingEndpoint, { params })
+        .then((response) => response.data);
+
+export const getHentingById = (hentingId: string): Promise<ApiHenting> =>
+    httpClient()
+        .get<ApiHenting>(`${hentingEndpoint}/${hentingId}`)
+        .then((response) => response.data);
+
+export const deleteHenting = (hentingId: string): Promise<ApiHenting> =>
+    httpClient()
+        .delete<ApiHenting>(`${hentingEndpoint}/${hentingId}`)
+        .then((response) => response.data);
+
+export const patchHenting = (updatedHenting: ApiHentingPatch): Promise<ApiHenting> =>
+    httpClient()
+        .patch<ApiHenting>(hentingEndpoint, updatedHenting)
+        .then((response) => response.data);
