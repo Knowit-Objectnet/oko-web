@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Button, ChakraProps, Icon } from '@chakra-ui/react';
 import Plus from '../../../assets/Plus.svg';
 

@@ -1,19 +1,12 @@
-import React from 'react';
-import { Button, ButtonGroup, Icon, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { mockStasjoner } from '../../../__mocks__/mocks-new/mockAktor';
-import Pencil from '../../assets/Pencil.svg';
-import Cross from '../../assets/Cross.svg';
-import { ApiHenteplanDownstream } from '../../services-new/HenteplanService';
-import { compareAsc, format, parseISO } from 'date-fns';
-import { nb } from 'date-fns/locale';
-import { HenteplanFrekvens, WorkingWeekdays } from '../../types';
-
-interface Props {
-    henteplaner: Array<ApiHenteplanDownstream>;
-}
-
-const formatDate = (date: string): string => format(parseISO(date), 'd. MMM yyyy', { locale: nb });
-const formatTime = (date: string): string => format(parseISO(date), 'HH:mm', { locale: nb });
+import * as React from 'react';
+import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
+import { mockStasjoner } from '../../../../__mocks__/mocks-new/mockAktor';
+import { ApiHenteplanDownstream } from '../../../services-new/HenteplanService';
+import { compareAsc, parseISO } from 'date-fns';
+import { HenteplanFrekvens, WorkingWeekdays } from '../../../types';
+import { formatDate, formatTime } from '../../../utils/formatDateTime';
+import { EditButton } from '../../../components/buttons/EditButton';
+import { DeleteButton } from '../../../components/buttons/DeleteButton';
 
 const frekvenser: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
@@ -29,13 +22,17 @@ const ukedager: Record<WorkingWeekdays, string> = {
     WEDNESDAY: 'Onsdag',
 };
 
+interface Props {
+    henteplaner: Array<ApiHenteplanDownstream>;
+}
+
 export const HenteplanTable: React.FC<Props> = ({ henteplaner }) => {
     const sortedHenteplaner = henteplaner.sort((henteplanA, henteplanB) =>
         compareAsc(parseISO(henteplanA.startTidspunkt), parseISO(henteplanB.startTidspunkt)),
     );
 
     return (
-        <Table marginTop={4}>
+        <Table size="sm">
             <Thead>
                 <Tr>
                     <Th>Ukedag</Th>
@@ -62,31 +59,30 @@ export const HenteplanTable: React.FC<Props> = ({ henteplaner }) => {
                             <Td>{stasjon?.navn}</Td>
                             <Td>{frekvenser[henteplan.frekvens]}</Td>
                             <Td>
-                                <time>{formatDate(henteplan.startTidspunkt)}</time>
+                                <time dateTime={henteplan.startTidspunkt}>{formatDate(henteplan.startTidspunkt)}</time>
                                 {henteplan.frekvens !== 'ENKELT' ? (
                                     <>
-                                        &ndash;<time>{formatDate(henteplan.sluttTidspunkt)}</time>
+                                        &ndash;
+                                        <time dateTime={henteplan.sluttTidspunkt}>
+                                            {formatDate(henteplan.sluttTidspunkt)}
+                                        </time>
                                     </>
                                 ) : null}
                             </Td>
                             <Td textAlign="end">
                                 <ButtonGroup spacing="4" size="sm">
-                                    <Button
-                                        leftIcon={<Icon as={Pencil} />}
+                                    <EditButton
+                                        label="Rediger"
                                         onClick={() => {
                                             console.log(`Rediger henteplan med id ${henteplan.id}`);
                                         }}
-                                    >
-                                        Rediger
-                                    </Button>
-                                    <Button
-                                        leftIcon={<Icon as={Cross} />}
+                                    />
+                                    <DeleteButton
+                                        label="Slett"
                                         onClick={() => {
                                             console.log(`Slett henteplan med id ${henteplan.id}`);
                                         }}
-                                    >
-                                        Slett
-                                    </Button>
+                                    />
                                 </ButtonGroup>
                             </Td>
                         </Tr>

@@ -1,5 +1,4 @@
-import React from 'react';
-import { ApiAvtale } from '../../services-new/AvtaleService';
+import * as React from 'react';
 import {
     PartnerInfoSection,
     PartnerInfoSectionButtons,
@@ -7,14 +6,15 @@ import {
     PartnerInfoSectionHeader,
     PartnerInfoSectionTitle,
 } from './PartnerInfoSection';
-import { AddButton } from '../../components/buttons/AddButton';
+import { AddButton } from '../../../components/buttons/AddButton';
 import { AvtaleInfoList } from './AvtaleInfoList';
+import { ApiPartner } from '../../../services-currentapi/AktorService';
 
 interface Props {
-    avtaler: Array<ApiAvtale>;
+    partner: ApiPartner;
 }
 
-export const AvtaleSection: React.FC<Props> = ({ avtaler }) => (
+export const AvtaleInfoSection: React.FC<Props> = ({ partner }) => (
     <PartnerInfoSection>
         <PartnerInfoSectionHeader>
             <PartnerInfoSectionTitle>Avtaler</PartnerInfoSectionTitle>
@@ -28,7 +28,7 @@ export const AvtaleSection: React.FC<Props> = ({ avtaler }) => (
             </PartnerInfoSectionButtons>
         </PartnerInfoSectionHeader>
         <PartnerInfoSectionContent>
-            <AvtaleInfoList avtaler={avtaler} />
+            <AvtaleInfoList partner={partner} key={partner.id} />
         </PartnerInfoSectionContent>
     </PartnerInfoSection>
 );

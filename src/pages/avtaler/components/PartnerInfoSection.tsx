@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Box, Flex } from '@chakra-ui/layout';
 import { ButtonGroup, Heading } from '@chakra-ui/react';
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import { ApiKontakt } from '../../services-new/AktorService';
+import * as React from 'react';
+import { ApiKontakt } from '../../../services-new/AktorService';
 import {
     PartnerInfoSection,
     PartnerInfoSectionButtons,
@@ -7,8 +7,8 @@ import {
     PartnerInfoSectionHeader,
     PartnerInfoSectionTitle,
 } from './PartnerInfoSection';
-import { AddButton } from '../../components/buttons/AddButton';
-import { KontaktTable } from './KontaktTable';
+import { AddButton } from '../../../components/buttons/AddButton';
+import { KontaktPersonTable } from './KontaktPersonTable';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;
@@ -29,7 +29,7 @@ export const KontaktPersonSection: React.FC<Props> = ({ kontaktPersoner }) => (
         </PartnerInfoSectionHeader>
         <PartnerInfoSectionContent>
             {kontaktPersoner.length > 0 ? (
-                <KontaktTable kontaktPersoner={kontaktPersoner} />
+                <KontaktPersonTable kontaktPersoner={kontaktPersoner} />
             ) : (
                 'Ingen registrerte kontaktpersoner'
             )}
