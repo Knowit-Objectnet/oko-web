@@ -50,7 +50,7 @@ export const Avtaler: React.FC = () => {
             <Helmet>
                 <title>Avtaler</title>
             </Helmet>
-            <HStack alignItems="stretch" padding={5} spacing={10} height="100%" marginX="auto">
+            <HStack alignItems="stretch" padding={5} spacing={10} height="100%" marginX="auto" maxWidth="100%">
                 <Flex
                     direction="column"
                     as="nav"
@@ -60,7 +60,15 @@ export const Avtaler: React.FC = () => {
                     padding={5}
                     minWidth="300px"
                 >
-                    <Heading as="h2" fontSize="2xl" paddingBottom={3}>
+                    <Heading
+                        as="h2"
+                        width="100%"
+                        fontSize="xl"
+                        paddingBottom={3}
+                        marginBottom={4}
+                        borderBottom="1px solid"
+                        borderBottomColor="DarkBeige"
+                    >
                         Partnere
                     </Heading>
                     <PartnerNavList />

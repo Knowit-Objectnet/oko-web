@@ -22,7 +22,7 @@ export const KontaktTable: React.FC<{ kontaktPersoner: Array<ApiKontakt> }> = ({
                     <Td>{person.navn}</Td>
                     <Td>{person.rolle}</Td>
                     <Td>{person.telefon}</Td>
-                    <Td textAlign="right">
+                    <Td textAlign="end">
                         <ButtonGroup spacing="4" size="sm">
                             <Button
                                 leftIcon={<Icon as={Pencil} />}

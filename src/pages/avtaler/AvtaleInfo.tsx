@@ -39,7 +39,7 @@ export const AvtaleInfo: React.FC<Props> = ({ avtale, isExpanded }) => (
         <Flex justifyContent="space-between" width="100%">
             <Heading as="h3">
                 <AccordionButton
-                    fontSize="2xl"
+                    fontSize="xl"
                     fontWeight="medium"
                     padding={0}
                     _hover={{ background: 'none', textDecoration: 'underline' }}
@@ -74,14 +74,14 @@ export const AvtaleInfo: React.FC<Props> = ({ avtale, isExpanded }) => (
         <AccordionPanel padding={0}>
             <Flex
                 justifyContent="space-between"
-                alignItems="baseline"
+                alignItems="center"
                 width="100%"
                 borderTop="2px solid"
                 borderColor="gray.200"
                 marginTop={4}
                 paddingTop={3}
             >
-                <Heading as="caption" textAlign="left" fontSize="lg">
+                <Heading as="h4" fontSize="lg" fontWeight="medium">
                     {avtale.henteplaner.length > 0 ? 'Henteplaner' : 'Ingen registrerte henteplaner'}
                 </Heading>
                 <Button
