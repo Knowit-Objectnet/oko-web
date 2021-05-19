@@ -30,7 +30,7 @@ describe('Validation of view string', () => {
 describe('Get internal view type from React Big Calendar view type mapping', () => {
     const validViewTypes: Array<[string, CalendarView]> = [
         ['day', 'dag'],
-        ['work_week', 'uke'],
+        ['week', 'uke'],
         ['month', 'maned'],
         ['agenda', 'liste'],
     ];
@@ -40,7 +40,7 @@ describe('Get internal view type from React Big Calendar view type mapping', () 
         expect(result).toBe(view);
     });
 
-    const invalidViewTypes: (string | undefined)[] = ['week', 'list', undefined, 'undefined', 'invalid'];
+    const invalidViewTypes: (string | undefined)[] = ['work_week', 'list', undefined, 'undefined', 'invalid'];
 
     it.each(invalidViewTypes)('%p invalid view type throws error', (viewType) => {
         expect(() => getCalendarViewFromType(viewType as View)).toThrowError();
