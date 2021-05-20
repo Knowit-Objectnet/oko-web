@@ -3,10 +3,10 @@ import { Heading, List, ListItem } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
-import { mockPartnere } from '../../../../__mocks__/mocks-new/mockAktor';
+import { mockPartnere } from '../../../__mocks__/mocks-new/mockAktor';
 
 export const PartnerNavigation: React.FC = () => {
-    // TODO: fetch partners from API/cache, handle error/loading
+    // TODO: fetch from new API and handle error/loading
     const partnere = mockPartnere;
 
     return (

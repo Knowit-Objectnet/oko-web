@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { ApiHenteplanDownstream } from '../../../services-new/HenteplanService';
+import { ApiHenteplanDownstream } from '../../services-new/HenteplanService';
 import { Flex } from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/react';
-import { AddButton } from '../../../components/buttons/AddButton';
+import { AddButton } from '../../components/buttons/AddButton';
 import { HenteplanTable } from './HenteplanTable';
 
 interface Props {

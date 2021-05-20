@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ApiKontakt } from '../../../services-new/AktorService';
+import { ApiKontakt } from '../../services-new/AktorService';
 import {
     PartnerInfoSection,
     PartnerInfoSectionButtons,
@@ -7,7 +7,7 @@ import {
     PartnerInfoSectionHeader,
     PartnerInfoSectionTitle,
 } from './PartnerInfoSection';
-import { AddButton } from '../../../components/buttons/AddButton';
+import { AddButton } from '../../components/buttons/AddButton';
 import { KontaktPersonTable } from './KontaktPersonTable';
 
 interface Props {

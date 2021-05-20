@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { mockStasjoner } from '../../../../__mocks__/mocks-new/mockAktor';
-import { ApiHenteplanDownstream } from '../../../services-new/HenteplanService';
+import { mockStasjoner } from '../../../__mocks__/mocks-new/mockAktor';
+import { ApiHenteplanDownstream } from '../../services-new/HenteplanService';
 import { compareAsc, parseISO } from 'date-fns';
-import { HenteplanFrekvens, WorkingWeekdays } from '../../../types';
-import { formatDate, formatTime } from '../../../utils/formatDateTime';
-import { EditButton } from '../../../components/buttons/EditButton';
-import { DeleteButton } from '../../../components/buttons/DeleteButton';
+import { HenteplanFrekvens, WorkingWeekdays } from '../../types';
+import { formatDate, formatTime } from '../../utils/formatDateTime';
+import { EditButton } from '../../components/buttons/EditButton';
+import { DeleteButton } from '../../components/buttons/DeleteButton';
 
 const frekvenser: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
