@@ -1,13 +1,13 @@
 import { useQueryString } from 'use-route-as-state';
-import { ApiEvent } from '../../../services/EventService';
 import { useStations } from '../../../services/hooks/useStations';
 import { ApiStation } from '../../../services/StationService';
+import { ApiHenting } from '../../../services-currentapi/HentingService';
 
 export interface CalendarFilters {
     stasjon?: string;
 }
 
-export type CalendarFilterFn = (event: ApiEvent) => boolean;
+export type CalendarFilterFn = (henting: ApiHenting) => boolean;
 
 const isValidStasjon = (stasjonName: string, stasjoner?: Array<ApiStation>) =>
     (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.name === stasjonName ? true : result), false);
@@ -26,10 +26,11 @@ export const useCalendarFilters = (): {
     // Checking for valid station filter name, and adding filter if present
     const { data: stasjoner } = useStations();
     if (isValidStasjon(queryFilters.stasjon, stasjoner)) {
-        const stasjonFilter = (event: ApiEvent): boolean => {
+        const stasjonFilter = (henting: ApiHenting): boolean => {
+            /* TODO: reactivate when henting has stasjon reference
             if (queryFilters.stasjon !== undefined) {
-                return event.station.name === queryFilters.stasjon;
-            }
+                return henting.station.name === queryFilters.stasjon;
+            }*/
             return true;
         };
         filterFns.push(stasjonFilter);

@@ -1,10 +1,10 @@
-import { useEvents } from '../../../services/hooks/useEvents';
 import { DateRange, Event as CalendarEvent } from 'react-big-calendar';
-import { usePrefetchEvents } from './usePrefetchEvents';
+import { usePrefetchHentinger } from './usePrefetchHentinger';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
-import { ApiEvent } from '../../../services/EventService';
 import { CalendarView, VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
+import { useHentinger } from '../../../services-currentapi/hooks/useHentinger';
+import { ApiHenting } from '../../../services-currentapi/HentingService';
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;
@@ -24,10 +24,10 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     }
 };
 
-const transformToCalendarEvent = () => (event: ApiEvent): CalendarEvent => ({
-    start: new Date(event.startDateTime),
-    end: new Date(event.endDateTime),
-    title: `${event.partner.name} - ${event.station.name}`,
+const transformToCalendarEvent = () => (henting: ApiHenting): CalendarEvent => ({
+    start: new Date(henting.startTidspunkt),
+    end: new Date(henting.sluttTidspunkt),
+    title: `Mangler beskrivelse`,
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
@@ -36,10 +36,10 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     const intervalToFetch = calculateDateRange(selectedDate, selectedView);
 
     // TODO: wrap in LazyResult in order to return loading/error status?
-    const { data: events } = useEvents(
+    const { data: events } = useHentinger(
         {
-            fromDate: intervalToFetch.start.toISOString(),
-            toDate: intervalToFetch.end.toISOString(),
+            after: intervalToFetch.start.toISOString(),
+            before: intervalToFetch.end.toISOString(),
         },
         {
             keepPreviousData: true,
@@ -48,7 +48,7 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     );
 
     // Fetching events for previous and next interval as well
-    usePrefetchEvents(intervalToFetch);
+    usePrefetchHentinger(intervalToFetch);
 
     const filteredEvents = (events ?? []).filter((event) =>
         filterFns.reduce((result: boolean, filterFn) => filterFn(event), true),
