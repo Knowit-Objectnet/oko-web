@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../auth/Roles';
+import { Loading } from '../components/Loading';
 
 const Kalender = React.lazy(() => import('../pages/kalender'));
 const Avtaler = React.lazy(() => import('../pages/avtaler'));
@@ -12,16 +13,18 @@ const Home: React.FC = () => {
 };
 
 export const PageRouter: React.FC = () => (
-    <Switch>
-        <Route path="/kalender/:view?">
-            <Kalender />
-        </Route>
-        <ProtectedRoute path="/avtaler" requiredRoles={[Roles.Admin]}>
-            <Avtaler />
-        </ProtectedRoute>
-        <Route path="/">
-            <Home />
-        </Route>
-        <Redirect to="/" />
-    </Switch>
+    <Suspense fallback={<Loading />}>
+        <Switch>
+            <Route path="/kalender/:view?">
+                <Kalender />
+            </Route>
+            <ProtectedRoute path="/avtaler" requiredRoles={[Roles.Admin]}>
+                <Avtaler />
+            </ProtectedRoute>
+            <Route path="/">
+                <Home />
+            </Route>
+            <Redirect to="/" />
+        </Switch>
+    </Suspense>
 );
