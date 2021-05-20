@@ -1,52 +1,45 @@
 import * as React from 'react';
 import { types, useAlert } from 'react-alert';
-import { useKeycloak } from '@react-keycloak/web';
-import { queryCache, useMutation } from 'react-query';
-import { Button } from '../../../sharedComponents/Button';
-import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../api/PickUpService';
+import { useMutation, useQueryClient } from 'react-query';
+import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../services/PickUpService';
+import { PositiveButton } from '../../../components/buttons/PositiveButton';
 
 interface Props {
     pickupId: number;
     partnerId: number;
+    onRequestApproval: (isLoading: boolean) => void;
 }
 
-export const RequestApprovalButton: React.FC<Props> = (props) => {
-    const { keycloak } = useKeycloak();
+export const RequestApprovalButton: React.FC<Props> = ({ pickupId, partnerId, onRequestApproval }) => {
     const alert = useAlert();
 
-    const [updatePickUpMutation, { isLoading: updatePickUpLoading }] = useMutation(
-        (updatedPickUp: ApiPickUpPatch) => patchPickUp(updatedPickUp, keycloak.token),
-        {
-            onSuccess: () => {
-                alert.show('Valg av samarbeidspartner til ekstrauttak ble registrert.', { type: types.SUCCESS });
-            },
-            onError: () => {
-                alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrauttak ble ikke registrert.', {
-                    type: types.ERROR,
-                });
-            },
-            onSettled: () => {
-                queryCache.invalidateQueries(pickUpsDefaultQueryKey);
-            },
+    const queryClient = useQueryClient();
+    const updatePickUpMutation = useMutation((updatedPickUp: ApiPickUpPatch) => patchPickUp(updatedPickUp), {
+        onError: () => {
+            alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrauttak ble ikke registrert.', {
+                type: types.ERROR,
+            });
         },
-    );
+        onSettled: () => {
+            // The Promise from `invalidateQueries` will resolve when matched queries are done refetching.
+            // We return this Promise so that `mutateAsync` can be used to await refetching.
+            return queryClient.invalidateQueries(pickUpsDefaultQueryKey);
+        },
+    });
 
-    const handleRequestApproval = () => {
+    const handleRequestApproval = async () => {
+        onRequestApproval(true);
         const updatedPickUp: ApiPickUpPatch = {
-            id: props.pickupId,
-            chosenPartnerId: props.partnerId,
+            id: pickupId,
+            chosenPartnerId: partnerId,
         };
-        updatePickUpMutation(updatedPickUp);
+        await updatePickUpMutation.mutateAsync(updatedPickUp);
+        onRequestApproval(false);
     };
 
     return (
-        <Button
-            text="Godkjenn"
-            variant="positive"
-            fillWidth
-            size="small"
-            onClick={handleRequestApproval}
-            isLoading={updatePickUpLoading}
-        />
+        <PositiveButton fillWidth size="small" onClick={handleRequestApproval}>
+            Godkjenn
+        </PositiveButton>
     );
 };

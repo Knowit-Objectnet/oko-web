@@ -1,40 +1,31 @@
 {
-  "extends": [
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
-  ],
-  "overrides": [
-    {
-      "files": "*.mdx",
-      "extends": "plugin:mdx/recommended",
-      "rules": {
-        "prettier/prettier": [
-          2,
-          {
-            "parser": "markdown"
-          }
-        ],
-        "semi": 0
-      }
-    }
-  ],
-  "env": {
-    "browser": true,
-    "jest": true
-  },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
     "sourceType": "module",
     "ecmaFeatures": {
-        "jsx": true
-      }
+      "jsx": true
+    }
   },
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended", // General syntax/logical errors, and some best practices
+    "plugin:@typescript-eslint/recommended", // Specifically for TypeScript
+    "plugin:react/recommended", // Specifically for React
+    "plugin:react-hooks/recommended", // Specifically for React Hooks
+    "plugin:jsx-a11y/recommended", // Checks for possible a11y issues with JSX
+    "plugin:jest-dom/recommended", // Common mistakes and best practices for tests using jest-dom
+    "plugin:testing-library/react", // Testing Library common mistakes and best practices
+    // NOTE: plugin:prettier/recommended must be listed last!
+    "plugin:prettier/recommended" // Prettier config, disables all rules conflicting with prettier
+  ],
   "rules": {
     "react/prop-types": 0,
-    "semi": 2
+    "semi": 2,
+    "react/jsx-curly-brace-presence": [1, "never"]
   },
   "settings": {
       "react": {

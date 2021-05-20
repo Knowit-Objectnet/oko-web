@@ -1,13 +1,13 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import App from '../src/App';
 
 test('renders loading screen', () => {
-    const { getByText } = render(<App />);
+    render(<App />);
 
     // hello world should be rendered
-    const text = getByText('Laster inn...');
+    const text = screen.getByText('Laster inn...');
     expect(text).toBeInTheDocument();
 });

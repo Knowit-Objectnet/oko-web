@@ -17,6 +17,11 @@ module.exports = merge(common, {
     module: {
         rules: [
             {
+                test: /\.js$/,
+                enforce: 'pre',
+                loader: 'source-map-loader',
+            },
+            {
                 test: /\.ts(x?)$/,
                 loader: 'ts-loader',
                 exclude: /node_modules/,
@@ -27,9 +32,11 @@ module.exports = merge(common, {
         ]
     },
     devServer: {
-        host: '0.0.0.0',
+        host: 'localhost',
         port: 8080,
         open: true,
         historyApiFallback: true,
     },
+    // Ignoring warnings from packages that source-map-loader is unable to map correctly:
+    ignoreWarnings: [/Failed to parse source map/],
 });

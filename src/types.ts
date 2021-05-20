@@ -1,8 +1,17 @@
-import { ApiStation } from './api/StationService';
-import { ApiPartner } from './api/PartnerService';
-import { ApiPickUp } from './api/PickUpService';
+import { ApiStation } from './services/StationService';
+import { ApiPartner } from './services/PartnerService';
 
 export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
+
+export type HenteplanFrekvens = 'ENKELT' | 'UKENTLIG' | 'ANNENHVER';
+
+export type AvtaleType = 'FAST' | 'ANNEN' | 'OMBRUKSARRANGEMENT' | 'INTERNTRANSPORT';
+
+export type StasjonType = 'GJENBRUK' | 'MINI';
+
+export type PartnerStorrelse = 'STOR' | 'MIDDELS' | 'LITEN';
+
+export type AktorType = 'PARTNER' | 'STASJON';
 
 export interface EventInfo {
     title: string;
@@ -30,53 +39,7 @@ interface EventInfoResource {
     };
 }
 
-export interface ApiWithdrawal {
-    reportId: number;
-    eventId: number;
-    partnerId: number;
-    station: ApiStation;
-    startDateTime: string;
-    endDateTime: string;
-    weight: number | null;
-    reportedDateTime: string | null;
-}
-
-export interface ApiRequest {
-    pickup: ApiPickUp;
-    partner: ApiPartner;
-}
-
 export interface SlotInfo {
     start: Date;
     end: Date;
 }
-
-export interface Withdrawal {
-    reportId: number;
-    eventId: number;
-    partnerId: number;
-    station: ApiStation;
-    startDateTime: Date;
-    endDateTime: Date;
-    weight: number | null;
-    reportedDateTime: Date | null;
-}
-
-export interface PickUp {
-    id: number;
-    startDateTime: Date;
-    endDateTime: Date;
-    description: string;
-    station: ApiStation;
-    chosenPartner: ApiPartner | null;
-}
-
-// Roles
-export enum Roles {
-    Oslo = 'reg_employee',
-    Partner = 'partner',
-    Ambassador = 'reuse_station',
-}
-
-// TODO: Remove when migration to Axios is complete (this is only used by SWR)
-export const apiUrl = process.env.REACT_APP_API_URL || 'https://dummy-for-testing.com';

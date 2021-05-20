@@ -1,15 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Roles } from '../../types';
 import { Station } from './Station';
-import { Loading } from '../../sharedComponents/Loading';
+import { Loading } from '../../components/Loading';
 import Plus from '../../assets/Plus.svg';
-import useModal from '../../sharedComponents/Modal/useModal';
-import { NewStation } from '../../sharedComponents/NewStation/NewStation';
+import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
-import { useStations } from '../../api/hooks/useStations';
-import { useKeycloak } from '@react-keycloak/web';
-import { FloatingActionButton } from '../../sharedComponents/FloatingActionButton';
+import { useStations } from '../../services/hooks/useStations';
+import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
+import { DeleteStation } from './DeleteStation';
+import Minus from '../../assets/Minus.svg';
+import { NewStation } from './NewStation';
+import { useAuth } from '../../auth/useAuth';
 
 const Wrapper = styled.div`
     display: flex;
@@ -22,10 +23,15 @@ const Wrapper = styled.div`
     background-color: ${(props) => props.theme.colors.White};
 `;
 
-const AddStationButtonContainer = styled.div`
+const StationAdminButtons = styled.div`
     position: absolute;
     top: 40px;
     right: 50px;
+    display: flex;
+    flex-direction: column;
+    & > *:not(:last-child) {
+        margin-bottom: 25px;
+    }
 `;
 
 const Content = styled.div`
@@ -39,17 +45,19 @@ const Content = styled.div`
 `;
 
 export const Stations: React.FC = () => {
-    const { keycloak } = useKeycloak();
-    const userIsAdmin = keycloak.hasRealmRole(Roles.Oslo);
-
+    const { user } = useAuth();
     const modal = useModal();
 
     const { data: stations, isLoading } = useStations();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
-    const handleNewStationClick = () => {
+    const showNewStationModal = () => {
         modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
+    };
+
+    const showDeleteStationModal = () => {
+        modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
     if (isLoading) {
@@ -62,15 +70,21 @@ export const Stations: React.FC = () => {
                 <title>Stasjonene</title>
             </Helmet>
             <Wrapper>
-                {userIsAdmin && (
-                    <AddStationButtonContainer>
+                {user.isAdmin && (
+                    <StationAdminButtons>
                         <FloatingActionButton
                             label="Ny stasjon"
                             icon={<Plus />}
-                            onClick={handleNewStationClick}
+                            onClick={showNewStationModal}
                             variant="positive"
                         />
-                    </AddStationButtonContainer>
+                        <FloatingActionButton
+                            label="Slett stasjon"
+                            icon={<Minus />}
+                            onClick={showDeleteStationModal}
+                            variant="negative"
+                        />
+                    </StationAdminButtons>
                 )}
                 <Content>
                     {stations?.map((station) => (

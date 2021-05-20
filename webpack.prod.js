@@ -6,10 +6,9 @@ const common = require('./webpack.common')
 
 module.exports = merge(common, {
     mode: 'production',
-    devtool: 'source-map',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[fullhash].bundle.js',
+        filename: '[name].[contenthash].bundle.js',
     },
     module: {
         rules: [

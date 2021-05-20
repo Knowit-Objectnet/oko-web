@@ -1,68 +1,48 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import useSWR from 'swr';
 import { RequestApprovalButton } from './RequestApprovalButton';
-import { ApiRequest, apiUrl, Roles } from '../../../types';
-import { fetcher } from '../../../utils/fetcher';
-import { ApiPickUp } from '../../../api/PickUpService';
-import { useKeycloak } from '@react-keycloak/web';
+import { ApiPickUp } from '../../../services/PickUpService';
+import { ApiRequest } from '../../../services/RequestService';
+import { useRequests } from '../../../services/hooks/useRequests';
+import { useState } from 'react';
+import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../components/StatusBadge';
+import { Spinner } from '../../../components/Spinner';
+import { useAuth } from '../../../auth/useAuth';
 
-const RequestList = styled.div`
+const RequestList = styled.ul`
     display: flex;
     flex-flow: column;
+    list-style: none;
+    padding-left: 0;
 `;
 
-const Request = styled.div`
+const Request = styled.li`
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex: 1;
+    padding: 0.5rem 1rem;
 
     &:not(:last-child) {
         border-bottom: 0.125rem solid ${(props) => props.theme.colors.White};
-    }
-
-    & > * {
-        padding: 0.5rem 1rem;
     }
 `;
 
 const Notice = styled.div`
     display: flex;
-    height: 100%;
+    align-items: center;
+    justify-content: center;
     font-style: italic;
     font-size: 0.875rem;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-`;
-
-const StatusWrapper = styled.div`
-    min-width: 10rem;
-`;
-
-const Status = styled.div`
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 0.875rem;
-    background: ${(props) => props.theme.colors.White};
-    border: 0.125rem solid;
     padding: 0.5rem 1rem;
-    min-height: 2.5rem;
-    width: 100%;
 `;
 
-const ApprovedStatus = styled(Status)`
-    border-color: ${(props) => props.theme.colors.Green};
-`;
-const RejectedStatus = styled(Status)`
-    border-color: ${(props) => props.theme.colors.Red};
-`;
-const AwaitingStatus = styled(Status)`
-    border-color: ${(props) => props.theme.colors.Blue};
+const RequestStatus = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 10rem;
+    min-height: 2.5rem;
 `;
 
 interface Props {
@@ -70,44 +50,69 @@ interface Props {
 }
 
 export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
-    const { keycloak } = useKeycloak();
+    const { user } = useAuth();
 
-    const { data: requests, isValidating } = useSWR<Array<ApiRequest>>(
-        `${apiUrl}/requests/?pickupId=${pickUp.id}`,
-        fetcher,
+    const [requestApprovalLoading, setRequestApprovalLoading] = useState(false);
+
+    const { data: requests, isLoading, isError } = useRequests({
+        pickupId: pickUp.id,
+    });
+    const requestsSortedByPartner = (requests ?? []).sort(
+        (requestA, requestB) => requestA.partner.id - requestB.partner.id,
     );
-    const sortedRequests = (requests ?? []).sort((requestA, requestB) => requestA.partner.id - requestB.partner.id);
 
     const getStatusForRequest = (request: ApiRequest) => {
-        const userCanApproveRequests = keycloak.hasRealmRole(Roles.Ambassador);
+        const userCanApproveRequests = user.isStasjon;
         const pickUpIsOpenForRequests = !pickUp.chosenPartner?.id;
         const thisRequestIsApproved = request.partner.id === pickUp.chosenPartner?.id;
 
-        if (pickUpIsOpenForRequests && userCanApproveRequests) {
-            return <RequestApprovalButton pickupId={request.pickup.id} partnerId={request.partner.id} />;
+        if (requestApprovalLoading) {
+            return <Spinner />;
+        } else if (pickUpIsOpenForRequests && userCanApproveRequests) {
+            return (
+                <RequestApprovalButton
+                    pickupId={request.pickup.id}
+                    partnerId={request.partner.id}
+                    onRequestApproval={setRequestApprovalLoading}
+                />
+            );
         } else if (pickUpIsOpenForRequests) {
-            return <AwaitingStatus>Avventer svar</AwaitingStatus>;
+            return (
+                <NeutralStatusBadge fillWidth size="small">
+                    Avventer svar
+                </NeutralStatusBadge>
+            );
         } else if (thisRequestIsApproved) {
-            return <ApprovedStatus>Godkjent</ApprovedStatus>;
+            return (
+                <PositiveStatusBadge fillWidth size="small">
+                    Godkjent
+                </PositiveStatusBadge>
+            );
         } else if (!thisRequestIsApproved) {
-            return <RejectedStatus>Avvist</RejectedStatus>;
+            return (
+                <NegativeStatusBadge fillWidth size="small">
+                    Avvist
+                </NegativeStatusBadge>
+            );
         }
     };
 
-    if (sortedRequests.length === 0 && isValidating) {
-        return <Notice>Laster inn...</Notice>;
+    if (isLoading) {
+        return <Spinner />;
     }
-
-    if (sortedRequests.length === 0) {
+    if (isError) {
+        return <Notice>Noe gikk galt, kunne ikke laste inn påmeldingsstatus.</Notice>;
+    }
+    if (requestsSortedByPartner.length === 0) {
         return <Notice>Ingen påmeldte enda</Notice>;
     }
 
     return (
         <RequestList>
-            {sortedRequests.map((request) => (
+            {requestsSortedByPartner.map((request) => (
                 <Request key={`${request.pickup.id}-${request.partner.id}`}>
                     <strong>{request.partner.name}</strong>
-                    <StatusWrapper>{getStatusForRequest(request)}</StatusWrapper>
+                    <RequestStatus>{getStatusForRequest(request)}</RequestStatus>
                 </Request>
             ))}
         </RequestList>
