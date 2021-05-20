@@ -1,7 +1,7 @@
 import { useQueryString } from 'use-route-as-state';
-import { useStations } from '../../../services/hooks/useStations';
-import { ApiStation } from '../../../services/StationService';
 import { ApiHenting } from '../../../services-currentapi/HentingService';
+import { useStasjoner } from '../../../services-currentapi/hooks/useStasjoner';
+import { ApiStasjon } from '../../../services-currentapi/StasjonService';
 
 export interface CalendarFilters {
     stasjon?: string;
@@ -9,8 +9,8 @@ export interface CalendarFilters {
 
 export type CalendarFilterFn = (henting: ApiHenting) => boolean;
 
-const isValidStasjon = (stasjonName: string, stasjoner?: Array<ApiStation>) =>
-    (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.name === stasjonName ? true : result), false);
+const isValidStasjon = (stasjonNavn: string, stasjoner?: Array<ApiStasjon>) =>
+    (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.navn === stasjonNavn ? true : result), false);
 
 export const useCalendarFilters = (): {
     filters: CalendarFilters;
@@ -24,7 +24,7 @@ export const useCalendarFilters = (): {
     const filterFns = [];
 
     // Checking for valid station filter name, and adding filter if present
-    const { data: stasjoner } = useStations();
+    const { data: stasjoner } = useStasjoner();
     if (isValidStasjon(queryFilters.stasjon, stasjoner)) {
         const stasjonFilter = (henting: ApiHenting): boolean => {
             /* TODO: reactivate when henting has stasjon reference

@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Accordion, Stack } from '@chakra-ui/react';
 import { AvtaleInfoItem } from './AvtaleInfoItem';
 import { mockAvtaler } from '../../../__mocks__/mocks-new/mockAvtale';
+import { ApiPartner } from '../../services-currentapi/PartnerService';
 import { compareDesc, parseISO } from 'date-fns';
-import { ApiPartner } from '../../services-new/AktorService';
 
 interface Props {
     partner: ApiPartner;
