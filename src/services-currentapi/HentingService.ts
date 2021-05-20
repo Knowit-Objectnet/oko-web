@@ -10,7 +10,7 @@ export interface ApiHenting {
 }
 
 export interface ApiHentingParams {
-    id?: string;
+    id?: string; //UUID
     before?: string; //LocalTimeDate Henting must be before this
     after?: string; //LocalTimeDate Henting must be after this
     merknad?: string;
@@ -19,7 +19,7 @@ export interface ApiHentingParams {
 }
 
 export interface ApiHentingPatch {
-    id: string;
+    id: string; //UUID
     startTidspunkt?: string; //LocalTimeDate
     sluttTidspunkt?: string; //LocalTimeDate
     merknad?: string;
