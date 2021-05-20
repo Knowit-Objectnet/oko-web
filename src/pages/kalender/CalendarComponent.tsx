@@ -33,7 +33,7 @@ export const CalendarComponent: React.FC = () => {
     return (
         <Box
             sx={{
-                '.rbc-event': {
+                'div.rbc-event': {
                     backgroundColor: 'surface',
                     color: 'onSurface',
                     borderRadius: '4px',
