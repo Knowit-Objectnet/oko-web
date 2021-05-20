@@ -33,7 +33,7 @@ export interface ApiPartnerParams {
 const partnerEndpoint = '/partnere';
 export const partnerDefaultQueryKey = 'getPartnere';
 
-export const getPartnere = (params: ApiPartnerParams): Promise<Array<ApiPartner>> =>
+export const getPartnere = (params: ApiPartnerParams = {}): Promise<Array<ApiPartner>> =>
     httpClient()
         .get<Array<ApiPartner>>(partnerEndpoint, { params })
         .then((response) => response.data);
