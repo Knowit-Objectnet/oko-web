@@ -16,7 +16,7 @@ export const AvtaleInfoList: React.FC<Props> = ({ partner }) => {
 
     return (
         <Accordion allowToggle allowMultiple>
-            <Stack direction="column" spacing={3} alignItems="stretch">
+            <Stack direction="column" spacing="3" alignItems="stretch">
                 {avtaler.map((avtale) => (
                     <AvtaleInfoItem key={avtale.id} avtale={avtale} />
                 ))}

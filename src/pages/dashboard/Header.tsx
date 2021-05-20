@@ -17,8 +17,8 @@ export const Header: React.FC = () => {
             <HStack
                 as="nav"
                 backgroundColor="primary"
-                height={{ base: '64px', md: '100px' }}
-                spacing={{ base: 0, md: 10 }}
+                height={{ base: 'navbar.mobile', tablet: 'navbar.default' }}
+                spacing={{ base: '0', tablet: '10' }}
                 paddingRight="4"
                 justifyContent="space-between"
                 position="relative"
@@ -28,11 +28,11 @@ export const Header: React.FC = () => {
                 </RouterLink>
                 <Box
                     flex="1"
-                    width="100%"
-                    height={{ base: '64px', md: '100%' }}
-                    position={{ base: 'fixed', md: 'static' }}
-                    bottom={{ base: 0, md: 'unset' }}
-                    left={{ base: 0, md: 'unset' }}
+                    width="full"
+                    height={{ base: '16', tablet: 'full' }}
+                    position={{ base: 'fixed', tablet: 'static' }}
+                    bottom={{ base: '0', tablet: 'unset' }}
+                    left={{ base: '0', tablet: 'unset' }}
                     backgroundColor="inherit"
                     // TODO: Z-index because of react-big-calendar default styles, try to remove after customizing stules for calendar
                     zIndex="docked"
@@ -41,20 +41,21 @@ export const Header: React.FC = () => {
                 </Box>
                 <RouterLink
                     to="/loggut"
-                    padding={{ base: '2', md: '3' }}
-                    fontSize={{ base: 'sm', md: 'lg' }}
+                    padding={{ base: '2', tablet: '3' }}
+                    fontSize={{ base: 'sm', tablet: 'lg' }}
                     fontWeight="normal"
                     minHeight="3"
-                    border="2px solid White"
-                    color="White"
+                    border="2px solid"
+                    borderColor="onPrimary"
+                    color="onPrimary"
                     display="block"
                     verticalAlign="center"
                 >
                     <Icon
                         as={Profile}
-                        marginRight={{ base: '2', md: '3' }}
-                        fill="White"
-                        height={{ base: '20px', md: '32px' }}
+                        marginRight={{ base: '2', tablet: '3' }}
+                        fill="onPrimary"
+                        height={{ base: '5', tablet: '8' }}
                         width="auto"
                         aria-hidden
                     />

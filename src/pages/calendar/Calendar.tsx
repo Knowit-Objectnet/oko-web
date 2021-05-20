@@ -13,12 +13,12 @@ export const Calendar: React.FC = () => (
             {/*TODO: create title from calendar state*/}
             <title>Kalender</title>
         </Helmet>
-        <HStack as="main" spacing={5} padding={5} alignItems="flex-start" width="100%" height="100%">
-            <VStack alignItems="flex-start" spacing={5} flex="0">
+        <HStack as="main" spacing="5" padding="5" alignItems="flex-start" width="full" height="full">
+            <VStack alignItems="flex-start" spacing="5" flex="0">
                 <CalendarDatePicker />
                 <CalendarStationFilter />
             </VStack>
-            <Box flex="1" minHeight="100%" height="100%">
+            <Box flex="1" minHeight="full" height="full">
                 <CalendarComponent />
             </Box>
         </HStack>

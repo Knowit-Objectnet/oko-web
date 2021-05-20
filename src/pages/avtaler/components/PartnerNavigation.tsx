@@ -15,29 +15,29 @@ export const PartnerNavigation: React.FC = () => {
             as="nav"
             alignItems="flex-start"
             backgroundColor="surface"
-            height="100%"
-            padding={5}
+            height="full"
+            padding="5"
             minWidth="300px"
         >
             <Heading
                 as="h2"
-                width="100%"
+                width="full"
                 fontSize="xl"
-                paddingBottom={3}
-                marginBottom={4}
+                paddingBottom="3"
+                marginBottom="4"
                 borderBottom="1px solid"
                 borderBottomColor="DarkBeige"
             >
                 Partnere
             </Heading>
-            <List spacing={2}>
+            <List spacing="2">
                 {(partnere ?? []).map((partner) => (
                     <ListItem key={partner.id}>
                         <PartnerNavItem partner={partner} />
                     </ListItem>
                 ))}
             </List>
-            <AddPartnerButton marginTop={10} />
+            <AddPartnerButton marginTop="10" />
         </Flex>
     );
 };

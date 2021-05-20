@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Stack } from '@chakra-ui/react';
 import { Route, useRouteMatch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { PartnerInfo } from './components/PartnerInfo';
 import { PartnerNavigation } from './components/PartnerNavigation';
+import { Stack } from '@chakra-ui/react';
 
 export const Avtaler: React.FC = () => {
     const { url } = useRouteMatch();
@@ -15,11 +15,12 @@ export const Avtaler: React.FC = () => {
             </Helmet>
             <Stack
                 direction="row"
-                flex={1}
+                flex="1"
                 alignItems="stretch"
-                padding={5}
-                spacing={10}
-                minHeight="100%"
+                padding="5"
+                spacing="10"
+                minHeight="full"
+                height="full"
                 marginX="auto"
             >
                 <PartnerNavigation />

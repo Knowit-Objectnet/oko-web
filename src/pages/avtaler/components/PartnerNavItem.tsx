@@ -27,7 +27,7 @@ export const PartnerNavItem: React.FC<Props> = ({ partner }) => {
                 },
             }}
             display="block"
-            paddingLeft={5}
+            paddingLeft="5"
             position="relative"
         >
             {partner.navn}

@@ -15,7 +15,7 @@ const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
         alignItems="flex-end"
         userSelect="none"
         fontWeight="normal"
-        fontSize={{ base: '1rem', md: '20px' }}
+        fontSize={{ base: 'md', tablet: 'xl' }}
         _activeLink={{
             color: 'secondary',
             borderBottomColor: 'secondary',
@@ -36,14 +36,14 @@ const Center: React.FC = (props) => (
         justifyContent="center"
         height="100%"
         flex={1}
-        flexDirection={{ base: 'column', md: 'row' }}
+        flexDirection={{ base: 'column', tablet: 'row' }}
         {...props}
     />
 );
 
 const iconStyle = {
-    height: { base: 'auto', md: '1em' },
-    width: { base: 'auto', md: '2rem' },
+    height: { base: 'auto', tablet: '4' },
+    width: { base: 'auto', tablet: '8' },
     maxWidth: '100%',
     flex: '1',
     sx: {
@@ -62,7 +62,7 @@ export const NavItem: React.FC<Props> = (props) => (
     <StyledNavLink to={props.path} exact={props.exact}>
         <Center>
             <Icon {...iconStyle}>{props.icon}</Icon>
-            <Box as="span" marginLeft={{ base: 0, md: 1 }}>
+            <Box as="span" marginLeft={{ base: '0', tablet: '1' }}>
                 {props.label}
             </Box>
         </Center>

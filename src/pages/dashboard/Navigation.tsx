@@ -21,7 +21,7 @@ const getNavItemsForRole = (user: UserInfo) => {
 export const Navigation: React.FC = () => {
     const { user } = useAuth();
     return (
-        <HStack width="100%" height="100%" spacing={6} justifyContent={{ base: 'center', md: 'flex-start' }}>
+        <HStack width="full" height="full" spacing="6" justifyContent={{ base: 'center', tablet: 'flex-start' }}>
             {getNavItemsForRole(user)}
         </HStack>
     );

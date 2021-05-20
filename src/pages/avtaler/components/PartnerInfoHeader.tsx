@@ -17,7 +17,7 @@ interface Props {
 
 export const PartnerInfoHeader: React.FC<Props> = ({ partner }) => (
     <>
-        <Flex justifyContent="space-between" width="100%" marginY={4} alignItems="center">
+        <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
             <Heading as="h1" fontWeight="medium" fontSize="4xl">
                 {partner.navn}
             </Heading>
@@ -33,9 +33,9 @@ export const PartnerInfoHeader: React.FC<Props> = ({ partner }) => (
             as="section"
             aria-label={`Generell informasjon for ${partner.navn}`}
             backgroundColor="gray.100"
-            width="100%"
-            padding={5}
-            marginBottom={4}
+            width="full"
+            padding="5"
+            marginBottom="4"
             sx={{
                 'dt, dd': {
                     display: 'inline',

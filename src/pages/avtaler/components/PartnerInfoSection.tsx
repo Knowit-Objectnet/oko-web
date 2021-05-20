@@ -3,7 +3,7 @@ import { Box, Flex } from '@chakra-ui/layout';
 import { ButtonGroup, Heading } from '@chakra-ui/react';
 
 export const PartnerInfoSection: React.FC = ({ children }) => (
-    <Box as="section" marginY={5} width="100%">
+    <Box as="section" marginY="5" width="full">
         {children}
     </Box>
 );
@@ -14,8 +14,8 @@ export const PartnerInfoSectionHeader: React.FC = ({ children }) => (
         width="100%"
         borderBottom="2px solid"
         borderBottomColor="gray.200"
-        marginBottom={4}
-        paddingBottom={4}
+        marginBottom="4"
+        paddingBottom="4"
     >
         {children}
     </Flex>

@@ -15,7 +15,7 @@ export const PartnerInfo: React.FC = () => {
     const partner = mockPartnere.find((partner) => partner.id === params.partnerId);
 
     return (
-        <Flex as="main" alignItems="flex-start" direction="column" flex={1}>
+        <Flex as="main" alignItems="flex-start" direction="column" flex="1" height="full">
             {partner ? (
                 <>
                     <PartnerInfoHeader partner={partner} />

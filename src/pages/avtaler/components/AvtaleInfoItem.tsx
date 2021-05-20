@@ -40,13 +40,13 @@ interface Props {
 export const AvtaleInfoItem: React.FC<Props> = ({ avtale }) => (
     <AccordionItem id={avtale.id}>
         {({ isExpanded }) => (
-            <Flex direction="column" width="100%" border="4px solid" borderColor="gray.200" padding={5}>
-                <Flex justifyContent="space-between" width="100%">
+            <Flex direction="column" width="full" border="4px solid" borderColor="gray.200" padding="5">
+                <Flex justifyContent="space-between" width="full">
                     <Heading as="h3" flex="1">
                         <AccordionButton
                             fontSize="xl"
                             fontWeight="medium"
-                            padding={0}
+                            padding="0"
                             _hover={{ background: 'none', textDecoration: 'underline' }}
                         >
                             <Icon
@@ -54,7 +54,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale }) => (
                                 transform={`translate(-2px, -2px) rotate(${isExpanded ? '90deg' : '0deg'})`}
                                 transformOrigin="center"
                                 transition="transform 200ms ease-in-out"
-                                marginRight={1}
+                                marginRight="1"
                             />
                             {getAvtaleTitle(avtale)}
                         </AccordionButton>
@@ -74,7 +74,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale }) => (
                     {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(avtale.startDato)}</time> til{' '}
                     <time>{formatDate(avtale.sluttDato)}</time>
                 </Text>
-                <AccordionPanel padding={0}>
+                <AccordionPanel padding="0">
                     <Henteplaner henteplaner={avtale.henteplaner} />
                 </AccordionPanel>
             </Flex>
