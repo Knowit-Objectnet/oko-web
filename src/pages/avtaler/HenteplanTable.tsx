@@ -8,13 +8,13 @@ import { formatDate, formatTime } from '../../utils/formatDateTime';
 import { EditButton } from '../../components/buttons/EditButton';
 import { DeleteButton } from '../../components/buttons/DeleteButton';
 
-const frekvenser: Record<HenteplanFrekvens, string> = {
+const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
     UKENTLIG: 'Ukentlig',
     ANNENHVER: 'Annenhver uke',
 };
 
-const ukedager: Record<WorkingWeekdays, string> = {
+const UKEDAG: Record<WorkingWeekdays, string> = {
     FRIDAY: 'Fredag',
     MONDAY: 'Mandag',
     THURSDAY: 'Tirsdag',
@@ -35,12 +35,12 @@ export const HenteplanTable: React.FC<Props> = ({ henteplaner }) => {
         <Table size="sm">
             <Thead>
                 <Tr>
-                    <Th>Ukedag</Th>
-                    <Th>Tidsrom</Th>
-                    <Th>Stasjon</Th>
-                    <Th>Frekvens</Th>
-                    <Th>Periode</Th>
-                    <Th>
+                    <Th scope="col">Ukedag</Th>
+                    <Th scope="col">Tidsrom</Th>
+                    <Th scope="col">Stasjon</Th>
+                    <Th scope="col">Frekvens</Th>
+                    <Th scope="col">Periode</Th>
+                    <Th scope="col">
                         <VisuallyHidden>Handlinger</VisuallyHidden>
                     </Th>
                 </Tr>
@@ -50,14 +50,14 @@ export const HenteplanTable: React.FC<Props> = ({ henteplaner }) => {
                     const stasjon = mockStasjoner.find((stasjon) => stasjon.id === henteplan.stasjonId);
                     return (
                         <Tr key={henteplan.id}>
-                            <Td>{ukedager[henteplan.ukedag]}</Td>
+                            <Td>{UKEDAG[henteplan.ukedag]}</Td>
                             <Td>
                                 <time>{formatTime(henteplan.startTidspunkt)}</time>
                                 &ndash;
                                 <time>{formatTime(henteplan.sluttTidspunkt)}</time>
                             </Td>
                             <Td>{stasjon?.navn}</Td>
-                            <Td>{frekvenser[henteplan.frekvens]}</Td>
+                            <Td>{FREKVENS[henteplan.frekvens]}</Td>
                             <Td>
                                 <time dateTime={henteplan.startTidspunkt}>{formatDate(henteplan.startTidspunkt)}</time>
                                 {henteplan.frekvens !== 'ENKELT' ? (

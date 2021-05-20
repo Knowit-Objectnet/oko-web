@@ -51,7 +51,7 @@ export const CalendarComponent: React.FC = () => {
                     fontWeight: 'medium',
                 },
             }}
-            height="100%"
+            height="full"
         >
             <Calendar
                 localizer={bigCalendarLocalizer}

@@ -17,10 +17,10 @@ export const KontaktPersonTable: React.FC<Props> = ({ kontaktPersoner }) => {
         <Table>
             <Thead>
                 <Tr>
-                    <Th>Navn</Th>
-                    <Th>Rolle</Th>
-                    <Th>Telefonnummer</Th>
-                    <Th>
+                    <Th scope="col">Navn</Th>
+                    <Th scope="col">Rolle</Th>
+                    <Th scope="col">Telefonnummer</Th>
+                    <Th scope="col">
                         <VisuallyHidden>Handlinger</VisuallyHidden>
                     </Th>
                 </Tr>

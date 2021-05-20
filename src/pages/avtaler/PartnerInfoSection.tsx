@@ -11,7 +11,7 @@ export const PartnerInfoSection: React.FC = ({ children }) => (
 export const PartnerInfoSectionHeader: React.FC = ({ children }) => (
     <Flex
         justifyContent="space-between"
-        width="100%"
+        width="full"
         borderBottom="2px solid"
         borderBottomColor="gray.200"
         marginBottom="4"
