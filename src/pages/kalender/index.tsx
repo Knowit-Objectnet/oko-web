@@ -4,10 +4,10 @@ import { CalendarComponent } from './CalendarComponent';
 import { HStack, VStack } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/layout';
 import { CalendarDatePicker } from './CalendarDatePicker';
-import { CalendarStationFilter } from './CalendarStationFilter';
 import { CalendarProvider } from './CalendarProvider';
+import { CalendarStasjonFilter } from './CalendarStasjonFilter';
 
-const Calendar: React.FC = () => (
+const Kalender: React.FC = () => (
     <CalendarProvider>
         <Helmet>
             {/*TODO: create title from calendar state*/}
@@ -16,7 +16,7 @@ const Calendar: React.FC = () => (
         <HStack as="main" spacing="5" padding="5" alignItems="flex-start" width="full" height="full">
             <VStack alignItems="flex-start" spacing="5" flex="0">
                 <CalendarDatePicker />
-                <CalendarStationFilter />
+                <CalendarStasjonFilter />
             </VStack>
             <Box flex="1" minHeight="full" height="full">
                 <CalendarComponent />
@@ -25,4 +25,4 @@ const Calendar: React.FC = () => (
     </CalendarProvider>
 );
 
-export default Calendar;
+export default Kalender;

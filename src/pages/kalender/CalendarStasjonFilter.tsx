@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import Filter from '../../assets/Filter.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
-import { useStations } from '../../services/hooks/useStations';
 import { useCalendarState } from './CalendarProvider';
+import { useStations } from '../../services/hooks/useStations';
 
 const Wrapper = styled.div`
     display: flex;
@@ -57,7 +57,7 @@ const Input = styled.input`
     margin-right: 15px;
 `;
 
-export const CalendarStationFilter: React.FC = () => {
+export const CalendarStasjonFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
     const { data: stations } = useStations();
     const { filters, setFilters } = useCalendarState();

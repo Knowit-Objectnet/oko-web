@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../auth/Roles';
 
-const Calendar = React.lazy(() => import('../pages/calendar'));
+const Kalender = React.lazy(() => import('../pages/kalender'));
 const Avtaler = React.lazy(() => import('../pages/avtaler'));
 
 const Home: React.FC = () => {
@@ -14,7 +14,7 @@ const Home: React.FC = () => {
 export const PageRouter: React.FC = () => (
     <Switch>
         <Route path="/kalender/:view?">
-            <Calendar />
+            <Kalender />
         </Route>
         <ProtectedRoute path="/avtaler" requiredRoles={[Roles.Admin]}>
             <Avtaler />
