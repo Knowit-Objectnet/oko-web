@@ -2,8 +2,9 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../auth/Roles';
-import { Avtaler } from '../pages/avtaler/Avtaler';
-import { Calendar } from '../pages/calendar/Calendar';
+
+const Calendar = React.lazy(() => import('../pages/calendar'));
+const Avtaler = React.lazy(() => import('../pages/avtaler'));
 
 const Home: React.FC = () => {
     // const { user } = useAuth();

@@ -5,7 +5,7 @@ import { PartnerInfo } from './PartnerInfo';
 import { PartnerNavigation } from './PartnerNavigation';
 import { Stack } from '@chakra-ui/react';
 
-export const Avtaler: React.FC = () => {
+const Avtaler: React.FC = () => {
     const { url } = useRouteMatch();
 
     return (
@@ -32,3 +32,5 @@ export const Avtaler: React.FC = () => {
         </>
     );
 };
+
+export default Avtaler;

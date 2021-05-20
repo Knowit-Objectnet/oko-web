@@ -7,7 +7,7 @@ import { CalendarDatePicker } from './CalendarDatePicker';
 import { CalendarStationFilter } from './CalendarStationFilter';
 import { CalendarProvider } from './CalendarProvider';
 
-export const Calendar: React.FC = () => (
+const Calendar: React.FC = () => (
     <CalendarProvider>
         <Helmet>
             {/*TODO: create title from calendar state*/}
@@ -24,3 +24,5 @@ export const Calendar: React.FC = () => (
         </HStack>
     </CalendarProvider>
 );
+
+export default Calendar;
