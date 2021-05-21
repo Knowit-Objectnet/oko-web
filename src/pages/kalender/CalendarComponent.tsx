@@ -52,6 +52,7 @@ export const CalendarComponent: React.FC = () => {
                 },
             }}
             height="full"
+            width="full"
         >
             <Calendar
                 localizer={bigCalendarLocalizer}
