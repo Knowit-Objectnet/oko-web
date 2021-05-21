@@ -13,16 +13,7 @@ const Avtaler: React.FC = () => {
             <Helmet>
                 <title>Avtaler</title>
             </Helmet>
-            <Stack
-                direction="row"
-                flex="1"
-                alignItems="stretch"
-                padding="5"
-                spacing="10"
-                minHeight="full"
-                height="full"
-                marginX="auto"
-            >
+            <Stack direction="row" flex="1" alignItems="stretch" padding="5" spacing="10" marginX="auto">
                 <PartnerNavigation />
                 <Route path={`${url}/:partnerId`}>
                     {/* TODO: handle no partner selected */}

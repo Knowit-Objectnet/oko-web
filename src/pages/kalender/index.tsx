@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import { CalendarComponent } from './CalendarComponent';
-import { HStack, VStack } from '@chakra-ui/react';
+import { Stack, VStack } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/layout';
 import { CalendarDatePicker } from './CalendarDatePicker';
 import { CalendarProvider } from './CalendarProvider';
@@ -13,15 +13,13 @@ const Kalender: React.FC = () => (
             {/*TODO: create title from calendar state*/}
             <title>Kalender</title>
         </Helmet>
-        <HStack as="main" spacing="5" padding="5" alignItems="flex-start" width="full" height="full">
-            <VStack alignItems="flex-start" spacing="5" flex="0">
+        <Stack direction="row" as="main" spacing="5" padding="5" alignItems="flex-start" minWidth="full">
+            <VStack alignItems="flex-start" spacing="5">
                 <CalendarDatePicker />
                 <CalendarStasjonFilter />
             </VStack>
-            <Box flex="1" minHeight="full" height="full">
-                <CalendarComponent />
-            </Box>
-        </HStack>
+            <CalendarComponent />
+        </Stack>
     </CalendarProvider>
 );
 
