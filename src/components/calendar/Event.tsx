@@ -31,7 +31,7 @@ const Wrapper = styled.div<WrapperProps>`
     border: ${(props) =>
         props.selected && props.userIsOwner
             ? `5px solid ${props.theme.colors.Blue}`
-            : `1px solid ${props.theme.colors.DarkBegie}`};
+            : `1px solid ${props.theme.colors.DarkBeige}`};
     color: ${(props) => props.theme.colors.Black};
     display: flex;
     align-items: center;

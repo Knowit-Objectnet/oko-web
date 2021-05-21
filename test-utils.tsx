@@ -2,9 +2,9 @@ import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
-import { oldTheme, theme } from './src/theme';
+import { oldTheme } from './src/theme/theme';
+import { theme } from './src/theme';
 import ModalProvider from './src/components/modal/Provider';
-import { GlobalStyle } from './src/global-styles';
 import AlertTemplate from 'react-alert-template-basic';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
@@ -38,10 +38,7 @@ const GlobalProviders: React.FC = ({ children }) => {
             <ThemeProvider theme={oldTheme}>
                 <AlertProvider template={AlertTemplate} {...alertOptions}>
                     <QueryClientProvider client={queryClient}>
-                        <ModalProvider>
-                            {children}
-                            <GlobalStyle />
-                        </ModalProvider>
+                        <ModalProvider>{children}</ModalProvider>
                     </QueryClientProvider>
                 </AlertProvider>
             </ThemeProvider>
