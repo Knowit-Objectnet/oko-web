@@ -8,6 +8,7 @@ import { typography } from './foundations/typography';
 
 // Styling of components (see https://chakra-ui.com/docs/theming/component-style)
 import { Button } from './components/button';
+import { Modal } from './components/modal';
 
 const overrides = {
     colors,
@@ -19,6 +20,7 @@ const overrides = {
     ...typography,
     components: {
         Button,
+        Modal,
     },
 };
 
