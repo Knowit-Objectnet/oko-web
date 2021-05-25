@@ -10,8 +10,7 @@ import {
     ModalProps,
 } from '@chakra-ui/react';
 import Cross from '../../assets/Cross.svg';
-
-export const AddPartnerForm: React.FC<Pick<ModalProps, 'onClose'>> = ({ onClose }) => <>Hei verden</>;
+import { AddPartnerForm } from './AddPartnerForm';
 
 export const AddPartnerModal: React.FC<Omit<ModalProps, 'children'>> = ({ isOpen, onClose }) => {
     return (
@@ -23,7 +22,7 @@ export const AddPartnerModal: React.FC<Omit<ModalProps, 'children'>> = ({ isOpen
                     <Icon as={Cross} height="5" width="auto" />
                 </ModalCloseButton>
                 <ModalBody>
-                    <AddPartnerForm onClose={onClose} />
+                    <AddPartnerForm afterSubmit={onClose} />
                 </ModalBody>
             </ModalContent>
         </Modal>
