@@ -15,6 +15,7 @@ export enum Colors {
     White = '#FFFFFF',
 }
 
+// Default values: https://github.com/chakra-ui/chakra-ui/blob/main/packages/theme/src/foundations/colors.ts
 export const colors = {
     primary: Colors.DarkBlue,
     secondary: Colors.Blue,

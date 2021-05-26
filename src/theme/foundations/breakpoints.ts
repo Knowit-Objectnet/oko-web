@@ -1,5 +1,6 @@
 import { createBreakpoints } from '@chakra-ui/theme-tools';
 
+// Default values: https://github.com/chakra-ui/chakra-ui/blob/main/packages/theme/src/foundations/breakpoints.ts
 export const breakpoints = createBreakpoints({
     // Our custom breakpoints
     base: '0px', // mobile

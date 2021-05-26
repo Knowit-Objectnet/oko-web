@@ -1,3 +1,4 @@
+// Default values: https://github.com/chakra-ui/chakra-ui/blob/main/packages/theme/src/components/button.ts
 export const Button = {
     baseStyle: {
         fontWeight: 'normal',
