@@ -21,7 +21,7 @@ export const TextInput: React.FC<Props> = ({ name, label, helperText }) => {
             {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
             <Input type="text" {...register(name)} />
             <FormErrorMessage>
-                <ErrorMessage name={name} errors={errors} />
+                <ErrorMessage name={name} />
             </FormErrorMessage>
         </FormControl>
     );
