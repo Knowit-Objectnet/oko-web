@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/layout';
-import { AccordionButton, AccordionItem, AccordionPanel, Heading, Icon, Text } from '@chakra-ui/react';
+import { AccordionButton, AccordionItem, AccordionPanel, Fade, Heading, Icon, Text } from '@chakra-ui/react';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import * as React from 'react';
 import { ApiAvtale } from '../../services-new/AvtaleService';
@@ -59,16 +59,15 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale }) => (
                             {getAvtaleTitle(avtale)}
                         </AccordionButton>
                     </Heading>
-                    <EditButton
-                        label="Rediger avtale"
-                        onClick={() => {
-                            console.log(`Rediger avtale med id ${avtale.id}`);
-                        }}
-                        size="sm"
-                        visibility={isExpanded ? 'visible' : 'hidden'}
-                        opacity={isExpanded ? '1' : '0'}
-                        transition="opacity 200ms ease-out"
-                    />
+                    <Fade in={isExpanded} unmountOnExit>
+                        <EditButton
+                            label="Rediger avtale"
+                            onClick={() => {
+                                console.log(`Rediger avtale med id ${avtale.id}`);
+                            }}
+                            size="sm"
+                        />
+                    </Fade>
                 </Flex>
                 <Text>
                     {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(avtale.startDato)}</time> til{' '}
