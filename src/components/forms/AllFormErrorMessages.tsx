@@ -7,7 +7,7 @@ import { Box } from '@chakra-ui/layout';
 export const AllFormErrorMessages: React.FC = () => {
     const { errors, isValid, isSubmitted } = useFormState();
 
-    return !isValid && isSubmitted ? (
+    return isSubmitted && !isValid ? (
         <HStack
             as="section"
             padding="4"
@@ -22,8 +22,9 @@ export const AllFormErrorMessages: React.FC = () => {
                     Vennligst rett opp følgende feil i skjemaet:
                 </Heading>
                 <UnorderedList>
-                    {Object.entries(errors).map(([fieldName, error]) => (
-                        <ListItem key={fieldName}>{error?.message}</ListItem>
+                    {Object.values(errors).map((error, index) => (
+                        // We use the index as key here on purpose, in order to get the correct order for the errors
+                        <ListItem key={index}>{error?.message}</ListItem>
                     ))}
                 </UnorderedList>
             </Box>

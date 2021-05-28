@@ -4,5 +4,5 @@ import { IconButton as ChakraIconButton } from '@chakra-ui/react';
 
 /** Component that overrides the border-radius of Chakra UIs IconButton (cannot be overridden in theme) **/
 export const IconButton: React.FC<IconButtonProps> = (props) => {
-    return <ChakraIconButton borderRadius="0" {...props} />;
+    return <ChakraIconButton borderRadius={props.isRound ? undefined : 0} {...props} />;
 };

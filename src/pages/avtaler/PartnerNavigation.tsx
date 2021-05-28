@@ -28,7 +28,7 @@ export const PartnerNavigation: React.FC = () => {
                 borderBottom="1px solid"
                 borderBottomColor="DarkBeige"
             >
-                Partnere
+                Samarbeidspartnere
             </Heading>
             <List spacing="2">
                 {(partnere ?? []).map((partner) => (

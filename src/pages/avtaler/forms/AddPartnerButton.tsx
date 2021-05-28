@@ -9,7 +9,7 @@ export const AddPartnerButton: React.FC<ButtonProps> = (props) => {
     return (
         <>
             <Button leftIcon={<Icon as={Plus} />} onClick={onOpen} {...props}>
-                Legg til partner
+                Legg til samarbeidspartner
             </Button>
             <AddPartnerModal isOpen={isOpen} onClose={onClose} />
         </>

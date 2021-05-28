@@ -10,8 +10,9 @@ import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMess
 import { ApiPartnerPost } from '../../../services-new/AktorService';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
+import { upperFirst } from 'lodash';
 
-const storrelseOptions: Array<SelectOption<PartnerStorrelse, string>> = [
+const storrelseOptions: Array<SelectOption<PartnerStorrelse>> = [
     { value: 'LITEN', label: 'Liten' },
     { value: 'MIDDELS', label: 'Middels' },
     { value: 'STOR', label: 'Stor' },
@@ -19,8 +20,9 @@ const storrelseOptions: Array<SelectOption<PartnerStorrelse, string>> = [
 
 yup.setLocale({
     string: {
-        min: '${label} må bestå av minst ${min} tegn',
-        max: '${label} må være ikke være lenger enn ${max} tegn',
+        min: ({ label, min }: { label: string; min: number }) => `${upperFirst(label)} må bestå av minst ${min} tegn`,
+        max: ({ label, max }: { label: string; max: number }) =>
+            `${upperFirst(label)} må være ikke være lenger enn ${max} tegn`,
     },
     mixed: {
         required: 'Du må oppgi ${label}',
@@ -29,10 +31,10 @@ yup.setLocale({
 });
 
 const validationSchema = yup.object().shape({
-    navn: yup.string().label('navn for samarbeidspartneren').required().min(2),
+    navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
     storrelse: yup
         .mixed<PartnerStorrelse>()
-        .label('størrelse på partneren')
+        .label('størrelse på samarbeidspartneren')
         .required()
         .oneOf(storrelseOptions.map(({ value }) => value)),
     ideell: yup.boolean().label('Om partneren er en ideell organisasjon').required(),
@@ -60,7 +62,7 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handlePartnerSubmission}>
-                <Stack direction="column" spacing="7">
+                <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
                     <TextInput name="navn" label="Navn på organisasjon" required />
                     <Select
