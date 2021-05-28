@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Heading, List, ListItem } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
-import { AddPartnerButton } from './AddPartnerButton';
+import { AddPartnerButton } from './forms/AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
 import { mockPartnere } from '../../../__mocks__/mocks-new/mockAktor';
 
@@ -28,7 +28,7 @@ export const PartnerNavigation: React.FC = () => {
                 borderBottom="1px solid"
                 borderBottomColor="DarkBeige"
             >
-                Partnere
+                Samarbeidspartnere
             </Heading>
             <List spacing="2">
                 {(partnere ?? []).map((partner) => (
@@ -37,7 +37,7 @@ export const PartnerNavigation: React.FC = () => {
                     </ListItem>
                 ))}
             </List>
-            <AddPartnerButton marginTop="10" />
+            <AddPartnerButton marginTop="10" width="full" variant="outline" />
         </Flex>
     );
 };
