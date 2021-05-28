@@ -5,13 +5,13 @@ import {
     FormErrorIcon,
     FormErrorMessage,
     FormHelperText,
-    FormLabel,
     Input,
     InputGroup,
     InputRightElement,
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import Warning from '../../assets/Warning.svg';
+import { FormLabel } from './FormLabel';
 
 interface Props {
     name: string;
@@ -30,10 +30,7 @@ export const TextInput: React.FC<Props> = ({ name, label, required, helperText }
 
     return (
         <FormControl id={name} isInvalid={isInvalid}>
-            <FormLabel>
-                {label}
-                {required ? '*' : null}
-            </FormLabel>
+            <FormLabel label={label} required={required} />
             {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
             <InputGroup>
                 <Input

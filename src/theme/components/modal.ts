@@ -14,5 +14,9 @@ export const Modal = {
             fontWeight: 'normal',
             paddingTop: { base: '7', tablet: '5' },
         },
+        closeButton: {
+            top: '4',
+            insetEnd: '4',
+        },
     },
 };
