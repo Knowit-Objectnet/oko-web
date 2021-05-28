@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { DatePicker } from '../forms/DatePicker';
+import { DatePickerOld } from '../forms/DatePickerOld';
 import { ErrorMessage } from '../forms/ErrorMessage';
 
 const Wrapper = styled.div`
@@ -27,9 +27,9 @@ export const EventDateRange: React.FC = () => {
     return (
         <Wrapper>
             <Range>
-                <DatePicker name="dateRange.start" />
+                <DatePickerOld name="dateRange.start" />
                 <Span>til</Span>
-                <DatePicker name="dateRange.end" />
+                <DatePickerOld name="dateRange.end" />
             </Range>
             <ErrorMessage name="dateRange.start" />
             <ErrorMessage name="dateRange.end" />

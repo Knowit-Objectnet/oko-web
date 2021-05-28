@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { DatePicker } from '../forms/DatePicker';
+import { DatePickerOld } from '../forms/DatePickerOld';
 import { EventDaysSelect } from './EventDaysSelect';
 import { EventTimeRange } from './EventTimeRange';
 import { EventDateRange } from './EventDateRange';
@@ -76,7 +76,7 @@ export const EventDateTimePicker: React.FC<EventOptionDateRangeProps> = (props) 
             </TimePickerWrapper>
             {props.recurring === 'None' ? (
                 <DatePickerWrapper>
-                    <DatePicker name="nonRecurringDate" />
+                    <DatePickerOld name="nonRecurringDate" />
                     <ErrorMessage name="nonRecurringDate" />
                 </DatePickerWrapper>
             ) : (
