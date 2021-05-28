@@ -13,13 +13,13 @@ import {
 import Cross from '../../../assets/Cross.svg';
 import { PartnerForm } from './PartnerForm';
 
-export const AddPartnerModal: React.FC<Omit<ModalProps, 'children'>> = ({ isOpen, onClose }) => {
+export const PartnerFormModal: React.FC<Omit<ModalProps, 'children'>> = ({ isOpen, onClose }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="3xl">
             <ModalOverlay />
-            <ModalContent padding="5" paddingBottom="10">
+            <ModalContent>
                 <ModalHeader>
-                    <Heading as="h1" fontSize="4xl" fontWeight="normal">
+                    <Heading as="h1" fontWeight="inherit" fontSize="inherit">
                         Legg til ny samarbeidspartner
                     </Heading>
                 </ModalHeader>
