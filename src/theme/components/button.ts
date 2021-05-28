@@ -6,30 +6,55 @@ export const Button = {
     },
     variants: {
         outline: {
-            bg: 'surface',
+            backgroundColor: 'surface',
             color: 'onSurface',
             borderColor: 'onSurface',
-            fill: 'onSurface',
+            '& svg': { fill: 'onSurface' },
             // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)
             //  here to avoid duplication - as soon as [this bug is fixed](https://github.com/chakra-ui/chakra-ui/issues/3883)
             _focus: {
-                bg: 'onSurface',
+                backgroundColor: 'onSurface',
                 color: 'surface',
-                fill: 'surface',
+                '& svg': { fill: 'surface' },
                 textDecoration: 'underline',
             },
             _active: {
-                bg: 'onSurface',
+                backgroundColor: 'onSurface',
                 color: 'surface',
-                fill: 'surface',
+                '& svg': { fill: 'surface' },
                 textDecoration: 'underline',
             },
             _hover: {
-                bg: 'onSurface',
+                backgroundColor: 'onSurface',
                 color: 'surface',
-                fill: 'surface',
+                '& svg': { fill: 'surface' },
                 textDecoration: 'underline',
             },
         },
+        primary: {
+            backgroundColor: 'primary',
+            color: 'onPrimary',
+            border: 'none',
+            '& svg': { fill: 'onPrimary' },
+            // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)
+            //  here to avoid duplication - as soon as [this bug is fixed](https://github.com/chakra-ui/chakra-ui/issues/3883)
+            _focus: {
+                backgroundColor: 'primaryHover',
+                textDecoration: 'underline',
+                boxShadow: 'none',
+            },
+            _hover: {
+                backgroundColor: 'primaryHover',
+                textDecoration: 'underline',
+            },
+            _active: {
+                backgroundColor: 'primaryHover',
+                textDecoration: 'none',
+            },
+        },
+    },
+    defaultProps: {
+        variant: 'solid',
+        size: 'md',
     },
 };

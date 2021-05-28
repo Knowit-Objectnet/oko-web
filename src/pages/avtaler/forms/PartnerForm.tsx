@@ -7,9 +7,9 @@ import { PartnerStorrelse } from '../../../types';
 import { Button, Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
-import { CheckboxWithLabel } from '../../../components/forms/Checkbox';
 import { ApiPartnerPost } from '../../../services-new/AktorService';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
+import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 
 const storrelseOptions: Array<SelectOption<PartnerStorrelse, string>> = [
     { value: 'LITEN', label: 'Liten' },
@@ -62,7 +62,7 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
             <form onSubmit={handlePartnerSubmission}>
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
-                    <TextInput name="navn" label="Navn" required />
+                    <TextInput name="navn" label="Navn på organisasjon" required />
                     <Select
                         name="storrelse"
                         label="Størrelse"
@@ -70,7 +70,7 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
                         placeholder="Velg en størrelse"
                         required
                     />
-                    <CheckboxWithLabel
+                    <CheckboxGroup
                         label="Organisasjonstype"
                         options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
                         required
@@ -79,9 +79,11 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
                     <Button
                         type="submit"
                         width="full"
+                        variant="primary"
+                        size="lg"
                         // TODO: isLoading-state from submission here
                     >
-                        Registrer ny partner
+                        Registrer ny samarbeidspartner
                     </Button>
                 </Stack>
             </form>

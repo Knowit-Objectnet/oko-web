@@ -1,9 +1,10 @@
 import React from 'react';
 import { ToolbarProps, View } from 'react-big-calendar';
-import { Button, ButtonGroup, Heading, Icon, IconButton, Stack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Heading, Icon, Stack } from '@chakra-ui/react';
 import ArrowLeft from '../../assets/ArrowLeft.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import { ViewProperties, VIEWS } from './hooks/useCalendarView';
+import { IconButton } from '../../components/buttons/IconButton';
 
 interface Props {
     view: ViewProperties;
