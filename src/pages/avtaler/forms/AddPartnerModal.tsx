@@ -15,7 +15,7 @@ import { PartnerForm } from './PartnerForm';
 
 export const AddPartnerModal: React.FC<Omit<ModalProps, 'children'>> = ({ isOpen, onClose }) => {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <Modal isOpen={isOpen} onClose={onClose} size="3xl">
             <ModalOverlay />
             <ModalContent padding="5" paddingBottom="10">
                 <ModalHeader>
@@ -23,12 +23,12 @@ export const AddPartnerModal: React.FC<Omit<ModalProps, 'children'>> = ({ isOpen
                         Legg til ny samarbeidspartner
                     </Heading>
                 </ModalHeader>
-                <ModalCloseButton aria-label="Lukk dialogboks" top="5" right="5">
-                    <Icon as={Cross} height="6" width="auto" />
-                </ModalCloseButton>
                 <ModalBody>
                     <PartnerForm afterSubmit={onClose} />
                 </ModalBody>
+                <ModalCloseButton aria-label="Lukk dialogboks" top="5" right="5">
+                    <Icon as={Cross} height="6" width="auto" />
+                </ModalCloseButton>
             </ModalContent>
         </Modal>
     );
