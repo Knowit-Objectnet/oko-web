@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Heading, List, ListItem } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
-import { AddPartnerButton } from './AddPartnerButton';
+import { AddPartnerButton } from './forms/AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
 import { mockPartnere } from '../../../__mocks__/mocks-new/mockAktor';
 

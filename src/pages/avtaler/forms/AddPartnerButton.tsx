@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, ButtonProps, Icon, useDisclosure } from '@chakra-ui/react';
-import Plus from '../../assets/Plus.svg';
+import Plus from '../../../assets/Plus.svg';
 import { AddPartnerModal } from './AddPartnerModal';
 
 export const AddPartnerButton: React.FC<ButtonProps> = (props) => {
