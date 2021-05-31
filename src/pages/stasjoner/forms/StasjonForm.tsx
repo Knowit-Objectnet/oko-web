@@ -3,40 +3,37 @@ import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextInput } from '../../../components/forms/TextInput';
-import { PartnerStorrelse } from '../../../types';
+import { StasjonType } from '../../../types';
 import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
-import { ApiPartnerPost } from '../../../services-new/AktorService';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
+import { ApiStasjonPost } from '../../../services-currentapi/AktorService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
 
-const storrelseOptions: Array<SelectOption<PartnerStorrelse>> = [
-    { value: 'LITEN', label: 'Liten' },
-    { value: 'MIDDELS', label: 'Middels' },
-    { value: 'STOR', label: 'Stor' },
+const stasjonTypeOptions: Array<SelectOption<StasjonType>> = [
+    { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },
+    { value: 'MINI', label: 'Minigjenbruksstasjon' },
 ];
 
 const validationSchema = yup.object().shape({
-    navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
-    storrelse: yup
-        .mixed<PartnerStorrelse>()
-        .label('størrelse på samarbeidspartneren')
+    navn: yup.string().label('navn på stasjonen').trim().required().min(2),
+    type: yup
+        .mixed<StasjonType>()
+        .label('type for stasjonen')
         .required()
-        .oneOf(storrelseOptions.map(({ value }) => value)),
-    ideell: yup.boolean().label('Om partneren er en ideell organisasjon').required(),
+        .oneOf(stasjonTypeOptions.map(({ value }) => value)),
 });
 
 interface Props {
     afterSubmit?: () => void;
 }
 
-export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
-    const formMethods = useForm<ApiPartnerPost>({
+export const StasjonForm: React.FC<Props> = ({ afterSubmit }) => {
+    const formMethods = useForm<ApiStasjonPost>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
     });
@@ -46,7 +43,7 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
         // TODO: submit data to API with useMutation (react-query) (post or patch, depending on form is in edit mode)
         //  - pass loading state to button / disable form
         //  - pass errors from backend response (onError react-query callback):
-        //  formMethods.setError('navn', { message: 'Partner med dette navnet eksisterer allerede' });
+        //  formMethods.setError('navn', { message: 'Stasjon med dette navnet eksisterer allerede' });
         afterSubmit?.();
     });
 
@@ -55,22 +52,17 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
             <form onSubmit={handlePartnerSubmission}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
-                    <TextInput name="navn" label="Navn på organisasjon" required />
+                    <TextInput name="navn" label="Navn på stasjonen" required />
                     <Select
-                        name="storrelse"
-                        label="Størrelse"
-                        options={storrelseOptions}
-                        placeholder="Velg en størrelse"
-                        required
-                    />
-                    <CheckboxGroup
-                        label="Organisasjonstype"
-                        options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
+                        name="type"
+                        label="Type stasjon"
+                        options={stasjonTypeOptions}
+                        placeholder="Velg en type"
                         required
                     />
                     <AllFormErrorMessages />
                     <FormSubmitButton
-                        label="Registrer ny samarbeidspartner"
+                        label="Registrer ny stasjon"
                         // TODO: isLoading-state from submission here
                     />
                 </Stack>
