@@ -63,7 +63,7 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handlePartnerSubmission}>
-                <Stack direction="column" spacing="8">
+                <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <AllFormErrorMessages />
                     <TextInput name="navn" label="Navn på organisasjon" required />

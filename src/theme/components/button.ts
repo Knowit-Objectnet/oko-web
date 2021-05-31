@@ -5,9 +5,10 @@ export const Button = {
         borderRadius: '0',
     },
     variants: {
-        outline: {
-            backgroundColor: 'surface',
+        outlineOnSurface: {
+            backgroundColor: 'transparent',
             color: 'onSurface',
+            border: '1px solid',
             borderColor: 'onSurface',
             '& svg': { fill: 'onSurface' },
             // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)

@@ -2,14 +2,15 @@
 export const Checkbox = {
     baseStyle: {
         container: {
+            // TODO: find a way to combine this focus-within with focus-visible
+            //  (so that focus-outline is not shown on mouse click)
             _focusWithin: {
                 transition: 'outline 0.2s',
-                outline: '2px solid',
+                outline: '4px solid',
                 outlineColor: 'primaryHover',
                 outlineOffset: '-2px',
             },
-            paddingX: '1',
-            minHeight: '12',
+            padding: '1',
             width: 'full',
         },
         control: {

@@ -23,7 +23,6 @@ export const Input = {
                 _focus: {
                     outline: '4px solid',
                     outlineColor: 'primaryHover',
-                    outlineOffset: '-4px',
                 },
                 _invalid: {
                     borderColor: 'error',
