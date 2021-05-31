@@ -1,51 +1,10 @@
-import { ApiHenteplan } from '../../src/services-new/HenteplanService';
+import { ApiHenteplan } from '../../src/services-currentapi/HenteplanService';
 
 export const mockHenteplaner: Array<ApiHenteplan> = [
     {
         id: 'bfbc7caa-d4ce-4a35-9251-008e500fd995',
-        avtale: {
-            id: '0067d96e-f7bf-4228-bca0-6f41462fe92c',
-            aktor: {
-                id: 'ebde26e5-bb66-4c6c-8cd7-e11d6cbd00f2',
-                navn: 'Fretex',
-                kontaktPersoner: [
-                    {
-                        id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
-                        navn: 'Kunde Kundesen',
-                        telefon: '004712345678',
-                        rolle: 'Kjøpsanvarlig',
-                    },
-                ],
-            },
-            type: 'FAST',
-            startDato: '2021-01-01T',
-            sluttDato: '2022-01-01T',
-        },
-        stasjon: {
-            id: 'f95b4f8b-adf6-418d-94a2-3c9f84e8a4d3',
-            navn: 'Haraldrud',
-            kontaktPersoner: [
-                {
-                    id: 'cfe1c3bc-06a3-4ec9-860b-2765f786d2af',
-                    navn: 'Ola Nordmann',
-                    telefon: '004712345678',
-                    rolle: 'Formann',
-                },
-                {
-                    id: 'c9bd770c-4131-4430-a412-c1e4e53a5c9e',
-                    navn: 'Kari Jensen',
-                    telefon: '004712345679',
-                    rolle: 'Mottaksarbeider',
-                },
-                {
-                    id: 'b25b2c78-0eda-45e4-8d94-b8d5323f26c3',
-                    navn: 'Navn Navnesen',
-                    telefon: '004712345678',
-                    rolle: 'Sjåfør',
-                },
-            ],
-            type: 'GJENBRUK',
-        },
+        avtaleId: '0067d96e-f7bf-4228-bca0-6f41462fe92c',
+        stasjonId: 'f95b4f8b-adf6-418d-94a2-3c9f84e8a4d3',
         frekvens: 'UKENTLIG',
         startTidspunkt: '2021-05-17T11:30:00.00Z',
         sluttTidspunkt: '2022-06-13T13:00:00.00Z',
@@ -88,49 +47,8 @@ export const mockHenteplaner: Array<ApiHenteplan> = [
     },
     {
         id: '263967ad-4725-41b9-b37e-0fb070a88e95',
-        avtale: {
-            id: '0067d96e-f7bf-4228-bca0-6f41462fe92c',
-            aktor: {
-                id: 'ebde26e5-bb66-4c6c-8cd7-e11d6cbd00f2',
-                navn: 'Fretex',
-                kontaktPersoner: [
-                    {
-                        id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
-                        navn: 'Kunde Kundesen',
-                        telefon: '004712345678',
-                        rolle: 'Kjøpsanvarlig',
-                    },
-                ],
-            },
-            type: 'FAST',
-            startDato: '2021-01-01T',
-            sluttDato: '2022-01-01T',
-        },
-        stasjon: {
-            id: 'f95b4f8b-adf6-418d-94a2-3c9f84e8a4d3',
-            navn: 'Haraldrud',
-            kontaktPersoner: [
-                {
-                    id: 'cfe1c3bc-06a3-4ec9-860b-2765f786d2af',
-                    navn: 'Ola Nordmann',
-                    telefon: '004712345678',
-                    rolle: 'Formann',
-                },
-                {
-                    id: 'c9bd770c-4131-4430-a412-c1e4e53a5c9e',
-                    navn: 'Kari Jensen',
-                    telefon: '004712345679',
-                    rolle: 'Mottaksarbeider',
-                },
-                {
-                    id: 'b25b2c78-0eda-45e4-8d94-b8d5323f26c3',
-                    navn: 'Navn Navnesen',
-                    telefon: '004712345678',
-                    rolle: 'Sjåfør',
-                },
-            ],
-            type: 'GJENBRUK',
-        },
+        avtaleId: '0067d96e-f7bf-4228-bca0-6f41462fe92c',
+        stasjonId: 'f95b4f8b-adf6-418d-94a2-3c9f84e8a4d3',
         frekvens: 'ANNENHVER',
         startTidspunkt: '2021-05-17T11:30:00.00Z',
         sluttTidspunkt: '2022-06-13T13:00:00.00Z',
@@ -157,55 +75,8 @@ export const mockHenteplaner: Array<ApiHenteplan> = [
     },
     {
         id: '66385727-5287-4d28-80ea-2a44d2812540',
-        avtale: {
-            id: '1bb86d8c-f5cc-476e-852c-39c50fd29ce4',
-            aktor: {
-                id: '20aafe35-eb86-4fe4-a9a8-6432e2109638',
-                navn: 'Maritastiftelsen',
-                kontaktPersoner: [
-                    {
-                        id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
-                        navn: 'Kunde Kundesen',
-                        telefon: '004712345678',
-                        rolle: 'Kjøpsanvarlig',
-                    },
-                    {
-                        id: '9ac829d8-0272-4f3f-b9db-3536576ca979',
-                        navn: 'Kunde Kundesen jr',
-                        telefon: '004712345678',
-                        rolle: 'Kjøpsanvarlig',
-                    },
-                ],
-            },
-            type: 'FAST',
-            startDato: '2021-01-01T',
-            sluttDato: '2022-01-01T',
-        },
-        stasjon: {
-            id: 'f95b4f8b-adf6-418d-94a2-3c9f84e8a4d3',
-            navn: 'Haraldrud',
-            kontaktPersoner: [
-                {
-                    id: 'cfe1c3bc-06a3-4ec9-860b-2765f786d2af',
-                    navn: 'Ola Nordmann',
-                    telefon: '004712345678',
-                    rolle: 'Formann',
-                },
-                {
-                    id: 'c9bd770c-4131-4430-a412-c1e4e53a5c9e',
-                    navn: 'Kari Jensen',
-                    telefon: '004712345679',
-                    rolle: 'Mottaksarbeider',
-                },
-                {
-                    id: 'b25b2c78-0eda-45e4-8d94-b8d5323f26c3',
-                    navn: 'Navn Navnesen',
-                    telefon: '004712345678',
-                    rolle: 'Sjåfør',
-                },
-            ],
-            type: 'GJENBRUK',
-        },
+        avtaleId: '1bb86d8c-f5cc-476e-852c-39c50fd29ce4',
+        stasjonId: 'f95b4f8b-adf6-418d-94a2-3c9f84e8a4d3',
         frekvens: 'ENKELT',
         startTidspunkt: '2021-05-19T13:30:00.00Z',
         sluttTidspunkt: '2022-05-19T15:00:00.00Z',
@@ -224,43 +95,8 @@ export const mockHenteplaner: Array<ApiHenteplan> = [
     },
     {
         id: '00c57b17-1822-4265-ab2c-f604bffee3f4',
-        avtale: {
-            id: '1bb86d8c-f5cc-476e-852c-39c50fd29ce4',
-            aktor: {
-                id: '20aafe35-eb86-4fe4-a9a8-6432e2109638',
-                navn: 'Maritastiftelsen',
-                kontaktPersoner: [
-                    {
-                        id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
-                        navn: 'Kunde Kundesen',
-                        telefon: '004712345678',
-                        rolle: 'Kjøpsanvarlig',
-                    },
-                    {
-                        id: '9ac829d8-0272-4f3f-b9db-3536576ca979',
-                        navn: 'Kunde Kundesen jr',
-                        telefon: '004712345678',
-                        rolle: 'Kjøpsanvarlig',
-                    },
-                ],
-            },
-            type: 'FAST',
-            startDato: '2021-01-01T',
-            sluttDato: '2022-01-01T',
-        },
-        stasjon: {
-            id: '4a34205c-f6e3-4da6-bc00-588e560521dd',
-            navn: 'Smestad',
-            kontaktPersoner: [
-                {
-                    id: 'cfe1c3bc-06a3-4ec9-860b-2765f786d2af',
-                    navn: 'Ola Nordmann',
-                    telefon: '004712345678',
-                    rolle: 'Formann',
-                },
-            ],
-            type: 'GJENBRUK',
-        },
+        avtaleId: '1bb86d8c-f5cc-476e-852c-39c50fd29ce4',
+        stasjonId: '4a34205c-f6e3-4da6-bc00-588e560521dd',
         frekvens: 'UKENTLIG',
         startTidspunkt: '2021-05-17T10:30:00.00Z',
         sluttTidspunkt: '2022-06-13T12:00:00.00Z',
@@ -303,43 +139,8 @@ export const mockHenteplaner: Array<ApiHenteplan> = [
     },
     {
         id: 'cd6db968-14d7-4e43-9409-695865313071',
-        avtale: {
-            id: '1bb86d8c-f5cc-476e-852c-39c50fd29ce4',
-            aktor: {
-                id: '20aafe35-eb86-4fe4-a9a8-6432e2109638',
-                navn: 'Maritastiftelsen',
-                kontaktPersoner: [
-                    {
-                        id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
-                        navn: 'Kunde Kundesen',
-                        telefon: '004712345678',
-                        rolle: 'Kjøpsanvarlig',
-                    },
-                    {
-                        id: '9ac829d8-0272-4f3f-b9db-3536576ca979',
-                        navn: 'Kunde Kundesen jr',
-                        telefon: '004712345678',
-                        rolle: 'Kjøpsanvarlig',
-                    },
-                ],
-            },
-            type: 'FAST',
-            startDato: '2021-01-01T',
-            sluttDato: '2022-01-01T',
-        },
-        stasjon: {
-            id: '4a34205c-f6e3-4da6-bc00-588e560521dd',
-            navn: 'Smestad',
-            kontaktPersoner: [
-                {
-                    id: 'cfe1c3bc-06a3-4ec9-860b-2765f786d2af',
-                    navn: 'Ola Nordmann',
-                    telefon: '004712345678',
-                    rolle: 'Formann',
-                },
-            ],
-            type: 'GJENBRUK',
-        },
+        avtaleId: '1bb86d8c-f5cc-476e-852c-39c50fd29ce4',
+        stasjonId: '4a34205c-f6e3-4da6-bc00-588e560521dd',
         frekvens: 'ANNENHVER',
         startTidspunkt: '2021-05-17T12:30:00.00Z',
         sluttTidspunkt: '2022-06-13T15:00:00.00Z',
@@ -366,37 +167,8 @@ export const mockHenteplaner: Array<ApiHenteplan> = [
     },
     {
         id: 'e2d7f0b8-715a-4eed-9552-5d097e03a3d3',
-        avtale: {
-            id: '0067d96e-f7bf-4228-bca0-6f41462fe92c',
-            aktor: {
-                id: 'ebde26e5-bb66-4c6c-8cd7-e11d6cbd00f2',
-                navn: 'Fretex',
-                kontaktPersoner: [
-                    {
-                        id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
-                        navn: 'Kunde Kundesen',
-                        telefon: '004712345678',
-                        rolle: 'Kjøpsanvarlig',
-                    },
-                ],
-            },
-            type: 'FAST',
-            startDato: '2021-01-01T',
-            sluttDato: '2022-01-01T',
-        },
-        stasjon: {
-            id: '4a34205c-f6e3-4da6-bc00-588e560521dd',
-            navn: 'Smestad',
-            kontaktPersoner: [
-                {
-                    id: 'cfe1c3bc-06a3-4ec9-860b-2765f786d2af',
-                    navn: 'Ola Nordmann',
-                    telefon: '004712345678',
-                    rolle: 'Formann',
-                },
-            ],
-            type: 'GJENBRUK',
-        },
+        avtaleId: '0067d96e-f7bf-4228-bca0-6f41462fe92c',
+        stasjonId: '4a34205c-f6e3-4da6-bc00-588e560521dd',
         frekvens: 'ENKELT',
         startTidspunkt: '2021-05-20T12:30:00.00Z',
         sluttTidspunkt: '2022-05-20T15:00:00.00Z',

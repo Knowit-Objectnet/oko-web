@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { ApiPartner } from '../../services-new/AktorService';
 import { Box, Flex } from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/react';
 import { EditButton } from '../../components/buttons/EditButton';
 import { PartnerStorrelse } from '../../types';
+import { ApiPartner } from '../../services-currentapi/PartnerService';
 
 const PARTNER_STORRELSE: Record<PartnerStorrelse, string> = {
     LITEN: 'liten',

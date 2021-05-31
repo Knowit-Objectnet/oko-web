@@ -3,15 +3,17 @@ import { Accordion, Stack } from '@chakra-ui/react';
 import { AvtaleInfoItem } from './AvtaleInfoItem';
 import { mockAvtaler } from '../../../__mocks__/mocks-new/mockAvtale';
 import { compareDesc, parseISO } from 'date-fns';
-import { ApiPartner } from '../../services-new/AktorService';
+import { ApiPartner } from '../../services-currentapi/PartnerService';
 
 interface Props {
     partner: ApiPartner;
 }
 
+//TODO: Redo avtale-handling with the current datatypes
+
 export const AvtaleInfoList: React.FC<Props> = ({ partner }) => {
     const avtaler = mockAvtaler
-        .filter((avtale) => avtale.aktor.id === partner?.id)
+        .filter((avtale) => avtale.aktorId === partner?.id)
         .sort((avtaleA, avtaleB) => compareDesc(parseISO(avtaleA.startDato), parseISO(avtaleB.startDato)));
 
     return (

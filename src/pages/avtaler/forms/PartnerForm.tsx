@@ -7,13 +7,14 @@ import { PartnerStorrelse } from '../../../types';
 import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
-import { ApiPartnerPost } from '../../../services-new/AktorService';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
+import { upperFirst } from 'lodash';
+import { ApiPartnerPost } from '../../../services-currentapi/PartnerService';
 
 const storrelseOptions: Array<SelectOption<PartnerStorrelse>> = [
     { value: 'LITEN', label: 'Liten' },

@@ -1,4 +1,6 @@
-import { ApiKontakt, ApiPartner, ApiStasjon } from '../../src/services-new/AktorService';
+import { ApiKontakt } from '../../src/services-currentapi/AktorService';
+import { ApiPartner } from '../../src/services-currentapi/PartnerService';
+import { ApiStasjon } from '../../src/services-currentapi/StasjonService';
 
 export const mockKontakter: Array<ApiKontakt> = [
     {

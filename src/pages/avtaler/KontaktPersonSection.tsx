@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { ApiKontakt } from '../../services-new/AktorService';
 import {
     PartnerInfoSection,
     PartnerInfoSectionButtons,
@@ -9,6 +8,7 @@ import {
 } from './PartnerInfoSection';
 import { AddButton } from '../../components/buttons/AddButton';
 import { KontaktPersonTable } from './KontaktPersonTable';
+import { ApiKontakt } from '../../services-currentapi/AktorService';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;
