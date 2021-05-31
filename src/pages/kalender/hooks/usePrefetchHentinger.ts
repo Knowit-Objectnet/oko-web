@@ -18,19 +18,20 @@ const calculateInterval = (
     before: add(intervalToFetch.end, { [intervalSize]: offset }).toISOString(),
 });
 
-const prefetchEvents = (queryClient: QueryClient, queryParams: ApiPlanlagtHentingParams) =>
+//TODO: Should this be based on a general Henting, rather than PlanlagtHenting?
+const prefetchHentinger = (queryClient: QueryClient, queryParams: ApiPlanlagtHentingParams) =>
     queryClient.prefetchQuery({
         queryKey: [planlagtHentingDefaultQueryKey, queryParams],
         queryFn: () => getPlanlagteHentinger(queryParams),
     });
 
-export const usePrefetchEvents = (currentInterval: Interval): void => {
+export const usePrefetchHentinger = (currentInterval: Interval): void => {
     const { selectedView } = useCalendarState();
     const intervalSize = VIEWS[selectedView].fetchInterval;
     const previousInterval = calculateInterval(currentInterval, intervalSize, -1);
     const nextInterval = calculateInterval(currentInterval, intervalSize, 1);
 
     const queryClient = useQueryClient();
-    prefetchEvents(queryClient, previousInterval);
-    prefetchEvents(queryClient, nextInterval);
+    prefetchHentinger(queryClient, previousInterval);
+    prefetchHentinger(queryClient, nextInterval);
 };

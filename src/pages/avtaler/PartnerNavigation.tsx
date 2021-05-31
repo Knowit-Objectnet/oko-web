@@ -4,10 +4,11 @@ import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './forms/AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
 import { mockPartnere } from '../../../__mocks__/mocks-new/mockAktor';
+import { usePartnere } from '../../services-currentapi/hooks/usePartnere';
 
 export const PartnerNavigation: React.FC = () => {
-    // TODO: fetch from new API and handle error/loading
-    const partnere = mockPartnere;
+    // TODO: handle error/loading
+    const { data: partnere } = usePartnere();
 
     return (
         <Flex
