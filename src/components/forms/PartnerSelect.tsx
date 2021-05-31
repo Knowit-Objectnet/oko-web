@@ -3,6 +3,7 @@ import { usePartners } from '../../services/hooks/usePartners';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from './ErrorMessage';
+import { usePartnere } from '../../services-currentapi/hooks/usePartnere';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -16,7 +17,8 @@ const Select = styled.select`
 `;
 
 export const PartnerSelect: React.FC = () => {
-    const { data: partners, isLoading, isLoadingError } = usePartners();
+    // const { data: partners, isLoading, isLoadingError } = usePartners();
+    const { data: partnere, isLoading, isLoadingError } = usePartnere();
 
     const { register } = useFormContext();
 
@@ -28,9 +30,9 @@ export const PartnerSelect: React.FC = () => {
                         (isLoadingError && 'Kunne ikke laste samarbeidspartnere') ||
                         'Velg samarbeidspartner'}
                 </option>
-                {partners?.map((partner) => (
+                {partnere?.map((partner) => (
                     <option value={partner.id} key={partner.id}>
-                        {partner.name}
+                        {partner.navn}
                     </option>
                 ))}
             </Select>
