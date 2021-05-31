@@ -1,4 +1,4 @@
-import { QueryObserverResult, useQuery, UseQueryOptions } from 'react-query';
+import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
 import {
     ApiPlanlagtHenting,
     ApiPlanlagtHentingParams,
@@ -9,7 +9,7 @@ import {
 export const usePlanlagteHentinger = (
     params: ApiPlanlagtHentingParams = {},
     queryOptions?: UseQueryOptions<Array<ApiPlanlagtHenting>>,
-): QueryObserverResult<Array<ApiPlanlagtHenting>> => {
+): UseQueryResult<Array<ApiPlanlagtHenting>> => {
     return useQuery<Array<ApiPlanlagtHenting>>({
         queryKey: [planlagtHentingDefaultQueryKey],
         queryFn: () => getPlanlagteHentinger(params),

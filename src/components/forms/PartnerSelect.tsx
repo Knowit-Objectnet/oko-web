@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { usePartners } from '../../services/hooks/usePartners';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from './ErrorMessage';
@@ -17,7 +16,6 @@ const Select = styled.select`
 `;
 
 export const PartnerSelect: React.FC = () => {
-    // const { data: partners, isLoading, isLoadingError } = usePartners();
     const { data: partnere, isLoading, isLoadingError } = usePartnere();
 
     const { register } = useFormContext();

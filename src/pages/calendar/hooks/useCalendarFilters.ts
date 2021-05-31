@@ -28,7 +28,7 @@ export const useCalendarFilters = (): {
 
     // Checking for valid station filter name, and adding filter if present
     // const { data: stasjoner } = useStations();
-    const { data: stasjoner } = useStasjoner({});
+    const { data: stasjoner } = useStasjoner();
     if (isValidStasjon(queryFilters.stasjon, stasjoner)) {
         const stasjonFilter = (event: ApiPlanlagtHenting): boolean => {
             //TODO: Allow filtering when datatype containing stasjon is added

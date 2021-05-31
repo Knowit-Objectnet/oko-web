@@ -60,8 +60,7 @@ const Input = styled.input`
 
 export const CalendarStasjonFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
-    // const { data: stations } = useStations();
-    const { data: stasjoner } = useStasjoner({});
+    const { data: stasjoner } = useStasjoner();
     const { filters, setFilters } = useCalendarState();
 
     const onToggleClick = () => {

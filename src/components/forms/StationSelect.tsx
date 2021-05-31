@@ -17,7 +17,6 @@ const Select = styled.select`
 `;
 
 export const StationSelect: React.FC = () => {
-    // const { data: stations, isLoading, isLoadingError } = useStations();
     const { data: stasjoner, isLoading, isLoadingError } = useStasjoner();
 
     const { register } = useFormContext();

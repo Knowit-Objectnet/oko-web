@@ -13,7 +13,6 @@ import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
-import { upperFirst } from 'lodash';
 import { ApiPartnerPost } from '../../../services-currentapi/PartnerService';
 
 const storrelseOptions: Array<SelectOption<PartnerStorrelse>> = [

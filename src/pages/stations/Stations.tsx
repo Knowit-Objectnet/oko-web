@@ -49,8 +49,7 @@ export const Stations: React.FC = () => {
     const { user } = useAuth();
     const modal = useModal();
 
-    // const { data: stations, isLoading } = useStations();
-    const { data: stasjoner, isLoading } = useStasjoner({});
+    const { data: stasjoner, isLoading } = useStasjoner();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 

@@ -39,7 +39,7 @@ export const ExpandableAgenda: React.FC<Props> = (props) => {
     const [expanded, setExpanded] = useState(false);
 
     // const { data: stations } = useStations();
-    const { data: stasjoner } = useStasjoner({});
+    const { data: stasjoner } = useStasjoner();
     const stationNames = (stasjoner ?? []).map((stasjon) => stasjon.navn);
     const eventsByStation = stationNames.map((stationName) =>
         //TODO: Currently no equivalent to EventInfo planned, so this mapping won't work.

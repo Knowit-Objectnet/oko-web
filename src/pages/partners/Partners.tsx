@@ -49,7 +49,6 @@ export const Partners: React.FC = () => {
 
     const modal = useModal();
 
-    // const { data: partners, isLoading } = usePartners();
     const { data: partnere, isLoading } = usePartnere();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
