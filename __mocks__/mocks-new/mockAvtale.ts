@@ -1,4 +1,4 @@
-import { ApiAvtale, ApiAvtaleUpstream } from '../../src/services-new/AvtaleService';
+import { ApiAvtale } from '../../src/services-new/AvtaleService';
 
 export const mockAvtaler: Array<ApiAvtale> = [
     {

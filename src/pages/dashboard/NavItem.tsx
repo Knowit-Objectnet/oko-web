@@ -6,21 +6,23 @@ import Icon from '@chakra-ui/icon';
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link
         as={NavLink}
-        color="White"
-        borderBottom={{ base: 'none', sm: 'solid 4px transparent' }}
+        color="onPrimary"
+        height="full"
+        borderBottom="solid 6px transparent"
+        paddingTop="3"
         display="flex"
         alignItems="flex-end"
         userSelect="none"
-        fontWeight="bold"
-        fontSize={{ base: 'md', sm: 'xl' }}
+        fontWeight="normal"
+        fontSize={{ base: 'md', tablet: 'xl' }}
         _activeLink={{
-            color: 'secondary.light',
-            borderBottomColor: 'secondary.light',
-            svg: { fill: 'secondary.light' },
+            color: 'secondary',
+            borderBottomColor: 'secondary',
+            svg: { fill: 'secondary' },
         }}
         _hover={{
             textDecoration: 'none',
-            borderBottomColor: 'white',
+            borderBottomColor: 'onPrimary',
         }}
         {...props}
     />
@@ -29,20 +31,21 @@ const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
 const Center: React.FC = (props) => (
     <Flex
         alignItems="center"
-        justifyContent="flex-end"
-        height={{ base: '100%', sm: 'auto' }}
-        flexDirection={{ base: 'column', lg: 'row' }}
+        justifyContent="center"
+        height="full"
+        flex="1"
+        flexDirection={{ base: 'column', tablet: 'row' }}
         {...props}
     />
 );
 
 const iconStyle = {
-    height: { base: 'auto', sm: '1em' },
-    width: { base: 'auto', sm: '2rem' },
-    maxWidth: '100%',
+    height: { base: 'auto', tablet: '5' },
+    width: { base: 'auto', tablet: '8' },
+    maxWidth: 'full',
     flex: '1',
     sx: {
-        svg: { fill: 'White' },
+        svg: { fill: 'onPrimary' },
     },
 };
 
@@ -57,7 +60,7 @@ export const NavItem: React.FC<Props> = (props) => (
     <StyledNavLink to={props.path} exact={props.exact}>
         <Center>
             <Icon {...iconStyle}>{props.icon}</Icon>
-            <Box as="span" marginLeft={{ base: '0', lg: 'sm' }}>
+            <Box as="span" marginLeft={{ base: '0', tablet: '1' }}>
                 {props.label}
             </Box>
         </Center>

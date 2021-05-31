@@ -1,34 +1,24 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import { Header } from './Header';
 import { PageRouter } from '../../routing/PageRouter';
-import { Flex } from '@chakra-ui/react';
-
-const Wrapper: React.FC = (props) => (
-    <Flex flexDirection={{ base: 'column-reverse', sm: 'column' }} height="100%" width="100%" {...props} />
-);
-
-const Body = styled.div`
-    height: 100%;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-`;
-
-const Page = styled.main`
-    flex: 1;
-    overflow-y: auto;
-`;
+import { Flex } from '@chakra-ui/layout';
+import { useQueryClient } from 'react-query';
+import { prefetchStations } from '../../services/hooks/useStations';
+import { prefetchPartners } from '../../services/hooks/usePartners';
 
 export const Dashboard: React.FC = () => {
+    const queryClient = useQueryClient();
+
+    // We do prefetching here so that these entities are available for faster rendering when needed
+    prefetchStations(queryClient);
+    prefetchPartners(queryClient);
+
     return (
-        <Wrapper>
+        <Flex direction="column" minHeight="100vh" width="full">
             <Header />
-            <Body>
-                <Page>
-                    <PageRouter />
-                </Page>
-            </Body>
-        </Wrapper>
+            <Flex flex="1" overflowY="auto" marginBottom={{ base: 'navbar.mobile', tablet: '0' }}>
+                <PageRouter />
+            </Flex>
+        </Flex>
     );
 };

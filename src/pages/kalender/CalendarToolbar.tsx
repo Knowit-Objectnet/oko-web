@@ -1,9 +1,10 @@
 import React from 'react';
 import { ToolbarProps, View } from 'react-big-calendar';
-import { Button, ButtonGroup, Heading, Icon, IconButton, Stack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Heading, Icon, Stack } from '@chakra-ui/react';
 import ArrowLeft from '../../assets/ArrowLeft.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import { ViewProperties, VIEWS } from './hooks/useCalendarView';
+import { IconButton } from '../../components/buttons/IconButton';
 
 interface Props {
     view: ViewProperties;
@@ -13,7 +14,6 @@ interface Props {
 
 const ViewToggleButton: React.FC<Props> = ({ view, currentView, onViewChange }) => (
     <Button
-        fontWeight="normal"
         onClick={() => {
             onViewChange(view.type);
         }}
@@ -35,7 +35,6 @@ export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, vie
                 }}
             />
             <Button
-                fontWeight="normal"
                 size="sm"
                 onClick={() => {
                     onNavigate('TODAY');

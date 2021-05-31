@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
-import { Calendar } from '../../../src/pages/calendar/Calendar';
+import Kalender from '../../../src/pages/kalender';
 import { cleanup, render, setupUseAuthMock } from '../../../test-utils';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
@@ -27,7 +27,7 @@ describe('Provides a page to view the calendar', () => {
 
         render(
             <MemoryRouter>
-                <Calendar />
+                <Kalender />
             </MemoryRouter>,
         );
     });
