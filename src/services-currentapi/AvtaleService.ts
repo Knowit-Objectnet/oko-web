@@ -30,7 +30,7 @@ export interface ApiAvtaleParams {
 const avtaleEndpoint = '/avtaler';
 export const avtaleDefaultQueryKey = 'getAvtaler';
 
-export const getAvtaler = (params: ApiAvtaleParams): Promise<Array<ApiAvtale>> =>
+export const getAvtaler = (params: ApiAvtaleParams = {}): Promise<Array<ApiAvtale>> =>
     httpClient()
         .get<Array<ApiAvtale>>(avtaleEndpoint, { params })
         .then((response) => response.data);

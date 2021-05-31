@@ -77,7 +77,7 @@ export const findOneAktor = (aktorId: string): Promise<AktorType> =>
 const stasjonEndpoint = '/stasjoner';
 export const stasjonDefaultQueryKey = 'getStasjoner';
 
-export const getStasjoner = (params: ApiStasjonParams): Promise<Array<ApiStasjon>> =>
+export const getStasjoner = (params: ApiStasjonParams = {}): Promise<Array<ApiStasjon>> =>
     httpClient()
         .get<Array<ApiStasjon>>(stasjonEndpoint, { params })
         .then((response) => response.data);
@@ -105,7 +105,7 @@ export const patchStasjon = (updatedStasjon: ApiStasjonPatch): Promise<ApiStasjo
 const partnerEndpoint = '/partnere';
 export const partnerDefaultQueryKey = 'getPartnere';
 
-export const getPartnere = (params: ApiPartnerParams): Promise<Array<ApiPartner>> =>
+export const getPartnere = (params: ApiPartnerParams = {}): Promise<Array<ApiPartner>> =>
     httpClient()
         .get<Array<ApiPartner>>(partnerEndpoint, { params })
         .then((response) => response.data);

@@ -46,7 +46,7 @@ export interface ApiHenteplanParams {
 const henteplanEndpoint = '/henteplaner';
 export const henteplanDefaultQueryKey = 'getHenteplaner';
 
-export const getHenteplaner = (params: ApiHenteplanParams): Promise<Array<ApiHenteplan>> =>
+export const getHenteplaner = (params: ApiHenteplanParams = {}): Promise<Array<ApiHenteplan>> =>
     httpClient()
         .get<Array<ApiHenteplan>>(henteplanEndpoint, { params })
         .then((response) => response.data);

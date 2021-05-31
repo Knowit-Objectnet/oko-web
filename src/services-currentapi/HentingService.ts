@@ -29,7 +29,7 @@ export interface ApiPlanlagtHentingPatch {
 const hentingEndpoint = '/planlagte-hentinger';
 export const planlagtHentingDefaultQueryKey = 'getPlanlagteHentinger';
 
-export const getPlanlagteHentinger = (params: ApiPlanlagtHentingParams): Promise<Array<ApiPlanlagtHenting>> =>
+export const getPlanlagteHentinger = (params: ApiPlanlagtHentingParams = {}): Promise<Array<ApiPlanlagtHenting>> =>
     httpClient()
         .get<Array<ApiPlanlagtHenting>>(hentingEndpoint, { params })
         .then((response) => response.data);
