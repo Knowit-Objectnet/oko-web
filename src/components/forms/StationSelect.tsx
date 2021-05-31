@@ -3,6 +3,7 @@ import { useStations } from '../../services/hooks/useStations';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from './ErrorMessage';
+import { useStasjoner } from '../../services-currentapi/hooks/useStasjoner';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -16,25 +17,26 @@ const Select = styled.select`
 `;
 
 export const StationSelect: React.FC = () => {
-    const { data: stations, isLoading, isLoadingError } = useStations();
+    // const { data: stations, isLoading, isLoadingError } = useStations();
+    const { data: stasjoner, isLoading, isLoadingError } = useStasjoner();
 
     const { register } = useFormContext();
 
     return (
         <Wrapper>
-            <Select {...register('selectedStation')} disabled={isLoading || isLoadingError} defaultValue={-1}>
+            <Select {...register('selectedStasjon')} disabled={isLoading || isLoadingError} defaultValue={-1}>
                 <option value={-1} disabled>
                     {(isLoading && 'Laster inn...') ||
                         (isLoadingError && 'Kunne ikke laste stasjoner') ||
                         'Velg stasjon'}
                 </option>
-                {stations?.map((station) => (
-                    <option value={station.id} key={station.id}>
-                        {station.name}
+                {stasjoner?.map((stasjon) => (
+                    <option value={stasjon.id} key={stasjon.id}>
+                        {stasjon.navn}
                     </option>
                 ))}
             </Select>
-            <ErrorMessage name="selectedStation" />
+            <ErrorMessage name="selectedStasjon" />
         </Wrapper>
     );
 };

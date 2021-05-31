@@ -1,4 +1,6 @@
 import { useQueryString } from 'use-route-as-state';
+import { ApiStasjon } from '../../../services-currentapi/AktorService';
+import { useStasjoner } from '../../../services-currentapi/hooks/useStasjoner';
 import { ApiEvent } from '../../../services/EventService';
 import { useStations } from '../../../services/hooks/useStations';
 import { ApiStation } from '../../../services/StationService';
@@ -9,8 +11,8 @@ export interface CalendarFilters {
 
 export type CalendarFilterFn = (event: ApiEvent) => boolean;
 
-const isValidStasjon = (stasjonName: string, stasjoner?: Array<ApiStation>) =>
-    (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.name === stasjonName ? true : result), false);
+const isValidStasjon = (stasjonName: string, stasjoner?: Array<ApiStasjon>) =>
+    (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.navn === stasjonName ? true : result), false);
 
 export const useCalendarFilters = (): {
     filters: CalendarFilters;
@@ -24,7 +26,8 @@ export const useCalendarFilters = (): {
     const filterFns = [];
 
     // Checking for valid station filter name, and adding filter if present
-    const { data: stasjoner } = useStations();
+    // const { data: stasjoner } = useStations();
+    const { data: stasjoner } = useStasjoner({});
     if (isValidStasjon(queryFilters.stasjon, stasjoner)) {
         const stasjonFilter = (event: ApiEvent): boolean => {
             if (queryFilters.stasjon !== undefined) {
