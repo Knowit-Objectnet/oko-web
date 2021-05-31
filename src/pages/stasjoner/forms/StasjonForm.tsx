@@ -4,37 +4,28 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextInput } from '../../../components/forms/TextInput';
 import { StasjonType } from '../../../types';
-import { Button, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { upperFirst } from 'lodash';
 import { ApiStasjonPost } from '../../../services-currentapi/AktorService';
+import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 
-const stjasjonTypeOptions: Array<SelectOption<StasjonType>> = [
+// NB! Setting the error messages used by yup
+import '../../../components/forms/formErrorMessages';
+
+const stasjonTypeOptions: Array<SelectOption<StasjonType>> = [
     { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },
     { value: 'MINI', label: 'Minigjenbruksstasjon' },
 ];
-
-yup.setLocale({
-    string: {
-        min: ({ label, min }: { label: string; min: number }) => `${upperFirst(label)} må bestå av minst ${min} tegn`,
-        max: ({ label, max }: { label: string; max: number }) =>
-            `${upperFirst(label)} må være ikke være lenger enn ${max} tegn`,
-    },
-    mixed: {
-        required: 'Du må oppgi ${label}',
-        oneOf: 'Du må velge ${label}',
-    },
-});
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn på stasjonen').trim().required().min(2),
     type: yup
         .mixed<StasjonType>()
-        .label('type stasjon')
+        .label('type for stasjonen')
         .required()
-        .oneOf(stjasjonTypeOptions.map(({ value }) => value)),
+        .oneOf(stasjonTypeOptions.map(({ value }) => value)),
 });
 
 interface Props {
@@ -65,20 +56,15 @@ export const StasjonForm: React.FC<Props> = ({ afterSubmit }) => {
                     <Select
                         name="type"
                         label="Type stasjon"
-                        options={stjasjonTypeOptions}
+                        options={stasjonTypeOptions}
                         placeholder="Velg en type"
                         required
                     />
                     <AllFormErrorMessages />
-                    <Button
-                        type="submit"
-                        width="full"
-                        variant="primary"
-                        size="lg"
+                    <FormSubmitButton
+                        label="Registrer ny stasjon"
                         // TODO: isLoading-state from submission here
-                    >
-                        Registrer ny stasjon
-                    </Button>
+                    />
                 </Stack>
             </form>
         </FormProvider>

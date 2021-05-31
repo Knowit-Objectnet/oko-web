@@ -4,31 +4,22 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextInput } from '../../../components/forms/TextInput';
 import { PartnerStorrelse } from '../../../types';
-import { Button, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { ApiPartnerPost } from '../../../services-new/AktorService';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
-import { upperFirst } from 'lodash';
+import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
+
+// NB! Setting the error messages used by yup
+import '../../../components/forms/formErrorMessages';
 
 const storrelseOptions: Array<SelectOption<PartnerStorrelse>> = [
     { value: 'LITEN', label: 'Liten' },
     { value: 'MIDDELS', label: 'Middels' },
     { value: 'STOR', label: 'Stor' },
 ];
-
-yup.setLocale({
-    string: {
-        min: ({ label, min }: { label: string; min: number }) => `${upperFirst(label)} må bestå av minst ${min} tegn`,
-        max: ({ label, max }: { label: string; max: number }) =>
-            `${upperFirst(label)} må være ikke være lenger enn ${max} tegn`,
-    },
-    mixed: {
-        required: 'Du må oppgi ${label}',
-        oneOf: 'Du må velge ${label}',
-    },
-});
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
@@ -78,15 +69,10 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
                         required
                     />
                     <AllFormErrorMessages />
-                    <Button
-                        type="submit"
-                        width="full"
-                        variant="primary"
-                        size="lg"
+                    <FormSubmitButton
+                        label="Registrer ny samarbeidspartner"
                         // TODO: isLoading-state from submission here
-                    >
-                        Registrer ny samarbeidspartner
-                    </Button>
+                    />
                 </Stack>
             </form>
         </FormProvider>
