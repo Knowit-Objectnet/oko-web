@@ -6,7 +6,6 @@ import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { upperFirst } from 'lodash';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { DatePicker } from '../../../components/forms/DatePicker';
 import { formatISO, parse } from 'date-fns';
@@ -15,22 +14,13 @@ import isValid from 'date-fns/isValid';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { AvtaleType } from '../../../services/avtale/AvtaleService';
 
+// NB! Setting the error messages used by yup
+import '../../../components/forms/formErrorMessages';
+
 const avtaleTypeOptions: Array<SelectOption<AvtaleType>> = [
     { value: 'FAST', label: 'Fast' },
     { value: 'ANNEN', label: 'Annen' },
 ];
-
-yup.setLocale({
-    string: {
-        min: ({ label, min }: { label: string; min: number }) => `${upperFirst(label)} må bestå av minst ${min} tegn`,
-        max: ({ label, max }: { label: string; max: number }) =>
-            `${upperFirst(label)} må være ikke være lenger enn ${max} tegn`,
-    },
-    mixed: {
-        required: 'Du må oppgi ${label}',
-        oneOf: 'Du må velge ${label}',
-    },
-});
 
 const validationSchema = yup.object().shape({
     type: yup
