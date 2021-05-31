@@ -3,20 +3,25 @@ import { add, Duration } from 'date-fns';
 import { ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../../services/EventService';
 import { VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
+import {
+    ApiPlanlagtHentingParams,
+    getPlanlagteHentinger,
+    planlagtHentingDefaultQueryKey,
+} from '../../../services-currentapi/HentingService';
 
 const calculateInterval = (
     intervalToFetch: Interval,
     intervalSize: keyof Duration,
     offset: 1 | -1,
-): ApiEventParams => ({
-    fromDate: add(intervalToFetch.start, { [intervalSize]: offset }).toISOString(),
-    toDate: add(intervalToFetch.end, { [intervalSize]: offset }).toISOString(),
+): ApiPlanlagtHentingParams => ({
+    after: add(intervalToFetch.start, { [intervalSize]: offset }).toISOString(),
+    before: add(intervalToFetch.end, { [intervalSize]: offset }).toISOString(),
 });
 
-const prefetchEvents = (queryClient: QueryClient, queryParams: ApiEventParams) =>
+const prefetchEvents = (queryClient: QueryClient, queryParams: ApiPlanlagtHentingParams) =>
     queryClient.prefetchQuery({
-        queryKey: [eventsDefaultQueryKey, queryParams],
-        queryFn: () => getEvents(queryParams),
+        queryKey: [planlagtHentingDefaultQueryKey, queryParams],
+        queryFn: () => getPlanlagteHentinger(queryParams),
     });
 
 export const usePrefetchEvents = (currentInterval: Interval): void => {

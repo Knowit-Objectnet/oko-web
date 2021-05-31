@@ -1,6 +1,6 @@
 import { httpClient } from '../services/httpClient';
 
-export interface ApiHenting {
+export interface ApiPlanlagtHenting {
     id: string; //UUID
     startTidspunkt: string; //LocalTimeDate
     sluttTidspunkt: string; //LocalTimeDate
@@ -9,7 +9,7 @@ export interface ApiHenting {
     avlyst: string; //LocalTimeDate
 }
 
-export interface ApiHentingParams {
+export interface ApiPlanlagtHentingParams {
     id?: string; //UUID
     before?: string; //LocalTimeDate Henting must be before this
     after?: string; //LocalTimeDate Henting must be after this
@@ -18,7 +18,7 @@ export interface ApiHentingParams {
     avlyst?: boolean;
 }
 
-export interface ApiHentingPatch {
+export interface ApiPlanlagtHentingPatch {
     id: string; //UUID
     startTidspunkt?: string; //LocalTimeDate
     sluttTidspunkt?: string; //LocalTimeDate
@@ -27,24 +27,24 @@ export interface ApiHentingPatch {
 }
 
 const hentingEndpoint = '/planlagte-hentinger';
-export const hentingDefaultQueryKey = 'getHentinger';
+export const planlagtHentingDefaultQueryKey = 'getPlanlagteHentinger';
 
-export const getHentinger = (params: ApiHentingParams): Promise<Array<ApiHenting>> =>
+export const getPlanlagteHentinger = (params: ApiPlanlagtHentingParams): Promise<Array<ApiPlanlagtHenting>> =>
     httpClient()
-        .get<Array<ApiHenting>>(hentingEndpoint, { params })
+        .get<Array<ApiPlanlagtHenting>>(hentingEndpoint, { params })
         .then((response) => response.data);
 
-export const getHentingById = (hentingId: string): Promise<ApiHenting> =>
+export const getPlanlagtHentingById = (hentingId: string): Promise<ApiPlanlagtHenting> =>
     httpClient()
-        .get<ApiHenting>(`${hentingEndpoint}/${hentingId}`)
+        .get<ApiPlanlagtHenting>(`${hentingEndpoint}/${hentingId}`)
         .then((response) => response.data);
 
-export const deleteHenting = (hentingId: string): Promise<ApiHenting> =>
+export const deletePlanlagtHenting = (hentingId: string): Promise<ApiPlanlagtHenting> =>
     httpClient()
-        .delete<ApiHenting>(`${hentingEndpoint}/${hentingId}`)
+        .delete<ApiPlanlagtHenting>(`${hentingEndpoint}/${hentingId}`)
         .then((response) => response.data);
 
-export const patchHenting = (updatedHenting: ApiHentingPatch): Promise<ApiHenting> =>
+export const patchPlanlagtHenting = (updatedHenting: ApiPlanlagtHentingPatch): Promise<ApiPlanlagtHenting> =>
     httpClient()
-        .patch<ApiHenting>(hentingEndpoint, updatedHenting)
+        .patch<ApiPlanlagtHenting>(hentingEndpoint, updatedHenting)
         .then((response) => response.data);

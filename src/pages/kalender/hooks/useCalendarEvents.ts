@@ -5,6 +5,8 @@ import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns
 import { ApiEvent } from '../../../services/EventService';
 import { CalendarView, VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
+import { usePlanlagteHentinger } from '../../../services-currentapi/hooks/usePlanlagteHentinger';
+import { ApiPlanlagtHenting } from '../../../services-currentapi/HentingService';
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;
@@ -24,10 +26,11 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     }
 };
 
-const transformToCalendarEvent = () => (event: ApiEvent): CalendarEvent => ({
-    start: new Date(event.startDateTime),
-    end: new Date(event.endDateTime),
-    title: `${event.partner.name} - ${event.station.name}`,
+const transformToCalendarEvent = () => (event: ApiPlanlagtHenting): CalendarEvent => ({
+    start: new Date(event.startTidspunkt),
+    end: new Date(event.sluttTidspunkt),
+    title: 'No partner/stasjon data', //TODO: Add Henting type including partner and stasjon
+    // title: `${event.partner.name} - ${event.station.name}`,
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
@@ -36,10 +39,10 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     const intervalToFetch = calculateDateRange(selectedDate, selectedView);
 
     // TODO: wrap in LazyResult in order to return loading/error status?
-    const { data: events } = useEvents(
+    const { data: events } = usePlanlagteHentinger(
         {
-            fromDate: intervalToFetch.start.toISOString(),
-            toDate: intervalToFetch.end.toISOString(),
+            after: intervalToFetch.start.toISOString(),
+            before: intervalToFetch.end.toISOString(),
         },
         {
             keepPreviousData: true,

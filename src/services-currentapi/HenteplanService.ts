@@ -1,6 +1,6 @@
 import { httpClient } from '../services/httpClient';
 import { HenteplanFrekvens, WorkingWeekdays } from '../types';
-import { ApiHenting } from './HentingService';
+import { ApiPlanlagtHenting } from './HentingService';
 
 export interface ApiHenteplan {
     id: string;
@@ -11,7 +11,7 @@ export interface ApiHenteplan {
     sluttTidspunkt: string; //LocalTimeDate: Time used for Henting time
     ukedag: WorkingWeekdays;
     merknad: string | null;
-    planlagteHentinger: Array<ApiHenting>;
+    planlagteHentinger: Array<ApiPlanlagtHenting>;
 }
 
 export interface ApiHenteplanPost {
