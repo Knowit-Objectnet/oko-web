@@ -8,7 +8,7 @@ import {
 } from './PartnerInfoSection';
 import { AddButton } from '../../components/buttons/AddButton';
 import { AvtaleInfoList } from './AvtaleInfoList';
-import { ApiPartner } from '../../services-currentapi/AktorService';
+import { ApiPartner } from '../../services-currentapi/PartnerService';
 
 interface Props {
     partner: ApiPartner;
