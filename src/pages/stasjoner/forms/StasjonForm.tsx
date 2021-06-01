@@ -19,6 +19,7 @@ import { useMutation, useQueryClient } from 'react-query';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
+import { useAddStasjon } from '../../../services-currentapi/hooks/useStasjonMutation';
 
 const stasjonTypeOptions: Array<SelectOption<StasjonType>> = [
     { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },
@@ -36,32 +37,28 @@ const validationSchema = yup.object().shape({
 
 interface Props {
     stasjon?: ApiStasjon;
-    afterSubmit?: () => void;
+    onSuccess?: () => void;
 }
 
-export const StasjonForm: React.FC<Props> = ({ afterSubmit }) => {
+export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
     const formMethods = useForm<ApiStasjonPost>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
     });
 
-    const queryClient = useQueryClient();
-    const addStasjonMutation = useMutation((newStasjon: ApiStasjonPost) => postStasjon(newStasjon), {
-        onSuccess: () => {
-            // alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
-            // afterSubmit?.();
-        },
-        onError: (error) => {
-            // TODO: get details from error and set message to correct field
-            formMethods.setError('navn', { message: 'noe gikk galt' });
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries(stasjonDefaultQueryKey);
-        },
-    });
+    const addStasjonMutation = useAddStasjon();
 
     const handlePartnerSubmission = formMethods.handleSubmit((data) => {
-        addStasjonMutation.mutate(data);
+        addStasjonMutation.mutate(data, {
+            onSuccess: () => {
+                // alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
+                onSuccess?.();
+            },
+            onError: (error) => {
+                // TODO: get details from error and set message to correct field
+                formMethods.setError('navn', { message: error.message });
+            },
+        });
     });
 
     return (
