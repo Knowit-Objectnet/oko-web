@@ -3,7 +3,7 @@ import { ButtonProps, useDisclosure } from '@chakra-ui/react';
 import { FormModal } from '../../../components/forms/FormModal';
 import { AddButton } from '../../../components/buttons/AddButton';
 import { AvtaleForm } from './AvtaleForm';
-import { ApiPartner } from '../../../services-new/AktorService';
+import { ApiPartner } from '../../../services/partner/PartnerService';
 
 interface Props {
     partner: ApiPartner;

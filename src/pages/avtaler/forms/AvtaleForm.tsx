@@ -2,11 +2,9 @@ import * as React from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AvtaleType } from '../../../types';
 import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
-import { ApiPartner } from '../../../services-new/AktorService';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { upperFirst } from 'lodash';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
@@ -14,6 +12,8 @@ import { DatePicker } from '../../../components/forms/DatePicker';
 import { formatISO, parse } from 'date-fns';
 import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
+import { ApiPartner } from '../../../services/partner/PartnerService';
+import { AvtaleType } from '../../../services/avtale/AvtaleService';
 
 const avtaleTypeOptions: Array<SelectOption<AvtaleType>> = [
     { value: 'FAST', label: 'Fast' },
