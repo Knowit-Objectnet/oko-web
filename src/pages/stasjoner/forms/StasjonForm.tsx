@@ -8,8 +8,14 @@ import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ApiStasjonPost } from '../../../services-currentapi/StasjonService';
+import {
+    ApiStasjon,
+    ApiStasjonPost,
+    postStasjon,
+    stasjonDefaultQueryKey,
+} from '../../../services-currentapi/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
+import { useMutation, useQueryClient } from 'react-query';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
@@ -29,6 +35,7 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
+    stasjon?: ApiStasjon;
     afterSubmit?: () => void;
 }
 
@@ -38,13 +45,23 @@ export const StasjonForm: React.FC<Props> = ({ afterSubmit }) => {
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
     });
 
+    const queryClient = useQueryClient();
+    const addStasjonMutation = useMutation((newStasjon: ApiStasjonPost) => postStasjon(newStasjon), {
+        onSuccess: () => {
+            // alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
+            // afterSubmit?.();
+        },
+        onError: (error) => {
+            // TODO: get details from error and set message to correct field
+            formMethods.setError('navn', { message: 'noe gikk galt' });
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(stasjonDefaultQueryKey);
+        },
+    });
+
     const handlePartnerSubmission = formMethods.handleSubmit((data) => {
-        console.log(data);
-        // TODO: submit data to API with useMutation (react-query) (post or patch, depending on form is in edit mode)
-        //  - pass loading state to button / disable form
-        //  - pass errors from backend response (onError react-query callback):
-        //  formMethods.setError('navn', { message: 'Stasjon med dette navnet eksisterer allerede' });
-        afterSubmit?.();
+        addStasjonMutation.mutate(data);
     });
 
     return (
@@ -61,10 +78,7 @@ export const StasjonForm: React.FC<Props> = ({ afterSubmit }) => {
                         required
                     />
                     <AllFormErrorMessages />
-                    <FormSubmitButton
-                        label="Registrer ny stasjon"
-                        // TODO: isLoading-state from submission here
-                    />
+                    <FormSubmitButton label="Registrer ny stasjon" isLoading={addStasjonMutation.isLoading} />
                 </Stack>
             </form>
         </FormProvider>
