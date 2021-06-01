@@ -85,7 +85,7 @@ export const AvtaleForm: React.FC<Props> = ({ partner, afterSubmit }) => {
                     <DatePicker name="startDato" label="Startdato for avtalen" required />
                     {/*TODO: form errors displayed even if no errors */}
                     <AllFormErrorMessages />
-                    <FormSubmitButton label="Registrer ny avtale" />
+                    <FormSubmitButton label="Registrer ny avtale" loadingText="Vennligst vent..." />
                 </Stack>
             </form>
         </FormProvider>
