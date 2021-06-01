@@ -7,9 +7,10 @@ import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ApiStasjon, ApiStasjonPost, StasjonType } from '../../../services-currentapi/StasjonService';
+import { ApiStasjonPost, StasjonType } from '../../../services-currentapi/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddStasjon } from '../../../services-currentapi/hooks/useAddStasjon';
+import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
@@ -29,7 +30,7 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
-    stasjon?: ApiStasjon;
+    /** Callback that will fire if registration of new Stasjon is successful: **/
     onSuccess?: () => void;
 }
 
@@ -40,15 +41,17 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
     });
 
     const addStasjonMutation = useAddStasjon();
+    const showSuccessToast = useSuccessToast();
 
-    const handlePartnerSubmission = formMethods.handleSubmit((data) => {
+    const handleSubmit = formMethods.handleSubmit((data) => {
         addStasjonMutation.mutate(data, {
             onSuccess: () => {
-                // alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
+                showSuccessToast({ title: `Stasjonen ${data.navn} ble opprettet` });
                 onSuccess?.();
             },
             onError: (error) => {
-                // TODO: get details from error and set message to correct field
+                // TODO: find a way to identify and display errors that are not caused by user (network, server issues etc.)
+                // TODO: get details from error and if caused by user: set message to correct field
                 formMethods.setError('navn', { message: error.message });
             },
         });
@@ -56,7 +59,7 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
 
     return (
         <FormProvider {...formMethods}>
-            <form onSubmit={handlePartnerSubmission}>
+            <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
                     <AllFormErrorMessages />

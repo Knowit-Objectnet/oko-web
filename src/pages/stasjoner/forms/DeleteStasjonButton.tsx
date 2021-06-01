@@ -2,6 +2,8 @@ import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import * as React from 'react';
 import { ApiStasjon } from '../../../services-currentapi/StasjonService';
 import { useDeleteStasjon } from '../../../services-currentapi/hooks/useDeleteStasjon';
+import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { useErrorToast } from '../../../components/toasts/useErrorToast';
 
 interface Props {
     stasjon: ApiStasjon;
@@ -10,18 +12,26 @@ interface Props {
 export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
     const deleteStasjonMutation = useDeleteStasjon();
 
+    const showSuccessToast = useSuccessToast();
+    const showErrorToast = useErrorToast();
+
     const handleStasjonDeletion = () => {
         deleteStasjonMutation.mutate(stasjon.id, {
             onSuccess: () => {
-                // TODO Chakra alert: success
-                alert(`Slettet stasjon ${stasjon.navn}`);
+                showSuccessToast({ title: `Stasjonen ${stasjon.navn} ble slettet` });
             },
             onError: (error) => {
-                // TODO Chakra alert: failure
-                alert(`Noe gikk galt ved sletting av ${stasjon.navn}: ${error.message}`);
+                showErrorToast({ title: `Noe gikk galt ved sletting av ${stasjon.navn}: ${error.message}` });
             },
         });
     };
 
-    return <DeleteButton label="Slett" onClick={handleStasjonDeletion} isLoading={deleteStasjonMutation.isLoading} />;
+    return (
+        <DeleteButton
+            label="Slett"
+            onClick={handleStasjonDeletion}
+            isLoading={deleteStasjonMutation.isLoading}
+            minWidth="20"
+        />
+    );
 };

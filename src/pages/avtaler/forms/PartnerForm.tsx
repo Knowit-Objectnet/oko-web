@@ -11,6 +11,7 @@ import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddPartner } from '../../../services-currentapi/hooks/useAddPartner';
 import { ApiPartnerPost, PartnerStorrelse } from '../../../services-currentapi/PartnerService';
+import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
@@ -32,6 +33,7 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
+    /** Callback that will fire if registration of new Stasjon is successful: **/
     onSuccess?: () => void;
 }
 
@@ -42,16 +44,17 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
     });
 
     const addPartnerMutation = useAddPartner();
+    const showSuccessToast = useSuccessToast();
 
     const handlePartnerSubmission = formMethods.handleSubmit((data) => {
         addPartnerMutation.mutate(data, {
             onSuccess: () => {
-                // TODO: chakra alert
-                alert(`Opprettet ny partner: ${data.navn}`);
+                showSuccessToast({ title: `Samarbeidspartner ${data.navn} ble opprettet` });
                 onSuccess?.();
             },
             onError: (error) => {
-                // TODO: get details from error object and set message to form errors
+                // TODO: find a way to identify and display errors that are not caused by user (network, server issues etc.)
+                // TODO: get details from error and if caused by user: set message to correct field
                 formMethods.setError('navn', { message: error.message });
             },
         });
