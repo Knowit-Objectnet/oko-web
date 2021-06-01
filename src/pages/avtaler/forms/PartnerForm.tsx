@@ -49,7 +49,7 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
     const handlePartnerSubmission = formMethods.handleSubmit((data) => {
         addPartnerMutation.mutate(data, {
             onSuccess: () => {
-                showSuccessToast({ title: `Samarbeidspartner ${data.navn} ble opprettet` });
+                showSuccessToast({ title: `${data.navn} ble registrert som samarbeidspartner` });
                 onSuccess?.();
             },
             onError: (error) => {

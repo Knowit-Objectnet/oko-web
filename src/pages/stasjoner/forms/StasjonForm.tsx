@@ -46,7 +46,7 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
     const handleSubmit = formMethods.handleSubmit((data) => {
         addStasjonMutation.mutate(data, {
             onSuccess: () => {
-                showSuccessToast({ title: `Stasjonen ${data.navn} ble opprettet` });
+                showSuccessToast({ title: `Stasjonen ${data.navn} ble registrert` });
                 onSuccess?.();
             },
             onError: (error) => {
