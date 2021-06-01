@@ -9,6 +9,7 @@ import { typography } from './foundations/typography';
 // Styling of components (see https://chakra-ui.com/docs/theming/component-style)
 import { Button } from './components/button';
 import { Modal } from './components/modal';
+import { Alert } from './components/alert';
 import { FormLabel } from './components/form-label';
 import { Input } from './components/input';
 import { Select } from './components/select';
@@ -26,6 +27,7 @@ const overrides = {
     components: {
         Button,
         Modal,
+        Alert,
         FormLabel,
         Input,
         Select,
