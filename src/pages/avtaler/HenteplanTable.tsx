@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { mockStasjoner } from '../../../__mocks__/mocks-new/mockAktor';
-import { ApiHenteplanDownstream } from '../../services-new/HenteplanService';
+import { ApiHenteplan } from '../../services-currentapi/HenteplanService';
 import { compareAsc, parseISO } from 'date-fns';
 import { HenteplanFrekvens, WorkingWeekdays } from '../../types';
 import { formatDate, formatTime } from '../../utils/formatDateTime';
@@ -23,7 +23,7 @@ const UKEDAG: Record<WorkingWeekdays, string> = {
 };
 
 interface Props {
-    henteplaner: Array<ApiHenteplanDownstream>;
+    henteplaner: Array<ApiHenteplan>;
 }
 
 export const HenteplanTable: React.FC<Props> = ({ henteplaner }) => {

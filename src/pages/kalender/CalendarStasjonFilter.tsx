@@ -6,6 +6,7 @@ import ArrowRight from '../../assets/ArrowRight.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
 import { useCalendarState } from './CalendarProvider';
 import { useStations } from '../../services/hooks/useStations';
+import { useStasjoner } from '../../services-currentapi/hooks/useStasjoner';
 
 const Wrapper = styled.div`
     display: flex;
@@ -59,7 +60,7 @@ const Input = styled.input`
 
 export const CalendarStasjonFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
-    const { data: stations } = useStations();
+    const { data: stasjoner } = useStasjoner();
     const { filters, setFilters } = useCalendarState();
 
     const onToggleClick = () => {
@@ -82,22 +83,22 @@ export const CalendarStasjonFilter: React.FC = () => {
             </Header>
             {toggled && (
                 <Stations>
-                    {stations?.map((station) => (
+                    {stasjoner?.map((station) => (
                         <Label key={station.id}>
                             <Input
                                 type="radio"
-                                name="station-selector"
-                                value={station.name}
-                                checked={station.name === filters.stasjon}
+                                name="stasjon-selector"
+                                value={station.navn}
+                                checked={station.navn === filters.stasjon}
                                 onChange={handleStationChange}
                             />
-                            {station.name}
+                            {station.navn}
                         </Label>
                     ))}
                     <Label key="AllRadioButton">
                         <Input
                             type="radio"
-                            name="station-selector"
+                            name="stasjon-selector"
                             value="default"
                             checked={filters.stasjon === undefined}
                             onChange={handleStationChange}

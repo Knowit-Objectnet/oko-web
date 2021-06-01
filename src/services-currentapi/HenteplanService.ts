@@ -1,6 +1,6 @@
 import { httpClient } from '../services/httpClient';
 import { HenteplanFrekvens, WorkingWeekdays } from '../types';
-import { ApiHenting } from './HentingService';
+import { ApiPlanlagtHenting } from './HentingService';
 
 export interface ApiHenteplan {
     id: string;
@@ -11,7 +11,7 @@ export interface ApiHenteplan {
     sluttTidspunkt: string; //LocalTimeDate: Time used for Henting time
     ukedag: WorkingWeekdays;
     merknad: string | null;
-    planlagteHentinger: Array<ApiHenting>;
+    planlagteHentinger: Array<ApiPlanlagtHenting>;
 }
 
 export interface ApiHenteplanPost {
@@ -46,7 +46,7 @@ export interface ApiHenteplanParams {
 const henteplanEndpoint = '/henteplaner';
 export const henteplanDefaultQueryKey = 'getHenteplaner';
 
-export const getHenteplaner = (params: ApiHenteplanParams): Promise<Array<ApiHenteplan>> =>
+export const getHenteplaner = (params: ApiHenteplanParams = {}): Promise<Array<ApiHenteplan>> =>
     httpClient()
         .get<Array<ApiHenteplan>>(henteplanEndpoint, { params })
         .then((response) => response.data);

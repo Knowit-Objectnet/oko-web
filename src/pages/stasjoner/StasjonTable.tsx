@@ -2,8 +2,8 @@ import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { EditButton } from '../../components/buttons/EditButton';
 import { DeleteButton } from '../../components/buttons/DeleteButton';
-import { mockStasjoner } from '../../../__mocks__/mocks-new/mockAktor';
 import { StasjonType } from '../../types';
+import { useStasjoner } from '../../services-currentapi/hooks/useStasjoner';
 
 const STASJONTYPE: Record<StasjonType, string> = {
     GJENBRUK: 'Gjenbruksstasjon',
@@ -11,10 +11,10 @@ const STASJONTYPE: Record<StasjonType, string> = {
 };
 
 export const StasjonTable: React.FC = () => {
-    // TODO: fetch from new API and handle error/loading
-    const stasjoner = mockStasjoner;
+    // TODO: handle error/loading
+    const { data: stasjoner } = useStasjoner();
 
-    const sortedStasjoner = stasjoner.sort((stasjonA, stasjonB) => stasjonA.navn.localeCompare(stasjonB.navn, 'nb'));
+    const sortedStasjoner = stasjoner?.sort((stasjonA, stasjonB) => stasjonA.navn.localeCompare(stasjonB.navn, 'nb'));
 
     return (
         <Table>
@@ -29,7 +29,7 @@ export const StasjonTable: React.FC = () => {
                 </Tr>
             </Thead>
             <Tbody>
-                {sortedStasjoner.map((stasjon) => (
+                {sortedStasjoner?.map((stasjon) => (
                     <Tr key={stasjon.id}>
                         <Td>{stasjon.navn}</Td>
                         <Td>{STASJONTYPE[stasjon.type] ?? 'Ukjent type'}</Td>
