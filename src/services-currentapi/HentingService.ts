@@ -6,7 +6,12 @@ export interface ApiPlanlagtHenting {
     sluttTidspunkt: string; //LocalTimeDate
     merknad: string | null;
     henteplanId: string; //UUID
-    avlyst: string; //LocalTimeDate
+    avlyst: string | null; //LocalTimeDate
+    avtaleId: string; //UUID
+    aktorId: string; //UUID
+    aktorNavn: string;
+    stasjonId: string; //UUID
+    stasjonNavn: string;
 }
 
 export interface ApiPlanlagtHentingParams {

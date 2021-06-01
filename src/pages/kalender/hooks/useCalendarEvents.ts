@@ -29,8 +29,7 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
 const transformToCalendarEvent = () => (event: ApiPlanlagtHenting): CalendarEvent => ({
     start: new Date(event.startTidspunkt),
     end: new Date(event.sluttTidspunkt),
-    title: 'Mangler beskrivelse', //TODO: Add Henting type including partner and stasjon
-    // title: `${event.partner.name} - ${event.station.name}`,
+    title: `${event.aktorNavn} - ${event.stasjonNavn}`,
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
