@@ -15,7 +15,7 @@ import parse from 'date-fns/parse';
 import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
 import set from 'date-fns/set';
-import { WorkingWeekdays } from '../../services-currentapi/HenteplanService';
+import { WorkingWeekdays } from '../../services-currentapi/henteplan/HenteplanService';
 
 const StyledForm = styled.form`
     display: flex;

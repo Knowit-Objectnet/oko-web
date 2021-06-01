@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
-import { ApiStasjon, ApiStasjonParams, getStasjoner, stasjonDefaultQueryKey } from '../StasjonService';
+import { ApiStasjon, ApiStasjonParams, getStasjoner, stasjonDefaultQueryKey } from './StasjonService';
 
 export const useStasjoner = (
     params: ApiStasjonParams = {},

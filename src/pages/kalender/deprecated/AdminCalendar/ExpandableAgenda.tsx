@@ -7,7 +7,7 @@ import { EventInfo, SlotInfo } from '../../../../types';
 import ArrowUp from '../../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../../assets/ArrowDown.svg';
 import { useStations } from '../../../../services/hooks/useStations';
-import { useStasjoner } from '../../../../services-currentapi/hooks/useStasjoner';
+import { useStasjoner } from '../../../../services-currentapi/stasjon/useStasjoner';
 
 const Wrapper = styled.div``;
 

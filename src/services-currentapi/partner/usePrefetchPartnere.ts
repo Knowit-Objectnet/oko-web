@@ -1,5 +1,5 @@
 import { useQueryClient } from 'react-query';
-import { getPartnere, partnerDefaultQueryKey } from '../PartnerService';
+import { getPartnere, partnerDefaultQueryKey } from './PartnerService';
 
 export const usePrefetchPartnere = (): void => {
     const queryClient = useQueryClient();

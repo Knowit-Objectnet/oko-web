@@ -1,6 +1,6 @@
-import { ApiKontakt } from '../../src/services-currentapi/AktorService';
-import { ApiPartner } from '../../src/services-currentapi/PartnerService';
-import { ApiStasjon } from '../../src/services-currentapi/StasjonService';
+import { ApiKontakt } from '../../src/services-currentapi/aktor/AktorService';
+import { ApiPartner } from '../../src/services-currentapi/partner/PartnerService';
+import { ApiStasjon } from '../../src/services-currentapi/stasjon/StasjonService';
 
 export const mockKontakter: Array<ApiKontakt> = [
     {
@@ -45,47 +45,47 @@ export const mockPartnere: Array<ApiPartner> = [
     {
         id: 'ebde26e5-bb66-4c6c-8cd7-e11d6cbd00f2',
         navn: 'Fretex',
-        kontaktPersoner: [
-            {
-                id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
-                navn: 'Kunde Kundesen',
-                telefon: '004712345678',
-                rolle: 'Kjøpsanvarlig',
-            },
-        ],
+        // kontaktPersoner: [
+        //     {
+        //         id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
+        //         navn: 'Kunde Kundesen',
+        //         telefon: '004712345678',
+        //         rolle: 'Kjøpsanvarlig',
+        //     },
+        // ],
         storrelse: 'STOR',
         ideell: true,
     },
     {
         id: '20aafe35-eb86-4fe4-a9a8-6432e2109638',
         navn: 'Maritastiftelsen',
-        kontaktPersoner: [
-            {
-                id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
-                navn: 'Kunde Kundesen',
-                telefon: '004712345678',
-                rolle: 'Kjøpsanvarlig',
-            },
-            {
-                id: '9ac829d8-0272-4f3f-b9db-3536576ca979',
-                navn: 'Kunde Kundesen jr',
-                telefon: '004712345678',
-                rolle: 'Sjåfør',
-            },
-            {
-                id: '9ac829d8-0272-4f3f-agse-3536576ca979',
-                navn: 'Ola Nordmann',
-                telefon: '004743892712',
-                rolle: 'Sjåfør',
-            },
-        ],
+        // kontaktPersoner: [
+        //     {
+        //         id: '1870517d-21a2-4238-8483-2b2b9e7d30ca',
+        //         navn: 'Kunde Kundesen',
+        //         telefon: '004712345678',
+        //         rolle: 'Kjøpsanvarlig',
+        //     },
+        //     {
+        //         id: '9ac829d8-0272-4f3f-b9db-3536576ca979',
+        //         navn: 'Kunde Kundesen jr',
+        //         telefon: '004712345678',
+        //         rolle: 'Sjåfør',
+        //     },
+        //     {
+        //         id: '9ac829d8-0272-4f3f-agse-3536576ca979',
+        //         navn: 'Ola Nordmann',
+        //         telefon: '004743892712',
+        //         rolle: 'Sjåfør',
+        //     },
+        // ],
         storrelse: 'MIDDELS',
         ideell: true,
     },
     {
         id: 'b370a928-f5f9-48d6-b9f3-52533123fc4a',
         navn: 'Jobben',
-        kontaktPersoner: [],
+        // kontaktPersoner: [],
         storrelse: 'LITEN',
         ideell: false,
     },

@@ -3,7 +3,7 @@ import { useStations } from '../../services/hooks/useStations';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from './ErrorMessage';
-import { useStasjoner } from '../../services-currentapi/hooks/useStasjoner';
+import { useStasjoner } from '../../services-currentapi/stasjon/useStasjoner';
 
 const Wrapper = styled.div`
     width: 100%;

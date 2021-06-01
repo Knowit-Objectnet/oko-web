@@ -11,7 +11,7 @@ import { DeleteStation } from './DeleteStation';
 import Minus from '../../assets/Minus.svg';
 import { NewStation } from './NewStation';
 import { useAuth } from '../../auth/useAuth';
-import { useStasjoner } from '../../services-currentapi/hooks/useStasjoner';
+import { useStasjoner } from '../../services-currentapi/stasjon/useStasjoner';
 
 const Wrapper = styled.div`
     display: flex;

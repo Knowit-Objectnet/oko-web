@@ -8,7 +8,7 @@ import {
 } from './PartnerInfoSection';
 import { AddButton } from '../../components/buttons/AddButton';
 import { KontaktPersonTable } from './KontaktPersonTable';
-import { ApiKontakt } from '../../services-currentapi/AktorService';
+import { ApiKontakt } from '../../services-currentapi/aktor/AktorService';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;

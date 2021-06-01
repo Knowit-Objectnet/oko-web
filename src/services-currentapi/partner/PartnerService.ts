@@ -1,12 +1,12 @@
-import { extractResponse, httpClient, transformError } from '../services/httpClient';
-import { ApiKontakt } from './AktorService';
+import { extractResponse, httpClient, transformError } from '../../services/httpClient';
+import { ApiKontakt } from '../aktor/AktorService';
 
 export type PartnerStorrelse = 'STOR' | 'MIDDELS' | 'LITEN';
 
 export interface ApiPartner {
     id: string;
     navn: string;
-    kontaktPersoner: Array<ApiKontakt>;
+    // kontaktPersoner: Array<ApiKontakt>;
     storrelse: PartnerStorrelse;
     ideell: boolean;
 }

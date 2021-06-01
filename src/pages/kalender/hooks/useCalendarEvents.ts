@@ -5,8 +5,8 @@ import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns
 import { ApiEvent } from '../../../services/EventService';
 import { CalendarView, VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
-import { usePlanlagteHentinger } from '../../../services-currentapi/hooks/usePlanlagteHentinger';
-import { ApiPlanlagtHenting } from '../../../services-currentapi/HentingService';
+import { usePlanlagteHentinger } from '../../../services-currentapi/henting/usePlanlagteHentinger';
+import { ApiPlanlagtHenting } from '../../../services-currentapi/henting/HentingService';
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;

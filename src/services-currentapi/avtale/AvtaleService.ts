@@ -1,5 +1,5 @@
-import { extractResponse, httpClient, transformError } from '../services/httpClient';
-import { ApiHenteplan, ApiHenteplanPost } from './HenteplanService';
+import { extractResponse, httpClient, transformError } from '../../services/httpClient';
+import { ApiHenteplan, ApiHenteplanPost } from '../henteplan/HenteplanService';
 
 export type AvtaleType = 'FAST' | 'ANNEN' | 'OMBRUKSARRANGEMENT' | 'INTERNTRANSPORT';
 

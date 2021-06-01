@@ -7,7 +7,7 @@ import {
     ApiPlanlagtHentingParams,
     getPlanlagteHentinger,
     planlagtHentingDefaultQueryKey,
-} from '../../../services-currentapi/HentingService';
+} from '../../../services-currentapi/henting/HentingService';
 
 const calculateInterval = (
     intervalToFetch: Interval,

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { EditButton } from '../../components/buttons/EditButton';
-import { useStasjoner } from '../../services-currentapi/hooks/useStasjoner';
+import { useStasjoner } from '../../services-currentapi/stasjon/useStasjoner';
 import { DeleteStasjonButton } from './forms/DeleteStasjonButton';
-import { StasjonType } from '../../services-currentapi/StasjonService';
+import { StasjonType } from '../../services-currentapi/stasjon/StasjonService';
 
 const STASJONTYPE: Record<StasjonType, string> = {
     GJENBRUK: 'Gjenbruksstasjon',

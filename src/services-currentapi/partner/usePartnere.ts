@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
-import { ApiPartner, ApiPartnerParams, getPartnere, partnerDefaultQueryKey } from '../PartnerService';
+import { ApiPartner, ApiPartnerParams, getPartnere, partnerDefaultQueryKey } from './PartnerService';
 
 export const usePartnere = (
     params: ApiPartnerParams = {},

@@ -1,6 +1,6 @@
 import { UseMutationResult } from 'react-query';
-import { ApiStasjon, ApiStasjonPost, postStasjon, stasjonDefaultQueryKey } from '../StasjonService';
-import { useMutationWithInvalidation } from './useMutationWithInvalidation';
+import { ApiStasjon, ApiStasjonPost, postStasjon, stasjonDefaultQueryKey } from './StasjonService';
+import { useMutationWithInvalidation } from '../useMutationWithInvalidation';
 import { ApiError } from '../../services/httpClient';
 
 export const useAddStasjon = (): UseMutationResult<ApiStasjon, ApiError, ApiStasjonPost> =>

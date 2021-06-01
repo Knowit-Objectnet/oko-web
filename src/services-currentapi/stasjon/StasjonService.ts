@@ -1,5 +1,5 @@
-import { extractResponse, httpClient, transformError } from '../services/httpClient';
-import { ApiKontakt } from './AktorService';
+import { extractResponse, httpClient, transformError } from '../../services/httpClient';
+import { ApiKontakt } from '../aktor/AktorService';
 
 export type StasjonType = 'GJENBRUK' | 'MINI';
 

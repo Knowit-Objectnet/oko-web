@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { mockStasjoner } from '../../../__mocks__/mocks-new/mockAktor';
-import { ApiHenteplan, HenteplanFrekvens, WorkingWeekdays } from '../../services-currentapi/HenteplanService';
+import { ApiHenteplan, HenteplanFrekvens, WorkingWeekdays } from '../../services-currentapi/henteplan/HenteplanService';
 import { compareAsc, parseISO } from 'date-fns';
 import { formatDate, formatTime } from '../../utils/formatDateTime';
 import { EditButton } from '../../components/buttons/EditButton';

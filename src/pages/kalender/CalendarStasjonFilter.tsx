@@ -6,7 +6,7 @@ import ArrowRight from '../../assets/ArrowRight.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
 import { useCalendarState } from './CalendarProvider';
 import { useStations } from '../../services/hooks/useStations';
-import { useStasjoner } from '../../services-currentapi/hooks/useStasjoner';
+import { useStasjoner } from '../../services-currentapi/stasjon/useStasjoner';
 
 const Wrapper = styled.div`
     display: flex;

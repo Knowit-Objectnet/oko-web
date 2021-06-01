@@ -1,4 +1,4 @@
-import { ApiAvtale } from '../../src/services-currentapi/AvtaleService';
+import { ApiAvtale } from '../../src/services-currentapi/avtale/AvtaleService';
 
 export const mockAvtaler: Array<ApiAvtale> = [
     {

@@ -1,4 +1,4 @@
-import { extractResponse, httpClient, transformError } from '../services/httpClient';
+import { extractResponse, httpClient, transformError } from '../../services/httpClient';
 
 export type AktorType = 'PARTNER' | 'STASJON';
 

@@ -1,4 +1,4 @@
-import { ApiHenteplan } from '../../src/services-currentapi/HenteplanService';
+import { ApiHenteplan } from '../../src/services-currentapi/henteplan/HenteplanService';
 
 export const mockHenteplaner: Array<ApiHenteplan> = [
     {

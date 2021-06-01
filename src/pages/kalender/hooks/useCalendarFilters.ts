@@ -1,7 +1,7 @@
 import { useQueryString } from 'use-route-as-state';
-import { ApiStasjon } from '../../../services-currentapi/StasjonService';
-import { ApiPlanlagtHenting } from '../../../services-currentapi/HentingService';
-import { useStasjoner } from '../../../services-currentapi/hooks/useStasjoner';
+import { ApiStasjon } from '../../../services-currentapi/stasjon/StasjonService';
+import { ApiPlanlagtHenting } from '../../../services-currentapi/henting/HentingService';
+import { useStasjoner } from '../../../services-currentapi/stasjon/useStasjoner';
 import { ApiEvent } from '../../../services/EventService';
 import { useStations } from '../../../services/hooks/useStations';
 import { ApiStation } from '../../../services/StationService';

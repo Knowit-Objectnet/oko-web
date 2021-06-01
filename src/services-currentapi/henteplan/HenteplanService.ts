@@ -1,5 +1,5 @@
-import { extractResponse, httpClient, transformError } from '../services/httpClient';
-import { ApiPlanlagtHenting } from './HentingService';
+import { extractResponse, httpClient, transformError } from '../../services/httpClient';
+import { ApiPlanlagtHenting } from '../henting/HentingService';
 
 export type HenteplanFrekvens = 'ENKELT' | 'UKENTLIG' | 'ANNENHVER';
 
