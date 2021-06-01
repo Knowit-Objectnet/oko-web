@@ -62,6 +62,7 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
             <form onSubmit={handlePartnerSubmission}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
+                    <AllFormErrorMessages />
                     <TextInput name="navn" label="Navn på organisasjon" required />
                     <Select
                         name="storrelse"
@@ -75,7 +76,6 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
                         options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
                         required
                     />
-                    <AllFormErrorMessages />
                     <FormSubmitButton label="Registrer ny samarbeidspartner" isLoading={addPartnerMutation.isLoading} />
                 </Stack>
             </form>

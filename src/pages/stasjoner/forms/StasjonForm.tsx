@@ -59,6 +59,7 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
             <form onSubmit={handlePartnerSubmission}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
+                    <AllFormErrorMessages />
                     <TextInput name="navn" label="Navn på stasjonen" required />
                     <Select
                         name="type"
@@ -67,7 +68,6 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
                         placeholder="Velg en type"
                         required
                     />
-                    <AllFormErrorMessages />
                     <FormSubmitButton label="Registrer ny stasjon" isLoading={addStasjonMutation.isLoading} />
                 </Stack>
             </form>
