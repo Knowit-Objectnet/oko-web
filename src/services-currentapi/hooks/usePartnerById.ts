@@ -1,13 +1,13 @@
-import { QueryObserverResult, useQuery, UseQueryOptions } from 'react-query';
-import { ApiPartner, ApiPartnerParams, getPartnerById, getPartnere, partnerDefaultQueryKey } from '../PartnerService';
+import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
+import { ApiPartner, getPartnerById, partnerDefaultQueryKey } from '../PartnerService';
 
 export const usePartnerById = (
-    id: string,
+    partnerId: string,
     queryOptions?: UseQueryOptions<ApiPartner>,
-): QueryObserverResult<ApiPartner> => {
+): UseQueryResult<ApiPartner> => {
     return useQuery<ApiPartner>({
-        queryKey: [partnerDefaultQueryKey, id],
-        queryFn: () => getPartnerById(id),
+        queryKey: [partnerDefaultQueryKey, partnerId],
+        queryFn: () => getPartnerById(partnerId),
         ...queryOptions,
     });
 };

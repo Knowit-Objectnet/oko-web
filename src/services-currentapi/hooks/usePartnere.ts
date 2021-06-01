@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
+import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
 import { ApiPartner, ApiPartnerParams, getPartnere, partnerDefaultQueryKey } from '../PartnerService';
 
 export const usePartnere = (
@@ -8,12 +8,6 @@ export const usePartnere = (
     return useQuery<Array<ApiPartner>>({
         queryKey: [partnerDefaultQueryKey],
         queryFn: () => getPartnere(params),
-    });
-};
-
-export const prefetchPartnere = (queryClient: QueryClient): void => {
-    queryClient.prefetchQuery({
-        queryKey: [partnerDefaultQueryKey],
-        queryFn: () => getPartnere(),
+        ...queryOptions,
     });
 };

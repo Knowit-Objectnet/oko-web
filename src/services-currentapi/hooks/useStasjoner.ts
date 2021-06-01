@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
+import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
 import { ApiStasjon, ApiStasjonParams, getStasjoner, stasjonDefaultQueryKey } from '../StasjonService';
 
 export const useStasjoner = (
@@ -9,12 +9,5 @@ export const useStasjoner = (
         queryKey: [stasjonDefaultQueryKey],
         queryFn: () => getStasjoner(params),
         ...queryOptions,
-    });
-};
-
-export const prefetchStasjoner = (queryClient: QueryClient): void => {
-    queryClient.prefetchQuery({
-        queryKey: [stasjonDefaultQueryKey],
-        queryFn: () => getStasjoner(),
     });
 };
