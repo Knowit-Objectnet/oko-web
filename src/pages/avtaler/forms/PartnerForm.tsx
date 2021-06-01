@@ -10,10 +10,11 @@ import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMess
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
+import { useAddPartner } from '../../../services-currentapi/hooks/useAddPartner';
+import { ApiPartnerPost } from '../../../services-currentapi/PartnerService';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
-import { ApiPartnerPost } from '../../../services-currentapi/PartnerService';
 
 const storrelseOptions: Array<SelectOption<PartnerStorrelse>> = [
     { value: 'LITEN', label: 'Liten' },
@@ -32,22 +33,29 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
-    afterSubmit?: () => void;
+    onSuccess?: () => void;
 }
 
-export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
+export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
     const formMethods = useForm<ApiPartnerPost>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
     });
 
+    const addPartnerMutation = useAddPartner();
+
     const handlePartnerSubmission = formMethods.handleSubmit((data) => {
-        console.log(data);
-        // TODO: submit data to API with useMutation (react-query) (post or patch, depending on form is in edit mode)
-        //  - pass loading state to button / disable form
-        //  - pass errors from backend response (onError react-query callback):
-        //  formMethods.setError('navn', { message: 'Partner med dette navnet eksisterer allerede' });
-        afterSubmit?.();
+        addPartnerMutation.mutate(data, {
+            onSuccess: () => {
+                // TODO: chakra alert
+                alert(`Opprettet ny partner: ${data.navn}`);
+                onSuccess?.();
+            },
+            onError: (error) => {
+                // TODO: get details from error object and set message to form errors
+                formMethods.setError('navn', { message: error.message });
+            },
+        });
     });
 
     return (
@@ -69,10 +77,7 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
                         required
                     />
                     <AllFormErrorMessages />
-                    <FormSubmitButton
-                        label="Registrer ny samarbeidspartner"
-                        // TODO: isLoading-state from submission here
-                    />
+                    <FormSubmitButton label="Registrer ny samarbeidspartner" isLoading={addPartnerMutation.isLoading} />
                 </Stack>
             </form>
         </FormProvider>
