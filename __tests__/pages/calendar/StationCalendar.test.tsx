@@ -2,7 +2,7 @@ import React from 'react';
 import { cleanup, setupUseAuthMock, render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { mockApiEvents } from '../../../__mocks__/mockEvents';
-import { EventInfo } from '../../../src/types';
+import { EventInfo } from '../../../src/services/deprecated/types';
 
 // Component to test
 import { StationCalendar } from '../../../src/pages/kalender/deprecated/StationCalendar/StationCalendar';

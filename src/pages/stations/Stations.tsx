@@ -5,7 +5,6 @@ import { Loading } from '../../components/Loading';
 import Plus from '../../assets/Plus.svg';
 import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
-import { useStations } from '../../services/deprecated/hooks/useStations';
 import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
 import { DeleteStation } from './DeleteStation';
 import Minus from '../../assets/Minus.svg';

@@ -8,7 +8,6 @@ import { FloatingActionButton } from '../../components/buttons/FloatingActionBut
 import Minus from '../../assets/Minus.svg';
 import { NewPartner } from './NewPartner';
 import { DeletePartner } from './DeletePartner';
-import { usePartners } from '../../services/deprecated/hooks/usePartners';
 import { useAuth } from '../../auth/useAuth';
 import { usePartnere } from '../../services/partner/usePartnere';
 

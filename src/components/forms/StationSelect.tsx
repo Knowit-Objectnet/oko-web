@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useStations } from '../../services/deprecated/hooks/useStations';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from './ErrorMessage';

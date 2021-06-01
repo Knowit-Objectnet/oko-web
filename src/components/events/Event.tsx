@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventInfo } from '../../types';
+import { EventInfo } from '../../services/deprecated/types';
 import { EventStationInfo } from './EventStationInfo';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { types, useAlert } from 'react-alert';

@@ -1,6 +1,5 @@
 import { QueryClient, useQueryClient } from 'react-query';
 import { add, Duration } from 'date-fns';
-import { ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../../services/deprecated/EventService';
 import { VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
 import {

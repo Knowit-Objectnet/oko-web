@@ -1,4 +1,4 @@
-import { EventInfo } from '../src/types';
+import { EventInfo } from '../src/services/deprecated/types';
 import { ApiEvent } from '../src/services/deprecated/EventService';
 
 const d = new Date();

@@ -12,15 +12,13 @@ export const PartnerInfo: React.FC = () => {
     // TODO: handle invalid partner Id and handle loading state more gracefully
     const { data: partner } = usePartnerById(params.partnerId);
 
-    console.log(partner);
-
     return (
         <Flex as="main" alignItems="flex-start" direction="column" flex="1" height="full">
             {partner ? (
                 <>
                     <PartnerInfoHeader partner={partner} />
                     <AvtaleInfoSection partner={partner} />
-                    {/*<KontaktPersonSection kontaktPersoner={partner.kontaktPersoner} />*/}
+                    <KontaktPersonSection kontaktPersoner={partner.kontaktPersoner} />
                 </>
             ) : (
                 <>Laster data...</>

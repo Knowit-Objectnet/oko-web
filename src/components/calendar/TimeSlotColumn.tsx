@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { TimeSlotGroup } from './TimeSlotGroup';
 import { useEffect, useState } from 'react';
-import { EventInfo } from '../../types';
+import { EventInfo } from '../../services/deprecated/types';
 import { ColumnTitle } from './ColumnTitle';
 import { EventsColumn } from './EventsColumn';
 

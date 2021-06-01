@@ -26,6 +26,7 @@ export interface ApiStasjonParams {
     navn?: string;
     type?: StasjonType;
 }
+
 const stasjonEndpoint = '/stasjoner';
 export const stasjonDefaultQueryKey = 'getStasjoner';
 

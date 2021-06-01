@@ -11,7 +11,7 @@ import { KontaktPersonTable } from './KontaktPersonTable';
 import { ApiKontakt } from '../../services/aktor/AktorService';
 
 interface Props {
-    kontaktPersoner: Array<ApiKontakt>;
+    kontaktPersoner?: Array<ApiKontakt>;
 }
 
 export const KontaktPersonSection: React.FC<Props> = ({ kontaktPersoner }) => (
@@ -28,7 +28,7 @@ export const KontaktPersonSection: React.FC<Props> = ({ kontaktPersoner }) => (
             </PartnerInfoSectionButtons>
         </PartnerInfoSectionHeader>
         <PartnerInfoSectionContent>
-            {kontaktPersoner.length > 0 ? (
+            {kontaktPersoner && kontaktPersoner.length > 0 ? (
                 <KontaktPersonTable kontaktPersoner={kontaktPersoner} />
             ) : (
                 'Ingen registrerte kontaktpersoner'

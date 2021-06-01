@@ -6,7 +6,7 @@ export type PartnerStorrelse = 'STOR' | 'MIDDELS' | 'LITEN';
 export interface ApiPartner {
     id: string;
     navn: string;
-    // kontaktPersoner: Array<ApiKontakt>;
+    kontaktPersoner: Array<ApiKontakt>;
     storrelse: PartnerStorrelse;
     ideell: boolean;
 }
@@ -30,6 +30,7 @@ export interface ApiPartnerParams {
     storrelse?: PartnerStorrelse;
     ideell?: boolean;
 }
+
 const partnerEndpoint = '/partnere';
 export const partnerDefaultQueryKey = 'getPartnere';
 

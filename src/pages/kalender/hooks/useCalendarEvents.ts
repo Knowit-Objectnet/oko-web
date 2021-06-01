@@ -1,8 +1,6 @@
-import { useEvents } from '../../../services/deprecated/hooks/useEvents';
 import { DateRange, Event as CalendarEvent } from 'react-big-calendar';
 import { usePrefetchHentinger } from './usePrefetchHentinger';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
-import { ApiEvent } from '../../../services/deprecated/EventService';
 import { CalendarView, VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
 import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHentinger';
