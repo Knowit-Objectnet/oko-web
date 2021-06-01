@@ -3,7 +3,6 @@ import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextInput } from '../../../components/forms/TextInput';
-import { PartnerStorrelse } from '../../../types';
 import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
@@ -11,7 +10,7 @@ import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFie
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddPartner } from '../../../services-currentapi/hooks/useAddPartner';
-import { ApiPartnerPost } from '../../../services-currentapi/PartnerService';
+import { ApiPartnerPost, PartnerStorrelse } from '../../../services-currentapi/PartnerService';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';

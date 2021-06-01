@@ -1,6 +1,7 @@
-import { httpClient } from '../services/httpClient';
-import { StasjonType } from '../types';
+import { extractResponse, httpClient, transformError } from '../services/httpClient';
 import { ApiKontakt } from './AktorService';
+
+export type StasjonType = 'GJENBRUK' | 'MINI';
 
 export interface ApiStasjon {
     id: string;
@@ -31,24 +32,16 @@ export const stasjonDefaultQueryKey = 'getStasjoner';
 export const getStasjoner = (params: ApiStasjonParams = {}): Promise<Array<ApiStasjon>> =>
     httpClient()
         .get<Array<ApiStasjon>>(stasjonEndpoint, { params })
-        .then((response) => response.data);
+        .then(extractResponse, transformError);
 
 export const getStasjonById = (stasjonId: string): Promise<ApiStasjon> =>
-    httpClient()
-        .get<ApiStasjon>(`${stasjonEndpoint}/${stasjonId}`)
-        .then((response) => response.data);
+    httpClient().get<ApiStasjon>(`${stasjonEndpoint}/${stasjonId}`).then(extractResponse, transformError);
 
 export const postStasjon = (newStasjon: ApiStasjonPost): Promise<ApiStasjon> =>
-    httpClient()
-        .post<ApiStasjon>(stasjonEndpoint, newStasjon)
-        .then((response) => response.data);
+    httpClient().post<ApiStasjon>(stasjonEndpoint, newStasjon).then(extractResponse, transformError);
 
 export const deleteStasjon = (stasjonId: string): Promise<ApiStasjon> =>
-    httpClient()
-        .delete<ApiStasjon>(`${stasjonEndpoint}/${stasjonId}`)
-        .then((response) => response.data);
+    httpClient().delete<ApiStasjon>(`${stasjonEndpoint}/${stasjonId}`).then(extractResponse, transformError);
 
 export const patchStasjon = (updatedStasjon: ApiStasjonPatch): Promise<ApiStasjon> =>
-    httpClient()
-        .patch<ApiStasjon>(stasjonEndpoint, updatedStasjon)
-        .then((response) => response.data);
+    httpClient().patch<ApiStasjon>(stasjonEndpoint, updatedStasjon).then(extractResponse, transformError);

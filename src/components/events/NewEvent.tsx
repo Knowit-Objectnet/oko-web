@@ -5,7 +5,6 @@ import { EventTemplateVertical } from './EventTemplateVertical';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../services/EventService';
-import { WorkingWeekdays } from '../../types';
 import { StationSelect } from '../forms/StationSelect';
 import { PartnerSelect } from '../forms/PartnerSelect';
 import { PositiveButton } from '../buttons/PositiveButton';
@@ -16,6 +15,7 @@ import parse from 'date-fns/parse';
 import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
 import set from 'date-fns/set';
+import { WorkingWeekdays } from '../../services-currentapi/HenteplanService';
 
 const StyledForm = styled.form`
     display: flex;

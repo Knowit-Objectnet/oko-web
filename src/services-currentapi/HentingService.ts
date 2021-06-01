@@ -1,4 +1,4 @@
-import { httpClient } from '../services/httpClient';
+import { extractResponse, httpClient, transformError } from '../services/httpClient';
 
 export interface ApiPlanlagtHenting {
     id: string; //UUID
@@ -37,19 +37,13 @@ export const planlagtHentingDefaultQueryKey = 'getPlanlagteHentinger';
 export const getPlanlagteHentinger = (params: ApiPlanlagtHentingParams = {}): Promise<Array<ApiPlanlagtHenting>> =>
     httpClient()
         .get<Array<ApiPlanlagtHenting>>(hentingEndpoint, { params })
-        .then((response) => response.data);
+        .then(extractResponse, transformError);
 
 export const getPlanlagtHentingById = (hentingId: string): Promise<ApiPlanlagtHenting> =>
-    httpClient()
-        .get<ApiPlanlagtHenting>(`${hentingEndpoint}/${hentingId}`)
-        .then((response) => response.data);
+    httpClient().get<ApiPlanlagtHenting>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);
 
 export const deletePlanlagtHenting = (hentingId: string): Promise<ApiPlanlagtHenting> =>
-    httpClient()
-        .delete<ApiPlanlagtHenting>(`${hentingEndpoint}/${hentingId}`)
-        .then((response) => response.data);
+    httpClient().delete<ApiPlanlagtHenting>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);
 
 export const patchPlanlagtHenting = (updatedHenting: ApiPlanlagtHentingPatch): Promise<ApiPlanlagtHenting> =>
-    httpClient()
-        .patch<ApiPlanlagtHenting>(hentingEndpoint, updatedHenting)
-        .then((response) => response.data);
+    httpClient().patch<ApiPlanlagtHenting>(hentingEndpoint, updatedHenting).then(extractResponse, transformError);

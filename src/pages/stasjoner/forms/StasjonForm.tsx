@@ -3,12 +3,11 @@ import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextInput } from '../../../components/forms/TextInput';
-import { StasjonType } from '../../../types';
 import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ApiStasjon, ApiStasjonPost } from '../../../services-currentapi/StasjonService';
+import { ApiStasjon, ApiStasjonPost, StasjonType } from '../../../services-currentapi/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddStasjon } from '../../../services-currentapi/hooks/useAddStasjon';
 

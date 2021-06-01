@@ -1,11 +1,10 @@
 import { UseMutationResult } from 'react-query';
 import { ApiStasjon, deleteStasjon, stasjonDefaultQueryKey } from '../StasjonService';
-import { AxiosError } from 'axios';
 import { useMutationWithInvalidation } from './useMutationWithInvalidation';
+import { ApiError } from '../../services/httpClient';
 
-// TODO: we might want to use our own error-object here, not AxiosError
-export const useDeleteStasjon = (): UseMutationResult<ApiStasjon, AxiosError, string> =>
-    useMutationWithInvalidation<ApiStasjon, AxiosError, string>(
+export const useDeleteStasjon = (): UseMutationResult<ApiStasjon, ApiError, string> =>
+    useMutationWithInvalidation<ApiStasjon, ApiError, string>(
         (stasjonId) => deleteStasjon(stasjonId),
         stasjonDefaultQueryKey,
     );
