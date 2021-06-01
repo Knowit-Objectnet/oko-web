@@ -27,14 +27,12 @@ export const useCalendarFilters = (): {
     const filterFns = [];
 
     // Checking for valid station filter name, and adding filter if present
-    // const { data: stasjoner } = useStations();
     const { data: stasjoner } = useStasjoner();
     if (isValidStasjon(queryFilters.stasjon, stasjoner)) {
         const stasjonFilter = (event: ApiPlanlagtHenting): boolean => {
-            //TODO: Allow filtering when datatype containing stasjon is added
-            // if (queryFilters.stasjon !== undefined) {
-            //     return event.station.name === queryFilters.stasjon;
-            // }
+            if (queryFilters.stasjon !== undefined) {
+                return event.stasjonNavn === queryFilters.stasjon;
+            }
             return true;
         };
         filterFns.push(stasjonFilter);
