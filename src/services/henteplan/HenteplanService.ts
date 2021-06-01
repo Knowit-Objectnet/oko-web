@@ -3,7 +3,7 @@ import { ApiPlanlagtHenting } from '../henting/HentingService';
 
 export type HenteplanFrekvens = 'ENKELT' | 'UKENTLIG' | 'ANNENHVER';
 
-export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
+export type Weekday = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
 
 export interface ApiHenteplan {
     id: string;
@@ -12,7 +12,7 @@ export interface ApiHenteplan {
     frekvens: HenteplanFrekvens;
     startTidspunkt: string; //LocalTimeDate: Time used for Henting time
     sluttTidspunkt: string; //LocalTimeDate: Time used for Henting time
-    ukedag: WorkingWeekdays;
+    ukedag: Weekday;
     merknad: string | null;
     planlagteHentinger: Array<ApiPlanlagtHenting>;
 }
@@ -23,7 +23,7 @@ export interface ApiHenteplanPost {
     frekvens: HenteplanFrekvens;
     startTidspunkt: string;
     sluttTidspunkt: string;
-    ukedag: WorkingWeekdays;
+    ukedag: Weekday;
     merknad?: string;
 }
 
@@ -32,7 +32,7 @@ export interface ApiHenteplanPatch {
     frekvens?: HenteplanFrekvens;
     startTidspunkt?: string;
     sluttTidspunkt?: string;
-    ukedag?: WorkingWeekdays;
+    ukedag?: Weekday;
     merknad?: string;
 }
 
@@ -42,7 +42,7 @@ export interface ApiHenteplanParams {
     frekvens?: HenteplanFrekvens;
     before?: string; //LocalTimeDate Henteplan must end before this
     after?: string; //LocalTimeDate Henteplan must start after this
-    ukedag?: WorkingWeekdays;
+    ukedag?: Weekday;
     id?: string;
 }
 

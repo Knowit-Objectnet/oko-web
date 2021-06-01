@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { mockStasjoner } from '../../../__mocks__/mocks-new/mockAktor';
-import { ApiHenteplan, HenteplanFrekvens, WorkingWeekdays } from '../../services/henteplan/HenteplanService';
+import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../services/henteplan/HenteplanService';
 import { compareAsc, parseISO } from 'date-fns';
 import { formatDate, formatTime } from '../../utils/formatDateTime';
 import { EditButton } from '../../components/buttons/EditButton';
@@ -13,12 +12,14 @@ const FREKVENS: Record<HenteplanFrekvens, string> = {
     ANNENHVER: 'Annenhver uke',
 };
 
-const UKEDAG: Record<WorkingWeekdays, string> = {
-    FRIDAY: 'Fredag',
+const UKEDAG: Record<Weekday, string> = {
     MONDAY: 'Mandag',
-    THURSDAY: 'Tirsdag',
-    TUESDAY: 'Torsdag',
+    TUESDAY: 'Tirsdag',
     WEDNESDAY: 'Onsdag',
+    THURSDAY: 'Torsdag',
+    FRIDAY: 'Fredag',
+    SATURDAY: 'Lørdag',
+    SUNDAY: 'Søndag',
 };
 
 interface Props {

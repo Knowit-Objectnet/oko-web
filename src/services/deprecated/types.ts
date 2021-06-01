@@ -1,6 +1,7 @@
 import { ApiStation } from './StationService';
 import { ApiPartner } from './PartnerService';
-import { WorkingWeekdays } from '../henteplan/HenteplanService';
+
+export type WorkingWeekdays = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY';
 
 export interface EventInfo {
     title: string;
