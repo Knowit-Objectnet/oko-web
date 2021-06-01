@@ -8,18 +8,12 @@ import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import {
-    ApiStasjon,
-    ApiStasjonPost,
-    postStasjon,
-    stasjonDefaultQueryKey,
-} from '../../../services-currentapi/StasjonService';
+import { ApiStasjon, ApiStasjonPost } from '../../../services-currentapi/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { useMutation, useQueryClient } from 'react-query';
+import { useAddStasjon } from '../../../services-currentapi/hooks/useAddStasjon';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
-import { useAddStasjon } from '../../../services-currentapi/hooks/useStasjonMutation';
 
 const stasjonTypeOptions: Array<SelectOption<StasjonType>> = [
     { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },

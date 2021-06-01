@@ -1,7 +1,7 @@
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import * as React from 'react';
 import { ApiStasjon } from '../../../services-currentapi/StasjonService';
-import { useDeleteStasjon } from '../../../services-currentapi/hooks/useStasjonMutation';
+import { useDeleteStasjon } from '../../../services-currentapi/hooks/useDeleteStasjon';
 
 interface Props {
     stasjon: ApiStasjon;
