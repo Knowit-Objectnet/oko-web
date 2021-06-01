@@ -1,26 +1,8 @@
 import * as React from 'react';
-import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../services/henteplan/HenteplanService';
+import { Table, Tbody, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
+import { ApiHenteplan } from '../../services/henteplan/HenteplanService';
 import { compareAsc, parseISO } from 'date-fns';
-import { formatDate, formatTime } from '../../utils/formatDateTime';
-import { EditButton } from '../../components/buttons/EditButton';
-import { DeleteButton } from '../../components/buttons/DeleteButton';
-
-const FREKVENS: Record<HenteplanFrekvens, string> = {
-    ENKELT: 'Én gang',
-    UKENTLIG: 'Ukentlig',
-    ANNENHVER: 'Annenhver uke',
-};
-
-const UKEDAG: Record<Weekday, string> = {
-    MONDAY: 'Mandag',
-    TUESDAY: 'Tirsdag',
-    WEDNESDAY: 'Onsdag',
-    THURSDAY: 'Torsdag',
-    FRIDAY: 'Fredag',
-    SATURDAY: 'Lørdag',
-    SUNDAY: 'Søndag',
-};
+import { HenteplanRow } from './HenteplanRow';
 
 interface Props {
     henteplaner: Array<ApiHenteplan>;
@@ -46,48 +28,9 @@ export const HenteplanTable: React.FC<Props> = ({ henteplaner }) => {
                 </Tr>
             </Thead>
             <Tbody>
-                {sortedHenteplaner.map((henteplan) => {
-                    const stasjon = mockStasjoner.find((stasjon) => stasjon.id === henteplan.stasjonId);
-                    return (
-                        <Tr key={henteplan.id}>
-                            <Td>{UKEDAG[henteplan.ukedag]}</Td>
-                            <Td>
-                                <time>{formatTime(henteplan.startTidspunkt)}</time>
-                                &ndash;
-                                <time>{formatTime(henteplan.sluttTidspunkt)}</time>
-                            </Td>
-                            <Td>{stasjon?.navn}</Td>
-                            <Td>{FREKVENS[henteplan.frekvens]}</Td>
-                            <Td>
-                                <time dateTime={henteplan.startTidspunkt}>{formatDate(henteplan.startTidspunkt)}</time>
-                                {henteplan.frekvens !== 'ENKELT' ? (
-                                    <>
-                                        &ndash;
-                                        <time dateTime={henteplan.sluttTidspunkt}>
-                                            {formatDate(henteplan.sluttTidspunkt)}
-                                        </time>
-                                    </>
-                                ) : null}
-                            </Td>
-                            <Td textAlign="end">
-                                <ButtonGroup spacing="4" size="sm">
-                                    <EditButton
-                                        label="Rediger"
-                                        onClick={() => {
-                                            console.log(`Rediger henteplan med id ${henteplan.id}`);
-                                        }}
-                                    />
-                                    <DeleteButton
-                                        label="Slett"
-                                        onClick={() => {
-                                            console.log(`Slett henteplan med id ${henteplan.id}`);
-                                        }}
-                                    />
-                                </ButtonGroup>
-                            </Td>
-                        </Tr>
-                    );
-                })}
+                {sortedHenteplaner.map((henteplan) => (
+                    <HenteplanRow key={henteplan.id} henteplan={henteplan} />
+                ))}
             </Tbody>
         </Table>
     );
