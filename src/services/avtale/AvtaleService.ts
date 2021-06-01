@@ -1,4 +1,4 @@
-import { extractResponse, httpClient, transformError } from '../../services/httpClient';
+import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiHenteplan, ApiHenteplanPost } from '../henteplan/HenteplanService';
 
 export type AvtaleType = 'FAST' | 'ANNEN' | 'OMBRUKSARRANGEMENT' | 'INTERNTRANSPORT';

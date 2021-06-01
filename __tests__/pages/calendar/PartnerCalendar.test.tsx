@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { mockApiEvents } from '../../../__mocks__/mockEvents';
 import { EventInfo } from '../../../src/types';
 import { PartnerCalendar } from '../../../src/pages/kalender/deprecated/PartnerCalendar/PartnerCalendar';
-import { ApiEvent } from '../../../src/services/EventService';
+import { ApiEvent } from '../../../src/services/deprecated/EventService';
 import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides a page for partners to view the calendar', () => {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ApiHenteplan } from '../../services-currentapi/henteplan/HenteplanService';
+import { ApiHenteplan } from '../../services/henteplan/HenteplanService';
 import { Flex } from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/react';
 import { AddButton } from '../../components/buttons/AddButton';

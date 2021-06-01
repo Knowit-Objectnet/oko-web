@@ -9,7 +9,7 @@ import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiEventPatch, patchEvent, eventsDefaultQueryKey } from '../../services/EventService';
+import { ApiEventPatch, patchEvent, eventsDefaultQueryKey } from '../../services/deprecated/EventService';
 import { NegativeButton } from '../buttons/NegativeButton';
 import { PositiveButton } from '../buttons/PositiveButton';
 import { useAuth } from '../../auth/useAuth';

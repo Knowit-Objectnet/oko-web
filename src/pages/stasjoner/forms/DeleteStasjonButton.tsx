@@ -1,7 +1,7 @@
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import * as React from 'react';
-import { ApiStasjon } from '../../../services-currentapi/stasjon/StasjonService';
-import { useDeleteStasjon } from '../../../services-currentapi/stasjon/useDeleteStasjon';
+import { ApiStasjon } from '../../../services/stasjon/StasjonService';
+import { useDeleteStasjon } from '../../../services/stasjon/useDeleteStasjon';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useErrorToast } from '../../../components/toasts/useErrorToast';
 

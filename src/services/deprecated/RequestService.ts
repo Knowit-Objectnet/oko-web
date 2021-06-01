@@ -1,4 +1,4 @@
-import { httpClient } from './httpClient';
+import { httpClient } from '../httpClient';
 import { ApiPickUp } from './PickUpService';
 import { ApiPartner } from './PartnerService';
 

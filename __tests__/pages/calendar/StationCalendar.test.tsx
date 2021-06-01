@@ -6,7 +6,7 @@ import { EventInfo } from '../../../src/types';
 
 // Component to test
 import { StationCalendar } from '../../../src/pages/kalender/deprecated/StationCalendar/StationCalendar';
-import { ApiEvent } from '../../../src/services/EventService';
+import { ApiEvent } from '../../../src/services/deprecated/EventService';
 import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides a page for ambassadors to view the calendar', () => {

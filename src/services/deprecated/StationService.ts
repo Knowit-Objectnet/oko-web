@@ -1,5 +1,5 @@
-import { httpClient } from './httpClient';
-import { WorkingWeekdays } from '../services-currentapi/henteplan/HenteplanService';
+import { httpClient } from '../httpClient';
+import { WorkingWeekdays } from '../henteplan/HenteplanService';
 
 const endpoint = '/stations';
 export const stationsDefaultQueryKey = 'getStations';

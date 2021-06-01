@@ -6,7 +6,7 @@ import Phone from '../../assets/Phone.svg';
 import Mail from '../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../services/StationService';
+import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../services/deprecated/StationService';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';

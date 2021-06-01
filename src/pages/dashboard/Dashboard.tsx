@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Header } from './Header';
 import { PageRouter } from '../../routing/PageRouter';
 import { Flex } from '@chakra-ui/layout';
-import { usePrefetchPartnere } from '../../services-currentapi/partner/usePrefetchPartnere';
-import { usePrefetchStasjoner } from '../../services-currentapi/stasjon/usePrefetchStasjoner';
+import { usePrefetchPartnere } from '../../services/partner/usePrefetchPartnere';
+import { usePrefetchStasjoner } from '../../services/stasjon/usePrefetchStasjoner';
 
 export const Dashboard: React.FC = () => {
     // We do prefetching here so that these entities are available for faster rendering when needed

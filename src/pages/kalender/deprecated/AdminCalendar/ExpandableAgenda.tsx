@@ -6,8 +6,8 @@ import { SingleDayCalendar } from '../../../../components/calendar/SingleDayCale
 import { EventInfo, SlotInfo } from '../../../../types';
 import ArrowUp from '../../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../../assets/ArrowDown.svg';
-import { useStations } from '../../../../services/hooks/useStations';
-import { useStasjoner } from '../../../../services-currentapi/stasjon/useStasjoner';
+import { useStations } from '../../../../services/deprecated/hooks/useStations';
+import { useStasjoner } from '../../../../services/stasjon/useStasjoner';
 
 const Wrapper = styled.div``;
 

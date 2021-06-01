@@ -9,8 +9,8 @@ import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMess
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { useAddPartner } from '../../../services-currentapi/partner/useAddPartner';
-import { ApiPartnerPost, PartnerStorrelse } from '../../../services-currentapi/partner/PartnerService';
+import { useAddPartner } from '../../../services/partner/useAddPartner';
+import { ApiPartnerPost, PartnerStorrelse } from '../../../services/partner/PartnerService';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 
 // NB! Setting the error messages used by yup

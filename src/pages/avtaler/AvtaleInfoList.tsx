@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Accordion, Stack } from '@chakra-ui/react';
 import { AvtaleInfoItem } from './AvtaleInfoItem';
 import { compareDesc, parseISO } from 'date-fns';
-import { ApiPartner } from '../../services-currentapi/partner/PartnerService';
-import { useAvtaler } from '../../services-currentapi/avtale/useAvtaler';
+import { ApiPartner } from '../../services/partner/PartnerService';
+import { useAvtaler } from '../../services/avtale/useAvtaler';
 
 interface Props {
     partner: ApiPartner;

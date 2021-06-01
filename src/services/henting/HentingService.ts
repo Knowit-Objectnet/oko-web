@@ -1,4 +1,4 @@
-import { extractResponse, httpClient, transformError } from '../../services/httpClient';
+import { extractResponse, httpClient, transformError } from '../httpClient';
 
 export interface ApiPlanlagtHenting {
     id: string; //UUID

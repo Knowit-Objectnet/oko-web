@@ -1,7 +1,7 @@
-import { httpClient } from './httpClient';
+import { httpClient } from '../httpClient';
 import { ApiStation } from './StationService';
 import { ApiPartner } from './PartnerService';
-import { WorkingWeekdays } from '../services-currentapi/henteplan/HenteplanService';
+import { WorkingWeekdays } from '../henteplan/HenteplanService';
 
 export interface ApiEvent {
     id: number;

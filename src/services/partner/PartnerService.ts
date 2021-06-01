@@ -1,4 +1,4 @@
-import { extractResponse, httpClient, transformError } from '../../services/httpClient';
+import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiKontakt } from '../aktor/AktorService';
 
 export type PartnerStorrelse = 'STOR' | 'MIDDELS' | 'LITEN';

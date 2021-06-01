@@ -4,7 +4,7 @@ import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './forms/AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
 import { mockPartnere } from '../../../__mocks__/mocks-new/mockAktor';
-import { usePartnere } from '../../services-currentapi/partner/usePartnere';
+import { usePartnere } from '../../services/partner/usePartnere';
 
 export const PartnerNavigation: React.FC = () => {
     // TODO: handle error/loading

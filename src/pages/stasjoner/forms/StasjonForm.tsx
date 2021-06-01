@@ -7,9 +7,9 @@ import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ApiStasjonPost, StasjonType } from '../../../services-currentapi/stasjon/StasjonService';
+import { ApiStasjonPost, StasjonType } from '../../../services/stasjon/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { useAddStasjon } from '../../../services-currentapi/stasjon/useAddStasjon';
+import { useAddStasjon } from '../../../services/stasjon/useAddStasjon';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 
 // NB! Setting the error messages used by yup

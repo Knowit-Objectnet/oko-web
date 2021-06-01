@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { PositiveButton } from '../buttons/PositiveButton';
 import { useMutation, useQueryClient } from 'react-query';
 import { EventInfo } from '../../types';
-import { ApiEventParams, deleteEvents, eventsDefaultQueryKey } from '../../services/EventService';
+import { ApiEventParams, deleteEvents, eventsDefaultQueryKey } from '../../services/deprecated/EventService';
 import { types, useAlert } from 'react-alert';
 import { useAuth } from '../../auth/useAuth';
 

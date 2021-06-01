@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { StationAddress } from './StationAddress';
 import { StationOpeningTimes } from './StationOpeningTimes';
 import { StationAmbassador } from './StationAmbassador';
-import { ApiStation } from '../../services/StationService';
-import { ApiStasjon } from '../../services-currentapi/stasjon/StasjonService';
+import { ApiStation } from '../../services/deprecated/StationService';
+import { ApiStasjon } from '../../services/stasjon/StasjonService';
 
 const Wrapper = styled.div`
     width: 100%;
