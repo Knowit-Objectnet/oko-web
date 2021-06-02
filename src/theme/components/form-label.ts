@@ -4,6 +4,5 @@ export const FormLabel = {
         fontSize: 'lg',
         fontWeight: 'medium',
         color: 'onBackground',
-        marginBottom: '1',
     },
 };

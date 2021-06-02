@@ -18,9 +18,9 @@ import {
     PopoverTrigger,
     useDisclosure,
 } from '@chakra-ui/react';
-import ReactFocusLock from 'react-focus-lock';
 import Warning from '../../../assets/Warning.svg';
 import { Box } from '@chakra-ui/layout';
+import { FocusLock } from '@chakra-ui/focus-lock';
 
 interface Props {
     stasjon: ApiStasjon;
@@ -53,7 +53,7 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
                     <DeleteButton label="Slett" aria-label={`Slett stasjonen ${stasjon.navn}`} />
                 </PopoverTrigger>
                 <PopoverContent>
-                    <ReactFocusLock>
+                    <FocusLock>
                         <PopoverArrow />
                         <PopoverHeader>
                             <HStack spacing="2" alignItems="flex-start">
@@ -74,7 +74,7 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
                                 Slett stasjonen
                             </Button>
                         </PopoverBody>
-                    </ReactFocusLock>
+                    </FocusLock>
                 </PopoverContent>
             </Popover>
         </Flex>

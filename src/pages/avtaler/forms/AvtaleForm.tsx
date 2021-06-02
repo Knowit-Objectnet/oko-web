@@ -7,15 +7,14 @@ import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { DatePicker } from '../../../components/forms/DatePicker';
-import { formatISO, parse } from 'date-fns';
-import isDate from 'date-fns/isDate';
-import isValid from 'date-fns/isValid';
+import { DateInput } from '../../../components/forms/DateInput';
+import { formatISO } from 'date-fns';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { AvtaleType } from '../../../services/avtale/AvtaleService';
+import { transformDate } from '../../../utils/forms/transformDate';
 
 // NB! Setting the error messages used by yup
-import '../../../components/forms/formErrorMessages';
+import '../../../utils/forms/formErrorMessages';
 
 const avtaleTypeOptions: Array<SelectOption<AvtaleType>> = [
     { value: 'FAST', label: 'Fast' },
@@ -28,19 +27,13 @@ const validationSchema = yup.object().shape({
         .label('type for avtalen')
         .required()
         .oneOf(Object.values(avtaleTypeOptions).map((avtaleType) => avtaleType.value)),
-    startDato: yup
+    startDato: yup.date().label('startdato for avtalen').transform(transformDate).required().nullable(),
+    sluttDato: yup
         .date()
-        .label('startdato for avtalen')
-        .transform((value, originalValue) => {
-            console.log(value);
-            if (isDate(value) && isValid(value)) {
-                return value;
-            }
-            const parsed = parse(originalValue, 'dd/MM/yyyy', new Date());
-            console.log(parsed);
-            return isValid(parsed) ? parsed : null;
-        })
+        .label('sluttdato for avtalen')
+        .transform(transformDate)
         .required()
+        .min(yup.ref('startDato'), 'Sluttdato kan ikke være før startdato')
         .nullable(),
 });
 
@@ -52,7 +45,7 @@ interface Props {
 interface AvtaleFormData {
     type: AvtaleType;
     startDato: Date;
-    // sluttDato: Date; //LocalDate
+    sluttDato: Date;
 }
 
 export const AvtaleForm: React.FC<Props> = ({ partner, afterSubmit }) => {
@@ -62,8 +55,12 @@ export const AvtaleForm: React.FC<Props> = ({ partner, afterSubmit }) => {
     });
 
     const handleAvtaleSubmission = formMethods.handleSubmit((data) => {
-        console.log(data.startDato);
-        console.log({ startDato: formatISO(data.startDato), type: data.type, aktorId: partner.id });
+        console.log({
+            startDato: formatISO(data.startDato),
+            sluttDato: formatISO(data.sluttDato),
+            type: data.type,
+            aktorId: partner.id,
+        });
         // TODO: submit data to API with useMutation (react-query) (post or patch, depending on form is in edit mode)
         //  - pass loading state to button / disable form
         //  - pass errors from backend response (onError react-query callback):
@@ -75,6 +72,7 @@ export const AvtaleForm: React.FC<Props> = ({ partner, afterSubmit }) => {
             <form onSubmit={handleAvtaleSubmission}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
+                    <AllFormErrorMessages />
                     <Select
                         name="type"
                         label="Type avtale"
@@ -82,9 +80,22 @@ export const AvtaleForm: React.FC<Props> = ({ partner, afterSubmit }) => {
                         placeholder="Velg en type"
                         required
                     />
-                    <DatePicker name="startDato" label="Startdato for avtalen" required />
-                    {/*TODO: form errors displayed even if no errors */}
-                    <AllFormErrorMessages />
+                    <DateInput
+                        name="startDato"
+                        // TODO: for browsers that do not support date inputs
+                        // placeholder="åååå-mm-dd"
+                        // helperText="Skriv inn dato med dette formatet: åååå-mm-dd"
+                        label="Startdato for avtalen"
+                        required
+                    />
+                    <DateInput
+                        name="sluttDato"
+                        // TODO: for browsers that do not support date inputs
+                        // placeholder="åååå-mm-dd"
+                        // helperText="Skriv inn dato med dette formatet: åååå-mm-dd"
+                        label="Sluttdato for avtalen"
+                        required
+                    />
                     <FormSubmitButton label="Registrer ny avtale" loadingText="Vennligst vent..." />
                 </Stack>
             </form>

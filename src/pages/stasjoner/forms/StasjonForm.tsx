@@ -13,7 +13,7 @@ import { useAddStasjon } from '../../../services/stasjon/useAddStasjon';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 
 // NB! Setting the error messages used by yup
-import '../../../components/forms/formErrorMessages';
+import '../../../utils/forms/formErrorMessages';
 
 const stasjonTypeOptions: Array<SelectOption<StasjonType>> = [
     { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },
