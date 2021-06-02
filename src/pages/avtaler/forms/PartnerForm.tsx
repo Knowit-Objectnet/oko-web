@@ -46,7 +46,7 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
     const addPartnerMutation = useAddPartner();
     const showSuccessToast = useSuccessToast();
 
-    const handlePartnerSubmission = formMethods.handleSubmit((data) => {
+    const handleSubmit = formMethods.handleSubmit((data) => {
         addPartnerMutation.mutate(data, {
             onSuccess: () => {
                 showSuccessToast({ title: `${data.navn} ble registrert som samarbeidspartner` });
@@ -62,7 +62,7 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
 
     return (
         <FormProvider {...formMethods}>
-            <form onSubmit={handlePartnerSubmission}>
+            <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <AllFormErrorMessages />

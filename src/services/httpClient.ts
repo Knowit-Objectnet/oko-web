@@ -14,13 +14,14 @@ export const httpClient = (): AxiosInstance =>
 export const extractResponse = <TData>(response: AxiosResponse<TData>): TData => response.data;
 
 export interface ApiError {
-    /** HTTP return code **/
     code?: string;
     name: string;
     message: string;
 }
 
-export const transformError = ({ code, name, message, response }: AxiosError) => {
+export const transformError = (error: AxiosError) => {
+    console.log('Error when talking to API:', error);
+    const { code, name, message, response } = error;
     // TODO: generate better error message here
     throw {
         code,
