@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
+import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden, Text } from '@chakra-ui/react';
 import { EditButton } from '../../components/buttons/EditButton';
 import { useStasjoner } from '../../services/stasjon/useStasjoner';
 import { DeleteStasjonButton } from './forms/DeleteStasjonButton';
@@ -15,6 +15,10 @@ export const StasjonTable: React.FC = () => {
     const { data: stasjoner } = useStasjoner();
 
     const sortedStasjoner = stasjoner?.sort((stasjonA, stasjonB) => stasjonA.navn.localeCompare(stasjonB.navn, 'nb'));
+
+    if (stasjoner && stasjoner?.length <= 0) {
+        return <Text>Ingen registrerte stasjoner</Text>;
+    }
 
     return (
         <Table>
