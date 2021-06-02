@@ -7,11 +7,11 @@ import {
 } from './HentingService';
 
 export const usePlanlagteHentinger = (
-    params: ApiPlanlagtHentingParams = {},
+    params?: ApiPlanlagtHentingParams,
     queryOptions?: UseQueryOptions<Array<ApiPlanlagtHenting>>,
 ): UseQueryResult<Array<ApiPlanlagtHenting>> => {
     return useQuery<Array<ApiPlanlagtHenting>>({
-        queryKey: [planlagtHentingDefaultQueryKey],
+        queryKey: [planlagtHentingDefaultQueryKey, params],
         queryFn: () => getPlanlagteHentinger(params),
         ...queryOptions,
     });

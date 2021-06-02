@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const AvtaleInfoSection: React.FC<Props> = ({ partner }) => (
-    <PartnerInfoSection>
+    <PartnerInfoSection key={partner.id}>
         <PartnerInfoSectionHeader>
             <PartnerInfoSectionTitle>Avtaler</PartnerInfoSectionTitle>
             <PartnerInfoSectionButtons>
@@ -23,7 +23,7 @@ export const AvtaleInfoSection: React.FC<Props> = ({ partner }) => (
             </PartnerInfoSectionButtons>
         </PartnerInfoSectionHeader>
         <PartnerInfoSectionContent>
-            <AvtaleInfoList partner={partner} key={partner.id} />
+            <AvtaleInfoList partner={partner} />
         </PartnerInfoSectionContent>
     </PartnerInfoSection>
 );

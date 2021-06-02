@@ -66,9 +66,11 @@ export const AvtaleForm: React.FC<Props> = ({ partner, onSuccess }) => {
 
         const newAvtale: ApiAvtalePost = {
             aktorId: partner.id,
-            startDato: formatISO(data.startDato),
-            sluttDato: formatISO(data.sluttDato),
+            startDato: formatISO(data.startDato, { representation: 'date' }),
+            sluttDato: formatISO(data.sluttDato, { representation: 'date' }),
             type: data.type,
+            // TODO: remove when this is not required by API
+            henteplaner: [],
         };
 
         addAvtaleMutation.mutate(newAvtale, {
@@ -115,7 +117,11 @@ export const AvtaleForm: React.FC<Props> = ({ partner, onSuccess }) => {
                         label="Sluttdato for avtalen"
                         required
                     />
-                    <FormSubmitButton label="Registrer ny avtale" loadingText="Vennligst vent..." />
+                    <FormSubmitButton
+                        label="Registrer ny avtale"
+                        isLoading={addAvtaleMutation.isLoading}
+                        loadingText="Vennligst vent..."
+                    />
                 </Stack>
             </form>
         </FormProvider>

@@ -17,7 +17,7 @@ export interface ApiAvtalePost {
     type: AvtaleType;
     startDato: string; //LocalDate
     sluttDato: string; //LocalDate
-    henteplaner?: Array<ApiHenteplanPost>;
+    henteplaner: Array<ApiHenteplanPost> | null; // TODO fix when backend is updated
 }
 
 export interface ApiAvtaleParams {
