@@ -1,10 +1,7 @@
 import { useQueryString } from 'use-route-as-state';
-import { ApiStasjon } from '../../../services-currentapi/StasjonService';
-import { ApiPlanlagtHenting } from '../../../services-currentapi/HentingService';
-import { useStasjoner } from '../../../services-currentapi/hooks/useStasjoner';
-import { ApiEvent } from '../../../services/EventService';
-import { useStations } from '../../../services/hooks/useStations';
-import { ApiStation } from '../../../services/StationService';
+import { ApiStasjon } from '../../../services/stasjon/StasjonService';
+import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { useStasjoner } from '../../../services/stasjon/useStasjoner';
 
 export interface CalendarFilters {
     stasjon?: string;

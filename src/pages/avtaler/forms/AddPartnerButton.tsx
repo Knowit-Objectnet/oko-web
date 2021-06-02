@@ -13,7 +13,7 @@ export const AddPartnerButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props) 
                 Legg til samarbeidspartner
             </Button>
             <FormModal title="Legg til ny samarbeidspartner" isOpen={isOpen} onClose={onClose}>
-                <PartnerForm afterSubmit={onClose} />
+                <PartnerForm onSuccess={onClose} />
             </FormModal>
         </>
     );

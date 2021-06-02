@@ -1,4 +1,4 @@
-import { ApiPartner } from '../src/services/PartnerService';
+import { ApiPartner } from '../src/services/deprecated/PartnerService';
 
 export const mockPartners: Array<ApiPartner> = [
     {

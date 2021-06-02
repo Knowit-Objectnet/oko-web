@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { EditButton } from '../../components/buttons/EditButton';
 import { DeleteButton } from '../../components/buttons/DeleteButton';
-import { ApiKontakt } from '../../services-currentapi/AktorService';
+import { ApiKontakt } from '../../services/aktor/AktorService';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;

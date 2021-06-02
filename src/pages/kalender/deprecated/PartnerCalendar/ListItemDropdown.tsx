@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo } from '../../../../types';
+import { EventInfo } from '../../../../services/deprecated/types';
 import { SingleDayCalendar } from '../../../../components/calendar/SingleDayCalendar';
 import { useState } from 'react';
 import add from 'date-fns/add';

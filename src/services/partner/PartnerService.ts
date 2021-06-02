@@ -1,6 +1,7 @@
-import { httpClient } from '../services/httpClient';
-import { PartnerStorrelse } from '../types';
-import { ApiKontakt } from './AktorService';
+import { extractResponse, httpClient, transformError } from '../httpClient';
+import { ApiKontakt } from '../aktor/AktorService';
+
+export type PartnerStorrelse = 'STOR' | 'MIDDELS' | 'LITEN';
 
 export interface ApiPartner {
     id: string;
@@ -29,30 +30,23 @@ export interface ApiPartnerParams {
     storrelse?: PartnerStorrelse;
     ideell?: boolean;
 }
+
 const partnerEndpoint = '/partnere';
 export const partnerDefaultQueryKey = 'getPartnere';
 
 export const getPartnere = (params: ApiPartnerParams = {}): Promise<Array<ApiPartner>> =>
     httpClient()
         .get<Array<ApiPartner>>(partnerEndpoint, { params })
-        .then((response) => response.data);
+        .then(extractResponse, transformError);
 
 export const getPartnerById = (partnerId: string): Promise<ApiPartner> =>
-    httpClient()
-        .get<ApiPartner>(`${partnerEndpoint}/${partnerId}`)
-        .then((response) => response.data);
+    httpClient().get<ApiPartner>(`${partnerEndpoint}/${partnerId}`).then(extractResponse, transformError);
 
 export const postPartner = (newPartner: ApiPartnerPost): Promise<ApiPartner> =>
-    httpClient()
-        .post<ApiPartner>(partnerEndpoint, newPartner)
-        .then((response) => response.data);
+    httpClient().post<ApiPartner>(partnerEndpoint, newPartner).then(extractResponse, transformError);
 
 export const deletePartner = (partnerId: string): Promise<ApiPartner> =>
-    httpClient()
-        .delete<ApiPartner>(`${partnerEndpoint}/${partnerId}`)
-        .then((response) => response.data);
+    httpClient().delete<ApiPartner>(`${partnerEndpoint}/${partnerId}`).then(extractResponse, transformError);
 
 export const patchPartner = (updatedPartner: ApiPartnerPatch): Promise<ApiPartner> =>
-    httpClient()
-        .patch<ApiPartner>(partnerEndpoint, updatedPartner)
-        .then((response) => response.data);
+    httpClient().patch<ApiPartner>(partnerEndpoint, updatedPartner).then(extractResponse, transformError);

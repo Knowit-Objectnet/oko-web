@@ -4,7 +4,7 @@ import { Flex } from '@chakra-ui/layout';
 import { PartnerInfoHeader } from './PartnerInfoHeader';
 import { KontaktPersonSection } from './KontaktPersonSection';
 import { AvtaleInfoSection } from './AvtaleInfoSection';
-import { usePartnerById } from '../../services-currentapi/hooks/usePartnerById';
+import { usePartnerById } from '../../services/partner/usePartnerById';
 
 export const PartnerInfo: React.FC = () => {
     const { params } = useRouteMatch<{ partnerId: string }>();

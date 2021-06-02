@@ -15,7 +15,8 @@ const Stasjoner: React.FC = () => (
             direction="column"
             alignItems="flex-start"
             height="full"
-            padding="5"
+            paddingY="5"
+            paddingX="10"
             marginX="auto"
             width="full"
         >

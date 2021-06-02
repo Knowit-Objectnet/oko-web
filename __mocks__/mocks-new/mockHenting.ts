@@ -1,4 +1,4 @@
-import { ApiPlanlagtHenting } from '../../src/services-currentapi/HentingService';
+import { ApiPlanlagtHenting } from '../../src/services/henting/HentingService';
 
 export const mockHentinger: Array<ApiPlanlagtHenting> = [
     {

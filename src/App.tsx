@@ -11,8 +11,6 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import { AuthProvider } from './auth/AuthProvider';
 import { Loading } from './components/Loading';
-import { prefetchStations } from './services/hooks/useStations';
-import { prefetchPartners } from './services/hooks/usePartners';
 import 'focus-visible/dist/focus-visible';
 
 const alertOptions = {

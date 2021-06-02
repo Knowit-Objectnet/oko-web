@@ -5,13 +5,12 @@ import { Loading } from '../../components/Loading';
 import Plus from '../../assets/Plus.svg';
 import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
-import { useStations } from '../../services/hooks/useStations';
 import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
 import { DeleteStation } from './DeleteStation';
 import Minus from '../../assets/Minus.svg';
 import { NewStation } from './NewStation';
 import { useAuth } from '../../auth/useAuth';
-import { useStasjoner } from '../../services-currentapi/hooks/useStasjoner';
+import { useStasjoner } from '../../services/stasjon/useStasjoner';
 
 const Wrapper = styled.div`
     display: flex;

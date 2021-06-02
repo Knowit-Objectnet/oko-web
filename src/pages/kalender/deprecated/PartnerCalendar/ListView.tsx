@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EventInfo } from '../../../../types';
+import { EventInfo } from '../../../../services/deprecated/types';
 import { createNDaysFromDate } from '../../../../utils/createNDaysFromDate';
 import isSameDay from 'date-fns/isSameDay';
 import groupBy from 'lodash/groupBy';

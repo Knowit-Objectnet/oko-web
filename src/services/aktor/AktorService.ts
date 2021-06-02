@@ -1,5 +1,6 @@
-import { httpClient } from '../services/httpClient';
-import { AktorType } from '../types';
+import { extractResponse, httpClient, transformError } from '../httpClient';
+
+export type AktorType = 'PARTNER' | 'STASJON';
 
 export interface ApiKontakt {
     id: string;
@@ -18,6 +19,4 @@ const aktorEndpoint = '/aktor';
 export const aktorDefaultQueryKey = 'findOneAktor';
 
 export const findOneAktor = (aktorId: string): Promise<AktorType> =>
-    httpClient()
-        .get<AktorType>(`${aktorEndpoint}/${aktorId}`)
-        .then((response) => response.data);
+    httpClient().get<AktorType>(`${aktorEndpoint}/${aktorId}`).then(extractResponse, transformError);

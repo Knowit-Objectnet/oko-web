@@ -1,4 +1,4 @@
-import { httpClient } from './httpClient';
+import { httpClient } from '../httpClient';
 
 const endpoint = '/partners';
 export const partnersDefaultQueryKey = 'getPartners';

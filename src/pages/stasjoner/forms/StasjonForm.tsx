@@ -3,13 +3,14 @@ import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextInput } from '../../../components/forms/TextInput';
-import { StasjonType } from '../../../types';
 import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ApiStasjonPost } from '../../../services-currentapi/StasjonService';
+import { ApiStasjonPost, StasjonType } from '../../../services/stasjon/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
+import { useAddStasjon } from '../../../services/stasjon/useAddStasjon';
+import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
@@ -29,29 +30,39 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
-    afterSubmit?: () => void;
+    /** Callback that will fire if registration of new Stasjon is successful: **/
+    onSuccess?: () => void;
 }
 
-export const StasjonForm: React.FC<Props> = ({ afterSubmit }) => {
+export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
     const formMethods = useForm<ApiStasjonPost>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
     });
 
-    const handlePartnerSubmission = formMethods.handleSubmit((data) => {
-        console.log(data);
-        // TODO: submit data to API with useMutation (react-query) (post or patch, depending on form is in edit mode)
-        //  - pass loading state to button / disable form
-        //  - pass errors from backend response (onError react-query callback):
-        //  formMethods.setError('navn', { message: 'Stasjon med dette navnet eksisterer allerede' });
-        afterSubmit?.();
+    const addStasjonMutation = useAddStasjon();
+    const showSuccessToast = useSuccessToast();
+
+    const handleSubmit = formMethods.handleSubmit((data) => {
+        addStasjonMutation.mutate(data, {
+            onSuccess: () => {
+                showSuccessToast({ title: `Stasjonen ${data.navn} ble registrert` });
+                onSuccess?.();
+            },
+            onError: (error) => {
+                // TODO: find a way to identify and display errors that are not caused by user (network, server issues etc.)
+                // TODO: get details from error and if caused by user: set message to correct field
+                formMethods.setError('navn', { message: error.message });
+            },
+        });
     });
 
     return (
         <FormProvider {...formMethods}>
-            <form onSubmit={handlePartnerSubmission}>
+            <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
+                    <AllFormErrorMessages />
                     <TextInput name="navn" label="Navn på stasjonen" required />
                     <Select
                         name="type"
@@ -60,11 +71,7 @@ export const StasjonForm: React.FC<Props> = ({ afterSubmit }) => {
                         placeholder="Velg en type"
                         required
                     />
-                    <AllFormErrorMessages />
-                    <FormSubmitButton
-                        label="Registrer ny stasjon"
-                        // TODO: isLoading-state from submission here
-                    />
+                    <FormSubmitButton label="Registrer ny stasjon" isLoading={addStasjonMutation.isLoading} />
                 </Stack>
             </form>
         </FormProvider>

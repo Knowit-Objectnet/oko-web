@@ -1,12 +1,10 @@
-import { useEvents } from '../../../services/hooks/useEvents';
 import { DateRange, Event as CalendarEvent } from 'react-big-calendar';
 import { usePrefetchHentinger } from './usePrefetchHentinger';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
-import { ApiEvent } from '../../../services/EventService';
 import { CalendarView, VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
-import { usePlanlagteHentinger } from '../../../services-currentapi/hooks/usePlanlagteHentinger';
-import { ApiPlanlagtHenting } from '../../../services-currentapi/HentingService';
+import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHentinger';
+import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;

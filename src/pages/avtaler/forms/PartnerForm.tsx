@@ -3,17 +3,18 @@ import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TextInput } from '../../../components/forms/TextInput';
-import { PartnerStorrelse } from '../../../types';
 import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
+import { useAddPartner } from '../../../services/partner/useAddPartner';
+import { ApiPartnerPost, PartnerStorrelse } from '../../../services/partner/PartnerService';
+import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 
 // NB! Setting the error messages used by yup
 import '../../../components/forms/formErrorMessages';
-import { ApiPartnerPost } from '../../../services-currentapi/PartnerService';
 
 const storrelseOptions: Array<SelectOption<PartnerStorrelse>> = [
     { value: 'LITEN', label: 'Liten' },
@@ -32,22 +33,31 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
-    afterSubmit?: () => void;
+    /** Callback that will fire if registration of new Stasjon is successful: **/
+    onSuccess?: () => void;
 }
 
-export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
+export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
     const formMethods = useForm<ApiPartnerPost>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
     });
 
+    const addPartnerMutation = useAddPartner();
+    const showSuccessToast = useSuccessToast();
+
     const handlePartnerSubmission = formMethods.handleSubmit((data) => {
-        console.log(data);
-        // TODO: submit data to API with useMutation (react-query) (post or patch, depending on form is in edit mode)
-        //  - pass loading state to button / disable form
-        //  - pass errors from backend response (onError react-query callback):
-        //  formMethods.setError('navn', { message: 'Partner med dette navnet eksisterer allerede' });
-        afterSubmit?.();
+        addPartnerMutation.mutate(data, {
+            onSuccess: () => {
+                showSuccessToast({ title: `${data.navn} ble registrert som samarbeidspartner` });
+                onSuccess?.();
+            },
+            onError: (error) => {
+                // TODO: find a way to identify and display errors that are not caused by user (network, server issues etc.)
+                // TODO: get details from error and if caused by user: set message to correct field
+                formMethods.setError('navn', { message: error.message });
+            },
+        });
     });
 
     return (
@@ -55,6 +65,7 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
             <form onSubmit={handlePartnerSubmission}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
+                    <AllFormErrorMessages />
                     <TextInput name="navn" label="Navn på organisasjon" required />
                     <Select
                         name="storrelse"
@@ -68,11 +79,7 @@ export const PartnerForm: React.FC<Props> = ({ afterSubmit }) => {
                         options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
                         required
                     />
-                    <AllFormErrorMessages />
-                    <FormSubmitButton
-                        label="Registrer ny samarbeidspartner"
-                        // TODO: isLoading-state from submission here
-                    />
+                    <FormSubmitButton label="Registrer ny samarbeidspartner" isLoading={addPartnerMutation.isLoading} />
                 </Stack>
             </form>
         </FormProvider>

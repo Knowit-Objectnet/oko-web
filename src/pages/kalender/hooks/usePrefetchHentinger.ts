@@ -1,13 +1,12 @@
 import { QueryClient, useQueryClient } from 'react-query';
 import { add, Duration } from 'date-fns';
-import { ApiEventParams, eventsDefaultQueryKey, getEvents } from '../../../services/EventService';
 import { VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
 import {
     ApiPlanlagtHentingParams,
     getPlanlagteHentinger,
     planlagtHentingDefaultQueryKey,
-} from '../../../services-currentapi/HentingService';
+} from '../../../services/henting/HentingService';
 
 const calculateInterval = (
     intervalToFetch: Interval,

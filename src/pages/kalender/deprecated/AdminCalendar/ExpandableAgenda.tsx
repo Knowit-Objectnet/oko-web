@@ -3,11 +3,10 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Agenda } from './Agenda';
 import { SingleDayCalendar } from '../../../../components/calendar/SingleDayCalendar';
-import { EventInfo, SlotInfo } from '../../../../types';
+import { EventInfo, SlotInfo } from '../../../../services/deprecated/types';
 import ArrowUp from '../../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../../assets/ArrowDown.svg';
-import { useStations } from '../../../../services/hooks/useStations';
-import { useStasjoner } from '../../../../services-currentapi/hooks/useStasjoner';
+import { useStasjoner } from '../../../../services/stasjon/useStasjoner';
 
 const Wrapper = styled.div``;
 

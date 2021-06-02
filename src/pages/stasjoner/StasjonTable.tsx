@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { EditButton } from '../../components/buttons/EditButton';
-import { DeleteButton } from '../../components/buttons/DeleteButton';
-import { StasjonType } from '../../types';
-import { useStasjoner } from '../../services-currentapi/hooks/useStasjoner';
+import { useStasjoner } from '../../services/stasjon/useStasjoner';
+import { DeleteStasjonButton } from './forms/DeleteStasjonButton';
+import { StasjonType } from '../../services/stasjon/StasjonService';
 
 const STASJONTYPE: Record<StasjonType, string> = {
     GJENBRUK: 'Gjenbruksstasjon',
@@ -42,12 +42,7 @@ export const StasjonTable: React.FC = () => {
                                         console.log(`Rediger ${stasjon.navn}`);
                                     }}
                                 />
-                                <DeleteButton
-                                    label="Slett"
-                                    onClick={() => {
-                                        console.log(`Slett ${stasjon.navn}`);
-                                    }}
-                                />
+                                <DeleteStasjonButton stasjon={stasjon} />
                             </ButtonGroup>
                         </Td>
                     </Tr>

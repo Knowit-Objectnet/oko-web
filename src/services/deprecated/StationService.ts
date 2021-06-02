@@ -1,5 +1,5 @@
-import { httpClient } from './httpClient';
-import { WorkingWeekdays } from '../types';
+import { httpClient } from '../httpClient';
+import { WorkingWeekdays } from './types';
 
 const endpoint = '/stations';
 export const stationsDefaultQueryKey = 'getStations';

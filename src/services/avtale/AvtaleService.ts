@@ -1,6 +1,7 @@
-import { httpClient } from '../services/httpClient';
-import { AvtaleType } from '../types';
-import { ApiHenteplan, ApiHenteplanPost } from './HenteplanService';
+import { extractResponse, httpClient, transformError } from '../httpClient';
+import { ApiHenteplan, ApiHenteplanPost } from '../henteplan/HenteplanService';
+
+export type AvtaleType = 'FAST' | 'ANNEN' | 'OMBRUKSARRANGEMENT' | 'INTERNTRANSPORT';
 
 export interface ApiAvtale {
     id: string;
@@ -33,19 +34,13 @@ export const avtaleDefaultQueryKey = 'getAvtaler';
 export const getAvtaler = (params: ApiAvtaleParams = {}): Promise<Array<ApiAvtale>> =>
     httpClient()
         .get<Array<ApiAvtale>>(avtaleEndpoint, { params })
-        .then((response) => response.data);
+        .then(extractResponse, transformError);
 
 export const getAvtaleById = (avtaleId: string): Promise<ApiAvtale> =>
-    httpClient()
-        .get<ApiAvtale>(`${avtaleEndpoint}/${avtaleId}`)
-        .then((response) => response.data);
+    httpClient().get<ApiAvtale>(`${avtaleEndpoint}/${avtaleId}`).then(extractResponse, transformError);
 
 export const postAvtale = (newavtale: ApiAvtalePost): Promise<ApiAvtale> =>
-    httpClient()
-        .post<ApiAvtale>(avtaleEndpoint, newavtale)
-        .then((response) => response.data);
+    httpClient().post<ApiAvtale>(avtaleEndpoint, newavtale).then(extractResponse, transformError);
 
 export const deleteAvtale = (avtaleId: string): Promise<ApiAvtale> =>
-    httpClient()
-        .delete<ApiAvtale>(`${avtaleEndpoint}/${avtaleId}`)
-        .then((response) => response.data);
+    httpClient().delete<ApiAvtale>(`${avtaleEndpoint}/${avtaleId}`).then(extractResponse, transformError);

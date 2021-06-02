@@ -13,7 +13,7 @@ export const AddStasjonButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props) 
                 Legg til stasjon
             </Button>
             <FormModal title="Legg til ny stasjon" isOpen={isOpen} onClose={onClose}>
-                <StasjonForm afterSubmit={onClose} />
+                <StasjonForm onSuccess={onClose} />
             </FormModal>
         </>
     );
