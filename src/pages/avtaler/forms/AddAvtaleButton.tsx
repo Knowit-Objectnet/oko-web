@@ -21,7 +21,7 @@ export const AddAvtaleButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = (
                 onClick={onOpen}
             />
             <FormModal title={`Ny avtale for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
-                <AvtaleForm partner={partner} afterSubmit={onClose} />
+                <AvtaleForm partner={partner} onSuccess={onClose} />
             </FormModal>
         </>
     );

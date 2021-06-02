@@ -10,8 +10,11 @@ import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { DateInput } from '../../../components/forms/DateInput';
 import { formatISO } from 'date-fns';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { AvtaleType } from '../../../services/avtale/AvtaleService';
+import { ApiAvtalePost, AvtaleType } from '../../../services/avtale/AvtaleService';
 import { transformDate } from '../../../utils/forms/transformDate';
+import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { useAddAvtale } from '../../../services/avtale/useAddAvtale';
+import { useState } from 'react';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
@@ -39,7 +42,7 @@ const validationSchema = yup.object().shape({
 
 interface Props {
     partner: ApiPartner;
-    afterSubmit?: () => void;
+    onSuccess?: () => void;
 }
 
 interface AvtaleFormData {
@@ -48,30 +51,46 @@ interface AvtaleFormData {
     sluttDato: Date;
 }
 
-export const AvtaleForm: React.FC<Props> = ({ partner, afterSubmit }) => {
+export const AvtaleForm: React.FC<Props> = ({ partner, onSuccess }) => {
     const formMethods = useForm<AvtaleFormData>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
     });
 
-    const handleAvtaleSubmission = formMethods.handleSubmit((data) => {
-        console.log({
+    const addAvtaleMutation = useAddAvtale();
+    const showSuccessToast = useSuccessToast();
+    const [apiError, setApiError] = useState<string>();
+
+    const handleSubmit = formMethods.handleSubmit((data) => {
+        setApiError(undefined);
+
+        const newAvtale: ApiAvtalePost = {
+            aktorId: partner.id,
             startDato: formatISO(data.startDato),
             sluttDato: formatISO(data.sluttDato),
             type: data.type,
-            aktorId: partner.id,
+        };
+
+        addAvtaleMutation.mutate(newAvtale, {
+            onSuccess: () => {
+                console.log('det gikk bra å opprette ny avtale', newAvtale);
+                showSuccessToast({ title: `Det ble registrert en ny avtale for ${partner.navn}` });
+                onSuccess?.();
+            },
+            onError: (error) => {
+                // TODO - fix error message
+                console.log(error);
+                setApiError(error.message);
+            },
         });
-        // TODO: submit data to API with useMutation (react-query) (post or patch, depending on form is in edit mode)
-        //  - pass loading state to button / disable form
-        //  - pass errors from backend response (onError react-query callback):
-        afterSubmit?.();
     });
 
     return (
         <FormProvider {...formMethods}>
-            <form onSubmit={handleAvtaleSubmission}>
+            <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
+                    {/*TODO: Display API errors*/}
                     <AllFormErrorMessages />
                     <Select
                         name="type"
