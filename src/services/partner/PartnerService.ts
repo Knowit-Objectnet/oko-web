@@ -1,33 +1,27 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiKontakt } from '../aktor/AktorService';
 
-export type PartnerStorrelse = 'STOR' | 'MIDDELS' | 'LITEN';
-
 export interface ApiPartner {
     id: string;
     navn: string;
     kontaktPersoner: Array<ApiKontakt>;
-    storrelse: PartnerStorrelse;
     ideell: boolean;
 }
 
 export interface ApiPartnerPatch {
     id: string;
     navn?: string;
-    storrelse?: PartnerStorrelse;
     ideell?: boolean;
 }
 
 export interface ApiPartnerPost {
     navn: string;
-    storrelse: PartnerStorrelse;
     ideell: boolean;
 }
 
 export interface ApiPartnerParams {
     id?: string;
     navn?: string;
-    storrelse?: PartnerStorrelse;
     ideell?: boolean;
 }
 

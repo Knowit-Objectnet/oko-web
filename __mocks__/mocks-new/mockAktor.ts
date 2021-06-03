@@ -53,7 +53,6 @@ export const mockPartnere: Array<ApiPartner> = [
                 rolle: 'Kjøpsanvarlig',
             },
         ],
-        storrelse: 'STOR',
         ideell: true,
     },
     {
@@ -79,14 +78,12 @@ export const mockPartnere: Array<ApiPartner> = [
                 rolle: 'Sjåfør',
             },
         ],
-        storrelse: 'MIDDELS',
         ideell: true,
     },
     {
         id: 'b370a928-f5f9-48d6-b9f3-52533123fc4a',
         navn: 'Jobben',
         kontaktPersoner: [],
-        storrelse: 'LITEN',
         ideell: false,
     },
 ];

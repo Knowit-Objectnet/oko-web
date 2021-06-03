@@ -10,26 +10,14 @@ import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFie
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddPartner } from '../../../services/partner/useAddPartner';
-import { ApiPartnerPost, PartnerStorrelse } from '../../../services/partner/PartnerService';
+import { ApiPartnerPost } from '../../../services/partner/PartnerService';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
 
-const storrelseOptions: Array<RadioOption<PartnerStorrelse>> = [
-    { value: 'LITEN', label: 'Liten' },
-    { value: 'MIDDELS', label: 'Middels' },
-    { value: 'STOR', label: 'Stor' },
-];
-
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
-    storrelse: yup
-        .mixed<PartnerStorrelse>()
-        .label('størrelse på samarbeidspartneren')
-        .required()
-        .oneOf(storrelseOptions.map(({ value }) => value)),
     ideell: yup.boolean().label('Om partneren er en ideell organisasjon').required(),
 });
 
@@ -71,7 +59,6 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på organisasjon" required />
-                    <RadiobuttonGroup name="storrelse" label="Størrelse" options={storrelseOptions} required />
                     <CheckboxGroup
                         label="Organisasjonstype"
                         options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
