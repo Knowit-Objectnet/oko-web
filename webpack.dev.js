@@ -10,10 +10,6 @@ const styledComponentsTransformer = createStyledComponentsTransformer();
 module.exports = merge(common, {
     mode: 'development',
     devtool: 'inline-source-map',
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: '[name].bundle.js',
-    },
     module: {
         rules: [
             {
