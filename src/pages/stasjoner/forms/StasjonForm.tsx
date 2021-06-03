@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../../../components/forms/Input';
 import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
-import { FieldErrorMessages } from '../../../components/forms/FieldErrorMessages';
+import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { ApiStasjonPost, StasjonType } from '../../../services/stasjon/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
@@ -42,17 +43,20 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
 
     const addStasjonMutation = useAddStasjon();
     const showSuccessToast = useSuccessToast();
+    const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
     const handleSubmit = formMethods.handleSubmit((data) => {
+        setApiOrNetworkError(undefined);
+
         addStasjonMutation.mutate(data, {
             onSuccess: () => {
                 showSuccessToast({ title: `Stasjonen ${data.navn} ble registrert` });
                 onSuccess?.();
             },
             onError: (error) => {
-                // TODO: find a way to identify and display errors that are not caused by user (network, server issues etc.)
-                // TODO: get details from error and if caused by user: set message to correct field
-                formMethods.setError('navn', { message: error.message });
+                // TODO: get details from error and set appropriate message.
+                //  If caused by user: set message to correct field
+                setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
             },
         });
     });
@@ -62,7 +66,7 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
-                    <FieldErrorMessages />
+                    <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på stasjonen" required />
                     <Select
                         name="type"

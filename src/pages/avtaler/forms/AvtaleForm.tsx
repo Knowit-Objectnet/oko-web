@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Stack } from '@chakra-ui/react';
-import { FieldErrorMessages } from '../../../components/forms/FieldErrorMessages';
+import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { DateInput } from '../../../components/forms/DateInput';
@@ -13,7 +14,6 @@ import { ApiAvtalePost, AvtaleType } from '../../../services/avtale/AvtaleServic
 import { transformDate } from '../../../utils/forms/transformDate';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useAddAvtale } from '../../../services/avtale/useAddAvtale';
-import { useState } from 'react';
 import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
@@ -59,10 +59,10 @@ export const AvtaleForm: React.FC<Props> = ({ partner, onSuccess }) => {
 
     const addAvtaleMutation = useAddAvtale();
     const showSuccessToast = useSuccessToast();
-    const [apiError, setApiError] = useState<string>();
+    const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
     const handleSubmit = formMethods.handleSubmit((data) => {
-        setApiError(undefined);
+        setApiOrNetworkError(undefined);
 
         const newAvtale: ApiAvtalePost = {
             aktorId: partner.id,
@@ -75,14 +75,13 @@ export const AvtaleForm: React.FC<Props> = ({ partner, onSuccess }) => {
 
         addAvtaleMutation.mutate(newAvtale, {
             onSuccess: () => {
-                console.log('det gikk bra å opprette ny avtale', newAvtale);
                 showSuccessToast({ title: `Det ble registrert en ny avtale for ${partner.navn}` });
                 onSuccess?.();
             },
             onError: (error) => {
-                // TODO - fix error message
-                console.log(error);
-                setApiError(error.message);
+                // TODO: get details from error and set appropriate message.
+                //  If caused by user: set message to correct field
+                setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
             },
         });
     });
@@ -92,8 +91,7 @@ export const AvtaleForm: React.FC<Props> = ({ partner, onSuccess }) => {
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
-                    {/*TODO: Display API errors*/}
-                    <FieldErrorMessages />
+                    <ErrorMessages globalError={apiOrNetworkError} />
                     <DateInput name="startDato" label="Startdato for avtalen" required />
                     <DateInput name="sluttDato" label="Sluttdato for avtalen" required />
                     <RadiobuttonGroup name="type" label="Type avtale" options={avtaleTypeOptions} required />

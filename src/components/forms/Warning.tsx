@@ -1,24 +1,21 @@
 import * as React from 'react';
-import { Heading, HStack, Icon } from '@chakra-ui/react';
+import { Heading, Icon, Stack } from '@chakra-ui/react';
 import Warning from '../../assets/Warning.svg';
-import { Box, Flex } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/layout';
 
 export const WarningContainer: React.FC = ({ children }) => (
-    <HStack
-        as="section"
-        padding="4"
-        backgroundColor="errorBackground"
-        color="onError"
-        alignItems="flex-start"
-        spacing="3"
-    >
-        <Icon as={Warning} aria-hidden width="5" height="auto" />
-        <Box>{children}</Box>
-    </HStack>
+    <Stack direction="row" as="section" padding="4" backgroundColor="errorBackground" color="onError" spacing="3">
+        <Flex alignItems="flex-start">
+            <Icon as={Warning} aria-hidden width="5" height="auto" />
+        </Flex>
+        <Stack direction="column" alignItems="center" spacing="1">
+            {children}
+        </Stack>
+    </Stack>
 );
 
 export const WarningTitle: React.FC<{ title: string }> = ({ title }) => (
-    <Heading as="h3" fontSize="sm" fontWeight="bold" marginBottom="1">
+    <Heading as="h3" fontSize="md" fontWeight="medium">
         {title}
     </Heading>
 );

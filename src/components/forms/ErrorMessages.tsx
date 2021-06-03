@@ -3,7 +3,26 @@ import { useFormState } from 'react-hook-form';
 import { ListItem, UnorderedList } from '@chakra-ui/react';
 import { WarningBody, WarningContainer, WarningTitle } from './Warning';
 
-export const FieldErrorMessages: React.FC = () => {
+interface Props {
+    globalError?: string;
+}
+
+export const ErrorMessages: React.FC<Props> = ({ globalError }) => (
+    <>
+        <GlobalErrorMessage globalError={globalError} />
+        <FieldErrorMessages />
+    </>
+);
+
+const GlobalErrorMessage: React.FC<Props> = ({ globalError }) => {
+    return globalError ? (
+        <WarningContainer>
+            <WarningTitle title={globalError} />
+        </WarningContainer>
+    ) : null;
+};
+
+const FieldErrorMessages: React.FC = () => {
     const { errors, isSubmitted } = useFormState();
 
     const errorMessages = Object.values(errors).map((error) => error.message);
