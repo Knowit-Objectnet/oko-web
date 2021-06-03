@@ -9,14 +9,14 @@ import { Henteplaner } from './Henteplaner';
 import { EditButton } from '../../components/buttons/EditButton';
 import { ApiPartner } from '../../services/partner/PartnerService';
 
-const AVTALE_TYPE: Record<AvtaleType, string> = {
+export const AVTALE_TYPE: Record<AvtaleType, string> = {
     ANNEN: 'Annen avtale',
     FAST: 'Fast avtale',
     INTERNTRANSPORT: 'Interntransport',
     OMBRUKSARRANGEMENT: 'Ombruksarrangement',
 };
 
-const getAvtaleTitle = (avtale: ApiAvtale) => {
+export const getAvtaleTitle = (avtale: ApiAvtale) => {
     if (
         isWithinInterval(new Date(), {
             start: parseISO(avtale.startDato),

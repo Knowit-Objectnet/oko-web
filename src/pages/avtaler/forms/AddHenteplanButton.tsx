@@ -22,8 +22,8 @@ export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> 
                 {...props}
                 onClick={onOpen}
             />
-            <FormModal title="Ny henteplan" isOpen={isOpen} onClose={onClose}>
-                <HenteplanForm avtale={avtale} partner={partner} onSuccess={onClose} />
+            <FormModal title={`Ny henteplan for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
+                <HenteplanForm avtale={avtale} onSuccess={onClose} />
             </FormModal>
         </>
     );

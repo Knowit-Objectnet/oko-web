@@ -8,7 +8,7 @@ import { ApiHenteplanPost, HenteplanFrekvens, Weekday } from '../../../services/
 import { useAddHenteplan } from '../../../services/henteplan/useAddHenteplan';
 import * as yup from 'yup';
 import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
-import { Stack } from '@chakra-ui/react';
+import { Heading, Stack, Text } from '@chakra-ui/react';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
@@ -19,6 +19,9 @@ import { transformTime } from '../../../utils/forms/transformTime';
 import { DateInput } from '../../../components/forms/DateInput';
 import { Select, SelectOption } from '../../../components/forms/Select';
 import { TextArea } from '../../../components/forms/TextArea';
+import { Box } from '@chakra-ui/layout';
+import { formatDate } from '../../../utils/formatDateTime';
+import { AVTALE_TYPE, getAvtaleTitle } from '../AvtaleInfoItem';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
@@ -174,6 +177,15 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
+                    <Box as="section" backgroundColor="gray.100" width="full" padding="5">
+                        <Heading as="h3" fontSize="md" fontWeight="medium">
+                            Gjelder for {getAvtaleTitle(avtale).toLowerCase()}:
+                        </Heading>
+                        <Text>
+                            {AVTALE_TYPE[avtale.type]} fra <time>{formatDate(avtale.startDato)}</time> til{' '}
+                            <time>{formatDate(avtale.sluttDato)}</time>
+                        </Text>
+                    </Box>
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <StasjonSelect label="Stasjon" required name="stasjonId" />

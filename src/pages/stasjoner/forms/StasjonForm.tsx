@@ -72,7 +72,11 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på stasjonen" required />
                     <RadiobuttonGroup name="type" label="Type stasjon" options={stasjonTypeOptions} required />
-                    <FormSubmitButton label="Registrer ny stasjon" isLoading={addStasjonMutation.isLoading} />
+                    <FormSubmitButton
+                        label="Registrer ny stasjon"
+                        isLoading={addStasjonMutation.isLoading}
+                        loadingText="Vennligst vent..."
+                    />
                 </Stack>
             </form>
         </FormProvider>
