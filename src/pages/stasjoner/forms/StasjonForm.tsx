@@ -27,7 +27,7 @@ const validationSchema = yup.object().shape({
         .mixed<StasjonType>()
         .label('type for stasjonen')
         .required()
-        .oneOf(stasjonTypeOptions.map(({ value }) => value)),
+        .oneOf(stasjonTypeOptions.map((type) => type.value)),
 });
 
 interface Props {
