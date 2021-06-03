@@ -9,6 +9,6 @@ interface Props {
 export const FormLabel: React.FC<Props & FormLabelProps> = ({ label, required, ...props }) => (
     <ChakraFormLabel {...props}>
         {label}
-        {required ? <span aria-label=", obligatorisk felt">*</span> : null}
+        {required ? <span aria-label="obligatorisk felt">*</span> : null}
     </ChakraFormLabel>
 );

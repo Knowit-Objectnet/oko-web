@@ -19,6 +19,12 @@ import { RadiobuttonGroup, RadioOption } from '../../../components/forms/Radiobu
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
 
+interface AvtaleFormData {
+    type: AvtaleType;
+    startDato: Date;
+    sluttDato: Date;
+}
+
 const avtaleTypeOptions: Array<RadioOption<AvtaleType>> = [
     { value: 'FAST', label: 'Fast' },
     { value: 'ANNEN', label: 'Annen' },
@@ -43,12 +49,6 @@ const validationSchema = yup.object().shape({
 interface Props {
     partner: ApiPartner;
     onSuccess?: () => void;
-}
-
-interface AvtaleFormData {
-    type: AvtaleType;
-    startDato: Date;
-    sluttDato: Date;
 }
 
 export const AvtaleForm: React.FC<Props> = ({ partner, onSuccess }) => {
