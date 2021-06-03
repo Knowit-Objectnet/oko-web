@@ -3,11 +3,20 @@ export const Button = {
     baseStyle: {
         fontWeight: 'normal',
         borderRadius: '0',
+        _disabled: {
+            opacity: 1,
+        },
+        _hover: {
+            _disabled: {
+                bg: 'none',
+            },
+        },
     },
     variants: {
-        outline: {
-            backgroundColor: 'surface',
+        outlineOnSurface: {
+            backgroundColor: 'transparent',
             color: 'onSurface',
+            border: '1px solid',
             borderColor: 'onSurface',
             '& svg': { fill: 'onSurface' },
             // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)
@@ -46,10 +55,19 @@ export const Button = {
             _hover: {
                 backgroundColor: 'primaryHover',
                 textDecoration: 'underline',
+                _disabled: {
+                    backgroundColor: 'gray.200',
+                    textDecoration: 'none',
+                },
             },
             _active: {
                 backgroundColor: 'primaryHover',
                 textDecoration: 'none',
+            },
+            _disabled: {
+                backgroundColor: 'gray.200',
+                color: 'gray.600',
+                '& svg': { fill: 'gray.500' },
             },
         },
         // TODO: better focus and hover colors/marking

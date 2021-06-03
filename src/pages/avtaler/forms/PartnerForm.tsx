@@ -1,22 +1,23 @@
 import * as React from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { TextInput } from '../../../components/forms/TextInput';
+import { Input } from '../../../components/forms/Input';
 import { Stack } from '@chakra-ui/react';
-import { Select, SelectOption } from '../../../components/forms/Select';
-import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
+import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddPartner } from '../../../services/partner/useAddPartner';
 import { ApiPartnerPost, PartnerStorrelse } from '../../../services/partner/PartnerService';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
-import '../../../components/forms/formErrorMessages';
+import '../../../utils/forms/formErrorMessages';
 
-const storrelseOptions: Array<SelectOption<PartnerStorrelse>> = [
+const storrelseOptions: Array<RadioOption<PartnerStorrelse>> = [
     { value: 'LITEN', label: 'Liten' },
     { value: 'MIDDELS', label: 'Middels' },
     { value: 'STOR', label: 'Stor' },
@@ -45,35 +46,32 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
 
     const addPartnerMutation = useAddPartner();
     const showSuccessToast = useSuccessToast();
+    const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
-    const handlePartnerSubmission = formMethods.handleSubmit((data) => {
+    const handleSubmit = formMethods.handleSubmit((data) => {
+        setApiOrNetworkError(undefined);
+
         addPartnerMutation.mutate(data, {
             onSuccess: () => {
                 showSuccessToast({ title: `${data.navn} ble registrert som samarbeidspartner` });
                 onSuccess?.();
             },
             onError: (error) => {
-                // TODO: find a way to identify and display errors that are not caused by user (network, server issues etc.)
-                // TODO: get details from error and if caused by user: set message to correct field
-                formMethods.setError('navn', { message: error.message });
+                // TODO: get details from error and set appropriate message.
+                //  If caused by user: set message to correct field
+                setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
             },
         });
     });
 
     return (
         <FormProvider {...formMethods}>
-            <form onSubmit={handlePartnerSubmission}>
-                <Stack direction="column" spacing="8">
+            <form onSubmit={handleSubmit}>
+                <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
-                    <AllFormErrorMessages />
-                    <TextInput name="navn" label="Navn på organisasjon" required />
-                    <Select
-                        name="storrelse"
-                        label="Størrelse"
-                        options={storrelseOptions}
-                        placeholder="Velg en størrelse"
-                        required
-                    />
+                    <ErrorMessages globalError={apiOrNetworkError} />
+                    <Input name="navn" label="Navn på organisasjon" required />
+                    <RadiobuttonGroup name="storrelse" label="Størrelse" options={storrelseOptions} required />
                     <CheckboxGroup
                         label="Organisasjonstype"
                         options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}

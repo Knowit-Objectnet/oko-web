@@ -37,7 +37,7 @@ export const PartnerNavigation: React.FC = () => {
                     </ListItem>
                 ))}
             </List>
-            <AddPartnerButton marginTop="10" width="full" variant="outline" />
+            <AddPartnerButton marginTop="10" width="full" variant="outlineOnSurface" />
         </Flex>
     );
 };

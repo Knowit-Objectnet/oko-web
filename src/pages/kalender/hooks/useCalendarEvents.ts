@@ -24,10 +24,10 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     }
 };
 
-const transformToCalendarEvent = () => (event: ApiPlanlagtHenting): CalendarEvent => ({
-    start: new Date(event.startTidspunkt),
-    end: new Date(event.sluttTidspunkt),
-    title: `${event.aktorNavn} - ${event.stasjonNavn}`,
+const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): CalendarEvent => ({
+    start: new Date(planlagtHenting.startTidspunkt),
+    end: new Date(planlagtHenting.sluttTidspunkt),
+    title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
@@ -36,7 +36,7 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     const intervalToFetch = calculateDateRange(selectedDate, selectedView);
 
     // TODO: wrap in LazyResult in order to return loading/error status?
-    const { data: events } = usePlanlagteHentinger(
+    const { data: planlagteHentinger } = usePlanlagteHentinger(
         {
             after: intervalToFetch.start.toISOString(),
             before: intervalToFetch.end.toISOString(),
@@ -50,9 +50,9 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     // Fetching events for previous and next interval as well
     usePrefetchHentinger(intervalToFetch);
 
-    const filteredEvents = (events ?? []).filter((event) =>
+    const filteredPlanlagteHentinger = (planlagteHentinger ?? []).filter((event) =>
         filterFns.reduce((result: boolean, filterFn) => filterFn(event), true),
     );
 
-    return filteredEvents.map(transformToCalendarEvent());
+    return filteredPlanlagteHentinger.map(transformToCalendarEvent);
 };

@@ -6,29 +6,24 @@ import {
     PartnerInfoSectionHeader,
     PartnerInfoSectionTitle,
 } from './PartnerInfoSection';
-import { AddButton } from '../../components/buttons/AddButton';
 import { AvtaleInfoList } from './AvtaleInfoList';
 import { ApiPartner } from '../../services/partner/PartnerService';
+import { AddAvtaleButton } from './forms/AddAvtaleButton';
 
 interface Props {
     partner: ApiPartner;
 }
 
 export const AvtaleInfoSection: React.FC<Props> = ({ partner }) => (
-    <PartnerInfoSection>
+    <PartnerInfoSection key={partner.id}>
         <PartnerInfoSectionHeader>
             <PartnerInfoSectionTitle>Avtaler</PartnerInfoSectionTitle>
             <PartnerInfoSectionButtons>
-                <AddButton
-                    label="Ny avtale"
-                    onClick={() => {
-                        console.log('Legg til ny avtale');
-                    }}
-                />
+                <AddAvtaleButton partner={partner} />
             </PartnerInfoSectionButtons>
         </PartnerInfoSectionHeader>
         <PartnerInfoSectionContent>
-            <AvtaleInfoList partner={partner} key={partner.id} />
+            <AvtaleInfoList partner={partner} />
         </PartnerInfoSectionContent>
     </PartnerInfoSection>
 );

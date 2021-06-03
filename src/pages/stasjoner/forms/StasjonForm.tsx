@@ -1,21 +1,22 @@
 import * as React from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { TextInput } from '../../../components/forms/TextInput';
+import { Input } from '../../../components/forms/Input';
 import { Stack } from '@chakra-ui/react';
-import { Select, SelectOption } from '../../../components/forms/Select';
-import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
+import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { ApiStasjonPost, StasjonType } from '../../../services/stasjon/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddStasjon } from '../../../services/stasjon/useAddStasjon';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
-import '../../../components/forms/formErrorMessages';
+import '../../../utils/forms/formErrorMessages';
 
-const stasjonTypeOptions: Array<SelectOption<StasjonType>> = [
+const stasjonTypeOptions: Array<RadioOption<StasjonType>> = [
     { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },
     { value: 'MINI', label: 'Minigjenbruksstasjon' },
 ];
@@ -38,21 +39,27 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
     const formMethods = useForm<ApiStasjonPost>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
+        defaultValues: {
+            type: 'GJENBRUK',
+        },
     });
 
     const addStasjonMutation = useAddStasjon();
     const showSuccessToast = useSuccessToast();
+    const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
     const handleSubmit = formMethods.handleSubmit((data) => {
+        setApiOrNetworkError(undefined);
+
         addStasjonMutation.mutate(data, {
             onSuccess: () => {
                 showSuccessToast({ title: `Stasjonen ${data.navn} ble registrert` });
                 onSuccess?.();
             },
             onError: (error) => {
-                // TODO: find a way to identify and display errors that are not caused by user (network, server issues etc.)
-                // TODO: get details from error and if caused by user: set message to correct field
-                formMethods.setError('navn', { message: error.message });
+                // TODO: get details from error and set appropriate message.
+                //  If caused by user: set message to correct field
+                setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
             },
         });
     });
@@ -62,15 +69,9 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
-                    <AllFormErrorMessages />
-                    <TextInput name="navn" label="Navn på stasjonen" required />
-                    <Select
-                        name="type"
-                        label="Type stasjon"
-                        options={stasjonTypeOptions}
-                        placeholder="Velg en type"
-                        required
-                    />
+                    <ErrorMessages globalError={apiOrNetworkError} />
+                    <Input name="navn" label="Navn på stasjonen" required />
+                    <RadiobuttonGroup name="type" label="Type stasjon" options={stasjonTypeOptions} required />
                     <FormSubmitButton label="Registrer ny stasjon" isLoading={addStasjonMutation.isLoading} />
                 </Stack>
             </form>

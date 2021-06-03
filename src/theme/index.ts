@@ -10,9 +10,11 @@ import { typography } from './foundations/typography';
 import { Button } from './components/button';
 import { Modal } from './components/modal';
 import { Alert } from './components/alert';
+import { Form } from './components/form';
 import { FormLabel } from './components/form-label';
 import { Input } from './components/input';
 import { Select } from './components/select';
+import { Radio } from './components/radio';
 import { Checkbox } from './components/checkbox';
 import { FormError } from './components/form-error';
 
@@ -28,9 +30,11 @@ const overrides = {
         Button,
         Modal,
         Alert,
+        Form,
         FormLabel,
         Input,
         Select,
+        Radio,
         Checkbox,
         FormError,
     },
