@@ -33,7 +33,7 @@ export const AvtaleInfoList: React.FC<Props> = ({ partner }) => {
         <Accordion allowToggle allowMultiple>
             <Stack direction="column" spacing="3" alignItems="stretch">
                 {sortedAvtaler.map((avtale) => (
-                    <AvtaleInfoItem key={avtale.id} avtale={avtale} />
+                    <AvtaleInfoItem key={avtale.id} avtale={avtale} partner={partner} />
                 ))}
             </Stack>
         </Accordion>
