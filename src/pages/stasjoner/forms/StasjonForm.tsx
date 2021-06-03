@@ -5,18 +5,18 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../../../components/forms/Input';
 import { Stack } from '@chakra-ui/react';
-import { Select, SelectOption } from '../../../components/forms/Select';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { ApiStasjonPost, StasjonType } from '../../../services/stasjon/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddStasjon } from '../../../services/stasjon/useAddStasjon';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
 
-const stasjonTypeOptions: Array<SelectOption<StasjonType>> = [
+const stasjonTypeOptions: Array<RadioOption<StasjonType>> = [
     { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },
     { value: 'MINI', label: 'Minigjenbruksstasjon' },
 ];
@@ -39,6 +39,9 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
     const formMethods = useForm<ApiStasjonPost>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
+        defaultValues: {
+            type: 'GJENBRUK',
+        },
     });
 
     const addStasjonMutation = useAddStasjon();
@@ -68,13 +71,7 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på stasjonen" required />
-                    <Select
-                        name="type"
-                        label="Type stasjon"
-                        options={stasjonTypeOptions}
-                        placeholder="Velg en type"
-                        required
-                    />
+                    <RadiobuttonGroup name="type" label="Type stasjon" options={stasjonTypeOptions} required />
                     <FormSubmitButton label="Registrer ny stasjon" isLoading={addStasjonMutation.isLoading} />
                 </Stack>
             </form>

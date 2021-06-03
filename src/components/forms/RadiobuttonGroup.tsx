@@ -19,16 +19,18 @@ interface Props {
 
 export const RadiobuttonGroup: React.FC<Props> = ({ label, name, options, required }) => {
     const {
+        watch,
         formState: { errors, isSubmitted },
     } = useFormContext();
 
+    const radioGroupValue = watch(name);
     const isInvalid = errors[name] && isSubmitted;
 
     return (
         <FormControl isInvalid={isInvalid}>
             <fieldset>
                 <FormLabel as="legend" label={label} required={required} />
-                <ChakraRadioGroup>
+                <ChakraRadioGroup value={radioGroupValue}>
                     <Stack direction="column" spacing="0">
                         {options.map(({ value, label: radioLabel }) => (
                             <Radiobutton name={name} key={value} value={value} label={radioLabel} />
