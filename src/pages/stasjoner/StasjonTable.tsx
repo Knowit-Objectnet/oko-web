@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden, Text } from '@chakra-ui/react';
+import { ButtonGroup, Table, Tbody, Td, Text, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { EditButton } from '../../components/buttons/EditButton';
 import { useStasjoner } from '../../services/stasjon/useStasjoner';
 import { DeleteStasjonButton } from './forms/DeleteStasjonButton';
