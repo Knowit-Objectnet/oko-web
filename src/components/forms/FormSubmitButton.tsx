@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const FormSubmitButton: React.FC<Props> = ({ label, isLoading, loadingText }) => (
-    <Flex width="full" paddingY="5">
+    <Flex width="full" paddingBottom="5" paddingTop="2">
         <Button type="submit" width="full" variant="primary" size="lg" isLoading={isLoading} loadingText={loadingText}>
             {label}
         </Button>

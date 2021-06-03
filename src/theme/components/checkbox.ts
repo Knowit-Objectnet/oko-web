@@ -28,6 +28,9 @@ export const Checkbox = {
             // Hover on parent
             '*:hover > &': {
                 borderColor: 'primaryHover',
+                _invalid: {
+                    borderColor: 'error',
+                },
             },
             _focus: {
                 boxShadow: 'none',

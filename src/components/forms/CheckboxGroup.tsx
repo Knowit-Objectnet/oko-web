@@ -24,5 +24,6 @@ export const CheckboxGroup: React.FC<Props> = ({ label, options, required }) => 
                 ))}
             </ChakraCheckboxGroup>
         </fieldset>
+        {/* TODO: display error messages? */}
     </FormControl>
 );
