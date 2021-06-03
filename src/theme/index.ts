@@ -13,6 +13,7 @@ import { Alert } from './components/alert';
 import { Form } from './components/form';
 import { FormLabel } from './components/form-label';
 import { Input } from './components/input';
+import { Textarea } from './components/textarea';
 import { Select } from './components/select';
 import { Radio } from './components/radio';
 import { Checkbox } from './components/checkbox';
@@ -33,6 +34,7 @@ const overrides = {
         Form,
         FormLabel,
         Input,
+        Textarea,
         Select,
         Radio,
         Checkbox,

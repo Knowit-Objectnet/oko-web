@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
-import { ApiPartner } from '../../../services/partner/PartnerService';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
@@ -19,10 +18,10 @@ import { transformDate } from '../../../utils/forms/transformDate';
 import { transformTime } from '../../../utils/forms/transformTime';
 import { DateInput } from '../../../components/forms/DateInput';
 import { Select, SelectOption } from '../../../components/forms/Select';
+import { TextArea } from '../../../components/forms/TextArea';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { isValid } from 'date-fns';
 
 interface HenteplanFormData {
     stasjonId: string;
@@ -71,6 +70,7 @@ const validationSchema = yup.object().shape({
     startDato: yup
         .date()
         .transform(transformDate)
+        // TODO: restrict to daterange of avtale
         .when(
             'frekvens',
             // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
@@ -93,6 +93,7 @@ const validationSchema = yup.object().shape({
             .label('sluttdato for henteplanen')
             .required()
             .transform(transformDate)
+            // TODO: restrict to daterange of avtale
             .min(yup.ref('startDato'), 'Sluttdatoen for henteplanen kan ikke være før startdatoen')
             .nullable(),
         otherwise: yup.mixed().notRequired(),
@@ -123,12 +124,11 @@ const mergeDateWithTime = (date: Date, time: Date) =>
 
 interface Props {
     avtale: ApiAvtale;
-    partner: ApiPartner;
     /** Callback that will fire if registration of new Stasjon is successful: **/
     onSuccess?: () => void;
 }
 
-export const HenteplanForm: React.FC<Props> = ({ avtale, partner, onSuccess }) => {
+export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
     const formMethods = useForm<HenteplanFormData>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
@@ -204,6 +204,7 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, partner, onSuccess }) =
                     {isRecurring ? <DateInput name="sluttDato" label="Sluttdato for henteplanen" required /> : null}
                     <TimeInput name="startTidspunkt" label="Starttidspunkt" required />
                     <TimeInput name="sluttTidspunkt" label="Sluttidspunkt" required />
+                    <TextArea name="merknad" label="Merknader" />
                     <FormSubmitButton
                         label="Registrer ny henteplan"
                         isLoading={addHenteplanMutation.isLoading}
