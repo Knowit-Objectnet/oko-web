@@ -2,10 +2,10 @@ import * as React from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { TextInput } from '../../../components/forms/TextInput';
+import { Input } from '../../../components/forms/Input';
 import { Stack } from '@chakra-ui/react';
 import { Select, SelectOption } from '../../../components/forms/Select';
-import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
+import { FieldErrorMessages } from '../../../components/forms/FieldErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { ApiStasjonPost, StasjonType } from '../../../services/stasjon/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
@@ -62,8 +62,8 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
-                    <AllFormErrorMessages />
-                    <TextInput name="navn" label="Navn på stasjonen" required />
+                    <FieldErrorMessages />
+                    <Input name="navn" label="Navn på stasjonen" required />
                     <Select
                         name="type"
                         label="Type stasjon"

@@ -3,8 +3,7 @@ import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Stack } from '@chakra-ui/react';
-import { Select, SelectOption } from '../../../components/forms/Select';
-import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
+import { FieldErrorMessages } from '../../../components/forms/FieldErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { DateInput } from '../../../components/forms/DateInput';
@@ -15,11 +14,12 @@ import { transformDate } from '../../../utils/forms/transformDate';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useAddAvtale } from '../../../services/avtale/useAddAvtale';
 import { useState } from 'react';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
 
-const avtaleTypeOptions: Array<SelectOption<AvtaleType>> = [
+const avtaleTypeOptions: Array<RadioOption<AvtaleType>> = [
     { value: 'FAST', label: 'Fast' },
     { value: 'ANNEN', label: 'Annen' },
 ];
@@ -93,30 +93,10 @@ export const AvtaleForm: React.FC<Props> = ({ partner, onSuccess }) => {
                 <Stack direction="column" spacing="8">
                     <RequiredFieldsInstruction />
                     {/*TODO: Display API errors*/}
-                    <AllFormErrorMessages />
-                    <Select
-                        name="type"
-                        label="Type avtale"
-                        options={avtaleTypeOptions}
-                        placeholder="Velg en type"
-                        required
-                    />
-                    <DateInput
-                        name="startDato"
-                        // TODO: for browsers that do not support date inputs
-                        // placeholder="åååå-mm-dd"
-                        // helperText="Skriv inn dato med dette formatet: åååå-mm-dd"
-                        label="Startdato for avtalen"
-                        required
-                    />
-                    <DateInput
-                        name="sluttDato"
-                        // TODO: for browsers that do not support date inputs
-                        // placeholder="åååå-mm-dd"
-                        // helperText="Skriv inn dato med dette formatet: åååå-mm-dd"
-                        label="Sluttdato for avtalen"
-                        required
-                    />
+                    <FieldErrorMessages />
+                    <DateInput name="startDato" label="Startdato for avtalen" required />
+                    <DateInput name="sluttDato" label="Sluttdato for avtalen" required />
+                    <RadiobuttonGroup name="type" label="Type avtale" options={avtaleTypeOptions} required />
                     <FormSubmitButton
                         label="Registrer ny avtale"
                         isLoading={addAvtaleMutation.isLoading}

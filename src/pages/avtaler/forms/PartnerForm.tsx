@@ -2,21 +2,21 @@ import * as React from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { TextInput } from '../../../components/forms/TextInput';
+import { Input } from '../../../components/forms/Input';
 import { Stack } from '@chakra-ui/react';
-import { Select, SelectOption } from '../../../components/forms/Select';
-import { AllFormErrorMessages } from '../../../components/forms/AllFormErrorMessages';
+import { FieldErrorMessages } from '../../../components/forms/FieldErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddPartner } from '../../../services/partner/useAddPartner';
 import { ApiPartnerPost, PartnerStorrelse } from '../../../services/partner/PartnerService';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
 
-const storrelseOptions: Array<SelectOption<PartnerStorrelse>> = [
+const storrelseOptions: Array<RadioOption<PartnerStorrelse>> = [
     { value: 'LITEN', label: 'Liten' },
     { value: 'MIDDELS', label: 'Middels' },
     { value: 'STOR', label: 'Stor' },
@@ -65,15 +65,9 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
-                    <AllFormErrorMessages />
-                    <TextInput name="navn" label="Navn på organisasjon" required />
-                    <Select
-                        name="storrelse"
-                        label="Størrelse"
-                        options={storrelseOptions}
-                        placeholder="Velg en størrelse"
-                        required
-                    />
+                    <FieldErrorMessages />
+                    <Input name="navn" label="Navn på organisasjon" required />
+                    <RadiobuttonGroup name="storrelse" label="Størrelse" options={storrelseOptions} required />
                     <CheckboxGroup
                         label="Organisasjonstype"
                         options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
