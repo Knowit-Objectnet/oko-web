@@ -8,7 +8,7 @@ export const WarningContainer: React.FC = ({ children }) => (
         <Flex alignItems="flex-start">
             <Icon as={Warning} aria-hidden width="5" height="auto" />
         </Flex>
-        <Stack direction="column" alignItems="center" spacing="1">
+        <Stack direction="column" spacing="1">
             {children}
         </Stack>
     </Stack>
