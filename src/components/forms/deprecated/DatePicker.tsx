@@ -32,7 +32,7 @@ interface Props {
     name: string;
 }
 
-export const DatePickerOld: React.FC<Props> = ({ name }) => {
+export const DatePicker: React.FC<Props> = ({ name }) => {
     const { control } = useFormContext();
 
     function parseDate(str: string, formatString: string, localeString: string) {

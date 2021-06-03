@@ -15,7 +15,7 @@ import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
 import format from 'date-fns/format';
 import { AnySchema } from 'yup';
-import Input from '../../components/forms/Input';
+import Input from '../../components/forms/deprecated/Input';
 import { PositiveButton } from '../../components/buttons/PositiveButton';
 
 const Wrapper = styled.div`
