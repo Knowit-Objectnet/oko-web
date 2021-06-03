@@ -23,7 +23,7 @@ export interface ApiHenteplanPost {
     frekvens: HenteplanFrekvens;
     startTidspunkt: string;
     sluttTidspunkt: string;
-    ukedag: Weekday;
+    ukedag?: Weekday;
     merknad?: string;
 }
 
