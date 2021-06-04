@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { ApiHenteplan } from '../../services/henteplan/HenteplanService';
+import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
 import { Flex } from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/react';
-import { AddButton } from '../../components/buttons/AddButton';
+import { AddButton } from '../../../components/buttons/AddButton';
 import { HenteplanTable } from './HenteplanTable';
-import { AddHenteplanButton } from './forms/AddHenteplanButton';
-import { ApiAvtale } from '../../services/avtale/AvtaleService';
-import { ApiPartner } from '../../services/partner/PartnerService';
+import { AddHenteplanButton } from './AddHenteplanButton';
+import { ApiAvtale } from '../../../services/avtale/AvtaleService';
+import { ApiPartner } from '../../../services/partner/PartnerService';
 
 interface Props {
     avtale: ApiAvtale;

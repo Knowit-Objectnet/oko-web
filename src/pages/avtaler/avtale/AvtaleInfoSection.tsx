@@ -5,10 +5,10 @@ import {
     PartnerInfoSectionContent,
     PartnerInfoSectionHeader,
     PartnerInfoSectionTitle,
-} from './PartnerInfoSection';
+} from '../partner/PartnerInfoSection';
 import { AvtaleInfoList } from './AvtaleInfoList';
-import { ApiPartner } from '../../services/partner/PartnerService';
-import { AddAvtaleButton } from './forms/AddAvtaleButton';
+import { ApiPartner } from '../../../services/partner/PartnerService';
+import { AddAvtaleButton } from './AddAvtaleButton';
 
 interface Props {
     partner: ApiPartner;

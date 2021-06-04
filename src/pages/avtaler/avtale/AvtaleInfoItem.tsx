@@ -1,13 +1,13 @@
 import { Flex } from '@chakra-ui/layout';
 import { AccordionButton, AccordionItem, AccordionPanel, Fade, Heading, Icon, Text } from '@chakra-ui/react';
-import ArrowRight from '../../assets/ArrowRight.svg';
+import ArrowRight from '../../../assets/ArrowRight.svg';
 import * as React from 'react';
-import { ApiAvtale, AvtaleType } from '../../services/avtale/AvtaleService';
+import { ApiAvtale, AvtaleType } from '../../../services/avtale/AvtaleService';
 import { isFuture, isPast, isWithinInterval, parseISO } from 'date-fns';
-import { formatDate } from '../../utils/formatDateTime';
-import { Henteplaner } from './Henteplaner';
-import { EditButton } from '../../components/buttons/EditButton';
-import { ApiPartner } from '../../services/partner/PartnerService';
+import { formatDate } from '../../../utils/formatDateTime';
+import { Henteplaner } from '../henteplan/Henteplaner';
+import { EditButton } from '../../../components/buttons/EditButton';
+import { ApiPartner } from '../../../services/partner/PartnerService';
 
 export const AVTALE_TYPE: Record<AvtaleType, string> = {
     ANNEN: 'Annen avtale',
@@ -16,7 +16,7 @@ export const AVTALE_TYPE: Record<AvtaleType, string> = {
     OMBRUKSARRANGEMENT: 'Ombruksarrangement',
 };
 
-export const getAvtaleTitle = (avtale: ApiAvtale) => {
+export const getAvtaleTitle = (avtale: ApiAvtale): string => {
     if (
         isWithinInterval(new Date(), {
             start: parseISO(avtale.startDato),
