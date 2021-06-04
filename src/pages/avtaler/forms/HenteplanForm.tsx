@@ -22,8 +22,10 @@ import { TextArea } from '../../../components/forms/TextArea';
 import { Box } from '@chakra-ui/layout';
 import { formatDate } from '../../../utils/formatDateTime';
 import { AVTALE_TYPE, getAvtaleTitle } from '../AvtaleInfoItem';
+import { upperFirst } from 'lodash';
+import { parseISO } from 'date-fns';
 
-// NB! Setting the error messages used by yup
+// NB! Setting the global error messages used by yup
 import '../../../utils/forms/formErrorMessages';
 
 interface HenteplanFormData {
@@ -53,75 +55,6 @@ const ukedagOptions: Array<SelectOption<Weekday>> = [
     { value: 'SUNDAY', label: 'Søndag' },
 ];
 
-const validationSchema = yup.object().shape({
-    stasjonId: yup.string().label('hvilken stasjon det skal hentes fra').required(),
-    frekvens: yup
-        .mixed<HenteplanFrekvens>()
-        .label('hvor ofte hentingene skal skje')
-        .required()
-        .oneOf(frekvensOptions.map((frekvens) => frekvens.value)),
-    ukedag: yup.mixed().when('frekvens', {
-        // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
-        is: (frekvens?: HenteplanFrekvens) => frekvens && frekvens !== 'ENKELT',
-        then: yup
-            .mixed<Weekday>()
-            .label('hvilken ukedag hentingene skal skje')
-            .required()
-            .oneOf(ukedagOptions.map((ukedag) => ukedag.value)),
-        otherwise: yup.string().notRequired(),
-    }),
-    startDato: yup
-        .date()
-        .transform(transformDate)
-        // TODO: restrict to daterange of avtale
-        .when(
-            'frekvens',
-            // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
-            (frekvens: HenteplanFrekvens | undefined, schema: yup.DateSchema) => {
-                if (!frekvens) {
-                    return yup.mixed().notRequired();
-                } else if (frekvens === 'ENKELT') {
-                    return schema.label('dato for hentingen').required();
-                } else {
-                    return schema.label('startdato for henteplanen').required();
-                }
-            },
-        )
-        .nullable(),
-    sluttDato: yup.mixed().when('frekvens', {
-        // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
-        is: (frekvens?: HenteplanFrekvens) => frekvens && frekvens !== 'ENKELT',
-        then: yup
-            .date()
-            .label('sluttdato for henteplanen')
-            .required()
-            .transform(transformDate)
-            // TODO: restrict to daterange of avtale
-            .min(yup.ref('startDato'), 'Sluttdatoen for henteplanen kan ikke være før startdatoen')
-            .nullable(),
-        otherwise: yup.mixed().notRequired(),
-    }),
-    startTidspunkt: yup
-        .date()
-        .label('starttidspunkt for når partneren kan hente')
-        .transform(transformTime)
-        .required()
-        // TODO: use station opening hours?
-        .nullable(),
-    sluttTidspunkt: yup
-        .date()
-        .label('sluttidspunkt for når partneren kan hente')
-        .transform(transformTime)
-        .required()
-        .min(
-            // TODO: use station opening hours?
-            // TODO: set minimum duration for henting (e.g. 15 mins after startTidspunkt)
-            yup.ref('startTidspunkt'),
-            'Sluttidspunktet for når partneren kan hente kan ikke være før starttidspunktet',
-        )
-        .nullable(),
-});
-
 const mergeDateWithTime = (date: Date, time: Date) =>
     new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes());
 
@@ -131,10 +64,103 @@ interface Props {
     onSuccess?: () => void;
 }
 
+const getHenteplanValidationSchema = (avtale: ApiAvtale) =>
+    yup.object().shape({
+        stasjonId: yup.string().label('hvilken stasjon det skal hentes fra').required(),
+        frekvens: yup
+            .mixed<HenteplanFrekvens>()
+            .label('hvor ofte hentingene skal skje')
+            .required()
+            .oneOf(frekvensOptions.map((frekvens) => frekvens.value)),
+        ukedag: yup
+            .mixed<Weekday>()
+            .label('hvilken ukedag hentingene skal skje')
+            .when('frekvens', (frekvens: HenteplanFrekvens | undefined, schema: yup.BaseSchema) => {
+                // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
+                if (frekvens && frekvens !== 'ENKELT') {
+                    return schema.required();
+                }
+                return schema.notRequired();
+            })
+            .oneOf(ukedagOptions.map((ukedag) => ukedag.value)),
+        startDato: yup
+            .date()
+            .transform(transformDate)
+            .when(
+                'frekvens',
+                // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
+                (frekvens: HenteplanFrekvens | undefined, schema: yup.DateSchema) => {
+                    if (!frekvens) {
+                        return yup.date().notRequired();
+                    } else if (frekvens === 'ENKELT') {
+                        return schema.label('dato for hentingen').required();
+                    } else {
+                        return schema.label('startdato for henteplanen').required();
+                    }
+                },
+            )
+            .min(parseISO(avtale.startDato), ({ label }) => `${upperFirst(label)} kan ikke være før avtalens startdato`)
+            .max(
+                parseISO(avtale.startDato),
+                ({ label }) => `${upperFirst(label)} kan ikke være etter avtalens sluttdato`,
+            )
+            .nullable(),
+        sluttDato: yup
+            .date()
+            .label('sluttdato for henteplanen')
+            .transform(transformDate)
+            .when(
+                'frekvens',
+                // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
+                (frekvens: HenteplanFrekvens | undefined, schema: yup.DateSchema) => {
+                    if (frekvens && frekvens !== 'ENKELT') {
+                        return schema
+                            .required()
+                            .min(yup.ref('startDato'), 'Sluttdatoen for henteplanen kan ikke være før startdatoen')
+                            .min(
+                                parseISO(avtale.startDato),
+                                ({ label }) => `${upperFirst(label)} kan ikke være før avtalens startdato`,
+                            )
+                            .max(
+                                parseISO(avtale.startDato),
+                                ({ label }) => `${upperFirst(label)} kan ikke være etter avtalens sluttdato`,
+                            );
+                    }
+                    return schema.notRequired();
+                },
+            )
+            .nullable(),
+        startTidspunkt: yup
+            .date()
+            .label('starttidspunkt for når partneren kan hente')
+            .transform(transformTime)
+            .required()
+            // TODO: use station opening hours?
+            .nullable(),
+        sluttTidspunkt: yup
+            .date()
+            .label('sluttidspunkt for når partneren kan hente')
+            .transform(transformTime)
+            .required()
+            .min(
+                // TODO: use station opening hours?
+                // TODO: set minimum duration for henting (e.g. 15 mins after startTidspunkt)
+                yup.ref('startTidspunkt'),
+                'Sluttidspunktet for når partneren kan hente kan ikke være før starttidspunktet',
+            )
+            .nullable(),
+        merknad: yup.string().notRequired(),
+    });
+
 export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
+    const validationSchema = getHenteplanValidationSchema(avtale);
     const formMethods = useForm<HenteplanFormData>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
+        defaultValues: {
+            startDato: avtale.startDato,
+            sluttDato: avtale.sluttDato,
+        },
     });
 
     const addHenteplanMutation = useAddHenteplan();
@@ -172,6 +198,7 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
 
     const frekvens = formMethods.watch('frekvens', undefined);
     const isRecurring = frekvens && frekvens !== 'ENKELT';
+    const avtaleVarighet = `fra ${formatDate(avtale.startDato)} til ${formatDate(avtale.sluttDato)}`;
 
     return (
         <FormProvider {...formMethods}>
@@ -182,8 +209,7 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
                             Gjelder for {getAvtaleTitle(avtale).toLowerCase()}:
                         </Heading>
                         <Text>
-                            {AVTALE_TYPE[avtale.type]} fra <time>{formatDate(avtale.startDato)}</time> til{' '}
-                            <time>{formatDate(avtale.sluttDato)}</time>
+                            {AVTALE_TYPE[avtale.type]} {avtaleVarighet}
                         </Text>
                     </Box>
                     <RequiredFieldsInstruction />
@@ -210,10 +236,18 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
                         <DateInput
                             name="startDato"
                             label={isRecurring ? 'Startdato for henteplanen' : 'Dato for hentingen'}
+                            helperText={`Avtalen varer ${avtaleVarighet}`}
                             required
                         />
                     ) : null}
-                    {isRecurring ? <DateInput name="sluttDato" label="Sluttdato for henteplanen" required /> : null}
+                    {isRecurring ? (
+                        <DateInput
+                            name="sluttDato"
+                            label="Sluttdato for henteplanen"
+                            helperText={`Avtalen varer ${avtaleVarighet}`}
+                            required
+                        />
+                    ) : null}
                     <TimeInput name="startTidspunkt" label="Starttidspunkt" required />
                     <TimeInput name="sluttTidspunkt" label="Sluttidspunkt" required />
                     <TextArea name="merknad" label="Merknader" />
