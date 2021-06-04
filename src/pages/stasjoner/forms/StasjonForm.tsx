@@ -16,18 +16,24 @@ import { RadiobuttonGroup, RadioOption } from '../../../components/forms/Radiobu
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
 
-const stasjonTypeOptions: Array<RadioOption<StasjonType>> = [
-    { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },
-    { value: 'MINI', label: 'Minigjenbruksstasjon' },
-];
+// TODO uncomment when we want to set station type in form
+// const stasjonTypeOptions: Array<RadioOption<StasjonType>> = [
+//     { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },
+//     { value: 'MINI', label: 'Minigjenbruksstasjon' },
+// ];
+
+interface StasjonFormData {
+    navn: string;
+}
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn på stasjonen').trim().required().min(2),
-    type: yup
-        .mixed<StasjonType>()
-        .label('type for stasjonen')
-        .required()
-        .oneOf(stasjonTypeOptions.map((type) => type.value)),
+    // TODO uncomment when we want to set station type in form
+    // type: yup
+    //     .mixed<StasjonType>()
+    //     .label('type for stasjonen')
+    //     .required()
+    //     .oneOf(stasjonTypeOptions.map((type) => type.value)),
 });
 
 interface Props {
@@ -36,12 +42,9 @@ interface Props {
 }
 
 export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
-    const formMethods = useForm<ApiStasjonPost>({
+    const formMethods = useForm<StasjonFormData>({
         resolver: yupResolver(validationSchema),
         // TODO: if form is in edit mode: pass original values as "defaultValues" here
-        defaultValues: {
-            type: 'GJENBRUK',
-        },
     });
 
     const addStasjonMutation = useAddStasjon();
@@ -51,9 +54,15 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
     const handleSubmit = formMethods.handleSubmit((data) => {
         setApiOrNetworkError(undefined);
 
-        addStasjonMutation.mutate(data, {
+        const newStation: ApiStasjonPost = {
+            ...data,
+            // TODO: remove when we want to set station type in form
+            type: 'GJENBRUK',
+        };
+
+        addStasjonMutation.mutate(newStation, {
             onSuccess: () => {
-                showSuccessToast({ title: `Stasjonen ${data.navn} ble registrert` });
+                showSuccessToast({ title: `Stasjonen ${newStation.navn} ble registrert` });
                 onSuccess?.();
             },
             onError: (error) => {
@@ -71,7 +80,8 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på stasjonen" required />
-                    <RadiobuttonGroup name="type" label="Type stasjon" options={stasjonTypeOptions} required />
+                    {/* TODO: uncomment when we want to set station type :
+                    <RadiobuttonGroup name="type" label="Type stasjon" options={stasjonTypeOptions} required />*/}
                     <FormSubmitButton
                         label="Registrer ny stasjon"
                         isLoading={addStasjonMutation.isLoading}
