@@ -7,6 +7,10 @@ import { upperFirst } from 'lodash';
 import { transformTime } from '../../../utils/forms/transformTime';
 import { frekvensOptions, ukedagOptions } from './HenteplanForm';
 
+/** IMPORTANT! The order of the fields in this schema must match the order of the visual fields in the form.
+ *   This is because the order here defines the order of the error messages in the error message summary
+ *   displayed in the form.
+ */
 export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSchema =>
     yup.object().shape({
         stasjonId: yup.string().label('hvilken stasjon det skal hentes fra').required(),
@@ -15,17 +19,6 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
             .label('hvor ofte hentingene skal skje')
             .required()
             .oneOf(frekvensOptions.map((frekvens) => frekvens.value)),
-        ukedag: yup
-            .mixed<Weekday>()
-            .label('hvilken ukedag hentingene skal skje')
-            .when('frekvens', (frekvens: HenteplanFrekvens | undefined, schema: yup.BaseSchema) => {
-                // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
-                if (frekvens && frekvens !== 'ENKELT') {
-                    return schema.required();
-                }
-                return schema.notRequired();
-            })
-            .oneOf(ukedagOptions.map((ukedag) => ukedag.value)),
         startDato: yup
             .date()
             .transform(transformDate)
@@ -44,7 +37,7 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
             )
             .min(parseISO(avtale.startDato), ({ label }) => `${upperFirst(label)} kan ikke være før avtalens startdato`)
             .max(
-                parseISO(avtale.startDato),
+                parseISO(avtale.sluttDato),
                 ({ label }) => `${upperFirst(label)} kan ikke være etter avtalens sluttdato`,
             )
             .nullable(),
@@ -65,7 +58,7 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
                                 ({ label }) => `${upperFirst(label)} kan ikke være før avtalens startdato`,
                             )
                             .max(
-                                parseISO(avtale.startDato),
+                                parseISO(avtale.sluttDato),
                                 ({ label }) => `${upperFirst(label)} kan ikke være etter avtalens sluttdato`,
                             );
                     }
@@ -73,6 +66,17 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
                 },
             )
             .nullable(),
+        ukedag: yup
+            .mixed<Weekday>()
+            .label('hvilken ukedag hentingene skal skje')
+            .when('frekvens', (frekvens: HenteplanFrekvens | undefined, schema: yup.BaseSchema) => {
+                // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
+                if (frekvens && frekvens !== 'ENKELT') {
+                    return schema.required();
+                }
+                return schema.notRequired();
+            })
+            .oneOf(ukedagOptions.map((ukedag) => ukedag.value)),
         startTidspunkt: yup
             .date()
             .label('starttidspunkt for når partneren kan hente')
