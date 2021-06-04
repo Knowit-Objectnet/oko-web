@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { ApiReport, ApiReportPatch, patchReport, reportsDefaultQueryKey } from '../../services/ReportService';
+import {
+    ApiReport,
+    ApiReportPatch,
+    patchReport,
+    reportsDefaultQueryKey,
+} from '../../services/deprecated/ReportService';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import styled from 'styled-components';

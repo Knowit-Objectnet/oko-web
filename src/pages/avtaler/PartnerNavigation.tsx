@@ -3,11 +3,11 @@ import { Heading, List, ListItem } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './forms/AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
-import { mockPartnere } from '../../../__mocks__/mocks-new/mockAktor';
+import { usePartnere } from '../../services/partner/usePartnere';
 
 export const PartnerNavigation: React.FC = () => {
-    // TODO: fetch from new API and handle error/loading
-    const partnere = mockPartnere;
+    // TODO: handle error/loading
+    const { data: partnere } = usePartnere();
 
     return (
         <Flex
@@ -37,7 +37,7 @@ export const PartnerNavigation: React.FC = () => {
                     </ListItem>
                 ))}
             </List>
-            <AddPartnerButton marginTop="10" width="full" variant="outline" />
+            <AddPartnerButton marginTop="10" width="full" variant="outlineOnSurface" />
         </Flex>
     );
 };

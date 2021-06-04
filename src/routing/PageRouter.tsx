@@ -6,6 +6,7 @@ import { Loading } from '../components/Loading';
 
 const Kalender = React.lazy(() => import('../pages/kalender'));
 const Avtaler = React.lazy(() => import('../pages/avtaler'));
+const Stasjoner = React.lazy(() => import('../pages/stasjoner'));
 
 const Home: React.FC = () => {
     // const { user } = useAuth();
@@ -20,6 +21,9 @@ export const PageRouter: React.FC = () => (
             </Route>
             <ProtectedRoute path="/avtaler" requiredRoles={[Roles.Admin]}>
                 <Avtaler />
+            </ProtectedRoute>
+            <ProtectedRoute path="/stasjoner" requiredRoles={[Roles.Admin]}>
+                <Stasjoner />
             </ProtectedRoute>
             <Route path="/">
                 <Home />

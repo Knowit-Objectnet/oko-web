@@ -1,15 +1,8 @@
 import * as React from 'react';
-import { ApiPartner } from '../../services-new/AktorService';
 import { Box, Flex } from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/react';
 import { EditButton } from '../../components/buttons/EditButton';
-import { PartnerStorrelse } from '../../types';
-
-const PARTNER_STORRELSE: Record<PartnerStorrelse, string> = {
-    LITEN: 'liten',
-    MIDDELS: 'middels',
-    STOR: 'stor',
-};
+import { ApiPartner } from '../../services/partner/PartnerService';
 
 interface Props {
     partner: ApiPartner;
@@ -44,10 +37,6 @@ export const PartnerInfoHeader: React.FC<Props> = ({ partner }) => (
             }}
         >
             <dl>
-                <Box>
-                    <dt>Størrelse:</dt>
-                    <dd>{PARTNER_STORRELSE[partner.storrelse]}</dd>
-                </Box>
                 <Box>
                     <dt>Ideell organisasjon:</dt>
                     <dd>{partner.ideell ? 'ja' : 'nei'}</dd>

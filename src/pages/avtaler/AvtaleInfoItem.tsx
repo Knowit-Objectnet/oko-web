@@ -2,12 +2,11 @@ import { Flex } from '@chakra-ui/layout';
 import { AccordionButton, AccordionItem, AccordionPanel, Fade, Heading, Icon, Text } from '@chakra-ui/react';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import * as React from 'react';
-import { ApiAvtale } from '../../services-new/AvtaleService';
+import { ApiAvtale, AvtaleType } from '../../services/avtale/AvtaleService';
 import { isFuture, isPast, isWithinInterval, parseISO } from 'date-fns';
 import { formatDate } from '../../utils/formatDateTime';
 import { Henteplaner } from './Henteplaner';
 import { EditButton } from '../../components/buttons/EditButton';
-import { AvtaleType } from '../../types';
 
 const AVTALE_TYPE: Record<AvtaleType, string> = {
     ANNEN: 'Annen avtale',

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EventInfo } from '../../../../types';
+import { EventInfo } from '../../../../services/deprecated/types';
 import { WeekMenu } from '../WeekMenu';
 import { WorkingWeekCalendar } from '../../../../components/calendar/WorkingWeekCalendar';
 

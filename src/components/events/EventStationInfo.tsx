@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import LocationIcon from '../../assets/Location.svg';
-import { ApiStation } from '../../services/StationService';
+import { ApiStation } from '../../services/deprecated/StationService';
 
 const Box = styled.div`
     background-color: ${(props) => props.theme.colors.LightBeige};

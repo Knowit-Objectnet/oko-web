@@ -8,8 +8,8 @@ import { FloatingActionButton } from '../../components/buttons/FloatingActionBut
 import Minus from '../../assets/Minus.svg';
 import { NewPartner } from './NewPartner';
 import { DeletePartner } from './DeletePartner';
-import { usePartners } from '../../services/hooks/usePartners';
 import { useAuth } from '../../auth/useAuth';
+import { usePartnere } from '../../services/partner/usePartnere';
 
 const Wrapper = styled.div`
     display: flex;
@@ -48,7 +48,7 @@ export const Partners: React.FC = () => {
 
     const modal = useModal();
 
-    const { data: partners, isLoading } = usePartners();
+    const { data: partnere, isLoading } = usePartnere();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
@@ -89,8 +89,8 @@ export const Partners: React.FC = () => {
                 <Content>
                     <h2>Registrerte samarbeidspartnere</h2>
                     <ul>
-                        {partners?.map((partner) => (
-                            <li key={partner.id}>{partner.name}</li>
+                        {partnere?.map((partner) => (
+                            <li key={partner.id}>{partner.navn}</li>
                         ))}
                     </ul>
                 </Content>

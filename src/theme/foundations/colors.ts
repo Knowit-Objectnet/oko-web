@@ -32,6 +32,8 @@ export const colors = {
     errorBackground: Colors.Red40,
     onError: Colors.Black,
     disabled: Colors.Disabled,
+    warning: Colors.Red,
+    onWarning: Colors.Black,
 
     ...Colors, // TODO: we might want to name these colors differently
 };

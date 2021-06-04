@@ -1,10 +1,10 @@
-import { useEvents } from '../../../services/hooks/useEvents';
 import { DateRange, Event as CalendarEvent } from 'react-big-calendar';
-import { usePrefetchEvents } from './usePrefetchEvents';
+import { usePrefetchHentinger } from './usePrefetchHentinger';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
-import { ApiEvent } from '../../../services/EventService';
 import { CalendarView, VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
+import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHentinger';
+import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;
@@ -24,10 +24,10 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     }
 };
 
-const transformToCalendarEvent = () => (event: ApiEvent): CalendarEvent => ({
-    start: new Date(event.startDateTime),
-    end: new Date(event.endDateTime),
-    title: `${event.partner.name} - ${event.station.name}`,
+const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): CalendarEvent => ({
+    start: new Date(planlagtHenting.startTidspunkt),
+    end: new Date(planlagtHenting.sluttTidspunkt),
+    title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
@@ -36,10 +36,10 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     const intervalToFetch = calculateDateRange(selectedDate, selectedView);
 
     // TODO: wrap in LazyResult in order to return loading/error status?
-    const { data: events } = useEvents(
+    const { data: planlagteHentinger } = usePlanlagteHentinger(
         {
-            fromDate: intervalToFetch.start.toISOString(),
-            toDate: intervalToFetch.end.toISOString(),
+            after: intervalToFetch.start.toISOString(),
+            before: intervalToFetch.end.toISOString(),
         },
         {
             keepPreviousData: true,
@@ -48,11 +48,11 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     );
 
     // Fetching events for previous and next interval as well
-    usePrefetchEvents(intervalToFetch);
+    usePrefetchHentinger(intervalToFetch);
 
-    const filteredEvents = (events ?? []).filter((event) =>
+    const filteredPlanlagteHentinger = (planlagteHentinger ?? []).filter((event) =>
         filterFns.reduce((result: boolean, filterFn) => filterFn(event), true),
     );
 
-    return filteredEvents.map(transformToCalendarEvent());
+    return filteredPlanlagteHentinger.map(transformToCalendarEvent);
 };

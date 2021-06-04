@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { ApiHenteplanDownstream } from '../../services-new/HenteplanService';
+import { ApiHenteplan } from '../../services/henteplan/HenteplanService';
 import { Flex } from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/react';
 import { AddButton } from '../../components/buttons/AddButton';
 import { HenteplanTable } from './HenteplanTable';
 
 interface Props {
-    henteplaner: Array<ApiHenteplanDownstream>;
+    henteplaner: Array<ApiHenteplan>;
 }
 
 export const Henteplaner: React.FC<Props> = ({ henteplaner }) => (

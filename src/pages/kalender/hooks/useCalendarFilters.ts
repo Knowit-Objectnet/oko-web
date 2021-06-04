@@ -1,16 +1,16 @@
 import { useQueryString } from 'use-route-as-state';
-import { ApiEvent } from '../../../services/EventService';
-import { useStations } from '../../../services/hooks/useStations';
-import { ApiStation } from '../../../services/StationService';
+import { ApiStasjon } from '../../../services/stasjon/StasjonService';
+import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { useStasjoner } from '../../../services/stasjon/useStasjoner';
 
 export interface CalendarFilters {
     stasjon?: string;
 }
 
-export type CalendarFilterFn = (event: ApiEvent) => boolean;
+export type CalendarFilterFn = (event: ApiPlanlagtHenting) => boolean;
 
-const isValidStasjon = (stasjonName: string, stasjoner?: Array<ApiStation>) =>
-    (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.name === stasjonName ? true : result), false);
+const isValidStasjon = (stasjonName: string, stasjoner?: Array<ApiStasjon>) =>
+    (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.navn === stasjonName ? true : result), false);
 
 export const useCalendarFilters = (): {
     filters: CalendarFilters;
@@ -24,11 +24,11 @@ export const useCalendarFilters = (): {
     const filterFns = [];
 
     // Checking for valid station filter name, and adding filter if present
-    const { data: stasjoner } = useStations();
+    const { data: stasjoner } = useStasjoner();
     if (isValidStasjon(queryFilters.stasjon, stasjoner)) {
-        const stasjonFilter = (event: ApiEvent): boolean => {
+        const stasjonFilter = (event: ApiPlanlagtHenting): boolean => {
             if (queryFilters.stasjon !== undefined) {
-                return event.station.name === queryFilters.stasjon;
+                return event.stasjonNavn === queryFilters.stasjon;
             }
             return true;
         };

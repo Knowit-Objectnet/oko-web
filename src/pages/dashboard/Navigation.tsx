@@ -1,6 +1,7 @@
 import * as React from 'react';
 import List from '../../assets/List.svg';
 import Calendar from '../../assets/Calendar.svg';
+import Location from '../../assets/Location.svg';
 import { NavItem } from './NavItem';
 import { useAuth, UserInfo } from '../../auth/useAuth';
 import { HStack } from '@chakra-ui/react';
@@ -9,8 +10,9 @@ const getNavItemsForRole = (user: UserInfo) => {
     if (user.isAdmin)
         return (
             <>
-                <NavItem path="/avtaler" icon={<List />} label="Avtaler" />
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
+                <NavItem path="/avtaler" icon={<List />} label="Avtaler" />
+                <NavItem path="/stasjoner" icon={<Location />} label="Stasjoner" />
             </>
         );
     else if (user.isPartner) return <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />;

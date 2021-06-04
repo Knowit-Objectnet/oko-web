@@ -1,15 +1,9 @@
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
-import {
-    FormControl,
-    FormErrorMessage,
-    FormHelperText,
-    FormLabel,
-    Icon,
-    Select as ChakraSelect,
-} from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormHelperText, Icon, Select as ChakraSelect } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import ChevronDown from '../../assets/ChevronDown.svg';
+import { FormLabel } from './FormLabel';
 
 export interface SelectOption<TValue = string, TLabel = string> {
     value: TValue;
@@ -35,10 +29,7 @@ export const Select: React.FC<Props> = ({ name, label, options, placeholder, req
 
     return (
         <FormControl isInvalid={isInvalid}>
-            <FormLabel>
-                {label}
-                {required ? '*' : null}
-            </FormLabel>
+            <FormLabel label={label} required={required} />
             {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
             <ChakraSelect
                 {...register(name)}

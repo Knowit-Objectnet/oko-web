@@ -3,7 +3,7 @@ import { Checkbox as ChakraCheckbox, CheckboxProps, Icon } from '@chakra-ui/reac
 import CheckboxIcon from '../../assets/Checkbox.svg';
 import { useFormContext } from 'react-hook-form';
 
-const CustomCheckboxIcon: React.FC<CheckboxProps> = () => (
+const CustomCheckboxIcon: React.FC = () => (
     <Icon fill="currentColor">
         <CheckboxIcon />
     </Icon>

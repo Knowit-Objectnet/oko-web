@@ -2,12 +2,12 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../../services/PartnerService';
+import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../../services/deprecated/PartnerService';
 import { PositiveButton } from '../../components/buttons/PositiveButton';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Input from '../../components/forms/Input';
+import Input from '../../components/forms/deprecated/Input';
 
 const Wrapper = styled.div`
     display: flex;

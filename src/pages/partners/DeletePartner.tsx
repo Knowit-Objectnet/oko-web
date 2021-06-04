@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
-import { deletePartner, partnersDefaultQueryKey } from '../../services/PartnerService';
+import { deletePartner, partnersDefaultQueryKey } from '../../services/deprecated/PartnerService';
 import { useMutation, useQueryClient } from 'react-query';
-import { PartnerSelect } from '../../components/forms/PartnerSelect';
+import { PartnerSelect } from '../../components/forms/deprecated/PartnerSelect';
 import { NegativeButton } from '../../components/buttons/NegativeButton';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';

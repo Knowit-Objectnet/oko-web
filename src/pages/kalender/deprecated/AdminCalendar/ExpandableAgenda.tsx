@@ -3,10 +3,10 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Agenda } from './Agenda';
 import { SingleDayCalendar } from '../../../../components/calendar/SingleDayCalendar';
-import { EventInfo, SlotInfo } from '../../../../types';
+import { EventInfo, SlotInfo } from '../../../../services/deprecated/types';
 import ArrowUp from '../../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../../assets/ArrowDown.svg';
-import { useStations } from '../../../../services/hooks/useStations';
+import { useStasjoner } from '../../../../services/stasjon/useStasjoner';
 
 const Wrapper = styled.div``;
 
@@ -37,9 +37,11 @@ export const ExpandableAgenda: React.FC<Props> = (props) => {
     // State for handling expansion of the agenda/calendar
     const [expanded, setExpanded] = useState(false);
 
-    const { data: stations } = useStations();
-    const stationNames = (stations ?? []).map((station) => station.name);
+    // const { data: stations } = useStations();
+    const { data: stasjoner } = useStasjoner();
+    const stationNames = (stasjoner ?? []).map((stasjon) => stasjon.navn);
     const eventsByStation = stationNames.map((stationName) =>
+        //TODO: Currently no equivalent to EventInfo planned, so this mapping won't work.
         props.events.filter((event) => event.resource.station.name === stationName),
     );
 

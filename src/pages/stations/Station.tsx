@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { StationAddress } from './StationAddress';
-import { StationOpeningTimes } from './StationOpeningTimes';
 import { StationAmbassador } from './StationAmbassador';
-import { ApiStation } from '../../services/StationService';
+import { ApiStasjon } from '../../services/stasjon/StasjonService';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -31,18 +30,18 @@ const Info = styled.div`
 `;
 
 interface Props {
-    station: ApiStation;
+    station: ApiStasjon;
 }
 
 export const Station: React.FC<Props> = ({ station }) => {
     return (
         <Wrapper>
             <Header>
-                <Title>{station.name}</Title>
+                <Title>{station.navn}</Title>
             </Header>
             <Info>
                 <StationAddress address="N/A" />
-                <StationOpeningTimes openingTimes={station.hours} />
+                {/* <StationOpeningTimes openingTimes={station.hours} /> */}
                 <StationAmbassador name="N/A" email="N/A" phone="N/A" title="N/A" />
             </Info>
         </Wrapper>

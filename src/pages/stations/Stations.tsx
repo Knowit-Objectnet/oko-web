@@ -5,12 +5,12 @@ import { Loading } from '../../components/Loading';
 import Plus from '../../assets/Plus.svg';
 import useModal from '../../components/modal/useModal';
 import { Helmet } from 'react-helmet';
-import { useStations } from '../../services/hooks/useStations';
 import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
 import { DeleteStation } from './DeleteStation';
 import Minus from '../../assets/Minus.svg';
 import { NewStation } from './NewStation';
 import { useAuth } from '../../auth/useAuth';
+import { useStasjoner } from '../../services/stasjon/useStasjoner';
 
 const Wrapper = styled.div`
     display: flex;
@@ -48,7 +48,7 @@ export const Stations: React.FC = () => {
     const { user } = useAuth();
     const modal = useModal();
 
-    const { data: stations, isLoading } = useStations();
+    const { data: stasjoner, isLoading } = useStasjoner();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
@@ -87,7 +87,7 @@ export const Stations: React.FC = () => {
                     </StationAdminButtons>
                 )}
                 <Content>
-                    {stations?.map((station) => (
+                    {stasjoner?.map((station) => (
                         <Station key={station.id} station={station} />
                     ))}
                 </Content>

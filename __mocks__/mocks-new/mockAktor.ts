@@ -1,4 +1,6 @@
-import { ApiKontakt, ApiPartner, ApiStasjon } from '../../src/services-new/AktorService';
+import { ApiKontakt } from '../../src/services/aktor/AktorService';
+import { ApiPartner } from '../../src/services/partner/PartnerService';
+import { ApiStasjon } from '../../src/services/stasjon/StasjonService';
 
 export const mockKontakter: Array<ApiKontakt> = [
     {
@@ -51,7 +53,6 @@ export const mockPartnere: Array<ApiPartner> = [
                 rolle: 'Kjøpsanvarlig',
             },
         ],
-        storrelse: 'STOR',
         ideell: true,
     },
     {
@@ -77,14 +78,12 @@ export const mockPartnere: Array<ApiPartner> = [
                 rolle: 'Sjåfør',
             },
         ],
-        storrelse: 'MIDDELS',
         ideell: true,
     },
     {
         id: 'b370a928-f5f9-48d6-b9f3-52533123fc4a',
         navn: 'Jobben',
         kontaktPersoner: [],
-        storrelse: 'LITEN',
         ideell: false,
     },
 ];
