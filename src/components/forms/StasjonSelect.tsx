@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useStasjoner } from '../../services/stasjon/useStasjoner';
-import { useFormContext } from 'react-hook-form';
 import { Select, SelectOption } from './Select';
 
 interface Props {
@@ -11,14 +10,22 @@ interface Props {
 }
 
 export const StasjonSelect: React.FC<Props> = (props) => {
-    const { data: stasjoner, isLoading, isLoadingError } = useStasjoner();
-
-    const { register } = useFormContext();
+    const { data: stasjoner, isLoading, isLoadingError } = useStasjoner({ queryOptions: { keepPreviousData: true } });
 
     const stasjonOptions: Array<SelectOption> = (stasjoner ?? []).map((stasjon) => ({
         label: stasjon.navn,
         value: stasjon.id,
     }));
 
-    return <Select options={stasjonOptions} placeholder="Velg stasjon" {...props} />;
+    const getPlaceholderValue = (): string => {
+        if (isLoading) {
+            return 'Laster inn...';
+        }
+        if (isLoadingError) {
+            return 'Klarte ikke hente stasjoner';
+        }
+        return 'Velg stasjon';
+    };
+
+    return <Select options={stasjonOptions} placeholder={getPlaceholderValue()} {...props} />;
 };
