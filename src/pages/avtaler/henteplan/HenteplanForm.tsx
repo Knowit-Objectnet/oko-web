@@ -56,7 +56,7 @@ export const ukedagOptions: Array<SelectOption<Weekday>> = [
 
 interface Props {
     avtale: ApiAvtale;
-    /** Callback that will fire if registration of new Stasjon is successful: **/
+    /** Callback that will fire if registration is successful: **/
     onSuccess?: () => void;
 }
 
