@@ -32,7 +32,7 @@ export const PartnerInfo: React.FC = () => {
         <Flex as="main" alignItems="flex-start" direction="column" flex="1" height="full">
             <PartnerInfoHeader partner={partner} />
             <AvtaleInfoSection partner={partner} />
-            <KontaktPersonSection kontaktPersoner={partner.kontaktPersoner} />
+            <KontaktPersonSection partner={partner} />
         </Flex>
     );
 };
