@@ -65,7 +65,7 @@ const createNewHenteplan = (data: HenteplanFormData, avtale: ApiAvtale): ApiHent
     return {
         avtaleId: avtale.id,
         frekvens: data.frekvens,
-        ukedag: data.ukedag || 'MONDAY',
+        ukedag: data.ukedag,
         stasjonId: data.stasjonId,
         startTidspunkt,
         sluttTidspunkt,
