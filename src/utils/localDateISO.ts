@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
-export const localeDateFromISO = (dateString: string): Date => {
+export const localDateFromISO = (dateString: string): Date => {
     const splitString = dateString.split('T');
     const splitTimeString = splitString[1].split(':');
     const hours: number = parseInt(splitTimeString[0]);
@@ -26,4 +26,4 @@ export const toISOLocalString = (date: Date): string => {
     )}Z`;
 };
 
-export const formatLocalTime = (date: string): string => format(localeDateFromISO(date), 'HH:mm', { locale: nb });
+export const formatLocalTime = (date: string): string => format(localDateFromISO(date), 'HH:mm', { locale: nb });
