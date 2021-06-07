@@ -63,9 +63,6 @@ const createNewHenteplan = (data: HenteplanFormData, avtale: ApiAvtale): ApiHent
     const startTidspunkt = toISOLocalString(mergeDateWithTime(data.startDato, data.startTidspunkt));
     const sluttTidspunkt = toISOLocalString(mergeDateWithTime(data.sluttDato || data.startDato, data.sluttTidspunkt));
 
-    console.log(startTidspunkt);
-    console.log(sluttTidspunkt);
-
     return {
         avtaleId: avtale.id,
         frekvens: data.frekvens,
