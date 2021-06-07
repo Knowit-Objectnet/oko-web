@@ -5,6 +5,7 @@ import { CalendarView, VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
 import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHentinger';
 import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { localeDateFromISO } from '../../../utils/localDateISO';
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;
@@ -22,19 +23,6 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
         default:
             throw new Error('Unsupported calendar view name provided when calculating date range');
     }
-};
-
-const localeDateFromISO = (dateString: string): Date => {
-    const splitString = dateString.split('T');
-    const splitTimeString = splitString[1].split(':');
-    const hours: number = parseInt(splitTimeString[0]);
-    const minutes: number = parseInt(splitTimeString[1]);
-
-    const myDate = new Date(splitString[0]);
-    myDate.setHours(hours);
-    myDate.setMinutes(minutes);
-
-    return myDate;
 };
 
 const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): CalendarEvent => ({
