@@ -24,9 +24,22 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     }
 };
 
+const localeDateFromISO = (dateString: string): Date => {
+    const splitString = dateString.split('T');
+    const splitTimeString = splitString[1].split(':');
+    const hours: number = parseInt(splitTimeString[0]);
+    const minutes: number = parseInt(splitTimeString[1]);
+
+    const myDate = new Date(splitString[0]);
+    myDate.setHours(hours);
+    myDate.setMinutes(minutes);
+
+    return myDate;
+};
+
 const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): CalendarEvent => ({
-    start: new Date(planlagtHenting.startTidspunkt),
-    end: new Date(planlagtHenting.sluttTidspunkt),
+    start: localeDateFromISO(planlagtHenting.startTidspunkt),
+    end: localeDateFromISO(planlagtHenting.sluttTidspunkt),
     title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
 });
 

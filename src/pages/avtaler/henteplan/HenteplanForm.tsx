@@ -58,9 +58,21 @@ interface Props {
     onSuccess?: () => void;
 }
 
+const zeroPad = (num: number, places: number) => String(num).padStart(places, '0');
+
+function toISOLocalString(date: Date): string {
+    return `${zeroPad(date.getFullYear(), 4)}-${zeroPad(date.getMonth(), 2)}-${zeroPad(date.getDay(), 2)}T${zeroPad(
+        date.getHours(),
+        2,
+    )}:${zeroPad(date.getMinutes(), 2)}:${zeroPad(date.getSeconds(), 2)}.${zeroPad(date.getMilliseconds(), 3)}Z`;
+}
+
 const createNewHenteplan = (data: HenteplanFormData, avtale: ApiAvtale): ApiHenteplanPost => {
-    const startTidspunkt = mergeDateWithTime(data.startDato, data.startTidspunkt).toISOString();
-    const sluttTidspunkt = mergeDateWithTime(data.sluttDato || data.startDato, data.sluttTidspunkt).toISOString();
+    const startTidspunkt = toISOLocalString(mergeDateWithTime(data.startDato, data.startTidspunkt));
+    const sluttTidspunkt = toISOLocalString(mergeDateWithTime(data.sluttDato || data.startDato, data.sluttTidspunkt));
+
+    console.log(startTidspunkt);
+    console.log(sluttTidspunkt);
 
     return {
         avtaleId: avtale.id,
