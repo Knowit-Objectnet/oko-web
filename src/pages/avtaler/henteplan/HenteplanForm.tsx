@@ -69,7 +69,7 @@ const createNewHenteplan = (data: HenteplanFormData, avtale: ApiAvtale): ApiHent
         stasjonId: data.stasjonId,
         startTidspunkt,
         sluttTidspunkt,
-        merknad: '',
+        merknad: data.merknad,
     };
 };
 
