@@ -46,7 +46,11 @@ export const StasjonTable: React.FC = () => {
                                         console.log(`Rediger ${stasjon.navn}`);
                                     }}
                                 />
-                                <DeleteStasjonButton stasjon={stasjon} />
+                                {process.env.NODE_ENV === 'development' ? (
+                                    // TODO: hacky solution to only show station deletion button
+                                    //  when project is built for development (and not in production)
+                                    <DeleteStasjonButton stasjon={stasjon} />
+                                ) : null}
                             </ButtonGroup>
                         </Td>
                     </Tr>

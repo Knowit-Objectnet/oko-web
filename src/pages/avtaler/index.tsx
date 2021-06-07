@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Route, useRouteMatch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { PartnerInfo } from './PartnerInfo';
-import { PartnerNavigation } from './PartnerNavigation';
+import { PartnerInfo } from './partner/PartnerInfo';
+import { PartnerNavigation } from './partner/PartnerNavigation';
 import { Stack } from '@chakra-ui/react';
 
 const Avtaler: React.FC = () => {

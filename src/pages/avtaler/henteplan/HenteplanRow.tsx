@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useStasjonById } from '../../services/stasjon/useStasjonById';
+import { useStasjonById } from '../../../services/stasjon/useStasjonById';
 import { ButtonGroup, Td, Tr } from '@chakra-ui/react';
-import { formatDate, formatTime } from '../../utils/formatDateTime';
-import { EditButton } from '../../components/buttons/EditButton';
-import { DeleteButton } from '../../components/buttons/DeleteButton';
-import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../services/henteplan/HenteplanService';
+import { formatDate, formatTime } from '../../../utils/formatDateTime';
+import { EditButton } from '../../../components/buttons/EditButton';
+import { DeleteButton } from '../../../components/buttons/DeleteButton';
+import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
 
 const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',

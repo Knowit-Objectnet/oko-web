@@ -2,13 +2,13 @@ import { MutationFunction, useMutation, UseMutationResult, useQueryClient } from
 
 export const useMutationWithInvalidation = <TReturn, TError, TInput>(
     mutationFn: MutationFunction<TReturn, TInput>,
-    queryKey: string,
+    queryKeysToInvalidate: Array<string>,
 ): UseMutationResult<TReturn, TError, TInput> => {
     const queryClient = useQueryClient();
     return useMutation<TReturn, TError, TInput>(mutationFn, {
         onSettled: () => {
             // We invalidate the cache after mutation is complete, so that data is refetched from the API
-            queryClient.invalidateQueries(queryKey);
+            queryKeysToInvalidate.forEach((queryKey) => queryClient.invalidateQueries(queryKey));
         },
     });
 };

@@ -5,10 +5,10 @@ import {
     PartnerInfoSectionContent,
     PartnerInfoSectionHeader,
     PartnerInfoSectionTitle,
-} from './PartnerInfoSection';
-import { AddButton } from '../../components/buttons/AddButton';
+} from '../partner/PartnerInfoSection';
+import { AddButton } from '../../../components/buttons/AddButton';
 import { KontaktPersonTable } from './KontaktPersonTable';
-import { ApiKontakt } from '../../services/aktor/AktorService';
+import { ApiKontakt } from '../../../services/aktor/AktorService';
 
 interface Props {
     kontaktPersoner?: Array<ApiKontakt>;

@@ -1,7 +1,7 @@
 import { NavLink, useRouteMatch } from 'react-router-dom';
 import { Link } from '@chakra-ui/react';
 import * as React from 'react';
-import { ApiPartner } from '../../services/partner/PartnerService';
+import { ApiPartner } from '../../../services/partner/PartnerService';
 
 interface Props {
     partner: ApiPartner;

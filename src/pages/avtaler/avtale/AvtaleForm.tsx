@@ -31,11 +31,6 @@ const avtaleTypeOptions: Array<RadioOption<AvtaleType>> = [
 ];
 
 const validationSchema = yup.object().shape({
-    type: yup
-        .mixed()
-        .label('type for avtalen')
-        .required()
-        .oneOf(Object.values(avtaleTypeOptions).map((avtaleType) => avtaleType.value)),
     startDato: yup.date().label('startdato for avtalen').transform(transformDate).required().nullable(),
     sluttDato: yup
         .date()
@@ -44,6 +39,11 @@ const validationSchema = yup.object().shape({
         .required()
         .min(yup.ref('startDato'), 'Sluttdato kan ikke være før startdato')
         .nullable(),
+    type: yup
+        .mixed()
+        .label('type for avtalen')
+        .required()
+        .oneOf(avtaleTypeOptions.map((avtaleType) => avtaleType.value)),
 });
 
 interface Props {

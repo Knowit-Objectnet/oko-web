@@ -64,7 +64,11 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
                         options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
                         required
                     />
-                    <FormSubmitButton label="Registrer ny samarbeidspartner" isLoading={addPartnerMutation.isLoading} />
+                    <FormSubmitButton
+                        label="Registrer ny samarbeidspartner"
+                        isLoading={addPartnerMutation.isLoading}
+                        loadingText="Vennligst vent..."
+                    />
                 </Stack>
             </form>
         </FormProvider>

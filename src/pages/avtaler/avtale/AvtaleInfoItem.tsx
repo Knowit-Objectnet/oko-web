@@ -1,21 +1,22 @@
 import { Flex } from '@chakra-ui/layout';
 import { AccordionButton, AccordionItem, AccordionPanel, Fade, Heading, Icon, Text } from '@chakra-ui/react';
-import ArrowRight from '../../assets/ArrowRight.svg';
+import ArrowRight from '../../../assets/ArrowRight.svg';
 import * as React from 'react';
-import { ApiAvtale, AvtaleType } from '../../services/avtale/AvtaleService';
+import { ApiAvtale, AvtaleType } from '../../../services/avtale/AvtaleService';
 import { isFuture, isPast, isWithinInterval, parseISO } from 'date-fns';
-import { formatDate } from '../../utils/formatDateTime';
-import { Henteplaner } from './Henteplaner';
-import { EditButton } from '../../components/buttons/EditButton';
+import { formatDate } from '../../../utils/formatDateTime';
+import { Henteplaner } from '../henteplan/Henteplaner';
+import { EditButton } from '../../../components/buttons/EditButton';
+import { ApiPartner } from '../../../services/partner/PartnerService';
 
-const AVTALE_TYPE: Record<AvtaleType, string> = {
+export const AVTALE_TYPE: Record<AvtaleType, string> = {
     ANNEN: 'Annen avtale',
     FAST: 'Fast avtale',
     INTERNTRANSPORT: 'Interntransport',
     OMBRUKSARRANGEMENT: 'Ombruksarrangement',
 };
 
-const getAvtaleTitle = (avtale: ApiAvtale) => {
+export const getAvtaleTitle = (avtale: ApiAvtale): string => {
     if (
         isWithinInterval(new Date(), {
             start: parseISO(avtale.startDato),
@@ -34,9 +35,10 @@ const getAvtaleTitle = (avtale: ApiAvtale) => {
 
 interface Props {
     avtale: ApiAvtale;
+    partner: ApiPartner;
 }
 
-export const AvtaleInfoItem: React.FC<Props> = ({ avtale }) => (
+export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => (
     <AccordionItem id={avtale.id}>
         {({ isExpanded }) => (
             <Flex direction="column" width="full" border="4px solid" borderColor="gray.200" padding="5">
@@ -73,7 +75,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale }) => (
                     <time>{formatDate(avtale.sluttDato)}</time>
                 </Text>
                 <AccordionPanel padding="0">
-                    <Henteplaner henteplaner={avtale.henteplaner} />
+                    <Henteplaner avtale={avtale} partner={partner} />
                 </AccordionPanel>
             </Flex>
         )}
