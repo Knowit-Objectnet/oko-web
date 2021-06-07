@@ -82,6 +82,10 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
             startDato: avtale.startDato,
             sluttDato: avtale.sluttDato,
         },
+        // The following line unregisters fields that are conditionally hidden (e.g. by changing "Frekvens" in this form).
+        //  This fixes a problem where errors for hidden fields are not cleared from the react-hook-form errors object.
+        //  But this setting comes with some caveats: https://react-hook-form.com/api/useform (see "shouldUnregister" section)
+        shouldUnregister: true,
     });
 
     const addHenteplanMutation = useAddHenteplan();

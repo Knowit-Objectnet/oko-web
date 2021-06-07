@@ -22,19 +22,15 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
         startDato: yup
             .date()
             .transform(transformDate)
-            .when(
-                'frekvens',
-                // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
-                (frekvens: HenteplanFrekvens | undefined, schema: yup.DateSchema) => {
-                    if (!frekvens) {
-                        return yup.date().notRequired();
-                    } else if (frekvens === 'ENKELT') {
-                        return schema.label('dato for hentingen').required();
-                    } else {
-                        return schema.label('startdato for henteplanen').required();
-                    }
-                },
-            )
+            .when('frekvens', (frekvens: HenteplanFrekvens | undefined, schema: yup.DateSchema) => {
+                if (!frekvens) {
+                    return yup.date().notRequired();
+                } else if (frekvens === 'ENKELT') {
+                    return schema.label('dato for hentingen').required();
+                } else {
+                    return schema.label('startdato for henteplanen').required();
+                }
+            })
             .min(parseISO(avtale.startDato), ({ label }) => `${upperFirst(label)} kan ikke være før avtalens startdato`)
             .max(
                 parseISO(avtale.sluttDato),
@@ -45,32 +41,27 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
             .date()
             .label('sluttdato for henteplanen')
             .transform(transformDate)
-            .when(
-                'frekvens',
-                // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
-                (frekvens: HenteplanFrekvens | undefined, schema: yup.DateSchema) => {
-                    if (frekvens && frekvens !== 'ENKELT') {
-                        return schema
-                            .required()
-                            .min(yup.ref('startDato'), 'Sluttdatoen for henteplanen kan ikke være før startdatoen')
-                            .min(
-                                parseISO(avtale.startDato),
-                                ({ label }) => `${upperFirst(label)} kan ikke være før avtalens startdato`,
-                            )
-                            .max(
-                                parseISO(avtale.sluttDato),
-                                ({ label }) => `${upperFirst(label)} kan ikke være etter avtalens sluttdato`,
-                            );
-                    }
-                    return schema.notRequired();
-                },
-            )
+            .when('frekvens', (frekvens: HenteplanFrekvens | undefined, schema: yup.DateSchema) => {
+                if (frekvens && frekvens !== 'ENKELT') {
+                    return schema
+                        .required()
+                        .min(yup.ref('startDato'), 'Sluttdatoen for henteplanen kan ikke være før startdatoen')
+                        .min(
+                            parseISO(avtale.startDato),
+                            ({ label }) => `${upperFirst(label)} kan ikke være før avtalens startdato`,
+                        )
+                        .max(
+                            parseISO(avtale.sluttDato),
+                            ({ label }) => `${upperFirst(label)} kan ikke være etter avtalens sluttdato`,
+                        );
+                }
+                return schema.notRequired();
+            })
             .nullable(),
         ukedag: yup
             .mixed<Weekday>()
             .label('hvilken ukedag hentingene skal skje')
             .when('frekvens', (frekvens: HenteplanFrekvens | undefined, schema: yup.BaseSchema) => {
-                // TODO: if frekvens is changed after submit, the react-hook-form errors object is not refreshed
                 if (frekvens && frekvens !== 'ENKELT') {
                     return schema.required();
                 }
