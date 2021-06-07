@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useStasjonById } from '../../../services/stasjon/useStasjonById';
 import { ButtonGroup, Td, Tr } from '@chakra-ui/react';
-import { formatDate, formatTime } from '../../../utils/formatDateTime';
+import { formatDate } from '../../../utils/formatDateTime';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
+import { formatLocalTime } from '../../../utils/localDateISO';
 
 const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
@@ -34,9 +35,9 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan }) => {
         <Tr key={henteplan.id}>
             <Td>{UKEDAG[henteplan.ukedag]}</Td>
             <Td>
-                <time>{formatTime(henteplan.startTidspunkt)}</time>
+                <time>{formatLocalTime(henteplan.startTidspunkt)}</time>
                 &ndash;
-                <time>{formatTime(henteplan.sluttTidspunkt)}</time>
+                <time>{formatLocalTime(henteplan.sluttTidspunkt)}</time>
             </Td>
             <Td>{stasjon?.navn}</Td>
             <Td>{FREKVENS[henteplan.frekvens]}</Td>
