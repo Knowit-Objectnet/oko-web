@@ -2,7 +2,7 @@ import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import * as yup from 'yup';
 import { HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
 import { transformDate } from '../../../utils/forms/transformDate';
-import { parseISO } from 'date-fns';
+import { add, isValid, parseISO } from 'date-fns';
 import { upperFirst } from 'lodash';
 import { transformTime } from '../../../utils/forms/transformTime';
 import { frekvensOptions, ukedagOptions } from './HenteplanForm';
@@ -86,6 +86,17 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
                 yup.ref('startTidspunkt'),
                 'Sluttidspunktet for når partneren kan hente kan ikke være før starttidspunktet',
             )
+            .when('startTidspunkt', (startTidspunkt: Date | null, schema: yup.DateSchema) => {
+                if (startTidspunkt instanceof Date && isValid(startTidspunkt)) {
+                    const validDuration = { minutes: 15 };
+                    const validSluttTidspunkt = add(startTidspunkt, validDuration);
+                    return schema.min(
+                        validSluttTidspunkt,
+                        'Sluttidspunkt må være minst 15 minutter etter starttidspunkt',
+                    );
+                }
+                return schema;
+            })
             .nullable(),
         merknad: yup.string().notRequired(),
     });
