@@ -28,5 +28,3 @@ export const toISOLocalString = (date: Date): string => {
         3,
     )}Z`;
 };
-
-export const formatLocalTime = (date: string): string => format(localDateFromISO(date), 'HH:mm', { locale: nb });
