@@ -1,6 +1,9 @@
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
+//TODO: This is done to circumvent issues regarding daylight saving. This might need a more robust solution.
+// It effectively makes it so Date fields are read as strings, with no regards to time zones.
+
 export const localDateFromISO = (dateString: string): Date => {
     const splitString = dateString.split('T');
     const splitTimeString = splitString[1].split(':');
