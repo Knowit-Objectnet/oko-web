@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Box, Flex } from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/react';
-import { EditButton } from '../../components/buttons/EditButton';
-import { ApiPartner } from '../../services/partner/PartnerService';
+import { EditButton } from '../../../components/buttons/EditButton';
+import { ApiPartner } from '../../../services/partner/PartnerService';
 
 interface Props {
     partner: ApiPartner;

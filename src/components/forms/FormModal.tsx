@@ -18,7 +18,7 @@ interface Props {
 
 export const FormModal: React.FC<Props & ModalProps> = ({ title, children, isOpen, onClose }) => {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+        <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>

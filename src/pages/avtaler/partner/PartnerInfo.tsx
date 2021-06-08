@@ -2,9 +2,9 @@ import * as React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { Flex } from '@chakra-ui/layout';
 import { PartnerInfoHeader } from './PartnerInfoHeader';
-import { KontaktPersonSection } from './KontaktPersonSection';
-import { AvtaleInfoSection } from './AvtaleInfoSection';
-import { usePartnerById } from '../../services/partner/usePartnerById';
+import { KontaktPersonSection } from '../kontaktperson/KontaktPersonSection';
+import { AvtaleInfoSection } from '../avtale/AvtaleInfoSection';
+import { usePartnerById } from '../../../services/partner/usePartnerById';
 
 export const PartnerInfo: React.FC = () => {
     const { params } = useRouteMatch<{ partnerId: string }>();

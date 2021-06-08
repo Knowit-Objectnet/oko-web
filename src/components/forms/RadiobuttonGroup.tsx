@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormControl, FormErrorMessage, RadioGroup as ChakraRadioGroup, Stack } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormHelperText, RadioGroup as ChakraRadioGroup, Stack } from '@chakra-ui/react';
 import { FormLabel } from './FormLabel';
 import { Radiobutton } from './Radiobutton';
 import { ErrorMessage } from '@hookform/error-message';
@@ -15,9 +15,10 @@ interface Props {
     name: string;
     options: Array<RadioOption>;
     required?: boolean;
+    helperText?: string;
 }
 
-export const RadiobuttonGroup: React.FC<Props> = ({ label, name, options, required }) => {
+export const RadiobuttonGroup: React.FC<Props> = ({ label, name, options, required, helperText }) => {
     const {
         watch,
         formState: { errors, isSubmitted },
@@ -30,6 +31,7 @@ export const RadiobuttonGroup: React.FC<Props> = ({ label, name, options, requir
         <FormControl isInvalid={isInvalid}>
             <fieldset>
                 <FormLabel as="legend" label={label} required={required} />
+                {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
                 <ChakraRadioGroup value={radioGroupValue}>
                     <Stack direction="column" spacing="0">
                         {options.map(({ value, label: radioLabel }) => (

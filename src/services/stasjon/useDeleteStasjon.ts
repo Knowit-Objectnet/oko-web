@@ -4,7 +4,6 @@ import { useMutationWithInvalidation } from '../useMutationWithInvalidation';
 import { ApiError } from '../httpClient';
 
 export const useDeleteStasjon = (): UseMutationResult<ApiStasjon, ApiError, string> =>
-    useMutationWithInvalidation<ApiStasjon, ApiError, string>(
-        (stasjonId) => deleteStasjon(stasjonId),
+    useMutationWithInvalidation<ApiStasjon, ApiError, string>((stasjonId) => deleteStasjon(stasjonId), [
         stasjonDefaultQueryKey,
-    );
+    ]);

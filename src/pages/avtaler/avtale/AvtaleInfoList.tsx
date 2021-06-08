@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Accordion, Stack } from '@chakra-ui/react';
 import { AvtaleInfoItem } from './AvtaleInfoItem';
 import { compareDesc, parseISO } from 'date-fns';
-import { ApiPartner } from '../../services/partner/PartnerService';
-import { useAvtaler } from '../../services/avtale/useAvtaler';
+import { ApiPartner } from '../../../services/partner/PartnerService';
+import { useAvtaler } from '../../../services/avtale/useAvtaler';
 
 interface Props {
     partner: ApiPartner;
@@ -33,7 +33,7 @@ export const AvtaleInfoList: React.FC<Props> = ({ partner }) => {
         <Accordion allowToggle allowMultiple>
             <Stack direction="column" spacing="3" alignItems="stretch">
                 {sortedAvtaler.map((avtale) => (
-                    <AvtaleInfoItem key={avtale.id} avtale={avtale} />
+                    <AvtaleInfoItem key={avtale.id} avtale={avtale} partner={partner} />
                 ))}
             </Stack>
         </Accordion>

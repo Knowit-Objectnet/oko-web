@@ -68,6 +68,9 @@ export const Button = {
                 backgroundColor: 'gray.200',
                 color: 'gray.600',
                 '& svg': { fill: 'gray.500' },
+                _focus: {
+                    textDecoration: 'none',
+                },
             },
         },
         // TODO: better focus and hover colors/marking

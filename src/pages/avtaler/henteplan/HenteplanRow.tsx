@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { useStasjonById } from '../../services/stasjon/useStasjonById';
+import { useStasjonById } from '../../../services/stasjon/useStasjonById';
 import { ButtonGroup, Td, Tr } from '@chakra-ui/react';
-import { formatDate, formatTime } from '../../utils/formatDateTime';
-import { EditButton } from '../../components/buttons/EditButton';
-import { DeleteButton } from '../../components/buttons/DeleteButton';
-import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../services/henteplan/HenteplanService';
+import { formatDate, formatTime } from '../../../utils/formatDateTime';
+import { EditButton } from '../../../components/buttons/EditButton';
+import { DeleteButton } from '../../../components/buttons/DeleteButton';
+import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
+import { localDateFromISO } from '../../../utils/localDateISO';
+import { parseISO } from 'date-fns';
 
 const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
@@ -34,18 +36,20 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan }) => {
         <Tr key={henteplan.id}>
             <Td>{UKEDAG[henteplan.ukedag]}</Td>
             <Td>
-                <time>{formatTime(henteplan.startTidspunkt)}</time>
+                <time>{formatTime(localDateFromISO(henteplan.startTidspunkt))}</time>
                 &ndash;
-                <time>{formatTime(henteplan.sluttTidspunkt)}</time>
+                <time>{formatTime(localDateFromISO(henteplan.sluttTidspunkt))}</time>
             </Td>
             <Td>{stasjon?.navn}</Td>
             <Td>{FREKVENS[henteplan.frekvens]}</Td>
             <Td>
-                <time dateTime={henteplan.startTidspunkt}>{formatDate(henteplan.startTidspunkt)}</time>
+                <time dateTime={henteplan.startTidspunkt}>{formatDate(parseISO(henteplan.startTidspunkt))}</time>
                 {henteplan.frekvens !== 'ENKELT' ? (
                     <>
                         &ndash;
-                        <time dateTime={henteplan.sluttTidspunkt}>{formatDate(henteplan.sluttTidspunkt)}</time>
+                        <time dateTime={henteplan.sluttTidspunkt}>
+                            {formatDate(parseISO(henteplan.sluttTidspunkt))}
+                        </time>
                     </>
                 ) : null}
             </Td>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Table, Tbody, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { ApiHenteplan } from '../../services/henteplan/HenteplanService';
+import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
 import { compareAsc, parseISO } from 'date-fns';
 import { HenteplanRow } from './HenteplanRow';
 
