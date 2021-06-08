@@ -24,6 +24,8 @@ import { FormInfoBody, FormInfoHeading, FormInfoSection } from '../../../compone
 
 // NB! Setting the global error messages used by yup
 import '../../../utils/forms/formErrorMessages';
+import { toISOLocalString } from '../../../utils/localDateISO';
+import { parseISO } from 'date-fns';
 
 interface HenteplanFormData {
     stasjonId: string;
@@ -59,8 +61,8 @@ interface Props {
 }
 
 const createNewHenteplan = (data: HenteplanFormData, avtale: ApiAvtale): ApiHenteplanPost => {
-    const startTidspunkt = mergeDateWithTime(data.startDato, data.startTidspunkt).toISOString();
-    const sluttTidspunkt = mergeDateWithTime(data.sluttDato || data.startDato, data.sluttTidspunkt).toISOString();
+    const startTidspunkt = toISOLocalString(mergeDateWithTime(data.startDato, data.startTidspunkt));
+    const sluttTidspunkt = toISOLocalString(mergeDateWithTime(data.sluttDato || data.startDato, data.sluttTidspunkt));
 
     return {
         avtaleId: avtale.id,
@@ -112,7 +114,9 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
 
     const frekvens = formMethods.watch('frekvens', undefined);
     const isRecurring = frekvens && frekvens !== 'ENKELT';
-    const avtaleVarighet = `fra ${formatDate(avtale.startDato)} til ${formatDate(avtale.sluttDato)}`;
+    const avtaleVarighet = `fra ${formatDate(parseISO(avtale.startDato))} til ${formatDate(
+        parseISO(avtale.sluttDato),
+    )}`;
 
     return (
         <FormProvider {...formMethods}>

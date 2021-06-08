@@ -71,8 +71,8 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => (
                     </Fade>
                 </Flex>
                 <Text>
-                    {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(avtale.startDato)}</time> til{' '}
-                    <time>{formatDate(avtale.sluttDato)}</time>
+                    {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(parseISO(avtale.startDato))}</time> til{' '}
+                    <time>{formatDate(parseISO(avtale.sluttDato))}</time>
                 </Text>
                 <AccordionPanel padding="0">
                     <Henteplaner avtale={avtale} partner={partner} />
