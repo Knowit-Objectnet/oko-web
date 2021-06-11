@@ -58,7 +58,11 @@ export const RequestsStatusList: React.FC<Props> = ({ pickUp }) => {
 
     const [requestApprovalLoading, setRequestApprovalLoading] = useState(false);
 
-    const { data: requests, isLoading, isError } = useRequests({
+    const {
+        data: requests,
+        isLoading,
+        isError,
+    } = useRequests({
         pickupId: pickUp.id,
     });
     const requestsSortedByPartner = (requests ?? []).sort(

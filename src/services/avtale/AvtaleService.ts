@@ -32,9 +32,7 @@ const avtaleEndpoint = '/avtaler';
 export const avtaleDefaultQueryKey = 'getAvtaler';
 
 export const getAvtaler = (params: ApiAvtaleParams = {}): Promise<Array<ApiAvtale>> =>
-    httpClient()
-        .get<Array<ApiAvtale>>(avtaleEndpoint, { params })
-        .then(extractResponse, transformError);
+    httpClient().get<Array<ApiAvtale>>(avtaleEndpoint, { params }).then(extractResponse, transformError);
 
 export const getAvtaleById = (avtaleId: string): Promise<ApiAvtale> =>
     httpClient().get<ApiAvtale>(`${avtaleEndpoint}/${avtaleId}`).then(extractResponse, transformError);

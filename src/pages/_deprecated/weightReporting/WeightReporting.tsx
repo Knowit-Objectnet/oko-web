@@ -27,7 +27,11 @@ const Notice = styled.p`
 export const WeightReporting: React.FC = () => {
     const { user } = useAuth();
 
-    const { data: reports, isLoading, isError } = useReports({
+    const {
+        data: reports,
+        isLoading,
+        isError,
+    } = useReports({
         partnerId: user.aktorId,
         /* Fetching all reports for today, until midnight. */
         toDate: formatISO(new Date().setHours(24, 0, 0, 0)),

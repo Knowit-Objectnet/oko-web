@@ -36,7 +36,7 @@ export const DatePicker: React.FC<Props> = ({ name }) => {
     const { control } = useFormContext();
 
     function parseDate(str: string, formatString: string, localeString: string) {
-        const locale = (localeString as unknown) as Locale;
+        const locale = localeString as unknown as Locale;
         const parsed = parse(str, formatString, new Date(), { locale });
         if (DateUtils.isDate(parsed)) {
             return parsed;
@@ -45,7 +45,7 @@ export const DatePicker: React.FC<Props> = ({ name }) => {
     }
 
     function formatDate(date: number | Date, formatString: string, localeString?: string) {
-        const locale = (localeString as unknown) as Locale;
+        const locale = localeString as unknown as Locale;
         return format(date, formatString, { locale });
     }
 

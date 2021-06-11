@@ -39,7 +39,11 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
 
     const [requestStatusLoading, setRequestStatusLoading] = useState(false);
 
-    const { data: request, isLoading: requestLoading, isError: requestLoadingError } = useRequests({
+    const {
+        data: request,
+        isLoading: requestLoading,
+        isError: requestLoadingError,
+    } = useRequests({
         pickupId: pickUp.id,
         partnerId: user.aktorId,
     });

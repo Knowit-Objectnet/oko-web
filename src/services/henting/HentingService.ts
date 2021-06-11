@@ -35,9 +35,7 @@ const hentingEndpoint = '/planlagte-hentinger';
 export const planlagtHentingDefaultQueryKey = 'getPlanlagteHentinger';
 
 export const getPlanlagteHentinger = (params: ApiPlanlagtHentingParams = {}): Promise<Array<ApiPlanlagtHenting>> =>
-    httpClient()
-        .get<Array<ApiPlanlagtHenting>>(hentingEndpoint, { params })
-        .then(extractResponse, transformError);
+    httpClient().get<Array<ApiPlanlagtHenting>>(hentingEndpoint, { params }).then(extractResponse, transformError);
 
 export const getPlanlagtHentingById = (hentingId: string): Promise<ApiPlanlagtHenting> =>
     httpClient().get<ApiPlanlagtHenting>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);

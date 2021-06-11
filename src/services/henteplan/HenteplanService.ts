@@ -50,9 +50,7 @@ const henteplanEndpoint = '/henteplaner';
 export const henteplanDefaultQueryKey = 'getHenteplaner';
 
 export const getHenteplaner = (params: ApiHenteplanParams = {}): Promise<Array<ApiHenteplan>> =>
-    httpClient()
-        .get<Array<ApiHenteplan>>(henteplanEndpoint, { params })
-        .then(extractResponse, transformError);
+    httpClient().get<Array<ApiHenteplan>>(henteplanEndpoint, { params }).then(extractResponse, transformError);
 
 export const getHenteplanById = (henteplanId: string): Promise<ApiHenteplan> =>
     httpClient().get<ApiHenteplan>(`${henteplanEndpoint}/${henteplanId}`).then(extractResponse, transformError);
