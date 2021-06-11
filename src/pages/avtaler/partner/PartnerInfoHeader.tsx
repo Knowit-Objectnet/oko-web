@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Box, Flex } from '@chakra-ui/layout';
 import { Heading } from '@chakra-ui/react';
-import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
+import { EditPartnerButton } from './EditPartnerButton';
 
 interface Props {
     partner: ApiPartner;
@@ -14,13 +14,7 @@ export const PartnerInfoHeader: React.FC<Props> = ({ partner }) => (
             <Heading as="h1" fontWeight="medium" fontSize="4xl">
                 {partner.navn}
             </Heading>
-            <EditButton
-                size="sm"
-                label="Rediger partner"
-                onClick={() => {
-                    console.log('Rediger partner');
-                }}
-            />
+            <EditPartnerButton partner={partner} size="sm" />
         </Flex>
         <Box
             as="section"

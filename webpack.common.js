@@ -24,8 +24,8 @@ module.exports = {
                 use: ['file-loader'],
             },
             {
-                test: /\.svg$/,
-                use: ['svg-react-loader'],
+                test: /\.svg$/i,
+                use: ['@svgr/webpack'],
             },
         ],
     },
