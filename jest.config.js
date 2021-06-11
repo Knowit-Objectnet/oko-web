@@ -8,6 +8,6 @@ module.exports = {
     testPathIgnorePatterns: ["_deprecated.?", "/node_modules/"],
     "setupFilesAfterEnv": [
         "<rootDir>/jest.setup.ts",
-        'jest-canvas-mock'
+        // 'jest-canvas-mock'
     ],
 };
