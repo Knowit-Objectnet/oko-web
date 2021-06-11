@@ -1,9 +1,9 @@
 import React from 'react';
-import { render, screen, cleanup, waitFor, fireEvent } from '../../../test-utils';
+import { render, screen, cleanup, waitFor, fireEvent } from '../../../../test-utils';
 import '@testing-library/jest-dom';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import { NewStation } from '../../../src/pages/_deprecated/stations/NewStation';
+import { NewStation } from './NewStation';
 
 describe('Provides an interface to submit a new station', () => {
     let axiosMock: MockAdapter;

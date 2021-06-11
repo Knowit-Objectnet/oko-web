@@ -1,9 +1,9 @@
 import React from 'react';
-import { cleanup, fireEvent, setupUseAuthMock, render, screen } from '../../../test-utils';
+import { cleanup, fireEvent, setupUseAuthMock, render, screen } from '../../../../test-utils';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
-import { Event } from '../../../src/components/_deprecated/events/Event';
-import { mockEvents } from '../../../__mocks__/_deprecated/mockEvents';
+import { Event } from './Event';
+import { mockEvents } from '../../../../__mocks__/_deprecated/mockEvents';
 import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides an interface to view and edit an Event', () => {

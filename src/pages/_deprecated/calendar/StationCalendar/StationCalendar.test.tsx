@@ -1,12 +1,12 @@
 import React from 'react';
-import { cleanup, setupUseAuthMock, render, screen } from '../../../test-utils';
+import { cleanup, setupUseAuthMock, render, screen } from '../../../../../test-utils';
 import '@testing-library/jest-dom';
-import { mockApiEvents } from '../../../__mocks__/_deprecated/mockEvents';
-import { EventInfo } from '../../../src/services/deprecated/types';
+import { mockApiEvents } from '../../../../../__mocks__/_deprecated/mockEvents';
+import { EventInfo } from '../../../../services/deprecated/types';
 
 // Component to test
-import { StationCalendar } from '../../../src/pages/_deprecated/calendar/StationCalendar/StationCalendar';
-import { ApiEvent } from '../../../src/services/deprecated/EventService';
+import { StationCalendar } from './StationCalendar';
+import { ApiEvent } from '../../../../services/deprecated/EventService';
 import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides a page for ambassadors to view the calendar', () => {

@@ -1,9 +1,9 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import add from 'date-fns/add';
-import { render, screen, cleanup, waitFor, fireEvent, setupUseAuthMock } from '../../../test-utils';
-import { NewPickUp } from '../../../src/components/_deprecated/events/NewPickUp';
-import { mockStations } from '../../../__mocks__/_deprecated/mockStations';
+import { render, screen, cleanup, waitFor, fireEvent, setupUseAuthMock } from '../../../../test-utils';
+import { NewPickUp } from './NewPickUp';
+import { mockStations } from '../../../../__mocks__/_deprecated/mockStations';
 import MockAdapter from 'axios-mock-adapter';
 import axios, { AxiosRequestConfig } from 'axios';
 import resetAllMocks = jest.resetAllMocks;

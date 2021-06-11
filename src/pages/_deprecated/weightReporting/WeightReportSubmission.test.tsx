@@ -1,10 +1,10 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { render, fireEvent, screen, cleanup, waitForElementToBeRemoved } from '../../../test-utils';
-import { mockReports } from '../../../__mocks__/_deprecated/mockReports';
+import { render, fireEvent, screen, cleanup, waitForElementToBeRemoved } from '../../../../test-utils';
+import { mockReports } from '../../../../__mocks__/_deprecated/mockReports';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import { WeightReportList } from '../../../src/pages/_deprecated/weightReporting/WeightReportList';
+import { WeightReportList } from './WeightReportList';
 
 describe('Provides a component to update a single weight withdrawal', () => {
     let axiosMock: MockAdapter;

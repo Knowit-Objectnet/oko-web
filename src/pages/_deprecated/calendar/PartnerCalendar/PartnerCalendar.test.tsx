@@ -1,10 +1,10 @@
 import React from 'react';
-import { cleanup, setupUseAuthMock, render, screen } from '../../../test-utils';
+import { cleanup, setupUseAuthMock, render, screen } from '../../../../../test-utils';
 import '@testing-library/jest-dom';
-import { mockApiEvents } from '../../../__mocks__/_deprecated/mockEvents';
-import { EventInfo } from '../../../src/services/deprecated/types';
-import { PartnerCalendar } from '../../../src/pages/_deprecated/calendar/PartnerCalendar/PartnerCalendar';
-import { ApiEvent } from '../../../src/services/deprecated/EventService';
+import { mockApiEvents } from '../../../../../__mocks__/_deprecated/mockEvents';
+import { EventInfo } from '../../../../services/deprecated/types';
+import { PartnerCalendar } from './PartnerCalendar';
+import { ApiEvent } from '../../../../services/deprecated/EventService';
 import resetAllMocks = jest.resetAllMocks;
 
 describe('Provides a page for partners to view the calendar', () => {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, cleanup, screen, setupUseAuthMock } from '../../../test-utils';
+import { render, cleanup, screen, setupUseAuthMock } from '../../../../test-utils';
 import '@testing-library/jest-dom';
-import { WeightReporting } from '../../../src/pages/_deprecated/weightReporting/WeightReporting';
-import { mockReports } from '../../../__mocks__/_deprecated/mockReports';
+import { WeightReporting } from './WeightReporting';
+import { mockReports } from '../../../../__mocks__/_deprecated/mockReports';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import resetAllMocks = jest.resetAllMocks;
