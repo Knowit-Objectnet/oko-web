@@ -1,8 +1,6 @@
-# Oslo kommune ombruk
+# Oslo kommune ombruk frontend
 
-The frontend-web for Oslo Kommune REG Knowit 2020 summer project.
-
-The frontend is an SPA (single page application) written in React with TypeScript. The project uses webpack as build tool. 
+A single page application written in React with TypeScript. The project uses webpack as build tool. 
 
 ## Local development
 
@@ -17,7 +15,7 @@ Before running/building locally the first time, copy the file `.env-sample` and 
 environment variables required. See ["Building and environment variables"](#building-and-environment-variables) below.
 
 * To start the development server simply execute `yarn start`.
-* Alternatively, start the provided docker container by going into the folder `container` and executing `docker-compose up`.
+* **Not recommended:** it is also possible to use the provided docker container by going into the folder `container` and executing `docker-compose up`.
 
 > **Note:** There might be an issue when running the app locally (in the 0.0.0.0 or localhost domain),
 > and connecting to an external Keycloak server. A logged in user might wrongfully be redirected to a logged out page
@@ -39,7 +37,7 @@ that deployment to the `production` environment must be triggered manually.
 The environments/branches:
 
 * [`test`](https://test.oko.knowit.no) – for development testing purposes. **Pull requests from development branches shall always be made to the `test` branch.**
-* [`staging`](https://staging.oko.knowit.no) – for pre-production testing purposes. Only pull requests from `test` shall be made to this branch.
+* [`staging`](https://staging.oko.knowit.no) – for pre-production testing purposes. Only pull requests from the `test` branch or `hotfix` branches shall be made to this branch.
 * [`production`](https://oko.knowit.no) – running application. Only pull requests from `staging` shall be made to this branch.
 
 #### Building and environment variables
@@ -88,6 +86,10 @@ The cache (contained in a `QueryClient` instance) has utility methods (like `inv
 
 > The prototype used [styled-components](https://styled-components.com/) to create the visual appearance of components.
 > For the MVP and final product, the project will be migrated to `Chakra UI` (and `emotion`, when absolutely necessary)
+> 
+> **NOTE:** Many of the deprecated components rely on a `theme` provided by a `<ThemeProvider>`. This has been removed from
+> `App.tsx`. If the need arises for rendering some of these components, the app must be wrapped in this provider, with 
+> the theme from `/theme/_deprecated/oldTheme.ts`
 
 
 #### Chakra UI
