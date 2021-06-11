@@ -7,11 +7,12 @@ import { Input } from '../../../components/forms/Input';
 import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ApiStasjonPost, StasjonType } from '../../../services/stasjon/StasjonService';
+import { ApiStasjon, ApiStasjonPatch, ApiStasjonPost } from '../../../services/stasjon/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddStasjon } from '../../../services/stasjon/useAddStasjon';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
+import { useUpdateStasjon } from '../../../services/stasjon/useUpdateStasjon';
+import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
@@ -37,41 +38,71 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
-    /** Callback that will fire if registration of new Stasjon is successful: **/
+    /** By passing an existing stasjon, the form will be in edit mode **/
+    stasjonToEdit?: ApiStasjon;
+    /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
 }
 
-export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
+export const StasjonForm: React.FC<Props> = ({ stasjonToEdit, onSuccess }) => {
     const formMethods = useForm<StasjonFormData>({
         resolver: yupResolver(validationSchema),
-        // TODO: if form is in edit mode: pass original values as "defaultValues" here
+        defaultValues: stasjonToEdit
+            ? {
+                  navn: stasjonToEdit.navn,
+              }
+            : undefined,
     });
 
     const addStasjonMutation = useAddStasjon();
+    const updateStasjonMutation = useUpdateStasjon();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
-    const handleSubmit = formMethods.handleSubmit((data) => {
+    const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        const newStation: ApiStasjonPost = {
-            ...data,
-            // TODO: remove when we want to set station type in form
-            type: 'GJENBRUK',
-        };
-
-        addStasjonMutation.mutate(newStation, {
-            onSuccess: () => {
-                showSuccessToast({ title: `Stasjonen ${newStation.navn} ble registrert` });
-                onSuccess?.();
-            },
-            onError: (error) => {
-                // TODO: get details from error and set appropriate message.
-                //  If caused by user: set message to correct field
-                setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
-            },
-        });
+        if (stasjonToEdit) {
+            updateStasjon({
+                id: stasjonToEdit.id,
+                navn: formData.navn,
+                // TODO: pass type here when we want to set station type in form
+            });
+        } else {
+            addStasjon({
+                ...formData,
+                // TODO: remove when we want to set station type in form
+                type: 'GJENBRUK',
+            });
+        }
     });
+
+    const addStasjon = (newStasjon: ApiStasjonPost) =>
+        addStasjonMutation.mutate(newStasjon, {
+            onSuccess: () => {
+                onApiSubmitSuccess(`Stasjonen ${newStasjon.navn} ble registrert`);
+            },
+            onError: onApiSubmitError,
+        });
+
+    const updateStasjon = (updatedStasjon: ApiStasjonPatch) =>
+        updateStasjonMutation.mutate(updatedStasjon, {
+            onSuccess: () => {
+                onApiSubmitSuccess(`Endringene ble lagret for ${updatedStasjon.navn}`);
+            },
+            onError: onApiSubmitError,
+        });
+
+    const onApiSubmitSuccess = (successMessage: string) => {
+        showSuccessToast({ title: successMessage });
+        onSuccess?.();
+    };
+
+    const onApiSubmitError = (error: ApiError) => {
+        // TODO: get details from error and set appropriate message.
+        //  If caused by user: set message to correct field
+        setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
+    };
 
     return (
         <FormProvider {...formMethods}>
@@ -83,9 +114,9 @@ export const StasjonForm: React.FC<Props> = ({ onSuccess }) => {
                     {/* TODO: uncomment when we want to set station type :
                     <RadiobuttonGroup name="type" label="Type stasjon" options={stasjonTypeOptions} required />*/}
                     <FormSubmitButton
-                        label="Registrer ny stasjon"
-                        isLoading={addStasjonMutation.isLoading}
-                        loadingText="Vennligst vent..."
+                        label={stasjonToEdit ? 'Lagre endringer' : 'Registrer ny stasjon'}
+                        isLoading={updateStasjonMutation.isLoading || addStasjonMutation.isLoading}
+                        loadingText="Lagrer..."
                     />
                 </Stack>
             </form>
