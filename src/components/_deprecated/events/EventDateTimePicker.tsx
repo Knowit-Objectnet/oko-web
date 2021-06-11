@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { DatePicker } from '../forms/deprecated/DatePicker';
+import { DatePicker } from '../forms/DatePicker';
 import { EventDaysSelect } from './EventDaysSelect';
 import { EventTimeRange } from './EventTimeRange';
 import { EventDateRange } from './EventDateRange';
-import { ErrorMessage } from '../forms/deprecated/ErrorMessage';
+import { ErrorMessage } from '../forms/ErrorMessage';
 import { useFormContext } from 'react-hook-form';
 
 const Wrapper = styled.div`

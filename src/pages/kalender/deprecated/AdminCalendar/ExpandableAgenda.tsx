@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Agenda } from './Agenda';
-import { SingleDayCalendar } from '../../../../components/calendar/SingleDayCalendar';
+import { SingleDayCalendar } from '../../../../components/_deprecated/calendar/SingleDayCalendar';
 import { EventInfo, SlotInfo } from '../../../../services/deprecated/types';
 import ArrowUp from '../../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../../assets/ArrowDown.svg';

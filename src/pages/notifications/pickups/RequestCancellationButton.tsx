@@ -3,7 +3,7 @@ import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../services/deprecated/RequestService';
 import CrossIcon from '../../../assets/Cross.svg';
-import { TextButton } from '../../../components/buttons/TextButton';
+import { TextButton } from '../../../components/_deprecated/buttons/TextButton';
 import { useAuth } from '../../../auth/useAuth';
 
 interface Props {

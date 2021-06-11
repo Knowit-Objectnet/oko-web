@@ -5,8 +5,12 @@ import { useRequests } from '../../../services/deprecated/hooks/useRequests';
 import { RequestRegistrationButton } from './RequestRegistrationButton';
 import { RequestCancellationButton } from './RequestCancellationButton';
 import { useState } from 'react';
-import { NegativeStatusBadge, NeutralStatusBadge, PositiveStatusBadge } from '../../../components/StatusBadge';
-import { Spinner } from '../../../components/Spinner';
+import {
+    NegativeStatusBadge,
+    NeutralStatusBadge,
+    PositiveStatusBadge,
+} from '../../../components/_deprecated/StatusBadge';
+import { Spinner } from '../../../components/_deprecated/Spinner';
 import { useAuth } from '../../../auth/useAuth';
 
 const StatusWrapper = styled.div`

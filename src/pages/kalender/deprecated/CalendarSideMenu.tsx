@@ -2,11 +2,11 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Calendar from '../../../assets/Calendar.svg';
 import Plus from '../../../assets/Plus.svg';
-import { FloatingActionButton } from '../../../components/buttons/FloatingActionButton';
+import { FloatingActionButton } from '../../../components/_deprecated/FloatingActionButton';
 import { getStartAndEndDateTime } from '../../../utils/getStartAndEndDateTime';
-import { NewEvent } from '../../../components/events/NewEvent';
-import { NewPickUp } from '../../../components/events/NewPickUp';
-import useModal from '../../../components/modal/useModal';
+import { NewEvent } from '../../../components/_deprecated/events/NewEvent';
+import { NewPickUp } from '../../../components/_deprecated/events/NewPickUp';
+import useModal from '../../../components/_deprecated/modal/useModal';
 import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.div`

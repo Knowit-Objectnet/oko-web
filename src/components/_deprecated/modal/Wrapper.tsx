@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Cross from '../../assets/Cross.svg';
+import Cross from '../../../assets/Cross.svg';
 import { Options } from './Types';
 
 const Background = styled.div`

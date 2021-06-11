@@ -10,7 +10,7 @@ import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import { VisuallyHidden } from '@chakra-ui/react';
-import { NegativeButton } from '../../components/buttons/NegativeButton';
+import { NegativeButton } from '../../components/_deprecated/buttons/NegativeButton';
 
 const StyledForm = styled.form`
     display: flex;

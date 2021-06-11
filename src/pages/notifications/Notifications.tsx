@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import Plus from '../../assets/Plus.svg';
-import { NewPickUp } from '../../components/events/NewPickUp';
-import useModal from '../../components/modal/useModal';
+import { NewPickUp } from '../../components/_deprecated/events/NewPickUp';
+import useModal from '../../components/_deprecated/modal/useModal';
 import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
-import { FloatingActionButton } from '../../components/buttons/FloatingActionButton';
+import { FloatingActionButton } from '../../components/_deprecated/FloatingActionButton';
 import { PickUpList } from './pickups/PickUpList';
 import { useAuth } from '../../auth/useAuth';
 

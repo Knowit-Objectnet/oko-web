@@ -4,10 +4,10 @@ import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { useState } from 'react';
 import { PositiveButton } from '../buttons/PositiveButton';
 import { useMutation, useQueryClient } from 'react-query';
-import { EventInfo } from '../../services/deprecated/types';
-import { ApiEventParams, deleteEvents, eventsDefaultQueryKey } from '../../services/deprecated/EventService';
+import { EventInfo } from '../../../services/deprecated/types';
+import { ApiEventParams, deleteEvents, eventsDefaultQueryKey } from '../../../services/deprecated/EventService';
 import { types, useAlert } from 'react-alert';
-import { useAuth } from '../../auth/useAuth';
+import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.div`
     position: absolute;

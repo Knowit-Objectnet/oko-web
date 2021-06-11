@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { EventInfo } from '../../services/deprecated/types';
+import { EventInfo } from '../../../services/deprecated/types';
 import areIntervalsOverlapping from 'date-fns/areIntervalsOverlapping';
 import add from 'date-fns/add';
 import { Event } from './Event';
-import { useAuth } from '../../auth/useAuth';
+import { useAuth } from '../../../auth/useAuth';
 
 const Events = styled.div`
     top: 0;

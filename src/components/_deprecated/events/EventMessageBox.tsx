@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Warning from '../../assets/Warning.svg';
+import Warning from '../../../assets/Warning.svg';
 
 const Wrapper = styled.div`
     display: flex;

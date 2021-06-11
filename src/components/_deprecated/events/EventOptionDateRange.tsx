@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
 import DatePicker from 'react-date-picker';
-import ClockIcon from '../../assets/Clock.svg';
-import CalendarIcon from '../../assets/Calendar.svg';
+import ClockIcon from '../../../assets/Clock.svg';
+import CalendarIcon from '../../../assets/Calendar.svg';
 import { useState } from 'react';
 
 const Wrapper = styled.div`

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { EventInfo } from '../../../../services/deprecated/types';
-import { SingleDayCalendar } from '../../../../components/calendar/SingleDayCalendar';
+import { SingleDayCalendar } from '../../../../components/_deprecated/calendar/SingleDayCalendar';
 import { useState } from 'react';
 import add from 'date-fns/add';
-import { Event } from '../../../../components/events/Event';
+import { Event } from '../../../../components/_deprecated/events/Event';
 import { useAuth } from '../../../../auth/useAuth';
 
 const Wrapper = styled.div`

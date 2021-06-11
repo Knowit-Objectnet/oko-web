@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { EventInfo, SlotInfo } from '../../../../services/deprecated/types';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import isSameDay from 'date-fns/isSameDay';
-import { WorkingWeekCalendar } from '../../../../components/calendar/WorkingWeekCalendar';
+import { WorkingWeekCalendar } from '../../../../components/_deprecated/calendar/WorkingWeekCalendar';
 import { WeekMenu } from '../WeekMenu';
 import { createNDaysFromDate } from '../../../../utils/createNDaysFromDate';
 

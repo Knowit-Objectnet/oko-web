@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import DotsSpinner from '../assets/DotsSpinner.svg';
+import DotsSpinner from '../../assets/DotsSpinner.svg';
 
 const Wrapper = styled.div`
     width: 100%;

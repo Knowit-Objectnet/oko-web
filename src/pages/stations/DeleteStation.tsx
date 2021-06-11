@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../../services/deprecated/StationService';
-import { StationSelect } from '../../components/forms/deprecated/StationSelect';
+import { StationSelect } from '../../components/_deprecated/forms/StationSelect';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { NegativeButton } from '../../components/buttons/NegativeButton';
+import { NegativeButton } from '../../components/_deprecated/buttons/NegativeButton';
 
 const Wrapper = styled.div`
     display: flex;

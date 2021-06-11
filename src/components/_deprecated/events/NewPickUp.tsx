@@ -5,9 +5,9 @@ import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiPickUpPost, pickUpsDefaultQueryKey, postPickUp } from '../../services/deprecated/PickUpService';
+import { ApiPickUpPost, pickUpsDefaultQueryKey, postPickUp } from '../../../services/deprecated/PickUpService';
 import { PositiveButton } from '../buttons/PositiveButton';
-import { useAuth } from '../../auth/useAuth';
+import { useAuth } from '../../../auth/useAuth';
 
 const Textarea = styled.textarea`
     min-height: 5rem;

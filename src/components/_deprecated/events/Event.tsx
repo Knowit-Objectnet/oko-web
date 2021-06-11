@@ -3,16 +3,16 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventMessageBox } from './EventMessageBox';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { EventInfo } from '../../services/deprecated/types';
+import { EventInfo } from '../../../services/deprecated/types';
 import { EventStationInfo } from './EventStationInfo';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
 import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiEventPatch, patchEvent, eventsDefaultQueryKey } from '../../services/deprecated/EventService';
+import { ApiEventPatch, patchEvent, eventsDefaultQueryKey } from '../../../services/deprecated/EventService';
 import { NegativeButton } from '../buttons/NegativeButton';
 import { PositiveButton } from '../buttons/PositiveButton';
-import { useAuth } from '../../auth/useAuth';
+import { useAuth } from '../../../auth/useAuth';
 
 const Body = styled.div`
     display: flex;

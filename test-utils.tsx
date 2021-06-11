@@ -4,7 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import { oldTheme } from './src/theme/theme';
 import { theme } from './src/theme';
-import ModalProvider from './src/components/modal/Provider';
+import ModalProvider from './src/components/_deprecated/modal/Provider';
 import AlertTemplate from 'react-alert-template-basic';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
@@ -23,25 +23,14 @@ import { AuthContext, useAuth, UserInfo } from './src/auth/useAuth';
  * For more information: https://testing-library.com/docs/react-testing-library/setup#custom-render
  */
 
-const alertOptions = {
-    position: positions.TOP_CENTER,
-    timeout: 5000,
-    offset: '30px',
-    transition: transitions.SCALE,
-};
-
 const queryClient = new QueryClient();
 
 const GlobalProviders: React.FC = ({ children }) => {
     return (
         <ChakraProvider theme={theme}>
-            <ThemeProvider theme={oldTheme}>
-                <AlertProvider template={AlertTemplate} {...alertOptions}>
-                    <QueryClientProvider client={queryClient}>
-                        <ModalProvider>{children}</ModalProvider>
-                    </QueryClientProvider>
-                </AlertProvider>
-            </ThemeProvider>
+            <QueryClientProvider client={queryClient}>
+                <ModalProvider>{children}</ModalProvider>
+            </QueryClientProvider>
         </ChakraProvider>
     );
 };

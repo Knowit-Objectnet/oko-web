@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { EventInfo } from '../../../../services/deprecated/types';
 import { WeekMenu } from '../WeekMenu';
-import { WorkingWeekCalendar } from '../../../../components/calendar/WorkingWeekCalendar';
+import { WorkingWeekCalendar } from '../../../../components/_deprecated/calendar/WorkingWeekCalendar';
 
 interface AmbassadorCalendarProps {
     date: Date;

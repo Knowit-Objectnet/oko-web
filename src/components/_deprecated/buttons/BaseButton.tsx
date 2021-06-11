@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ButtonHTMLAttributes } from 'react';
 import styled, { css, SimpleInterpolation } from 'styled-components';
-import DotsSpinner from '../../assets/DotsSpinner.svg';
+import DotsSpinner from '../../../assets/DotsSpinner.svg';
 
 type ButtonSize = 'medium' | 'small';
 

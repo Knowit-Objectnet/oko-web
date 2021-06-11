@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useFormContext, Controller } from 'react-hook-form';
-import { ErrorMessage } from '../forms/deprecated/ErrorMessage';
+import { ErrorMessage } from '../forms/ErrorMessage';
 
 const Label = styled.label`
     display: flex;

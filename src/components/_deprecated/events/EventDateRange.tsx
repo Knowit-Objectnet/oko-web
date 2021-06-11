@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { DatePicker } from '../forms/deprecated/DatePicker';
-import { ErrorMessage } from '../forms/deprecated/ErrorMessage';
+import { DatePicker } from '../forms/DatePicker';
+import { ErrorMessage } from '../forms/ErrorMessage';
 
 const Wrapper = styled.div`
     width: 100%;
