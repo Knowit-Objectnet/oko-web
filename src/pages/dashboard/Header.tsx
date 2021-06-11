@@ -5,12 +5,6 @@ import { RouterLink } from '../../routing/RouterLink';
 import { Box, HStack, Icon } from '@chakra-ui/react';
 import Profile from '../../assets/Default_profile_pic.svg';
 
-const Logo: React.FC = (props) => (
-    <Box height="100%" sx={{ svg: { height: '100%' } }} {...props}>
-        <OsloKommuneLogo />
-    </Box>
-);
-
 export const Header: React.FC = () => {
     return (
         <header>
@@ -23,8 +17,8 @@ export const Header: React.FC = () => {
                 justifyContent="space-between"
                 position="relative"
             >
-                <RouterLink to="/" height="100%" aria-label="Til forsiden">
-                    <Logo />
+                <RouterLink to="/" height="full" aria-label="Til forsiden">
+                    <Icon as={OsloKommuneLogo} height="full" width="auto" aria-hidden />
                 </RouterLink>
                 <Box
                     flex="1"

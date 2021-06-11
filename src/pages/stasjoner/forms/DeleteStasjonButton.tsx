@@ -17,6 +17,7 @@ import {
     PopoverHeader,
     PopoverTrigger,
     useDisclosure,
+    Portal,
 } from '@chakra-ui/react';
 import Warning from '../../../assets/Warning.svg';
 import { Box } from '@chakra-ui/layout';
@@ -52,30 +53,32 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
                 <PopoverTrigger>
                     <DeleteButton label="Slett" aria-label={`Slett stasjonen ${stasjon.navn}`} />
                 </PopoverTrigger>
-                <PopoverContent>
-                    <FocusLock>
-                        <PopoverArrow />
-                        <PopoverHeader>
-                            <HStack spacing="2" alignItems="flex-start">
-                                <Icon as={Warning} marginTop="2px" />
-                                <Box fontWeight="medium">Du er i ferd med å slette stasjonen. Er du sikker?</Box>
-                                <PopoverCloseButton />
-                            </HStack>
-                        </PopoverHeader>
-                        <PopoverBody>
-                            {/* TODO: add description/helper text */}
-                            <Button
-                                width="full"
-                                size="sm"
-                                variant="warning"
-                                onClick={handleStasjonDeletion}
-                                isLoading={deleteStasjonMutation.isLoading}
-                            >
-                                Slett stasjonen
-                            </Button>
-                        </PopoverBody>
-                    </FocusLock>
-                </PopoverContent>
+                <Portal>
+                    <PopoverContent>
+                        <FocusLock>
+                            <PopoverArrow />
+                            <PopoverHeader>
+                                <HStack spacing="2" alignItems="flex-start">
+                                    <Icon as={Warning} marginTop="2px" />
+                                    <Box fontWeight="medium">Du er i ferd med å slette stasjonen. Er du sikker?</Box>
+                                    <PopoverCloseButton aria-label="Avbryt sletting" />
+                                </HStack>
+                            </PopoverHeader>
+                            <PopoverBody>
+                                {/* TODO: add description/helper text */}
+                                <Button
+                                    width="full"
+                                    size="sm"
+                                    variant="warning"
+                                    onClick={handleStasjonDeletion}
+                                    isLoading={deleteStasjonMutation.isLoading}
+                                >
+                                    Slett stasjonen
+                                </Button>
+                            </PopoverBody>
+                        </FocusLock>
+                    </PopoverContent>
+                </Portal>
             </Popover>
         </Flex>
     );
