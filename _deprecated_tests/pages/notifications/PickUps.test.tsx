@@ -1,8 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { Notifications } from '../../../src/pages/notifications/Notifications';
-import { mockApiPickUps } from '../../../__mocks__/mockPickUps';
-import { mockApiRequests } from '../../../__mocks__/mockRequests';
+import { mockApiPickUps } from '../../../__mocks__/_deprecated/mockPickUps';
+import { mockApiRequests } from '../../../__mocks__/_deprecated/mockRequests';
 import { render, cleanup, screen, setupUseAuthMock } from '../../../test-utils';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';

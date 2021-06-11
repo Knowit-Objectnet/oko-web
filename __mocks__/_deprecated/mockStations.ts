@@ -1,4 +1,4 @@
-import { ApiStation } from '../src/services/deprecated/StationService';
+import { ApiStation } from '../../src/services/deprecated/StationService';
 
 export const mockStations: Array<ApiStation> = [
     {

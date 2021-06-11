@@ -1,7 +1,7 @@
 import React from 'react';
 import { cleanup, setupUseAuthMock, render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
-import { mockApiEvents } from '../../../__mocks__/mockEvents';
+import { mockApiEvents } from '../../../__mocks__/_deprecated/mockEvents';
 import { EventInfo } from '../../../src/services/deprecated/types';
 
 // Component to test

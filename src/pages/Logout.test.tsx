@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { setupUseAuthMock, render, screen } from '../../test-utils';
 import { MemoryRouter } from 'react-router-dom';
-import { Logout } from '../../src/pages/Logout';
+import { Logout } from './Logout';
 
 describe('Provides a logout page', () => {
     it('Should show logout text and call logout function', async () => {

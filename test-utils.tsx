@@ -1,11 +1,7 @@
-import { positions, Provider as AlertProvider, transitions } from 'react-alert';
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
-import { oldTheme } from './src/theme/theme';
 import { theme } from './src/theme';
 import ModalProvider from './src/components/_deprecated/modal/Provider';
-import AlertTemplate from 'react-alert-template-basic';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import { mocked } from 'ts-jest/utils';
