@@ -29,6 +29,7 @@ interface PartnerFormData {
 }
 
 interface Props {
+    /** By passing an existing partner, the form will be in edit mode **/
     partnerToEdit?: ApiPartner;
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
