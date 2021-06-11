@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { ApiReport } from '../../services/deprecated/ReportService';
+import { ApiReport } from '../../../services/deprecated/ReportService';
 import { format, formatISO } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import styled from 'styled-components';
-import Pencil from '../../assets/Pencil.svg';
+import Pencil from '../../../assets/Pencil.svg';
 import { WeightReportForm } from './WeightReportForm';
 
 const ReportDataRow = styled.tr<{ weightReported: boolean }>`

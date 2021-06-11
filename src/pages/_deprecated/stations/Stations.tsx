@@ -1,15 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Loading } from '../../components/Loading';
-import Plus from '../../assets/Plus.svg';
-import useModal from '../../components/_deprecated/modal/useModal';
+import { Station } from './Station';
+import { Loading } from '../../../components/Loading';
+import Plus from '../../../assets/Plus.svg';
+import useModal from '../../../components/_deprecated/modal/useModal';
 import { Helmet } from 'react-helmet';
-import { FloatingActionButton } from '../../components/_deprecated/FloatingActionButton';
-import Minus from '../../assets/Minus.svg';
-import { NewPartner } from './NewPartner';
-import { DeletePartner } from './DeletePartner';
-import { useAuth } from '../../auth/useAuth';
-import { usePartnere } from '../../services/partner/usePartnere';
+import { FloatingActionButton } from '../../../components/_deprecated/FloatingActionButton';
+import { DeleteStation } from './DeleteStation';
+import Minus from '../../../assets/Minus.svg';
+import { NewStation } from './NewStation';
+import { useAuth } from '../../../auth/useAuth';
+import { useStasjoner } from '../../../services/stasjon/useStasjoner';
 
 const Wrapper = styled.div`
     display: flex;
@@ -22,7 +23,7 @@ const Wrapper = styled.div`
     background-color: ${(props) => props.theme.colors.White};
 `;
 
-const PartnerAdminButtons = styled.div`
+const StationAdminButtons = styled.div`
     position: absolute;
     top: 40px;
     right: 50px;
@@ -43,21 +44,20 @@ const Content = styled.div`
     overflow: auto;
 `;
 
-export const Partners: React.FC = () => {
+export const Stations: React.FC = () => {
     const { user } = useAuth();
-
     const modal = useModal();
 
-    const { data: partnere, isLoading } = usePartnere();
+    const { data: stasjoner, isLoading } = useStasjoner();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
-    const showNewPartnerModal = () => {
-        modal.show(<NewPartner afterSubmit={closeModalOnSuccess} />);
+    const showNewStationModal = () => {
+        modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
     };
 
-    const showDeletePartnerModal = () => {
-        modal.show(<DeletePartner afterSubmit={closeModalOnSuccess} />);
+    const showDeleteStationModal = () => {
+        modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
     if (isLoading) {
@@ -67,32 +67,29 @@ export const Partners: React.FC = () => {
     return (
         <>
             <Helmet>
-                <title>Samarbeidspartnere</title>
+                <title>Stasjonene</title>
             </Helmet>
             <Wrapper>
                 {user.isAdmin && (
-                    <PartnerAdminButtons>
+                    <StationAdminButtons>
                         <FloatingActionButton
-                            label="Ny samarbeidspartner"
+                            label="Ny stasjon"
                             icon={<Plus />}
-                            onClick={showNewPartnerModal}
+                            onClick={showNewStationModal}
                             variant="positive"
                         />
                         <FloatingActionButton
-                            label="Slett samarbeidspartner"
+                            label="Slett stasjon"
                             icon={<Minus />}
-                            onClick={showDeletePartnerModal}
+                            onClick={showDeleteStationModal}
                             variant="negative"
                         />
-                    </PartnerAdminButtons>
+                    </StationAdminButtons>
                 )}
                 <Content>
-                    <h2>Registrerte samarbeidspartnere</h2>
-                    <ul>
-                        {partnere?.map((partner) => (
-                            <li key={partner.id}>{partner.navn}</li>
-                        ))}
-                    </ul>
+                    {stasjoner?.map((station) => (
+                        <Station key={station.id} station={station} />
+                    ))}
                 </Content>
             </Wrapper>
         </>

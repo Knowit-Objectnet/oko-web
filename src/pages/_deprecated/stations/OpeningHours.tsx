@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { ErrorMessage } from '../../components/_deprecated/forms/ErrorMessage';
+import { ErrorMessage } from '../../../components/_deprecated/forms/ErrorMessage';
 
 const Wrapper = styled.div`
     display: flex;

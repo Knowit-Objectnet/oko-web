@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { StationAddress } from './StationAddress';
 import { StationAmbassador } from './StationAmbassador';
-import { ApiStasjon } from '../../services/stasjon/StasjonService';
+import { ApiStasjon } from '../../../services/stasjon/StasjonService';
 
 const Wrapper = styled.div`
     width: 100%;

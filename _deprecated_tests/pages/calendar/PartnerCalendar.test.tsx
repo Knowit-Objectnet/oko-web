@@ -3,7 +3,7 @@ import { cleanup, setupUseAuthMock, render, screen } from '../../../test-utils';
 import '@testing-library/jest-dom';
 import { mockApiEvents } from '../../../__mocks__/_deprecated/mockEvents';
 import { EventInfo } from '../../../src/services/deprecated/types';
-import { PartnerCalendar } from '../../../src/pages/kalender/deprecated/PartnerCalendar/PartnerCalendar';
+import { PartnerCalendar } from '../../../src/pages/_deprecated/calendar/PartnerCalendar/PartnerCalendar';
 import { ApiEvent } from '../../../src/services/deprecated/EventService';
 import resetAllMocks = jest.resetAllMocks;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup, screen, waitFor, fireEvent } from '../../../test-utils';
 import '@testing-library/jest-dom';
-import { NewPartner } from '../../../src/pages/partners/NewPartner';
+import { NewPartner } from '../../../src/pages/_deprecated/partners/NewPartner';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 

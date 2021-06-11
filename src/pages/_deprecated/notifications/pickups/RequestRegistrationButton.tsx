@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../services/deprecated/RequestService';
-import { PositiveButton } from '../../../components/_deprecated/buttons/PositiveButton';
-import { useAuth } from '../../../auth/useAuth';
+import { ApiRequestPost, postRequest, requestsDefaultQueryKey } from '../../../../services/deprecated/RequestService';
+import { PositiveButton } from '../../../../components/_deprecated/buttons/PositiveButton';
+import { useAuth } from '../../../../auth/useAuth';
 
 interface Props {
     pickupId: number;

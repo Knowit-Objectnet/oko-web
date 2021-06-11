@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { OpeningHours } from './OpeningHours';
-import Person from '../../assets/Person.svg';
-import Phone from '../../assets/Phone.svg';
-import Mail from '../../assets/Mail.svg';
+import Person from '../../../assets/Person.svg';
+import Phone from '../../../assets/Phone.svg';
+import Mail from '../../../assets/Mail.svg';
 import { useAlert, types } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../services/deprecated/StationService';
+import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../../services/deprecated/StationService';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,8 +15,8 @@ import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
 import format from 'date-fns/format';
 import { AnySchema } from 'yup';
-import Input from '../../components/_deprecated/forms/Input';
-import { PositiveButton } from '../../components/_deprecated/buttons/PositiveButton';
+import Input from '../../../components/_deprecated/forms/Input';
+import { PositiveButton } from '../../../components/_deprecated/buttons/PositiveButton';
 
 const Wrapper = styled.div`
     display: flex;

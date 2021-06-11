@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Plus from '../../assets/Plus.svg';
-import { NewPickUp } from '../../components/_deprecated/events/NewPickUp';
-import useModal from '../../components/_deprecated/modal/useModal';
-import { getStartAndEndDateTime } from '../../utils/getStartAndEndDateTime';
+import Plus from '../../../assets/Plus.svg';
+import { NewPickUp } from '../../../components/_deprecated/events/NewPickUp';
+import useModal from '../../../components/_deprecated/modal/useModal';
+import { getStartAndEndDateTime } from '../../../utils/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
-import { FloatingActionButton } from '../../components/_deprecated/FloatingActionButton';
+import { FloatingActionButton } from '../../../components/_deprecated/FloatingActionButton';
 import { PickUpList } from './pickups/PickUpList';
-import { useAuth } from '../../auth/useAuth';
+import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.div`
     position: relative;

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
-import { deletePartner, partnersDefaultQueryKey } from '../../services/deprecated/PartnerService';
 import { useMutation, useQueryClient } from 'react-query';
-import { PartnerSelect } from '../../components/_deprecated/forms/PartnerSelect';
-import { NegativeButton } from '../../components/_deprecated/buttons/NegativeButton';
+import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../../../services/deprecated/PartnerService';
+import { PositiveButton } from '../../../components/_deprecated/buttons/PositiveButton';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Input from '../../../components/_deprecated/forms/Input';
 
 const Wrapper = styled.div`
     display: flex;
@@ -30,45 +30,46 @@ const Title = styled.div`
 `;
 
 const StyledForm = styled.form`
-    padding: 0 35px 35px;
+    padding: 0 50px 50px;
     display: flex;
     flex-direction: column;
 `;
 
+const StyledInput = styled(Input)`
+    width: 350px;
+    height: 45px;
+
+    &::placeholder {
+        text-align: center;
+    }
+`;
+
 // The type of the form data for the form
 type FormData = {
-    selectedPartner: number;
+    name: string;
 };
 
 const validationSchema = yup.object().shape({
-    selectedPartner: yup
-        .number()
-        .min(0, 'Vennligst velg en samarbeidspartner')
-        .required('Vennligst velg en samarbeidspartner'),
+    name: yup.string().label('Navnet til en samarbeidspartner').required().min(2).max(128),
 });
 
 interface Props {
     afterSubmit?: (successful: boolean) => void;
 }
 
-export const DeletePartner: React.FC<Props> = (props) => {
+export const NewPartner: React.FC<Props> = (props) => {
     const alert = useAlert();
 
-    const formMethods = useForm<FormData>({
-        resolver: yupResolver(validationSchema),
-        defaultValues: {
-            selectedPartner: -1,
-        },
-    });
+    const formMethods = useForm<FormData>({ resolver: yupResolver(validationSchema) });
 
     const queryClient = useQueryClient();
-    const deletePartnerMutation = useMutation((partnerId: number) => deletePartner(partnerId), {
+    const addPartnerMutation = useMutation((newPartner: ApiPartnerPost) => postPartner(newPartner), {
         onSuccess: () => {
-            alert.show('Samarbeidspartneren ble slettet.', { type: types.SUCCESS });
+            alert.show('Ny partner ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
         },
         onError: () => {
-            alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
+            alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
             props.afterSubmit?.(false);
         },
         onSettled: () => {
@@ -76,17 +77,18 @@ export const DeletePartner: React.FC<Props> = (props) => {
         },
     });
 
-    const handleDeletePartnerSubmission = formMethods.handleSubmit((data) => {
-        deletePartnerMutation.mutate(data.selectedPartner);
+    const handleNewPartnerSubmission = formMethods.handleSubmit((data) => {
+        const newPartner: ApiPartnerPost = data;
+        addPartnerMutation.mutate(newPartner);
     });
 
     return (
         <Wrapper>
-            <Title>Fjern samarbeidspartner</Title>
+            <Title>Legg til ny samarbeidspartner</Title>
             <FormProvider {...formMethods}>
-                <StyledForm onSubmit={handleDeletePartnerSubmission}>
-                    <PartnerSelect />
-                    <NegativeButton isLoading={deletePartnerMutation.isLoading}>Slett</NegativeButton>
+                <StyledForm onSubmit={handleNewPartnerSubmission}>
+                    <StyledInput name="name" type="text" label="Navn på organisasjonen" />
+                    <PositiveButton isLoading={addPartnerMutation.isLoading}>Legg til samarbeidspartner</PositiveButton>
                 </StyledForm>
             </FormProvider>
         </Wrapper>

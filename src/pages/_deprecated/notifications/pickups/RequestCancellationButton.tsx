@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiRequestParams, deleteRequest, requestsDefaultQueryKey } from '../../../services/deprecated/RequestService';
-import CrossIcon from '../../../assets/Cross.svg';
-import { TextButton } from '../../../components/_deprecated/buttons/TextButton';
-import { useAuth } from '../../../auth/useAuth';
+import {
+    ApiRequestParams,
+    deleteRequest,
+    requestsDefaultQueryKey,
+} from '../../../../services/deprecated/RequestService';
+import CrossIcon from '../../../../assets/Cross.svg';
+import { TextButton } from '../../../../components/_deprecated/buttons/TextButton';
+import { useAuth } from '../../../../auth/useAuth';
 
 interface Props {
     pickupId: number;

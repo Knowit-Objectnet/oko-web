@@ -4,8 +4,8 @@ import { format, formatISO } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { PartnerRequestStatus } from './PartnerRequestStatus';
 import { RequestsStatusList } from './RequestsStatusList';
-import { ApiPickUp } from '../../../services/deprecated/PickUpService';
-import { useAuth } from '../../../auth/useAuth';
+import { ApiPickUp } from '../../../../services/deprecated/PickUpService';
+import { useAuth } from '../../../../auth/useAuth';
 
 const Wrapper = styled.li`
     width: 100%;

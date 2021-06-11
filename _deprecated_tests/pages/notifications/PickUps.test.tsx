@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { Notifications } from '../../../src/pages/notifications/Notifications';
+import { Notifications } from '../../../src/pages/_deprecated/notifications/Notifications';
 import { mockApiPickUps } from '../../../__mocks__/_deprecated/mockPickUps';
 import { mockApiRequests } from '../../../__mocks__/_deprecated/mockRequests';
 import { render, cleanup, screen, setupUseAuthMock } from '../../../test-utils';

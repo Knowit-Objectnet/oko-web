@@ -1,16 +1,15 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Station } from './Station';
-import { Loading } from '../../components/Loading';
-import Plus from '../../assets/Plus.svg';
-import useModal from '../../components/_deprecated/modal/useModal';
+import { Loading } from '../../../components/Loading';
+import Plus from '../../../assets/Plus.svg';
+import useModal from '../../../components/_deprecated/modal/useModal';
 import { Helmet } from 'react-helmet';
-import { FloatingActionButton } from '../../components/_deprecated/FloatingActionButton';
-import { DeleteStation } from './DeleteStation';
-import Minus from '../../assets/Minus.svg';
-import { NewStation } from './NewStation';
-import { useAuth } from '../../auth/useAuth';
-import { useStasjoner } from '../../services/stasjon/useStasjoner';
+import { FloatingActionButton } from '../../../components/_deprecated/FloatingActionButton';
+import Minus from '../../../assets/Minus.svg';
+import { NewPartner } from './NewPartner';
+import { DeletePartner } from './DeletePartner';
+import { useAuth } from '../../../auth/useAuth';
+import { usePartnere } from '../../../services/partner/usePartnere';
 
 const Wrapper = styled.div`
     display: flex;
@@ -23,7 +22,7 @@ const Wrapper = styled.div`
     background-color: ${(props) => props.theme.colors.White};
 `;
 
-const StationAdminButtons = styled.div`
+const PartnerAdminButtons = styled.div`
     position: absolute;
     top: 40px;
     right: 50px;
@@ -44,20 +43,21 @@ const Content = styled.div`
     overflow: auto;
 `;
 
-export const Stations: React.FC = () => {
+export const Partners: React.FC = () => {
     const { user } = useAuth();
+
     const modal = useModal();
 
-    const { data: stasjoner, isLoading } = useStasjoner();
+    const { data: partnere, isLoading } = usePartnere();
 
     const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
-    const showNewStationModal = () => {
-        modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
+    const showNewPartnerModal = () => {
+        modal.show(<NewPartner afterSubmit={closeModalOnSuccess} />);
     };
 
-    const showDeleteStationModal = () => {
-        modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
+    const showDeletePartnerModal = () => {
+        modal.show(<DeletePartner afterSubmit={closeModalOnSuccess} />);
     };
 
     if (isLoading) {
@@ -67,29 +67,32 @@ export const Stations: React.FC = () => {
     return (
         <>
             <Helmet>
-                <title>Stasjonene</title>
+                <title>Samarbeidspartnere</title>
             </Helmet>
             <Wrapper>
                 {user.isAdmin && (
-                    <StationAdminButtons>
+                    <PartnerAdminButtons>
                         <FloatingActionButton
-                            label="Ny stasjon"
+                            label="Ny samarbeidspartner"
                             icon={<Plus />}
-                            onClick={showNewStationModal}
+                            onClick={showNewPartnerModal}
                             variant="positive"
                         />
                         <FloatingActionButton
-                            label="Slett stasjon"
+                            label="Slett samarbeidspartner"
                             icon={<Minus />}
-                            onClick={showDeleteStationModal}
+                            onClick={showDeletePartnerModal}
                             variant="negative"
                         />
-                    </StationAdminButtons>
+                    </PartnerAdminButtons>
                 )}
                 <Content>
-                    {stasjoner?.map((station) => (
-                        <Station key={station.id} station={station} />
-                    ))}
+                    <h2>Registrerte samarbeidspartnere</h2>
+                    <ul>
+                        {partnere?.map((partner) => (
+                            <li key={partner.id}>{partner.navn}</li>
+                        ))}
+                    </ul>
                 </Content>
             </Wrapper>
         </>

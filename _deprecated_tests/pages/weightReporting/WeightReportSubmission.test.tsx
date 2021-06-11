@@ -4,7 +4,7 @@ import { render, fireEvent, screen, cleanup, waitForElementToBeRemoved } from '.
 import { mockReports } from '../../../__mocks__/_deprecated/mockReports';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import { WeightReportList } from '../../../src/pages/weightReporting/WeightReportList';
+import { WeightReportList } from '../../../src/pages/_deprecated/weightReporting/WeightReportList';
 
 describe('Provides a component to update a single weight withdrawal', () => {
     let axiosMock: MockAdapter;

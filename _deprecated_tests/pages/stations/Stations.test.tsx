@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, cleanup, setupUseAuthMock } from '../../../test-utils';
 import '@testing-library/jest-dom';
-import { Stations } from '../../../src/pages/stations/Stations';
+import { Stations } from '../../../src/pages/_deprecated/stations/Stations';
 import resetAllMocks = jest.resetAllMocks;
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';

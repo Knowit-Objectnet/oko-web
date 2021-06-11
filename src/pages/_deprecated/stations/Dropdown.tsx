@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import ArrowDown from '../../assets/ArrowDown.svg';
-import ArrowUp from '../../assets/ArrowUp.svg';
+import ArrowDown from '../../../assets/ArrowDown.svg';
+import ArrowUp from '../../../assets/ArrowUp.svg';
 
 const Wrapper = styled.div`
     user-select: none;

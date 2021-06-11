@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPickUp } from '../../../services/deprecated/PickUpService';
-import { useRequests } from '../../../services/deprecated/hooks/useRequests';
+import { ApiPickUp } from '../../../../services/deprecated/PickUpService';
+import { useRequests } from '../../../../services/deprecated/hooks/useRequests';
 import { RequestRegistrationButton } from './RequestRegistrationButton';
 import { RequestCancellationButton } from './RequestCancellationButton';
 import { useState } from 'react';
@@ -9,9 +9,9 @@ import {
     NegativeStatusBadge,
     NeutralStatusBadge,
     PositiveStatusBadge,
-} from '../../../components/_deprecated/StatusBadge';
-import { Spinner } from '../../../components/_deprecated/Spinner';
-import { useAuth } from '../../../auth/useAuth';
+} from '../../../../components/_deprecated/StatusBadge';
+import { Spinner } from '../../../../components/_deprecated/Spinner';
+import { useAuth } from '../../../../auth/useAuth';
 
 const StatusWrapper = styled.div`
     display: flex;

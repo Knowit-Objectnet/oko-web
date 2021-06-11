@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Person from '../../assets/Person.svg';
-import Phone from '../../assets/Phone.svg';
-import Mail from '../../assets/Mail.svg';
+import Person from '../../../assets/Person.svg';
+import Phone from '../../../assets/Phone.svg';
+import Mail from '../../../assets/Mail.svg';
 
 const Wrapper = styled.div`
     flex: 1;

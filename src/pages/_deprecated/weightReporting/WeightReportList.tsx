@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ApiReport } from '../../services/deprecated/ReportService';
+import { ApiReport } from '../../../services/deprecated/ReportService';
 import { WeightReportListItem } from './WeightReportListItem';
 import styled from 'styled-components';
 import { VisuallyHidden } from '@chakra-ui/react';
