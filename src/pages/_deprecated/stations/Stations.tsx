@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Station } from './Station';
 import { Loading } from '../../../components/Loading';
 import Plus from '../../../assets/Plus.svg';
-import useModal from '../../../components/_deprecated/modal/useModal';
+// import useModal from '../../../components/_deprecated/modal/useModal';
 import { Helmet } from 'react-helmet';
 import { FloatingActionButton } from '../../../components/_deprecated/FloatingActionButton';
 import { DeleteStation } from './DeleteStation';
@@ -46,18 +46,18 @@ const Content = styled.div`
 
 export const Stations: React.FC = () => {
     const { user } = useAuth();
-    const modal = useModal();
+    // const modal = useModal();
 
     const { data: stasjoner, isLoading } = useStasjoner();
 
-    const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
+    // const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
     const showNewStationModal = () => {
-        modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
+        // modal.show(<NewStation afterSubmit={closeModalOnSuccess} />);
     };
 
     const showDeleteStationModal = () => {
-        modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
+        // modal.show(<DeleteStation afterSubmit={closeModalOnSuccess} />);
     };
 
     if (isLoading) {

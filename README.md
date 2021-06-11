@@ -123,20 +123,10 @@ The cache (contained in a `QueryClient` instance) has utility methods (like `inv
 > Chakra UI relies on [`emotion`](https://emotion.sh/docs/introduction) and [`framer/motion`](https://www.framer.com/motion/).
 > If necessary, these libraries can be used (rather than `styled-components` and `react-transition-group`).
 
-#### Soon to be deprecated: 
-
-* [react-alert](https://www.npmjs.com/package/react-alert) and react-alert-template-basic for toast-style alerts
-* [react-calendar](https://www.npmjs.com/package/react-calendar)
-* [react-date-picker](https://projects.wojtekmaj.pl/react-date-picker/)
-* [@wojtekmaj/react-daterange-picker](https://projects.wojtekmaj.pl/react-daterange-picker/)
-* [@wojtekmaj/react-timerange-picker](https://projects.wojtekmaj.pl/react-timerange-picker/)
-
 #### Forms 
 
-> The forms in the project is being migrated to the setup below. 
-
-* [React Hook Form](https://react-hook-form.com/)
-* [yup](https://github.com/jquense/yup)
+* [React Hook Form](https://react-hook-form.com/) for keeping track of form state.
+* [yup](https://github.com/jquense/yup) for performing validation of user input.
 
 
 ### Utilities

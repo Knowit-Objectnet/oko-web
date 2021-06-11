@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useAlert, types } from 'react-alert';
+// import { useAlert, types } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../../../services/_deprecated/PartnerService';
 import { PositiveButton } from '../../../components/_deprecated/buttons/PositiveButton';
@@ -58,18 +58,18 @@ interface Props {
 }
 
 export const NewPartner: React.FC<Props> = (props) => {
-    const alert = useAlert();
+    // const alert = useAlert();
 
     const formMethods = useForm<FormData>({ resolver: yupResolver(validationSchema) });
 
     const queryClient = useQueryClient();
     const addPartnerMutation = useMutation((newPartner: ApiPartnerPost) => postPartner(newPartner), {
         onSuccess: () => {
-            alert.show('Ny partner ble lagt til.', { type: types.SUCCESS });
+            // alert.show('Ny partner ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
         },
         onError: () => {
-            alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
+            // alert.show('Noe gikk galt, ny partner ble ikke lagt til.', { type: types.ERROR });
             props.afterSubmit?.(false);
         },
         onSettled: () => {

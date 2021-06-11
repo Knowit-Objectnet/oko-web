@@ -18,7 +18,7 @@ export const App: React.FC = () => {
                     <Helmet titleTemplate="%s – Oslo kommune REG">
                         <html lang="nb" />
                         {/* TODO write a SEO-friendly description: */}
-                        <meta name="description" content="Oslo kommune REG" />{' '}
+                        <meta name="description" content="Oslo kommune REG" />
                     </Helmet>
                     <MainRouter />
                 </QueryClientProvider>

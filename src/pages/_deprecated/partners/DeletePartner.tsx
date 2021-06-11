@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useAlert, types } from 'react-alert';
+// import { useAlert, types } from 'react-alert';
 import { deletePartner, partnersDefaultQueryKey } from '../../../services/_deprecated/PartnerService';
 import { useMutation, useQueryClient } from 'react-query';
 import { PartnerSelect } from '../../../components/_deprecated/forms/PartnerSelect';
@@ -52,7 +52,7 @@ interface Props {
 }
 
 export const DeletePartner: React.FC<Props> = (props) => {
-    const alert = useAlert();
+    // const alert = useAlert();
 
     const formMethods = useForm<FormData>({
         resolver: yupResolver(validationSchema),
@@ -64,11 +64,11 @@ export const DeletePartner: React.FC<Props> = (props) => {
     const queryClient = useQueryClient();
     const deletePartnerMutation = useMutation((partnerId: number) => deletePartner(partnerId), {
         onSuccess: () => {
-            alert.show('Samarbeidspartneren ble slettet.', { type: types.SUCCESS });
+            // alert.show('Samarbeidspartneren ble slettet.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
         },
         onError: () => {
-            alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
+            // alert.show('Noe gikk galt, samarbeidspartneren ble ikke slettet.', { type: types.ERROR });
             props.afterSubmit?.(false);
         },
         onSettled: () => {

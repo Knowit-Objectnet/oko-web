@@ -6,7 +6,7 @@ import {
     patchReport,
     reportsDefaultQueryKey,
 } from '../../../services/_deprecated/ReportService';
-import { types, useAlert } from 'react-alert';
+// import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import { VisuallyHidden } from '@chakra-ui/react';
@@ -36,15 +36,15 @@ interface Props {
 export const WeightReportForm: React.FC<Props> = ({ report, onSubmit }) => {
     const [weight, setWeight] = useState<number | null>(report.weight);
 
-    const alert = useAlert();
+    // const alert = useAlert();
 
     const queryClient = useQueryClient();
     const updateReportMutation = useMutation((updatedReport: ApiReportPatch) => patchReport(updatedReport), {
         onSuccess: () => {
-            alert.show('Vekt ble registrert på uttaket.', { type: types.SUCCESS });
+            // alert.show('Vekt ble registrert på uttaket.', { type: types.SUCCESS });
         },
         onError: () => {
-            alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
+            // alert.show('Noe gikk kalt, uttaket ble ikke oppdatert.', { type: types.ERROR });
         },
         onSettled: () => {
             return queryClient.invalidateQueries(reportsDefaultQueryKey);

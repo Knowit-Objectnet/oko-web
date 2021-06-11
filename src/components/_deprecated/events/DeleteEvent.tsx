@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
 import { useState } from 'react';
 import { PositiveButton } from '../buttons/PositiveButton';
 import { useMutation, useQueryClient } from 'react-query';
 import { EventInfo } from '../../../services/_deprecated/types';
 import { ApiEventParams, deleteEvents, eventsDefaultQueryKey } from '../../../services/_deprecated/EventService';
-import { types, useAlert } from 'react-alert';
+// import { types, useAlert } from 'react-alert';
 import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.div`
@@ -38,14 +38,14 @@ const Selection = styled.div<{ selected?: boolean }>`
     user-select: none;
 `;
 
-const StyledDateRangePicker = styled(DateRangePicker)`
-    width: 100%;
-    background-color: ${(props) => props.theme.colors.White};
-
-    & .react-daterange-picker__range-divider {
-        flex: auto;
-    }
-`;
+// const StyledDateRangePicker = styled(DateRangePicker)`
+//     width: 100%;
+////     background-color: ${(props) => props.theme.colors.White};
+//
+//     & .react-daterange-picker__range-divider {
+//         flex: auto;
+//     }
+// `;
 
 interface DeleteEventProps {
     event: EventInfo;
@@ -54,7 +54,7 @@ interface DeleteEventProps {
 }
 
 export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
-    const alert = useAlert();
+    // const alert = useAlert();
 
     const { user } = useAuth();
 
@@ -80,11 +80,11 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
         (event: EventInfo) => deleteEvents({ eventId: event.resource.eventId }),
         {
             onSuccess: () => {
-                alert.show('Avtalen ble slettet.', { type: types.SUCCESS });
+                // alert.show('Avtalen ble slettet.', { type: types.SUCCESS });
                 props.afterDeleteSingleEvent?.(true);
             },
             onError: () => {
-                alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
+                // alert.show('Noe gikk kalt, avtalen ble ikke slettet.', { type: types.ERROR });
                 props.afterDeleteSingleEvent?.(false);
             },
             onSettled: () => {
@@ -104,11 +104,11 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
         },
         {
             onSuccess: () => {
-                alert.show('Avtalen(e) ble slettet.', { type: types.SUCCESS });
+                // alert.show('Avtalen(e) ble slettet.', { type: types.SUCCESS });
                 props.afterDeleteRangeEvent?.(true);
             },
             onError: () => {
-                alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
+                // alert.show('Noe gikk galt, avtalen(e) ble ikke slettet.', { type: types.ERROR });
                 props.afterDeleteRangeEvent?.(false);
             },
             onSettled: () => {
@@ -137,7 +137,7 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
                     </Selection>
                 </RangeSelection>
             )}
-            {!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={setDateRange} value={dateRange} />}
+            {/*{!isSingleDeletion && <StyledDateRangePicker clearIcon={null} onChange={setDateRange} value={dateRange} />}*/}
             <PositiveButton
                 onClick={handleDeleteEvent}
                 isLoading={deleteSingleEventMutation.isLoading || deleteRangeEventsMutation.isLoading}

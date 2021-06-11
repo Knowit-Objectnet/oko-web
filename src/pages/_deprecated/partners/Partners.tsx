@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Loading } from '../../../components/Loading';
 import Plus from '../../../assets/Plus.svg';
-import useModal from '../../../components/_deprecated/modal/useModal';
+// import useModal from '../../../components/_deprecated/modal/useModal';
 import { Helmet } from 'react-helmet';
 import { FloatingActionButton } from '../../../components/_deprecated/FloatingActionButton';
 import Minus from '../../../assets/Minus.svg';
@@ -46,18 +46,18 @@ const Content = styled.div`
 export const Partners: React.FC = () => {
     const { user } = useAuth();
 
-    const modal = useModal();
+    // const modal = useModal();
 
     const { data: partnere, isLoading } = usePartnere();
 
-    const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
+    // const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
     const showNewPartnerModal = () => {
-        modal.show(<NewPartner afterSubmit={closeModalOnSuccess} />);
+        // modal.show(<NewPartner afterSubmit={closeModalOnSuccess} />);
     };
 
     const showDeletePartnerModal = () => {
-        modal.show(<DeletePartner afterSubmit={closeModalOnSuccess} />);
+        // modal.show(<DeletePartner afterSubmit={closeModalOnSuccess} />);
     };
 
     if (isLoading) {

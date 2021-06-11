@@ -4,7 +4,7 @@ import { OpeningHours } from './OpeningHours';
 import Person from '../../../assets/Person.svg';
 import Phone from '../../../assets/Phone.svg';
 import Mail from '../../../assets/Mail.svg';
-import { useAlert, types } from 'react-alert';
+// import { useAlert, types } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiStationPost, postStation, stationsDefaultQueryKey } from '../../../services/_deprecated/StationService';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -204,7 +204,7 @@ interface Props {
 }
 
 export const NewStation: React.FC<Props> = (props) => {
-    const alert = useAlert();
+    // const alert = useAlert();
 
     // form methods from reaect-hook-forms used in the form provider and inputs
     const formMethods = useForm<FormData>({
@@ -231,11 +231,11 @@ export const NewStation: React.FC<Props> = (props) => {
     const queryClient = useQueryClient();
     const addStationMutation = useMutation((newStation: ApiStationPost) => postStation(newStation), {
         onSuccess: () => {
-            alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
+            // alert.show('Stasjonen ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
         },
         onError: () => {
-            alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
+            // alert.show('Noe gikk galt, ny stasjon ble ikke lagt til.', { type: types.ERROR });
             props.afterSubmit?.(false);
         },
         onSettled: () => {

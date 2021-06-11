@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Plus from '../../../assets/Plus.svg';
 import { NewPickUp } from '../../../components/_deprecated/events/NewPickUp';
-import useModal from '../../../components/_deprecated/modal/useModal';
+// import useModal from '../../../components/_deprecated/modal/useModal';
 import { getStartAndEndDateTime } from '../../../utils/_deprecated/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
 import { FloatingActionButton } from '../../../components/_deprecated/FloatingActionButton';
@@ -28,15 +28,15 @@ const PageContent = styled.section`
 `;
 
 export const Notifications: React.FC = () => {
-    const modal = useModal();
+    // const modal = useModal();
 
     const { user } = useAuth();
 
-    const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
+    // const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
     const showNewPickUpModal = () => {
         const { start, end } = getStartAndEndDateTime();
-        modal.show(<NewPickUp start={start} end={end} afterSubmit={closeModalOnSuccess} />);
+        // modal.show(<NewPickUp start={start} end={end} afterSubmit={closeModalOnSuccess} />);
     };
 
     return (

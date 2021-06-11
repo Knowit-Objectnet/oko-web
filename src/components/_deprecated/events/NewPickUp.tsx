@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { EventOptionDateRange } from './EventOptionDateRange';
-import { types, useAlert } from 'react-alert';
+// import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiPickUpPost, pickUpsDefaultQueryKey, postPickUp } from '../../../services/_deprecated/PickUpService';
 import { PositiveButton } from '../buttons/PositiveButton';
@@ -25,16 +25,16 @@ interface Props {
 
 export const NewPickUp: React.FC<Props> = (props) => {
     const { user } = useAuth();
-    const alert = useAlert();
+    // const alert = useAlert();
 
     const queryClient = useQueryClient();
     const addPickUpMutation = useMutation((newPickUp: ApiPickUpPost) => postPickUp(newPickUp), {
         onSuccess: () => {
-            alert.show('Et nytt ekstrauttak ble lagt til.', { type: types.SUCCESS });
+            // alert.show('Et nytt ekstrauttak ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
         },
         onError: () => {
-            alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
+            // alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
             props.afterSubmit?.(false);
         },
         onSettled: () => {

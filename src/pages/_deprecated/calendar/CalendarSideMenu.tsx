@@ -6,7 +6,7 @@ import { FloatingActionButton } from '../../../components/_deprecated/FloatingAc
 import { getStartAndEndDateTime } from '../../../utils/_deprecated/getStartAndEndDateTime';
 import { NewEvent } from '../../../components/_deprecated/events/NewEvent';
 import { NewPickUp } from '../../../components/_deprecated/events/NewPickUp';
-import useModal from '../../../components/_deprecated/modal/useModal';
+// import useModal from '../../../components/_deprecated/modal/useModal';
 import { useAuth } from '../../../auth/useAuth';
 
 const Wrapper = styled.div`
@@ -25,18 +25,18 @@ interface Props {
 export const CalendarSideMenu: React.FC<Props> = (props) => {
     const { user } = useAuth();
 
-    const modal = useModal();
+    // const modal = useModal();
 
-    const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
+    // const closeModalOnSuccess = (successful: boolean) => successful && modal.remove();
 
     const showNewEventModal = () => {
         const { start, end } = getStartAndEndDateTime();
-        modal.show(<NewEvent start={start} end={end} afterSubmit={closeModalOnSuccess} />);
+        // modal.show(<NewEvent start={start} end={end} afterSubmit={closeModalOnSuccess} />);
     };
 
     const showNewPickUpModal = () => {
         const { start, end } = getStartAndEndDateTime();
-        modal.show(<NewPickUp start={start} end={end} afterSubmit={closeModalOnSuccess} />);
+        // modal.show(<NewPickUp start={start} end={end} afterSubmit={closeModalOnSuccess} />);
     };
 
     return (

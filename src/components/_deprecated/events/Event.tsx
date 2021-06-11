@@ -6,7 +6,7 @@ import { EventOptionDateRange } from './EventOptionDateRange';
 import { EventInfo } from '../../../services/_deprecated/types';
 import { EventStationInfo } from './EventStationInfo';
 import { EventTemplateHorizontal } from './EventTemplateHorizontal';
-import { types, useAlert } from 'react-alert';
+// import { types, useAlert } from 'react-alert';
 import { DeleteEvent } from './DeleteEvent';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiEventPatch, patchEvent, eventsDefaultQueryKey } from '../../../services/_deprecated/EventService';
@@ -56,7 +56,7 @@ interface Props {
  * Will be rendered differently depending on user's role.
  */
 export const Event: React.FC<Props> = (props) => {
-    const alert = useAlert();
+    // const alert = useAlert();
 
     const { user } = useAuth();
     const stationOwnsEvent = user.ownsResource(props.event.resource.station.id);
@@ -65,11 +65,11 @@ export const Event: React.FC<Props> = (props) => {
     const queryClient = useQueryClient();
     const updateEventMutation = useMutation((updatedEvent: ApiEventPatch) => patchEvent(updatedEvent), {
         onSuccess: () => {
-            alert.show('Avtalen ble oppdatert.', { type: types.SUCCESS });
+            // alert.show('Avtalen ble oppdatert.', { type: types.SUCCESS });
             setIsEditing(false);
         },
         onError: () => {
-            alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
+            // alert.show('Noe gikk kalt, avtalen ble ikke oppdatert.', { type: types.ERROR });
         },
         onSettled: () => {
             queryClient.invalidateQueries(eventsDefaultQueryKey);
@@ -136,17 +136,17 @@ export const Event: React.FC<Props> = (props) => {
         max.setHours(20, 0, 0, 0);
 
         if (start > end) {
-            alert.show('Start tiden kan ikke være etter slutt tiden.', { type: types.ERROR });
+            // alert.show('Start tiden kan ikke være etter slutt tiden.', { type: types.ERROR });
             return;
         }
 
         if (start < min) {
-            alert.show('Starttiden kan ikke være før 08:00', { type: types.ERROR });
+            // alert.show('Starttiden kan ikke være før 08:00', { type: types.ERROR });
             return;
         }
 
         if (end > max) {
-            alert.show('Sluttiden kan ikke være etter 20:00', { type: types.ERROR });
+            // alert.show('Sluttiden kan ikke være etter 20:00', { type: types.ERROR });
             return;
         }
 

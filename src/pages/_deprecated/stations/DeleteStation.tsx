@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { useAlert, types } from 'react-alert';
+// import { useAlert, types } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { deleteStation, stationsDefaultQueryKey } from '../../../services/_deprecated/StationService';
 import { StationSelect } from '../../../components/_deprecated/forms/StationSelect';
@@ -49,7 +49,7 @@ interface Props {
 }
 
 export const DeleteStation: React.FC<Props> = (props) => {
-    const alert = useAlert();
+    // const alert = useAlert();
 
     const formMethods = useForm<FormData>({
         resolver: yupResolver(validationSchema),
@@ -61,11 +61,11 @@ export const DeleteStation: React.FC<Props> = (props) => {
     const queryClient = useQueryClient();
     const deleteStationMutation = useMutation((stationId: number) => deleteStation(stationId), {
         onSuccess: () => {
-            alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
+            // alert.show('Stasjonen ble slettet.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
         },
         onError: () => {
-            alert.show('Noe gikk galt, stasjonen ble ikke slettet.', { type: types.ERROR });
+            // alert.show('Noe gikk galt, stasjonen ble ikke slettet.', { type: types.ERROR });
             props.afterSubmit?.(false);
         },
         onSettled: () => {

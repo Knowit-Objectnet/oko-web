@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { types, useAlert } from 'react-alert';
+// import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../../services/_deprecated/PickUpService';
 import { PositiveButton } from '../../../../components/_deprecated/buttons/PositiveButton';
@@ -11,14 +11,14 @@ interface Props {
 }
 
 export const RequestApprovalButton: React.FC<Props> = ({ pickupId, partnerId, onRequestApproval }) => {
-    const alert = useAlert();
+    // const alert = useAlert();
 
     const queryClient = useQueryClient();
     const updatePickUpMutation = useMutation((updatedPickUp: ApiPickUpPatch) => patchPickUp(updatedPickUp), {
         onError: () => {
-            alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrauttak ble ikke registrert.', {
-                type: types.ERROR,
-            });
+            // alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrauttak ble ikke registrert.', {
+            //     type: types.ERROR,
+            // });
         },
         onSettled: () => {
             // The Promise from `invalidateQueries` will resolve when matched queries are done refetching.

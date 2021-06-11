@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { EventDateTimePicker } from './EventDateTimePicker';
 import { EventTemplateVertical } from './EventTemplateVertical';
-import { types, useAlert } from 'react-alert';
+// import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../../services/_deprecated/EventService';
 import { StationSelect } from '../forms/StationSelect';
@@ -147,7 +147,7 @@ interface Props {
 const WEEKDAYS: Array<WorkingWeekdays> = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
 
 export const NewEvent: React.FC<Props> = (props) => {
-    const alert = useAlert();
+    // const alert = useAlert();
 
     // form methods from reaect-hook-forms used in the form provider and inputs
     const formMethods = useForm<FormData>({
@@ -172,11 +172,11 @@ export const NewEvent: React.FC<Props> = (props) => {
     const queryClient = useQueryClient();
     const addEventMutation = useMutation((newEvent: ApiEventPost) => postEvent(newEvent), {
         onSuccess: () => {
-            alert.show('Avtalen ble lagt til.', { type: types.SUCCESS });
+            // alert.show('Avtalen ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
         },
         onError: () => {
-            alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
+            // alert.show('Noe gikk kalt, avtalen ble ikke lagt til.', { type: types.ERROR });
             props.afterSubmit?.(false);
         },
         onSettled: () => {
@@ -189,7 +189,7 @@ export const NewEvent: React.FC<Props> = (props) => {
         // The ts-ignore is needed as for some reason the @types for the library forgot to add removeAll to the interface
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        alert.removeAll();
+        // alert.removeAll();
 
         // Set the date of the time to the first date in the range (or the only date if a non-recurring event), this is needed
         // as the time's date will be today while the user can choose another date.

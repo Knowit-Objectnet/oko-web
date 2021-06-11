@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { EventOption } from './EventOption';
 import styled from 'styled-components';
-import DateRangePicker from '@wojtekmaj/react-daterange-picker';
-import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
-import DatePicker from 'react-date-picker';
+// import DateRangePicker from '@wojtekmaj/react-daterange-picker';
+// import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
+// import DatePicker from 'react-date-picker';
 import ClockIcon from '../../../assets/Clock.svg';
 import CalendarIcon from '../../../assets/Calendar.svg';
 import { useState } from 'react';
@@ -80,27 +80,27 @@ const Day = styled.div<DayProps>`
     user-select: none;
 `;
 
-const StyledTimeRangePicker = styled(TimeRangePicker)`
-    width: 100%;
-    background-color: ${(props) => props.theme.colors.White};
-
-    & .react-timerange-picker__range-divider {
-        flex: auto;
-    }
-`;
-
-const StyledDateRangePicker = styled(DateRangePicker)`
-    width: 100%;
-    background-color: ${(props) => props.theme.colors.White};
-
-    & .react-daterange-picker__range-divider {
-        flex: auto;
-    }
-`;
-
-const StyledDatePicker = styled(DatePicker)`
-    background-color: ${(props) => props.theme.colors.White};
-`;
+// const StyledTimeRangePicker = styled(TimeRangePicker)`
+//     width: 100%;
+////     background-color: ${(props) => props.theme.colors.White};
+//
+//     & .react-timerange-picker__range-divider {
+//         flex: auto;
+//     }
+// `;
+//
+// const StyledDateRangePicker = styled(DateRangePicker)`
+//     width: 100%;
+////     background-color: ${(props) => props.theme.colors.White};
+//
+//     & .react-daterange-picker__range-divider {
+//         flex: auto;
+//     }
+// `;
+//
+// const StyledDatePicker = styled(DatePicker)`
+////     background-color: ${(props) => props.theme.colors.White};
+// `;
 
 const BoxWrapper = styled.div`
     display: flex;
@@ -255,32 +255,32 @@ export const EventOptionDateRange: React.FC<EventOptionDateRangeProps> = (props)
                     )}
                     <DateTimePickersWrapper>
                         <Span>Velg tidspunkt</Span>
-                        <StyledTimeRangePicker
-                            clearIcon={null}
-                            format="HH:mm"
-                            onChange={onTimeRangeChange}
-                            value={props.timeRange}
-                        />
+                        {/*<StyledTimeRangePicker*/}
+                        {/*    clearIcon={null}*/}
+                        {/*    format="HH:mm"*/}
+                        {/*    onChange={onTimeRangeChange}*/}
+                        {/*    value={props.timeRange}*/}
+                        {/*/>*/}
                     </DateTimePickersWrapper>
                     {props.recurring !== 'None' && (
                         <DateTimePickersWrapper>
                             <Span>Velg periode</Span>
-                            <StyledDateRangePicker
-                                clearIcon={null}
-                                onChange={onDateRangeChange}
-                                value={props.dateRange}
-                                tileDisabled={disableWeekends}
-                            />
+                            {/*<StyledDateRangePicker*/}
+                            {/*    clearIcon={null}*/}
+                            {/*    onChange={onDateRangeChange}*/}
+                            {/*    value={props.dateRange}*/}
+                            {/*    tileDisabled={disableWeekends}*/}
+                            {/*/>*/}
                         </DateTimePickersWrapper>
                     )}
-                    {props.recurring === 'None' && (
-                        <StyledDatePicker
-                            clearIcon={null}
-                            onChange={onNonRecurringDateChange}
-                            value={nonRecurringDate}
-                            tileDisabled={disableWeekends}
-                        />
-                    )}
+                    {/*{props.recurring === 'None' && (*/}
+                    {/*    <StyledDatePicker*/}
+                    {/*        clearIcon={null}*/}
+                    {/*        onChange={onNonRecurringDateChange}*/}
+                    {/*        value={nonRecurringDate}*/}
+                    {/*        tileDisabled={disableWeekends}*/}
+                    {/*    />*/}
+                    {/*)}*/}
                 </Wrapper>
             ) : (
                 <BoxWrapper>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { types, useAlert } from 'react-alert';
+// import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import {
     ApiRequestParams,
@@ -18,14 +18,14 @@ interface Props {
 export const RequestCancellationButton: React.FC<Props> = ({ pickupId, onRequestCancellation }) => {
     const { user } = useAuth();
     const partnerId = user.aktorId;
-    const alert = useAlert();
+    // const alert = useAlert();
 
     const queryClient = useQueryClient();
     const deleteRequestMutation = useMutation((request: ApiRequestParams) => deleteRequest(request), {
         onError: () => {
-            alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
-                type: types.ERROR,
-            });
+            // alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
+            //     type: types.ERROR,
+            // });
         },
         onSettled: () => {
             // The Promise from `invalidateQueries` will resolve when matched queries are done refetching.
