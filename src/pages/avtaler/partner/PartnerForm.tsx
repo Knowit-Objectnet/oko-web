@@ -10,8 +10,10 @@ import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFie
 import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddPartner } from '../../../services/partner/useAddPartner';
-import { ApiPartnerPost } from '../../../services/partner/PartnerService';
+import { ApiPartner, ApiPartnerPatch, ApiPartnerPost } from '../../../services/partner/PartnerService';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { useUpdatePartner } from '../../../services/partner/useUpdatePartner';
+import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
@@ -21,36 +23,72 @@ const validationSchema = yup.object().shape({
     ideell: yup.boolean().label('Om partneren er en ideell organisasjon').required(),
 });
 
+interface PartnerFormData {
+    navn: string;
+    ideell: boolean;
+}
+
 interface Props {
-    /** Callback that will fire if registration of new Stasjon is successful: **/
+    partnerToEdit?: ApiPartner;
+    /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
 }
 
-export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
-    const formMethods = useForm<ApiPartnerPost>({
+export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
+    const formMethods = useForm<PartnerFormData>({
         resolver: yupResolver(validationSchema),
-        // TODO: if form is in edit mode: pass original values as "defaultValues" here
+        defaultValues: partnerToEdit
+            ? {
+                  navn: partnerToEdit.navn,
+                  ideell: partnerToEdit.ideell,
+              }
+            : undefined,
     });
 
     const addPartnerMutation = useAddPartner();
+    const updatePartnerMutation = useUpdatePartner();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
-    const handleSubmit = formMethods.handleSubmit((data) => {
+    const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        addPartnerMutation.mutate(data, {
-            onSuccess: () => {
-                showSuccessToast({ title: `${data.navn} ble registrert som samarbeidspartner` });
-                onSuccess?.();
-            },
-            onError: (error) => {
-                // TODO: get details from error and set appropriate message.
-                //  If caused by user: set message to correct field
-                setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
-            },
-        });
+        if (partnerToEdit) {
+            updatePartner({
+                id: partnerToEdit.id,
+                ...formData,
+            });
+        } else {
+            addPartner(formData);
+        }
     });
+
+    const addPartner = (newPartner: ApiPartnerPost) =>
+        addPartnerMutation.mutate(newPartner, {
+            onSuccess: () => {
+                onApiSubmitSuccess(`${newPartner.navn} ble registrert som samarbeidspartner`);
+            },
+            onError: onApiSubmitError,
+        });
+
+    const updatePartner = (updatedPartner: ApiPartnerPatch) =>
+        updatePartnerMutation.mutate(updatedPartner, {
+            onSuccess: () => {
+                onApiSubmitSuccess(`Endringene ble lagret for ${updatedPartner.navn}`);
+            },
+            onError: onApiSubmitError,
+        });
+
+    const onApiSubmitSuccess = (successMessage: string) => {
+        showSuccessToast({ title: successMessage });
+        onSuccess?.();
+    };
+
+    const onApiSubmitError = (error: ApiError) => {
+        // TODO: get details from error and set appropriate message.
+        //  If caused by user: set message to correct field
+        setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
+    };
 
     return (
         <FormProvider {...formMethods}>
@@ -65,9 +103,9 @@ export const PartnerForm: React.FC<Props> = ({ onSuccess }) => {
                         required
                     />
                     <FormSubmitButton
-                        label="Registrer ny samarbeidspartner"
-                        isLoading={addPartnerMutation.isLoading}
-                        loadingText="Vennligst vent..."
+                        label={partnerToEdit ? 'Lagre endringer' : 'Registrer ny samarbeidspartner'}
+                        isLoading={updatePartnerMutation.isLoading || addPartnerMutation.isLoading}
+                        loadingText="Lagrer..."
                     />
                 </Stack>
             </form>
