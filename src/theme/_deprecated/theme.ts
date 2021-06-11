@@ -1,4 +1,4 @@
-import { Colors } from './foundations/colors';
+import { Colors } from '../foundations/colors';
 
 const oldTheme = {
     colors: {

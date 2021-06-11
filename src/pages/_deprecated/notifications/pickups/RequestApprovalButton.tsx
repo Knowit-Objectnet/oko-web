@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../../services/deprecated/PickUpService';
+import { ApiPickUpPatch, patchPickUp, pickUpsDefaultQueryKey } from '../../../../services/_deprecated/PickUpService';
 import { PositiveButton } from '../../../../components/_deprecated/buttons/PositiveButton';
 
 interface Props {

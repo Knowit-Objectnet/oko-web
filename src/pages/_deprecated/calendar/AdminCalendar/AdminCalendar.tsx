@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo, SlotInfo } from '../../../../services/deprecated/types';
+import { EventInfo, SlotInfo } from '../../../../services/_deprecated/types';
 import { ExpandableAgenda } from './ExpandableAgenda';
 import isSameDay from 'date-fns/isSameDay';
 import { WorkingWeekCalendar } from '../../../../components/_deprecated/calendar/WorkingWeekCalendar';

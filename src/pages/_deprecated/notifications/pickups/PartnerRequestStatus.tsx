@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ApiPickUp } from '../../../../services/deprecated/PickUpService';
-import { useRequests } from '../../../../services/deprecated/hooks/useRequests';
+import { ApiPickUp } from '../../../../services/_deprecated/PickUpService';
+import { useRequests } from '../../../../services/_deprecated/hooks/useRequests';
 import { RequestRegistrationButton } from './RequestRegistrationButton';
 import { RequestCancellationButton } from './RequestCancellationButton';
 import { useState } from 'react';

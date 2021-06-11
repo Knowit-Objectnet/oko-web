@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { deleteStation, stationsDefaultQueryKey } from '../../../services/deprecated/StationService';
+import { deleteStation, stationsDefaultQueryKey } from '../../../services/_deprecated/StationService';
 import { StationSelect } from '../../../components/_deprecated/forms/StationSelect';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';

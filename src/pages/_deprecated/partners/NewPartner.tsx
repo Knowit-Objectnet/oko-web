@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../../../services/deprecated/PartnerService';
+import { ApiPartnerPost, partnersDefaultQueryKey, postPartner } from '../../../services/_deprecated/PartnerService';
 import { PositiveButton } from '../../../components/_deprecated/buttons/PositiveButton';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';

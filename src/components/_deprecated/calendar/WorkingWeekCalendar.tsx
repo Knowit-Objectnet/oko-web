@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventInfo } from '../../../services/deprecated/types';
+import { EventInfo } from '../../../services/_deprecated/types';
 import { Gutter } from './Gutter';
 import { TimeSlotColumn } from './TimeSlotColumn';
 import { WorkingWeekCalendarTitle } from './WorkingWeekCalendarTitle';

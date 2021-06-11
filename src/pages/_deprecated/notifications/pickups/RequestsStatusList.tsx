@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { RequestApprovalButton } from './RequestApprovalButton';
-import { ApiPickUp } from '../../../../services/deprecated/PickUpService';
-import { ApiRequest } from '../../../../services/deprecated/RequestService';
-import { useRequests } from '../../../../services/deprecated/hooks/useRequests';
+import { ApiPickUp } from '../../../../services/_deprecated/PickUpService';
+import { ApiRequest } from '../../../../services/_deprecated/RequestService';
+import { useRequests } from '../../../../services/_deprecated/hooks/useRequests';
 import { useState } from 'react';
 import {
     NegativeStatusBadge,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { useAlert, types } from 'react-alert';
-import { deletePartner, partnersDefaultQueryKey } from '../../../services/deprecated/PartnerService';
+import { deletePartner, partnersDefaultQueryKey } from '../../../services/_deprecated/PartnerService';
 import { useMutation, useQueryClient } from 'react-query';
 import { PartnerSelect } from '../../../components/_deprecated/forms/PartnerSelect';
 import { NegativeButton } from '../../../components/_deprecated/buttons/NegativeButton';

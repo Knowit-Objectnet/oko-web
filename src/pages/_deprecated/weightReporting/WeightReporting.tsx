@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Loading } from '../../../components/Loading';
 import { Helmet } from 'react-helmet';
-import { useReports } from '../../../services/deprecated/hooks/useReports';
+import { useReports } from '../../../services/_deprecated/hooks/useReports';
 import { formatISO } from 'date-fns';
 import { WeightReportList } from './WeightReportList';
 import compareAsc from 'date-fns/compareAsc';

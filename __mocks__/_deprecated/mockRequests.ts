@@ -1,4 +1,4 @@
-import { ApiRequest } from '../../src/services/deprecated/RequestService';
+import { ApiRequest } from '../../src/services/_deprecated/RequestService';
 
 export const mockApiRequests: Array<ApiRequest> = [
     {

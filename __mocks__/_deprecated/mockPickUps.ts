@@ -1,4 +1,4 @@
-import { ApiPickUp } from '../../src/services/deprecated/PickUpService';
+import { ApiPickUp } from '../../src/services/_deprecated/PickUpService';
 
 export const mockApiPickUps: Array<ApiPickUp> = [
     {

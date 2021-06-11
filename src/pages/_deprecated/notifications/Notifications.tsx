@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Plus from '../../../assets/Plus.svg';
 import { NewPickUp } from '../../../components/_deprecated/events/NewPickUp';
 import useModal from '../../../components/_deprecated/modal/useModal';
-import { getStartAndEndDateTime } from '../../../utils/getStartAndEndDateTime';
+import { getStartAndEndDateTime } from '../../../utils/_deprecated/getStartAndEndDateTime';
 import { Helmet } from 'react-helmet';
 import { FloatingActionButton } from '../../../components/_deprecated/FloatingActionButton';
 import { PickUpList } from './pickups/PickUpList';

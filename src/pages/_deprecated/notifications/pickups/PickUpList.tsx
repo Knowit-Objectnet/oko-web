@@ -1,8 +1,8 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { PickUpListItem } from './PickUpListItem';
-import { usePickUps } from '../../../../services/deprecated/hooks/usePickUps';
-import { ApiPickUpParams } from '../../../../services/deprecated/PickUpService';
+import { usePickUps } from '../../../../services/_deprecated/hooks/usePickUps';
+import { ApiPickUpParams } from '../../../../services/_deprecated/PickUpService';
 import { useAuth } from '../../../../auth/useAuth';
 import compareDesc from 'date-fns/compareDesc';
 

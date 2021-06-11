@@ -5,7 +5,7 @@ import {
     ApiRequestParams,
     deleteRequest,
     requestsDefaultQueryKey,
-} from '../../../../services/deprecated/RequestService';
+} from '../../../../services/_deprecated/RequestService';
 import CrossIcon from '../../../../assets/Cross.svg';
 import { TextButton } from '../../../../components/_deprecated/buttons/TextButton';
 import { useAuth } from '../../../../auth/useAuth';

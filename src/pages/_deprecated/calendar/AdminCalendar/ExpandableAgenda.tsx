@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Agenda } from './Agenda';
 import { SingleDayCalendar } from '../../../../components/_deprecated/calendar/SingleDayCalendar';
-import { EventInfo, SlotInfo } from '../../../../services/deprecated/types';
+import { EventInfo, SlotInfo } from '../../../../services/_deprecated/types';
 import ArrowUp from '../../../../assets/ArrowUp.svg';
 import ArrowDown from '../../../../assets/ArrowDown.svg';
 import { useStasjoner } from '../../../../services/stasjon/useStasjoner';

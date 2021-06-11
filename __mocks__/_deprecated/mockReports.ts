@@ -1,5 +1,5 @@
 import add from 'date-fns/add';
-import { ApiReport } from '../../src/services/deprecated/ReportService';
+import { ApiReport } from '../../src/services/_deprecated/ReportService';
 
 const now = new Date();
 now.setHours(10, 0, 0, 0);

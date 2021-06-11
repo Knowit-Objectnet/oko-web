@@ -5,7 +5,7 @@ import {
     ApiReportPatch,
     patchReport,
     reportsDefaultQueryKey,
-} from '../../../services/deprecated/ReportService';
+} from '../../../services/_deprecated/ReportService';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
 import styled from 'styled-components';

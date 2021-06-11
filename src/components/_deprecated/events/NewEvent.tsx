@@ -4,7 +4,7 @@ import { EventDateTimePicker } from './EventDateTimePicker';
 import { EventTemplateVertical } from './EventTemplateVertical';
 import { types, useAlert } from 'react-alert';
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../../services/deprecated/EventService';
+import { ApiEventPost, eventsDefaultQueryKey, postEvent } from '../../../services/_deprecated/EventService';
 import { StationSelect } from '../forms/StationSelect';
 import { PartnerSelect } from '../forms/PartnerSelect';
 import { PositiveButton } from '../buttons/PositiveButton';
@@ -15,7 +15,7 @@ import parse from 'date-fns/parse';
 import isDate from 'date-fns/isDate';
 import isValid from 'date-fns/isValid';
 import set from 'date-fns/set';
-import { WorkingWeekdays } from '../../../services/deprecated/types';
+import { WorkingWeekdays } from '../../../services/_deprecated/types';
 
 const StyledForm = styled.form`
     display: flex;
