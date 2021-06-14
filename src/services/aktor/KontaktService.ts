@@ -44,7 +44,7 @@ export interface ApiKontaktParams {
 const kontaktEndpoint = '/kontakter';
 export const kontaktDefaultQueryKey = 'getKontakt';
 
-export const getKontaktr = (params: ApiKontaktParams = {}): Promise<Array<ApiKontakt>> =>
+export const getKontakter = (params: ApiKontaktParams = {}): Promise<Array<ApiKontakt>> =>
     httpClient().get<Array<ApiKontakt>>(kontaktEndpoint, { params }).then(extractResponse, transformError);
 
 export const getKontaktById = (kontaktId: string): Promise<ApiKontakt> =>
