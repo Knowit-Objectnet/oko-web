@@ -4,6 +4,7 @@ import { ApiPartner, ApiPartnerPost, partnerDefaultQueryKey, postPartner } from 
 import { ApiError } from '../httpClient';
 
 export const useAddPartner = (): UseMutationResult<ApiPartner, ApiError, ApiPartnerPost> =>
-    useMutationWithInvalidation<ApiPartner, ApiError, ApiPartnerPost>((newPartner) => postPartner(newPartner), [
-        partnerDefaultQueryKey,
-    ]);
+    useMutationWithInvalidation<ApiPartner, ApiError, ApiPartnerPost>(
+        (newPartner) => postPartner(newPartner),
+        [partnerDefaultQueryKey],
+    );
