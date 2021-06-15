@@ -3,7 +3,7 @@ import { ButtonProps, useDisclosure } from '@chakra-ui/react';
 import { FormModal } from '../../../components/forms/FormModal';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiKontakt } from '../../../services/aktor/KontaktService';
-import { KontaktPersonFormFixCase } from './KontaktPersonFormFixCase';
+import { KontaktPersonForm } from './KontaktPersonForm';
 
 interface Props {
     kontakt: ApiKontakt;
@@ -21,7 +21,7 @@ export const EditKontaktPersonButton: React.FC<Props & Omit<ButtonProps, 'onClic
                 onClick={onOpen}
             />
             <FormModal title="Rediger kontaktinformasjon" isOpen={isOpen} onClose={onClose}>
-                <KontaktPersonFormFixCase onSuccess={onClose} kontaktToEdit={kontakt} />
+                <KontaktPersonForm onSuccess={onClose} kontaktToEdit={kontakt} />
             </FormModal>
         </>
     );
