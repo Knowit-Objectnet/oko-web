@@ -54,5 +54,8 @@ export const getKontaktById = (kontaktId: string): Promise<ApiKontakt> =>
 export const postKontakt = (newKontakt: ApiKontaktPost): Promise<ApiKontakt> =>
     httpClient().post<ApiKontakt>(kontaktEndpoint, newKontakt).then(extractResponse, transformError);
 
+export const patchKontakt = (updatedKontakt: ApiKontaktPatch): Promise<ApiKontakt> =>
+    httpClient().patch<ApiKontakt>(kontaktEndpoint, updatedKontakt).then(extractResponse, transformError);
+
 export const deleteKontakt = (kontaktId: string): Promise<ApiKontakt> =>
     httpClient().delete<ApiKontakt>(`${kontaktEndpoint}/${kontaktId}`).then(extractResponse, transformError);
