@@ -52,7 +52,11 @@ interface EditModeProps extends Props {
     kontaktToEdit: ApiKontakt;
 }
 
-export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ partner, kontaktToEdit, onSuccess }) => {
+export const KontaktPersonFormFixCase: React.FC<EditModeProps | AddModeProps> = ({
+    partner,
+    kontaktToEdit,
+    onSuccess,
+}) => {
     const formMethods = useForm<ApiKontaktPost>({
         resolver: yupResolver(validationSchema),
         defaultValues: kontaktToEdit

@@ -3,13 +3,13 @@ import { ButtonProps, useDisclosure } from '@chakra-ui/react';
 import { FormModal } from '../../../components/forms/FormModal';
 import { AddButton } from '../../../components/buttons/AddButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { KontaktPersonForm } from './KontaktPersonForm';
+import { KontaktPersonFormFixCase } from './KontaktPersonFormFixCase';
 
 interface Props {
     partner: ApiPartner;
 }
 
-export const AddKontaktpersonButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ partner, ...props }) => {
+export const AddKontaktPersonButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ partner, ...props }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -21,7 +21,7 @@ export const AddKontaktpersonButton: React.FC<Props & Omit<ButtonProps, 'onClick
                 onClick={onOpen}
             />
             <FormModal title={`Ny kontaktperson for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
-                <KontaktPersonForm partner={partner} onSuccess={onClose} />
+                <KontaktPersonFormFixCase partner={partner} onSuccess={onClose} />
             </FormModal>
         </>
     );

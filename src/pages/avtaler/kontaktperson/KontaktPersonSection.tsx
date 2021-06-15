@@ -7,7 +7,7 @@ import {
     PartnerInfoSectionTitle,
 } from '../partner/PartnerInfoSection';
 import { KontaktPersonTable } from './KontaktPersonTable';
-import { AddKontaktpersonButton } from './AddKontaktPersonButton';
+import { AddKontaktPersonButton } from './AddKontaktPersonButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 
 interface Props {
@@ -22,7 +22,7 @@ export const KontaktPersonSection: React.FC<Props> = ({ partner }) => {
             <PartnerInfoSectionHeader>
                 <PartnerInfoSectionTitle>Kontaktpersoner</PartnerInfoSectionTitle>
                 <PartnerInfoSectionButtons>
-                    <AddKontaktpersonButton partner={partner} />
+                    <AddKontaktPersonButton partner={partner} />
                 </PartnerInfoSectionButtons>
             </PartnerInfoSectionHeader>
             <PartnerInfoSectionContent>

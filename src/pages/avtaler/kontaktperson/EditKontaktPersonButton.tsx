@@ -3,13 +3,13 @@ import { ButtonProps, useDisclosure } from '@chakra-ui/react';
 import { FormModal } from '../../../components/forms/FormModal';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiKontakt } from '../../../services/aktor/KontaktService';
-import { KontaktPersonForm } from './KontaktPersonForm';
+import { KontaktPersonFormFixCase } from './KontaktPersonFormFixCase';
 
 interface Props {
     kontakt: ApiKontakt;
 }
 
-export const EditKontaktButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ kontakt, ...props }) => {
+export const EditKontaktPersonButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ kontakt, ...props }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -21,7 +21,7 @@ export const EditKontaktButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> =
                 onClick={onOpen}
             />
             <FormModal title="Rediger kontaktinformasjon" isOpen={isOpen} onClose={onClose}>
-                <KontaktPersonForm onSuccess={onClose} kontaktToEdit={kontakt} />
+                <KontaktPersonFormFixCase onSuccess={onClose} kontaktToEdit={kontakt} />
             </FormModal>
         </>
     );

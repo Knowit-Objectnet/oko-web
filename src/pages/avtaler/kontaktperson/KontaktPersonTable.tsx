@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ButtonGroup, Link, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { ApiKontakt } from '../../../services/aktor/KontaktService';
-import { EditKontaktButton } from './EditKontaktButton';
+import { EditKontaktPersonButton } from './EditKontaktPersonButton';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;
@@ -35,7 +35,7 @@ export const KontaktPersonTable: React.FC<Props> = ({ kontaktPersoner }) => {
                         <Td>{kontakt.epost ? <Link href={`mailto:${kontakt.epost}`}>{kontakt.epost}</Link> : null}</Td>
                         <Td textAlign="end">
                             <ButtonGroup spacing="4" size="sm">
-                                <EditKontaktButton kontakt={kontakt} />
+                                <EditKontaktPersonButton kontakt={kontakt} />
                                 <DeleteButton
                                     label="Slett"
                                     onClick={() => {
