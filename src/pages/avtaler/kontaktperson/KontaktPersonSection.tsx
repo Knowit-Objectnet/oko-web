@@ -7,7 +7,7 @@ import {
     PartnerInfoSectionTitle,
 } from '../partner/PartnerInfoSection';
 import { KontaktPersonTable } from './KontaktPersonTable';
-import { AddKontaktpersonButton } from './AddKontaktpersonButton';
+import { AddKontaktpersonButton } from './AddKontaktPersonButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 
 interface Props {

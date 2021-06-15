@@ -3,7 +3,7 @@ import * as yup from 'yup';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ApiKontaktPost } from '../../../services/aktor/KontaktService';
+import { ApiKontakt, ApiKontaktPatch, ApiKontaktPost } from '../../../services/aktor/KontaktService';
 import { Stack } from '@chakra-ui/react';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
@@ -13,12 +13,15 @@ import { useState } from 'react';
 import { useAddKontakt } from '../../../services/aktor/useAddKontakt';
 import { upperFirst } from 'lodash';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { useUpdateKontakt } from '../../../services/aktor/useUpdateKontakt';
+import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
 
 const validationSchema = yup.object().shape({
-    navn: yup.string().label('navn på kontaktpersonen').trim().required().min(5), // TODO: regex for og etternavn
+    // TODO: validation of first and last name (both required) using `matches(regex pattern)`
+    navn: yup.string().label('navn på kontaktpersonen').trim().required().min(5),
     rolle: yup.string().label('kontaktpersonens rolle').trim().required().min(5),
     telefon: yup
         .string()
@@ -33,43 +36,72 @@ const validationSchema = yup.object().shape({
 
 interface Props {
     partner: ApiPartner;
+    /** By passing an existing Kontakt, the form will be in edit mode **/
+    kontaktToEdit?: ApiKontakt;
     /** Callback that will fire if registration is successful: **/
     onSuccess: () => void;
 }
 
-export const KontaktpersonForm: React.FC<Props> = ({ partner, onSuccess }) => {
+export const KontaktPersonForm: React.FC<Props> = ({ partner, kontaktToEdit, onSuccess }) => {
     const formMethods = useForm<ApiKontaktPost>({
         resolver: yupResolver(validationSchema),
-        // TODO: if form is in edit mode: pass original values as "defaultValues" here
+        defaultValues: kontaktToEdit
+            ? {
+                  navn: kontaktToEdit.navn,
+                  rolle: kontaktToEdit.rolle,
+                  telefon: kontaktToEdit.telefon,
+                  epost: kontaktToEdit.epost,
+              }
+            : undefined,
     });
 
     const addKontaktMutation = useAddKontakt();
+    const updateKontaktMutation = useUpdateKontakt();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
-    const handleSubmit = formMethods.handleSubmit((data) => {
+    const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        const newKontakt: ApiKontaktPost = {
-            ...data,
-            aktorId: partner.id,
-        };
+        if (kontaktToEdit) {
+            updateKontakt({
+                ...formData,
+                id: kontaktToEdit.id,
+            });
+        } else {
+            addKontakt({
+                ...formData,
+                aktorId: partner.id,
+            });
+        }
+    });
 
-        console.log(data);
-        console.log(newKontakt);
-
+    const addKontakt = (newKontakt: ApiKontaktPost) =>
         addKontaktMutation.mutate(newKontakt, {
             onSuccess: () => {
-                showSuccessToast({ title: `${data.navn} ble registrert som kontaktperson for ${partner.navn}` });
-                onSuccess?.();
+                onApiSubmitSuccess(`${newKontakt.navn} ble registrert som kontaktperson for ${partner.navn}`);
             },
-            onError: (error) => {
-                // TODO: get details from error and set appropriate message.
-                //  If caused by user: set message to correct field
-                setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
-            },
+            onError: onApiSubmitError,
         });
-    });
+
+    const updateKontakt = (updatedKontakt: ApiKontaktPatch) =>
+        updateKontaktMutation.mutate(updatedKontakt, {
+            onSuccess: () => {
+                onApiSubmitSuccess(`Endringene ble lagret for ${updatedKontakt.navn}`);
+            },
+            onError: onApiSubmitError,
+        });
+
+    const onApiSubmitSuccess = (successMessage: string) => {
+        showSuccessToast({ title: successMessage });
+        onSuccess?.();
+    };
+
+    const onApiSubmitError = (error: ApiError) => {
+        // TODO: get details from error and set appropriate message.
+        //  If caused by user: set message to correct field
+        setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
+    };
 
     return (
         <FormProvider {...formMethods}>
