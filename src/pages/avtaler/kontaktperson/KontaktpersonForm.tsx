@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -9,12 +10,12 @@ import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFie
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { Input } from '../../../components/forms/Input';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { useState } from 'react';
 import { useAddKontakt } from '../../../services/aktor/useAddKontakt';
 import { upperFirst } from 'lodash';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useUpdateKontakt } from '../../../services/aktor/useUpdateKontakt';
 import { ApiError } from '../../../services/httpClient';
+import { removeWhitespace } from '../../../utils/forms/removeWhitespace';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
@@ -26,7 +27,7 @@ const validationSchema = yup.object().shape({
     telefon: yup
         .string()
         .label('telefonnummer for kontaktpersonen')
-        .trim()
+        .transform(removeWhitespace)
         .matches(/^(\+?(00)?(47))?[2-9]\d{7}$/, {
             message: ({ label }: { label: string }) => `${upperFirst(label)} må være et gyldig, norsk telefonnummer`,
             excludeEmptyString: true,
@@ -35,14 +36,23 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
-    partner: ApiPartner;
-    /** By passing an existing Kontakt, the form will be in edit mode **/
-    kontaktToEdit?: ApiKontakt;
     /** Callback that will fire if registration is successful: **/
     onSuccess: () => void;
 }
 
-export const KontaktPersonForm: React.FC<Props> = ({ partner, kontaktToEdit, onSuccess }) => {
+interface AddModeProps extends Props {
+    /**  Partner is only required for adding Kontakt, and not allowed in edit mode. **/
+    partner: ApiPartner;
+    kontaktToEdit?: never;
+}
+
+interface EditModeProps extends Props {
+    partner?: never;
+    /**  By passing an existing Kontakt, the form will be in edit mode (not allowed in add mode) **/
+    kontaktToEdit: ApiKontakt;
+}
+
+export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ partner, kontaktToEdit, onSuccess }) => {
     const formMethods = useForm<ApiKontaktPost>({
         resolver: yupResolver(validationSchema),
         defaultValues: kontaktToEdit
@@ -68,7 +78,7 @@ export const KontaktPersonForm: React.FC<Props> = ({ partner, kontaktToEdit, onS
                 ...formData,
                 id: kontaktToEdit.id,
             });
-        } else {
+        } else if (partner) {
             addKontakt({
                 ...formData,
                 aktorId: partner.id,
@@ -79,7 +89,7 @@ export const KontaktPersonForm: React.FC<Props> = ({ partner, kontaktToEdit, onS
     const addKontakt = (newKontakt: ApiKontaktPost) =>
         addKontaktMutation.mutate(newKontakt, {
             onSuccess: () => {
-                onApiSubmitSuccess(`${newKontakt.navn} ble registrert som kontaktperson for ${partner.navn}`);
+                onApiSubmitSuccess(`${newKontakt.navn} ble registrert som kontaktperson for ${partner?.navn}`);
             },
             onError: onApiSubmitError,
         });
@@ -119,9 +129,9 @@ export const KontaktPersonForm: React.FC<Props> = ({ partner, kontaktToEdit, onS
                     />
                     <Input type="email" name="epost" label="E-postadresse" required={false} />
                     <FormSubmitButton
-                        label="Registrer ny kontaktperson"
-                        isLoading={addKontaktMutation.isLoading}
-                        loadingText="Vennligst vent..."
+                        label={kontaktToEdit ? 'Lagre endringer' : 'Registrer ny kontaktperson'}
+                        isLoading={updateKontaktMutation.isLoading || addKontaktMutation.isLoading}
+                        loadingText="Lagrer..."
                     />
                 </Stack>
             </form>

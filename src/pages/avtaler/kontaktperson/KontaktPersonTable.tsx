@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { ButtonGroup, Link, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { EditButton } from '../../../components/buttons/EditButton';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { ApiKontakt } from '../../../services/aktor/KontaktService';
+import { EditKontaktButton } from './EditKontaktButton';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;
@@ -27,24 +27,19 @@ export const KontaktPersonTable: React.FC<Props> = ({ kontaktPersoner }) => {
                 </Tr>
             </Thead>
             <Tbody>
-                {sortedKontaktPersoner.map(({ id, navn, rolle, telefon, epost }) => (
-                    <Tr key={id}>
-                        <Td>{navn}</Td>
-                        <Td>{rolle}</Td>
-                        <Td>{telefon}</Td>
-                        <Td>{epost ? <Link href={`mailto:${epost}`}>{epost}</Link> : null}</Td>
+                {sortedKontaktPersoner.map((kontakt) => (
+                    <Tr key={kontakt.id}>
+                        <Td>{kontakt.navn}</Td>
+                        <Td>{kontakt.rolle}</Td>
+                        <Td>{kontakt.telefon}</Td>
+                        <Td>{kontakt.epost ? <Link href={`mailto:${kontakt.epost}`}>{kontakt.epost}</Link> : null}</Td>
                         <Td textAlign="end">
                             <ButtonGroup spacing="4" size="sm">
-                                <EditButton
-                                    label="Rediger"
-                                    onClick={() => {
-                                        console.log(`Rediger ${navn}`);
-                                    }}
-                                />
+                                <EditKontaktButton kontakt={kontakt} />
                                 <DeleteButton
                                     label="Slett"
                                     onClick={() => {
-                                        console.log(`Slett ${navn}`);
+                                        console.log(`Slett ${kontakt.navn}`);
                                     }}
                                 />
                             </ButtonGroup>
