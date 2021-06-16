@@ -1,14 +1,24 @@
 import React from 'react';
-import { ButtonProps, Button } from '@chakra-ui/react';
+import { LinkBox, LinkBoxProps, LinkOverlay } from '@chakra-ui/react';
 import { CalendarEvent } from '../hooks/useCalendarEvents';
+import { Link, useRouteMatch } from 'react-router-dom';
+import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
 
-type Props = Pick<ButtonProps, 'onClick' | 'position' | 'top' | 'left' | 'height' | 'width'> & {
+type Props = Pick<LinkBoxProps, 'position' | 'top' | 'left' | 'height' | 'width' | 'margin'> & {
     event: CalendarEvent;
 };
 
 export const EventComponent: React.FC<Props> = ({ event, ...props }) => {
+    // console.log(props);
+
+    const { url } = useRouteMatch();
+
+    const { resource } = event;
+    const planlagtHenting = resource as ApiPlanlagtHenting;
+
     return (
-        <Button
+        <LinkBox
+            as="article"
             display="block"
             backgroundColor="surface"
             color="onSurface"
@@ -27,7 +37,9 @@ export const EventComponent: React.FC<Props> = ({ event, ...props }) => {
             fontWeight="medium"
             {...props}
         >
-            {event.title}
-        </Button>
+            <LinkOverlay as={Link} to={`${url}/${planlagtHenting.id}`}>
+                {event.title}
+            </LinkOverlay>
+        </LinkBox>
     );
 };

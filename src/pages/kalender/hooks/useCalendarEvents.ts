@@ -31,7 +31,7 @@ const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): Calendar
     start: parseISOIgnoreTimezone(planlagtHenting.startTidspunkt),
     end: parseISOIgnoreTimezone(planlagtHenting.sluttTidspunkt),
     title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
-    ...planlagtHenting,
+    resource: planlagtHenting,
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {

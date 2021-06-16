@@ -1,7 +1,7 @@
 import React from 'react';
 import { VStack } from '@chakra-ui/react';
-import { Modal } from '../../components/Modal';
-import { CalendarEvent } from './hooks/useCalendarEvents';
+import { Modal } from '../../../components/Modal';
+import { CalendarEvent } from '../hooks/useCalendarEvents';
 
 interface Props {
     henting?: CalendarEvent;

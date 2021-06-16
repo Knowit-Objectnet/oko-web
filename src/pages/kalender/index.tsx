@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { CalendarComponent } from './CalendarComponent';
+import { CalendarComponent } from './components/CalendarComponent';
 import { Stack, VStack } from '@chakra-ui/react';
-import { CalendarDatePicker } from './CalendarDatePicker';
+import { CalendarDatePicker } from './components/CalendarDatePicker';
 import { CalendarProvider } from './CalendarProvider';
-import { CalendarStasjonFilter } from './CalendarStasjonFilter';
+import { CalendarStasjonFilter } from './components/CalendarStasjonFilter';
 
 const Kalender: React.FC = () => (
     <CalendarProvider>
