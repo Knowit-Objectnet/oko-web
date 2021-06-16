@@ -1,4 +1,4 @@
-import { DateRange, Event as CalendarEvent } from 'react-big-calendar';
+import { DateRange, Event } from 'react-big-calendar';
 import { usePrefetchHentinger } from './usePrefetchHentinger';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
 import { CalendarView, VIEWS } from './useCalendarView';
@@ -6,6 +6,8 @@ import { useCalendarState } from '../CalendarProvider';
 import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHentinger';
 import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
+
+export type CalendarEvent = Event;
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;
@@ -29,6 +31,7 @@ const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): Calendar
     start: parseISOIgnoreTimezone(planlagtHenting.startTidspunkt),
     end: parseISOIgnoreTimezone(planlagtHenting.sluttTidspunkt),
     title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
+    ...planlagtHenting,
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {

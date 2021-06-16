@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { FormModal } from '../../../components/forms/FormModal';
+import { Modal } from '../../../components/Modal';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiKontakt } from '../../../services/aktor/KontaktService';
 import { KontaktPersonForm } from './KontaktPersonForm';
@@ -20,9 +20,9 @@ export const EditKontaktPersonButton: React.FC<Props & Omit<ButtonProps, 'onClic
                 {...props}
                 onClick={onOpen}
             />
-            <FormModal title="Rediger kontaktinformasjon" isOpen={isOpen} onClose={onClose}>
+            <Modal title="Rediger kontaktinformasjon" isOpen={isOpen} onClose={onClose}>
                 <KontaktPersonForm onSuccess={onClose} kontaktToEdit={kontakt} />
-            </FormModal>
+            </Modal>
         </>
     );
 };
