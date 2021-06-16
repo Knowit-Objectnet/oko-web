@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { usePersistedState } from '../../../utils/usePersistedState';
 import findKey from 'lodash/findKey';
 
-export type CalendarView = 'dag' | 'uke' | 'liste' | 'maned';
+export type CalendarView = 'maned' | 'dag' | 'uke' /*| 'liste'*/;
 
 const DEFAULT_VIEW: CalendarView = 'uke';
 
@@ -32,11 +32,11 @@ export const VIEWS: Record<CalendarView, ViewProperties> = {
         type: 'day',
         fetchInterval: 'weeks',
     },
-    liste: {
-        label: 'Liste',
-        type: 'agenda',
-        fetchInterval: 'months',
-    },
+    // liste: {
+    //     label: 'Liste',
+    //     type: 'agenda',
+    //     fetchInterval: 'months',
+    // },
 };
 
 export const isValidView = (view?: string): view is CalendarView => (view ? Object.keys(VIEWS).includes(view) : false);
