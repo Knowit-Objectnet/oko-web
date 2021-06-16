@@ -1,5 +1,5 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
-import { ApiKontakt } from '../aktor/AktorService';
+import { ApiKontakt } from '../aktor/KontaktService';
 
 export interface ApiPartner {
     id: string;

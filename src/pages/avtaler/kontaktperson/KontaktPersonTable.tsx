@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { ButtonGroup, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { EditButton } from '../../../components/buttons/EditButton';
+import { ButtonGroup, Link, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
-import { ApiKontakt } from '../../../services/aktor/AktorService';
+import { ApiKontakt } from '../../../services/aktor/KontaktService';
+import { EditKontaktPersonButton } from './EditKontaktPersonButton';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;
@@ -20,29 +20,26 @@ export const KontaktPersonTable: React.FC<Props> = ({ kontaktPersoner }) => {
                     <Th scope="col">Navn</Th>
                     <Th scope="col">Rolle</Th>
                     <Th scope="col">Telefonnummer</Th>
+                    <Th scope="col">E-postadresse</Th>
                     <Th scope="col">
                         <VisuallyHidden>Handlinger</VisuallyHidden>
                     </Th>
                 </Tr>
             </Thead>
             <Tbody>
-                {sortedKontaktPersoner.map((person) => (
-                    <Tr key={person.id}>
-                        <Td>{person.navn}</Td>
-                        <Td>{person.rolle}</Td>
-                        <Td>{person.telefon}</Td>
+                {sortedKontaktPersoner.map((kontakt) => (
+                    <Tr key={kontakt.id}>
+                        <Td>{kontakt.navn}</Td>
+                        <Td>{kontakt.rolle}</Td>
+                        <Td>{kontakt.telefon}</Td>
+                        <Td>{kontakt.epost ? <Link href={`mailto:${kontakt.epost}`}>{kontakt.epost}</Link> : null}</Td>
                         <Td textAlign="end">
                             <ButtonGroup spacing="4" size="sm">
-                                <EditButton
-                                    label="Rediger"
-                                    onClick={() => {
-                                        console.log(`Rediger ${person.navn}`);
-                                    }}
-                                />
+                                <EditKontaktPersonButton kontakt={kontakt} />
                                 <DeleteButton
                                     label="Slett"
                                     onClick={() => {
-                                        console.log(`Slett ${person.navn}`);
+                                        console.log(`Slett ${kontakt.navn}`);
                                     }}
                                 />
                             </ButtonGroup>

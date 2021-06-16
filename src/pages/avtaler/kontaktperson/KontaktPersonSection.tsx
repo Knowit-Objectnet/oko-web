@@ -6,33 +6,32 @@ import {
     PartnerInfoSectionHeader,
     PartnerInfoSectionTitle,
 } from '../partner/PartnerInfoSection';
-import { AddButton } from '../../../components/buttons/AddButton';
 import { KontaktPersonTable } from './KontaktPersonTable';
-import { ApiKontakt } from '../../../services/aktor/AktorService';
+import { AddKontaktPersonButton } from './AddKontaktPersonButton';
+import { ApiPartner } from '../../../services/partner/PartnerService';
 
 interface Props {
-    kontaktPersoner?: Array<ApiKontakt>;
+    partner: ApiPartner;
 }
 
-export const KontaktPersonSection: React.FC<Props> = ({ kontaktPersoner }) => (
-    <PartnerInfoSection>
-        <PartnerInfoSectionHeader>
-            <PartnerInfoSectionTitle>Kontaktpersoner</PartnerInfoSectionTitle>
-            <PartnerInfoSectionButtons>
-                <AddButton
-                    label="Ny kontaktperson"
-                    onClick={() => {
-                        console.log('Legg til ny kontaktperson');
-                    }}
-                />
-            </PartnerInfoSectionButtons>
-        </PartnerInfoSectionHeader>
-        <PartnerInfoSectionContent>
-            {kontaktPersoner && kontaktPersoner.length > 0 ? (
-                <KontaktPersonTable kontaktPersoner={kontaktPersoner} />
-            ) : (
-                'Ingen registrerte kontaktpersoner'
-            )}
-        </PartnerInfoSectionContent>
-    </PartnerInfoSection>
-);
+export const KontaktPersonSection: React.FC<Props> = ({ partner }) => {
+    const { kontaktPersoner } = partner;
+
+    return (
+        <PartnerInfoSection>
+            <PartnerInfoSectionHeader>
+                <PartnerInfoSectionTitle>Kontaktpersoner</PartnerInfoSectionTitle>
+                <PartnerInfoSectionButtons>
+                    <AddKontaktPersonButton partner={partner} />
+                </PartnerInfoSectionButtons>
+            </PartnerInfoSectionHeader>
+            <PartnerInfoSectionContent>
+                {kontaktPersoner && kontaktPersoner.length > 0 ? (
+                    <KontaktPersonTable kontaktPersoner={kontaktPersoner} />
+                ) : (
+                    'Ingen registrerte kontaktpersoner'
+                )}
+            </PartnerInfoSectionContent>
+        </PartnerInfoSection>
+    );
+};
