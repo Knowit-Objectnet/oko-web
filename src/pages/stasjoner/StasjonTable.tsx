@@ -4,6 +4,7 @@ import { EditButton } from '../../components/buttons/EditButton';
 import { useStasjoner } from '../../services/stasjon/useStasjoner';
 import { DeleteStasjonButton } from './forms/DeleteStasjonButton';
 import { StasjonType } from '../../services/stasjon/StasjonService';
+import { EditStasjonButton } from './forms/EditStasjonButton';
 
 const STASJONTYPE: Record<StasjonType, string> = {
     GJENBRUK: 'Gjenbruksstasjon',
@@ -40,12 +41,7 @@ export const StasjonTable: React.FC = () => {
                         <Td>{stasjon.id}</Td>
                         <Td textAlign="end">
                             <ButtonGroup spacing="4" size="sm">
-                                <EditButton
-                                    label="Rediger"
-                                    onClick={() => {
-                                        console.log(`Rediger ${stasjon.navn}`);
-                                    }}
-                                />
+                                <EditStasjonButton stasjon={stasjon} />
                                 {process.env.NODE_ENV === 'development' ? (
                                     // TODO: hacky solution to only show station deletion button
                                     //  when project is built for development (and not in production)

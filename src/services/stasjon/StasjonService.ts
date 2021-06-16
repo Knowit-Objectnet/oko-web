@@ -1,5 +1,5 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
-import { ApiKontakt } from '../aktor/AktorService';
+import { ApiKontakt } from '../aktor/KontaktService';
 
 export type StasjonType = 'GJENBRUK' | 'MINI';
 
@@ -31,9 +31,7 @@ const stasjonEndpoint = '/stasjoner';
 export const stasjonDefaultQueryKey = 'getStasjoner';
 
 export const getStasjoner = (params: ApiStasjonParams = {}): Promise<Array<ApiStasjon>> =>
-    httpClient()
-        .get<Array<ApiStasjon>>(stasjonEndpoint, { params })
-        .then(extractResponse, transformError);
+    httpClient().get<Array<ApiStasjon>>(stasjonEndpoint, { params }).then(extractResponse, transformError);
 
 export const getStasjonById = (stasjonId: string): Promise<ApiStasjon> =>
     httpClient().get<ApiStasjon>(`${stasjonEndpoint}/${stasjonId}`).then(extractResponse, transformError);

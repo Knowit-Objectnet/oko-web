@@ -1,13 +1,7 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
+import { ApiKontakt } from './KontaktService';
 
 export type AktorType = 'PARTNER' | 'STASJON';
-
-export interface ApiKontakt {
-    id: string;
-    navn: string;
-    telefon: string;
-    rolle: string;
-}
 
 export interface ApiAktor {
     id: string;

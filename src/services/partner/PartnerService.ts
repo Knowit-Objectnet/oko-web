@@ -1,5 +1,5 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
-import { ApiKontakt } from '../aktor/AktorService';
+import { ApiKontakt } from '../aktor/KontaktService';
 
 export interface ApiPartner {
     id: string;
@@ -29,9 +29,7 @@ const partnerEndpoint = '/partnere';
 export const partnerDefaultQueryKey = 'getPartnere';
 
 export const getPartnere = (params: ApiPartnerParams = {}): Promise<Array<ApiPartner>> =>
-    httpClient()
-        .get<Array<ApiPartner>>(partnerEndpoint, { params })
-        .then(extractResponse, transformError);
+    httpClient().get<Array<ApiPartner>>(partnerEndpoint, { params }).then(extractResponse, transformError);
 
 export const getPartnerById = (partnerId: string): Promise<ApiPartner> =>
     httpClient().get<ApiPartner>(`${partnerEndpoint}/${partnerId}`).then(extractResponse, transformError);

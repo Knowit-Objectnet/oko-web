@@ -17,7 +17,7 @@ export const PartnerNavigation: React.FC = () => {
             backgroundColor="surface"
             height="full"
             padding="5"
-            minWidth="300px"
+            width="300px"
         >
             <Heading
                 as="h2"
@@ -30,7 +30,7 @@ export const PartnerNavigation: React.FC = () => {
             >
                 Samarbeidspartnere
             </Heading>
-            <List spacing="2">
+            <List spacing="3">
                 {(partnere ?? []).map((partner) => (
                     <ListItem key={partner.id}>
                         <PartnerNavItem partner={partner} />
