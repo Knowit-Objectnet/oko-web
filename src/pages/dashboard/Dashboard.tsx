@@ -4,11 +4,13 @@ import { PageRouter } from '../../routing/PageRouter';
 import { Flex } from '@chakra-ui/layout';
 import { usePrefetchPartnere } from '../../services/partner/usePrefetchPartnere';
 import { usePrefetchStasjoner } from '../../services/stasjon/usePrefetchStasjoner';
+import { usePrefetchKategorier } from '../../services/kategori/usePrefetchKategorier';
 
 export const Dashboard: React.FC = () => {
     // We do prefetching here so that these entities are available for faster rendering when needed
     usePrefetchStasjoner();
     usePrefetchPartnere();
+    usePrefetchKategorier();
 
     return (
         <Flex direction="column" minHeight="100vh" width="full">
