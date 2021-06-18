@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { CheckboxGroup as ChakraCheckboxGroup, FormControl } from '@chakra-ui/react';
+import {
+    CheckboxGroup as ChakraCheckboxGroup,
+    FormControl,
+    FormHelperText,
+    HStack,
+    Skeleton,
+    VStack,
+} from '@chakra-ui/react';
 import { Checkbox } from './Checkbox';
 import { FormLabel } from './FormLabel';
 
@@ -12,17 +19,41 @@ interface Props {
     label: string;
     options: Array<CheckboxOption>;
     required?: boolean;
+    helperText?: string;
+    isLoading?: boolean;
 }
 
-export const CheckboxGroup: React.FC<Props> = ({ label, options, required }) => (
+const CheckBoxGroupSkeleton: React.FC = () => (
+    <HStack>
+        <VStack width={5} paddingRight={1}>
+            <Skeleton width="full" height={5} />
+            <Skeleton width="full" height={5} />
+            <Skeleton width="full" height={5} />
+        </VStack>
+        <VStack width="full">
+            <Skeleton width="full" height={5} />
+            <Skeleton width="full" height={5} />
+            <Skeleton width="full" height={5} />
+        </VStack>
+    </HStack>
+);
+
+export const CheckboxGroup: React.FC<Props> = ({ label, options, required, helperText, isLoading }) => (
     <FormControl>
         <fieldset>
             <FormLabel as="legend" label={label} required={required} />
-            <ChakraCheckboxGroup>
-                {options.map(({ name: checkboxName, label: checkboxLabel }) => (
-                    <Checkbox key={checkboxName} name={checkboxName} label={checkboxLabel} />
-                ))}
-            </ChakraCheckboxGroup>
+            {isLoading ? (
+                <CheckBoxGroupSkeleton />
+            ) : (
+                <>
+                    {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
+                    <ChakraCheckboxGroup>
+                        {options.map(({ name: checkboxName, label: checkboxLabel }) => (
+                            <Checkbox key={checkboxName} name={checkboxName} label={checkboxLabel} />
+                        ))}
+                    </ChakraCheckboxGroup>
+                </>
+            )}
         </fieldset>
         {/* TODO: display error messages? */}
     </FormControl>

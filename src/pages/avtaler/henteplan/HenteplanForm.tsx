@@ -26,6 +26,7 @@ import { FormInfoBody, FormInfoHeading, FormInfoSection } from '../../../compone
 import '../../../utils/forms/formErrorMessages';
 import { toISOLocalString } from '../../../utils/localDateISO';
 import { parseISO } from 'date-fns';
+import { KategorierCheckBoxGroup } from '../../../components/forms/KategorierCheckBoxGroup';
 
 interface HenteplanFormData {
     stasjonId: string;
@@ -121,7 +122,12 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
-                <Stack direction="column" spacing="7">
+                <Stack direction="column" spacing="8">
+                    <KategorierCheckBoxGroup
+                        label="Kategorier"
+                        helperText="Hvilken type varer skal partneren kunne hente?"
+                        required
+                    />
                     <FormInfoSection>
                         <FormInfoHeading>Gjelder for {getAvtaleTitle(avtale).toLowerCase()}:</FormInfoHeading>
                         <FormInfoBody>
@@ -183,7 +189,6 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
                         helperText="Til hvilket tidspunkt kan partneren komme og hente?"
                         required
                     />
-                    {/* TODO: kategorier combobox */}
                     <TextArea name="merknad" label="Merknader" />
                     <FormSubmitButton
                         label="Registrer ny henteplan"
