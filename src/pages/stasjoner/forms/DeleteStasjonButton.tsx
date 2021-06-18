@@ -34,7 +34,7 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
     const showErrorToast = useErrorToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const handleStasjonDeletion = () => {
+    const handleDeleteStasjon = () => {
         deleteStasjonMutation.mutate(stasjon.id, {
             onSuccess: () => {
                 onClose();
@@ -42,7 +42,7 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
             },
             onError: (error) => {
                 // TODO: show error message in popover?
-                showErrorToast({ title: `Noe gikk galt ved sletting av ${stasjon.navn}: ${error.message}` });
+                showErrorToast({ title: `Noe gikk galt ved sletting av ${stasjon.navn}` });
             },
         });
     };
@@ -70,7 +70,7 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
                                     width="full"
                                     size="sm"
                                     variant="warning"
-                                    onClick={handleStasjonDeletion}
+                                    onClick={handleDeleteStasjon}
                                     isLoading={deleteStasjonMutation.isLoading}
                                 >
                                     Slett stasjonen
