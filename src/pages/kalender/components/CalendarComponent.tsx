@@ -19,14 +19,6 @@ export const CalendarComponent: React.FC = () => {
     // TODO: get loading-status for displaying in calendar
     const events = useCalendarEvents();
 
-    const bigCalendarLocalizer = dateFnsLocalizer({
-        format,
-        parse,
-        startOfWeek,
-        getDay,
-        locales: { 'nb-no': nb },
-    });
-
     const handleViewChange = (view: View) => {
         const calendarView = getCalendarViewFromType(view);
         setSelectedView(calendarView);
@@ -46,11 +38,9 @@ export const CalendarComponent: React.FC = () => {
     return (
         <Box width="full" height="full">
             <Calendar
-                localizer={bigCalendarLocalizer}
                 culture="nb-no"
                 events={events}
                 date={selectedDate}
-                showAllEvents
                 views={Object.values(VIEWS).map((viewProperties) => viewProperties.type)}
                 view={VIEWS[selectedView].type}
                 onNavigate={setSelectedDate}
@@ -62,6 +52,30 @@ export const CalendarComponent: React.FC = () => {
                     eventWrapper: EventWrapper,
                 }}
                 min={set(new Date(), { hours: 6, minutes: 0 })}
+                localizer={dateFnsLocalizer({
+                    format,
+                    parse,
+                    startOfWeek,
+                    getDay,
+                    locales: { 'nb-no': nb },
+                })}
+                messages={{
+                    date: 'Dato',
+                    time: 'Tidspunkt',
+                    event: 'Hendelse',
+                    allDay: 'Hele dagen',
+                    week: 'Uke',
+                    work_week: 'Arbeidsuke',
+                    day: 'Dag',
+                    month: 'Måned',
+                    previous: 'Forrige',
+                    next: 'Neste',
+                    yesterday: 'I går',
+                    tomorrow: 'I morgen',
+                    today: 'I dag',
+                    agenda: 'Liste',
+                    noEventsInRange: 'Det finnes ingen hendelser i dette tidsrommet',
+                }}
             />
         </Box>
     );
