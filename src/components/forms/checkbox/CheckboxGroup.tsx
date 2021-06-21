@@ -27,9 +27,9 @@ export const CheckboxGroup: React.FC<Props> = ({ name, label, options, required,
                     <Checkbox key={value} value={value} label={checkboxLabel} name={name} />
                 ))}
             </ChakraCheckboxGroup>
-            <FormErrorMessage>
-                <ErrorMessage name={name} />
-            </FormErrorMessage>
         </fieldset>
+        <FormErrorMessage>
+            <ErrorMessage name={name} />
+        </FormErrorMessage>
     </FormControl>
 );

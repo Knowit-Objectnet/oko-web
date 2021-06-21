@@ -5,7 +5,7 @@ import { FormLabel } from './FormLabel';
 import { ErrorMessage } from '@hookform/error-message';
 import { useFormContext } from 'react-hook-form';
 import { Checkbox } from './checkbox/Checkbox';
-import { CheckBoxGroupSkeleton } from './checkbox/CheckBoxGroupSkeleton';
+import { CheckboxGroupSkeleton } from './checkbox/CheckboxGroupSkeleton';
 
 interface Props {
     name: string;
@@ -25,7 +25,7 @@ export const KategoriSelect: React.FC<Props> = ({ name, label, required, helperT
 
     const getKategoriCheckBoxes = () => {
         if (isLoading) {
-            return <CheckBoxGroupSkeleton loadingText="Laster inn kategorier..." />;
+            return <CheckboxGroupSkeleton loadingText="Laster inn kategorier..." />;
         }
         if (isLoadingError) {
             return 'Noe gikk galt, klarte ikke å laste inn kategorier. Vennligst forsøk å lukke skjemaet og åpne det på nytt.';
