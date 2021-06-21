@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { CheckboxGroup as ChakraCheckboxGroup, FormControl, FormErrorMessage, FormHelperText } from '@chakra-ui/react';
 import { Checkbox } from './Checkbox';
-import { FormLabel } from './FormLabel';
+import { FormLabel } from '../FormLabel';
 import { ErrorMessage } from '@hookform/error-message';
 
 export interface CheckboxOption<TValue = string, TLabel = string> {

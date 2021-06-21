@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormControl, FormErrorMessage, FormHelperText, RadioGroup as ChakraRadioGroup, Stack } from '@chakra-ui/react';
-import { FormLabel } from './FormLabel';
+import { FormLabel } from '../FormLabel';
 import { Radiobutton } from './Radiobutton';
 import { ErrorMessage } from '@hookform/error-message';
 import { useFormContext } from 'react-hook-form';

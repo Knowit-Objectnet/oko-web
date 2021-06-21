@@ -1,29 +1,11 @@
 import * as React from 'react';
 import { useKategorier } from '../../services/kategori/useKategorier';
-import {
-    CheckboxGroup,
-    FormControl,
-    FormErrorMessage,
-    FormHelperText,
-    HStack,
-    Skeleton,
-    VStack,
-} from '@chakra-ui/react';
+import { CheckboxGroup, FormControl, FormErrorMessage, FormHelperText, HStack } from '@chakra-ui/react';
 import { FormLabel } from './FormLabel';
 import { ErrorMessage } from '@hookform/error-message';
 import { useFormContext } from 'react-hook-form';
-import { Checkbox } from './Checkbox';
-
-const CheckBoxGroupSkeleton: React.FC<{ loadingText?: string }> = ({ loadingText }) => (
-    <VStack tabIndex={0} spacing="2" aria-label={loadingText ?? 'Laster inn valg...'} width="full">
-        {[...Array(3).keys()].map((value) => (
-            <HStack spacing="2" height="7" key={value} width="full">
-                <Skeleton width="7" height="full" />
-                <Skeleton width="full" height="full" />
-            </HStack>
-        ))}
-    </VStack>
-);
+import { Checkbox } from './checkbox/Checkbox';
+import { CheckBoxGroupSkeleton } from './checkbox/CheckBoxGroupSkeleton';
 
 interface Props {
     name: string;

@@ -12,8 +12,8 @@ import {
     InputRightElement,
 } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
-import Warning from '../../assets/Warning.svg';
-import { FormLabel } from './FormLabel';
+import Warning from '../../../assets/Warning.svg';
+import { FormLabel } from '../FormLabel';
 
 export interface Props {
     name: string;

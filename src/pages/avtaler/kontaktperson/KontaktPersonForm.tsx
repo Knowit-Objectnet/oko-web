@@ -8,7 +8,7 @@ import { ApiKontakt, ApiKontaktPatch, ApiKontaktPost } from '../../../services/a
 import { Stack } from '@chakra-ui/react';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
-import { Input } from '../../../components/forms/Input';
+import { Input } from '../../../components/forms/input/Input';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddKontakt } from '../../../services/aktor/useAddKontakt';
 import { upperFirst } from 'lodash';
