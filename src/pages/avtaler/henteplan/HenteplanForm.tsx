@@ -21,12 +21,12 @@ import { AVTALE_TYPE, getAvtaleTitle } from '../avtale/AvtaleInfoItem';
 import { mergeDateWithTime } from '../../../utils/forms/mergeDateWithTime';
 import { getHenteplanValidationSchema } from './henteplanFormSchema';
 import { FormInfoBody, FormInfoHeading, FormInfoSection } from '../../../components/forms/FormInfoSection';
-
-// NB! Setting the global error messages used by yup
-import '../../../utils/forms/formErrorMessages';
 import { toISOLocalString } from '../../../utils/localDateISO';
 import { parseISO } from 'date-fns';
 import { KategorierCheckBoxGroup } from '../../../components/forms/KategorierCheckBoxGroup';
+
+// NB! Setting the global error messages used by yup
+import '../../../utils/forms/formErrorMessages';
 
 interface HenteplanFormData {
     stasjonId: string;
@@ -124,6 +124,7 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
                     <KategorierCheckBoxGroup
+                        name="kategorier"
                         label="Kategorier"
                         helperText="Hvilken type varer skal partneren kunne hente?"
                         required
@@ -137,16 +138,16 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <StasjonSelect
-                        label="Stasjon"
-                        required
                         name="stasjonId"
+                        label="Stasjon"
                         helperText="Hvilken stasjon skal det hentes fra?"
+                        required
                     />
                     <RadiobuttonGroup
                         name="frekvens"
                         label="Frekvens"
-                        helperText="Hvor ofte skal hentingene skje?"
                         options={frekvensOptions}
+                        helperText="Hvor ofte skal hentingene skje?"
                         required
                     />
                     {/* TODO: group startDato and sluttDato in fieldset with legend "Varighet"? */}
@@ -193,7 +194,7 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
                     <FormSubmitButton
                         label="Registrer ny henteplan"
                         isLoading={addHenteplanMutation.isLoading}
-                        loadingText="Vennligst vent..."
+                        loadingText="Lagrer..."
                     />
                 </Stack>
             </form>

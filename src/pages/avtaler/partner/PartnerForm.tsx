@@ -99,8 +99,9 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på organisasjon" required />
                     <CheckboxGroup
+                        name="ideell"
                         label="Organisasjonstype"
-                        options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
+                        options={[{ value: 'true', label: 'Ideell organisasjon' }]}
                         required
                     />
                     <FormSubmitButton

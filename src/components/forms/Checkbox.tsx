@@ -11,6 +11,7 @@ const CustomCheckboxIcon: React.FC = () => (
 
 interface Props {
     name: string;
+    value: string;
     label: string;
 }
 
