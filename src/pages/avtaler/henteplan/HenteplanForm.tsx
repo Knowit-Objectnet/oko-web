@@ -23,7 +23,7 @@ import { getHenteplanValidationSchema } from './henteplanFormSchema';
 import { FormInfoBody, FormInfoHeading, FormInfoSection } from '../../../components/forms/FormInfoSection';
 import { toISOLocalString } from '../../../utils/localDateISO';
 import { parseISO } from 'date-fns';
-import { KategorierCheckBoxGroup } from '../../../components/forms/KategorierCheckBoxGroup';
+import { KategoriSelect } from '../../../components/forms/KategoriSelect';
 
 // NB! Setting the global error messages used by yup
 import '../../../utils/forms/formErrorMessages';
@@ -123,12 +123,6 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="8">
-                    <KategorierCheckBoxGroup
-                        name="kategorier"
-                        label="Kategorier"
-                        helperText="Hvilken type varer skal partneren kunne hente?"
-                        required
-                    />
                     <FormInfoSection>
                         <FormInfoHeading>Gjelder for {getAvtaleTitle(avtale).toLowerCase()}:</FormInfoHeading>
                         <FormInfoBody>
@@ -188,6 +182,12 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
                         name="sluttTidspunkt"
                         label="Sluttidspunkt"
                         helperText="Til hvilket tidspunkt kan partneren komme og hente?"
+                        required
+                    />
+                    <KategoriSelect
+                        name="kategorier"
+                        label="Kategorier"
+                        helperText="Hvilken type varer skal partneren kunne hente?"
                         required
                     />
                     <TextArea name="merknad" label="Merknader" />

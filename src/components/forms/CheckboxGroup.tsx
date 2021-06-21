@@ -1,14 +1,8 @@
 import * as React from 'react';
-import {
-    CheckboxGroup as ChakraCheckboxGroup,
-    FormControl,
-    FormHelperText,
-    HStack,
-    Skeleton,
-    VStack,
-} from '@chakra-ui/react';
+import { CheckboxGroup as ChakraCheckboxGroup, FormControl, FormErrorMessage, FormHelperText } from '@chakra-ui/react';
 import { Checkbox } from './Checkbox';
 import { FormLabel } from './FormLabel';
+import { ErrorMessage } from '@hookform/error-message';
 
 export interface CheckboxOption<TValue = string, TLabel = string> {
     value: TValue;
@@ -21,41 +15,21 @@ interface Props {
     options: Array<CheckboxOption>;
     required?: boolean;
     helperText?: string;
-    isLoading?: boolean;
 }
 
-const CheckBoxGroupSkeleton: React.FC = () => (
-    <HStack>
-        <VStack width={5} paddingRight={1}>
-            <Skeleton width="full" height={5} />
-            <Skeleton width="full" height={5} />
-            <Skeleton width="full" height={5} />
-        </VStack>
-        <VStack width="full">
-            <Skeleton width="full" height={5} />
-            <Skeleton width="full" height={5} />
-            <Skeleton width="full" height={5} />
-        </VStack>
-    </HStack>
-);
-
-export const CheckboxGroup: React.FC<Props> = ({ name, label, options, required, helperText, isLoading }) => (
+export const CheckboxGroup: React.FC<Props> = ({ name, label, options, required, helperText }) => (
     <FormControl>
         <fieldset>
             <FormLabel as="legend" label={label} required={required} />
-            {isLoading ? (
-                <CheckBoxGroupSkeleton />
-            ) : (
-                <>
-                    {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
-                    <ChakraCheckboxGroup>
-                        {options.map(({ value, label: checkboxLabel }) => (
-                            <Checkbox key={value} value={value} label={checkboxLabel} name={name} />
-                        ))}
-                    </ChakraCheckboxGroup>
-                </>
-            )}
+            {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
+            <ChakraCheckboxGroup>
+                {options.map(({ value, label: checkboxLabel }) => (
+                    <Checkbox key={value} value={value} label={checkboxLabel} name={name} />
+                ))}
+            </ChakraCheckboxGroup>
+            <FormErrorMessage>
+                <ErrorMessage name={name} />
+            </FormErrorMessage>
         </fieldset>
-        {/* TODO: display error messages? */}
     </FormControl>
 );
