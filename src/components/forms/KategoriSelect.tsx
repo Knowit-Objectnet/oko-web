@@ -10,8 +10,9 @@ import {
     VStack,
 } from '@chakra-ui/react';
 import { FormLabel } from './FormLabel';
-import { Checkbox } from './Checkbox';
 import { ErrorMessage } from '@hookform/error-message';
+import { useFormContext } from 'react-hook-form';
+import { Checkbox } from './Checkbox';
 
 const CheckBoxGroupSkeleton: React.FC<{ loadingText?: string }> = ({ loadingText }) => (
     <VStack tabIndex={0} spacing="2" aria-label={loadingText ?? 'Laster inn valg...'} width="full">
@@ -32,7 +33,13 @@ interface Props {
 }
 
 export const KategoriSelect: React.FC<Props> = ({ name, label, required, helperText }) => {
+    const {
+        formState: { errors, isSubmitted },
+    } = useFormContext();
+
     const { data: kategorier, isLoading, isLoadingError } = useKategorier({ queryOptions: { keepPreviousData: true } });
+
+    const isInvalid = errors[name] && isSubmitted;
 
     const getKategoriCheckBoxes = () => {
         if (isLoading) {
@@ -45,21 +52,35 @@ export const KategoriSelect: React.FC<Props> = ({ name, label, required, helperT
             return 'Fant ingen kategorier å velge mellom.';
         }
 
-        return (kategorier || [])
-            .sort((kategoriA, kategoriB) => kategoriA.navn.localeCompare(kategoriB.navn))
-            .map((kategori) => <Checkbox key={kategori.id} value={kategori.id} label={kategori.navn} name={name} />);
+        const sortedKategorier = (kategorier || []).sort((kategoriA, kategoriB) =>
+            kategoriA.navn.localeCompare(kategoriB.navn),
+        );
+
+        return (
+            <HStack spacing="0">
+                {sortedKategorier.map((kategori) => (
+                    <Checkbox
+                        key={kategori.id}
+                        value={kategori.id}
+                        label={kategori.navn}
+                        name={name}
+                        isInvalid={isInvalid}
+                    />
+                ))}
+            </HStack>
+        );
     };
 
     return (
-        <FormControl>
+        <FormControl isInvalid={isInvalid}>
             <fieldset>
                 <FormLabel as="legend" label={label} required={required} />
                 {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
                 <CheckboxGroup>{getKategoriCheckBoxes()}</CheckboxGroup>
-                <FormErrorMessage>
-                    <ErrorMessage name={name} />
-                </FormErrorMessage>
             </fieldset>
+            <FormErrorMessage>
+                <ErrorMessage name={name} />
+            </FormErrorMessage>
         </FormControl>
     );
 };

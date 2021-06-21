@@ -20,9 +20,15 @@ export const Checkbox = {
                 backgroundColor: 'primary',
                 borderColor: 'primary',
                 color: 'onPrimary',
+                _invalid: {
+                    backgroundColor: 'error',
+                },
                 // Hover on parent
                 '*:hover > &': {
                     backgroundColor: 'primaryHover',
+                    _invalid: {
+                        backgroundColor: 'error',
+                    },
                 },
             },
             // Hover on parent
@@ -34,6 +40,9 @@ export const Checkbox = {
             },
             _focus: {
                 boxShadow: 'none',
+            },
+            _invalid: {
+                borderColor: 'error',
             },
         },
     },

@@ -98,5 +98,14 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
                 return schema;
             })
             .nullable(),
+        kategorier: yup
+            .array(yup.string())
+            .transform((value) => {
+                if (Array.isArray(value)) {
+                    return value;
+                }
+                return [];
+            })
+            .min(1, 'Du må velge minst én varekategori som partneren skal kunne hente'),
         merknad: yup.string().notRequired(),
     });
