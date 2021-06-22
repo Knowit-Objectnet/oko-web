@@ -15,8 +15,8 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
     const showSuccessToast = useSuccessToast();
     const showErrorToast = useErrorToast();
 
-    const handleDeleteStasjon = () => {
-        deleteStasjonMutation.mutate(stasjon.id, {
+    const handleDeleteStasjon = () =>
+        deleteStasjonMutation.mutateAsync(stasjon.id, {
             onSuccess: () => {
                 showSuccessToast({ title: `Stasjonen ${stasjon.navn} ble slettet` });
             },
@@ -25,7 +25,6 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
                 showErrorToast({ title: `Noe gikk galt ved sletting av ${stasjon.navn}` });
             },
         });
-    };
 
     return (
         <DeleteButtonWithConfirmation

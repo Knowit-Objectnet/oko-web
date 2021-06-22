@@ -15,7 +15,7 @@ export const DeleteKontaktPersonButton: React.FunctionComponent<Props> = ({ kont
     const showErrorToast = useErrorToast();
 
     const handleDeleteKontakt = () =>
-        deleteKontaktMutation.mutate(kontakt.id, {
+        deleteKontaktMutation.mutateAsync(kontakt.id, {
             onSuccess: () => {
                 showSuccessToast({ title: `${kontakt.navn} ble slettet` });
             },

@@ -21,12 +21,16 @@ import { DeleteButton } from './DeleteButton';
 
 interface Props {
     label: string;
-    onConfirm: () => void;
+    onConfirm: () => Promise<unknown>;
     isLoading?: boolean;
 }
 
 export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm, isLoading }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const onDeleteConfirmation = () => {
+        onConfirm().then(() => onClose());
+    };
 
     return (
         <Flex textAlign="start">
@@ -51,7 +55,7 @@ export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm
                                     width="full"
                                     size="sm"
                                     variant="warning"
-                                    onClick={onConfirm}
+                                    onClick={onDeleteConfirmation}
                                     isLoading={isLoading}
                                 >
                                     Slett {label}
