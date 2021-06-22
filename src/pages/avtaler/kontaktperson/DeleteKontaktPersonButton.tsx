@@ -24,5 +24,11 @@ export const DeleteKontaktPersonButton: React.FunctionComponent<Props> = ({ kont
             },
         });
 
-    return <DeleteButtonWithConfirmation label="kontaktpersonen" onConfirm={handleDeleteKontakt} />;
+    return (
+        <DeleteButtonWithConfirmation
+            label="kontaktpersonen"
+            onConfirm={handleDeleteKontakt}
+            isLoading={deleteKontaktMutation.isLoading}
+        />
+    );
 };

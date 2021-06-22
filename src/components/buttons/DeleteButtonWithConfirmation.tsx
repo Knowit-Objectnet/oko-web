@@ -25,7 +25,7 @@ interface Props {
     isLoading?: boolean;
 }
 
-export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm }) => {
+export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm, isLoading }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -52,7 +52,7 @@ export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm
                                     size="sm"
                                     variant="warning"
                                     onClick={onConfirm}
-                                    //isLoading={deleteStasjonMutation.isLoading}
+                                    isLoading={isLoading}
                                 >
                                     Slett {label}
                                 </Button>
