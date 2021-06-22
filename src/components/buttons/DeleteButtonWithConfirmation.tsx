@@ -17,23 +17,20 @@ import {
 import Warning from '../../assets/Warning.svg';
 import { Box } from '@chakra-ui/layout';
 import { FocusLock } from '@chakra-ui/focus-lock';
-import { useState } from 'react';
 import { DeleteButton } from './DeleteButton';
 
 interface Props {
     label: string;
     onConfirm: () => void;
+    isLoading?: boolean;
 }
 
 export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm }) => {
-    const [popoverIsOpen, setPopoverIsOpen] = useState<boolean>(false);
-
-    const openPopover = () => setPopoverIsOpen(true);
-    const closePopover = () => setPopoverIsOpen(false);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
         <Flex textAlign="start">
-            <Popover isOpen={popoverIsOpen} onOpen={openPopover} onClose={closePopover} placement="bottom-end">
+            <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose} placement="bottom-end">
                 <PopoverTrigger>
                     <DeleteButton label="Slett" aria-label={`Slett ${label}`} />
                 </PopoverTrigger>
@@ -55,7 +52,7 @@ export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm
                                     size="sm"
                                     variant="warning"
                                     onClick={onConfirm}
-                                    // isLoading={deleteStasjonMutation.isLoading}
+                                    //isLoading={deleteStasjonMutation.isLoading}
                                 >
                                     Slett {label}
                                 </Button>
