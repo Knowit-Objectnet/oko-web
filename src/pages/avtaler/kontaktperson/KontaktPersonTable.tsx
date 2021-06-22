@@ -3,6 +3,7 @@ import { ButtonGroup, Link, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } fr
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { ApiKontakt } from '../../../services/aktor/KontaktService';
 import { EditKontaktPersonButton } from './EditKontaktPersonButton';
+import { DeleteKontaktPersonButton } from './DeleteKontaktPersonButton';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;
@@ -36,12 +37,7 @@ export const KontaktPersonTable: React.FC<Props> = ({ kontaktPersoner }) => {
                         <Td textAlign="end">
                             <ButtonGroup spacing="4" size="sm">
                                 <EditKontaktPersonButton kontakt={kontakt} />
-                                <DeleteButton
-                                    label="Slett"
-                                    onClick={() => {
-                                        console.log(`Slett ${kontakt.navn}`);
-                                    }}
-                                />
+                                <DeleteKontaktPersonButton kontakt={kontakt} />
                             </ButtonGroup>
                         </Td>
                     </Tr>
