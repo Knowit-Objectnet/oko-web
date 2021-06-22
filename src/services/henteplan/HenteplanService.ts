@@ -21,9 +21,9 @@ export interface ApiHenteplanPost {
     avtaleId: string;
     stasjonId: string;
     frekvens: HenteplanFrekvens;
-    ukedag?: Weekday;
     startTidspunkt: string;
     sluttTidspunkt: string;
+    ukedag?: Weekday;
     merknad?: string;
 }
 
