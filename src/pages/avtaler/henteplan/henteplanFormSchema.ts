@@ -5,7 +5,8 @@ import { transformDate } from '../../../utils/forms/transformDate';
 import { add, isValid, parseISO } from 'date-fns';
 import { upperFirst } from 'lodash';
 import { transformTime } from '../../../utils/forms/transformTime';
-import { frekvensOptions, ukedagOptions } from './HenteplanForm';
+import { frekvensOptions } from './HenteplanForm';
+import { ukedagOptions } from './HenteplanFormTidspunkt';
 
 /** IMPORTANT! The order of the fields in this schema must match the order of the visual fields in the form.
  *   This is because the order here defines the order of the error messages in the error message summary

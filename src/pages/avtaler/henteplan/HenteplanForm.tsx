@@ -4,7 +4,13 @@ import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { ApiHenteplanPost, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
+import {
+    ApiHenteplan,
+    ApiHenteplanPatch,
+    ApiHenteplanPost,
+    HenteplanFrekvens,
+    Weekday,
+} from '../../../services/henteplan/HenteplanService';
 import { useAddHenteplan } from '../../../services/henteplan/useAddHenteplan';
 import { RadiobuttonGroup, RadioOption } from '../../../components/forms/radio/RadiobuttonGroup';
 import { Stack } from '@chakra-ui/react';
@@ -12,9 +18,6 @@ import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFie
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { StasjonSelect } from '../../../components/forms/StasjonSelect';
-import { TimeInput } from '../../../components/forms/input/TimeInput';
-import { DateInput } from '../../../components/forms/input/DateInput';
-import { Select, SelectOption } from '../../../components/forms/Select';
 import { TextArea } from '../../../components/forms/TextArea';
 import { formatDate } from '../../../utils/formatDateTime';
 import { AVTALE_TYPE, getAvtaleTitle } from '../avtale/AvtaleInfoItem';
@@ -24,9 +27,19 @@ import { FormInfoBody, FormInfoHeading, FormInfoSection } from '../../../compone
 import { toISOLocalString } from '../../../utils/localDateISO';
 import { parseISO } from 'date-fns';
 import { KategoriSelect } from '../../../components/forms/KategoriSelect';
+import { HenteplanFormTidspunkt } from './HenteplanFormTidspunkt';
+import { HenteplanFormDato } from './HenteplanFormDato';
+import { ApiError } from '../../../services/httpClient';
+import { useUpdateHenteplan } from '../../../services/henteplan/useUpdateHenteplan';
 
 // NB! Setting the global error messages used by yup
 import '../../../utils/forms/formErrorMessages';
+
+export const frekvensOptions: Array<RadioOption<HenteplanFrekvens>> = [
+    { value: 'ENKELT', label: 'Enkelthendelse' },
+    { value: 'UKENTLIG', label: 'Ukentlig' },
+    { value: 'ANNENHVER', label: 'Annenhver uke' },
+];
 
 interface HenteplanFormData {
     stasjonId: string;
@@ -39,44 +52,26 @@ interface HenteplanFormData {
     merknad?: string;
 }
 
-export const frekvensOptions: Array<RadioOption<HenteplanFrekvens>> = [
-    { value: 'ENKELT', label: 'Enkelthendelse' },
-    { value: 'UKENTLIG', label: 'Ukentlig' },
-    { value: 'ANNENHVER', label: 'Annenhver uke' },
-];
-
-export const ukedagOptions: Array<SelectOption<Weekday>> = [
-    { value: 'MONDAY', label: 'Mandag' },
-    { value: 'TUESDAY', label: 'Tirsdag' },
-    { value: 'WEDNESDAY', label: 'Onsdag' },
-    { value: 'THURSDAY', label: 'Torsdag' },
-    { value: 'FRIDAY', label: 'Fredag' },
-    { value: 'SATURDAY', label: 'Lørdag' },
-    { value: 'SUNDAY', label: 'Søndag' },
-];
-
-interface Props {
-    avtale: ApiAvtale;
-    /** Callback that will fire if registration is successful: **/
-    onSuccess?: () => void;
-}
-
-const createNewHenteplan = (data: HenteplanFormData, avtale: ApiAvtale): ApiHenteplanPost => {
+const createHenteplan = (data: HenteplanFormData): Omit<ApiHenteplanPost, 'avtaleId'> => {
     const startTidspunkt = toISOLocalString(mergeDateWithTime(data.startDato, data.startTidspunkt));
     const sluttTidspunkt = toISOLocalString(mergeDateWithTime(data.sluttDato || data.startDato, data.sluttTidspunkt));
 
     return {
-        avtaleId: avtale.id,
-        frekvens: data.frekvens,
-        ukedag: data.ukedag,
-        stasjonId: data.stasjonId,
+        ...data,
         startTidspunkt,
         sluttTidspunkt,
-        merknad: data.merknad,
     };
 };
 
-export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
+interface Props {
+    avtale: ApiAvtale;
+    /**  By passing an existing Henteplan, the form will be in edit mode **/
+    henteplanToEdit?: ApiHenteplan;
+    /** Callback that will fire if registration is successful: **/
+    onSuccess?: () => void;
+}
+
+export const HenteplanForm: React.FC<Props> = ({ avtale, henteplanToEdit, onSuccess }) => {
     const validationSchema = getHenteplanValidationSchema(avtale);
     const formMethods = useForm<HenteplanFormData>({
         resolver: yupResolver(validationSchema),
@@ -92,26 +87,46 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
     });
 
     const addHenteplanMutation = useAddHenteplan();
+    const updateHenteplanMutation = useUpdateHenteplan();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
-    const handleSubmit = formMethods.handleSubmit((data) => {
+    const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        const newHenteplan = createNewHenteplan(data, avtale);
+        if (henteplanToEdit) {
+            updateHenteplan({ ...createHenteplan(formData), id: henteplanToEdit.id });
+        } else {
+            addHenteplan({ ...createHenteplan(formData), avtaleId: avtale.id });
+        }
+    });
 
+    const addHenteplan = (newHenteplan: ApiHenteplanPost) =>
         addHenteplanMutation.mutate(newHenteplan, {
             onSuccess: () => {
-                showSuccessToast({ title: `Henteplanen ble registrert` });
-                onSuccess?.();
+                onApiSubmitSuccess(`Henteplanen ble registrert`);
             },
-            onError: (error) => {
-                // TODO: get details from error and set appropriate message.
-                //  If caused by user: set message to correct field
-                setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
-            },
+            onError: onApiSubmitError,
         });
-    });
+
+    const updateHenteplan = (updatedHenteplan: ApiHenteplanPatch) =>
+        updateHenteplanMutation.mutate(updatedHenteplan, {
+            onSuccess: () => {
+                onApiSubmitSuccess(`Henteplanen ble oppdatert`);
+            },
+            onError: onApiSubmitError,
+        });
+
+    const onApiSubmitSuccess = (successMessage: string) => {
+        showSuccessToast({ title: successMessage });
+        onSuccess?.();
+    };
+
+    const onApiSubmitError = (error: ApiError) => {
+        // TODO: get details from error and set appropriate message.
+        //  If caused by user: set message to correct field
+        setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
+    };
 
     const frekvens = formMethods.watch('frekvens', undefined);
     const isRecurring = frekvens && frekvens !== 'ENKELT';
@@ -144,46 +159,13 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
                         helperText="Hvor ofte skal hentingene skje?"
                         required
                     />
-                    {/* TODO: group startDato and sluttDato in fieldset with legend "Varighet"? */}
                     {frekvens ? (
-                        <DateInput
-                            name="startDato"
-                            label={isRecurring ? 'Startdato for henteplanen' : 'Dato for hentingen'}
+                        <HenteplanFormDato
+                            isInterval={isRecurring}
                             helperText={`Må være innenfor avtalens varighet (${avtaleVarighet})`}
-                            required
                         />
                     ) : null}
-                    {isRecurring ? (
-                        <DateInput
-                            name="sluttDato"
-                            label="Sluttdato for henteplanen"
-                            helperText={`Må være innenfor avtalens varighet (${avtaleVarighet})`}
-                            required
-                        />
-                    ) : null}
-                    {/* TODO: group ukedag, starttidspunkt and sluttidspunkt in fieldset with legend "Tidspunkt"? */}
-                    {isRecurring ? (
-                        <Select
-                            name="ukedag"
-                            label="Ukedag"
-                            placeholder="Velg ukedag"
-                            helperText="Hvilken ukedag skal hentingene skje?"
-                            options={ukedagOptions}
-                            required
-                        />
-                    ) : null}
-                    <TimeInput
-                        name="startTidspunkt"
-                        label="Starttidspunkt"
-                        helperText="Fra hvilket tidspunkt kan partneren komme og hente?"
-                        required
-                    />
-                    <TimeInput
-                        name="sluttTidspunkt"
-                        label="Sluttidspunkt"
-                        helperText="Til hvilket tidspunkt kan partneren komme og hente?"
-                        required
-                    />
+                    <HenteplanFormTidspunkt frekvensIsRecurring={isRecurring} />
                     <KategoriSelect
                         name="kategorier"
                         label="Kategorier"
