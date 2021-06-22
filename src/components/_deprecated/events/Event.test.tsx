@@ -36,7 +36,7 @@ describe('Provides an interface to view and edit an Event', () => {
         const mockEvent = mockEvents[0];
         setupUseAuthMock({
             isStasjon: true,
-            ownsResource: (eventOwnerId: number) => eventOwnerId === mockEvent.resource.station.id,
+            ownsResource: (eventOwnerId: string) => eventOwnerId === mockEvent.resource.station.id.toString(),
         });
 
         const afterDeleteSingleEvent = jest.fn();
@@ -59,7 +59,7 @@ describe('Provides an interface to view and edit an Event', () => {
         const mockEvent = mockEvents[0];
         setupUseAuthMock({
             isPartner: true,
-            ownsResource: (eventOwnerId: number) => eventOwnerId === mockEvent.resource.partner.id,
+            ownsResource: (eventOwnerId: string) => eventOwnerId === mockEvent.resource.partner.id.toString(),
         });
 
         const afterDeleteSingleEvent = jest.fn();
@@ -101,7 +101,7 @@ describe('Provides an interface to view and edit an Event', () => {
         const mockEvent = mockEvents[1];
         setupUseAuthMock({
             isPartner: true,
-            ownsResource: (eventOwnerId: number) => eventOwnerId === mockEvent.resource.partner.id,
+            ownsResource: (eventOwnerId: string) => eventOwnerId === mockEvent.resource.partner.id.toString(),
         });
 
         render(

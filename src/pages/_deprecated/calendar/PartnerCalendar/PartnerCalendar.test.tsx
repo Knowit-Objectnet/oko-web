@@ -26,7 +26,7 @@ describe('Provides a page for partners to view the calendar', () => {
         .filter((event) => event.resource.partner.id === 1);
 
     beforeEach(() => {
-        setupUseAuthMock({ isPartner: true, ownsResource: (ownerId: number) => ownerId === 1 });
+        setupUseAuthMock({ isPartner: true, ownsResource: (ownerId: string) => ownerId === '1' });
     });
 
     afterEach(() => {

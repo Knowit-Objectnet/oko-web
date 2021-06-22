@@ -28,7 +28,7 @@ export const PickUpList: React.FC = () => {
     const { user } = useAuth();
 
     const pickUpsFilter: ApiPickUpParams = {
-        stationId: user.isStasjon ? user.aktorId : undefined,
+        // stationId: user.isStasjon ? user.aktorId : undefined,
     };
     const { data: pickUps, isLoading, isError } = usePickUps(pickUpsFilter);
     const sortedPickups = (pickUps ?? []).sort((pickUpA, pickUpB) => {

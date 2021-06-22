@@ -1,14 +1,14 @@
-import { KeycloakTokenParsed } from 'keycloak-js';
 import { useKeycloak } from '@react-keycloak/web';
 import { Roles } from './Roles';
+import { useEffect, useState } from 'react';
 
 export interface UserInfo {
-    aktorId?: number;
+    aktorId?: string;
     isAdmin: boolean;
     isStasjon: boolean;
     isPartner: boolean;
     hasRole: (role: Roles) => boolean;
-    ownsResource: (ownerId: number) => boolean;
+    ownsResource: (ownerId: string) => boolean;
 }
 
 interface LogoutOptions {
@@ -20,21 +20,24 @@ export interface AuthContext {
     logout: (options: LogoutOptions) => void;
 }
 
-interface AuthTokenParsed extends KeycloakTokenParsed {
-    GroupID?: number;
-}
-
 export const useAuth = (): AuthContext => {
     const { keycloak } = useKeycloak();
-    const tokenParsed = keycloak.tokenParsed as AuthTokenParsed;
+
+    const [keycloakGroupId, setKeycloakGroupId] = useState<string>();
+
+    useEffect(() => {
+        keycloak.loadUserInfo().then((keycloakCustomUserInfo: { GroupID?: string }) => {
+            setKeycloakGroupId(keycloakCustomUserInfo.GroupID);
+        });
+    }, [keycloak]);
 
     const user: UserInfo = {
-        aktorId: tokenParsed.GroupID,
+        aktorId: keycloakGroupId,
         isAdmin: keycloak.hasRealmRole(Roles.Admin),
         isStasjon: keycloak.hasRealmRole(Roles.Stasjon),
         isPartner: keycloak.hasRealmRole(Roles.Partner),
         hasRole: (role) => keycloak.hasRealmRole(role),
-        ownsResource: (ownerId) => ownerId === tokenParsed?.GroupID,
+        ownsResource: (ownerId) => ownerId === keycloakGroupId,
     };
 
     const logout = (options: LogoutOptions) => {

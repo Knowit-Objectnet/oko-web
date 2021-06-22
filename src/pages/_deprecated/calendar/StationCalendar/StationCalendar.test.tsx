@@ -54,7 +54,7 @@ describe('Provides a page for ambassadors to view the calendar', () => {
             isStasjon: true,
             ownsResource: (ownerId) => {
                 // id 0 === Haraldrud
-                return ownerId === 0;
+                return ownerId === '0';
             },
         });
     });

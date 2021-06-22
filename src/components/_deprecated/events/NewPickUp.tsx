@@ -75,14 +75,14 @@ export const NewPickUp: React.FC<Props> = (props) => {
         start.setHours(timeRange[0].getHours(), timeRange[0].getMinutes(), 0, 0);
         end.setHours(timeRange[1].getHours(), timeRange[1].getMinutes(), 0, 0);
 
-        const newPickUp: ApiPickUpPost = {
+        /* const newPickUp: ApiPickUpPost = {
             startDateTime: start.toISOString(),
             endDateTime: end.toISOString(),
             description: description,
-            stationId: user.aktorId as number, // TODO: find a way to handle undefined so we can remove this type assertion
+            stationId: user.aktorId,
         };
 
-        addPickUpMutation.mutate(newPickUp);
+        addPickUpMutation.mutate(newPickUp); */
     };
 
     return (

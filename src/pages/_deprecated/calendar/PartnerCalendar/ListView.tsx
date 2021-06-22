@@ -40,7 +40,7 @@ export const ListView: React.FC<ListViewProps> = (props) => {
         const eventsForDate = props.events.filter((event) => isSameDay(event.start, date));
         const groupedEvents = groupBy(eventsForDate, (event): string => event.resource.station.name);
         const filteredAndGroupedEvents = pickBy(groupedEvents, (eventsInGroup) =>
-            eventsInGroup.some((event) => user.ownsResource(event.resource.partner.id)),
+            eventsInGroup.some((event) => user.ownsResource(event.resource.partner.id.toString())),
         );
         return Object.entries(filteredAndGroupedEvents).map(([label, events]) => (
             <ListItem key={label} date={date} title={label} events={events} />

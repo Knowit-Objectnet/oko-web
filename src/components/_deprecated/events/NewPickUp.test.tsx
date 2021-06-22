@@ -15,7 +15,7 @@ describe('Provides an interface to create a pickup/Extra event', () => {
     });
 
     it('should be possible to add pickup/extra event', async () => {
-        setupUseAuthMock({ aktorId: mockStations[0].id });
+        setupUseAuthMock({ aktorId: mockStations[0].id.toString() });
 
         new MockAdapter(axios).onPost('/pickups').reply((config: AxiosRequestConfig) => {
             return [
