@@ -3,10 +3,10 @@ import { useStasjonById } from '../../../services/stasjon/useStasjonById';
 import { ButtonGroup, Td, Tr } from '@chakra-ui/react';
 import { formatDate, formatTime } from '../../../utils/formatDateTime';
 import { EditButton } from '../../../components/buttons/EditButton';
-import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
 import { localDateFromISO } from '../../../utils/localDateISO';
 import { parseISO } from 'date-fns';
+import { DeleteHenteplanButton } from './DeleteHenteplanButton';
 
 const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
@@ -61,12 +61,7 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan }) => {
                             console.log(`Rediger henteplan med id ${henteplan.id}`);
                         }}
                     />
-                    <DeleteButton
-                        label="Slett"
-                        onClick={() => {
-                            console.log(`Slett henteplan med id ${henteplan.id}`);
-                        }}
-                    />
+                    <DeleteHenteplanButton henteplan={henteplan} />
                 </ButtonGroup>
             </Td>
         </Tr>
