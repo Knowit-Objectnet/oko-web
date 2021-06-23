@@ -13,14 +13,14 @@ import { ApiAvtale, ApiAvtalePatch, ApiAvtalePost, AvtaleType } from '../../../s
 import { transformDate } from '../../../utils/forms/transformDate';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useAddAvtale } from '../../../services/avtale/useAddAvtale';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 import { ApiError } from '../../../services/httpClient';
 import { useUpdateAvtale } from '../../../services/avtale/useUpdateAvtale';
 import { AvtaleFormSluttDato } from './AvtaleFormSluttDato';
+import { AvtaleFormStartDato } from './AvtaleFormStartDato';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/radio/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { AvtaleFormStartDato } from './AvtaleFormStartDato';
 
 interface AvtaleFormData {
     type: AvtaleType;

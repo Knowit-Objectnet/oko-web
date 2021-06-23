@@ -2,8 +2,8 @@ import * as React from 'react';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { formatDate } from '../../../utils/formatDateTime';
 import { isBefore, parseISO } from 'date-fns';
-import { DateInput } from '../../../components/forms/DateInput';
 import { ConditionalFieldWarning } from '../../../components/forms/ConditionalFieldWarning';
+import { DateInput } from '../../../components/forms/input/DateInput';
 
 interface Props {
     avtaleToEdit?: ApiAvtale;
