@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { formatDate } from '../../../utils/formatDateTime';
-import { addDays, isAfter, isBefore, parseISO } from 'date-fns';
+import { isBefore, parseISO } from 'date-fns';
 import { DateInput } from '../../../components/forms/DateInput';
 import { ConditionalFieldWarning } from '../../../components/forms/ConditionalFieldWarning';
 
@@ -40,7 +40,7 @@ export const AvtaleFormStartDato: React.FC<Props> = ({ avtaleToEdit }) => {
 
     return (
         <>
-            <DateInput name="startDato" label="StartDato for avtalen" required />
+            <DateInput name="startDato" label="Startdato for avtalen" required />
             {getEditWarning()}
         </>
     );
