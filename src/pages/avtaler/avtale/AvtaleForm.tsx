@@ -7,7 +7,6 @@ import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { DateInput } from '../../../components/forms/DateInput';
 import { formatISO } from 'date-fns';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { ApiAvtale, ApiAvtalePatch, ApiAvtalePost, AvtaleType } from '../../../services/avtale/AvtaleService';
@@ -17,9 +16,11 @@ import { useAddAvtale } from '../../../services/avtale/useAddAvtale';
 import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 import { ApiError } from '../../../services/httpClient';
 import { useUpdateAvtale } from '../../../services/avtale/useUpdateAvtale';
+import { AvtaleFormSluttDato } from './AvtaleFormSluttDato';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
+import { AvtaleFormStartDato } from './AvtaleFormStartDato';
 
 interface AvtaleFormData {
     type: AvtaleType;
@@ -137,13 +138,13 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <DateInput name="startDato" label="Startdato for avtalen" required />
-                    <DateInput name="sluttDato" label="Sluttdato for avtalen" required />
+                    <AvtaleFormStartDato avtaleToEdit={avtaleToEdit} />
+                    <AvtaleFormSluttDato avtaleToEdit={avtaleToEdit} />
                     <RadiobuttonGroup name="type" label="Type avtale" options={avtaleTypeOptions} required />
                     <FormSubmitButton
-                        label="Registrer ny avtale"
-                        isLoading={addAvtaleMutation.isLoading}
-                        loadingText="Vennligst vent..."
+                        label={avtaleToEdit ? 'Lagre endringer' : 'Registrer ny avtale'}
+                        isLoading={updateAvtaleMutation.isLoading || addAvtaleMutation.isLoading}
+                        loadingText="Lagrer..."
                     />
                 </Stack>
             </form>
