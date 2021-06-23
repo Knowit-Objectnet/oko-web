@@ -13,7 +13,7 @@ export interface ApiHenteplan {
     startTidspunkt: string; //LocalTimeDate: Time used for Henting time
     sluttTidspunkt: string; //LocalTimeDate: Time used for Henting time
     ukedag: Weekday;
-    merknad: string | null;
+    merknad: string;
     planlagteHentinger: Array<ApiPlanlagtHenting>;
 }
 

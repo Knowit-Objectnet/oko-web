@@ -4,7 +4,7 @@ import { FormModal } from '../../../components/forms/FormModal';
 import { AddButton } from '../../../components/buttons/AddButton';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { HenteplanForm } from './HenteplanForm';
+import { AddHenteplanForm } from './AddHenteplanForm';
 
 interface Props {
     avtale: ApiAvtale;
@@ -23,7 +23,7 @@ export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> 
                 onClick={onOpen}
             />
             <FormModal title={`Ny henteplan for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
-                <HenteplanForm avtale={avtale} onSuccess={onClose} />
+                <AddHenteplanForm avtale={avtale} onSuccess={onClose} />
             </FormModal>
         </>
     );

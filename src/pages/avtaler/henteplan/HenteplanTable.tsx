@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Table, Tbody, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
 import { compareAsc, parseISO } from 'date-fns';
 import { HenteplanRow } from './HenteplanRow';
+import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 
 interface Props {
-    henteplaner: Array<ApiHenteplan>;
+    avtale: ApiAvtale;
 }
 
-export const HenteplanTable: React.FC<Props> = ({ henteplaner }) => {
-    const sortedHenteplaner = henteplaner.sort((henteplanA, henteplanB) =>
+export const HenteplanTable: React.FC<Props> = ({ avtale }) => {
+    const sortedHenteplaner = avtale.henteplaner.sort((henteplanA, henteplanB) =>
         compareAsc(parseISO(henteplanA.startTidspunkt), parseISO(henteplanB.startTidspunkt)),
     );
 
@@ -29,7 +29,7 @@ export const HenteplanTable: React.FC<Props> = ({ henteplaner }) => {
             </Thead>
             <Tbody>
                 {sortedHenteplaner.map((henteplan) => (
-                    <HenteplanRow key={henteplan.id} henteplan={henteplan} />
+                    <HenteplanRow key={henteplan.id} henteplan={henteplan} avtale={avtale} />
                 ))}
             </Tbody>
         </Table>

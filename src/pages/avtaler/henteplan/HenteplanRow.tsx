@@ -7,6 +7,8 @@ import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/hent
 import { localDateFromISO } from '../../../utils/localDateISO';
 import { parseISO } from 'date-fns';
 import { DeleteHenteplanButton } from './DeleteHenteplanButton';
+import { EditHenteplanButton } from './EditHenteplanButton';
+import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 
 const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
@@ -25,10 +27,11 @@ const UKEDAG: Record<Weekday, string> = {
 };
 
 interface Props {
+    avtale: ApiAvtale;
     henteplan: ApiHenteplan;
 }
 
-export const HenteplanRow: React.FC<Props> = ({ henteplan }) => {
+export const HenteplanRow: React.FC<Props> = ({ henteplan, avtale }) => {
     // TODO: handle loading/error
     const { data: stasjon } = useStasjonById(henteplan.stasjonId);
 
@@ -55,12 +58,7 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan }) => {
             </Td>
             <Td textAlign="end">
                 <ButtonGroup spacing="4" size="sm">
-                    <EditButton
-                        label="Rediger"
-                        onClick={() => {
-                            console.log(`Rediger henteplan med id ${henteplan.id}`);
-                        }}
-                    />
+                    <EditHenteplanButton henteplan={henteplan} avtale={avtale} />
                     <DeleteHenteplanButton henteplan={henteplan} />
                 </ButtonGroup>
             </Td>
