@@ -8,6 +8,7 @@ import { formatDate } from '../../../utils/formatDateTime';
 import { Henteplaner } from '../henteplan/Henteplaner';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
+import { EditAvtaleButton } from './EditAvtaleButton';
 
 export const AVTALE_TYPE: Record<AvtaleType, string> = {
     ANNEN: 'Annen avtale',
@@ -61,13 +62,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => (
                         </AccordionButton>
                     </Heading>
                     <Fade in={isExpanded} unmountOnExit>
-                        <EditButton
-                            label="Rediger avtale"
-                            onClick={() => {
-                                console.log(`Rediger avtale med id ${avtale.id}`);
-                            }}
-                            size="sm"
-                        />
+                        <EditAvtaleButton size="sm" avtale={avtale} />
                     </Fade>
                 </Flex>
                 <Text>

@@ -16,7 +16,7 @@ export const ErrorMessages: React.FC<Props> = ({ globalError }) => (
 
 const GlobalErrorMessage: React.FC<Props> = ({ globalError }) => {
     return globalError ? (
-        <WarningContainer>
+        <WarningContainer variant="error">
             <WarningTitle title={globalError} />
         </WarningContainer>
     ) : null;
@@ -29,7 +29,7 @@ const FieldErrorMessages: React.FC = () => {
     const formHasErrors = errorMessages.length > 0;
 
     return isSubmitted && formHasErrors ? (
-        <WarningContainer>
+        <WarningContainer variant="error">
             <WarningTitle title="Vennligst rett opp følgende feil i skjemaet:" />
             <WarningBody>
                 <UnorderedList>

@@ -17,7 +17,14 @@ export interface ApiAvtalePost {
     type: AvtaleType;
     startDato: string; //LocalDate
     sluttDato: string; //LocalDate
-    henteplaner: Array<ApiHenteplanPost> | null; // TODO fix when backend is updated
+    henteplaner?: Array<ApiHenteplanPost> | null;
+}
+
+export interface ApiAvtalePatch {
+    id: string;
+    type?: AvtaleType;
+    startDato?: string; //LocalDate
+    sluttDato?: string; //LocalDate
 }
 
 export interface ApiAvtaleParams {
@@ -39,6 +46,9 @@ export const getAvtaleById = (avtaleId: string): Promise<ApiAvtale> =>
 
 export const postAvtale = (newAvtale: ApiAvtalePost): Promise<ApiAvtale> =>
     httpClient().post<ApiAvtale>(avtaleEndpoint, newAvtale).then(extractResponse, transformError);
+
+export const patchAvtale = (updatedAvtale: ApiAvtalePatch): Promise<ApiAvtale> =>
+    httpClient().patch<ApiAvtale>(avtaleEndpoint, updatedAvtale).then(extractResponse, transformError);
 
 export const deleteAvtale = (avtaleId: string): Promise<ApiAvtale> =>
     httpClient().delete<ApiAvtale>(`${avtaleEndpoint}/${avtaleId}`).then(extractResponse, transformError);

@@ -121,7 +121,7 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
-                <Stack direction="column" spacing="8">
+                <Stack direction="column" spacing="7">
                     <FormInfoSection>
                         <FormInfoHeading>Gjelder for {getAvtaleTitle(avtale).toLowerCase()}:</FormInfoHeading>
                         <FormInfoBody>

@@ -7,17 +7,20 @@ import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { DateInput } from '../../../components/forms/DateInput';
 import { formatISO } from 'date-fns';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { ApiAvtalePost, AvtaleType } from '../../../services/avtale/AvtaleService';
+import { ApiAvtale, ApiAvtalePatch, ApiAvtalePost, AvtaleType } from '../../../services/avtale/AvtaleService';
 import { transformDate } from '../../../utils/forms/transformDate';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useAddAvtale } from '../../../services/avtale/useAddAvtale';
 import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
+import { ApiError } from '../../../services/httpClient';
+import { useUpdateAvtale } from '../../../services/avtale/useUpdateAvtale';
+import { AvtaleFormSluttDato } from './AvtaleFormSluttDato';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
+import { AvtaleFormStartDato } from './AvtaleFormStartDato';
 
 interface AvtaleFormData {
     type: AvtaleType;
@@ -47,58 +50,101 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
-    partner: ApiPartner;
-    onSuccess?: () => void;
+    /** Callback that will fire if registration is successful: **/
+    onSuccess: () => void;
 }
 
-export const AvtaleForm: React.FC<Props> = ({ partner, onSuccess }) => {
+interface AddModeProps extends Props {
+    /**  Partner is only required for adding Avtale, and not allowed in edit mode. **/
+    partner: ApiPartner;
+    avtaleToEdit?: never;
+}
+
+interface EditModeProps extends Props {
+    partner?: never;
+    /**  By passing an existing Kontakt, the form will be in edit mode (not allowed in add mode) **/
+    avtaleToEdit: ApiAvtale;
+}
+
+export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, avtaleToEdit, onSuccess }) => {
     const formMethods = useForm<AvtaleFormData>({
         resolver: yupResolver(validationSchema),
-        // TODO: if form is in edit mode: pass original values as "defaultValues" here
+        defaultValues: avtaleToEdit
+            ? {
+                  type: avtaleToEdit.type,
+                  startDato: avtaleToEdit.startDato,
+                  sluttDato: avtaleToEdit.sluttDato,
+              }
+            : undefined,
     });
 
     const addAvtaleMutation = useAddAvtale();
+    const updateAvtaleMutation = useUpdateAvtale();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
-    const handleSubmit = formMethods.handleSubmit((data) => {
+    const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        const newAvtale: ApiAvtalePost = {
-            aktorId: partner.id,
-            startDato: formatISO(data.startDato, { representation: 'date' }),
-            sluttDato: formatISO(data.sluttDato, { representation: 'date' }),
-            type: data.type,
-            // TODO: remove when this is not required by API
-            henteplaner: [],
+        const avtale: Omit<ApiAvtalePost, 'aktorId'> = {
+            startDato: formatISO(formData.startDato, { representation: 'date' }),
+            sluttDato: formatISO(formData.sluttDato, { representation: 'date' }),
+            type: formData.type,
         };
 
+        if (avtaleToEdit) {
+            updateAvtale({
+                ...avtale,
+                id: avtaleToEdit.id,
+            });
+        } else if (partner) {
+            addAvtale({
+                ...avtale,
+                aktorId: partner.id,
+            });
+        }
+    });
+
+    const addAvtale = (newAvtale: ApiAvtalePost) =>
         addAvtaleMutation.mutate(newAvtale, {
             onSuccess: () => {
-                showSuccessToast({ title: `Det ble registrert en ny avtale for ${partner.navn}` });
-                onSuccess?.();
+                onApiSubmitSuccess(`Det ble registrert en ny avtale for ${partner?.navn}`);
             },
-            onError: (error) => {
-                // TODO: get details from error and set appropriate message.
-                //  If caused by user: set message to correct field
-                setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
-            },
+            onError: onApiSubmitError,
         });
-    });
+
+    const updateAvtale = (updatedAvtale: ApiAvtalePatch) =>
+        updateAvtaleMutation.mutate(updatedAvtale, {
+            onSuccess: () => {
+                onApiSubmitSuccess(`Endringene for avtalen ble lagret`);
+            },
+            onError: onApiSubmitError,
+        });
+
+    const onApiSubmitSuccess = (successMessage: string) => {
+        showSuccessToast({ title: successMessage });
+        onSuccess?.();
+    };
+
+    const onApiSubmitError = (error: ApiError) => {
+        // TODO: get details from error and set appropriate message.
+        //  If caused by user: set message to correct field
+        setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
+    };
 
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
-                <Stack direction="column" spacing="8">
+                <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <DateInput name="startDato" label="Startdato for avtalen" required />
-                    <DateInput name="sluttDato" label="Sluttdato for avtalen" required />
+                    <AvtaleFormStartDato avtaleToEdit={avtaleToEdit} />
+                    <AvtaleFormSluttDato avtaleToEdit={avtaleToEdit} />
                     <RadiobuttonGroup name="type" label="Type avtale" options={avtaleTypeOptions} required />
                     <FormSubmitButton
-                        label="Registrer ny avtale"
-                        isLoading={addAvtaleMutation.isLoading}
-                        loadingText="Vennligst vent..."
+                        label={avtaleToEdit ? 'Lagre endringer' : 'Registrer ny avtale'}
+                        isLoading={updateAvtaleMutation.isLoading || addAvtaleMutation.isLoading}
+                        loadingText="Lagrer..."
                     />
                 </Stack>
             </form>

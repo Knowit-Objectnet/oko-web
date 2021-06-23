@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import { CalendarComponent } from './CalendarComponent';
 import { Stack, VStack } from '@chakra-ui/react';
-import { Box } from '@chakra-ui/layout';
 import { CalendarDatePicker } from './CalendarDatePicker';
 import { CalendarProvider } from './CalendarProvider';
 import { CalendarStasjonFilter } from './CalendarStasjonFilter';
