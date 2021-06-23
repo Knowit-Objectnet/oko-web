@@ -1,10 +1,23 @@
 import * as React from 'react';
-import { Heading, Icon, Stack } from '@chakra-ui/react';
+import { Heading, Icon, Stack, StyleProps } from '@chakra-ui/react';
 import Warning from '../../assets/Warning.svg';
 import { Flex } from '@chakra-ui/layout';
 
-export const WarningContainer: React.FC = ({ children }) => (
-    <Stack direction="row" as="section" padding="4" backgroundColor="errorBackground" color="onError" spacing="3">
+type ContainerVariant = 'error' | 'warning';
+
+const VARIANT_COLORS: Record<ContainerVariant, Pick<StyleProps, 'color' | 'backgroundColor'>> = {
+    error: {
+        backgroundColor: 'errorBackground',
+        color: 'onError',
+    },
+    warning: {
+        backgroundColor: 'warning',
+        color: 'onWarning',
+    },
+};
+
+export const WarningContainer: React.FC<{ variant: ContainerVariant }> = ({ variant, children }) => (
+    <Stack direction="row" as="section" padding="4" spacing="3" {...VARIANT_COLORS[variant]}>
         <Flex alignItems="flex-start">
             <Icon as={Warning} aria-hidden width="5" height="auto" />
         </Flex>

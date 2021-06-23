@@ -32,7 +32,7 @@ export const colors = {
     errorBackground: Colors.Red40,
     onError: Colors.Black,
     disabled: Colors.Disabled,
-    warning: Colors.Red,
+    warning: Colors.Yellow,
     onWarning: Colors.Black,
 
     ...Colors, // TODO: we might want to name these colors differently

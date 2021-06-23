@@ -75,22 +75,22 @@ export const Button = {
         },
         // TODO: better focus and hover colors/marking
         warning: {
-            backgroundColor: 'warning',
-            color: 'onWarning',
+            backgroundColor: 'error',
+            color: 'onError',
             border: 'none',
-            '& svg': { fill: 'onWarning' },
+            '& svg': { fill: 'onError' },
             // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)
             //  here to avoid duplication - as soon as [this bug is fixed](https://github.com/chakra-ui/chakra-ui/issues/3883)
             _focus: {
-                backgroundColor: 'warning',
+                backgroundColor: 'error',
                 textDecoration: 'underline',
             },
             _hover: {
-                backgroundColor: 'warning',
+                backgroundColor: 'error',
                 textDecoration: 'underline',
             },
             _active: {
-                backgroundColor: 'warning',
+                backgroundColor: 'error',
                 textDecoration: 'none',
             },
         },
