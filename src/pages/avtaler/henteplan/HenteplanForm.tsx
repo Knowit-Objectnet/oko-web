@@ -49,17 +49,23 @@ interface HenteplanFormData {
     sluttDato?: Date;
     startTidspunkt: Date;
     sluttTidspunkt: Date;
+    kategorier: Array<string>;
     merknad?: string;
 }
 
 const createHenteplan = (data: HenteplanFormData): Omit<ApiHenteplanPost, 'avtaleId'> => {
     const startTidspunkt = toISOLocalString(mergeDateWithTime(data.startDato, data.startTidspunkt));
     const sluttTidspunkt = toISOLocalString(mergeDateWithTime(data.sluttDato || data.startDato, data.sluttTidspunkt));
+    const kategorier = data.kategorier.map((kategoriId) => ({ kategoriId }));
 
     return {
-        ...data,
+        stasjonId: data.stasjonId,
+        frekvens: data.frekvens,
+        ukedag: data.ukedag,
         startTidspunkt,
         sluttTidspunkt,
+        kategorier,
+        merknad: data.merknad,
     };
 };
 
@@ -95,9 +101,20 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, henteplanToEdit, onSucc
         setApiOrNetworkError(undefined);
 
         if (henteplanToEdit) {
-            updateHenteplan({ ...createHenteplan(formData), id: henteplanToEdit.id });
+            const updatedHenteplan = {
+                ...createHenteplan(formData),
+                id: henteplanToEdit.id,
+            };
+
+            console.log(updatedHenteplan);
+
+            // updateHenteplan(updatedHenteplan);
         } else {
-            addHenteplan({ ...createHenteplan(formData), avtaleId: avtale.id });
+            const newHenteplan = {
+                ...createHenteplan(formData),
+                avtaleId: avtale.id,
+            };
+            addHenteplan(newHenteplan);
         }
     });
 
@@ -137,7 +154,7 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, henteplanToEdit, onSucc
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
-                <Stack direction="column" spacing="8">
+                <Stack direction="column" spacing="7">
                     <FormInfoSection>
                         <FormInfoHeading>Gjelder for {getAvtaleTitle(avtale).toLowerCase()}:</FormInfoHeading>
                         <FormInfoBody>

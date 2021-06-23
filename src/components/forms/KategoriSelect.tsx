@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useKategorier } from '../../services/kategori/useKategorier';
-import { CheckboxGroup, FormControl, FormErrorMessage, FormHelperText, HStack } from '@chakra-ui/react';
+import { CheckboxGroup, FormControl, FormErrorMessage, FormHelperText, VStack } from '@chakra-ui/react';
 import { FormLabel } from './FormLabel';
 import { ErrorMessage } from '@hookform/error-message';
 import { useFormContext } from 'react-hook-form';
@@ -39,7 +39,7 @@ export const KategoriSelect: React.FC<Props> = ({ name, label, required, helperT
         );
 
         return (
-            <HStack spacing="0">
+            <VStack spacing="0">
                 {sortedKategorier.map((kategori) => (
                     <Checkbox
                         key={kategori.id}
@@ -49,7 +49,7 @@ export const KategoriSelect: React.FC<Props> = ({ name, label, required, helperT
                         isInvalid={isInvalid}
                     />
                 ))}
-            </HStack>
+            </VStack>
         );
     };
 

@@ -25,6 +25,10 @@ export interface ApiHenteplanPost {
     sluttTidspunkt: string;
     ukedag?: Weekday;
     merknad?: string;
+    kategorier: Array<{
+        kategoriId: string;
+        merknad?: string;
+    }>;
 }
 
 export interface ApiHenteplanPatch {
