@@ -18,11 +18,11 @@ export const DeleteAvtaleButton: React.FC<Props> = ({ avtale }) => {
     const handleDeleteAvtale = () =>
         deleteAvtaleMutation.mutateAsync(avtale.id, {
             onSuccess: () => {
-                showSuccessToast({ title: `Avtale ${avtale.aktorId} ble slettet` });
+                showSuccessToast({ title: `Avtalen ble slettet` });
             },
             onError: (error) => {
                 // TODO: show error message in popover?
-                showErrorToast({ title: `Noe gikk galt ved sletting av ${avtale.aktorId}` });
+                showErrorToast({ title: `Noe gikk galt ved sletting av avtalen` });
             },
         });
 
