@@ -83,7 +83,6 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
             .required()
             .min(
                 // TODO: use station opening hours?
-                // TODO: set minimum duration for henting (e.g. 15 mins after startTidspunkt)
                 yup.ref('startTidspunkt'),
                 'Sluttidspunktet for når partneren kan hente kan ikke være før starttidspunktet',
             )

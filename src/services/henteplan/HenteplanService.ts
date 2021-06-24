@@ -1,5 +1,6 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiPlanlagtHenting } from '../henting/HentingService';
+import { ApiKategori } from '../kategori/KategoriService';
 
 export type HenteplanFrekvens = 'ENKELT' | 'UKENTLIG' | 'ANNENHVER';
 
@@ -15,6 +16,11 @@ export interface ApiHenteplan {
     ukedag: Weekday;
     merknad: string;
     planlagteHentinger: Array<ApiPlanlagtHenting>;
+    kategorier: Array<{
+        kategoriId: string;
+        kategori: ApiKategori;
+        merknad?: string;
+    }>;
 }
 
 export interface ApiHenteplanPost {
@@ -38,6 +44,10 @@ export interface ApiHenteplanPatch {
     sluttTidspunkt?: string;
     ukedag?: Weekday;
     merknad?: string;
+    kategorier: Array<{
+        kategoriId: string;
+        merknad?: string;
+    }>;
 }
 
 export interface ApiHenteplanParams {

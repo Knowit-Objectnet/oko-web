@@ -1,11 +1,8 @@
 import * as React from 'react';
 import { useKategorier } from '../../services/kategori/useKategorier';
-import { CheckboxGroup, FormControl, FormErrorMessage, FormHelperText, VStack } from '@chakra-ui/react';
-import { FormLabel } from './FormLabel';
-import { ErrorMessage } from '@hookform/error-message';
-import { useFormContext } from 'react-hook-form';
-import { Checkbox } from './checkbox/Checkbox';
+import { CheckboxGroup, CheckboxOption } from './checkbox/CheckboxGroup';
 import { CheckboxGroupSkeleton } from './checkbox/CheckboxGroupSkeleton';
+import { WarningBody, WarningContainer, WarningTitle } from './Warning';
 
 interface Props {
     name: string;
@@ -14,55 +11,47 @@ interface Props {
     required?: boolean;
 }
 
-export const KategoriSelect: React.FC<Props> = ({ name, label, required, helperText }) => {
-    const {
-        formState: { errors, isSubmitted },
-    } = useFormContext();
-
+export const KategoriSelect: React.FC<Props> = ({ name, ...props }) => {
     const { data: kategorier, isLoading, isLoadingError } = useKategorier({ queryOptions: { keepPreviousData: true } });
 
-    const isInvalid = errors[name] && isSubmitted;
-
-    const getKategoriCheckBoxes = () => {
+    const getLoadingPlaceholder = (): React.ReactNode => {
         if (isLoading) {
             return <CheckboxGroupSkeleton loadingText="Laster inn kategorier..." />;
         }
         if (isLoadingError) {
-            return 'Noe gikk galt, klarte ikke å laste inn kategorier. Vennligst forsøk å lukke skjemaet og åpne det på nytt.';
+            return (
+                <WarningContainer variant="warning">
+                    <WarningTitle title="Noe gikk galt, klarte ikke å laste inn kategorier." />
+                    <WarningBody>
+                        Vennligst forsøk å lukke skjemaet og åpne det på nytt. Du kan fortsatt lagre henteplanen, men
+                        ingen kategorier vil bli registrert.
+                    </WarningBody>
+                </WarningContainer>
+            );
         }
         if (kategorier && kategorier.length < 1) {
             return 'Fant ingen kategorier å velge mellom.';
         }
+        return null;
+    };
 
-        const sortedKategorier = (kategorier || []).sort((kategoriA, kategoriB) =>
+    const getKategoriCheckBoxes = (): Array<CheckboxOption> => {
+        const sortedKategorier = kategorier || []; /*.sort((kategoriA, kategoriB) =>
             kategoriA.navn.localeCompare(kategoriB.navn),
-        );
+        );*/
 
-        return (
-            <VStack spacing="0">
-                {sortedKategorier.map((kategori) => (
-                    <Checkbox
-                        key={kategori.id}
-                        value={kategori.id}
-                        label={kategori.navn}
-                        name={name}
-                        isInvalid={isInvalid}
-                    />
-                ))}
-            </VStack>
-        );
+        return sortedKategorier.map((kategori) => ({
+            value: kategori.id,
+            label: kategori.navn,
+        }));
     };
 
     return (
-        <FormControl isInvalid={isInvalid}>
-            <fieldset>
-                <FormLabel as="legend" label={label} required={required} />
-                {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
-                <CheckboxGroup>{getKategoriCheckBoxes()}</CheckboxGroup>
-            </fieldset>
-            <FormErrorMessage>
-                <ErrorMessage name={name} />
-            </FormErrorMessage>
-        </FormControl>
+        <CheckboxGroup
+            name={name}
+            options={getKategoriCheckBoxes()}
+            optionsPlaceholder={getLoadingPlaceholder()}
+            {...props}
+        />
     );
 };

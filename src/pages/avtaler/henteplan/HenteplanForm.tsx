@@ -73,8 +73,9 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSu
 
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
-    const handleSubmit = formMethods.handleSubmit(async (formData) => {
+    const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
+        console.log('Henteplan som sendes til API', formData);
         onSubmit(formData).catch(onApiSubmitError);
     });
 
@@ -94,6 +95,12 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSu
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
+                    <KategoriSelect
+                        name="kategorier"
+                        label="Kategorier"
+                        helperText="Hvilken type varer skal partneren kunne hente?"
+                        required
+                    />
                     <FormInfoSection>
                         <FormInfoHeading>Gjelder for {getAvtaleTitle(avtale).toLowerCase()}:</FormInfoHeading>
                         <FormInfoBody>
@@ -101,7 +108,6 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSu
                         </FormInfoBody>
                     </FormInfoSection>
                     <RequiredFieldsInstruction />
-                    <ErrorMessages globalError={apiOrNetworkError} />
                     {/* TODO: show station name, not dropdown if isEditing */}
                     <StasjonSelect
                         name="stasjonId"
@@ -123,13 +129,8 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSu
                         />
                     ) : null}
                     <HenteplanFormTidspunkt frekvensIsRecurring={isRecurring} />
-                    <KategoriSelect
-                        name="kategorier"
-                        label="Kategorier"
-                        helperText="Hvilken type varer skal partneren kunne hente?"
-                        required
-                    />
                     <TextArea name="merknad" label="Merknader" />
+                    <ErrorMessages globalError={apiOrNetworkError} />
                     <FormSubmitButton
                         label={isEditing ? 'Lagre endringer' : 'Registrer ny henteplan'}
                         isLoading={submitLoading}

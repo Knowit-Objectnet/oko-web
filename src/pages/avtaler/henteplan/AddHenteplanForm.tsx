@@ -1,7 +1,7 @@
 import React from 'react';
 import { HenteplanForm, HenteplanFormData } from './HenteplanForm';
 import { useAddHenteplan } from '../../../services/henteplan/useAddHenteplan';
-import { createHenteplan } from './henteplanFormUtils';
+import { createNewHenteplan } from './henteplanFormUtils';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const AddHenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
-    const defaultFormValues = {
+    const formValues = {
         startDato: avtale.startDato,
         sluttDato: avtale.sluttDato,
     };
@@ -21,10 +21,7 @@ export const AddHenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
     const showSuccessToast = useSuccessToast();
 
     const handleSubmit = (formData: HenteplanFormData) => {
-        const newHenteplan = {
-            ...createHenteplan(formData),
-            avtaleId: avtale.id,
-        };
+        const newHenteplan = createNewHenteplan(avtale.id, formData);
 
         return addHenteplanMutation.mutateAsync(newHenteplan, {
             onSuccess: () => {
@@ -37,7 +34,7 @@ export const AddHenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
     return (
         <HenteplanForm
             avtale={avtale}
-            defaultFormValues={defaultFormValues}
+            defaultFormValues={formValues}
             onSubmit={handleSubmit}
             submitLoading={addHenteplanMutation.isLoading}
         />
