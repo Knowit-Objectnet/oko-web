@@ -3,7 +3,7 @@ import { DeleteButtonWithConfirmation } from '../../../components/buttons/Delete
 import { useErrorToast } from '../../../components/toasts/useErrorToast';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
-import { useDeleteHenteplan } from '../../../services/henting/useDeleteHenteplan';
+import { useDeleteHenteplan } from '../../../services/henteplan/useDeleteHenteplan';
 
 interface Props {
     henteplan: ApiHenteplan;

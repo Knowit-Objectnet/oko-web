@@ -1,9 +1,9 @@
 import { UseMutationResult } from 'react-query';
 import { avtaleDefaultQueryKey } from '../avtale/AvtaleService';
-import { ApiHenteplan, deleteHenteplan, henteplanDefaultQueryKey } from '../henteplan/HenteplanService';
+import { ApiHenteplan, deleteHenteplan, henteplanDefaultQueryKey } from './HenteplanService';
 import { ApiError } from '../httpClient';
 import { useMutationWithInvalidation } from '../useMutationWithInvalidation';
-import { planlagtHentingDefaultQueryKey } from './HentingService';
+import { planlagtHentingDefaultQueryKey } from '../henting/HentingService';
 
 export const useDeleteHenteplan = (): UseMutationResult<ApiHenteplan, ApiError, string> =>
     useMutationWithInvalidation<ApiHenteplan, ApiError, string>(
