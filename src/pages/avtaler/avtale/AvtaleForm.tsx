@@ -17,7 +17,7 @@ import { ApiError } from '../../../services/httpClient';
 import { useUpdateAvtale } from '../../../services/avtale/useUpdateAvtale';
 import { AvtaleFormSluttDato } from './AvtaleFormSluttDato';
 import { AvtaleFormStartDato } from './AvtaleFormStartDato';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/radio/RadiobuttonGroup';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';

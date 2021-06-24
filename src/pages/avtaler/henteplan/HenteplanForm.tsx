@@ -4,7 +4,7 @@ import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/radio/RadiobuttonGroup';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 import { Stack } from '@chakra-ui/react';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
@@ -95,12 +95,6 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSu
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
-                    <KategoriSelect
-                        name="kategorier"
-                        label="Kategorier"
-                        helperText="Hvilken type varer skal partneren kunne hente?"
-                        required
-                    />
                     <FormInfoSection>
                         <FormInfoHeading>Gjelder for {getAvtaleTitle(avtale).toLowerCase()}:</FormInfoHeading>
                         <FormInfoBody>
@@ -129,6 +123,12 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSu
                         />
                     ) : null}
                     <HenteplanFormTidspunkt frekvensIsRecurring={isRecurring} />
+                    <KategoriSelect
+                        name="kategorier"
+                        label="Kategorier"
+                        helperText="Hvilken type varer skal partneren kunne hente?"
+                        required
+                    />
                     <TextArea name="merknad" label="Merknader" />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <FormSubmitButton
