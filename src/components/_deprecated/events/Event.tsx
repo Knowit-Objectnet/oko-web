@@ -59,8 +59,8 @@ export const Event: React.FC<Props> = (props) => {
     // const alert = useAlert();
 
     const { user } = useAuth();
-    const stationOwnsEvent = user.ownsResource(props.event.resource.station.id);
-    const partnerOwnsEvent = user.ownsResource(props.event.resource.partner.id);
+    const stationOwnsEvent = user.ownsResource(props.event.resource.station.id.toString());
+    const partnerOwnsEvent = user.ownsResource(props.event.resource.partner.id.toString());
 
     const queryClient = useQueryClient();
     const updateEventMutation = useMutation((updatedEvent: ApiEventPatch) => patchEvent(updatedEvent), {

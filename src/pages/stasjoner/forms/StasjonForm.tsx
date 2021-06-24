@@ -107,7 +107,7 @@ export const StasjonForm: React.FC<Props> = ({ stasjonToEdit, onSuccess }) => {
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
-                <Stack direction="column" spacing="8">
+                <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på stasjonen" required />

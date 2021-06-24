@@ -45,7 +45,7 @@ export const PartnerRequestStatus: React.FC<Props> = ({ pickUp }) => {
         isError: requestLoadingError,
     } = useRequests({
         pickupId: pickUp.id,
-        partnerId: user.aktorId,
+        // partnerId: user.aktorId,
     });
 
     const renderRequestStatus = () => {

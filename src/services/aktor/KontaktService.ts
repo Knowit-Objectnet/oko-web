@@ -12,25 +12,17 @@ export interface ApiKontakt {
 export interface ApiKontaktPost {
     aktorId: string;
     navn: string;
+    rolle?: string;
     telefon?: string;
     epost?: string;
-    rolle?: string;
 }
 
 export interface ApiKontaktPatch {
     id: string;
     navn?: string;
+    rolle?: string;
     telefon?: string;
     epost?: string;
-    rolle?: string;
-}
-
-export interface ApiKontaktPatch {
-    id: string;
-    navn?: string;
-    telefon?: string;
-    epost?: string;
-    rolle?: string;
 }
 
 export interface ApiKontaktParams {

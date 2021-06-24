@@ -25,7 +25,7 @@ describe('Provides a page provide and update weight of withdrawals', () => {
             return [200, ''];
         });
 
-        setupUseAuthMock({ isStasjon: true, aktorId: 1 });
+        setupUseAuthMock({ isStasjon: true, aktorId: '1' });
 
         render(<WeightReporting />);
 

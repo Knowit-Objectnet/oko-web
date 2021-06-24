@@ -32,7 +32,7 @@ export const WeightReporting: React.FC = () => {
         isLoading,
         isError,
     } = useReports({
-        partnerId: user.aktorId,
+        // partnerId: user.aktorId,
         /* Fetching all reports for today, until midnight. */
         toDate: formatISO(new Date().setHours(24, 0, 0, 0)),
     });
