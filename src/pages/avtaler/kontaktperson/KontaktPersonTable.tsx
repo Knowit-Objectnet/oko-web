@@ -20,7 +20,7 @@ export const KontaktPersonTable: React.FC<Props> = ({ kontaktPersoner }) => {
                 <Tr>
                     <Th scope="col">Navn</Th>
                     <Th scope="col">Rolle</Th>
-                    <Th scope="col">Telefonnummer</Th>
+                    <Th scope="col">Mobiltelefon</Th>
                     <Th scope="col">E-postadresse</Th>
                     <Th scope="col">
                         <VisuallyHidden>Handlinger</VisuallyHidden>

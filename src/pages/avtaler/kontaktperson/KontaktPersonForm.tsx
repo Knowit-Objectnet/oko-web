@@ -15,7 +15,7 @@ import { upperFirst } from 'lodash';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useUpdateKontakt } from '../../../services/aktor/useUpdateKontakt';
 import { ApiError } from '../../../services/httpClient';
-import { removeWhitespace } from '../../../utils/forms/removeWhitespace';
+import { transformToNorwegianPhone } from '../../../utils/forms/transformToNorwegianPhone';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
@@ -27,12 +27,13 @@ const validationSchema = yup.object().shape({
     telefon: yup
         .string()
         .label('telefonnummer for kontaktpersonen')
-        .transform(removeWhitespace)
-        .matches(/^(\+?(00)?(47))?[2-9]\d{7}$/, {
-            message: ({ label }: { label: string }) => `${upperFirst(label)} må være et gyldig, norsk telefonnummer`,
+        .transform(transformToNorwegianPhone)
+        .matches(/^\+47[4|9]\d{7}$/, {
+            message: ({ label }: { label: string }) =>
+                `${upperFirst(label)} må være et gyldig, norsk mobiltelefonnummer (8 siffer, starter med 4 eller 9)`,
             excludeEmptyString: true,
         }),
-    epost: yup.string().label('e-postadresse for kontaktpersonen').trim().email(),
+    epost: yup.string().label('e-postadresse for kontaktpersonen').trim().email().nullable(),
 });
 
 interface Props {
@@ -59,7 +60,7 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ part
             ? {
                   navn: kontaktToEdit.navn,
                   rolle: kontaktToEdit.rolle,
-                  telefon: kontaktToEdit.telefon,
+                  telefon: kontaktToEdit.telefon?.replace(/^\+47/, ''),
                   epost: kontaktToEdit.epost,
               }
             : undefined,
@@ -124,8 +125,9 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ part
                     <Input
                         type="phone"
                         name="telefon"
-                        label="Telefonnummer"
-                        helperText="Må være et norsk telefonnummer"
+                        label="Mobiltelefon"
+                        helperText="Må være et gyldig, norsk mobiltelefonnummer"
+                        leftAddon="+47"
                     />
                     <Input type="email" name="epost" label="E-postadresse" required={false} />
                     <FormSubmitButton

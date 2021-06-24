@@ -7,6 +7,7 @@ import {
     FormHelperText,
     Input as InputField,
     InputGroup,
+    InputLeftElement,
     InputProps,
     InputRightElement,
 } from '@chakra-ui/react';
@@ -19,9 +20,18 @@ export interface Props {
     label: string;
     required?: boolean;
     helperText?: string;
+    leftAddon?: React.ReactNode;
 }
 
-export const Input: React.FC<Props & InputProps> = ({ name, label, required, helperText, type = 'text', ...props }) => {
+export const Input: React.FC<Props & InputProps> = ({
+    name,
+    label,
+    required,
+    helperText,
+    type = 'text',
+    leftAddon,
+    ...props
+}) => {
     const {
         register,
         formState: { errors, isSubmitted },
@@ -34,6 +44,7 @@ export const Input: React.FC<Props & InputProps> = ({ name, label, required, hel
             <FormLabel label={label} required={required} />
             {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
             <InputGroup>
+                {leftAddon ? <InputLeftElement paddingLeft="1">{leftAddon}</InputLeftElement> : null}
                 <InputField
                     type={type}
                     {...props}
