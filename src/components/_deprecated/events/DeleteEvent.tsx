@@ -60,7 +60,8 @@ export const DeleteEvent: React.FC<DeleteEventProps> = (props) => {
 
     const eventIsRecurring = props.event.resource.recurrenceRule != null;
     const allowRangeDeletion =
-        eventIsRecurring && (user.isAdmin || (user.isStasjon && user.ownsResource(props.event.resource.station.id)));
+        eventIsRecurring &&
+        (user.isAdmin || (user.isStasjon && user.ownsResource(props.event.resource.station.id.toString())));
 
     const date = new Date();
     date.setHours(2, 0, 0, 0);

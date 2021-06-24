@@ -41,14 +41,14 @@ export const ListItemDropdown: React.FC<ListItemDropdownProps> = (props) => {
     const { user } = useAuth();
     // Select the first event that is owned by the logged in partner. It should never be undefined, but if it is
     // then it should cause problems as it simply won't open the sideview with event info.
-    const firstOwnedEvent = () => props.events.find((event) => user.ownsResource(event.resource.partner.id));
+    const firstOwnedEvent = () => props.events.find((event) => user.ownsResource(event.resource.partner.id.toString()));
     // State for handling the selected event to view info of
     const [selectedEvent, setSelectedEvent] = useState<EventInfo | undefined>(firstOwnedEvent());
     const selectedEventResource = selectedEvent && selectedEvent.resource;
 
     // On event click function
     const onSelectEvent = (event: EventInfo) => {
-        if (user.ownsResource(event.resource.partner.id)) {
+        if (user.ownsResource(event.resource.partner.id.toString())) {
             setSelectedEvent(event);
         }
     };

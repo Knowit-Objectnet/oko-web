@@ -199,7 +199,7 @@ export const EventsColumn: React.FC<EventsColumnProps> = (props) => {
                                 ? undefined
                                 : props.selectedEvent === event.resource.eventId
                         }
-                        userIsOwner={user.isPartner && user.ownsResource(event.resource.partner.id)}
+                        userIsOwner={user.isPartner && user.ownsResource(event.resource.partner.id.toString())}
                     />,
                 );
             });

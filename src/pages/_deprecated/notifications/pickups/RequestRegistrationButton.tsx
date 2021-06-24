@@ -12,7 +12,7 @@ interface Props {
 
 export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, onRequestRegistration }) => {
     const { user } = useAuth();
-    const partnerId = user.aktorId as number; // TODO: find a way to handle undefined so we can remove this type assertion
+    const partnerId = user.aktorId; // TODO: find a way to handle undefined so we can remove this type assertion
     // const alert = useAlert();
 
     const queryClient = useQueryClient();
@@ -29,11 +29,11 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, onRequest
 
     const handleRequestRegistrationClick = async () => {
         onRequestRegistration(true);
-        const newRequest: ApiRequestPost = {
+        /*const newRequest: ApiRequestPost = {
             pickupId,
             partnerId,
         };
-        await addRequestMutation.mutateAsync(newRequest);
+        await addRequestMutation.mutateAsync(newRequest);*/
         onRequestRegistration(false);
     };
 

@@ -36,11 +36,11 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, onRequest
 
     const handleRequestCancellationClick = async () => {
         onRequestCancellation(true);
-        const requestToCancel: ApiRequestParams = {
+        /*const requestToCancel: ApiRequestParams = {
             pickupId,
             partnerId,
         };
-        await deleteRequestMutation.mutateAsync(requestToCancel);
+        await deleteRequestMutation.mutateAsync(requestToCancel);*/
         onRequestCancellation(false);
     };
 
