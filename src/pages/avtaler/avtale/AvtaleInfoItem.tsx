@@ -1,14 +1,23 @@
 import { Flex } from '@chakra-ui/layout';
-import { AccordionButton, AccordionItem, AccordionPanel, Fade, Heading, Icon, Text } from '@chakra-ui/react';
+import {
+    AccordionButton,
+    AccordionItem,
+    AccordionPanel,
+    ButtonGroup,
+    Fade,
+    Heading,
+    Icon,
+    Text,
+} from '@chakra-ui/react';
 import ArrowRight from '../../../assets/ArrowRight.svg';
 import * as React from 'react';
 import { ApiAvtale, AvtaleType } from '../../../services/avtale/AvtaleService';
 import { isFuture, isPast, isWithinInterval, parseISO } from 'date-fns';
 import { formatDate } from '../../../utils/formatDateTime';
 import { Henteplaner } from '../henteplan/Henteplaner';
-import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { EditAvtaleButton } from './EditAvtaleButton';
+import { DeleteAvtaleButton } from './DeleteAvtaleButton';
 
 export const AVTALE_TYPE: Record<AvtaleType, string> = {
     ANNEN: 'Annen avtale',
@@ -62,7 +71,10 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => (
                         </AccordionButton>
                     </Heading>
                     <Fade in={isExpanded} unmountOnExit>
-                        <EditAvtaleButton size="sm" avtale={avtale} />
+                        <ButtonGroup spacing="4" size="sm">
+                            <EditAvtaleButton size="sm" avtale={avtale} />
+                            <DeleteAvtaleButton avtale={avtale} />
+                        </ButtonGroup>
                     </Fade>
                 </Flex>
                 <Text>
