@@ -4,7 +4,7 @@ import { FormModal } from '../../../components/forms/FormModal';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
-import { EditHenteplanForm } from './EditHenteplanForm';
+import { EditHenteplanForm } from './form/EditHenteplanForm';
 
 interface Props {
     avtale: ApiAvtale;

@@ -1,12 +1,12 @@
-import { ApiAvtale } from '../../../services/avtale/AvtaleService';
+import { ApiAvtale } from '../../../../services/avtale/AvtaleService';
 import * as yup from 'yup';
-import { HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
-import { transformStringToDate } from '../../../utils/forms/transformStringToDate';
+import { HenteplanFrekvens, Weekday } from '../../../../services/henteplan/HenteplanService';
+import { transformStringToDate } from '../../../../utils/forms/transformStringToDate';
 import { add, isValid, parseISO } from 'date-fns';
 import { upperFirst } from 'lodash';
-import { transformStringToDateTime } from '../../../utils/forms/transformStringToDateTime';
-import { frekvensOptions } from './HenteplanForm';
+import { transformStringToDateTime } from '../../../../utils/forms/transformStringToDateTime';
 import { ukedagOptions } from './HenteplanFormTidspunkt';
+import { frekvensOptions } from './HenteplanFormFrekvens';
 
 /** IMPORTANT! The order of the fields in this schema must match the order of the visual fields in the form.
  *   This is because the order here defines the order of the error messages in the error message summary

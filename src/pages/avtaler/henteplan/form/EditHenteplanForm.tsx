@@ -1,11 +1,11 @@
 import React from 'react';
 import { HenteplanForm, HenteplanFormData } from './HenteplanForm';
-import { useUpdateHenteplan } from '../../../services/henteplan/useUpdateHenteplan';
-import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
+import { useUpdateHenteplan } from '../../../../services/henteplan/useUpdateHenteplan';
+import { ApiHenteplan } from '../../../../services/henteplan/HenteplanService';
 import { createUpdatedHenteplan } from './henteplanFormUtils';
-import { ApiAvtale } from '../../../services/avtale/AvtaleService';
-import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { getDateStringFromISOString, getTimeStringFromISOString } from '../../../utils/hentingDateTimeHelpers';
+import { ApiAvtale } from '../../../../services/avtale/AvtaleService';
+import { useSuccessToast } from '../../../../components/toasts/useSuccessToast';
+import { getDateStringFromISOString, getTimeStringFromISOString } from '../../../../utils/hentingDateTimeHelpers';
 
 interface Props {
     avtale: ApiAvtale;

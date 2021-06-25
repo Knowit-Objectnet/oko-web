@@ -1,34 +1,25 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { ApiAvtale } from '../../../services/avtale/AvtaleService';
+import { ApiAvtale } from '../../../../services/avtale/AvtaleService';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
+import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../../services/henteplan/HenteplanService';
 import { Stack } from '@chakra-ui/react';
-import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ErrorMessages } from '../../../components/forms/ErrorMessages';
-import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { StasjonSelect } from '../../../components/forms/StasjonSelect';
-import { TextArea } from '../../../components/forms/TextArea';
-import { formatDate } from '../../../utils/formatDateTime';
-import { AVTALE_TYPE, getAvtaleTitle } from '../avtale/AvtaleInfoItem';
+import { RequiredFieldsInstruction } from '../../../../components/forms/RequiredFieldsInstruction';
+import { ErrorMessages } from '../../../../components/forms/ErrorMessages';
+import { FormSubmitButton } from '../../../../components/forms/FormSubmitButton';
+import { TextArea } from '../../../../components/forms/TextArea';
 import { getHenteplanValidationSchema } from './henteplanFormSchema';
-import { FormInfoBody, FormInfoHeading, FormInfoSection } from '../../../components/forms/FormInfoSection';
-import { parseISO } from 'date-fns';
-import { KategoriSelect } from '../../../components/forms/KategoriSelect';
+import { KategoriSelect } from '../../../../components/forms/KategoriSelect';
 import { HenteplanFormTidspunkt } from './HenteplanFormTidspunkt';
 import { HenteplanFormDato } from './HenteplanFormDato';
-import { ApiError } from '../../../services/httpClient';
+import { ApiError } from '../../../../services/httpClient';
+import { HenteplanFormStasjon } from './HenteplanFormStasjon';
+import { HenteplanFormAvtaleInfo } from './HenteplanFormAvtaleInfo';
+import { HenteplanFormFrekvens } from './HenteplanFormFrekvens';
 
 // NB! Setting the global error messages used by yup
-import '../../../utils/forms/formErrorMessages';
-
-export const frekvensOptions: Array<RadioOption<HenteplanFrekvens>> = [
-    { value: 'ENKELT', label: 'Enkelthendelse' },
-    { value: 'UKENTLIG', label: 'Ukentlig' },
-    { value: 'ANNENHVER', label: 'Annenhver uke' },
-];
+import '../../../../utils/forms/formErrorMessages';
 
 interface HenteplanFormBase {
     stasjonId: string;
@@ -86,41 +77,16 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSu
 
     const frekvens = formMethods.watch('frekvens', undefined);
     const isRecurring = frekvens && frekvens !== 'ENKELT';
-    const avtaleVarighet = `fra ${formatDate(parseISO(avtale.startDato))} til ${formatDate(
-        parseISO(avtale.sluttDato),
-    )}`;
 
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
-                    <FormInfoSection>
-                        <FormInfoHeading>Gjelder for {getAvtaleTitle(avtale).toLowerCase()}:</FormInfoHeading>
-                        <FormInfoBody>
-                            {AVTALE_TYPE[avtale.type]} {avtaleVarighet}
-                        </FormInfoBody>
-                    </FormInfoSection>
+                    <HenteplanFormAvtaleInfo avtale={avtale} />
                     <RequiredFieldsInstruction />
-                    {/* TODO: show station name, not dropdown if isEditing */}
-                    <StasjonSelect
-                        name="stasjonId"
-                        label="Stasjon"
-                        helperText="Hvilken stasjon skal det hentes fra?"
-                        required
-                    />
-                    <RadiobuttonGroup
-                        name="frekvens"
-                        label="Frekvens"
-                        options={frekvensOptions}
-                        helperText="Hvor ofte skal hentingene skje?"
-                        required
-                    />
-                    {frekvens ? (
-                        <HenteplanFormDato
-                            isInterval={isRecurring}
-                            helperText={`Må være innenfor avtalens varighet (${avtaleVarighet})`}
-                        />
-                    ) : null}
+                    <HenteplanFormStasjon stasjonId={defaultFormValues.stasjonId} />
+                    <HenteplanFormFrekvens />
+                    {frekvens ? <HenteplanFormDato isInterval={isRecurring} avtale={avtale} /> : null}
                     <HenteplanFormTidspunkt frekvensIsRecurring={isRecurring} />
                     <KategoriSelect
                         name="kategorier"

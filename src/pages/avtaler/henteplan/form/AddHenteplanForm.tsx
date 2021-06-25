@@ -1,9 +1,9 @@
 import React from 'react';
 import { HenteplanForm, HenteplanFormData } from './HenteplanForm';
-import { useAddHenteplan } from '../../../services/henteplan/useAddHenteplan';
+import { useAddHenteplan } from '../../../../services/henteplan/useAddHenteplan';
 import { createNewHenteplan } from './henteplanFormUtils';
-import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { ApiAvtale } from '../../../services/avtale/AvtaleService';
+import { useSuccessToast } from '../../../../components/toasts/useSuccessToast';
+import { ApiAvtale } from '../../../../services/avtale/AvtaleService';
 
 interface Props {
     avtale: ApiAvtale;

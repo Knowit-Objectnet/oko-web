@@ -1,5 +1,5 @@
-import { ApiHenteplanPatch, ApiHenteplanPost } from '../../../services/henteplan/HenteplanService';
-import { mergeDateWithTimeToString } from '../../../utils/hentingDateTimeHelpers';
+import { ApiHenteplanPatch, ApiHenteplanPost } from '../../../../services/henteplan/HenteplanService';
+import { mergeDateWithTimeToString } from '../../../../utils/hentingDateTimeHelpers';
 import { HenteplanFormData } from './HenteplanForm';
 
 const getStartTidspunkt = (data: HenteplanFormData): string =>

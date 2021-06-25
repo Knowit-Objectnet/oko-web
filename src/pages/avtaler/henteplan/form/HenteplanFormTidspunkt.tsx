@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Select, SelectOption } from '../../../components/forms/Select';
-import { TimeInput } from '../../../components/forms/input/TimeInput';
-import { Weekday } from '../../../services/henteplan/HenteplanService';
+import { Select, SelectOption } from '../../../../components/forms/Select';
+import { TimeInput } from '../../../../components/forms/input/TimeInput';
+import { Weekday } from '../../../../services/henteplan/HenteplanService';
 
 export const ukedagOptions: Array<SelectOption<Weekday>> = [
     { value: 'MONDAY', label: 'Mandag' },
