@@ -2,7 +2,7 @@ import { isDate, isValid, parse } from 'date-fns';
 
 export const PARSE_TIME_FORMAT = 'HH:mm';
 
-export const transformTime = (value: unknown, originalValue: string): Date | null => {
+export const transformStringToDateTime = (value: unknown, originalValue: string): Date | null => {
     // If yup has successfully transformed user input to Date by itself
     if (isDate(value) && isValid(value)) {
         return value as Date;

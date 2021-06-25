@@ -2,13 +2,12 @@ import * as React from 'react';
 import { useStasjonById } from '../../../services/stasjon/useStasjonById';
 import { ButtonGroup, Td, Tr } from '@chakra-ui/react';
 import { formatDate, formatTime } from '../../../utils/formatDateTime';
-import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
-import { localDateFromISO } from '../../../utils/localDateISO';
 import { parseISO } from 'date-fns';
 import { DeleteHenteplanButton } from './DeleteHenteplanButton';
 import { EditHenteplanButton } from './EditHenteplanButton';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
+import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 
 const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
@@ -39,9 +38,9 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan, avtale }) => {
         <Tr key={henteplan.id}>
             <Td>{UKEDAG[henteplan.ukedag]}</Td>
             <Td>
-                <time>{formatTime(localDateFromISO(henteplan.startTidspunkt))}</time>
+                <time>{formatTime(parseISOIgnoreTimezone(henteplan.startTidspunkt))}</time>
                 &ndash;
-                <time>{formatTime(localDateFromISO(henteplan.sluttTidspunkt))}</time>
+                <time>{formatTime(parseISOIgnoreTimezone(henteplan.sluttTidspunkt))}</time>
             </Td>
             <Td>{stasjon?.navn}</Td>
             <Td>{FREKVENS[henteplan.frekvens]}</Td>

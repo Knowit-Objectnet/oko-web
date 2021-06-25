@@ -1,12 +1,13 @@
 import { ApiHenteplanPatch, ApiHenteplanPost } from '../../../services/henteplan/HenteplanService';
-import { toISOLocalString } from '../../../utils/localDateISO';
-import { mergeDateWithTime } from '../../../utils/forms/mergeDateWithTime';
+import { mergeDateWithTimeToString } from '../../../utils/hentingDateTimeHelpers';
 import { HenteplanFormData } from './HenteplanForm';
 
-const getStartTidspunkt = (data: HenteplanFormData) =>
-    toISOLocalString(mergeDateWithTime(data.startDato, data.startTidspunkt));
-const getSluttTidspunkt = (data: HenteplanFormData) =>
-    toISOLocalString(mergeDateWithTime(data.sluttDato || data.startDato, data.sluttTidspunkt));
+const getStartTidspunkt = (data: HenteplanFormData): string =>
+    mergeDateWithTimeToString(data.startDato, data.startTidspunkt);
+
+const getSluttTidspunkt = (data: HenteplanFormData): string =>
+    mergeDateWithTimeToString(data.sluttDato || data.startDato, data.sluttTidspunkt);
+
 const getKategorier = (data: HenteplanFormData) => data.kategorier.map((kategoriId) => ({ kategoriId }));
 
 const createHenteplanBase = (data: HenteplanFormData): Omit<ApiHenteplanPost, 'avtaleId' | 'stasjonId'> => ({
