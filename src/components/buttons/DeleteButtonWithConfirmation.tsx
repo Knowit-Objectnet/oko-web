@@ -34,7 +34,15 @@ export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm
 
     return (
         <Flex textAlign="start">
-            <Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose} placement="bottom-end">
+            <Popover
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+                placement="bottom-end"
+                // We have to use lazy loading and unmounting in order for the focus lock to work
+                isLazy
+                lazyBehavior="unmount"
+            >
                 <PopoverTrigger>
                     <DeleteButton label="Slett" aria-label={`Slett ${label}`} />
                 </PopoverTrigger>
