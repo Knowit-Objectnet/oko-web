@@ -76,6 +76,7 @@ export const ConfirmationPopover: React.FC<Props> = ({ message, onConfirm, isLoa
                                     variant="warning"
                                     onClick={onDeleteConfirmation}
                                     isLoading={isLoading}
+                                    loadingText="Vennligst vent..."
                                 >
                                     {message.buttonLabel}
                                 </Button>
