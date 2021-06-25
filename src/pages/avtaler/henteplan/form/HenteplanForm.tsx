@@ -52,7 +52,7 @@ export interface Props {
 }
 
 export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSubmit, submitLoading, isEditing }) => {
-    const validationSchema = getHenteplanValidationSchema(avtale);
+    const validationSchema = getHenteplanValidationSchema(avtale, isEditing);
     const formMethods = useForm<HenteplanFormData>({
         resolver: yupResolver(validationSchema),
         defaultValues: defaultFormValues,

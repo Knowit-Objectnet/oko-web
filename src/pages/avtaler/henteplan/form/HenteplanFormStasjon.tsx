@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { StasjonSelect } from '../../../../components/forms/StasjonSelect';
 import { useStasjonById } from '../../../../services/stasjon/useStasjonById';
-import { FormInfoHeading, FormInfoSection } from '../../../../components/forms/FormInfoSection';
-import { FormField } from '../../../../components/forms/FormField';
+import { FormLabel } from '../../../../components/forms/FormLabel';
+import { FormControl, FormHelperText } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/layout';
 
 interface Props {
     stasjonId?: string;
@@ -22,11 +23,13 @@ const StasjonInfo: React.FC<Required<Props>> = ({ stasjonId }) => {
     };
 
     return (
-        <FormField name="stasjonId" label="Stasjon">
-            <FormInfoSection>
-                <FormInfoHeading>{getStasjonNavn()}</FormInfoHeading>
-            </FormInfoSection>
-        </FormField>
+        <FormControl>
+            <FormLabel label="Stasjon" />
+            <FormHelperText>Hvilken stasjon det skal hentes fra</FormHelperText>
+            <Box backgroundColor="gray.100" width="full" padding="5" fontSize="lg">
+                {getStasjonNavn()}
+            </Box>
+        </FormControl>
     );
 };
 

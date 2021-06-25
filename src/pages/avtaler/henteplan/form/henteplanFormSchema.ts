@@ -12,9 +12,13 @@ import { frekvensOptions } from './HenteplanFormFrekvens';
  *   This is because the order here defines the order of the error messages in the error message summary
  *   displayed in the form.
  */
-export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSchema =>
+export const getHenteplanValidationSchema = (avtale: ApiAvtale, isEditing?: boolean): yup.AnyObjectSchema =>
     yup.object().shape({
-        stasjonId: yup.string().label('hvilken stasjon det skal hentes fra').required(),
+        stasjonId: yup
+            .string()
+            .when((value: unknown, schema: yup.StringSchema) =>
+                isEditing ? schema : schema.label('hvilken stasjon det skal hentes fra').required(),
+            ),
         frekvens: yup
             .mixed<HenteplanFrekvens>()
             .label('hvor ofte hentingene skal skje')
