@@ -75,7 +75,6 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSu
 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
-        console.log('Henteplan som sendes til API', formData);
         onSubmit(formData).catch(onApiSubmitError);
     });
 
