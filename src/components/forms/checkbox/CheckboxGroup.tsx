@@ -10,17 +10,14 @@ import { Checkbox } from './Checkbox';
 import { FormLabel } from '../FormLabel';
 import { ErrorMessage } from '@hookform/error-message';
 import { useController } from 'react-hook-form';
+import { FormFieldProps } from '../FormField';
 
 export interface CheckboxOption<TValue = string, TLabel = string> {
     value: TValue;
     label: TLabel;
 }
 
-interface Props {
-    name: string;
-    label: string;
-    required?: boolean;
-    helperText?: string;
+interface Props extends FormFieldProps {
     options?: Array<CheckboxOption>;
     /** Component to display as placeholder for the checkbox list, e.g. while waiting for dynamically loaded options **/
     optionsPlaceholder?: React.ReactNode;

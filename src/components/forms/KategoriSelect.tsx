@@ -3,15 +3,9 @@ import { useKategorier } from '../../services/kategori/useKategorier';
 import { CheckboxGroup, CheckboxOption } from './checkbox/CheckboxGroup';
 import { CheckboxGroupSkeleton } from './checkbox/CheckboxGroupSkeleton';
 import { WarningBody, WarningContainer, WarningTitle } from './Warning';
+import { FormFieldProps } from './FormField';
 
-interface Props {
-    name: string;
-    label: string;
-    helperText?: string;
-    required?: boolean;
-}
-
-export const KategoriSelect: React.FC<Props> = ({ name, ...props }) => {
+export const KategoriSelect: React.FC<FormFieldProps> = ({ name, ...props }) => {
     const { data: kategorier, isLoading, isLoadingError } = useKategorier({ queryOptions: { keepPreviousData: true } });
 
     const getLoadingPlaceholder = (): React.ReactNode => {
@@ -35,16 +29,11 @@ export const KategoriSelect: React.FC<Props> = ({ name, ...props }) => {
         return null;
     };
 
-    const getKategoriCheckBoxes = (): Array<CheckboxOption> => {
-        const sortedKategorier = kategorier || []; /*.sort((kategoriA, kategoriB) =>
-            kategoriA.navn.localeCompare(kategoriB.navn),
-        );*/
-
-        return sortedKategorier.map((kategori) => ({
+    const getKategoriCheckBoxes = (): Array<CheckboxOption> =>
+        (kategorier || []).map((kategori) => ({
             value: kategori.id,
             label: kategori.navn,
         }));
-    };
 
     return (
         <CheckboxGroup

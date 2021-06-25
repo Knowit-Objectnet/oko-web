@@ -20,7 +20,16 @@ import '../../../utils/forms/formErrorMessages';
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
-    ideell: yup.boolean().label('Om partneren er en ideell organisasjon').required(),
+    ideell: yup
+        .boolean()
+        .label('om partneren er en ideell organisasjon')
+        .default(false)
+        .transform((value: Array<boolean> | boolean) => {
+            if (Array.isArray(value)) {
+                return value[0];
+            }
+            return value;
+        }),
 });
 
 interface PartnerFormData {

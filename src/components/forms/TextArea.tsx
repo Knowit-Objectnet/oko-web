@@ -1,28 +1,13 @@
 import * as React from 'react';
-import { FormControl, FormErrorMessage, FormHelperText, Textarea, TextareaProps } from '@chakra-ui/react';
+import { Textarea, TextareaProps } from '@chakra-ui/react';
 import { useFormContext } from 'react-hook-form';
-import { FormLabel } from './FormLabel';
-import { ErrorMessage } from '@hookform/error-message';
+import { FormFieldProps, FormField } from './FormField';
 
-export interface Props {
-    name: string;
-    label: string;
-    required?: boolean;
-    helperText?: string;
-}
-
-export const TextArea: React.FC<Props & TextareaProps> = ({ name, label, required, helperText, ...props }) => {
-    const {
-        register,
-        formState: { errors, isSubmitted },
-    } = useFormContext();
-
-    const isInvalid = errors[name] && isSubmitted;
+export const TextArea: React.FC<FormFieldProps & TextareaProps> = ({ name, label, required, helperText, ...props }) => {
+    const { register } = useFormContext();
 
     return (
-        <FormControl isInvalid={isInvalid}>
-            <FormLabel label={label} required={required} />
-            {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
+        <FormField name={name} label={label} helperText={helperText} required={required}>
             <Textarea
                 {...props}
                 {...register(name)}
@@ -33,9 +18,6 @@ export const TextArea: React.FC<Props & TextareaProps> = ({ name, label, require
                 //  I haven't been able to find a way to bypass this.
                 aria-required={required}
             />
-            <FormErrorMessage>
-                <ErrorMessage name={name} />
-            </FormErrorMessage>
-        </FormControl>
+        </FormField>
     );
 };
