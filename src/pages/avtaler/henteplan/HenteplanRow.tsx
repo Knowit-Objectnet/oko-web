@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useStasjonById } from '../../../services/stasjon/useStasjonById';
-import { ButtonGroup, TableCellProps, Td, Tr, Text } from '@chakra-ui/react';
+import { ButtonGroup, Td, Tr, Text } from '@chakra-ui/react';
 import { formatDate, formatTime } from '../../../utils/formatDateTime';
 import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
 import { parseISO } from 'date-fns';
@@ -31,19 +31,13 @@ interface Props {
     henteplan: ApiHenteplan;
 }
 
-export const TextTableCell: React.FC<TableCellProps> = ({ children, ...props }) => (
-    <Td paddingY="3" {...props}>
-        {children}
-    </Td>
-);
-
 export const HenteplanRow: React.FC<Props> = ({ henteplan, avtale }) => {
     // TODO: handle loading/error
     const { data: stasjon } = useStasjonById(henteplan.stasjonId);
 
     return (
         <Tr key={henteplan.id} verticalAlign="top">
-            <TextTableCell>
+            <Td>
                 <Text as="time" dateTime={henteplan.startTidspunkt} whiteSpace="nowrap">
                     {formatDate(parseISO(henteplan.startTidspunkt))}
                 </Text>
@@ -55,26 +49,26 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan, avtale }) => {
                         </Text>
                     </>
                 ) : null}
-            </TextTableCell>
-            <TextTableCell>{FREKVENS[henteplan.frekvens]}</TextTableCell>
-            <TextTableCell>{UKEDAG[henteplan.ukedag]}</TextTableCell>
-            <TextTableCell>{stasjon?.navn}</TextTableCell>
-            <TextTableCell>
+            </Td>
+            <Td>{FREKVENS[henteplan.frekvens]}</Td>
+            <Td>{UKEDAG[henteplan.ukedag]}</Td>
+            <Td>{stasjon?.navn}</Td>
+            <Td>
                 <time>{formatTime(parseISOIgnoreTimezone(henteplan.startTidspunkt))}</time>
                 &ndash;
                 <time>{formatTime(parseISOIgnoreTimezone(henteplan.sluttTidspunkt))}</time>
-            </TextTableCell>
-            <Td>
+            </Td>
+            <Td paddingY="2.5">
                 <KategoriList
                     kategorier={henteplan.kategorier.map((henteplanKategori) => henteplanKategori.kategori)}
                 />
             </Td>
-            <TextTableCell textAlign="end">
-                <ButtonGroup spacing="4" size="sm">
+            <Td textAlign="end">
+                <ButtonGroup spacing="3" size="sm">
                     <EditHenteplanButton henteplan={henteplan} avtale={avtale} />
                     <DeleteHenteplanButton henteplan={henteplan} />
                 </ButtonGroup>
-            </TextTableCell>
+            </Td>
         </Tr>
     );
 };

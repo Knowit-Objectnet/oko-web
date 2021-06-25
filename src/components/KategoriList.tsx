@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const KategoriList: React.FC<Props> = ({ kategorier }) => (
-    <UnorderedList display="flex" flexFlow="row wrap" margin="0" marginTop="1">
+    <UnorderedList display="flex" flexFlow="row wrap" margin="0" paddingTop="1">
         {kategorier.map((kategori) => (
             <Tag as="li" key={kategori.id} size="sm" marginBottom="1" marginRight="1">
                 {kategori.navn}

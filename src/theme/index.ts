@@ -18,6 +18,7 @@ import { Select } from './components/select';
 import { Radio } from './components/radio';
 import { Checkbox } from './components/checkbox';
 import { FormError } from './components/form-error';
+import { Table } from './components/table';
 
 const overrides = {
     colors,
@@ -39,6 +40,7 @@ const overrides = {
         Radio,
         Checkbox,
         FormError,
+        Table,
     },
 };
 
