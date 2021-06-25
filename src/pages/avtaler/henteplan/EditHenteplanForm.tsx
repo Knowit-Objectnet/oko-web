@@ -5,6 +5,7 @@ import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
 import { createUpdatedHenteplan } from './henteplanFormUtils';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { getDateStringFromISOString, getTimeStringFromISOString } from '../../../utils/hentingDateTimeHelpers';
 
 interface Props {
     avtale: ApiAvtale;
@@ -18,15 +19,13 @@ export const EditHenteplanForm: React.FC<Props> = ({ avtale, henteplan, onSucces
         stasjonId: henteplan.stasjonId,
         frekvens: henteplan.frekvens,
         ukedag: henteplan.ukedag,
-        // startDato: localDateFromISO(henteplan.startTidspunkt),
-        // sluttDato: localDateFromISO(henteplan.sluttTidspunkt),
-        // startTidspunkt: localDateFromISO(henteplan.startTidspunkt),
-        // sluttTidspunkt: localDateFromISO(henteplan.sluttTidspunkt),
+        startDato: getDateStringFromISOString(henteplan.startTidspunkt),
+        sluttDato: getDateStringFromISOString(henteplan.sluttTidspunkt),
+        startTidspunkt: getTimeStringFromISOString(henteplan.startTidspunkt),
+        sluttTidspunkt: getTimeStringFromISOString(henteplan.sluttTidspunkt),
         kategorier: henteplan.kategorier.map((kategori) => kategori.kategoriId),
         merknad: henteplan.merknad,
     };
-
-    console.log('Henteplan som skal redigeres: ', formValues);
 
     const updateHenteplanMutation = useUpdateHenteplan();
     const showSuccessToast = useSuccessToast();
