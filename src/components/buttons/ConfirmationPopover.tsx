@@ -13,19 +13,24 @@ import {
     PopoverTrigger,
     useDisclosure,
     Portal,
+    Heading,
+    Text,
 } from '@chakra-ui/react';
 import Warning from '../../assets/Warning.svg';
 import { Box } from '@chakra-ui/layout';
 import { FocusLock } from '@chakra-ui/focus-lock';
 
 interface Props {
-    message: string;
-    buttonLabel: string;
+    message: {
+        title: string;
+        body?: string;
+        buttonLabel: string;
+    };
     onConfirm: () => Promise<unknown>;
     isLoading?: boolean;
 }
 
-export const ConfirmationPopover: React.FC<Props> = ({ buttonLabel, message, onConfirm, isLoading, children }) => {
+export const ConfirmationPopover: React.FC<Props> = ({ message, onConfirm, isLoading, children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const onDeleteConfirmation = () => {
@@ -48,10 +53,19 @@ export const ConfirmationPopover: React.FC<Props> = ({ buttonLabel, message, onC
                     <PopoverContent>
                         <FocusLock>
                             <PopoverArrow />
-                            <PopoverHeader>
-                                <HStack spacing="2" alignItems="flex-start">
+                            <PopoverHeader paddingY="3">
+                                <HStack spacing="3" alignItems="flex-start">
                                     <Icon as={Warning} marginTop="2px" />
-                                    <Box fontWeight="medium">{message}</Box>
+                                    <Box paddingEnd="5">
+                                        <Heading as="h2" fontWeight="medium" fontSize="md">
+                                            {message.title}
+                                        </Heading>
+                                        {message.body ? (
+                                            <Text fontSize="sm" paddingTop="1">
+                                                {message.body}
+                                            </Text>
+                                        ) : null}
+                                    </Box>
                                     <PopoverCloseButton aria-label="Avbryt" />
                                 </HStack>
                             </PopoverHeader>
@@ -63,7 +77,7 @@ export const ConfirmationPopover: React.FC<Props> = ({ buttonLabel, message, onC
                                     onClick={onDeleteConfirmation}
                                     isLoading={isLoading}
                                 >
-                                    {buttonLabel}
+                                    {message.buttonLabel}
                                 </Button>
                             </PopoverBody>
                         </FocusLock>

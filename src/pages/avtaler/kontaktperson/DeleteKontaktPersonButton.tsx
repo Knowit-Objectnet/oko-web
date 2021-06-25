@@ -27,8 +27,10 @@ export const DeleteKontaktPersonButton: React.FunctionComponent<Props> = ({ kont
 
     return (
         <ConfirmationPopover
-            message="Du er i ferd med å slette kontaktpersonen. Er du sikker?"
-            buttonLabel="Ja, slett kontaktpersonen"
+            message={{
+                title: 'Du er i ferd med å slette kontaktpersonen. Er du sikker?',
+                buttonLabel: 'Ja, slett kontaktpersonen',
+            }}
             onConfirm={handleDeleteKontakt}
             isLoading={deleteKontaktMutation.isLoading}
         >

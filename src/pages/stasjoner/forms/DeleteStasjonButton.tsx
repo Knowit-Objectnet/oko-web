@@ -29,8 +29,10 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
 
     return (
         <ConfirmationPopover
-            message="Du er i ferd med å slette stasjonen. Er du sikker?"
-            buttonLabel="Ja, slett stasjonen"
+            message={{
+                title: 'Du er i ferd med å slette stasjonen. Er du sikker?',
+                buttonLabel: 'Ja, slett stasjonen',
+            }}
             onConfirm={handleDeleteStasjon}
             isLoading={deleteStasjonMutation.isLoading}
         >

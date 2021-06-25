@@ -29,8 +29,11 @@ export const DeleteAvtaleButton: React.FC<Props> = ({ avtale }) => {
 
     return (
         <ConfirmationPopover
-            message="Du er i ferd med å slette avtalen, inkludert alle tilknyttede henteplaner og hentinger som ikke er gjennomført ennå. Er du sikker?"
-            buttonLabel="Ja, slett avtalen"
+            message={{
+                title: 'Du er i ferd med å slette avtalen. Er du sikker?',
+                body: 'Dette vil også slette alle tilknyttede henteplaner og hentinger som ikke er gjennomført ennå.',
+                buttonLabel: 'Ja, slett avtalen',
+            }}
             onConfirm={handleDeleteAvtale}
             isLoading={deleteAvtaleMutation.isLoading}
         >

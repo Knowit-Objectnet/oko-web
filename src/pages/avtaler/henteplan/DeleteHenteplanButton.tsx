@@ -29,8 +29,11 @@ export const DeleteHenteplanButton: React.FC<Props> = ({ henteplan }) => {
 
     return (
         <ConfirmationPopover
-            message="Du er i ferd med å slette henteplanen, inkludert alle hentinger som ikke er gjennomført ennå. Er du sikker?"
-            buttonLabel="Ja, slett henteplanen"
+            message={{
+                title: 'Du er i ferd med å slette henteplanen. Er du sikker?',
+                body: 'Dette vil også slette alle tilknyttede hentinger som ikke er gjennomført ennå.',
+                buttonLabel: 'Ja, slett henteplanen',
+            }}
             onConfirm={handleDeleteHenteplan}
             isLoading={deleteHenteplanMutation.isLoading}
         >
