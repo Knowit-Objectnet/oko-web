@@ -15,7 +15,13 @@ const getNavItemsForRole = (user: UserInfo) => {
                 <NavItem path="/stasjoner" icon={<Location />} label="Stasjoner" />
             </>
         );
-    else if (user.isPartner) return <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />;
+    else if (user.isPartner)
+        return (
+            <>
+                <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
+                <NavItem path="/minavtale" icon={<Location />} label="Mine Avtaler" />
+            </>
+        );
     else if (user.isStasjon) return <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />;
     return null;
 };
