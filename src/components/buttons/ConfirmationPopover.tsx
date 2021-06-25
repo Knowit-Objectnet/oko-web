@@ -17,19 +17,19 @@ import {
 import Warning from '../../assets/Warning.svg';
 import { Box } from '@chakra-ui/layout';
 import { FocusLock } from '@chakra-ui/focus-lock';
-import { DeleteButton } from './DeleteButton';
 
 interface Props {
-    label: string;
+    message: string;
+    buttonLabel: string;
     onConfirm: () => Promise<unknown>;
     isLoading?: boolean;
 }
 
-export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm, isLoading }) => {
+export const ConfirmationPopover: React.FC<Props> = ({ buttonLabel, message, onConfirm, isLoading, children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const onDeleteConfirmation = () => {
-        onConfirm().then(() => onClose());
+        onConfirm().then(onClose);
     };
 
     return (
@@ -43,9 +43,7 @@ export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm
                 isLazy
                 lazyBehavior="unmount"
             >
-                <PopoverTrigger>
-                    <DeleteButton label="Slett" aria-label={`Slett ${label}`} />
-                </PopoverTrigger>
+                <PopoverTrigger>{children}</PopoverTrigger>
                 <Portal>
                     <PopoverContent>
                         <FocusLock>
@@ -53,12 +51,11 @@ export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm
                             <PopoverHeader>
                                 <HStack spacing="2" alignItems="flex-start">
                                     <Icon as={Warning} marginTop="2px" />
-                                    <Box fontWeight="medium">Du er i ferd med å slette {label}. Er du sikker?</Box>
-                                    <PopoverCloseButton aria-label="Avbryt sletting" />
+                                    <Box fontWeight="medium">{message}</Box>
+                                    <PopoverCloseButton aria-label="Avbryt" />
                                 </HStack>
                             </PopoverHeader>
                             <PopoverBody>
-                                {/* TODO: add description/helper text */}
                                 <Button
                                     width="full"
                                     size="sm"
@@ -66,7 +63,7 @@ export const DeleteButtonWithConfirmation: React.FC<Props> = ({ label, onConfirm
                                     onClick={onDeleteConfirmation}
                                     isLoading={isLoading}
                                 >
-                                    Slett {label}
+                                    {buttonLabel}
                                 </Button>
                             </PopoverBody>
                         </FocusLock>

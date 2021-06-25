@@ -40,7 +40,7 @@ export const StasjonTable: React.FC = () => {
                         <Td>{STASJONTYPE[stasjon.type] ?? 'Ukjent type'}</Td>
                         <Td>{stasjon.id}</Td>
                         <Td textAlign="end">
-                            <ButtonGroup spacing="4" size="sm">
+                            <ButtonGroup spacing="3" size="sm">
                                 <EditStasjonButton stasjon={stasjon} />
                                 {process.env.NODE_ENV === 'development' ? (
                                     // TODO: hacky solution to only show station deletion button

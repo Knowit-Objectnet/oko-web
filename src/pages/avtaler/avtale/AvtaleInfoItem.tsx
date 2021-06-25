@@ -75,7 +75,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                         </Heading>
                         <Fade in={isExpanded} unmountOnExit>
                             {user.isAdmin ? (
-                                <ButtonGroup spacing="4" size="sm">
+                                <ButtonGroup spacing="3" size="sm">
                                     <EditAvtaleButton size="sm" avtale={avtale} />
                                     <DeleteAvtaleButton avtale={avtale} />
                                 </ButtonGroup>
