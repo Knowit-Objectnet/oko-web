@@ -20,15 +20,14 @@ export const AvtaleInfoSection: React.FC<Props> = ({ partner }) => {
 
     return (
         <PartnerInfoSection key={partner.id}>
-            {user.isAdmin ? (
-                <PartnerInfoSectionHeader>
-                    <PartnerInfoSectionTitle>Avtaler</PartnerInfoSectionTitle>
-
+            <PartnerInfoSectionHeader>
+                <PartnerInfoSectionTitle>Avtaler</PartnerInfoSectionTitle>
+                {user.isAdmin ? (
                     <PartnerInfoSectionButtons>
                         <AddAvtaleButton partner={partner} />
                     </PartnerInfoSectionButtons>
-                </PartnerInfoSectionHeader>
-            ) : null}
+                ) : null}
+            </PartnerInfoSectionHeader>
 
             <PartnerInfoSectionContent>
                 <AvtaleInfoList partner={partner} />
