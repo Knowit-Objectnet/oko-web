@@ -17,11 +17,12 @@ export const HenteplanTable: React.FC<Props> = ({ avtale }) => {
         <Table size="sm">
             <Thead>
                 <Tr>
-                    <Th scope="col">Ukedag</Th>
-                    <Th scope="col">Tidsrom</Th>
-                    <Th scope="col">Stasjon</Th>
-                    <Th scope="col">Frekvens</Th>
                     <Th scope="col">Periode</Th>
+                    <Th scope="col">Frekvens</Th>
+                    <Th scope="col">Ukedag</Th>
+                    <Th scope="col">Stasjon</Th>
+                    <Th scope="col">Tidsrom</Th>
+                    <Th scope="col">Varekategorier</Th>
                     <Th scope="col">
                         <VisuallyHidden>Handlinger</VisuallyHidden>
                     </Th>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useStasjonById } from '../../../services/stasjon/useStasjonById';
-import { ButtonGroup, Td, Tr } from '@chakra-ui/react';
+import { ButtonGroup, Td, Tr, Text } from '@chakra-ui/react';
 import { formatDate, formatTime } from '../../../utils/formatDateTime';
 import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
 import { parseISO } from 'date-fns';
@@ -8,6 +8,7 @@ import { DeleteHenteplanButton } from './DeleteHenteplanButton';
 import { EditHenteplanButton } from './EditHenteplanButton';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
+import { KategoriList } from '../../../components/KategoriList';
 
 const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
@@ -25,6 +26,30 @@ const UKEDAG: Record<Weekday, string> = {
     SUNDAY: 'Søndag',
 };
 
+const getPeriodeCellContent = (henteplan: ApiHenteplan) => (
+    <>
+        <Text as="time" dateTime={henteplan.startTidspunkt} whiteSpace="nowrap">
+            {formatDate(parseISO(henteplan.startTidspunkt))}
+        </Text>
+        {henteplan.frekvens !== 'ENKELT' ? (
+            <>
+                &ndash;&#8203;
+                <Text as="time" dateTime={henteplan.sluttTidspunkt} whiteSpace="nowrap">
+                    {formatDate(parseISO(henteplan.sluttTidspunkt))}
+                </Text>
+            </>
+        ) : null}
+    </>
+);
+
+const getTidsromCellContent = (henteplan: ApiHenteplan) => (
+    <>
+        <time>{formatTime(parseISOIgnoreTimezone(henteplan.startTidspunkt))}</time>
+        &ndash;
+        <time>{formatTime(parseISOIgnoreTimezone(henteplan.sluttTidspunkt))}</time>
+    </>
+);
+
 interface Props {
     avtale: ApiAvtale;
     henteplan: ApiHenteplan;
@@ -35,28 +60,19 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan, avtale }) => {
     const { data: stasjon } = useStasjonById(henteplan.stasjonId);
 
     return (
-        <Tr key={henteplan.id}>
-            <Td>{UKEDAG[henteplan.ukedag]}</Td>
-            <Td>
-                <time>{formatTime(parseISOIgnoreTimezone(henteplan.startTidspunkt))}</time>
-                &ndash;
-                <time>{formatTime(parseISOIgnoreTimezone(henteplan.sluttTidspunkt))}</time>
-            </Td>
-            <Td>{stasjon?.navn}</Td>
+        <Tr key={henteplan.id} verticalAlign="top">
+            <Td>{getPeriodeCellContent(henteplan)}</Td>
             <Td>{FREKVENS[henteplan.frekvens]}</Td>
-            <Td>
-                <time dateTime={henteplan.startTidspunkt}>{formatDate(parseISO(henteplan.startTidspunkt))}</time>
-                {henteplan.frekvens !== 'ENKELT' ? (
-                    <>
-                        &ndash;
-                        <time dateTime={henteplan.sluttTidspunkt}>
-                            {formatDate(parseISO(henteplan.sluttTidspunkt))}
-                        </time>
-                    </>
-                ) : null}
+            <Td>{UKEDAG[henteplan.ukedag]}</Td>
+            <Td>{stasjon?.navn}</Td>
+            <Td>{getTidsromCellContent(henteplan)}</Td>
+            <Td paddingY="2.5">
+                <KategoriList
+                    kategorier={henteplan.kategorier.map((henteplanKategori) => henteplanKategori.kategori)}
+                />
             </Td>
             <Td textAlign="end">
-                <ButtonGroup spacing="4" size="sm">
+                <ButtonGroup spacing="3" size="sm">
                     <EditHenteplanButton henteplan={henteplan} avtale={avtale} />
                     <DeleteHenteplanButton henteplan={henteplan} />
                 </ButtonGroup>

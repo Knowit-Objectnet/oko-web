@@ -16,9 +16,9 @@ const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
         fontWeight="normal"
         fontSize={{ base: 'md', tablet: 'xl' }}
         _activeLink={{
-            color: 'secondary',
-            borderBottomColor: 'secondary',
-            svg: { fill: 'secondary' },
+            color: 'accent',
+            borderBottomColor: 'accent',
+            svg: { fill: 'accent' },
         }}
         _hover={{
             textDecoration: 'none',
