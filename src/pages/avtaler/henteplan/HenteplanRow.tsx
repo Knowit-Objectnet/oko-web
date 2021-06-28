@@ -7,6 +7,7 @@ import { ApiHenteplan, HenteplanFrekvens, Weekday } from '../../../services/hent
 import { localDateFromISO } from '../../../utils/localDateISO';
 import { parseISO } from 'date-fns';
 import { DeleteHenteplanButton } from './DeleteHenteplanButton';
+import { useAuth } from '../../../auth/useAuth';
 
 const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
@@ -31,6 +32,7 @@ interface Props {
 export const HenteplanRow: React.FC<Props> = ({ henteplan }) => {
     // TODO: handle loading/error
     const { data: stasjon } = useStasjonById(henteplan.stasjonId);
+    const { user } = useAuth();
 
     return (
         <Tr key={henteplan.id}>
@@ -54,15 +56,17 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan }) => {
                 ) : null}
             </Td>
             <Td textAlign="end">
-                <ButtonGroup spacing="4" size="sm">
-                    <EditButton
-                        label="Rediger"
-                        onClick={() => {
-                            console.log(`Rediger henteplan med id ${henteplan.id}`);
-                        }}
-                    />
-                    <DeleteHenteplanButton henteplan={henteplan} />
-                </ButtonGroup>
+                {user.isAdmin ? (
+                    <ButtonGroup spacing="4" size="sm">
+                        <EditButton
+                            label="Rediger"
+                            onClick={() => {
+                                console.log(`Rediger henteplan med id ${henteplan.id}`);
+                            }}
+                        />
+                        <DeleteHenteplanButton henteplan={henteplan} />
+                    </ButtonGroup>
+                ) : null}
             </Td>
         </Tr>
     );
