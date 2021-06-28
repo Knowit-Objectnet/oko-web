@@ -5,6 +5,7 @@ import { KontaktPersonSection } from '../avtaler/kontaktperson/KontaktPersonSect
 import { AvtaleInfoSection } from '../avtaler/avtale/AvtaleInfoSection';
 import { useAuth } from '../../auth/useAuth';
 import { usePartnerById } from '../../services/partner/usePartnerById';
+import { Helmet } from 'react-helmet';
 
 export const PartnerInfo: React.FC = () => {
     const { user } = useAuth();
@@ -29,11 +30,24 @@ export const PartnerInfo: React.FC = () => {
     }
 
     return (
-        <Flex as="main" alignItems="flex-start" direction="column" flex="1" height="full">
-            <PartnerInfoHeader partner={partner} />
-            <AvtaleInfoSection partner={partner} />
-            <KontaktPersonSection partner={partner} />
-        </Flex>
+        <>
+            <Helmet>
+                <title>Mine avtaler</title>
+            </Helmet>
+            <Flex
+                as="main"
+                alignItems="flex-start"
+                direction="column"
+                flex="1"
+                paddingY="5"
+                paddingX="10"
+                height="full"
+            >
+                <PartnerInfoHeader partner={partner} />
+                <AvtaleInfoSection partner={partner} />
+                <KontaktPersonSection partner={partner} />
+            </Flex>
+        </>
     );
 };
 
