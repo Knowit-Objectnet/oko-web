@@ -1,36 +1,24 @@
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { FormControl, FormErrorMessage, FormHelperText, Icon, Select as ChakraSelect } from '@chakra-ui/react';
-import { ErrorMessage } from '@hookform/error-message';
+import { Icon, Select as ChakraSelect } from '@chakra-ui/react';
 import ChevronDown from '../../assets/ChevronDown.svg';
-import { FormLabel } from './FormLabel';
+import { FormFieldProps, FormField } from './FormField';
 
 export interface SelectOption<TValue = string, TLabel = string> {
     value: TValue;
     label: TLabel;
 }
 
-interface Props {
-    name: string;
-    label: string;
+interface Props extends FormFieldProps {
     options: Array<SelectOption>;
     placeholder: string;
-    required?: boolean;
-    helperText?: string;
 }
 
 export const Select: React.FC<Props> = ({ name, label, options, placeholder, required, helperText }) => {
-    const {
-        register,
-        formState: { errors, isSubmitted },
-    } = useFormContext();
-
-    const isInvalid = errors[name] && isSubmitted;
+    const { register } = useFormContext();
 
     return (
-        <FormControl isInvalid={isInvalid}>
-            <FormLabel label={label} required={required} />
-            {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
+        <FormField name={name} label={label} helperText={helperText} required={required}>
             <ChakraSelect
                 {...register(name)}
                 icon={<Icon as={ChevronDown} />}
@@ -50,9 +38,6 @@ export const Select: React.FC<Props> = ({ name, label, options, placeholder, req
                     </option>
                 ))}
             </ChakraSelect>
-            <FormErrorMessage>
-                <ErrorMessage name={name} />
-            </FormErrorMessage>
-        </FormControl>
+        </FormField>
     );
 };

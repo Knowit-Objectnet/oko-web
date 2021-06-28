@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { ButtonGroup, Link, Table, Tbody, Td, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { DeleteButton } from '../../../components/buttons/DeleteButton';
 import { ApiKontakt } from '../../../services/aktor/KontaktService';
 import { EditKontaktPersonButton } from './EditKontaktPersonButton';
 import { DeleteKontaktPersonButton } from './DeleteKontaktPersonButton';

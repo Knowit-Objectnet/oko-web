@@ -3,11 +3,11 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Input } from '../../../components/forms/Input';
+import { Input } from '../../../components/forms/input/Input';
 import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
+import { CheckboxGroup } from '../../../components/forms/checkbox/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddPartner } from '../../../services/partner/useAddPartner';
 import { ApiPartner, ApiPartnerPatch, ApiPartnerPost } from '../../../services/partner/PartnerService';
@@ -20,7 +20,16 @@ import '../../../utils/forms/formErrorMessages';
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
-    ideell: yup.boolean().label('Om partneren er en ideell organisasjon').required(),
+    ideell: yup
+        .boolean()
+        .label('om partneren er en ideell organisasjon')
+        .default(false)
+        .transform((value: Array<boolean> | boolean) => {
+            if (Array.isArray(value)) {
+                return value[0];
+            }
+            return value;
+        }),
 });
 
 interface PartnerFormData {
@@ -99,8 +108,9 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på organisasjon" required />
                     <CheckboxGroup
+                        name="ideell"
                         label="Organisasjonstype"
-                        options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
+                        options={[{ value: 'true', label: 'Ideell organisasjon' }]}
                         required
                     />
                     <FormSubmitButton

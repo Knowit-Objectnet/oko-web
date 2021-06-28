@@ -1,15 +1,9 @@
 import * as React from 'react';
 import { useStasjoner } from '../../services/stasjon/useStasjoner';
 import { Select, SelectOption } from './Select';
+import { FormFieldProps } from './FormField';
 
-interface Props {
-    name: string;
-    label: string;
-    required?: boolean;
-    helperText?: string;
-}
-
-export const StasjonSelect: React.FC<Props> = (props) => {
+export const StasjonSelect: React.FC<FormFieldProps> = (props) => {
     const { data: stasjoner, isLoading, isLoadingError } = useStasjoner({ queryOptions: { keepPreviousData: true } });
 
     const stasjonOptions: Array<SelectOption> = (stasjoner ?? []).map((stasjon) => ({

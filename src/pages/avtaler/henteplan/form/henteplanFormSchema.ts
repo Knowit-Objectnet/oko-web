@@ -1,19 +1,24 @@
-import { ApiAvtale } from '../../../services/avtale/AvtaleService';
+import { ApiAvtale } from '../../../../services/avtale/AvtaleService';
 import * as yup from 'yup';
-import { HenteplanFrekvens, Weekday } from '../../../services/henteplan/HenteplanService';
-import { transformDate } from '../../../utils/forms/transformDate';
+import { HenteplanFrekvens, Weekday } from '../../../../services/henteplan/HenteplanService';
+import { transformStringToDate } from '../../../../utils/forms/transformStringToDate';
 import { add, isValid, parseISO } from 'date-fns';
 import { upperFirst } from 'lodash';
-import { transformTime } from '../../../utils/forms/transformTime';
-import { frekvensOptions, ukedagOptions } from './HenteplanForm';
+import { transformStringToDateTime } from '../../../../utils/forms/transformStringToDateTime';
+import { ukedagOptions } from './HenteplanFormTidspunkt';
+import { frekvensOptions } from './HenteplanFormFrekvens';
 
 /** IMPORTANT! The order of the fields in this schema must match the order of the visual fields in the form.
  *   This is because the order here defines the order of the error messages in the error message summary
  *   displayed in the form.
  */
-export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSchema =>
+export const getHenteplanValidationSchema = (avtale: ApiAvtale, isEditing?: boolean): yup.AnyObjectSchema =>
     yup.object().shape({
-        stasjonId: yup.string().label('hvilken stasjon det skal hentes fra').required(),
+        stasjonId: yup
+            .string()
+            .when((value: unknown, schema: yup.StringSchema) =>
+                isEditing ? schema : schema.label('hvilken stasjon det skal hentes fra').required(),
+            ),
         frekvens: yup
             .mixed<HenteplanFrekvens>()
             .label('hvor ofte hentingene skal skje')
@@ -21,14 +26,17 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
             .oneOf(frekvensOptions.map((frekvens) => frekvens.value)),
         startDato: yup
             .date()
-            .transform(transformDate)
+            .transform(transformStringToDate)
             .when('frekvens', (frekvens: HenteplanFrekvens | undefined, schema: yup.DateSchema) => {
                 if (!frekvens) {
                     return yup.date().notRequired();
                 } else if (frekvens === 'ENKELT') {
                     return schema.label('dato for hentingen').required();
                 } else {
-                    return schema.label('startdato for henteplanen').required();
+                    return schema
+                        .label('startdato for henteplanen')
+                        .required()
+                        .max(yup.ref('sluttDato'), 'Startdatoen for henteplanen kan ikke være etter sluttdatoen');
                 }
             })
             .min(parseISO(avtale.startDato), ({ label }) => `${upperFirst(label)} kan ikke være før avtalens startdato`)
@@ -40,7 +48,7 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
         sluttDato: yup
             .date()
             .label('sluttdato for henteplanen')
-            .transform(transformDate)
+            .transform(transformStringToDate)
             .when('frekvens', (frekvens: HenteplanFrekvens | undefined, schema: yup.DateSchema) => {
                 if (frekvens && frekvens !== 'ENKELT') {
                     return schema
@@ -71,18 +79,17 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
         startTidspunkt: yup
             .date()
             .label('starttidspunkt for når partneren kan hente')
-            .transform(transformTime)
+            .transform(transformStringToDateTime)
             .required()
             // TODO: use station opening hours?
             .nullable(),
         sluttTidspunkt: yup
             .date()
             .label('sluttidspunkt for når partneren kan hente')
-            .transform(transformTime)
+            .transform(transformStringToDateTime)
             .required()
             .min(
                 // TODO: use station opening hours?
-                // TODO: set minimum duration for henting (e.g. 15 mins after startTidspunkt)
                 yup.ref('startTidspunkt'),
                 'Sluttidspunktet for når partneren kan hente kan ikke være før starttidspunktet',
             )
@@ -98,5 +105,9 @@ export const getHenteplanValidationSchema = (avtale: ApiAvtale): yup.AnyObjectSc
                 return schema;
             })
             .nullable(),
+        kategorier: yup
+            .array(yup.string())
+            .ensure()
+            .min(1, 'Du må velge minst én varekategori som partneren skal kunne hente'),
         merknad: yup.string().notRequired(),
     });
