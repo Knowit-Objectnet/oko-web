@@ -5,6 +5,7 @@ import { HenteplanTable } from './HenteplanTable';
 import { AddHenteplanButton } from './AddHenteplanButton';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { ApiPartner } from '../../../services/partner/PartnerService';
+import { useAuth } from '../../../auth/useAuth';
 
 interface Props {
     avtale: ApiAvtale;
@@ -13,6 +14,7 @@ interface Props {
 
 export const Henteplaner: React.FC<Props> = ({ avtale, partner }) => {
     const henteplaner = avtale.henteplaner;
+    const { user } = useAuth();
 
     return (
         <>
@@ -29,7 +31,7 @@ export const Henteplaner: React.FC<Props> = ({ avtale, partner }) => {
                 <Heading as="h4" fontSize="lg" fontWeight="medium">
                     {henteplaner.length > 0 ? 'Henteplaner' : 'Ingen registrerte henteplaner'}
                 </Heading>
-                <AddHenteplanButton size="sm" avtale={avtale} partner={partner} />
+                {user.isAdmin ? <AddHenteplanButton size="sm" avtale={avtale} partner={partner} /> : null}
             </Flex>
             {henteplaner.length > 0 ? <HenteplanTable avtale={avtale} /> : null}
         </>
