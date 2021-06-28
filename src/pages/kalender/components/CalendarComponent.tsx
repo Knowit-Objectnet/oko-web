@@ -3,7 +3,7 @@ import { Calendar, dateFnsLocalizer, EventWrapperProps, View } from 'react-big-c
 import { nb } from 'date-fns/locale';
 import { format, getDay, parse, set, startOfWeek } from 'date-fns';
 import { CalendarToolbar } from './CalendarToolbar';
-import { useCalendarEvents } from '../hooks/useCalendarEvents';
+import { CalendarEvent, useCalendarEvents } from '../hooks/useCalendarEvents';
 import { getCalendarViewFromType, VIEWS } from '../hooks/useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
 import { WeekOrDayEvent } from './WeekOrDayEvent';
@@ -24,7 +24,7 @@ export const CalendarComponent: React.FC = () => {
         setSelectedView(calendarView);
     };
 
-    const EventWrapper: React.FC<EventWrapperProps> = ({ style, event }) => {
+    const EventWrapper: React.FC<EventWrapperProps<CalendarEvent>> = ({ style, event }) => {
         // This is a bit "hacky", but the easiest way I've been able to find for identifying the
         // current type of view for the Calendar. The month view renders the wrapper component differently.
         const viewIsWeekOrDay = style !== undefined;
@@ -37,7 +37,7 @@ export const CalendarComponent: React.FC = () => {
 
     return (
         <Box width="full" height="full">
-            <Calendar
+            <Calendar<CalendarEvent>
                 culture="nb-no"
                 events={events}
                 date={selectedDate}

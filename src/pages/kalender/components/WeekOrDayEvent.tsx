@@ -1,8 +1,9 @@
 import React from 'react';
 import { EventWrapperProps } from 'react-big-calendar';
 import { EventComponent } from './EventComponent';
+import { CalendarEvent } from '../hooks/useCalendarEvents';
 
-type Props = Pick<EventWrapperProps, 'style' | 'event'>;
+type Props = Pick<EventWrapperProps<CalendarEvent>, 'style' | 'event'>;
 
 /**
  * Wrapper component that sets the position and size of the event in a "time slot"

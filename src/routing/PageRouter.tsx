@@ -5,6 +5,7 @@ import { Roles } from '../auth/Roles';
 import { Loading } from '../components/Loading';
 
 const Kalender = React.lazy(() => import('../pages/kalender'));
+const Henting = React.lazy(() => import('../pages/henting'));
 const Avtaler = React.lazy(() => import('../pages/avtaler'));
 const Stasjoner = React.lazy(() => import('../pages/stasjoner'));
 const MineAvtaler = React.lazy(() => import('../pages/minavtale'));
@@ -19,6 +20,9 @@ export const PageRouter: React.FC = () => (
         <Switch>
             <Route path="/kalender/:view?">
                 <Kalender />
+            </Route>
+            <Route path="/henting/:hentingId">
+                <Henting />
             </Route>
             <ProtectedRoute path="/avtaler" requiredRoles={[Roles.Admin]}>
                 <Avtaler />

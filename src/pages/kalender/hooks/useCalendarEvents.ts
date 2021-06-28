@@ -7,7 +7,7 @@ import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHen
 import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 
-export type CalendarEvent = Event;
+export type CalendarEvent = Event & ApiPlanlagtHenting;
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;
@@ -31,7 +31,7 @@ const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): Calendar
     start: parseISOIgnoreTimezone(planlagtHenting.startTidspunkt),
     end: parseISOIgnoreTimezone(planlagtHenting.sluttTidspunkt),
     title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
-    resource: planlagtHenting,
+    ...planlagtHenting,
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
