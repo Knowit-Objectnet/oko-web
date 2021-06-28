@@ -10,6 +10,7 @@ import { typography } from './foundations/typography';
 import { Button } from './components/button';
 import { Modal } from './components/modal';
 import { Alert } from './components/alert';
+import { Tag } from './components/tag';
 import { Form } from './components/form';
 import { FormLabel } from './components/form-label';
 import { Input } from './components/input';
@@ -32,6 +33,7 @@ const overrides = {
         Button,
         Modal,
         Alert,
+        Tag,
         Form,
         FormLabel,
         Input,
