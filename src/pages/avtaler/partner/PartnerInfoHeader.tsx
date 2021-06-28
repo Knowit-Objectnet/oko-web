@@ -13,37 +13,33 @@ export const PartnerInfoHeader: React.FC<Props> = ({ partner }) => {
     const { user } = useAuth();
     return (
         <>
-            {user.isAdmin || user.isPartner ? (
-                <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
-                    <Heading as="h1" fontWeight="medium" fontSize="4xl">
-                        {partner.navn}
-                    </Heading>
-                    {user.isAdmin ? <EditPartnerButton partner={partner} size="sm" /> : null}
-                </Flex>
-            ) : null}
-            {user.isAdmin || user.isPartner ? (
-                <Box
-                    as="section"
-                    aria-label={`Generell informasjon for ${partner.navn}`}
-                    backgroundColor="gray.100"
-                    width="full"
-                    padding="5"
-                    marginBottom="4"
-                    sx={{
-                        'dt, dd': {
-                            display: 'inline',
-                            marginRight: '1',
-                        },
-                    }}
-                >
-                    <dl>
-                        <Box>
-                            <dt>Ideell organisasjon:</dt>
-                            <dd>{partner.ideell ? 'ja' : 'nei'}</dd>
-                        </Box>
-                    </dl>
-                </Box>
-            ) : null}
+            <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
+                <Heading as="h1" fontWeight="medium" fontSize="4xl">
+                    {partner.navn}
+                </Heading>
+                {user.isAdmin ? <EditPartnerButton partner={partner} size="sm" /> : null}
+            </Flex>
+            <Box
+                as="section"
+                aria-label={`Generell informasjon for ${partner.navn}`}
+                backgroundColor="gray.100"
+                width="full"
+                padding="5"
+                marginBottom="4"
+                sx={{
+                    'dt, dd': {
+                        display: 'inline',
+                        marginRight: '1',
+                    },
+                }}
+            >
+                <dl>
+                    <Box>
+                        <dt>Ideell organisasjon:</dt>
+                        <dd>{partner.ideell ? 'ja' : 'nei'}</dd>
+                    </Box>
+                </dl>
+            </Box>
         </>
     );
 };
