@@ -33,7 +33,7 @@ export const Henteplaner: React.FC<Props> = ({ avtale, partner }) => {
                 </Heading>
                 {user.isAdmin ? <AddHenteplanButton size="sm" avtale={avtale} partner={partner} /> : null}
             </Flex>
-            {henteplaner.length > 0 ? <HenteplanTable henteplaner={henteplaner} /> : null}
+            {henteplaner.length > 0 ? <HenteplanTable avtale={avtale} /> : null}
         </>
     );
 };

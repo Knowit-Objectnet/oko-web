@@ -5,7 +5,7 @@ import { CalendarView, VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
 import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHentinger';
 import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
-import { localDateFromISO } from '../../../utils/localDateISO';
+import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     const intervalSize = VIEWS[view].fetchInterval;
@@ -26,8 +26,8 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
 };
 
 const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): CalendarEvent => ({
-    start: localDateFromISO(planlagtHenting.startTidspunkt),
-    end: localDateFromISO(planlagtHenting.sluttTidspunkt),
+    start: parseISOIgnoreTimezone(planlagtHenting.startTidspunkt),
+    end: parseISOIgnoreTimezone(planlagtHenting.sluttTidspunkt),
     title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
 });
 

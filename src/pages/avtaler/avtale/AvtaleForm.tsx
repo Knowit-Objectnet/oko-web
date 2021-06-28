@@ -10,17 +10,17 @@ import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { formatISO } from 'date-fns';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { ApiAvtale, ApiAvtalePatch, ApiAvtalePost, AvtaleType } from '../../../services/avtale/AvtaleService';
-import { transformDate } from '../../../utils/forms/transformDate';
+import { transformStringToDate } from '../../../utils/forms/transformStringToDate';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useAddAvtale } from '../../../services/avtale/useAddAvtale';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 import { ApiError } from '../../../services/httpClient';
 import { useUpdateAvtale } from '../../../services/avtale/useUpdateAvtale';
 import { AvtaleFormSluttDato } from './AvtaleFormSluttDato';
+import { AvtaleFormStartDato } from './AvtaleFormStartDato';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { AvtaleFormStartDato } from './AvtaleFormStartDato';
 
 interface AvtaleFormData {
     type: AvtaleType;
@@ -34,11 +34,11 @@ const avtaleTypeOptions: Array<RadioOption<AvtaleType>> = [
 ];
 
 const validationSchema = yup.object().shape({
-    startDato: yup.date().label('startdato for avtalen').transform(transformDate).required().nullable(),
+    startDato: yup.date().label('startdato for avtalen').transform(transformStringToDate).required().nullable(),
     sluttDato: yup
         .date()
         .label('sluttdato for avtalen')
-        .transform(transformDate)
+        .transform(transformStringToDate)
         .required()
         .min(yup.ref('startDato'), 'Sluttdato kan ikke være før startdato')
         .nullable(),
