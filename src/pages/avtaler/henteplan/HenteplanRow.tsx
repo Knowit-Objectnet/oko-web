@@ -26,6 +26,30 @@ const UKEDAG: Record<Weekday, string> = {
     SUNDAY: 'Søndag',
 };
 
+const getPeriodeCellContent = (henteplan: ApiHenteplan) => (
+    <>
+        <Text as="time" dateTime={henteplan.startTidspunkt} whiteSpace="nowrap">
+            {formatDate(parseISO(henteplan.startTidspunkt))}
+        </Text>
+        {henteplan.frekvens !== 'ENKELT' ? (
+            <>
+                &ndash;&#8203;
+                <Text as="time" dateTime={henteplan.sluttTidspunkt} whiteSpace="nowrap">
+                    {formatDate(parseISO(henteplan.sluttTidspunkt))}
+                </Text>
+            </>
+        ) : null}
+    </>
+);
+
+const getTidsromCellContent = (henteplan: ApiHenteplan) => (
+    <>
+        <time>{formatTime(parseISOIgnoreTimezone(henteplan.startTidspunkt))}</time>
+        &ndash;
+        <time>{formatTime(parseISOIgnoreTimezone(henteplan.sluttTidspunkt))}</time>
+    </>
+);
+
 interface Props {
     avtale: ApiAvtale;
     henteplan: ApiHenteplan;
@@ -37,27 +61,11 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan, avtale }) => {
 
     return (
         <Tr key={henteplan.id} verticalAlign="top">
-            <Td>
-                <Text as="time" dateTime={henteplan.startTidspunkt} whiteSpace="nowrap">
-                    {formatDate(parseISO(henteplan.startTidspunkt))}
-                </Text>
-                {henteplan.frekvens !== 'ENKELT' ? (
-                    <>
-                        &ndash;&#8203;
-                        <Text as="time" dateTime={henteplan.sluttTidspunkt} whiteSpace="nowrap">
-                            {formatDate(parseISO(henteplan.sluttTidspunkt))}
-                        </Text>
-                    </>
-                ) : null}
-            </Td>
+            <Td>{getPeriodeCellContent(henteplan)}</Td>
             <Td>{FREKVENS[henteplan.frekvens]}</Td>
             <Td>{UKEDAG[henteplan.ukedag]}</Td>
             <Td>{stasjon?.navn}</Td>
-            <Td>
-                <time>{formatTime(parseISOIgnoreTimezone(henteplan.startTidspunkt))}</time>
-                &ndash;
-                <time>{formatTime(parseISOIgnoreTimezone(henteplan.sluttTidspunkt))}</time>
-            </Td>
+            <Td>{getTidsromCellContent(henteplan)}</Td>
             <Td paddingY="2.5">
                 <KategoriList
                     kategorier={henteplan.kategorier.map((henteplanKategori) => henteplanKategori.kategori)}
