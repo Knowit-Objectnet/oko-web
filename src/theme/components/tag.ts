@@ -10,14 +10,7 @@ export const Tag = {
             container: {
                 backgroundColor: 'secondary',
                 color: 'onSecondary',
-                borderRadius: '0',
-            },
-        },
-    },
-    sizes: {
-        sm: {
-            container: {
-                paddingX: '1.5',
+                borderRadius: 'full',
             },
         },
     },
