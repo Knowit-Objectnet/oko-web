@@ -7,13 +7,15 @@ import { usePlanlagtHentingById } from '../../services/henting/usePlanlagtHentin
 import { formatDate, formatTime } from '../../utils/formatDateTime';
 import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { KategoriList } from '../../components/KategoriList';
-import { HStack, Icon, VStack, Badge, VisuallyHidden } from '@chakra-ui/react';
+import { HStack, Icon, VStack, Badge, VisuallyHidden, Heading, Text, ButtonGroup, Button } from '@chakra-ui/react';
 import { isToday } from 'date-fns';
 import Calendar from '../../assets/Calendar.svg';
 import Clock from '../../assets/Clock.svg';
 import Location from '../../assets/Location.svg';
+import ArrowLeft from '../../assets/ArrowLeft.svg';
 import Warning from '../../assets/Warning.svg';
 import { CancelPlanlagtHentingButton } from './CancelPlanlagtHentingButton';
+import { RouterLink } from '../../routing/RouterLink';
 
 const getDayString = (date: Date) => {
     if (isToday(date)) {
@@ -37,94 +39,132 @@ export const AvlystBadge: React.FC = () => (
     </Badge>
 );
 
+const IconLabel: React.FC<{ icon: React.ElementType; label: string }> = ({ icon, label }) => (
+    <Icon as={icon} aria-label={label} transform="translateY(-2px)" boxSize="1.2rem" />
+);
+
 const Henting: React.FC = () => {
     const location = useLocation<{ henting?: ApiPlanlagtHenting; prevPath?: string }>();
 
     const routeMatch = useRouteMatch<{ hentingId?: string }>();
-    const { data, isLoading, error } = usePlanlagtHentingById(routeMatch.params.hentingId || '', {
+    const {
+        data: planlagtHenting,
+        isLoading,
+        error,
+    } = usePlanlagtHentingById(routeMatch.params.hentingId || '', {
         initialData: location?.state?.henting,
         enabled: routeMatch.params.hentingId !== undefined,
     });
 
-    return (
+    console.log(planlagtHenting);
+
+    return planlagtHenting ? (
         <>
             <Helmet>
-                {/*TODO: create title from calendar state*/}
-                <title>Kalender</title>
+                <title>
+                    {planlagtHenting.aktorNavn} henter fra {planlagtHenting.stasjonNavn},{' '}
+                    {getDayString(parseISOIgnoreTimezone(planlagtHenting?.startTidspunkt))} kl.{' '}
+                    {formatTime(parseISOIgnoreTimezone(planlagtHenting?.startTidspunkt))}
+                </title>
             </Helmet>
-            {data ? (
-                <Flex as="main" width="full" height="full" backgroundColor="surface">
-                    <Flex width="4xl" maxWidth="4xl" marginX="auto" direction="column" padding="10">
-                        {location.state?.prevPath ? <Link to={location.state.prevPath}>&laquo; Tilbake</Link> : null}
-                        <VStack as="dl" spacing="3" alignItems="flex-start" marginY="4">
+            <Flex as="main" width="full" height="full" backgroundColor="surface">
+                <Flex
+                    width="2xl"
+                    maxWidth="2xl"
+                    marginX="auto"
+                    direction="column"
+                    padding="10"
+                    paddingTop={{ base: '4', tablet: '14' }}
+                    fontSize="18px"
+                >
+                    <Heading as="h1" fontWeight="normal" marginBottom="4">
+                        {planlagtHenting.aktorNavn}
+                    </Heading>
+                    {location.state?.prevPath ? (
+                        <RouterLink to={location.state.prevPath} fontSize="1rem" display="flex" alignItems="center">
+                            <Icon as={ArrowLeft} aria-hidden marginRight="1" /> Tilbake
+                        </RouterLink>
+                    ) : null}
+                    <VStack as="dl" spacing="3" alignItems="flex-start" marginTop="4">
+                        {planlagtHenting.avlyst ? (
                             <Box>
                                 <VisuallyHidden>
-                                    <dt>Partner</dt>
+                                    <dt>Status</dt>
                                 </VisuallyHidden>
-                                <dd>{data.aktorNavn}</dd>
-                            </Box>
-
-                            {data.avlyst ? (
-                                <Box>
-                                    <VisuallyHidden>
-                                        <dt>Status</dt>
-                                    </VisuallyHidden>
-                                    <dd>
-                                        <AvlystBadge />
-                                    </dd>
-                                </Box>
-                            ) : null}
-
-                            <HStack>
-                                <dt>
-                                    <Icon as={Location} aria-label="Stasjon" />
-                                </dt>
-                                <dd>{data.stasjonNavn}</dd>
-                            </HStack>
-                            <HStack>
-                                <dt>
-                                    <Icon as={Calendar} aria-label="Dato" />
-                                </dt>
-                                <dd>{getDayString(parseISOIgnoreTimezone(data?.startTidspunkt))}</dd>
-                            </HStack>
-                            <HStack>
-                                <dt>
-                                    <Icon as={Clock} aria-label="Tidspunkt" />
-                                </dt>
                                 <dd>
-                                    {`Fra kl. `}
-                                    {formatTime(parseISOIgnoreTimezone(data?.startTidspunkt))}
-                                    {` til kl. `}
-                                    {formatTime(parseISOIgnoreTimezone(data?.sluttTidspunkt))}
+                                    <AvlystBadge />
                                 </dd>
-                            </HStack>
+                            </Box>
+                        ) : null}
+                        <HStack>
+                            <dt>
+                                <IconLabel icon={Location} label="Stasjon" />
+                            </dt>
+                            <dd>{planlagtHenting.stasjonNavn}</dd>
+                        </HStack>
+                        <HStack>
+                            <dt>
+                                <IconLabel icon={Calendar} label="Dato" />
+                            </dt>
+                            <dd>
+                                <time>{getDayString(parseISOIgnoreTimezone(planlagtHenting?.startTidspunkt))}</time>
+                            </dd>
+                        </HStack>
+                        <HStack>
+                            <dt>
+                                <IconLabel icon={Clock} label="Tidspunkt" />
+                            </dt>
+                            <dd>
+                                {`Fra kl. `}
+                                <time>{formatTime(parseISOIgnoreTimezone(planlagtHenting?.startTidspunkt))}</time>
+                                {` til kl. `}
+                                <time>{formatTime(parseISOIgnoreTimezone(planlagtHenting?.sluttTidspunkt))}</time>
+                            </dd>
+                        </HStack>
 
-                            {data?.merknad ? (
-                                <VStack spacing="1">
-                                    <dt>Merknad</dt>
-                                    <dd>{data.merknad}</dd>
-                                </VStack>
-                            ) : null}
+                        {planlagtHenting.merknad ? (
+                            <VStack spacing="1">
+                                <Text as="dt" fontSize="1rem" fontWeight="medium" paddingTop="2">
+                                    Merknad
+                                </Text>
+                                <dd>{planlagtHenting.merknad}</dd>
+                            </VStack>
+                        ) : null}
 
-                            {data.kategorier.length > 0 ? (
-                                <VStack spacing="1" alignItems="flex-start">
-                                    <dt>Kategorier</dt>
-                                    <dd>
-                                        <KategoriList
-                                            kategorier={(data?.kategorier || []).map(({ kategori }) => kategori)}
-                                        />
-                                    </dd>
-                                </VStack>
+                        {planlagtHenting.kategorier.length > 0 ? (
+                            <VStack spacing="1" alignItems="flex-start">
+                                <Text as="dt" fontSize="1rem" fontWeight="medium" paddingTop="2">
+                                    Kategorier
+                                </Text>
+                                <dd>
+                                    <KategoriList
+                                        size="md"
+                                        kategorier={(planlagtHenting?.kategorier || []).map(({ kategori }) => kategori)}
+                                    />
+                                </dd>
+                            </VStack>
+                        ) : null}
+                    </VStack>
+
+                    {!planlagtHenting.avlyst ? (
+                        <ButtonGroup marginTop="10" width="full">
+                            {location.state?.prevPath ? (
+                                <Button
+                                    as={Link}
+                                    to={location.state.prevPath}
+                                    variant="outline"
+                                    leftIcon={<Icon as={ArrowLeft} />}
+                                >
+                                    Tilbake
+                                </Button>
                             ) : null}
-                        </VStack>
-                        {!data.avlyst ? <CancelPlanlagtHentingButton henting={data} /> : null}
-                    </Flex>
+                            <CancelPlanlagtHentingButton henting={planlagtHenting} />
+                        </ButtonGroup>
+                    ) : null}
                 </Flex>
-            ) : (
-                'Laster data'
-            )}
+            </Flex>
         </>
-    );
+    ) : null;
 };
 
 export default Henting;

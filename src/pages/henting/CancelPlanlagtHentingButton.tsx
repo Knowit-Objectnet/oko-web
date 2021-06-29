@@ -30,7 +30,7 @@ export const CancelPlanlagtHentingButton: React.FC<{ henting: ApiPlanlagtHenting
     return (
         <ConfirmationPopover
             message={{
-                title: 'Du er i ferd med å avlyse hentingen, er du sikker?',
+                title: 'Du er i ferd med å avlyse hentingen. Er du sikker?',
                 body: 'Det vil ikke være mulig å angre avlysningen.',
                 buttonLabel: 'Ja, avlys hentingen',
             }}
@@ -38,9 +38,7 @@ export const CancelPlanlagtHentingButton: React.FC<{ henting: ApiPlanlagtHenting
             isLoading={updateHentingMutation.isLoading}
             popoverPosition="bottom-start"
         >
-            <Button variant="primary" size="lg">
-                Avlys denne hentingen
-            </Button>
+            <Button variant="outline">Avlys denne hentingen</Button>
         </ConfirmationPopover>
     );
 };
