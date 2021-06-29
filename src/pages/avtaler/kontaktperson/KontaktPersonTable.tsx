@@ -34,7 +34,7 @@ export const KontaktPersonTable: React.FC<Props> = ({ kontaktPersoner }) => {
                         <Td>{kontakt.telefon}</Td>
                         <Td>{kontakt.epost ? <Link href={`mailto:${kontakt.epost}`}>{kontakt.epost}</Link> : null}</Td>
                         <Td textAlign="end">
-                            <ButtonGroup spacing="4" size="sm">
+                            <ButtonGroup spacing="3" size="sm">
                                 <EditKontaktPersonButton kontakt={kontakt} />
                                 <DeleteKontaktPersonButton kontakt={kontakt} />
                             </ButtonGroup>
