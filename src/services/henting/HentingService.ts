@@ -26,11 +26,12 @@ export interface ApiPlanlagtHentingParams {
 }
 
 export interface ApiPlanlagtHentingPatch {
-    id: string; //UUID
-    startTidspunkt?: string; //LocalTimeDate
-    sluttTidspunkt?: string; //LocalTimeDate
+    id: string;
+    startTidspunkt?: string;
+    sluttTidspunkt?: string;
     merknad?: string;
-    avlyst?: string; //LocalTimeDate
+    avlys?: boolean; // TODO: should be avlyst, not avlys -> update when fixed in backend
+    aarsak?: string; // TODO, should be avlystAarsak -> update when fixed in backend
 }
 
 const hentingEndpoint = '/planlagte-hentinger';
