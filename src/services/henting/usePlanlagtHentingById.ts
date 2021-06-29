@@ -1,11 +1,14 @@
-import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
+import { UseQueryOptions } from 'react-query';
 import { ApiPlanlagtHenting, getPlanlagtHentingById, planlagtHentingDefaultQueryKey } from './HentingService';
+import { useQueryWithLazyResult } from '../useQueryWithLazyResult';
+import { LazyResult } from 'lemons';
+import { ApiError } from '../httpClient';
 
 export const usePlanlagtHentingById = (
     hentingId: string,
-    queryOptions?: UseQueryOptions<ApiPlanlagtHenting>,
-): UseQueryResult<ApiPlanlagtHenting> => {
-    return useQuery<ApiPlanlagtHenting>({
+    queryOptions?: UseQueryOptions<ApiPlanlagtHenting, ApiError>,
+): LazyResult<ApiError, ApiPlanlagtHenting> => {
+    return useQueryWithLazyResult<ApiPlanlagtHenting, ApiError>({
         queryKey: [planlagtHentingDefaultQueryKey, hentingId],
         queryFn: () => getPlanlagtHentingById(hentingId),
         ...queryOptions,
