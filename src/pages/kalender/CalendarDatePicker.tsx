@@ -15,6 +15,22 @@ export const CalendarDatePicker: React.FC = () => {
         setSelectedDate(date);
     };
 
+    const months = {
+        'nb-no': [
+            'Januar',
+            'Februar',
+            'Mars',
+            'April',
+            'Mai',
+            'Juni',
+            'Juli',
+            'August',
+            'September',
+            'Oktober',
+            'November',
+            'Desember',
+        ],
+    };
     const weekdaysLong = {
         'nb-no': ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'],
     };
@@ -43,6 +59,7 @@ export const CalendarDatePicker: React.FC = () => {
                 firstDayOfWeek={firstDayOfWeek['nb-no']}
                 weekdaysShort={weekdaysShort['nb-no']}
                 weekdaysLong={weekdaysLong['nb-no']}
+                months={months['nb-no']}
             />
         </Box>
     );
