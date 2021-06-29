@@ -26,7 +26,7 @@ export const CalendarDatePicker: React.FC = () => {
                 },
             }}
         >
-            <DayPicker onDayClick={handleDateChange} selectedDays={selectedDate} showOutsideDays />
+            <DayPicker onDayClick={handleDateChange} selectedDays={selectedDate} showOutsideDays firstDayOfWeek={1} />
         </Box>
     );
 };
