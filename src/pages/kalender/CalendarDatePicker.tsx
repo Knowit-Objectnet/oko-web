@@ -15,6 +15,18 @@ export const CalendarDatePicker: React.FC = () => {
         setSelectedDate(date);
     };
 
+    const weekdaysLong = {
+        'nb-no': ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'],
+    };
+
+    const weekdaysShort = {
+        'nb-no': ['Sø', 'Ma', 'Ti', 'On', 'To', 'Fr', 'Lø'],
+    };
+
+    const firstDayOfWeek = {
+        'nb-no': 1,
+    };
+
     return (
         <Box
             sx={{
@@ -26,7 +38,14 @@ export const CalendarDatePicker: React.FC = () => {
                 },
             }}
         >
-            <DayPicker onDayClick={handleDateChange} selectedDays={selectedDate} showOutsideDays firstDayOfWeek={1} />
+            <DayPicker
+                onDayClick={handleDateChange}
+                selectedDays={selectedDate}
+                showOutsideDays
+                firstDayOfWeek={firstDayOfWeek['nb-no']}
+                weekdaysShort={weekdaysShort['nb-no']}
+                weekdaysLong={weekdaysLong['nb-no']}
+            />
         </Box>
     );
 };
