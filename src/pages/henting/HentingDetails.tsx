@@ -1,5 +1,16 @@
 import * as React from 'react';
-import { Badge, Button, ButtonGroup, Heading, HStack, Icon, Text, VisuallyHidden, VStack } from '@chakra-ui/react';
+import {
+    Badge,
+    BadgeProps,
+    Button,
+    ButtonGroup,
+    Heading,
+    HStack,
+    Icon,
+    Text,
+    VisuallyHidden,
+    VStack,
+} from '@chakra-ui/react';
 import { Box, Flex } from '@chakra-ui/layout';
 import { Link, useLocation } from 'react-router-dom';
 import { ApiPlanlagtHenting } from '../../services/henting/HentingService';
@@ -23,16 +34,17 @@ const getDayString = (date: Date) => {
     return formatDate(date);
 };
 
-export const AvlystBadge: React.FC = () => (
+export const AvlystBadge: React.FC<BadgeProps> = (props) => (
     <Badge
         as={Flex}
         variant="solid"
-        backgroundColor="warning"
-        color="onWarning"
+        backgroundColor="error"
+        color="onError"
         fontSize="0.8rem"
         paddingY="0.5"
         paddingX="1.5"
         borderRadius={0}
+        {...props}
     >
         <Icon as={Warning} transform="translateY(-2px)" /> Avlyst
     </Badge>
@@ -51,12 +63,13 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
 
     const hentingQuery = usePlanlagtHentingById(hentingId, {
         initialData: locationState?.henting,
+        retry: 1,
     });
 
     return hentingQuery.dispatch<React.ReactElement | null>(
         () => null,
-        () => <>Laster inn...</>,
-        (error) => <>Noe gikk galt</>,
+        () => <>Vennligst vent...</>,
+        () => <>Klarte dessverre ikke å finne informasjon for denne hentingen</>,
         (planlagtHenting) => (
             <>
                 <Helmet>
@@ -66,7 +79,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                         {formatTime(parseISOIgnoreTimezone(planlagtHenting?.startTidspunkt))}
                     </title>
                 </Helmet>
-                <Heading as="h1" fontWeight="normal" marginBottom="4">
+                <Heading as="h1" fontWeight="normal">
                     {planlagtHenting.aktorNavn}
                 </Heading>
                 {/*{location.state?.prevPath ? (*/}
@@ -81,7 +94,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                                 <dt>Status</dt>
                             </VisuallyHidden>
                             <dd>
-                                <AvlystBadge />
+                                <AvlystBadge marginBottom="2" fontSize="1rem" />
                             </dd>
                         </Box>
                     ) : null}
@@ -135,21 +148,19 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     ) : null}
                 </VStack>
 
-                {!planlagtHenting.avlyst ? (
-                    <ButtonGroup marginTop="10" width="full">
-                        {locationState?.prevPath ? (
-                            <Button
-                                as={Link}
-                                to={locationState.prevPath}
-                                variant="outline"
-                                leftIcon={<Icon as={ArrowLeft} />}
-                            >
-                                Tilbake
-                            </Button>
-                        ) : null}
-                        <CancelPlanlagtHentingButton henting={planlagtHenting} />
-                    </ButtonGroup>
-                ) : null}
+                <ButtonGroup marginTop="10" width="full">
+                    {locationState?.prevPath ? (
+                        <Button
+                            as={Link}
+                            to={locationState.prevPath}
+                            variant="outline"
+                            // leftIcon={<Icon as={ArrowLeft} />}
+                        >
+                            Tilbake
+                        </Button>
+                    ) : null}
+                    {!planlagtHenting.avlyst ? <CancelPlanlagtHentingButton henting={planlagtHenting} /> : null}
+                </ButtonGroup>
             </>
         ),
     );

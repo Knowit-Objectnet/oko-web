@@ -13,6 +13,17 @@ import { Box } from '@chakra-ui/layout';
 // TODO: write our own CSS for the calendar
 import '../calendar-style.css';
 
+const EventWrapper: React.FC<EventWrapperProps<CalendarEvent>> = ({ style, event }) => {
+    // This is a bit "hacky", but the easiest way I've been able to find for identifying the
+    // current type of view for the Calendar. The month view renders the wrapper component differently.
+    const viewIsWeekOrDay = style !== undefined;
+
+    if (viewIsWeekOrDay) {
+        return <WeekOrDayEvent event={event} style={style} />;
+    }
+    return <EventComponent event={event} compactView />;
+};
+
 export const CalendarComponent: React.FC = () => {
     const { selectedView, setSelectedView, selectedDate, setSelectedDate } = useCalendarState();
 
@@ -22,17 +33,6 @@ export const CalendarComponent: React.FC = () => {
     const handleViewChange = (view: View) => {
         const calendarView = getCalendarViewFromType(view);
         setSelectedView(calendarView);
-    };
-
-    const EventWrapper: React.FC<EventWrapperProps<CalendarEvent>> = ({ style, event }) => {
-        // This is a bit "hacky", but the easiest way I've been able to find for identifying the
-        // current type of view for the Calendar. The month view renders the wrapper component differently.
-        const viewIsWeekOrDay = style !== undefined;
-
-        if (viewIsWeekOrDay) {
-            return <WeekOrDayEvent event={event} style={style} />;
-        }
-        return <EventComponent event={event} />;
     };
 
     return (
@@ -47,6 +47,7 @@ export const CalendarComponent: React.FC = () => {
                 onView={handleViewChange}
                 drilldownView={null}
                 dayLayoutAlgorithm="no-overlap"
+                showAllEvents
                 components={{
                     toolbar: CalendarToolbar,
                     eventWrapper: EventWrapper,

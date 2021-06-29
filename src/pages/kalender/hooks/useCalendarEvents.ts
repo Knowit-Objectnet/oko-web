@@ -8,6 +8,8 @@ import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 
 export interface CalendarEvent extends Event {
+    start: Date;
+    end: Date;
     henting: ApiPlanlagtHenting;
 }
 

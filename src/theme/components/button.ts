@@ -49,7 +49,7 @@ export const Button = {
         outlineOnSurface: {
             backgroundColor: 'transparent',
             color: 'onSurface',
-            border: '2px solid',
+            border: '1px solid',
             borderColor: 'onSurface',
             '& svg': { fill: 'onSurface' },
             // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)

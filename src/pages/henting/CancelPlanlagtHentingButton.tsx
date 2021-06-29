@@ -36,7 +36,7 @@ export const CancelPlanlagtHentingButton: React.FC<{ henting: ApiPlanlagtHenting
             }}
             onConfirm={handleDeleteHenteplan}
             isLoading={updateHentingMutation.isLoading}
-            popoverPosition="bottom-start"
+            popoverPosition="bottom"
         >
             <Button variant="outline">Avlys denne hentingen</Button>
         </ConfirmationPopover>

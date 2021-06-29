@@ -20,7 +20,7 @@ export const WeekOrDayEvent: React.FC<Props> = ({ event, style }) => {
             width={style?.width}
             height={style?.height}
             event={event}
-            margin="-1px 4px 0 -1px"
+            margin="-1px 2px 0 -1px"
         />
     );
 };
