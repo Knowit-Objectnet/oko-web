@@ -88,9 +88,17 @@ export const Button = {
             _hover: {
                 backgroundColor: 'error',
                 textDecoration: 'underline',
+                _disabled: {
+                    backgroundColor: 'errorBackground',
+                    textDecoration: 'none',
+                },
             },
             _active: {
                 backgroundColor: 'error',
+                textDecoration: 'none',
+            },
+            _disabled: {
+                backgroundColor: 'errorBackground',
                 textDecoration: 'none',
             },
         },

@@ -28,7 +28,7 @@ export const PartnerInfoSectionTitle: React.FC = ({ children }) => (
 );
 
 export const PartnerInfoSectionButtons: React.FC = ({ children }) => (
-    <ButtonGroup spacing="4" size="sm">
+    <ButtonGroup spacing="3" size="sm">
         {children}
     </ButtonGroup>
 );
