@@ -42,7 +42,8 @@ export const CalendarComponent: React.FC = () => {
 
     const formats: Formats = {
         dayRangeHeaderFormat: (range: DateRange, culture?: Culture, localizer?: DateLocalizer) => {
-            return `Uke ${range.start.getWeek()}`;
+            if (culture == 'nb-no') return `Uke ${range.start.getWeek()}`;
+            else return `Week ${range.start.getWeek()}`;
         },
         dayHeaderFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) => {
             return `${localizer?.format(date, 'cccc', culture || 'nb-no')} ${date.getDate()}. ${localizer?.format(
