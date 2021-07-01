@@ -20,21 +20,12 @@ import '../../../utils/forms/formErrorMessages';
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
-    ideell: yup
-        .boolean()
-        .label('om partneren er en ideell organisasjon')
-        .default(false)
-        .transform((value: Array<boolean> | boolean) => {
-            if (Array.isArray(value)) {
-                return value[0];
-            }
-            return value;
-        }),
+    organisasjonstype: yup.array(yup.string()).ensure().label('om partneren er en ideell organisasjon'),
 });
 
 interface PartnerFormData {
     navn: string;
-    ideell: boolean;
+    organisasjonstype: Array<string>;
 }
 
 interface Props {
@@ -50,7 +41,7 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
         defaultValues: partnerToEdit
             ? {
                   navn: partnerToEdit.navn,
-                  ideell: partnerToEdit.ideell,
+                  organisasjonstype: partnerToEdit.ideell ? ['ideell'] : [],
               }
             : undefined,
     });
@@ -63,13 +54,18 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
+        const partner = {
+            navn: formData.navn,
+            ideell: formData.organisasjonstype.some((type) => type === 'ideell'),
+        };
+
         if (partnerToEdit) {
             updatePartner({
                 id: partnerToEdit.id,
-                ...formData,
+                ...partner,
             });
         } else {
-            addPartner(formData);
+            addPartner(partner);
         }
     });
 
@@ -108,9 +104,9 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på organisasjon" required />
                     <CheckboxGroup
-                        name="ideell"
+                        name="organisasjonstype"
                         label="Organisasjonstype"
-                        options={[{ value: 'true', label: 'Ideell organisasjon' }]}
+                        options={[{ value: 'ideell', label: 'Ideell organisasjon' }]}
                         required
                     />
                     <FormSubmitButton
