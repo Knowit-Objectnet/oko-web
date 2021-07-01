@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import Filter from '../../assets/Filter.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
-import { useCalendarState } from './CalendarProvider';
 import { useStasjoner } from '../../services/stasjon/useStasjoner';
+import { useCalendarState } from './CalendarProvider';
+import { ApiPlanlagtHenting } from '../../services/henting/HentingService';
 
 const Wrapper = styled.div`
     display: flex;
@@ -60,7 +61,7 @@ const Input = styled.input`
 export const CalendarStasjonFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
     const { data: stasjoner } = useStasjoner();
-    const { filters, setFilters } = useCalendarState();
+    const { setFilter } = useCalendarState();
 
     const onToggleClick = () => {
         setToggled(!toggled);
@@ -70,7 +71,18 @@ export const CalendarStasjonFilter: React.FC = () => {
         e.persist();
         const value = e.currentTarget.value;
         const stasjon = value === 'default' ? undefined : value;
-        setFilters({ stasjon });
+
+        const stasjonFilterFunction = (henting: ApiPlanlagtHenting) => {
+            // Her burde du kunne bruke arrayet du får fra avkrysningsboksene og kjøre:
+            // return stasjoner.some((stasjonId) => henting.stasjonId === stasjonId)
+            // Neste linje funker bare med radioknapper
+            return henting.stasjonNavn === stasjon;
+        };
+        const filterFunctionObject = {
+            stasjonFilter: stasjonFilterFunction,
+        };
+
+        setFilter(filterFunctionObject);
     };
 
     return (
@@ -88,7 +100,7 @@ export const CalendarStasjonFilter: React.FC = () => {
                                 type="radio"
                                 name="stasjon-selector"
                                 value={station.navn}
-                                checked={station.navn === filters.stasjon}
+                                // checked={station.navn === filters.stasjon}
                                 onChange={handleStationChange}
                             />
                             {station.navn}
@@ -99,7 +111,7 @@ export const CalendarStasjonFilter: React.FC = () => {
                             type="radio"
                             name="stasjon-selector"
                             value="default"
-                            checked={filters.stasjon === undefined}
+                            // checked={filters.stasjon === undefined}
                             onChange={handleStationChange}
                         />
                         Alle

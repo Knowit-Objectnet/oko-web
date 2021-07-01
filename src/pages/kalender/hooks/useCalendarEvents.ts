@@ -32,7 +32,7 @@ const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): Calendar
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
-    const { selectedView, selectedDate, filterFns } = useCalendarState();
+    const { selectedView, selectedDate, filters } = useCalendarState();
 
     const intervalToFetch = calculateDateRange(selectedDate, selectedView);
 
@@ -51,8 +51,8 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     // Fetching events for previous and next interval as well
     usePrefetchHentinger(intervalToFetch);
 
-    const filteredPlanlagteHentinger = (planlagteHentinger ?? []).filter((event) =>
-        filterFns.reduce((result: boolean, filterFn) => filterFn(event), true),
+    const filteredPlanlagteHentinger = (planlagteHentinger ?? []).filter((henting) =>
+        Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting), true),
     );
 
     return filteredPlanlagteHentinger.map(transformToCalendarEvent);
