@@ -15,6 +15,7 @@ import {
     Portal,
     Heading,
     Text,
+    Placement,
 } from '@chakra-ui/react';
 import Warning from '../../assets/Warning.svg';
 import { Box } from '@chakra-ui/layout';
@@ -28,9 +29,14 @@ interface Props {
     };
     onConfirm: () => Promise<unknown>;
     isLoading?: boolean;
+    popoverPosition?: Placement;
 }
 
-export const ConfirmationPopover: React.FC<Props> = ({ message, onConfirm, isLoading, children }) => {
+/**
+ * Popover component that asks user to confirm an action.
+ * Pass the trigger for the action (e.g. a button) as a child to this component.
+ */
+export const ConfirmationPopover: React.FC<Props> = ({ message, onConfirm, isLoading, popoverPosition, children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const onDeleteConfirmation = () => {
@@ -43,7 +49,7 @@ export const ConfirmationPopover: React.FC<Props> = ({ message, onConfirm, isLoa
                 isOpen={isOpen}
                 onOpen={onOpen}
                 onClose={onClose}
-                placement="bottom-end"
+                placement={popoverPosition || 'bottom-end'}
                 // We have to use lazy loading and unmounting in order for the focus lock to work
                 isLazy
                 lazyBehavior="unmount"

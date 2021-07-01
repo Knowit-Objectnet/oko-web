@@ -6,6 +6,11 @@ export type HenteplanFrekvens = 'ENKELT' | 'UKENTLIG' | 'ANNENHVER';
 
 export type Weekday = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
 
+export interface ApiHenteplanKategori {
+    kategori: ApiKategori;
+    merknad?: string;
+}
+
 export interface ApiHenteplan {
     id: string;
     avtaleId: string;
@@ -16,11 +21,7 @@ export interface ApiHenteplan {
     ukedag: Weekday;
     merknad: string;
     planlagteHentinger: Array<ApiPlanlagtHenting>;
-    kategorier: Array<{
-        kategoriId: string;
-        kategori: ApiKategori;
-        merknad?: string;
-    }>;
+    kategorier: Array<ApiHenteplanKategori>;
 }
 
 export interface ApiHenteplanPost {
