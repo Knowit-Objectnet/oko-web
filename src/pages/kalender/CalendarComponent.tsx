@@ -1,5 +1,14 @@
 import React from 'react';
-import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
+import {
+    Calendar,
+    Culture,
+    dateFnsLocalizer,
+    DateLocalizer,
+    DateRange,
+    DateRangeFormatFunction,
+    Formats,
+    View,
+} from 'react-big-calendar';
 import { nb } from 'date-fns/locale';
 import { format, getDay, parse, set, startOfWeek } from 'date-fns';
 import { CalendarToolbar } from './CalendarToolbar';
@@ -7,6 +16,7 @@ import { useCalendarEvents } from './hooks/useCalendarEvents';
 import { getCalendarViewFromType, VIEWS } from './hooks/useCalendarView';
 import { useCalendarState } from './CalendarProvider';
 import { Box } from '@chakra-ui/layout';
+import './../../utils/date.extensions';
 
 // TODO: write our own CSS for the calendar
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -28,6 +38,19 @@ export const CalendarComponent: React.FC = () => {
     const handleViewChange = (view: View) => {
         const calendarView = getCalendarViewFromType(view);
         setSelectedView(calendarView);
+    };
+
+    const formats: Formats = {
+        dayRangeHeaderFormat: (range: DateRange, culture?: Culture, localizer?: DateLocalizer) => {
+            return `Uke ${range.start.getWeek()}`;
+        },
+        dayHeaderFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) => {
+            return `${localizer?.format(date, 'cccc', culture || 'nb-no')} ${date.getDate()}. ${localizer?.format(
+                date,
+                'MMM',
+                culture || 'nb-no',
+            )}`;
+        },
     };
 
     return (
@@ -65,6 +88,7 @@ export const CalendarComponent: React.FC = () => {
                 onNavigate={setSelectedDate}
                 onView={handleViewChange}
                 dayLayoutAlgorithm="no-overlap"
+                formats={formats}
                 components={{
                     toolbar: CalendarToolbar,
                 }}
