@@ -9,6 +9,10 @@ export const PartnerNavigation: React.FC = () => {
     // TODO: handle error/loading
     const { data: partnere } = usePartnere();
 
+    const sortedPartnere = (partnere ?? []).sort((partnerA, partnerB) =>
+        partnerA.navn.localeCompare(partnerB.navn, 'nb'),
+    );
+
     return (
         <Flex
             direction="column"
@@ -31,13 +35,11 @@ export const PartnerNavigation: React.FC = () => {
                 Samarbeidspartnere
             </Heading>
             <List spacing="3">
-                {(partnere ?? [])
-                    .sort((partnerA, partnerB) => partnerA.navn.localeCompare(partnerB.navn))
-                    .map((partner) => (
-                        <ListItem key={partner.id}>
-                            <PartnerNavItem partner={partner} />
-                        </ListItem>
-                    ))}
+                {sortedPartnere.map((partner) => (
+                    <ListItem key={partner.id}>
+                        <PartnerNavItem partner={partner} />
+                    </ListItem>
+                ))}
             </List>
             <AddPartnerButton marginTop="10" width="full" variant="outlineOnSurface" />
         </Flex>

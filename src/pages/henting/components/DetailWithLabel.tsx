@@ -6,8 +6,8 @@ interface Props {
 }
 
 export const DetailWithLabel: React.FC<Props> = ({ label, children }) => (
-    <VStack spacing="1" alignItems="flex-start">
-        <Heading as="h2" fontSize="1rem" fontWeight="medium" paddingTop="2">
+    <VStack spacing="1.5" alignItems="flex-start">
+        <Heading as="h2" fontSize="md" fontWeight="medium" paddingTop="2">
             {label}
         </Heading>
         {children}
