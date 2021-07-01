@@ -68,9 +68,15 @@ export const CalendarStasjonFilter: React.FC = () => {
 
     const handleStationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
+        let stasjon = filters.stasjon ? filters.stasjon : [];
         const value = e.currentTarget.value;
-        const stasjon = value === 'default' ? undefined : value;
-        setFilters({ stasjon });
+        const index = stasjon.indexOf(value);
+        if (index == -1) stasjon.push(value);
+        else stasjon.splice(index, 1);
+        if (value === 'default') stasjon = [];
+        console.log(value);
+        console.log(stasjon);
+        setFilters({ stasjon: stasjon });
     };
 
     return (
@@ -85,10 +91,10 @@ export const CalendarStasjonFilter: React.FC = () => {
                     {stasjoner?.map((station) => (
                         <Label key={station.id}>
                             <Input
-                                type="radio"
+                                type="checkbox"
                                 name="stasjon-selector"
-                                value={station.navn}
-                                checked={station.navn === filters.stasjon}
+                                value={station.id}
+                                checked={filters.stasjon?.some((stasjonId) => stasjonId === station.id)}
                                 onChange={handleStationChange}
                             />
                             {station.navn}
@@ -96,10 +102,10 @@ export const CalendarStasjonFilter: React.FC = () => {
                     ))}
                     <Label key="AllRadioButton">
                         <Input
-                            type="radio"
+                            type="checkbox"
                             name="stasjon-selector"
                             value="default"
-                            checked={filters.stasjon === undefined}
+                            checked={filters.stasjon?.length == 0}
                             onChange={handleStationChange}
                         />
                         Alle

@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-    Calendar,
-    Culture,
-    dateFnsLocalizer,
-    DateLocalizer,
-    DateRange,
-    DateRangeFormatFunction,
-    Formats,
-    View,
-} from 'react-big-calendar';
+import { Calendar, Culture, dateFnsLocalizer, DateLocalizer, DateRange, Formats, View } from 'react-big-calendar';
 import { nb } from 'date-fns/locale';
 import { format, getDay, parse, set, startOfWeek } from 'date-fns';
 import { CalendarToolbar } from './CalendarToolbar';
