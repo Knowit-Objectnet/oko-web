@@ -31,11 +31,13 @@ export const PartnerNavigation: React.FC = () => {
                 Samarbeidspartnere
             </Heading>
             <List spacing="3">
-                {(partnere ?? []).map((partner) => (
-                    <ListItem key={partner.id}>
-                        <PartnerNavItem partner={partner} />
-                    </ListItem>
-                ))}
+                {(partnere ?? [])
+                    .sort((partnerA, partnerB) => partnerA.navn.localeCompare(partnerB.navn))
+                    .map((partner) => (
+                        <ListItem key={partner.id}>
+                            <PartnerNavItem partner={partner} />
+                        </ListItem>
+                    ))}
             </List>
             <AddPartnerButton marginTop="10" width="full" variant="outlineOnSurface" />
         </Flex>

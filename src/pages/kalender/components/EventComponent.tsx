@@ -3,15 +3,14 @@ import { LinkBox, LinkBoxProps, LinkOverlay, Text } from '@chakra-ui/react';
 import { CalendarEvent } from '../hooks/useCalendarEvents';
 import { Link, useLocation } from 'react-router-dom';
 import { Box } from '@chakra-ui/layout';
-import { AvlystBadge } from '../../henting/HentingDetails';
 import { formatTime } from '../../../utils/formatDateTime';
+import { AvlystBadge } from '../../henting/components/AvlystBadge';
 
 const getEventStyle = (event: CalendarEvent) => {
     if (event.henting.avlyst) {
         return {
             backgroundColor: 'errorBackground',
             color: 'onError',
-            border: '1px solid',
             borderColor: 'error',
         };
     }
@@ -19,7 +18,6 @@ const getEventStyle = (event: CalendarEvent) => {
     return {
         backgroundColor: 'surface',
         color: 'onSurface',
-        border: '1px solid',
         borderColor: 'DarkBeige',
     };
 };
@@ -37,9 +35,7 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             as="article"
             display="flex"
             flexDirection={compactView ? 'row' : 'column'}
-            // flexDirection="column"
             alignItems={compactView ? 'center' : 'flex-start'}
-            borderRadius="4px"
             minHeight="5"
             paddingY="2px"
             paddingX="5px"
@@ -52,6 +48,8 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             fontWeight="normal"
             lineHeight="1.3"
             overflow="hidden"
+            border="1px solid"
+            borderRadius="4px"
             {...getEventStyle(event)}
             {...props}
         >

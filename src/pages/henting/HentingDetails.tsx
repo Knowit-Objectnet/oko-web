@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { Badge, BadgeProps, Button, ButtonGroup, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
-import { Flex } from '@chakra-ui/layout';
+import { Button, ButtonGroup, Heading, Text, VStack } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { ApiPlanlagtHenting } from '../../services/henting/HentingService';
 import { usePlanlagtHentingById } from '../../services/henting/usePlanlagtHentingById';
-import { Helmet } from 'react-helmet';
 import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { formatDate, formatTime } from '../../utils/formatDateTime';
 import { KategoriList } from '../../components/KategoriList';
 import { CancelPlanlagtHentingButton } from './CancelPlanlagtHentingButton';
 import { isToday } from 'date-fns';
-import Warning from '../../assets/Warning.svg';
 import Location from '../../assets/Location.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Clock from '../../assets/Clock.svg';
 import { useAuth } from '../../auth/useAuth';
+import { DetailWithIcon } from './components/DetailWithIcon';
+import { AvlystBadge } from './components/AvlystBadge';
+import { DetailWithLabel } from './components/DetailWithLabel';
 
 const getDayString = (date: Date) => {
     if (isToday(date)) {
@@ -22,26 +22,6 @@ const getDayString = (date: Date) => {
     }
     return formatDate(date);
 };
-
-export const AvlystBadge: React.FC<BadgeProps> = (props) => (
-    <Badge
-        as={Flex}
-        variant="solid"
-        backgroundColor="error"
-        color="onError"
-        fontSize="0.8rem"
-        paddingY="0.5"
-        paddingX="1.5"
-        borderRadius={0}
-        {...props}
-    >
-        <Icon as={Warning} transform="translateY(-2px)" /> Avlyst
-    </Badge>
-);
-
-const IconLabel: React.FC<{ icon: React.ElementType; label: string }> = ({ icon, label }) => (
-    <Icon as={icon} aria-label={label} transform="translateY(-2px)" boxSize="1.2rem" />
-);
 
 interface Props {
     hentingId: string;
@@ -63,82 +43,58 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                 </Button>
             );
         }
-        return null;
     };
 
-    const userCanCancelHenting = (planlagtHenting: ApiPlanlagtHenting) => {
-        const aktorUserOwnsHenting = user.ownsResource(planlagtHenting.aktorId);
-        const stasjonUserOwnsHenting = user.ownsResource(planlagtHenting.stasjonId);
+    const getCancelButton = (henting: ApiPlanlagtHenting) => {
+        if (!henting.avlyst && userCanCancelHenting(henting)) {
+            return <CancelPlanlagtHentingButton henting={henting} variant="outline" />;
+        }
+    };
+
+    const userCanCancelHenting = (henting: ApiPlanlagtHenting) => {
+        const aktorUserOwnsHenting = user.ownsResource(henting.aktorId);
+        const stasjonUserOwnsHenting = user.ownsResource(henting.stasjonId);
         return user.isAdmin || aktorUserOwnsHenting || stasjonUserOwnsHenting;
     };
 
+    // TODO: create better UI for loading and error states
     return hentingQuery.dispatch<React.ReactElement | null>(
         () => null,
         () => <>Vennligst vent...</>,
         () => <>Klarte dessverre ikke å finne informasjon for denne hentingen</>,
-        (planlagtHenting) => (
+        (henting) => (
             <>
-                <Helmet>
-                    <title>
-                        {planlagtHenting.aktorNavn} henter fra {planlagtHenting.stasjonNavn},{' '}
-                        {getDayString(parseISOIgnoreTimezone(planlagtHenting?.startTidspunkt))} kl.{' '}
-                        {formatTime(parseISOIgnoreTimezone(planlagtHenting?.startTidspunkt))}
-                    </title>
-                </Helmet>
-                <Heading as="h1" fontWeight="normal">
-                    {planlagtHenting.aktorNavn}
+                <Heading as="h1" fontWeight="normal" aria-label="Partner">
+                    {henting.aktorNavn}
                 </Heading>
                 <VStack spacing="3" alignItems="flex-start" marginTop="4">
-                    {planlagtHenting.avlyst ? (
-                        <AvlystBadge marginBottom="2" fontSize="1rem" aria-label="Status" />
+                    {henting.avlyst ? <AvlystBadge aria-label="Status" fontSize="sm" marginBottom="2" /> : null}
+                    <DetailWithIcon icon={Location} label="Stasjon">
+                        {henting.stasjonNavn}
+                    </DetailWithIcon>
+                    <DetailWithIcon icon={Calendar} label="Dato">
+                        <time>{getDayString(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
+                    </DetailWithIcon>
+                    <DetailWithIcon icon={Clock} label="Tidspunkt">
+                        {`Fra kl. `}
+                        <time>{formatTime(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
+                        {` til kl. `}
+                        <time>{formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))}</time>
+                    </DetailWithIcon>
+                    {henting.kategorier.length > 0 ? (
+                        <DetailWithLabel label="Kategorier">
+                            <KategoriList size="md" kategorier={henting.kategorier.map(({ kategori }) => kategori)} />
+                        </DetailWithLabel>
                     ) : null}
-                    <HStack>
-                        <IconLabel icon={Location} label="Stasjon" />
-                        <Text>{planlagtHenting.stasjonNavn}</Text>
-                    </HStack>
-                    <HStack>
-                        <IconLabel icon={Calendar} label="Dato" />
-                        <Text>
-                            <time>{getDayString(parseISOIgnoreTimezone(planlagtHenting?.startTidspunkt))}</time>
-                        </Text>
-                    </HStack>
-                    <HStack>
-                        <IconLabel icon={Clock} label="Tidspunkt" />
-                        <Text>
-                            {`Fra kl. `}
-                            <time>{formatTime(parseISOIgnoreTimezone(planlagtHenting?.startTidspunkt))}</time>
-                            {` til kl. `}
-                            <time>{formatTime(parseISOIgnoreTimezone(planlagtHenting?.sluttTidspunkt))}</time>
-                        </Text>
-                    </HStack>
-
-                    {planlagtHenting.merknad ? (
-                        <VStack spacing="1">
-                            <Heading as="h2" fontSize="1rem" fontWeight="medium" paddingTop="2">
-                                Merknad
-                            </Heading>
-                            <Text>{planlagtHenting.merknad}</Text>
-                        </VStack>
-                    ) : null}
-
-                    {planlagtHenting.kategorier.length > 0 ? (
-                        <VStack spacing="1" alignItems="flex-start">
-                            <Heading as="h2" fontSize="1rem" fontWeight="medium" paddingTop="2">
-                                Kategorier
-                            </Heading>
-                            <KategoriList
-                                size="md"
-                                kategorier={(planlagtHenting?.kategorier || []).map(({ kategori }) => kategori)}
-                            />
-                        </VStack>
+                    {henting.merknad ? (
+                        <DetailWithLabel label="Merknad">
+                            <Text>{henting.merknad}</Text>
+                        </DetailWithLabel>
                     ) : null}
                 </VStack>
-
                 <ButtonGroup marginTop="10">
                     {getBackButton()}
-                    {!planlagtHenting.avlyst && userCanCancelHenting(planlagtHenting) ? (
-                        <CancelPlanlagtHentingButton henting={planlagtHenting} />
-                    ) : null}
+                    {getCancelButton(henting)}
                 </ButtonGroup>
             </>
         ),

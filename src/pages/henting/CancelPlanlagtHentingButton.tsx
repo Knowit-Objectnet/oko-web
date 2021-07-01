@@ -4,9 +4,13 @@ import { useUpdateHenting } from '../../services/henting/useUpdateHenting';
 import { useSuccessToast } from '../../components/toasts/useSuccessToast';
 import { useErrorToast } from '../../components/toasts/useErrorToast';
 import { ConfirmationPopover } from '../../components/buttons/ConfirmationPopover';
-import { Button } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/react';
 
-export const CancelPlanlagtHentingButton: React.FC<{ henting: ApiPlanlagtHenting }> = ({ henting }) => {
+interface Props {
+    henting: ApiPlanlagtHenting;
+}
+
+export const CancelPlanlagtHentingButton: React.FC<Props & ButtonProps> = ({ henting, ...props }) => {
     const updateHentingMutation = useUpdateHenting();
 
     const showSuccessToast = useSuccessToast();
@@ -38,7 +42,7 @@ export const CancelPlanlagtHentingButton: React.FC<{ henting: ApiPlanlagtHenting
             isLoading={updateHentingMutation.isLoading}
             popoverPosition="bottom"
         >
-            <Button variant="outline">Avlys denne hentingen</Button>
+            <Button {...props}>Avlys denne hentingen</Button>
         </ConfirmationPopover>
     );
 };
