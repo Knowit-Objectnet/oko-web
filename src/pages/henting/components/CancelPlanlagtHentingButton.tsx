@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { ApiPlanlagtHenting } from '../../services/henting/HentingService';
-import { useUpdateHenting } from '../../services/henting/useUpdateHenting';
-import { useSuccessToast } from '../../components/toasts/useSuccessToast';
-import { useErrorToast } from '../../components/toasts/useErrorToast';
-import { ConfirmationPopover } from '../../components/buttons/ConfirmationPopover';
+import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { useUpdateHenting } from '../../../services/henting/useUpdateHenting';
+import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { useErrorToast } from '../../../components/toasts/useErrorToast';
+import { ConfirmationPopover } from '../../../components/buttons/ConfirmationPopover';
 import { Button, ButtonProps } from '@chakra-ui/react';
 
 interface Props {

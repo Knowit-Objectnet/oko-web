@@ -30,8 +30,8 @@ export interface ApiPlanlagtHentingPatch {
     startTidspunkt?: string;
     sluttTidspunkt?: string;
     merknad?: string;
-    avlys?: boolean; // TODO: should be avlyst, not avlys -> update when fixed in backend
-    aarsak?: string; // TODO, should be avlystAarsak -> update when fixed in backend
+    avlys?: boolean; // TODO: should probably be avlyst, not avlys -> update if fixed in backend
+    aarsak?: string; // TODO, should probably be avlystAarsak -> update if fixed in backend
 }
 
 const hentingEndpoint = '/planlagte-hentinger';

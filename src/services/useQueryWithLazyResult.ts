@@ -5,18 +5,14 @@ export const useQueryWithLazyResult = <TResult, TError>(
     queryOptions: UseQueryOptions<TResult, TError>,
 ): LazyResult<TError, TResult> => {
     const { data, isLoading, error } = useQuery<TResult, TError>(queryOptions);
-
     if (data) {
         return Success(data);
     }
-
     if (isLoading) {
         return Loading();
     }
-
     if (error) {
         return Failure(error);
     }
-
     return Initial();
 };

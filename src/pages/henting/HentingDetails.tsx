@@ -6,7 +6,7 @@ import { usePlanlagtHentingById } from '../../services/henting/usePlanlagtHentin
 import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { formatDate, formatTime } from '../../utils/formatDateTime';
 import { KategoriList } from '../../components/KategoriList';
-import { CancelPlanlagtHentingButton } from './CancelPlanlagtHentingButton';
+import { CancelPlanlagtHentingButton } from './components/CancelPlanlagtHentingButton';
 import { isToday } from 'date-fns';
 import Location from '../../assets/Location.svg';
 import Calendar from '../../assets/Calendar.svg';
