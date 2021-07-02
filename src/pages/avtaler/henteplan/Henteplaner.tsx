@@ -22,13 +22,11 @@ export const Henteplaner: React.FC<Props> = ({ avtale, partner }) => {
                 justifyContent="space-between"
                 alignItems="center"
                 width="full"
-                borderTop="2px solid"
-                borderColor="gray.200"
                 marginTop="4"
                 marginBottom="3"
                 paddingTop="3"
             >
-                <Heading as="h4" fontSize="lg" fontWeight="medium">
+                <Heading as="h4" fontSize="lg" fontWeight="bold">
                     {henteplaner.length > 0 ? 'Henteplaner' : 'Ingen registrerte henteplaner'}
                 </Heading>
                 {user.isAdmin ? (

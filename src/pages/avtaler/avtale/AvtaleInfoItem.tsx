@@ -55,7 +55,13 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
         return (
             <Flex direction="column" width="full" backgroundColor="gray.100" padding="5">
                 <Flex justifyContent="space-between" width="full">
-                    <Text style={{ fontSize: '20px' }}> {getAvtaleTitle(avtale)}</Text>
+                    <Text style={{ fontSize: '20px' }}>
+                        {getAvtaleTitle(avtale)} &nbsp;&nbsp;&nbsp;&nbsp;
+                        <small>
+                            {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(parseISO(avtale.startDato))}</time> til{' '}
+                            <time>{formatDate(parseISO(avtale.sluttDato))}</time>
+                        </small>
+                    </Text>
 
                     {user.isAdmin ? (
                         <ButtonGroup spacing="3" size="sm">
@@ -64,10 +70,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                         </ButtonGroup>
                     ) : null}
                 </Flex>
-                <Text>
-                    {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(parseISO(avtale.startDato))}</time> til{' '}
-                    <time>{formatDate(parseISO(avtale.sluttDato))}</time>
-                </Text>
+
                 <Henteplaner avtale={avtale} partner={partner} />
             </Flex>
         );
