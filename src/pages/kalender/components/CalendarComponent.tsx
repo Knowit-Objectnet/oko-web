@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Calendar, dateFnsLocalizer, View } from 'react-big-calendar';
+import { Calendar, Culture, dateFnsLocalizer, DateLocalizer, DateRange, Formats, View } from 'react-big-calendar';
 import { nb } from 'date-fns/locale';
-import { format, getDay, parse, set, startOfWeek } from 'date-fns';
+import { format, getDay, getISOWeek, parse, set, startOfWeek } from 'date-fns';
 import { CalendarToolbar } from './CalendarToolbar';
 import { EventWrapper } from './EventWrapper';
 import { CalendarEvent, useCalendarEvents } from '../hooks/useCalendarEvents';
@@ -21,6 +21,15 @@ export const CalendarComponent: React.FC = () => {
     const handleViewChange = (view: View) => {
         const calendarView = getCalendarViewFromType(view);
         setSelectedView(calendarView);
+    };
+
+    const formats: Formats = {
+        dayRangeHeaderFormat: (range: DateRange, culture?: Culture, localizer?: DateLocalizer) => {
+            return `Uke ${getISOWeek(range.start)}`;
+        },
+        dayHeaderFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) => {
+            return `${localizer?.format(date, 'cccc dd', culture || 'nb-no')}`;
+        },
     };
 
     return (
@@ -65,6 +74,7 @@ export const CalendarComponent: React.FC = () => {
                     agenda: 'Liste',
                     noEventsInRange: 'Det finnes ingen hendelser i dette tidsrommet',
                 }}
+                formats={formats}
             />
         </Box>
     );
