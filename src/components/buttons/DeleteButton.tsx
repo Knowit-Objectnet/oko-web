@@ -4,15 +4,14 @@ import Cross from '../../assets/Cross.svg';
 
 interface Props {
     label: string;
-    onClick?: () => void;
 }
 
 export const DeleteButton = React.forwardRef<HTMLButtonElement, Props & ButtonProps>(function DeleteButton(
-    { label, onClick, ...props },
+    { label, ...props },
     ref,
 ) {
     return (
-        <Button ref={ref} leftIcon={<Icon as={Cross} />} onClick={onClick} {...props}>
+        <Button ref={ref} leftIcon={<Icon as={Cross} />} {...props}>
             {label}
         </Button>
     );

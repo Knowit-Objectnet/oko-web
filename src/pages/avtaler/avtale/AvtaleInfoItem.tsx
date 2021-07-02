@@ -51,46 +51,68 @@ interface Props {
 
 export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
     const { user } = useAuth();
-    return (
-        <AccordionItem id={avtale.id}>
-            {({ isExpanded }) => (
-                <Flex direction="column" width="full" border="4px solid" borderColor="gray.200" padding="5">
-                    <Flex justifyContent="space-between" width="full">
-                        <Heading as="h3" flex="1">
-                            <AccordionButton
-                                fontSize="xl"
-                                fontWeight="medium"
-                                padding="0"
-                                _hover={{ background: 'none', textDecoration: 'underline' }}
-                            >
-                                <Icon
-                                    as={ArrowRight}
-                                    transform={`translate(-2px, -2px) rotate(${isExpanded ? '90deg' : '0deg'})`}
-                                    transformOrigin="center"
-                                    transition="transform 200ms ease-in-out"
-                                    marginRight="1"
-                                />
-                                {getAvtaleTitle(avtale)}
-                            </AccordionButton>
-                        </Heading>
-                        <Fade in={isExpanded} unmountOnExit>
-                            {user.isAdmin ? (
-                                <ButtonGroup spacing="3" size="sm">
-                                    <EditAvtaleButton size="sm" avtale={avtale} />
-                                    <DeleteAvtaleButton avtale={avtale} />
-                                </ButtonGroup>
-                            ) : null}
-                        </Fade>
-                    </Flex>
-                    <Text>
-                        {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(parseISO(avtale.startDato))}</time> til{' '}
-                        <time>{formatDate(parseISO(avtale.sluttDato))}</time>
-                    </Text>
-                    <AccordionPanel padding="0">
-                        <Henteplaner avtale={avtale} partner={partner} />
-                    </AccordionPanel>
+    if (getAvtaleTitle(avtale) == 'Aktiv avtale') {
+        return (
+            <Flex direction="column" width="full" backgroundColor="gray.100" padding="5">
+                <Flex justifyContent="space-between" width="full">
+                    <Text style={{ fontSize: '20px' }}> {getAvtaleTitle(avtale)}</Text>
+
+                    {user.isAdmin ? (
+                        <ButtonGroup spacing="3" size="sm">
+                            <EditAvtaleButton backgroundColor="white" size="sm" avtale={avtale} />
+                            <DeleteAvtaleButton backgroundColor="white" avtale={avtale} />
+                        </ButtonGroup>
+                    ) : null}
                 </Flex>
-            )}
-        </AccordionItem>
-    );
+                <Text>
+                    {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(parseISO(avtale.startDato))}</time> til{' '}
+                    <time>{formatDate(parseISO(avtale.sluttDato))}</time>
+                </Text>
+                <Henteplaner avtale={avtale} partner={partner} />
+            </Flex>
+        );
+    } else {
+        return user.isPartner ? null : (
+            <AccordionItem id={avtale.id}>
+                {({ isExpanded }) => (
+                    <Flex direction="column" width="full" backgroundColor="gray.100" padding="5">
+                        <Flex justifyContent="space-between" width="full">
+                            <Heading as="h3" flex="1">
+                                <AccordionButton
+                                    fontSize="xl"
+                                    fontWeight="medium"
+                                    padding="0"
+                                    _hover={{ background: 'none', textDecoration: 'underline' }}
+                                >
+                                    <Icon
+                                        as={ArrowRight}
+                                        transform={`translate(-2px, -2px) rotate(${isExpanded ? '90deg' : '0deg'})`}
+                                        transformOrigin="center"
+                                        transition="transform 200ms ease-in-out"
+                                        marginRight="1"
+                                    />
+                                    {getAvtaleTitle(avtale)}
+                                </AccordionButton>
+                            </Heading>
+                            <Fade in={isExpanded} unmountOnExit>
+                                {user.isAdmin ? (
+                                    <ButtonGroup spacing="3" size="sm">
+                                        <EditAvtaleButton backgroundColor="white" size="sm" avtale={avtale} />
+                                        <DeleteAvtaleButton backgroundColor="white" avtale={avtale} />
+                                    </ButtonGroup>
+                                ) : null}
+                            </Fade>
+                        </Flex>
+                        <Text>
+                            {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(parseISO(avtale.startDato))}</time> til{' '}
+                            <time>{formatDate(parseISO(avtale.sluttDato))}</time>
+                        </Text>
+                        <AccordionPanel padding="0">
+                            <Henteplaner avtale={avtale} partner={partner} />
+                        </AccordionPanel>
+                    </Flex>
+                )}
+            </AccordionItem>
+        );
+    }
 };

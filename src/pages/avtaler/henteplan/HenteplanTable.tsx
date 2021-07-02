@@ -14,7 +14,7 @@ export const HenteplanTable: React.FC<Props> = ({ avtale }) => {
     );
 
     return (
-        <Table size="sm">
+        <Table variant="stripedNegative" size="sm">
             <Thead>
                 <Tr>
                     <Th scope="col">Periode</Th>
