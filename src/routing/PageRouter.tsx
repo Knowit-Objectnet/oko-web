@@ -10,6 +10,7 @@ const Henting = React.lazy(() => import('../pages/henting'));
 const Avtaler = React.lazy(() => import('../pages/avtaler'));
 const Stasjoner = React.lazy(() => import('../pages/stasjoner'));
 const MineAvtaler = React.lazy(() => import('../pages/minavtale'));
+const EkstraUttak = React.lazy(() => import('../pages/ekstrauttak'));
 
 const Home: React.FC = () => {
     // const { user } = useAuth();
@@ -36,6 +37,9 @@ export const PageRouter: React.FC = () => (
             </ProtectedRoute>
             <ProtectedRoute path="/kategorier" requiredRoles={[Roles.Admin]}>
                 <Kategorier />
+            </ProtectedRoute>
+            <ProtectedRoute path="/ekstrauttak" requiredRoles={[Roles.Stasjon]}>
+                <EkstraUttak />
             </ProtectedRoute>
             <Route path="/">
                 <Home />
