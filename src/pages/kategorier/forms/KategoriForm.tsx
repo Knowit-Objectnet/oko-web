@@ -7,88 +7,73 @@ import { Input } from '../../../components/forms/input/Input';
 import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ApiStasjon, ApiStasjonPatch, ApiStasjonPost } from '../../../services/stasjon/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { useAddStasjon } from '../../../services/stasjon/useAddStasjon';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { useUpdateStasjon } from '../../../services/stasjon/useUpdateStasjon';
 import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
+import { ApiKategori, ApiKategoriPatch, ApiKategoriPost } from '../../../services/kategori/KategoriService';
+import { useAddKategori } from '../../../services/kategori/useAddKategori';
+import { useUpdateKategori } from '../../../services/kategori/useUpdateKategori';
 
-// TODO uncomment when we want to set station type in form
-// const stasjonTypeOptions: Array<RadioOption<StasjonType>> = [
-//     { value: 'GJENBRUK', label: 'Gjenbruksstasjon' },
-//     { value: 'MINI', label: 'Minigjenbruksstasjon' },
-// ];
-
-interface StasjonFormData {
+interface KategoriFormData {
     navn: string;
 }
 
 const validationSchema = yup.object().shape({
-    navn: yup.string().label('navn på stasjonen').trim().required().min(2),
-    // TODO uncomment when we want to set station type in form
-    // type: yup
-    //     .mixed<StasjonType>()
-    //     .label('type for stasjonen')
-    //     .required()
-    //     .oneOf(stasjonTypeOptions.map((type) => type.value)),
+    navn: yup.string().label('navn på kategori').required().min(2),
 });
 
 interface Props {
-    /** By passing an existing stasjon, the form will be in edit mode **/
-    stasjonToEdit?: ApiStasjon;
+    /** By passing an existing kategori, the form will be in edit mode **/
+    kategoriToEdit?: ApiKategori;
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
 }
 
-export const StasjonForm: React.FC<Props> = ({ stasjonToEdit, onSuccess }) => {
-    const formMethods = useForm<StasjonFormData>({
+export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => {
+    const formMethods = useForm<KategoriFormData>({
         resolver: yupResolver(validationSchema),
-        defaultValues: stasjonToEdit
+        defaultValues: kategoriToEdit
             ? {
-                  navn: stasjonToEdit.navn,
+                  navn: kategoriToEdit.navn,
               }
             : undefined,
     });
 
-    const addStasjonMutation = useAddStasjon();
-    const updateStasjonMutation = useUpdateStasjon();
+    const addKategoriMutation = useAddKategori();
+    const updateKategoriMutation = useUpdateKategori();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        if (stasjonToEdit) {
-            updateStasjon({
-                id: stasjonToEdit.id,
+        if (kategoriToEdit) {
+            updateKategori({
+                id: kategoriToEdit.id,
                 navn: formData.navn,
-                // TODO: pass type here when we want to set station type in form
             });
         } else {
-            addStasjon({
+            addKategori({
                 ...formData,
-                // TODO: remove when we want to set station type in form
-                type: 'GJENBRUK',
             });
         }
     });
 
-    const addStasjon = (newStasjon: ApiStasjonPost) =>
-        addStasjonMutation.mutate(newStasjon, {
+    const addKategori = (newKategori: ApiKategoriPost) =>
+        addKategoriMutation.mutate(newKategori, {
             onSuccess: () => {
-                onApiSubmitSuccess(`Stasjonen ${newStasjon.navn} ble registrert`);
+                onApiSubmitSuccess(`Kategori ${newKategori.navn} ble registrert`);
             },
             onError: onApiSubmitError,
         });
 
-    const updateStasjon = (updatedStasjon: ApiStasjonPatch) =>
-        updateStasjonMutation.mutate(updatedStasjon, {
+    const updateKategori = (updateKategori: ApiKategoriPatch) =>
+        updateKategoriMutation.mutate(updateKategori, {
             onSuccess: () => {
-                onApiSubmitSuccess(`Endringene ble lagret for ${updatedStasjon.navn}`);
+                onApiSubmitSuccess(`Endringene ble lagret for ${updateKategori.navn}`);
             },
             onError: onApiSubmitError,
         });
@@ -110,12 +95,11 @@ export const StasjonForm: React.FC<Props> = ({ stasjonToEdit, onSuccess }) => {
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <Input name="navn" label="Navn på stasjonen" required />
-                    {/* TODO: uncomment when we want to set station type :
-                    <RadiobuttonGroup name="type" label="Type stasjon" options={stasjonTypeOptions} required />*/}
+                    <Input name="navn" label="Navn på kategori" required />
+
                     <FormSubmitButton
-                        label={stasjonToEdit ? 'Lagre endringer' : 'Registrer ny stasjon'}
-                        isLoading={updateStasjonMutation.isLoading || addStasjonMutation.isLoading}
+                        label={kategoriToEdit ? 'Lagre endringer' : 'Registrer ny kategori'}
+                        isLoading={updateKategoriMutation.isLoading || addKategoriMutation.isLoading}
                         loadingText="Lagrer..."
                     />
                 </Stack>

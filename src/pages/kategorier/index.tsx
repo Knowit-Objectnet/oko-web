@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import { Heading } from '@chakra-ui/react';
-import { AddStasjonButton } from './forms/AddStasjonButton';
 import { Box, Flex } from '@chakra-ui/layout';
-import { StasjonTable } from './KategoriTable';
+import { KategoriTable } from './KategoriTable';
+import { AddKategoriButton } from './forms/AddKategoriButton';
 
 const Kategorier: React.FC = () => (
     <>
@@ -15,10 +15,10 @@ const Kategorier: React.FC = () => (
                 <Heading as="h1" fontWeight="medium" fontSize="4xl">
                     Kategorier
                 </Heading>
-                <AddStasjonButton />
+                <AddKategoriButton />
             </Flex>
             <Box width="full" overflowX="auto">
-                <StasjonTable />
+                <KategoriTable />
             </Box>
         </Flex>
     </>

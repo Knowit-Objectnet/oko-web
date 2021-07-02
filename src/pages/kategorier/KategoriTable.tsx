@@ -1,31 +1,22 @@
 import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Text, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { useStasjoner } from '../../services/stasjon/useStasjoner';
-import { DeleteStasjonButton } from './forms/DeleteStasjonButton';
-import { StasjonType } from '../../services/stasjon/StasjonService';
-import { EditStasjonButton } from './forms/EditStasjonButton';
+import { useKategorier } from '../../services/kategori/useKategorier';
+import { DeleteKategoriButton } from './forms/DeleteKategoriButton';
+import { EditKategoriButton } from './forms/EditKategoriButton';
 
-const STASJONTYPE: Record<StasjonType, string> = {
-    GJENBRUK: 'Gjenbruksstasjon',
-    MINI: 'Minigjenbruksstasjon',
-};
-
-export const StasjonTable: React.FC = () => {
+export const KategoriTable: React.FC = () => {
     // TODO: handle error/loading
-    const { data: stasjoner } = useStasjoner();
+    const { data: kategorier } = useKategorier();
 
-    const sortedStasjoner = stasjoner?.sort((stasjonA, stasjonB) => stasjonA.navn.localeCompare(stasjonB.navn, 'nb'));
+    const sortedKategorier = kategorier?.sort((kategoriA, kategoriB) => kategoriA.navn.localeCompare(kategoriB.navn));
 
-    if (stasjoner && stasjoner?.length <= 0) {
-        return <Text>Ingen registrerte stasjoner</Text>;
-    }
+    if (kategorier && kategorier?.length <= 0) return <Text>Ingen registrerte kategorier</Text>;
 
     return (
         <Table>
             <Thead>
                 <Tr>
                     <Th scope="col">Navn</Th>
-                    <Th scope="col">Type</Th>
                     <Th scope="col">ID</Th>
                     <Th scope="col">
                         <VisuallyHidden>Handlinger</VisuallyHidden>
@@ -33,18 +24,15 @@ export const StasjonTable: React.FC = () => {
                 </Tr>
             </Thead>
             <Tbody>
-                {sortedStasjoner?.map((stasjon) => (
-                    <Tr key={stasjon.id}>
-                        <Td>{stasjon.navn}</Td>
-                        <Td>{STASJONTYPE[stasjon.type] ?? 'Ukjent type'}</Td>
-                        <Td>{stasjon.id}</Td>
+                {sortedKategorier?.map((kategori) => (
+                    <Tr key={kategori.id}>
+                        <Td>{kategori.navn}</Td>
+                        <Td>{kategori.id}</Td>
                         <Td textAlign="end">
                             <ButtonGroup spacing="3" size="sm">
-                                <EditStasjonButton stasjon={stasjon} />
+                                <EditKategoriButton kategori={kategori} />
                                 {process.env.NODE_ENV === 'development' ? (
-                                    // TODO: hacky solution to only show station deletion button
-                                    //  when project is built for development (and not in production)
-                                    <DeleteStasjonButton stasjon={stasjon} />
+                                    <DeleteKategoriButton kategori={kategori} />
                                 ) : null}
                             </ButtonGroup>
                         </Td>

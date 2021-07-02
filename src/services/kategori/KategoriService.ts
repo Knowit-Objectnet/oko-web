@@ -5,6 +5,11 @@ export interface ApiKategori {
     navn: string;
 }
 
+export interface ApiKategoriPatch {
+    id: string;
+    navn?: string;
+}
+
 export interface ApiKategoriParams {
     id?: string;
 }
@@ -24,3 +29,6 @@ export const deleteKategori = (kategoriId: string): Promise<ApiKategori> =>
 
 export const postKategori = (newKategori: ApiKategoriPost): Promise<ApiKategori> =>
     httpClient().post<ApiKategori>(kategoriEndpoint, newKategori).then(extractResponse, transformError);
+
+export const patchKategori = (updatedKategori: ApiKategoriPatch): Promise<ApiKategori> =>
+    httpClient().patch<ApiKategori>(kategoriEndpoint, updatedKategori).then(extractResponse, transformError);
