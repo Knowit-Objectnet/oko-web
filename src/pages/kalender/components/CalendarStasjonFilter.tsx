@@ -7,6 +7,7 @@ import ArrowDown from '../../../assets/ArrowDown.svg';
 import { useCalendarState } from '../CalendarProvider';
 import { useStasjoner } from '../../../services/stasjon/useStasjoner';
 import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { Checkbox } from '@chakra-ui/react';
 
 const Wrapper = styled.div`
     display: flex;
@@ -99,25 +100,25 @@ export const CalendarStasjonFilter: React.FC = () => {
                 <Stations>
                     {stasjoner?.map((station) => (
                         <Label key={station.id}>
-                            <Input
-                                type="checkbox"
+                            <Checkbox
                                 name="stasjon-selector"
                                 value={station.id}
-                                checked={stasjonIder.some((stasjonId) => stasjonId === station.id)}
+                                isChecked={stasjonIder.some((stasjonId) => stasjonId === station.id)}
                                 onChange={handleStationChange}
-                            />
-                            {station.navn}
+                            >
+                                {station.navn}
+                            </Checkbox>
                         </Label>
                     ))}
                     <Label key="AllRadioButton">
-                        <Input
-                            type="checkbox"
+                        <Checkbox
                             name="stasjon-selector"
                             value="default"
-                            checked={stasjonIder.length === 0}
+                            isChecked={stasjonIder.length === 0}
                             onChange={handleStationChange}
-                        />
-                        Alle
+                        >
+                            Alle
+                        </Checkbox>
                     </Label>
                 </Stations>
             )}
