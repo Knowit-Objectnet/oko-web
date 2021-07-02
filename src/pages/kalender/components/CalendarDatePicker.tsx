@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCalendarState } from './CalendarProvider';
+import { useCalendarState } from '../CalendarProvider';
 import DayPicker from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css';

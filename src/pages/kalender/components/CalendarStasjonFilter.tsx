@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import Filter from '../../assets/Filter.svg';
-import ArrowRight from '../../assets/ArrowRight.svg';
-import ArrowDown from '../../assets/ArrowDown.svg';
-import { useStasjoner } from '../../services/stasjon/useStasjoner';
-import { useCalendarState } from './CalendarProvider';
-import { ApiPlanlagtHenting } from '../../services/henting/HentingService';
+import Filter from '../../../assets/Filter.svg';
+import ArrowRight from '../../../assets/ArrowRight.svg';
+import ArrowDown from '../../../assets/ArrowDown.svg';
+import { useCalendarState } from '../CalendarProvider';
+import { useStasjoner } from '../../../services/stasjon/useStasjoner';
+import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
 
 const Wrapper = styled.div`
     display: flex;

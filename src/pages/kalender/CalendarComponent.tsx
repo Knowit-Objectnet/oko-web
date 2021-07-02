@@ -2,7 +2,7 @@ import React from 'react';
 import { Calendar, Culture, dateFnsLocalizer, DateLocalizer, DateRange, Formats, View } from 'react-big-calendar';
 import { nb } from 'date-fns/locale';
 import { format, getDay, parse, set, startOfWeek } from 'date-fns';
-import { CalendarToolbar } from './CalendarToolbar';
+import { CalendarToolbar } from './components/CalendarToolbar';
 import { useCalendarEvents } from './hooks/useCalendarEvents';
 import { getCalendarViewFromType, VIEWS } from './hooks/useCalendarView';
 import { useCalendarState } from './CalendarProvider';

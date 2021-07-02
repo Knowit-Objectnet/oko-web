@@ -95,6 +95,7 @@
     "focus-visible": "^5.2.0",
     "framer-motion": "^4.1.14",
     "keycloak-js": "^10.0.2",
+    "lemons": "^1.6.0",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-big-calendar": "^0.33.2",

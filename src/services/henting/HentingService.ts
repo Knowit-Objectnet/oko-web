@@ -1,4 +1,5 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
+import { ApiHenteplanKategori } from '../henteplan/HenteplanService';
 
 export interface ApiPlanlagtHenting {
     id: string; //UUID
@@ -12,6 +13,7 @@ export interface ApiPlanlagtHenting {
     aktorNavn: string;
     stasjonId: string; //UUID
     stasjonNavn: string;
+    kategorier: Array<ApiHenteplanKategori>;
 }
 
 export interface ApiPlanlagtHentingParams {
@@ -24,11 +26,12 @@ export interface ApiPlanlagtHentingParams {
 }
 
 export interface ApiPlanlagtHentingPatch {
-    id: string; //UUID
-    startTidspunkt?: string; //LocalTimeDate
-    sluttTidspunkt?: string; //LocalTimeDate
+    id: string;
+    startTidspunkt?: string;
+    sluttTidspunkt?: string;
     merknad?: string;
-    avlyst?: string; //LocalTimeDate
+    avlys?: boolean; // TODO: should probably be avlyst, not avlys -> update if fixed in backend
+    aarsak?: string; // TODO, should probably be avlystAarsak -> update if fixed in backend
 }
 
 const hentingEndpoint = '/planlagte-hentinger';

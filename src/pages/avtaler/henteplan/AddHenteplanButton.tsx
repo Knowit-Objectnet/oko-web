@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { FormModal } from '../../../components/forms/FormModal';
+import { Modal } from '../../../components/Modal';
 import { AddButton } from '../../../components/buttons/AddButton';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { ApiPartner } from '../../../services/partner/PartnerService';
@@ -22,9 +22,9 @@ export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> 
                 {...props}
                 onClick={onOpen}
             />
-            <FormModal title={`Ny henteplan for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
+            <Modal title={`Ny henteplan for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
                 <AddHenteplanForm avtale={avtale} onSuccess={onClose} />
-            </FormModal>
+            </Modal>
         </>
     );
 };

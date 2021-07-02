@@ -23,7 +23,7 @@ export const EditHenteplanForm: React.FC<Props> = ({ avtale, henteplan, onSucces
         sluttDato: getDateStringFromISOString(henteplan.sluttTidspunkt),
         startTidspunkt: getTimeStringFromISOString(henteplan.startTidspunkt),
         sluttTidspunkt: getTimeStringFromISOString(henteplan.sluttTidspunkt),
-        kategorier: henteplan.kategorier.map((kategori) => kategori.kategoriId),
+        kategorier: henteplan.kategorier.map(({ kategori }) => kategori.id),
         merknad: henteplan.merknad,
     };
 

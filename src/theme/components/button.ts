@@ -13,33 +13,6 @@ export const Button = {
         },
     },
     variants: {
-        outlineOnSurface: {
-            backgroundColor: 'transparent',
-            color: 'onSurface',
-            border: '1px solid',
-            borderColor: 'onSurface',
-            '& svg': { fill: 'onSurface' },
-            // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)
-            //  here to avoid duplication - as soon as [this bug is fixed](https://github.com/chakra-ui/chakra-ui/issues/3883)
-            _focus: {
-                backgroundColor: 'onSurface',
-                color: 'surface',
-                '& svg': { fill: 'surface' },
-                textDecoration: 'underline',
-            },
-            _active: {
-                backgroundColor: 'onSurface',
-                color: 'surface',
-                '& svg': { fill: 'surface' },
-                textDecoration: 'underline',
-            },
-            _hover: {
-                backgroundColor: 'onSurface',
-                color: 'surface',
-                '& svg': { fill: 'surface' },
-                textDecoration: 'underline',
-            },
-        },
         primary: {
             backgroundColor: 'primary',
             color: 'onPrimary',
@@ -71,6 +44,61 @@ export const Button = {
                 _focus: {
                     textDecoration: 'none',
                 },
+            },
+        },
+        outlineOnSurface: {
+            backgroundColor: 'transparent',
+            color: 'onSurface',
+            border: '1px solid',
+            borderColor: 'onSurface',
+            '& svg': { fill: 'onSurface' },
+            // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)
+            //  here to avoid duplication - as soon as [this bug is fixed](https://github.com/chakra-ui/chakra-ui/issues/3883)
+            _focus: {
+                backgroundColor: 'onSurface',
+                color: 'surface',
+                '& svg': { fill: 'surface' },
+                textDecoration: 'underline',
+            },
+            _active: {
+                backgroundColor: 'onSurface',
+                color: 'surface',
+                '& svg': { fill: 'surface' },
+                textDecoration: 'underline',
+            },
+            _hover: {
+                backgroundColor: 'onSurface',
+                color: 'surface',
+                '& svg': { fill: 'surface' },
+                textDecoration: 'underline',
+            },
+        },
+        outline: {
+            fontWeight: 'medium',
+            backgroundColor: 'transparent',
+            color: 'primary',
+            border: '2px solid',
+            borderColor: 'primary',
+            '& svg': { fill: 'primary' },
+            // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)
+            //  here to avoid duplication - as soon as [this bug is fixed](https://github.com/chakra-ui/chakra-ui/issues/3883)
+            _focus: {
+                backgroundColor: 'primary',
+                color: 'onPrimary',
+                '& svg': { fill: 'onPrimary' },
+                textDecoration: 'underline',
+            },
+            _active: {
+                backgroundColor: 'primary',
+                color: 'onPrimary',
+                '& svg': { fill: 'onPrimary' },
+                textDecoration: 'underline',
+            },
+            _hover: {
+                backgroundColor: 'primary',
+                color: 'onPrimary',
+                '& svg': { fill: 'onPrimary' },
+                textDecoration: 'underline',
             },
         },
         // TODO: better focus and hover colors/marking

@@ -2,7 +2,7 @@ import { CalendarView, getCalendarViewFromType, isValidView } from './useCalenda
 import { View } from 'react-big-calendar';
 
 describe('Validation of view string', () => {
-    const validViewStrings: string[] = ['uke', 'maned', 'dag', 'liste'];
+    const validViewStrings: string[] = ['uke', 'maned', 'dag' /*, 'liste'*/];
 
     it.each(validViewStrings)('%p is validated as valid calendar view', (viewString) => {
         const result = isValidView(viewString);
@@ -32,7 +32,7 @@ describe('Get internal view type from React Big Calendar view type mapping', () 
         ['day', 'dag'],
         ['week', 'uke'],
         ['month', 'maned'],
-        ['agenda', 'liste'],
+        // ['agenda', 'liste'],
     ];
 
     it.each(validViewTypes)('%p React Big Calendar view type returns internal view type of %p', (viewType, view) => {
@@ -40,7 +40,7 @@ describe('Get internal view type from React Big Calendar view type mapping', () 
         expect(result).toBe(view);
     });
 
-    const invalidViewTypes: (string | undefined)[] = ['work_week', 'list', undefined, 'undefined', 'invalid'];
+    const invalidViewTypes: (string | undefined)[] = ['work_week', 'list', undefined, 'undefined', 'invalid', 'liste'];
 
     it.each(invalidViewTypes)('%p invalid view type throws error', (viewType) => {
         expect(() => getCalendarViewFromType(viewType as View)).toThrowError();
