@@ -7,7 +7,7 @@ import ArrowDown from '../../../assets/ArrowDown.svg';
 import { useCalendarState } from '../CalendarProvider';
 import { useStasjoner } from '../../../services/stasjon/useStasjoner';
 import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
-import { Checkbox } from '@chakra-ui/react';
+import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
 
 const Wrapper = styled.div`
     display: flex;
@@ -47,16 +47,6 @@ const StyledArrowRight = styled(ArrowRight)`
 const StyledArrowDown = styled(ArrowDown)`
     height: 1em;
     margin-left: 10px;
-`;
-
-const Label = styled.label`
-    &:not(:last-child) {
-        margin-bottom: 10px;
-    }
-`;
-
-const Input = styled.input`
-    margin-right: 15px;
 `;
 
 export const CalendarStasjonFilter: React.FC = () => {
@@ -99,27 +89,23 @@ export const CalendarStasjonFilter: React.FC = () => {
             {toggled && (
                 <Stations>
                     {stasjoner?.map((station) => (
-                        <Label key={station.id}>
-                            <Checkbox
-                                name="stasjon-selector"
-                                value={station.id}
-                                isChecked={stasjonIder.some((stasjonId) => stasjonId === station.id)}
-                                onChange={handleStationChange}
-                            >
-                                {station.navn}
-                            </Checkbox>
-                        </Label>
-                    ))}
-                    <Label key="AllRadioButton">
                         <Checkbox
+                            key={station.id}
                             name="stasjon-selector"
-                            value="default"
-                            isChecked={stasjonIder.length === 0}
+                            value={station.id}
+                            isChecked={stasjonIder.some((stasjonId) => stasjonId === station.id)}
                             onChange={handleStationChange}
-                        >
-                            Alle
-                        </Checkbox>
-                    </Label>
+                            label={station.navn}
+                        ></Checkbox>
+                    ))}
+                    <Checkbox
+                        key="AllCheckboxes"
+                        name="stasjon-selector"
+                        value="default"
+                        isChecked={stasjonIder.length === 0}
+                        onChange={handleStationChange}
+                        label="Alle"
+                    ></Checkbox>
                 </Stations>
             )}
         </Wrapper>
