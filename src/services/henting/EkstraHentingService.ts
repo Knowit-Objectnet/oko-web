@@ -11,7 +11,7 @@ export interface ApiEkstraHenting {
     stasjonId: string; //UUID
     stasjonNavn: string;
     godkjentUtlysning: ApiUtlysning | null;
-    kategorier: ApiKategori[];
+    kategorier: ApiEkstraHentingKategori[];
 }
 
 export interface ApiEkstraHentingParams {
@@ -27,7 +27,7 @@ export interface ApiEkstraHentingPatch {
     startTidspunkt?: string; //LocalTimeDate
     sluttTidspunkt?: string; //LocalTimeDate
     merknad?: string;
-    kategorier?: ApiKategori[];
+    kategorier?: ApiEkstraHentingKategoriPost[];
 }
 
 export interface ApiEkstraHentingPost {
@@ -35,7 +35,20 @@ export interface ApiEkstraHentingPost {
     sluttTidspunkt?: string; //LocalTimeDate
     merknad?: string;
     stasjonId: string; //UUID
-    kategorier?: ApiKategori[];
+    kategorier?: ApiEkstraHentingKategoriPost[];
+}
+
+export interface ApiEkstraHentingKategori {
+    id: string;
+    ekstraHentingId: string;
+    kategoriId: string;
+    kategori: ApiKategori | null;
+    mengde: number;
+}
+
+export interface ApiEkstraHentingKategoriPost {
+    kategoriId: string;
+    mengde?: number;
 }
 
 const hentingEndpoint = '/ekstra-hentinger';
