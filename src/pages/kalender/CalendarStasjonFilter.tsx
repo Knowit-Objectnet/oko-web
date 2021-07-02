@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import Filter from '../../assets/Filter.svg';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import ArrowDown from '../../assets/ArrowDown.svg';
-import { useCalendarState } from './CalendarProvider';
 import { useStasjoner } from '../../services/stasjon/useStasjoner';
+import { useCalendarState } from './CalendarProvider';
+import { ApiPlanlagtHenting } from '../../services/henting/HentingService';
 
 const Wrapper = styled.div`
     display: flex;
@@ -60,7 +61,7 @@ const Input = styled.input`
 export const CalendarStasjonFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
     const { data: stasjoner } = useStasjoner();
-    const { filters, setFilters } = useCalendarState();
+    const { setFilter } = useCalendarState();
 
     const onToggleClick = () => {
         setToggled(!toggled);
@@ -68,15 +69,20 @@ export const CalendarStasjonFilter: React.FC = () => {
 
     const handleStationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.persist();
-        let stasjon = filters.stasjon ? filters.stasjon : [];
         const value = e.currentTarget.value;
-        const index = stasjon.indexOf(value);
-        if (index == -1) stasjon.push(value);
-        else stasjon.splice(index, 1);
-        if (value === 'default') stasjon = [];
-        console.log(value);
-        console.log(stasjon);
-        setFilters({ stasjon: stasjon });
+        const stasjon = value === 'default' ? undefined : value;
+
+        const stasjonFilterFunction = (henting: ApiPlanlagtHenting) => {
+            // Her burde du kunne bruke arrayet du får fra avkrysningsboksene og kjøre:
+            // return stasjoner.some((stasjonId) => henting.stasjonId === stasjonId)
+            // Neste linje funker bare med radioknapper
+            return henting.stasjonNavn === stasjon;
+        };
+        const filterFunctionObject = {
+            stasjonFilter: stasjonFilterFunction,
+        };
+
+        setFilter(filterFunctionObject);
     };
 
     return (
@@ -91,10 +97,10 @@ export const CalendarStasjonFilter: React.FC = () => {
                     {stasjoner?.map((station) => (
                         <Label key={station.id}>
                             <Input
-                                type="checkbox"
+                                type="radio"
                                 name="stasjon-selector"
-                                value={station.id}
-                                checked={filters.stasjon?.some((stasjonId) => stasjonId === station.id)}
+                                value={station.navn}
+                                // checked={station.navn === filters.stasjon}
                                 onChange={handleStationChange}
                             />
                             {station.navn}
@@ -102,10 +108,10 @@ export const CalendarStasjonFilter: React.FC = () => {
                     ))}
                     <Label key="AllRadioButton">
                         <Input
-                            type="checkbox"
+                            type="radio"
                             name="stasjon-selector"
                             value="default"
-                            checked={filters.stasjon?.length == 0}
+                            // checked={filters.stasjon === undefined}
                             onChange={handleStationChange}
                         />
                         Alle

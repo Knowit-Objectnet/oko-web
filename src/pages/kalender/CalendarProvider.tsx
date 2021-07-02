@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { CalendarView, useCalendarView } from './hooks/useCalendarView';
 import { useCalendarDate } from './hooks/useCalendarDate';
-import { CalendarFilters, CalendarFilterFn, useCalendarFilters } from './hooks/useCalendarFilters';
+import { CalendarFilters, useCalendarFilters } from './hooks/useCalendarFilters';
 
 export interface CalendarContext {
     selectedView: CalendarView;
@@ -9,8 +9,7 @@ export interface CalendarContext {
     selectedDate: Date;
     setSelectedDate: (date: Date) => void;
     filters: CalendarFilters;
-    filterFns: Array<CalendarFilterFn>;
-    setFilters: (filter: CalendarFilters) => void;
+    setFilter: (filters: CalendarFilters) => void;
 }
 
 export const CalendarContext = React.createContext<CalendarContext | undefined>(undefined);
@@ -18,7 +17,7 @@ export const CalendarContext = React.createContext<CalendarContext | undefined>(
 export const CalendarProvider: React.FC = ({ children }) => {
     const [selectedView, setSelectedView] = useCalendarView();
     const [selectedDate, setSelectedDate] = useCalendarDate();
-    const { filters, filterFns, setFilters } = useCalendarFilters();
+    const { filters, setFilter } = useCalendarFilters();
 
     const value = {
         selectedView,
@@ -26,8 +25,7 @@ export const CalendarProvider: React.FC = ({ children }) => {
         selectedDate,
         setSelectedDate,
         filters,
-        filterFns,
-        setFilters,
+        setFilter,
     };
 
     return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
