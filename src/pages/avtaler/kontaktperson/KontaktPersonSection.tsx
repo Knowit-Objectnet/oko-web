@@ -6,7 +6,7 @@ import {
     PartnerInfoSectionHeader,
     PartnerInfoSectionTitle,
 } from '../partner/PartnerInfoSection';
-import { KontaktPersonTable } from './KontaktPersonTable';
+import { KontaktPersonList } from './KontaktPersonList';
 import { AddKontaktPersonButton } from './AddKontaktPersonButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 
@@ -27,7 +27,7 @@ export const KontaktPersonSection: React.FC<Props> = ({ partner }) => {
             </PartnerInfoSectionHeader>
             <PartnerInfoSectionContent>
                 {kontaktPersoner && kontaktPersoner.length > 0 ? (
-                    <KontaktPersonTable kontaktPersoner={kontaktPersoner} />
+                    <KontaktPersonList kontaktPersoner={kontaktPersoner} />
                 ) : (
                     'Ingen registrerte kontaktpersoner'
                 )}
