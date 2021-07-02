@@ -1,44 +1,27 @@
-import { useQueryString } from 'use-route-as-state';
-import { ApiStasjon } from '../../../services/stasjon/StasjonService';
 import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
-import { useStasjoner } from '../../../services/stasjon/useStasjoner';
+import { useState } from 'react';
 
 export interface CalendarFilters {
-    stasjon?: string;
+    stasjonFilter?: CalendarFilterFn;
 }
 
-export type CalendarFilterFn = (event: ApiPlanlagtHenting) => boolean;
-
-const isValidStasjon = (stasjonName: string, stasjoner?: Array<ApiStasjon>) =>
-    (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.navn === stasjonName ? true : result), false);
+export type CalendarFilterFn = (henting: ApiPlanlagtHenting) => boolean;
 
 export const useCalendarFilters = (): {
     filters: CalendarFilters;
-    filterFns: Array<CalendarFilterFn>;
-    setFilters: (updatedFilters: CalendarFilters) => void;
+    setFilter: (filters: CalendarFilters) => void;
 } => {
-    // Getting all key=value query pairs from URL
-    const [queryFilters, setQueryFilters] = useQueryString();
+    const [filters, setFilters] = useState<CalendarFilters>({});
 
-    const filters: CalendarFilters = {};
-    const filterFns = [];
-
-    // Checking for valid station filter name, and adding filter if present
-    const { data: stasjoner } = useStasjoner();
-    if (isValidStasjon(queryFilters.stasjon, stasjoner)) {
-        const stasjonFilter = (event: ApiPlanlagtHenting): boolean => {
-            if (queryFilters.stasjon !== undefined) {
-                return event.stasjonNavn === queryFilters.stasjon;
-            }
-            return true;
+    const setFilter = (filter: CalendarFilters) => {
+        // Merge together other possible filters with this updated/new one
+        const updatedFilters = {
+            ...filters,
+            ...filter,
         };
-        filterFns.push(stasjonFilter);
-        filters.stasjon = queryFilters.stasjon;
-    }
 
-    const setFilters = (updatedFilters: CalendarFilters) => {
-        setQueryFilters({ ...queryFilters, ...updatedFilters });
+        setFilters(updatedFilters);
     };
 
-    return { filters, filterFns, setFilters };
+    return { filters, setFilter };
 };

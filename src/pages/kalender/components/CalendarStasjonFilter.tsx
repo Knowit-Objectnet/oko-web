@@ -6,6 +6,8 @@ import ArrowRight from '../../../assets/ArrowRight.svg';
 import ArrowDown from '../../../assets/ArrowDown.svg';
 import { useCalendarState } from '../CalendarProvider';
 import { useStasjoner } from '../../../services/stasjon/useStasjoner';
+import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
 
 const Wrapper = styled.div`
     display: flex;
@@ -47,20 +49,11 @@ const StyledArrowDown = styled(ArrowDown)`
     margin-left: 10px;
 `;
 
-const Label = styled.label`
-    &:not(:last-child) {
-        margin-bottom: 10px;
-    }
-`;
-
-const Input = styled.input`
-    margin-right: 15px;
-`;
-
 export const CalendarStasjonFilter: React.FC = () => {
     const [toggled, setToggled] = useState(true);
     const { data: stasjoner } = useStasjoner();
-    const { filters, setFilters } = useCalendarState();
+    const { setFilter } = useCalendarState();
+    const [stasjonIder] = useState<Array<string>>([]);
 
     const onToggleClick = () => {
         setToggled(!toggled);
@@ -70,7 +63,20 @@ export const CalendarStasjonFilter: React.FC = () => {
         e.persist();
         const value = e.currentTarget.value;
         const stasjon = value === 'default' ? undefined : value;
-        setFilters({ stasjon });
+        const index = stasjonIder.indexOf(value);
+        if (!stasjon) stasjonIder.length = 0;
+        else if (!~index) stasjonIder.push(stasjon);
+        else stasjonIder.splice(index, 1);
+
+        const stasjonFilterFunction = (henting: ApiPlanlagtHenting) => {
+            if (stasjonIder.length === 0) return true;
+            else return stasjonIder.some((stasjonId) => henting.stasjonId === stasjonId);
+        };
+        const filterFunctionObject = {
+            stasjonFilter: stasjonFilterFunction,
+        };
+
+        setFilter(filterFunctionObject);
     };
 
     return (
@@ -83,27 +89,23 @@ export const CalendarStasjonFilter: React.FC = () => {
             {toggled && (
                 <Stations>
                     {stasjoner?.map((station) => (
-                        <Label key={station.id}>
-                            <Input
-                                type="radio"
-                                name="stasjon-selector"
-                                value={station.navn}
-                                checked={station.navn === filters.stasjon}
-                                onChange={handleStationChange}
-                            />
-                            {station.navn}
-                        </Label>
-                    ))}
-                    <Label key="AllRadioButton">
-                        <Input
-                            type="radio"
+                        <Checkbox
+                            key={station.id}
                             name="stasjon-selector"
-                            value="default"
-                            checked={filters.stasjon === undefined}
+                            value={station.id}
+                            isChecked={stasjonIder.some((stasjonId) => stasjonId === station.id)}
                             onChange={handleStationChange}
-                        />
-                        Alle
-                    </Label>
+                            label={station.navn}
+                        ></Checkbox>
+                    ))}
+                    <Checkbox
+                        key="AllCheckboxes"
+                        name="stasjon-selector"
+                        value="default"
+                        isChecked={stasjonIder.length === 0}
+                        onChange={handleStationChange}
+                        label="Alle"
+                    ></Checkbox>
                 </Stations>
             )}
         </Wrapper>
