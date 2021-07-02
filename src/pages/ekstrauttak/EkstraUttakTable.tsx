@@ -33,7 +33,6 @@ export const EkstraUttakTable: React.FC = () => {
                 </Tr>
             </Thead>
             <Tbody>
-                <small></small>
                 {ekstraHentinger?.map((henting) => (
                     <Tr
                         key={henting.id}
