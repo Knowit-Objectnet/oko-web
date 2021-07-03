@@ -42,7 +42,7 @@ export const KontaktPersonList: React.FC<Props> = ({ kontaktPersoner }) => {
                                 {kontakt.navn}
                             </Text>
                             <Text aria-label="Rolle">{kontakt.rolle}</Text>
-                            {kontakt.telefon ? <Text aria-label="Telefonnummer">kontakt.telefon </Text> : null}
+                            {kontakt.telefon ? <Text aria-label="Telefonnummer"> {kontakt.telefon} </Text> : null}
 
                             {kontakt.epost ? (
                                 <Text aria-label="E-postadresse">
