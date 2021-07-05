@@ -55,7 +55,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
         return (
             <Flex direction="column" width="full" backgroundColor="gray.100" padding="5">
                 <Flex justifyContent="space-between" width="full">
-                    <Text style={{ fontSize: '20px' }}>
+                    <Text fontSize="xl" as="h3">
                         {getAvtaleTitle(avtale)} &nbsp;&nbsp;&nbsp;&nbsp;
                         <small>
                             {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(parseISO(avtale.startDato))}</time> til{' '}
