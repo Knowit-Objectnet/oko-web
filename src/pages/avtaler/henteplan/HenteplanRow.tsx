@@ -63,11 +63,11 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan, avtale }) => {
 
     return (
         <Tr key={henteplan.id} verticalAlign="top">
-            <Td>{getPeriodeCellContent(henteplan)}</Td>
-            <Td>{FREKVENS[henteplan.frekvens]}</Td>
             <Td>{UKEDAG[henteplan.ukedag]}</Td>
-            <Td>{stasjon?.navn}</Td>
             <Td>{getTidsromCellContent(henteplan)}</Td>
+            <Td>{stasjon?.navn}</Td>
+            <Td>{FREKVENS[henteplan.frekvens]}</Td>
+            <Td>{getPeriodeCellContent(henteplan)}</Td>
             <Td paddingY="2.5">
                 <KategoriList
                     kategorier={henteplan.kategorier.map((henteplanKategori) => henteplanKategori.kategori)}
