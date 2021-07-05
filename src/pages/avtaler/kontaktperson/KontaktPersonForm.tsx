@@ -114,6 +114,10 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ part
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
+    const instructions: string[] = [
+        'Mobiltelefonnummeret og e-postadressen vil bli brukt til å varsle om avlysninger og relevante ekstrautlysninger.',
+    ];
+
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
@@ -122,6 +126,7 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ part
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn" helperText="Skriv inn fullt navn (for- og etternavn)" required />
                     <Input name="rolle" label="Rolle" required />
+                    <RequiredFieldsInstruction instructions={instructions} useDefault={false} />
                     <Input
                         type="phone"
                         name="telefon"
