@@ -17,10 +17,10 @@ export const EkstraUttakInfo: React.FC<Props> = ({ henting }) => {
         <VStack alignItems="flex-start">
             <EkstraUttakInfoRow icon={<Calendar />} text={formatDate(parseISOIgnoreTimezone(henting.startTidspunkt))} />
             <EkstraUttakInfoRow icon={<Location />} text={henting.stasjonNavn} />
-            <EkstraUttakInfoRow
+            {/* <EkstraUttakInfoRow
                 icon={<Weight />}
                 text={henting.kategorier.reduce((prev, next) => prev + next.mengde, 0) + ' kg'}
-            />
+            /> */}
         </VStack>
     );
 };
