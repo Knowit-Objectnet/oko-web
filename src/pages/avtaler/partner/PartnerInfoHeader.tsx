@@ -14,7 +14,7 @@ export const PartnerInfoHeader: React.FC<Props> = ({ partner }) => {
     return (
         <>
             <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
-                <Heading as="h1" fontWeight="medium" fontSize="4xl">
+                <Heading as="h1" fontWeight="bold" fontSize="4xl">
                     {partner.navn}
                 </Heading>
                 {user.isAdmin ? <EditPartnerButton partner={partner} size="sm" /> : null}

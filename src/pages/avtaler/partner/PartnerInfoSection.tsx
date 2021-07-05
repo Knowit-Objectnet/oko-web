@@ -9,14 +9,7 @@ export const PartnerInfoSection: React.FC = ({ children }) => (
 );
 
 export const PartnerInfoSectionHeader: React.FC = ({ children }) => (
-    <Flex
-        justifyContent="space-between"
-        width="full"
-        borderBottom="2px solid"
-        borderBottomColor="gray.200"
-        marginBottom="4"
-        paddingBottom="4"
-    >
+    <Flex justifyContent="space-between" width="full" marginBottom="4" paddingBottom="4">
         {children}
     </Flex>
 );

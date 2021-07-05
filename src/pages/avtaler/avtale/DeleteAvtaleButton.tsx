@@ -5,12 +5,13 @@ import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { useDeleteAvtale } from '../../../services/avtale/useDeleteAvtale';
 import { DeleteButton } from '../../../components/buttons/DeleteButton';
+import { ButtonProps } from '@chakra-ui/react';
 
 interface Props {
     avtale: ApiAvtale;
 }
 
-export const DeleteAvtaleButton: React.FC<Props> = ({ avtale }) => {
+export const DeleteAvtaleButton: React.FC<Props & ButtonProps> = ({ avtale, ...props }) => {
     const deleteAvtaleMutation = useDeleteAvtale();
 
     const showSuccessToast = useSuccessToast();
@@ -37,7 +38,7 @@ export const DeleteAvtaleButton: React.FC<Props> = ({ avtale }) => {
             onConfirm={handleDeleteAvtale}
             isLoading={deleteAvtaleMutation.isLoading}
         >
-            <DeleteButton label="Slett avtale" />
+            <DeleteButton label="Slett avtale" {...props} />
         </ConfirmationPopover>
     );
 };
