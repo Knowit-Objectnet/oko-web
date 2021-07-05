@@ -89,11 +89,13 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
+    const instructions: string[] = ['Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.'];
+
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
-                    <RequiredFieldsInstruction />
+                    <RequiredFieldsInstruction instructions={kategoriToEdit ? instructions : undefined} />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på kategori" required />
 

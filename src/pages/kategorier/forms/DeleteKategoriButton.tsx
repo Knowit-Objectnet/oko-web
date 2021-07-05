@@ -31,6 +31,7 @@ export const DeleteKategoriButton: React.FC<Props> = ({ kategori }) => {
         <ConfirmationPopover
             message={{
                 title: 'Du er i ferd med å slette kategorien. Er du sikker?',
+                body: 'Dette vil ikke gjøre det mulig å vektrapportere videre på kategorien.',
                 buttonLabel: 'Ja, slett kategorien',
             }}
             onConfirm={handleDeleteKategori}
