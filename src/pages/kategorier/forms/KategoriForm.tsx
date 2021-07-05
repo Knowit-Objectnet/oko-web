@@ -96,13 +96,18 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <WarningContainer variant="warning">
-                        <WarningTitle title="Advarsel" />
-                        <WarningBody>
-                            Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.
-                        </WarningBody>
+
+                    {kategoriToEdit ? (
+                        <WarningContainer variant="warning">
+                            <WarningTitle title="Advarsel" />
+                            <WarningBody>
+                                Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.
+                            </WarningBody>
+                            <Input name="navn" label="Navn på kategori" required />
+                        </WarningContainer>
+                    ) : (
                         <Input name="navn" label="Navn på kategori" required />
-                    </WarningContainer>
+                    )}
 
                     <FormSubmitButton
                         label={kategoriToEdit ? 'Lagre endringer' : 'Registrer ny kategori'}
