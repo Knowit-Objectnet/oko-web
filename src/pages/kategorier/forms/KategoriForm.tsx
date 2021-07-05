@@ -16,6 +16,7 @@ import '../../../utils/forms/formErrorMessages';
 import { ApiKategori, ApiKategoriPatch, ApiKategoriPost } from '../../../services/kategori/KategoriService';
 import { useAddKategori } from '../../../services/kategori/useAddKategori';
 import { useUpdateKategori } from '../../../services/kategori/useUpdateKategori';
+import { WarningBody, WarningContainer, WarningTitle } from '../../../components/forms/Warning';
 
 interface KategoriFormData {
     navn: string;
@@ -89,15 +90,19 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
-    const instructions: string[] = ['Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.'];
-
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
-                    <RequiredFieldsInstruction instructions={kategoriToEdit ? instructions : undefined} />
+                    <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <Input name="navn" label="Navn på kategori" required />
+                    <WarningContainer variant="warning">
+                        <WarningTitle title="Advarsel" />
+                        <WarningBody>
+                            Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.
+                        </WarningBody>
+                        <Input name="navn" label="Navn på kategori" required />
+                    </WarningContainer>
 
                     <FormSubmitButton
                         label={kategoriToEdit ? 'Lagre endringer' : 'Registrer ny kategori'}
