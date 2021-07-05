@@ -17,7 +17,6 @@ export const KategoriTable: React.FC = () => {
             <Thead>
                 <Tr>
                     <Th scope="col">Navn</Th>
-                    <Th scope="col">ID</Th>
                     <Th scope="col">
                         <VisuallyHidden>Handlinger</VisuallyHidden>
                     </Th>
@@ -27,13 +26,10 @@ export const KategoriTable: React.FC = () => {
                 {sortedKategorier?.map((kategori) => (
                     <Tr key={kategori.id}>
                         <Td>{kategori.navn}</Td>
-                        <Td>{kategori.id}</Td>
                         <Td textAlign="end">
                             <ButtonGroup spacing="3" size="sm">
                                 <EditKategoriButton kategori={kategori} />
-                                {process.env.NODE_ENV === 'development' ? (
-                                    <DeleteKategoriButton kategori={kategori} />
-                                ) : null}
+                                <DeleteKategoriButton kategori={kategori} />
                             </ButtonGroup>
                         </Td>
                     </Tr>

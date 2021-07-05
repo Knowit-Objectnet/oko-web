@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../../../components/forms/input/Input';
 import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
-import { Instruction, RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
+import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { ApiError } from '../../../services/httpClient';
@@ -16,7 +16,7 @@ import '../../../utils/forms/formErrorMessages';
 import { ApiKategori, ApiKategoriPatch, ApiKategoriPost } from '../../../services/kategori/KategoriService';
 import { useAddKategori } from '../../../services/kategori/useAddKategori';
 import { useUpdateKategori } from '../../../services/kategori/useUpdateKategori';
-import Warning from '../../../assets/Warning.svg';
+import { WarningBody, WarningContainer, WarningTitle } from '../../../components/forms/Warning';
 
 interface KategoriFormData {
     navn: string;
@@ -90,17 +90,24 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
-    const instructions: Instruction[] = [
-        { text: 'Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.', icon: Warning },
-    ];
-
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
-                    <RequiredFieldsInstruction instructions={kategoriToEdit ? instructions : undefined} />
+                    <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <Input name="navn" label="Navn på kategori" required />
+
+                    {kategoriToEdit ? (
+                        <WarningContainer variant="warning">
+                            <WarningTitle title="Advarsel" />
+                            <WarningBody>
+                                Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.
+                            </WarningBody>
+                            <Input name="navn" label="Navn på kategori" required />
+                        </WarningContainer>
+                    ) : (
+                        <Input name="navn" label="Navn på kategori" required />
+                    )}
 
                     <FormSubmitButton
                         label={kategoriToEdit ? 'Lagre endringer' : 'Registrer ny kategori'}
