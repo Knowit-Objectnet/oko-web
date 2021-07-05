@@ -4,8 +4,13 @@ import { Icon } from '@chakra-ui/react';
 import Info from '../../assets/Info.svg';
 
 interface Props {
-    instructions?: string[];
+    instructions?: Instruction[];
     useDefault?: boolean;
+}
+
+export interface Instruction {
+    text: string;
+    icon?: any;
 }
 
 export const RequiredFieldsInstruction: React.FC<Props> = ({ instructions, useDefault = true }) => (
@@ -19,8 +24,9 @@ export const RequiredFieldsInstruction: React.FC<Props> = ({ instructions, useDe
 
         {instructions?.map((instrusction) => {
             return (
-                <Flex key={instrusction} fontSize={{ base: 'sm', tablet: 'md' }}>
-                    <Icon as={Info} marginRight="2" aria-hidden transform="translateY(3px)" /> {instrusction}
+                <Flex key={instrusction.text} fontSize={{ base: 'sm', tablet: 'md' }}>
+                    <Icon as={instrusction.icon || Info} marginRight="2" aria-hidden transform="translateY(3px)" />{' '}
+                    {instrusction.text}
                 </Flex>
             );
         })}

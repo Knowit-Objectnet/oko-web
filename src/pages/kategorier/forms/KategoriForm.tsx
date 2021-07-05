@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from '../../../components/forms/input/Input';
 import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
-import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
+import { Instruction, RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { ApiError } from '../../../services/httpClient';
@@ -16,6 +16,7 @@ import '../../../utils/forms/formErrorMessages';
 import { ApiKategori, ApiKategoriPatch, ApiKategoriPost } from '../../../services/kategori/KategoriService';
 import { useAddKategori } from '../../../services/kategori/useAddKategori';
 import { useUpdateKategori } from '../../../services/kategori/useUpdateKategori';
+import Warning from '../../../assets/Warning.svg';
 
 interface KategoriFormData {
     navn: string;
@@ -89,7 +90,9 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
-    const instructions: string[] = ['Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.'];
+    const instructions: Instruction[] = [
+        { text: 'Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.', icon: Warning },
+    ];
 
     return (
         <FormProvider {...formMethods}>

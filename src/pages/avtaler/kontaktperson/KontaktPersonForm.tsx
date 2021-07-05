@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ApiKontakt, ApiKontaktPatch, ApiKontaktPost } from '../../../services/aktor/KontaktService';
 import { Stack } from '@chakra-ui/react';
-import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
+import { Instruction, RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { Input } from '../../../components/forms/input/Input';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
@@ -16,6 +16,7 @@ import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useUpdateKontakt } from '../../../services/aktor/useUpdateKontakt';
 import { ApiError } from '../../../services/httpClient';
 import { transformToNorwegianPhone } from '../../../utils/forms/transformToNorwegianPhone';
+import Warning from '../../../assets/Warning.svg';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
@@ -114,8 +115,11 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ part
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
-    const instructions: string[] = [
-        'Mobiltelefonnummeret og e-postadressen vil bli brukt til å varsle om avlysninger og relevante ekstrautlysninger.',
+    const instructions: Instruction[] = [
+        {
+            text: 'Mobiltelefonnummeret og e-postadressen vil bli brukt til å varsle om avlysninger og relevante ekstrautlysninger.',
+            icon: Warning,
+        },
     ];
 
     return (
