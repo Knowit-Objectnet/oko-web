@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../auth/Roles';
 import { Loading } from '../components/Loading';
+import Kategorier from '../pages/kategorier';
 
 const Kalender = React.lazy(() => import('../pages/kalender'));
 const Henting = React.lazy(() => import('../pages/henting'));
@@ -32,6 +33,9 @@ export const PageRouter: React.FC = () => (
             </ProtectedRoute>
             <ProtectedRoute path="/minavtale" requiredRoles={[Roles.Partner]}>
                 <MineAvtaler />
+            </ProtectedRoute>
+            <ProtectedRoute path="/kategorier" requiredRoles={[Roles.Admin]}>
+                <Kategorier />
             </ProtectedRoute>
             <Route path="/">
                 <Home />
