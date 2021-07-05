@@ -8,7 +8,6 @@ import {
     Heading,
     Icon,
     HStack,
-    Spacer,
     Text,
 } from '@chakra-ui/react';
 import ArrowRight from '../../../assets/ArrowRight.svg';
