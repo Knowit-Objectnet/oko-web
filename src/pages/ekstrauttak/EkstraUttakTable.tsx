@@ -8,6 +8,7 @@ import { useAuth } from '../../auth/useAuth';
 import { Roles } from '../../auth/Roles';
 import { ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
 import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
+import { PameldtInfo } from './PameldtInfo';
 
 export const EkstraUttakTable: React.FC = () => {
     const { user } = useAuth();
@@ -51,11 +52,7 @@ export const EkstraUttakTable: React.FC = () => {
                             />
                         </Td>
                         <Td>
-                            {henting.godkjentUtlysning ? (
-                                <Text>{henting.godkjentUtlysning.partnerNavn}</Text>
-                            ) : (
-                                <Text>Ingen påmeldt</Text>
-                            )}
+                            <PameldtInfo henting={henting} />
                         </Td>
                     </Tr>
                 ))}

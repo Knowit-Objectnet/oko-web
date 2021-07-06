@@ -14,7 +14,7 @@ export const AddEkstraUttakButton: React.FC<Omit<ButtonProps, 'onClick'>> = (pro
             <Button leftIcon={<Icon as={Plus} />} {...props} onClick={onOpen}>
                 Legg til ekstrauttak
             </Button>
-            <FormModal title="Legg til ny stasjon" isOpen={isOpen} onClose={onClose}>
+            <FormModal title="Legg til nytt ekstrauttak" isOpen={isOpen} onClose={onClose}>
                 <EkstraUttakForm onSuccess={onClose} stasjonId={user.isStasjon ? user.aktorId : undefined} />
             </FormModal>
         </>
