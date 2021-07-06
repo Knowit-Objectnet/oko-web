@@ -92,9 +92,9 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                             <Text>{henting.merknad}</Text>
                         </DetailWithLabel>
                     ) : null}
-                    {henting.avlyst ? (
+                    {henting.avlyst && henting.avlystAv ? (
                         <DetailWithLabel label="Avlysning">
-                            <AvlystDetails henting={henting} />
+                            <AvlystDetails id={henting.avlystAv} aarsak={henting.aarsak} />
                         </DetailWithLabel>
                     ) : null}
                 </VStack>
