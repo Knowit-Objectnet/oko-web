@@ -12,6 +12,7 @@ export interface ApiEkstraHenting {
     stasjonNavn: string;
     godkjentUtlysning: ApiUtlysning | null;
     kategorier: ApiEkstraHentingKategori[];
+    utlysninger: ApiUtlysning[];
 }
 
 export interface ApiEkstraHentingParams {
@@ -57,6 +58,13 @@ export const ekstraHentingDefaultQueryKey = 'getEkstraHentinger';
 
 export const getEkstraHentinger = (params: ApiEkstraHentingParams = {}): Promise<Array<ApiEkstraHenting>> =>
     httpClient().get<Array<ApiEkstraHenting>>(hentingEndpoint, { params }).then(extractResponse, transformError);
+
+export const getEkstraHentingerWithUtlysning = (
+    params: ApiEkstraHentingParams = {},
+): Promise<Array<ApiEkstraHenting>> =>
+    httpClient()
+        .get<Array<ApiEkstraHenting>>(`${hentingEndpoint}/med-utlysning`, { params })
+        .then(extractResponse, transformError);
 
 export const getEkstraHentingById = (hentingId: string): Promise<ApiEkstraHenting> =>
     httpClient().get<ApiEkstraHenting>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);

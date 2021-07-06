@@ -3,20 +3,15 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Input } from '../../../components/forms/input/Input';
 import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ApiStasjon, ApiStasjonPatch, ApiStasjonPost } from '../../../services/stasjon/StasjonService';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { useAddStasjon } from '../../../services/stasjon/useAddStasjon';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { useUpdateStasjon } from '../../../services/stasjon/useUpdateStasjon';
 import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { ApiKategori } from '../../../services/kategori/KategoriService';
 import { KategoriSelect } from '../../../components/forms/KategoriSelect';
 import { TextArea } from '../../../components/forms/TextArea';
 import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
