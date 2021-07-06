@@ -1,27 +1,27 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Heading } from '@chakra-ui/react';
-import { AddStasjonButton } from './forms/AddStasjonButton';
-import { Box, Flex } from '@chakra-ui/layout';
-import { StasjonTable } from './StasjonTable';
+import { Stack } from '@chakra-ui/react';
+import { StasjonNavigation } from './stasjon/StasjonNavigation';
+import { Route, useRouteMatch } from 'react-router-dom';
+import { StasjonInfo } from './stasjon/StasjonInfo';
 
-const Stasjoner: React.FC = () => (
-    <>
-        <Helmet>
-            <title>Stasjoner</title>
-        </Helmet>
-        <Flex as="main" direction="column" paddingY="5" paddingX="10" marginX="auto" width="full">
-            <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
-                <Heading as="h1" fontWeight="medium" fontSize="4xl">
-                    Stasjoner
-                </Heading>
-                <AddStasjonButton />
-            </Flex>
-            <Box width="full" overflowX="auto">
-                <StasjonTable />
-            </Box>
-        </Flex>
-    </>
-);
+const Stasjoner: React.FC = () => {
+    const { url } = useRouteMatch();
+
+    return (
+        <>
+            <Helmet>
+                <title>Stasjoner</title>
+            </Helmet>
+            <Stack direction="row" flex="1" alignItems="stretch" padding="5" spacing="10" marginX="auto">
+                <StasjonNavigation />
+                <Route path={`${url}/:stasjonId`}>
+                    {/* TODO: handle no station selected */}
+                    <StasjonInfo />
+                </Route>
+            </Stack>
+        </>
+    );
+};
 
 export default Stasjoner;

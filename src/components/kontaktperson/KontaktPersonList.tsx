@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ButtonGroup, Flex, HStack, Icon, Link, Text } from '@chakra-ui/react';
-import { ApiKontakt } from '../../../services/aktor/KontaktService';
+import { ApiKontakt } from '../../services/aktor/KontaktService';
 import { EditKontaktPersonButton } from './EditKontaktPersonButton';
 import { DeleteKontaktPersonButton } from './DeleteKontaktPersonButton';
 import { List, ListItem } from '@chakra-ui/react';
-import DefaultProfilePic from '../../../assets/Default_profile_pic.svg';
+import DefaultProfilePic from '../../assets/Default_profile_pic.svg';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;

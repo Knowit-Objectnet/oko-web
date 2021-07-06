@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Flex } from '@chakra-ui/layout';
 import { PartnerInfoHeader } from '../avtaler/partner/PartnerInfoHeader';
-import { KontaktPersonSection } from '../avtaler/kontaktperson/KontaktPersonSection';
+import { KontaktPersonSection } from '../../components/kontaktperson/KontaktPersonSection';
 import { AvtaleInfoSection } from '../avtaler/avtale/AvtaleInfoSection';
 import { useAuth } from '../../auth/useAuth';
 import { usePartnerById } from '../../services/partner/usePartnerById';
@@ -45,7 +45,7 @@ export const PartnerInfo: React.FC = () => {
             >
                 <PartnerInfoHeader partner={partner} />
                 <AvtaleInfoSection partner={partner} />
-                <KontaktPersonSection partner={partner} />
+                <KontaktPersonSection aktor={partner} isPartner={true} />
             </Flex>
         </>
     );
