@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../../../components/Modal';
-import { EditButton } from '../../../components/buttons/EditButton';
-import { ApiKontakt } from '../../../services/aktor/KontaktService';
+import { Modal } from '../Modal';
+import { EditButton } from '../buttons/EditButton';
+import { ApiKontakt } from '../../services/aktor/KontaktService';
 import { KontaktPersonForm } from './KontaktPersonForm';
 
 interface Props {

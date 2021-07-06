@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { Flex } from '@chakra-ui/layout';
 import { PartnerInfoHeader } from './PartnerInfoHeader';
-import { KontaktPersonSection } from '../kontaktperson/KontaktPersonSection';
+import { KontaktPersonSection } from '../../../components/kontaktperson/KontaktPersonSection';
 import { AvtaleInfoSection } from '../avtale/AvtaleInfoSection';
 import { usePartnerById } from '../../../services/partner/usePartnerById';
 
@@ -32,7 +32,7 @@ export const PartnerInfo: React.FC = () => {
         <Flex as="main" alignItems="flex-start" direction="column" flex="1" height="full">
             <PartnerInfoHeader partner={partner} />
             <AvtaleInfoSection partner={partner} />
-            <KontaktPersonSection partner={partner} />
+            <KontaktPersonSection aktor={partner} isPartner={true} />
         </Flex>
     );
 };
