@@ -13,7 +13,7 @@ export const AvlystDetails: React.FC<Props & BoxProps> = ({ id, aarsak, ...props
 
     return (
         <Box p={5} backgroundColor="error" borderRadius="0.5rem" {...props}>
-            <Heading fontSize="xl">{aktor?.navn || null}</Heading>
+            <Heading fontSize="xl">{aktor?.navn || null}:</Heading>
             <Text fontSize="sm" mt={4}>
                 {aarsak || null}
             </Text>
