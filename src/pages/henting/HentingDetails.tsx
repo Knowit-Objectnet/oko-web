@@ -13,8 +13,9 @@ import Calendar from '../../assets/Calendar.svg';
 import Clock from '../../assets/Clock.svg';
 import { useAuth } from '../../auth/useAuth';
 import { DetailWithIcon } from './components/DetailWithIcon';
-import { AvlystBadge } from './components/AvlystBadge';
 import { DetailWithLabel } from './components/DetailWithLabel';
+import { AvlystDetails } from './components/AvlystDetails';
+import { AvlystBadge } from './components/AvlystBadge';
 
 const getDayString = (date: Date) => {
     if (isToday(date)) {
@@ -89,6 +90,11 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     {henting.merknad ? (
                         <DetailWithLabel label="Merknad">
                             <Text>{henting.merknad}</Text>
+                        </DetailWithLabel>
+                    ) : null}
+                    {henting.avlyst ? (
+                        <DetailWithLabel label="Avlysning">
+                            <AvlystDetails henting={henting} />
                         </DetailWithLabel>
                     ) : null}
                 </VStack>

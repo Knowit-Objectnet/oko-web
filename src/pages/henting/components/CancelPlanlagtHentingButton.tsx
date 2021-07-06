@@ -16,9 +16,13 @@ export const CancelPlanlagtHentingButton: React.FC<Props & ButtonProps> = ({ hen
     const showSuccessToast = useSuccessToast();
     const showErrorToast = useErrorToast();
 
-    const handleDeleteHenteplan = () =>
+    const handleCancelHenting = () =>
         updateHentingMutation.mutateAsync(
-            { id: henting.id, avlys: true },
+            {
+                id: henting.id,
+                avlys: true,
+                aarsak: henting.aarsak || undefined,
+            },
             {
                 onSuccess: () => {
                     showSuccessToast({ title: `Hentingen ble avlyst` });
@@ -38,7 +42,7 @@ export const CancelPlanlagtHentingButton: React.FC<Props & ButtonProps> = ({ hen
                 body: 'Det vil ikke være mulig å angre avlysningen.',
                 buttonLabel: 'Ja, avlys hentingen',
             }}
-            onConfirm={handleDeleteHenteplan}
+            onConfirm={handleCancelHenting}
             isLoading={updateHentingMutation.isLoading}
             popoverPosition="bottom"
         >
