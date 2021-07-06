@@ -9,7 +9,9 @@ interface Props {
 export const EkstraUttakInfoRow: React.FC<Props> = ({ text, icon }) => {
     return (
         <Flex>
-            <Icon marginRight="3">{icon}</Icon>
+            <Icon marginRight="3" aria-hidden>
+                {icon}
+            </Icon>
             <Text>{text}</Text>
         </Flex>
     );

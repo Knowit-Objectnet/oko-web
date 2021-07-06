@@ -36,6 +36,7 @@ export interface ApiEkstraHentingPost {
     merknad?: string;
     stasjonId: string; //UUID
     kategorier?: ApiEkstraHentingKategoriPost[];
+    partnere?: string[];
 }
 
 export interface ApiEkstraHentingKategori {
@@ -66,5 +67,5 @@ export const deleteEkstraHenting = (hentingId: string): Promise<ApiEkstraHenting
 export const patchEkstraHenting = (updatedHenting: ApiEkstraHentingPatch): Promise<ApiEkstraHenting> =>
     httpClient().patch<ApiEkstraHenting>(hentingEndpoint, updatedHenting).then(extractResponse, transformError);
 
-export const postUtlysning = (newHenting: ApiEkstraHentingPost): Promise<ApiEkstraHenting> =>
+export const postEkstraHenting = (newHenting: ApiEkstraHentingPost): Promise<ApiEkstraHenting> =>
     httpClient().post<ApiEkstraHenting>(hentingEndpoint, newHenting).then(extractResponse, transformError);
