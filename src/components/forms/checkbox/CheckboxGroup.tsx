@@ -15,25 +15,42 @@ import { FormFieldProps } from '../FormField';
 export interface CheckboxOption<TValue = string, TLabel = string> {
     value: TValue;
     label: TLabel;
+    disabled?: boolean;
 }
 
-interface Props extends FormFieldProps {
-    options?: Array<CheckboxOption>;
+interface Props<TValue = string, TLabel = string> extends FormFieldProps {
+    defaultValues?: TValue[];
+    options?: Array<CheckboxOption<TValue, TLabel>>;
     /** Component to display as placeholder for the checkbox list, e.g. while waiting for dynamically loaded options **/
     optionsPlaceholder?: React.ReactNode;
 }
 
-export const CheckboxGroup: React.FC<Props> = ({ name, label, options, required, helperText, optionsPlaceholder }) => {
+export const CheckboxGroup: React.FC<Props> = ({
+    name,
+    label,
+    options,
+    required,
+    helperText,
+    optionsPlaceholder,
+    defaultValues,
+}) => {
     const {
         field: { onChange, value },
         formState: { errors, isSubmitted },
-    } = useController({ name });
+    } = useController({ name, defaultValue: defaultValues });
 
     const isInvalid = errors[name] && isSubmitted;
 
     const getCheckboxes = () =>
-        options?.map(({ value, label: checkboxLabel }) => (
-            <Checkbox key={value} value={value} label={checkboxLabel} name={name} isInvalid={isInvalid} />
+        options?.map(({ value, label: checkboxLabel, disabled: checkboxDisabled }) => (
+            <Checkbox
+                key={value}
+                value={value}
+                label={checkboxLabel}
+                name={name}
+                isDisabled={checkboxDisabled}
+                isInvalid={isInvalid}
+            />
         ));
 
     return (

@@ -7,13 +7,17 @@ import { CheckboxGroupSkeleton } from './checkbox/CheckboxGroupSkeleton';
 import { WarningBody, WarningContainer, WarningTitle } from './Warning';
 import { CheckboxGroup, CheckboxOption } from './checkbox/CheckboxGroup';
 
-export const PartnerSelectMultiple: React.FC<FormFieldProps> = (props) => {
-    const { data: partnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
+interface Props {
+    existingPartnere?: string[];
+    disableExisting?: boolean;
+}
 
-    const partnerOptions: Array<SelectOption> = (partnere ?? []).map((partner) => ({
-        label: partner.navn,
-        value: partner.id,
-    }));
+export const PartnerSelectMultiple: React.FC<FormFieldProps & Props> = ({
+    disableExisting = false,
+    existingPartnere = [],
+    ...props
+}) => {
+    const { data: partnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
 
     const getLoadingPlaceholder = (): React.ReactNode => {
         if (isLoading) {
@@ -37,7 +41,15 @@ export const PartnerSelectMultiple: React.FC<FormFieldProps> = (props) => {
         (partnere || []).map((partner) => ({
             value: partner.id,
             label: partner.navn,
+            disabled: disableExisting && existingPartnere.indexOf(partner.id) >= 0,
         }));
 
-    return <CheckboxGroup options={getPartnerCheckBoxes()} optionsPlaceholder={getLoadingPlaceholder()} {...props} />;
+    return (
+        <CheckboxGroup
+            options={getPartnerCheckBoxes()}
+            optionsPlaceholder={getLoadingPlaceholder()}
+            defaultValues={existingPartnere}
+            {...props}
+        />
+    );
 };

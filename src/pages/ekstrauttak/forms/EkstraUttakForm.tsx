@@ -23,6 +23,7 @@ import { useAddEkstraHenting } from '../../../services/henting/useAddEkstraHenti
 import { transformStringToDate } from '../../../utils/forms/transformStringToDate';
 import { transformStringToDateTime } from '../../../utils/forms/transformStringToDateTime';
 import { StasjonSelect } from '../../../components/forms/StasjonSelect';
+import { usePartnere } from '../../../services/partner/usePartnere';
 
 interface EkstraUttakFormData {
     stasjonId: string;
@@ -137,6 +138,11 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
         resolver: yupResolver(validationSchema(stasjonId)),
     });
 
+    const { data: allPartnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
+    const addEkstraHentingMutation = useAddEkstraHenting();
+    const showSuccessToast = useSuccessToast();
+    const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
+
     const transformFormData = (formData: EkstraUttakFormData): ApiEkstraHentingPost => {
         return {
             stasjonId: formData.stasjonId || stasjonId!,
@@ -146,13 +152,9 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
             kategorier: formData.kategorier.map((kat) => {
                 return { kategoriId: kat };
             }),
-            partnere: formData.partnere,
+            partnere: formData.partnere || allPartnere?.map((p) => p.id),
         };
     };
-
-    const addEkstraHentingMutation = useAddEkstraHenting();
-    const showSuccessToast = useSuccessToast();
-    const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
