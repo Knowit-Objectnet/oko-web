@@ -16,73 +16,159 @@ import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
+import { ApiKategori } from '../../../services/kategori/KategoriService';
+import { KategoriSelect } from '../../../components/forms/KategoriSelect';
+import { TextArea } from '../../../components/forms/TextArea';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
+import { TimeInput } from '../../../components/forms/input/TimeInput';
+import { EkstraUttakFormTidspunkt } from './EkstraUttakFormTidspunkt';
+import { PartnerSelectMultiple } from '../../../components/forms/PartnerSelect';
+import { ApiEkstraHentingPost } from '../../../services/henting/EkstraHentingService';
+import { useAddEkstraHenting } from '../../../services/henting/useAddEkstraHenting';
+import { transformStringToDate } from '../../../utils/forms/transformStringToDate';
+import { transformStringToDateTime } from '../../../utils/forms/transformStringToDateTime';
+import { StasjonSelect } from '../../../components/forms/StasjonSelect';
 
 interface EkstraUttakFormData {
-    navn: string;
+    stasjonId: string;
+    beskrivelse: string;
+    når: NårType;
+    kategorier: string[];
+    uttakType: UttakType;
+    utlysningSelect: UtlysningSelectorType;
+    dato: Date;
+    startTidspunkt: Date;
+    sluttTidspunkt: Date;
+    partnere: string[];
 }
 
-const validationSchema = yup.object().shape({
-    navn: yup.string().label('navn på stasjonen').trim().required().min(2),
-    // TODO uncomment when we want to set station type in form
-    // type: yup
-    //     .mixed<StasjonType>()
-    //     .label('type for stasjonen')
-    //     .required()
-    //     .oneOf(stasjonTypeOptions.map((type) => type.value)),
-});
+type NårType = 'NOW' | 'CUSTOM';
+type UttakType = 'FIRST' | 'ACCEPT';
+type UtlysningSelectorType = 'ALL' | 'CUSTOM';
+
+export const nårOptions: Array<RadioOption<NårType>> = [
+    { value: 'NOW', label: 'Med en gang' },
+    { value: 'CUSTOM', label: 'Jeg vil sette tidspunkt' },
+];
+
+export const uttakTypeOptions: Array<RadioOption<UttakType>> = [
+    { value: 'FIRST', label: 'Førstemann til mølla' },
+    { value: 'ACCEPT', label: 'Godkjenning' },
+];
+
+export const utlysningSelectorOptions: Array<RadioOption<UtlysningSelectorType>> = [
+    { value: 'ALL', label: 'Alle' },
+    { value: 'CUSTOM', label: 'Velg ut hvem som kan melde seg på' },
+];
+
+const validationSchema = (stasjonId?: string) =>
+    yup.object().shape({
+        stasjon: yup.string().when((value: unknown, schema: yup.StringSchema) => {
+            if (stasjonId) {
+                return schema.notRequired();
+            } else {
+                return schema.label('hvilken stasjon det skal hentes fra').required();
+            }
+        }),
+        beskrivelse: yup.string().label('en beskrivelse av hva som skal hentes').required(),
+        når: yup
+            .mixed<NårType>()
+            .label('når det skal hentes')
+            .required()
+            .oneOf(nårOptions.map((opt) => opt.value)),
+        dato: yup
+            .date()
+            .label('dato for hentingen')
+            .transform(transformStringToDate)
+            .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
+                if (når && når === 'CUSTOM') {
+                    return schema.required();
+                } else {
+                    return schema.notRequired();
+                }
+            })
+            .nullable(),
+        startTidspunkt: yup
+            .date()
+            .label('starttidspunkt for hentingen')
+            .transform(transformStringToDateTime)
+            .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
+                if (når && når === 'CUSTOM') {
+                    return schema.required();
+                } else {
+                    return schema.notRequired();
+                }
+            })
+            .nullable(),
+        sluttTidspunkt: yup
+            .date()
+            .label('sluttidspunkt for hentingen')
+            .transform(transformStringToDateTime)
+            .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
+                if (når) {
+                    return schema.required();
+                } else {
+                    return schema.notRequired();
+                }
+            })
+            .nullable(),
+        kategorier: yup
+            .array(yup.string())
+            .ensure()
+            .min(1, 'Du må velge minst én varekategori som partneren skal kunne hente'),
+        utlysningSelect: yup
+            .mixed<UtlysningSelectorType>()
+            .label('hvem som skal få varsel')
+            .required()
+            .oneOf(utlysningSelectorOptions.map((opt) => opt.value)),
+        partnere: yup.array(yup.string()).when('utlysningSelect', (us: UtlysningSelectorType | undefined, schema) => {
+            if (us && us === 'CUSTOM') {
+                return schema.ensure().min(1, 'Du må velge minst én partner å sende utlysning');
+            } else {
+                return schema.notRequired();
+            }
+        }),
+    });
 
 interface Props {
     /** By passing an existing stasjon, the form will be in edit mode **/
-    ekstraUttakToEdit?: ApiStasjon;
+    stasjonId?: string;
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
 }
 
-export const EkstraUttakForm: React.FC<Props> = ({ ekstraUttakToEdit, onSuccess }) => {
+export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
     const formMethods = useForm<EkstraUttakFormData>({
-        resolver: yupResolver(validationSchema),
-        defaultValues: ekstraUttakToEdit
-            ? {
-                  navn: ekstraUttakToEdit.navn,
-              }
-            : undefined,
+        resolver: yupResolver(validationSchema(stasjonId)),
     });
 
-    const addStasjonMutation = useAddStasjon();
-    const updateStasjonMutation = useUpdateStasjon();
+    const transformFormData = (formData: EkstraUttakFormData): ApiEkstraHentingPost => {
+        return {
+            stasjonId: formData.stasjonId || stasjonId!,
+            startTidspunkt: (formData.når === 'NOW' ? new Date() : formData.startTidspunkt).toISOString(),
+            sluttTidspunkt: formData.sluttTidspunkt.toISOString(),
+            merknad: formData.beskrivelse,
+            kategorier: formData.kategorier.map((kat) => {
+                return { kategoriId: kat };
+            }),
+            partnere: formData.partnere,
+        };
+    };
+
+    const addEkstraHentingMutation = useAddEkstraHenting();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        if (ekstraUttakToEdit) {
-            updateStasjon({
-                id: ekstraUttakToEdit.id,
-                navn: formData.navn,
-                // TODO: pass type here when we want to set station type in form
-            });
-        } else {
-            addStasjon({
-                ...formData,
-                // TODO: remove when we want to set station type in form
-                type: 'GJENBRUK',
-            });
-        }
+        addEkstraHenting(transformFormData(formData));
     });
 
-    const addStasjon = (newStasjon: ApiStasjonPost) =>
-        addStasjonMutation.mutate(newStasjon, {
+    const addEkstraHenting = (newHenting: ApiEkstraHentingPost) =>
+        addEkstraHentingMutation.mutate(newHenting, {
             onSuccess: () => {
-                onApiSubmitSuccess(`Stasjonen ${newStasjon.navn} ble registrert`);
-            },
-            onError: onApiSubmitError,
-        });
-
-    const updateStasjon = (updatedStasjon: ApiStasjonPatch) =>
-        updateStasjonMutation.mutate(updatedStasjon, {
-            onSuccess: () => {
-                onApiSubmitSuccess(`Endringene ble lagret for ${updatedStasjon.navn}`);
+                onApiSubmitSuccess(`Hentingen ble registrert`);
             },
             onError: onApiSubmitError,
         });
@@ -98,18 +184,41 @@ export const EkstraUttakForm: React.FC<Props> = ({ ekstraUttakToEdit, onSuccess 
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
+    const når = formMethods.watch('når', undefined);
+    const utlysningsSelect = formMethods.watch('utlysningSelect');
+
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <Input name="navn" label="Navn på stasjonen" required />
-                    {/* TODO: uncomment when we want to set station type :
-                    <RadiobuttonGroup name="type" label="Type stasjon" options={stasjonTypeOptions} required />*/}
+                    {!stasjonId ? <StasjonSelect name="stasjon" label="Velg stasjon" /> : null}
+                    <TextArea name="beskrivelse" label="Beskrivelse" required />
+                    <RadiobuttonGroup name="når" label="Når?" options={nårOptions} required />
+                    {når && når == 'NOW' ? (
+                        <TimeInput name="sluttTidspunkt" label="Sluttidspunkt" helperText="Frem til kl" />
+                    ) : null}
+                    {når && når == 'CUSTOM' ? <EkstraUttakFormTidspunkt /> : null}
+                    <KategoriSelect
+                        name="kategorier"
+                        label="Kategorier"
+                        helperText="Hvilke kategorier kan hentes?"
+                        required
+                    />
+                    <RadiobuttonGroup name="uttakType" label="Type uttak" options={uttakTypeOptions} required />
+                    <RadiobuttonGroup
+                        name="utlysningSelect"
+                        label="Hvem kan melde seg på?"
+                        options={utlysningSelectorOptions}
+                        required
+                    />
+                    {utlysningsSelect && utlysningsSelect == 'CUSTOM' ? (
+                        <PartnerSelectMultiple name="partnere" label="Velg partnere" />
+                    ) : null}
                     <FormSubmitButton
-                        label={ekstraUttakToEdit ? 'Lagre endringer' : 'Registrer ny stasjon'}
-                        isLoading={updateStasjonMutation.isLoading || addStasjonMutation.isLoading}
+                        label="Registrer nytt ekstrauttak"
+                        isLoading={addEkstraHentingMutation.isLoading}
                         loadingText="Lagrer..."
                     />
                 </Stack>
