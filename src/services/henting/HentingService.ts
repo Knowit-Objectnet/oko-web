@@ -8,6 +8,8 @@ export interface ApiPlanlagtHenting {
     merknad: string | null;
     henteplanId: string; //UUID
     avlyst: string | null; //LocalTimeDate
+    aarsak: string | null;
+    avlystAv: string | null; //UUID
     avtaleId: string; //UUID
     aktorId: string; //UUID
     aktorNavn: string;
