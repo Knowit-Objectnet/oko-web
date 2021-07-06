@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ApiKontakt, ApiKontaktPatch, ApiKontaktPost } from '../../services/aktor/KontaktService';
 import { Stack } from '@chakra-ui/react';
-import { RequiredFieldsInstruction } from '../forms/RequiredFieldsInstruction';
+import { Instruction, RequiredFieldsInstruction } from '../forms/RequiredFieldsInstruction';
 import { ErrorMessages } from '../forms/ErrorMessages';
 import { Input } from '../forms/input/Input';
 import { FormSubmitButton } from '../forms/FormSubmitButton';
@@ -16,6 +16,7 @@ import { useSuccessToast } from '../toasts/useSuccessToast';
 import { useUpdateKontakt } from '../../services/aktor/useUpdateKontakt';
 import { ApiError } from '../../services/httpClient';
 import { transformToNorwegianPhone } from '../../utils/forms/transformToNorwegianPhone';
+import Warning from '../../assets/Warning.svg';
 
 // NB! Setting the error messages used by yup
 import '../../utils/forms/formErrorMessages';
@@ -115,6 +116,13 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ akto
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
+    const instructions: Instruction[] = [
+        {
+            text: 'Mobiltelefonnummeret og e-postadressen vil bli brukt til å varsle om avlysninger og relevante ekstrautlysninger.',
+            icon: Warning,
+        },
+    ];
+
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
@@ -123,6 +131,7 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ akto
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn" helperText="Skriv inn fullt navn (for- og etternavn)" required />
                     <Input name="rolle" label="Rolle" required />
+                    <RequiredFieldsInstruction instructions={instructions} useDefault={false} />
                     <Input
                         type="phone"
                         name="telefon"
