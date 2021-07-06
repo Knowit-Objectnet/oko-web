@@ -1,24 +1,25 @@
 import * as React from 'react';
 import { useState } from 'react';
 import * as yup from 'yup';
-import { ApiPartner } from '../../../services/partner/PartnerService';
+import { ApiPartner } from '../../services/partner/PartnerService';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ApiKontakt, ApiKontaktPatch, ApiKontaktPost } from '../../../services/aktor/KontaktService';
+import { ApiKontakt, ApiKontaktPatch, ApiKontaktPost } from '../../services/aktor/KontaktService';
 import { Stack } from '@chakra-ui/react';
-import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { ErrorMessages } from '../../../components/forms/ErrorMessages';
-import { Input } from '../../../components/forms/input/Input';
-import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { useAddKontakt } from '../../../services/aktor/useAddKontakt';
+import { RequiredFieldsInstruction } from '../forms/RequiredFieldsInstruction';
+import { ErrorMessages } from '../forms/ErrorMessages';
+import { Input } from '../forms/input/Input';
+import { FormSubmitButton } from '../forms/FormSubmitButton';
+import { useAddKontakt } from '../../services/aktor/useAddKontakt';
 import { upperFirst } from 'lodash';
-import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { useUpdateKontakt } from '../../../services/aktor/useUpdateKontakt';
-import { ApiError } from '../../../services/httpClient';
-import { transformToNorwegianPhone } from '../../../utils/forms/transformToNorwegianPhone';
+import { useSuccessToast } from '../toasts/useSuccessToast';
+import { useUpdateKontakt } from '../../services/aktor/useUpdateKontakt';
+import { ApiError } from '../../services/httpClient';
+import { transformToNorwegianPhone } from '../../utils/forms/transformToNorwegianPhone';
 
 // NB! Setting the error messages used by yup
-import '../../../utils/forms/formErrorMessages';
+import '../../utils/forms/formErrorMessages';
+import { ApiStasjon } from '../../services/stasjon/StasjonService';
 
 const validationSchema = yup.object().shape({
     // TODO: validation of first and last name (both required) using `matches(regex pattern)`
@@ -43,17 +44,17 @@ interface Props {
 
 interface AddModeProps extends Props {
     /**  Partner is only required for adding Kontakt, and not allowed in edit mode. **/
-    partner: ApiPartner;
+    aktor: ApiPartner | ApiStasjon;
     kontaktToEdit?: never;
 }
 
 interface EditModeProps extends Props {
-    partner?: never;
+    aktor?: never;
     /**  By passing an existing Kontakt, the form will be in edit mode (not allowed in add mode) **/
     kontaktToEdit: ApiKontakt;
 }
 
-export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ partner, kontaktToEdit, onSuccess }) => {
+export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ aktor, kontaktToEdit, onSuccess }) => {
     const formMethods = useForm<ApiKontaktPost>({
         resolver: yupResolver(validationSchema),
         defaultValues: kontaktToEdit
@@ -79,10 +80,10 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ part
                 ...formData,
                 id: kontaktToEdit.id,
             });
-        } else if (partner) {
+        } else if (aktor) {
             addKontakt({
                 ...formData,
-                aktorId: partner.id,
+                aktorId: aktor.id,
             });
         }
     });
@@ -90,7 +91,7 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ part
     const addKontakt = (newKontakt: ApiKontaktPost) =>
         addKontaktMutation.mutate(newKontakt, {
             onSuccess: () => {
-                onApiSubmitSuccess(`${newKontakt.navn} ble registrert som kontaktperson for ${partner?.navn}`);
+                onApiSubmitSuccess(`${newKontakt.navn} ble registrert som kontaktperson for ${aktor?.navn}`);
             },
             onError: onApiSubmitError,
         });

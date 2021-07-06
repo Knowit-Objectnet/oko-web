@@ -1,10 +1,10 @@
 import React from 'react';
-import { ApiKontakt } from '../../../services/aktor/KontaktService';
-import { useDeleteKontakt } from '../../../services/aktor/useDeleteKontakt';
-import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { useErrorToast } from '../../../components/toasts/useErrorToast';
-import { ConfirmationPopover } from '../../../components/buttons/ConfirmationPopover';
-import { DeleteButton } from '../../../components/buttons/DeleteButton';
+import { ApiKontakt } from '../../services/aktor/KontaktService';
+import { useDeleteKontakt } from '../../services/aktor/useDeleteKontakt';
+import { useSuccessToast } from '../toasts/useSuccessToast';
+import { useErrorToast } from '../toasts/useErrorToast';
+import { ConfirmationPopover } from '../buttons/ConfirmationPopover';
+import { DeleteButton } from '../buttons/DeleteButton';
 
 interface Props {
     kontakt: ApiKontakt;
