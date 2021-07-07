@@ -25,7 +25,9 @@ export const getEkstraUttakValidationSchema = (stasjonId?: string) =>
             .transform(transformStringToDate)
             .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
                 if (når && når === 'CUSTOM') {
-                    return schema.required().min(new Date().setHours(0, 0, 0, 0), 'Dato må være i dag eller senere');
+                    return schema
+                        .required()
+                        .min(new Date(new Date().setHours(0, 0, 0, 0)), 'Dato må være i dag eller senere');
                 } else {
                     return schema.notRequired();
                 }

@@ -24,11 +24,11 @@ import { usePartnere } from '../../../services/partner/usePartnere';
 import { getEkstraUttakValidationSchema } from './ekstraUttakFormSchema';
 
 interface EkstraUttakFormData {
-    stasjonId: string;
+    stasjon: string;
     beskrivelse: string;
     når: NårType;
     kategorier: string[];
-    uttakType: UttakType;
+    // uttakType: UttakType;
     utlysningSelect: UtlysningSelectorType;
     dato: Date;
     startTidspunkt: Date;
@@ -74,7 +74,7 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
 
     const transformFormData = (formData: EkstraUttakFormData): ApiEkstraHentingPost => {
         return {
-            stasjonId: formData.stasjonId || stasjonId!,
+            stasjonId: formData.stasjon || stasjonId!,
             startTidspunkt: (formData.når === 'NOW' ? new Date() : formData.startTidspunkt).toISOString(),
             sluttTidspunkt: formData.sluttTidspunkt.toISOString(),
             beskrivelse: formData.beskrivelse,
@@ -132,7 +132,7 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
                         helperText="Hvilke kategorier kan hentes?"
                         required
                     />
-                    <RadiobuttonGroup name="uttakType" label="Type uttak" options={uttakTypeOptions} required />
+                    {/* <RadiobuttonGroup name="uttakType" label="Type uttak" options={uttakTypeOptions} required /> */}
                     <RadiobuttonGroup
                         name="utlysningSelect"
                         label="Hvem kan melde seg på?"
