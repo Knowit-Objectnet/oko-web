@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from 'react';
-import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Stack } from '@chakra-ui/react';
@@ -20,10 +19,9 @@ import { EkstraUttakFormTidspunkt } from './EkstraUttakFormTidspunkt';
 import { PartnerSelectMultiple } from '../../../components/forms/PartnerSelect';
 import { ApiEkstraHentingPost } from '../../../services/henting/EkstraHentingService';
 import { useAddEkstraHenting } from '../../../services/henting/useAddEkstraHenting';
-import { transformStringToDate } from '../../../utils/forms/transformStringToDate';
-import { transformStringToDateTime } from '../../../utils/forms/transformStringToDateTime';
 import { StasjonSelect } from '../../../components/forms/StasjonSelect';
 import { usePartnere } from '../../../services/partner/usePartnere';
+import { getEkstraUttakValidationSchema } from './ekstraUttakFormSchema';
 
 interface EkstraUttakFormData {
     stasjonId: string;
@@ -38,9 +36,9 @@ interface EkstraUttakFormData {
     partnere: string[];
 }
 
-type NårType = 'NOW' | 'CUSTOM';
+export type NårType = 'NOW' | 'CUSTOM';
 type UttakType = 'FIRST' | 'ACCEPT';
-type UtlysningSelectorType = 'ALL' | 'CUSTOM';
+export type UtlysningSelectorType = 'ALL' | 'CUSTOM';
 
 export const nårOptions: Array<RadioOption<NårType>> = [
     { value: 'NOW', label: 'Med en gang' },
@@ -57,77 +55,8 @@ export const utlysningSelectorOptions: Array<RadioOption<UtlysningSelectorType>>
     { value: 'CUSTOM', label: 'Velg ut hvem som kan melde seg på' },
 ];
 
-const validationSchema = (stasjonId?: string) =>
-    yup.object().shape({
-        stasjon: yup.string().when((value: unknown, schema: yup.StringSchema) => {
-            if (stasjonId) {
-                return schema.notRequired();
-            } else {
-                return schema.label('hvilken stasjon det skal hentes fra').required();
-            }
-        }),
-        beskrivelse: yup.string().label('en beskrivelse av hva som skal hentes').required(),
-        når: yup
-            .mixed<NårType>()
-            .label('når det skal hentes')
-            .required()
-            .oneOf(nårOptions.map((opt) => opt.value)),
-        dato: yup
-            .date()
-            .label('dato for hentingen')
-            .transform(transformStringToDate)
-            .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
-                if (når && når === 'CUSTOM') {
-                    return schema.required();
-                } else {
-                    return schema.notRequired();
-                }
-            })
-            .nullable(),
-        startTidspunkt: yup
-            .date()
-            .label('starttidspunkt for hentingen')
-            .transform(transformStringToDateTime)
-            .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
-                if (når && når === 'CUSTOM') {
-                    return schema.required();
-                } else {
-                    return schema.notRequired();
-                }
-            })
-            .nullable(),
-        sluttTidspunkt: yup
-            .date()
-            .label('sluttidspunkt for hentingen')
-            .transform(transformStringToDateTime)
-            .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
-                if (når) {
-                    return schema.required();
-                } else {
-                    return schema.notRequired();
-                }
-            })
-            .nullable(),
-        kategorier: yup
-            .array(yup.string())
-            .ensure()
-            .min(1, 'Du må velge minst én varekategori som partneren skal kunne hente'),
-        utlysningSelect: yup
-            .mixed<UtlysningSelectorType>()
-            .label('hvem som skal få varsel')
-            .required()
-            .oneOf(utlysningSelectorOptions.map((opt) => opt.value)),
-        partnere: yup.array(yup.string()).when('utlysningSelect', (us: UtlysningSelectorType | undefined, schema) => {
-            if (us && us === 'CUSTOM') {
-                return schema.ensure().min(1, 'Du må velge minst én partner å sende utlysning');
-            } else {
-                return schema.notRequired();
-            }
-        }),
-    });
-
 interface Props {
-    /** By passing an existing stasjon, the form will be in edit mode **/
+    /** By passing a stasjonId, stasjon will be preset **/
     stasjonId?: string;
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
@@ -135,7 +64,7 @@ interface Props {
 
 export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
     const formMethods = useForm<EkstraUttakFormData>({
-        resolver: yupResolver(validationSchema(stasjonId)),
+        resolver: yupResolver(getEkstraUttakValidationSchema(stasjonId)),
     });
 
     const { data: allPartnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
