@@ -15,6 +15,7 @@ const getNavItemsForRole = (user: UserInfo) => {
                 <NavItem path="/avtaler" icon={<List />} label="Avtaler" />
                 <NavItem path="/stasjoner" icon={<Location />} label="Stasjoner" />
                 <NavItem path="/kategorier" icon={<Bibliotek />} label="Kategorier" />
+                <NavItem path="/ekstrauttak" icon={<List />} label="Ekstrauttak" />
             </>
         );
     else if (user.isPartner)
