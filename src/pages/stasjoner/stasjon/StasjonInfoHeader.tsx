@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Box, Flex } from '@chakra-ui/layout';
-import { Heading } from '@chakra-ui/react';
+import { ButtonGroup, Heading } from '@chakra-ui/react';
 import { useAuth } from '../../../auth/useAuth';
 import { ApiStasjon, StasjonType } from '../../../services/stasjon/StasjonService';
 import { EditStasjonButton } from '../forms/EditStasjonButton';
+import { DeleteStasjonButton } from '../forms/DeleteStasjonButton';
 
 const STASJONTYPE: Record<StasjonType, string> = {
     GJENBRUK: 'Gjenbruksstasjon',
@@ -22,7 +23,14 @@ export const StasjonInfoHeader: React.FC<Props> = ({ stasjon }) => {
                 <Heading as="h1" fontWeight="bold" fontSize="4xl">
                     {stasjon.navn}
                 </Heading>
-                {user.isAdmin ? <EditStasjonButton stasjon={stasjon} size="sm" /> : null}
+                <ButtonGroup spacing="3" size="sm">
+                    <EditStasjonButton stasjon={stasjon} />
+                    {process.env.NODE_ENV === 'development' ? (
+                        // TODO: hacky solution to only show station deletion button
+                        //  when project is built for development (and not in production)
+                        <DeleteStasjonButton stasjon={stasjon} />
+                    ) : null}
+                </ButtonGroup>
             </Flex>
             <Box
                 as="section"

@@ -75,7 +75,7 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan, avtale }) => {
             </Td>
             <Td textAlign="end">
                 {user.isAdmin ? (
-                    <ButtonGroup spacing="3" size="sm">
+                    <ButtonGroup spacing="3" size="xs">
                         <EditHenteplanButton henteplan={henteplan} avtale={avtale} />
                         <DeleteHenteplanButton henteplan={henteplan} />
                     </ButtonGroup>

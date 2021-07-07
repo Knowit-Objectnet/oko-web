@@ -50,7 +50,7 @@ export const KontaktPersonList: React.FC<Props> = ({ kontaktPersoner }) => {
                                 </Text>
                             ) : null}
                         </Flex>
-                        <ButtonGroup spacing="4" size="sm">
+                        <ButtonGroup spacing="4" size="xs">
                             <EditKontaktPersonButton kontakt={kontakt} />
                             <DeleteKontaktPersonButton kontakt={kontakt} />
                         </ButtonGroup>

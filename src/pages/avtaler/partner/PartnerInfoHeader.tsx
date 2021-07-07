@@ -35,8 +35,7 @@ export const PartnerInfoHeader: React.FC<Props> = ({ partner }) => {
             >
                 <dl>
                     <Box>
-                        <dt>Ideell organisasjon:</dt>
-                        <dd>{partner.ideell ? 'ja' : 'nei'}</dd>
+                        <dd>{partner.ideell ? 'Ideell organisasjon' : 'Kommersiell organisasjon'}</dd>
                     </Box>
                 </dl>
             </Box>
