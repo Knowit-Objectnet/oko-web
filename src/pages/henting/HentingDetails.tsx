@@ -65,11 +65,13 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
         () => <>Klarte dessverre ikke å finne informasjon for denne hentingen</>,
         (henting) => (
             <>
+                {henting.avlyst && henting.avlystAv ? (
+                    <AvlystDetails id={henting.avlystAv} aarsak={henting.aarsak} mb="1em" />
+                ) : null}
                 <Heading as="h1" fontWeight="normal" aria-label="Partner">
                     {henting.aktorNavn}
                 </Heading>
                 <VStack spacing="3" alignItems="flex-start" marginTop="4">
-                    {henting.avlyst ? <AvlystBadge aria-label="Status" fontSize="sm" marginBottom="2" /> : null}
                     <DetailWithIcon icon={Location} label="Stasjon">
                         {henting.stasjonNavn}
                     </DetailWithIcon>
@@ -90,11 +92,6 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     {henting.merknad ? (
                         <DetailWithLabel label="Merknad">
                             <Text>{henting.merknad}</Text>
-                        </DetailWithLabel>
-                    ) : null}
-                    {henting.avlyst && henting.avlystAv ? (
-                        <DetailWithLabel label="Avlysning">
-                            <AvlystDetails id={henting.avlystAv} aarsak={henting.aarsak} />
                         </DetailWithLabel>
                     ) : null}
                 </VStack>
