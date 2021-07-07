@@ -42,7 +42,7 @@ export const EkstraUttakTable: React.FC = () => {
                         borderBottomWidth="16px"
                         borderBottomColor="background"
                     >
-                        <Td>{henting.merknad || 'Ingen merknad skrevet'}</Td>
+                        <Td>{henting.beskrivelse || 'Ingen merknad skrevet'}</Td>
                         <Td>
                             <EkstraUttakInfo henting={henting} />
                         </Td>
