@@ -30,7 +30,7 @@ export const PageRouter: React.FC = () => (
             <ProtectedRoute path="/minavtale" requiredRoles={[Roles.Partner]}>
                 <MineAvtaler />
             </ProtectedRoute>
-            <ProtectedRoute path="/ekstrauttak" requiredRoles={[Roles.Stasjon]}>
+            <ProtectedRoute path="/ekstrauttak" requiredRoles={[Roles.Stasjon, Roles.Admin]}>
                 <EkstraUttak />
             </ProtectedRoute>
             <Route path="/">
