@@ -6,7 +6,7 @@ export interface ApiEkstraHenting {
     id: string; //UUID
     startTidspunkt: string; //LocalTimeDate
     sluttTidspunkt: string; //LocalTimeDate
-    merknad: string | null;
+    beskrivelse: string | null;
     aktorNavn: string;
     stasjonId: string; //UUID
     stasjonNavn: string;
@@ -19,7 +19,7 @@ export interface ApiEkstraHentingParams {
     id?: string; //UUID
     before?: string; //LocalTimeDate Henting must be before this
     after?: string; //LocalTimeDate Henting must be after this
-    merknad?: string;
+    beskrivelse?: string;
     stasjonId?: string;
 }
 
@@ -27,14 +27,14 @@ export interface ApiEkstraHentingPatch {
     id: string; //UUID
     startTidspunkt?: string; //LocalTimeDate
     sluttTidspunkt?: string; //LocalTimeDate
-    merknad?: string;
+    beskrivelse?: string;
     kategorier?: ApiEkstraHentingKategoriPost[];
 }
 
 export interface ApiEkstraHentingPost {
     startTidspunkt?: string; //LocalTimeDate
     sluttTidspunkt?: string; //LocalTimeDate
-    merknad?: string;
+    beskrivelse: string;
     stasjonId: string; //UUID
     kategorier?: ApiEkstraHentingKategoriPost[];
     partnere?: string[];
