@@ -13,11 +13,11 @@ export const AvlystDetails: React.FC<Props & StackProps> = ({ id, aarsak, ...pro
     console.log(aktor);
 
     return (
-        <HStack spacing={2} p="0.5rem" pl="1rem" backgroundColor="error" {...props} align="center">
+        <HStack spacing={2} padding="0.5rem" paddingLeft="1rem" backgroundColor="error" {...props} align="center">
             <Icon as={Warning} boxSize="2rem" />
             <HStack spacing={10} alignItems="baseline">
                 <Heading fontSize="lg">Henting avlyst av {aktor?.navn || null}</Heading>
-                <Text fontSize="sm" mt={4}>
+                <Text fontSize="sm" marginTop={4}>
                     {aarsak || null}
                 </Text>
             </HStack>

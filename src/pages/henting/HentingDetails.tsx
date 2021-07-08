@@ -15,7 +15,6 @@ import { useAuth } from '../../auth/useAuth';
 import { DetailWithIcon } from './components/DetailWithIcon';
 import { DetailWithLabel } from './components/DetailWithLabel';
 import { AvlystDetails } from './components/AvlystDetails';
-import { AvlystBadge } from './components/AvlystBadge';
 
 const getDayString = (date: Date) => {
     if (isToday(date)) {
