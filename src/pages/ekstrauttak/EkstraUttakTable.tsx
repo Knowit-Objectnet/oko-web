@@ -9,6 +9,7 @@ import { Roles } from '../../auth/Roles';
 import { ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
 import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
 import { PameldtInfo } from './PameldtInfo';
+import { PartnerPameldingInfo } from './PartnerPameldingInfo';
 
 export const EkstraUttakTable: React.FC = () => {
     const { user } = useAuth();
@@ -31,7 +32,7 @@ export const EkstraUttakTable: React.FC = () => {
                     <Th scope="col">Beskrivelse</Th>
                     <Th scope="col">Informasjon</Th>
                     <Th scope="col">Kategorier</Th>
-                    <Th scope="col">Påmeldt</Th>
+                    <Th scope="col">{user.isPartner ? 'Påmelding' : 'Påmeldt'}</Th>
                 </Tr>
             </Thead>
             <Tbody>
@@ -52,7 +53,11 @@ export const EkstraUttakTable: React.FC = () => {
                             />
                         </Td>
                         <Td>
-                            <PameldtInfo henting={henting} />
+                            {user.isPartner ? (
+                                <PartnerPameldingInfo henting={henting} partnerId={user.aktorId!} />
+                            ) : (
+                                <PameldtInfo henting={henting} />
+                            )}
                         </Td>
                     </Tr>
                 ))}
