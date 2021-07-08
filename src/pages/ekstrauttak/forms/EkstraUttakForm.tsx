@@ -119,7 +119,7 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    {!stasjonId ? <StasjonSelect name="stasjon" label="Velg stasjon" /> : null}
+                    {!stasjonId ? <StasjonSelect name="stasjon" label="Velg stasjon" required /> : null}
                     <TextArea name="beskrivelse" label="Beskrivelse" required />
                     <RadiobuttonGroup name="når" label="Når?" options={nårOptions} required />
                     {når && når == 'NOW' ? (
