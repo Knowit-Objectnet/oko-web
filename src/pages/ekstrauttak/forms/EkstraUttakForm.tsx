@@ -22,6 +22,7 @@ import { useAddEkstraHenting } from '../../../services/henting/useAddEkstraHenti
 import { StasjonSelect } from '../../../components/forms/StasjonSelect';
 import { usePartnere } from '../../../services/partner/usePartnere';
 import { getEkstraUttakValidationSchema } from './ekstraUttakFormSchema';
+import { dateTimeToStringIgnoreTimezone, mergeDateWithTimeToString } from '../../../utils/hentingDateTimeHelpers';
 
 interface EkstraUttakFormData {
     stasjon: string;
@@ -75,8 +76,14 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
     const transformFormData = (formData: EkstraUttakFormData): ApiEkstraHentingPost => {
         return {
             stasjonId: formData.stasjon || stasjonId!,
-            startTidspunkt: (formData.når === 'NOW' ? new Date() : formData.startTidspunkt).toISOString(),
-            sluttTidspunkt: formData.sluttTidspunkt.toISOString(),
+            startTidspunkt:
+                formData.når === 'NOW'
+                    ? dateTimeToStringIgnoreTimezone(new Date())
+                    : mergeDateWithTimeToString(formData.dato, formData.startTidspunkt),
+            sluttTidspunkt:
+                formData.når === 'NOW'
+                    ? mergeDateWithTimeToString(new Date(), formData.sluttTidspunkt)
+                    : mergeDateWithTimeToString(formData.dato, formData.sluttTidspunkt),
             beskrivelse: formData.beskrivelse,
             kategorier: formData.kategorier.map((kategoriId) => {
                 return { kategoriId: kategoriId };
