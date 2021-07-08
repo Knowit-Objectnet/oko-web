@@ -117,9 +117,6 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
                     />
                 </Stack>
             </form>
-            <Checkbox isChecked={true} isDisabled={true}>
-                Hello There
-            </Checkbox>
         </FormProvider>
     );
 };
