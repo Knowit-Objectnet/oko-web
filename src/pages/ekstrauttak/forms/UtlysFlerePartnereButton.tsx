@@ -9,7 +9,7 @@ interface Props {
     henting: ApiEkstraHenting;
 }
 
-export const UtlysFlerPartnereButton: React.FC<Omit<ButtonProps, 'onClick'> & Props> = (props) => {
+export const UtlysFlerePartnereButton: React.FC<Omit<ButtonProps, 'onClick'> & Props> = (props) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (

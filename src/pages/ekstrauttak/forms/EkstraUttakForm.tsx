@@ -78,10 +78,10 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
             startTidspunkt: (formData.når === 'NOW' ? new Date() : formData.startTidspunkt).toISOString(),
             sluttTidspunkt: formData.sluttTidspunkt.toISOString(),
             beskrivelse: formData.beskrivelse,
-            kategorier: formData.kategorier.map((kat) => {
-                return { kategoriId: kat };
+            kategorier: formData.kategorier.map((kategoriId) => {
+                return { kategoriId: kategoriId };
             }),
-            partnere: formData.partnere || allPartnere?.map((p) => p.id),
+            partnere: formData.partnere || allPartnere?.map((partner) => partner.id),
         };
     };
 

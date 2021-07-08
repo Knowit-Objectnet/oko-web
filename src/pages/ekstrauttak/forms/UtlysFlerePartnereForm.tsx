@@ -66,7 +66,10 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        batchAddUtlysning({ hentingId: henting.id, partnerIds: formData.partnere || allPartnere?.map((p) => p.id) });
+        batchAddUtlysning({
+            hentingId: henting.id,
+            partnerIds: formData.partnere || allPartnere?.map((partner) => partner.id),
+        });
     });
 
     const batchAddUtlysning = (newUtlysninger: ApiUtlysningBatchPost) => {
@@ -107,7 +110,7 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
                         <PartnerSelectMultiple
                             name="partnere"
                             label="Velg partnere"
-                            existingPartnere={henting.utlysninger.map((u) => u.partnerId)}
+                            existingPartnere={henting.utlysninger.map((utlysning) => utlysning.partnerId)}
                         />
                     ) : null}
                     <FormSubmitButton

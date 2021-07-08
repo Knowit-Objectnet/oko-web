@@ -2,7 +2,7 @@ import { Box, Text, Flex } from '@chakra-ui/react';
 import * as React from 'react';
 import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
 import { usePartnere } from '../../services/partner/usePartnere';
-import { UtlysFlerPartnereButton } from './forms/UtlysFlerPartnereButton';
+import { UtlysFlerePartnereButton } from './forms/UtlysFlerePartnereButton';
 
 interface Props {
     henting: ApiEkstraHenting;
@@ -30,7 +30,7 @@ export const PameldtInfo: React.FC<Props> = ({ henting }) => {
                         </Text>
                     </Box>
                     {!isLoading && !isLoadingError && henting.utlysninger.length < allPartnere!.length ? (
-                        <UtlysFlerPartnereButton henting={henting} />
+                        <UtlysFlerePartnereButton henting={henting} />
                     ) : null}
                 </Flex>
             )}
