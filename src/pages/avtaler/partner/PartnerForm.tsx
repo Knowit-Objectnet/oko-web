@@ -41,7 +41,7 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
         defaultValues: partnerToEdit
             ? {
                   navn: partnerToEdit.navn,
-                  organisasjonstype: partnerToEdit.ideell ? ['ideell'] : ['kommersiell'],
+                  organisasjonstype: partnerToEdit.ideell ? ['ideell'] : ['ikke ideell'],
               }
             : undefined,
     });
@@ -105,10 +105,10 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
                     <Input name="navn" label="Navn på organisasjon" required />
                     <RadiobuttonGroup
                         name="organisasjonstype"
-                        label="Organisasjonstype"
+                        label="Er det en ideell organisasjon?"
                         options={[
-                            { value: 'ideell', label: 'Ideell organisasjon' },
-                            { value: 'kommersiell', label: 'Kommersiell organisasjon' },
+                            { value: 'ideell', label: 'Ja' },
+                            { value: 'ikke ideell', label: 'Nei' },
                         ]}
                         required
                     />
