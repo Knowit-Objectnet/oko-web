@@ -62,7 +62,17 @@ export const getEkstraUttakValidationSchema = (stasjonId?: string) =>
                 } else if (når && når === 'CUSTOM') {
                     return schema
                         .required()
-                        .min(yup.ref('startTidspunkt'), 'Sluttidspunktet må være etter starttidspunktet');
+                        .when('startTidspunkt', (startTidspunkt: Date | undefined, schema: yup.DateSchema) => {
+                            const minimumMinutesDuration = 15;
+                            if (startTidspunkt) {
+                                return schema.min(
+                                    add(startTidspunkt, { minutes: minimumMinutesDuration }),
+                                    `Sluttidspunktet må være minst ${minimumMinutesDuration} minutter etter starttidspunktet`,
+                                );
+                            } else {
+                                return schema;
+                            }
+                        });
                 } else {
                     return schema.notRequired();
                 }
