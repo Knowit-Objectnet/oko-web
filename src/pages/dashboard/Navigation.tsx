@@ -1,5 +1,6 @@
 import * as React from 'react';
 import List from '../../assets/List.svg';
+import Bell from '../../assets/Bell.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Location from '../../assets/Location.svg';
 import Bibliotek from '../../assets/Bibliotek.svg';
@@ -15,7 +16,7 @@ const getNavItemsForRole = (user: UserInfo) => {
                 <NavItem path="/avtaler" icon={<List />} label="Avtaler" />
                 <NavItem path="/stasjoner" icon={<Location />} label="Stasjoner" />
                 <NavItem path="/kategorier" icon={<Bibliotek />} label="Kategorier" />
-                <NavItem path="/ekstrauttak" icon={<List />} label="Ekstrauttak" />
+                <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
             </>
         );
     else if (user.isPartner)
@@ -29,7 +30,7 @@ const getNavItemsForRole = (user: UserInfo) => {
         return (
             <>
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
-                <NavItem path="/ekstrauttak" icon={<List />} label="Ekstrauttak" />
+                <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
             </>
         );
     return null;
