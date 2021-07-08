@@ -67,8 +67,8 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                     </Heading>
 
                     {user.isAdmin ? (
-                        <ButtonGroup spacing="3" size="sm">
-                            <EditAvtaleButton backgroundColor="white" size="sm" avtale={avtale} />
+                        <ButtonGroup spacing="3" size="xs">
+                            <EditAvtaleButton backgroundColor="white" avtale={avtale} />
                             <DeleteAvtaleButton backgroundColor="white" avtale={avtale} />
                         </ButtonGroup>
                     ) : null}
@@ -112,7 +112,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                             <Fade in={isExpanded} unmountOnExit>
                                 {user.isAdmin ? (
                                     <ButtonGroup spacing="3" size="sm">
-                                        <EditAvtaleButton backgroundColor="white" size="sm" avtale={avtale} />
+                                        <EditAvtaleButton backgroundColor="white" avtale={avtale} />
                                         <DeleteAvtaleButton backgroundColor="white" avtale={avtale} />
                                     </ButtonGroup>
                                 ) : null}
