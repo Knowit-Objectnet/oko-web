@@ -1,7 +1,7 @@
 import { VStack, Text, Box, Icon, Flex } from '@chakra-ui/react';
 import React from 'react';
 import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
-import { formatDate } from '../../utils/formatDateTime';
+import { formatDate, formatDateTime } from '../../utils/formatDateTime';
 import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import Calendar from '../../assets/Calendar.svg';
 import Location from '../../assets/Location.svg';
@@ -15,7 +15,10 @@ interface Props {
 export const EkstraUttakInfo: React.FC<Props> = ({ henting }) => {
     return (
         <VStack alignItems="flex-start">
-            <EkstraUttakInfoRow icon={<Calendar />} text={formatDate(parseISOIgnoreTimezone(henting.startTidspunkt))} />
+            <EkstraUttakInfoRow
+                icon={<Calendar />}
+                text={formatDateTime(parseISOIgnoreTimezone(henting.startTidspunkt))}
+            />
             <EkstraUttakInfoRow icon={<Location />} text={henting.stasjonNavn} />
             {/* <EkstraUttakInfoRow
                 icon={<Weight />}
