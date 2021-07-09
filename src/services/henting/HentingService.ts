@@ -32,7 +32,7 @@ export interface ApiPlanlagtHentingPatch {
     startTidspunkt?: string;
     sluttTidspunkt?: string;
     merknad?: string;
-    avlys?: boolean; // TODO: should probably be avlyst, not avlys -> update if fixed in backend
+    avlyst?: boolean; // TODO: should probably be avlyst, not avlys -> update if fixed in backend
     aarsak?: string; // TODO, should probably be avlystAarsak -> update if fixed in backend
 }
 

@@ -10,13 +10,12 @@ interface Props {
 
 export const AvlystDetails: React.FC<Props & StackProps> = ({ id, aarsak, ...props }) => {
     const { data: aktor } = useAktorById(id);
-    console.log(aktor);
 
     return (
         <HStack spacing={2} padding="0.5rem" paddingLeft="1rem" backgroundColor="error" {...props} align="center">
             <Icon as={Warning} boxSize="2rem" />
             <HStack spacing={10} alignItems="baseline">
-                <Heading fontSize="lg">Henting avlyst av {aktor?.navn || null}</Heading>
+                <Heading fontSize="lg">Henting avlyst av {aktor?.navn || 'Admin'}</Heading>
                 <Text fontSize="sm" marginTop={4}>
                     {aarsak || null}
                 </Text>
