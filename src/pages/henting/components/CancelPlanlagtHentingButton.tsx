@@ -21,7 +21,7 @@ export const CancelPlanlagtHentingButton: React.FC<Props & ButtonProps> = ({ hen
             {
                 id: henting.id,
                 avlyst: true,
-                aarsak: henting.aarsak || undefined,
+                aarsakId: henting.aarsakId || undefined,
             },
             {
                 onSuccess: () => {

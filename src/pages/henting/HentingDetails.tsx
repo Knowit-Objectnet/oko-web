@@ -65,7 +65,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
         (henting) => (
             <>
                 {henting.avlyst && henting.avlystAv ? (
-                    <AvlystDetails id={henting.avlystAv} aarsak={henting.aarsak} mb="1em" />
+                    <AvlystDetails id={henting.avlystAv} aarsakId={henting.aarsakId} mb="1em" />
                 ) : null}
                 <Heading as="h1" fontWeight="normal" aria-label="Partner">
                     {henting.aktorNavn}
