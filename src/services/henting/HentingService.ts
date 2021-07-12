@@ -8,7 +8,7 @@ export interface ApiPlanlagtHenting {
     merknad: string | null;
     henteplanId: string; //UUID
     avlyst: string | null; //LocalTimeDate
-    aarsak: string | null;
+    aarsakId: string | null; //UUID
     avlystAv: string | null; //UUID
     avtaleId: string; //UUID
     aktorId: string; //UUID
@@ -32,8 +32,8 @@ export interface ApiPlanlagtHentingPatch {
     startTidspunkt?: string;
     sluttTidspunkt?: string;
     merknad?: string;
-    avlys?: boolean; // TODO: should probably be avlyst, not avlys -> update if fixed in backend
-    aarsak?: string; // TODO, should probably be avlystAarsak -> update if fixed in backend
+    avlyst?: boolean;
+    aarsakId?: string; //UUID
 }
 
 const hentingEndpoint = '/planlagte-hentinger';
