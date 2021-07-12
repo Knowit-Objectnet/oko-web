@@ -7,7 +7,6 @@ import { Input } from '../../../components/forms/input/Input';
 import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { CheckboxGroup } from '../../../components/forms/checkbox/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddPartner } from '../../../services/partner/useAddPartner';
 import { ApiPartner, ApiPartnerPatch, ApiPartnerPost } from '../../../services/partner/PartnerService';
@@ -17,6 +16,7 @@ import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
+import { RadiobuttonGroup } from '../../../components/forms/RadiobuttonGroup';
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
@@ -41,7 +41,7 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
         defaultValues: partnerToEdit
             ? {
                   navn: partnerToEdit.navn,
-                  organisasjonstype: partnerToEdit.ideell ? ['ideell'] : [],
+                  organisasjonstype: partnerToEdit.ideell ? ['ideell'] : ['ikke ideell'],
               }
             : undefined,
     });
@@ -103,10 +103,13 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på organisasjon" required />
-                    <CheckboxGroup
+                    <RadiobuttonGroup
                         name="organisasjonstype"
-                        label="Organisasjonstype"
-                        options={[{ value: 'ideell', label: 'Ideell organisasjon' }]}
+                        label="Er det en ideell organisasjon?"
+                        options={[
+                            { value: 'ideell', label: 'Ja' },
+                            { value: 'ikke ideell', label: 'Nei' },
+                        ]}
                         required
                     />
                     <FormSubmitButton

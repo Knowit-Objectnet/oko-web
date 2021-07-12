@@ -22,8 +22,8 @@ export const CancelPlanlagtHentingButton: React.FC<Props & Omit<ButtonProps, 'on
         updateHentingMutation.mutateAsync(
             {
                 id: henting.id,
-                avlys: true,
-                aarsak: henting.aarsak || undefined,
+                avlyst: true,
+                aarsakId: henting.aarsakId || undefined,
             },
             {
                 onSuccess: () => {

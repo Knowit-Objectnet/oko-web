@@ -1,22 +1,27 @@
 import * as React from 'react';
-import { Box, BoxProps, Heading, Text } from '@chakra-ui/react';
+import { Heading, HStack, Icon, StackProps, Text } from '@chakra-ui/react';
 import { useAktorById } from '../../../services/aktor/useAktorById';
+import Warning from '../../../assets/Warning.svg';
+import { useAarsakById } from '../../../services/aarsak/useAarsakById';
 
 interface Props {
     id: string;
-    aarsak: string | null;
+    aarsakId: string | null;
 }
 
-export const AvlystDetails: React.FC<Props & BoxProps> = ({ id, aarsak, ...props }) => {
+export const AvlystDetails: React.FC<Props & StackProps> = ({ id, aarsakId, ...props }) => {
     const { data: aktor } = useAktorById(id);
-    console.log(aktor);
+    const { data: aarsak } = useAarsakById(aarsakId || '');
 
     return (
-        <Box p={5} backgroundColor="error" borderRadius="0.5rem" {...props}>
-            <Heading fontSize="xl">{aktor?.navn || null}:</Heading>
-            <Text fontSize="sm" mt={4}>
-                {aarsak || null}
-            </Text>
-        </Box>
+        <HStack spacing={2} padding="0.5rem" paddingLeft="1rem" backgroundColor="error" {...props} align="center">
+            <Icon as={Warning} boxSize="2rem" />
+            <HStack spacing={10} alignItems="baseline">
+                <Heading fontSize="lg">Henting avlyst av {aktor?.navn || 'Admin'}</Heading>
+                <Text fontSize="sm" marginTop={4}>
+                    {aarsak?.beskrivelse || null}
+                </Text>
+            </HStack>
+        </HStack>
     );
 };
