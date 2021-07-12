@@ -9,7 +9,15 @@ interface Props {
 export const KategoriList: React.FC<Props & Pick<TagProps, 'size'>> = ({ kategorier, size }) => (
     <UnorderedList display="flex" flexFlow="row wrap" margin="0" paddingTop="1">
         {kategorier.map((kategori) => (
-            <Tag as="li" key={kategori.id} size={size || 'sm'} marginBottom="1" marginRight="1">
+            <Tag
+                as="li"
+                key={kategori.id}
+                size={size || 'sm'}
+                marginBottom="1"
+                marginRight="1"
+                padding={2}
+                fontSize="0.8rem"
+            >
                 {kategori.navn}
             </Tag>
         ))}
