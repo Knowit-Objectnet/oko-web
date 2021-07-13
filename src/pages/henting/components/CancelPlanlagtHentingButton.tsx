@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 import { useUpdateHenting } from '../../../services/henting/useUpdateHenting';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useErrorToast } from '../../../components/toasts/useErrorToast';

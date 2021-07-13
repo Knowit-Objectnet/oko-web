@@ -6,7 +6,7 @@ import {
     ApiPlanlagtHentingPatch,
     patchPlanlagtHenting,
     planlagtHentingDefaultQueryKey,
-} from './HentingService';
+} from './PlanlagtHentingService';
 
 export const useUpdateHenting = (): UseMutationResult<ApiPlanlagtHenting, ApiError, ApiPlanlagtHentingPatch> =>
     useMutationWithInvalidation<ApiPlanlagtHenting, ApiError, ApiPlanlagtHentingPatch>(

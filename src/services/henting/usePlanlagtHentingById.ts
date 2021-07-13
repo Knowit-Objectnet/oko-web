@@ -1,5 +1,5 @@
 import { UseQueryOptions } from 'react-query';
-import { ApiPlanlagtHenting, getPlanlagtHentingById, planlagtHentingDefaultQueryKey } from './HentingService';
+import { ApiPlanlagtHenting, getPlanlagtHentingById, planlagtHentingDefaultQueryKey } from './PlanlagtHentingService';
 import { useQueryWithLazyResult } from '../useQueryWithLazyResult';
 import { LazyResult } from 'lemons';
 import { ApiError } from '../httpClient';
