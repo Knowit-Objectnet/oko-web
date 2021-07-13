@@ -7,7 +7,7 @@ import { formatTime } from '../../../utils/formatDateTime';
 import { AvlystBadge } from '../../henting/components/AvlystBadge';
 
 const getEventStyle = (event: CalendarEvent) => {
-    if (event.henting.avlyst) {
+    if (event.hentingWrapper.planlagtHenting?.avlyst) {
         return {
             backgroundColor: 'errorBackground',
             color: 'onError',
@@ -61,19 +61,19 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
                 flexDirection={compactView ? 'row' : 'column'}
                 as={Link}
                 to={{
-                    pathname: `/henting/${event.henting.id}`,
+                    pathname: `/henting/${event.hentingWrapper.id}`,
                     // We pass the henting object, to avoid unnecessary loading state in details view
-                    state: { henting: event.henting, prevPath: location.pathname + location.search },
+                    state: { henting: event.hentingWrapper, prevPath: location.pathname + location.search },
                 }}
             >
                 <Text as="span" marginRight={compactView ? '1' : 0} fontWeight="medium">
-                    {event.henting.aktorNavn}
+                    {event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
                 </Text>
                 <Text as="span" fontStyle="italic">
-                    {event.henting.stasjonNavn}
+                    {event.hentingWrapper.stasjonNavn}
                 </Text>
             </LinkOverlay>
-            {event.henting.avlyst && !compactView ? (
+            {event.hentingWrapper.planlagtHenting?.avlyst && !compactView ? (
                 <Box paddingTop="1">
                     <AvlystBadge backgroundColor="transparent" padding={0} />
                 </Box>

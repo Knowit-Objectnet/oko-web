@@ -7,7 +7,6 @@ export interface ApiEkstraHenting {
     startTidspunkt: string; //LocalTimeDate
     sluttTidspunkt: string; //LocalTimeDate
     beskrivelse: string | null;
-    aktorNavn: string;
     stasjonId: string; //UUID
     stasjonNavn: string;
     godkjentUtlysning: ApiUtlysning | null;

@@ -1,16 +1,20 @@
 import { DateRange, Event } from 'react-big-calendar';
-import { usePrefetchHentinger } from './usePrefetchHentinger';
+import { usePrefetchPlanlagteHentinger } from './usePrefetchPlanlagteHentinger';
 import { endOfISOWeek, endOfMonth, startOfISOWeek, startOfMonth } from 'date-fns';
 import { CalendarView, VIEWS } from './useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
 import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHentinger';
-import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
+import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService';
+import { useEkstraHentinger } from '../../../services/henting/useEkstraHentinger';
+import { usePrefetchEkstraHentinger } from './usePrefetchEkstraHentinger';
+import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 
 export interface CalendarEvent extends Event {
     start: Date;
     end: Date;
-    henting: ApiPlanlagtHenting;
+    hentingWrapper: ApiHentingWrapper;
 }
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
@@ -31,11 +35,38 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     }
 };
 
-const transformToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): CalendarEvent => ({
+const transformPlanlagteHentingerToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): CalendarEvent => ({
     start: parseISOIgnoreTimezone(planlagtHenting.startTidspunkt),
     end: parseISOIgnoreTimezone(planlagtHenting.sluttTidspunkt),
     title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
-    henting: planlagtHenting,
+    hentingWrapper: {
+        id: planlagtHenting.id,
+        startTidspunkt: planlagtHenting.startTidspunkt,
+        sluttTidspunkt: planlagtHenting.sluttTidspunkt,
+        type: 'PLANLAGT',
+        planlagtHenting,
+        stasjonId: planlagtHenting.stasjonId,
+        stasjonNavn: planlagtHenting.stasjonNavn,
+        aktorId: planlagtHenting.aktorId,
+        aktorNavn: planlagtHenting.aktorNavn,
+    },
+});
+
+const transformEkstraHentingerToCalendarEvent = (ekstraHenting: ApiEkstraHenting): CalendarEvent => ({
+    start: parseISOIgnoreTimezone(ekstraHenting.startTidspunkt),
+    end: parseISOIgnoreTimezone(ekstraHenting.sluttTidspunkt),
+    title: `${ekstraHenting.godkjentUtlysning?.partnerNavn} - ${ekstraHenting.stasjonNavn}`,
+    hentingWrapper: {
+        id: ekstraHenting.id,
+        startTidspunkt: ekstraHenting.startTidspunkt,
+        sluttTidspunkt: ekstraHenting.sluttTidspunkt,
+        type: 'EKSTRA',
+        ekstraHenting,
+        stasjonId: ekstraHenting.stasjonId,
+        stasjonNavn: ekstraHenting.stasjonNavn,
+        aktorId: ekstraHenting.godkjentUtlysning?.partnerId,
+        aktorNavn: ekstraHenting.godkjentUtlysning?.partnerNavn,
+    },
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
@@ -55,12 +86,32 @@ export const useCalendarEvents = (): CalendarEvent[] => {
         },
     );
 
+    const { data: ekstraHentinger } = useEkstraHentinger(
+        {
+            after: intervalToFetch.start.toISOString(),
+            before: intervalToFetch.end.toISOString(),
+        },
+        {
+            keepPreviousData: true,
+            refetchInterval: 30_000,
+        },
+    );
+
     // Fetching events for previous and next interval as well
-    usePrefetchHentinger(intervalToFetch);
+    usePrefetchPlanlagteHentinger(intervalToFetch);
+    usePrefetchEkstraHentinger(intervalToFetch);
 
     const filteredPlanlagteHentinger = (planlagteHentinger ?? []).filter((henting) =>
         Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting), true),
     );
 
-    return filteredPlanlagteHentinger.map(transformToCalendarEvent);
+    const filteredEkstraHentinger = (ekstraHentinger ?? []).filter((henting) =>
+        Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting), true),
+    );
+
+    const allCalendarEvents = filteredPlanlagteHentinger
+        .map(transformPlanlagteHentingerToCalendarEvent)
+        .concat(filteredEkstraHentinger.map(transformEkstraHentingerToCalendarEvent));
+
+    return allCalendarEvents;
 };

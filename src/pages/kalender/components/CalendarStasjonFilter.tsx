@@ -6,8 +6,9 @@ import ArrowRight from '../../../assets/ArrowRight.svg';
 import ArrowDown from '../../../assets/ArrowDown.svg';
 import { useCalendarState } from '../CalendarProvider';
 import { useStasjoner } from '../../../services/stasjon/useStasjoner';
-import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
+import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 
 const Wrapper = styled.div`
     display: flex;
@@ -68,7 +69,7 @@ export const CalendarStasjonFilter: React.FC = () => {
         else if (!~index) stasjonIder.push(stasjon);
         else stasjonIder.splice(index, 1);
 
-        const stasjonFilterFunction = (henting: ApiPlanlagtHenting) => {
+        const stasjonFilterFunction = (henting: ApiHentingWrapper) => {
             if (stasjonIder.length === 0) return true;
             else return stasjonIder.some((stasjonId) => henting.stasjonId === stasjonId);
         };

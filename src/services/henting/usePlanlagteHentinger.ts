@@ -4,7 +4,7 @@ import {
     ApiPlanlagtHentingParams,
     getPlanlagteHentinger,
     planlagtHentingDefaultQueryKey,
-} from './HentingService';
+} from './PlanlagtHentingService';
 
 export const usePlanlagteHentinger = (
     params?: ApiPlanlagtHentingParams,
