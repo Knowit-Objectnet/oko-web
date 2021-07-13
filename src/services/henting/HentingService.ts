@@ -2,7 +2,7 @@ import { ApiPlanlagtHenting } from './PlanlagtHentingService';
 import { ApiEkstraHenting } from './EkstraHentingService';
 import { extractResponse, httpClient, transformError } from '../httpClient';
 
-export interface ApiHenting {
+export interface ApiHentingWrapper {
     id: string;
     startTidspunkt: string; //LocalTimeDate
     sluttTidspunkt: string; //LocalTimeDate
@@ -18,5 +18,5 @@ export interface ApiHenting {
 const hentingEndpoint = '/henting';
 export const hentingDefaultQueryKey = 'findOneHentingById';
 
-export const getHentingById = (hentingId: string): Promise<ApiHenting> =>
-    httpClient().get<ApiHenting>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);
+export const getHentingById = (hentingId: string): Promise<ApiHentingWrapper> =>
+    httpClient().get<ApiHentingWrapper>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);

@@ -1,12 +1,12 @@
 import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 import { useState } from 'react';
-import { ApiHenting } from '../../../services/henting/HentingService';
+import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 
 export interface CalendarFilters {
     stasjonFilter?: CalendarFilterFn;
 }
 
-export type CalendarFilterFn = (henting: ApiHenting) => boolean;
+export type CalendarFilterFn = (henting: ApiHentingWrapper) => boolean;
 
 export const useCalendarFilters = (): {
     filters: CalendarFilters;

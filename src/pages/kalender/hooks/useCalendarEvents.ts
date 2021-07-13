@@ -9,12 +9,12 @@ import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService';
 import { useEkstraHentinger } from '../../../services/henting/useEkstraHentinger';
 import { usePrefetchEkstraHentinger } from './usePrefetchEkstraHentinger';
-import { ApiHenting } from '../../../services/henting/HentingService';
+import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 
 export interface CalendarEvent extends Event {
     start: Date;
     end: Date;
-    henting: ApiHenting;
+    hentingWrapper: ApiHentingWrapper;
 }
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
@@ -39,7 +39,7 @@ const transformPlanlagteHentingerToCalendarEvent = (planlagtHenting: ApiPlanlagt
     start: parseISOIgnoreTimezone(planlagtHenting.startTidspunkt),
     end: parseISOIgnoreTimezone(planlagtHenting.sluttTidspunkt),
     title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
-    henting: {
+    hentingWrapper: {
         id: planlagtHenting.id,
         startTidspunkt: planlagtHenting.startTidspunkt,
         sluttTidspunkt: planlagtHenting.sluttTidspunkt,
@@ -56,7 +56,7 @@ const transformEkstraHentingerToCalendarEvent = (ekstraHenting: ApiEkstraHenting
     start: parseISOIgnoreTimezone(ekstraHenting.startTidspunkt),
     end: parseISOIgnoreTimezone(ekstraHenting.sluttTidspunkt),
     title: `${ekstraHenting.godkjentUtlysning?.partnerNavn} - ${ekstraHenting.stasjonNavn}`,
-    henting: {
+    hentingWrapper: {
         id: ekstraHenting.id,
         startTidspunkt: ekstraHenting.startTidspunkt,
         sluttTidspunkt: ekstraHenting.sluttTidspunkt,

@@ -15,7 +15,7 @@ import { useAuth } from '../../auth/useAuth';
 import { DetailWithIcon } from './components/DetailWithIcon';
 import { DetailWithLabel } from './components/DetailWithLabel';
 import { AvlystDetails } from './components/AvlystDetails';
-import { ApiHenting } from '../../services/henting/HentingService';
+import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
 
 const getDayString = (date: Date) => {
@@ -31,7 +31,7 @@ interface Props {
 
 export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
     const { user } = useAuth();
-    const { state: locationState } = useLocation<{ henting?: ApiHenting; prevPath?: string }>();
+    const { state: locationState } = useLocation<{ henting?: ApiHentingWrapper; prevPath?: string }>();
 
     const hentingQuery = useHentingById(hentingId, {
         initialData: locationState?.henting,
@@ -47,13 +47,13 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
         }
     };
 
-    const getCancelButton = (henting: ApiHenting) => {
+    const getCancelButton = (henting: ApiHentingWrapper) => {
         if (!henting.planlagtHenting?.avlyst && userCanCancelHenting(henting)) {
             return <CancelPlanlagtHentingButton henting={henting.planlagtHenting!} variant="outline" />;
         }
     };
 
-    const userCanCancelHenting = (henting: ApiHenting) => {
+    const userCanCancelHenting = (henting: ApiHentingWrapper) => {
         const aktorUserOwnsHenting = henting.aktorId && user.ownsResource(henting.aktorId);
         const stasjonUserOwnsHenting = user.ownsResource(henting.stasjonId);
         return user.isAdmin || aktorUserOwnsHenting || stasjonUserOwnsHenting;
@@ -64,48 +64,48 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
         () => null,
         () => <>Vennligst vent...</>,
         () => <>Klarte dessverre ikke å finne informasjon for denne hentingen</>,
-        (henting) => (
+        (hentingWrapper) => (
             <>
-                {henting.planlagtHenting?.avlyst && henting.planlagtHenting?.avlystAv ? (
+                {hentingWrapper.planlagtHenting?.avlyst && hentingWrapper.planlagtHenting?.avlystAv ? (
                     <AvlystDetails
-                        id={henting.planlagtHenting.avlystAv}
-                        aarsakId={henting.planlagtHenting?.aarsakId}
+                        id={hentingWrapper.planlagtHenting.avlystAv}
+                        aarsakId={hentingWrapper.planlagtHenting?.aarsakId}
                         mb="1em"
                     />
                 ) : null}
                 <Heading as="h1" fontWeight="normal" aria-label="Partner">
-                    {henting.aktorNavn}
+                    {hentingWrapper.aktorNavn}
                 </Heading>
                 <VStack spacing="3" alignItems="flex-start" marginTop="4">
                     <DetailWithIcon icon={Location} label="Stasjon">
-                        {henting.stasjonNavn}
+                        {hentingWrapper.stasjonNavn}
                     </DetailWithIcon>
                     <DetailWithIcon icon={Calendar} label="Dato">
-                        <time>{getDayString(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
+                        <time>{getDayString(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
                     </DetailWithIcon>
                     <DetailWithIcon icon={Clock} label="Tidspunkt">
                         {`Fra kl. `}
-                        <time>{formatTime(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
+                        <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
                         {` til kl. `}
-                        <time>{formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))}</time>
+                        <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt))}</time>
                     </DetailWithIcon>
-                    {henting.planlagtHenting && henting.planlagtHenting.kategorier.length > 0 ? (
+                    {hentingWrapper.planlagtHenting && hentingWrapper.planlagtHenting.kategorier.length > 0 ? (
                         <DetailWithLabel label="Kategorier">
                             <KategoriList
                                 size="md"
-                                kategorier={henting.planlagtHenting.kategorier.map(({ kategori }) => kategori)}
+                                kategorier={hentingWrapper.planlagtHenting.kategorier.map(({ kategori }) => kategori)}
                             />
                         </DetailWithLabel>
                     ) : null}
-                    {henting.planlagtHenting?.merknad ? (
+                    {hentingWrapper.planlagtHenting?.merknad ? (
                         <DetailWithLabel label="Merknad">
-                            <Text>{henting.planlagtHenting?.merknad}</Text>
+                            <Text>{hentingWrapper.planlagtHenting?.merknad}</Text>
                         </DetailWithLabel>
                     ) : null}
                 </VStack>
                 <ButtonGroup marginTop="10">
                     {getBackButton()}
-                    {getCancelButton(henting)}
+                    {getCancelButton(hentingWrapper)}
                 </ButtonGroup>
             </>
         ),
