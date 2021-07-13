@@ -13,21 +13,32 @@ import { ApiError } from '../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../utils/forms/formErrorMessages';
-import { WarningBody, WarningContainer, WarningTitle } from '../../components/forms/Warning';
-import { ApiAarsak, ApiAarsakPatch, ApiAarsakPost } from '../../services/aarsak/AarsakService';
+import { AarsakType, ApiAarsak, ApiAarsakPatch, ApiAarsakPost } from '../../services/aarsak/AarsakService';
 import { useAddAarsak } from '../../services/aarsak/useAddAarsak';
 import { useUpdateAarsak } from '../../services/aarsak/useUpdateAarsak';
+import { RadiobuttonGroup, RadioOption } from '../../components/forms/RadiobuttonGroup';
 
 interface AarsakFormData {
     beskrivelse: string;
+    type: AarsakType;
 }
 
+const aarsakTypeOptions: Array<RadioOption<AarsakType>> = [
+    { value: 'PARTNER', label: 'Partner' },
+    { value: 'STASJON', label: 'Stasjon' },
+    { value: 'ALLE', label: 'Alle' },
+];
+
 const validationSchema = yup.object().shape({
-    beskrivelse: yup.string().label('Avlysningstekst').required().min(2),
+    type: yup
+        .mixed()
+        .label('type for årsaken')
+        .required()
+        .oneOf(aarsakTypeOptions.map((aarsakType) => aarsakType.value)),
+    beskrivelse: yup.string().label('avlysningstekst').required().min(2),
 });
 
 interface Props {
-    /** By passing an existing kategori, the form will be in edit mode **/
     aarsakToEdit?: ApiAarsak;
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
@@ -91,21 +102,10 @@ export const AarsakForm: React.FC<Props> = ({ aarsakToEdit, onSuccess }) => {
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-
-                    {aarsakToEdit ? (
-                        <WarningContainer variant="warning">
-                            <WarningTitle title="Advarsel" />
-                            <WarningBody>
-                                Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.
-                            </WarningBody>
-                            <Input name="beskrivelse" label="Beskrivelse av årsak" required />
-                        </WarningContainer>
-                    ) : (
-                        <Input name="beskrivelse" label="Beskrivelse av årsak" required />
-                    )}
-
+                    <RadiobuttonGroup name="type" label="Type årsak" options={aarsakTypeOptions} required />
+                    <Input name="beskrivelse" label="Beskrivelse av årsak" required />
                     <FormSubmitButton
-                        label={aarsakToEdit ? 'Lagre endringer' : 'Registrer ny årsak'}
+                        label={aarsakToEdit ? 'Lagre endringer' : 'Registrer ny avlysningstekst'}
                         isLoading={updateAarsakMutation.isLoading || addAarsakMutation.isLoading}
                         loadingText="Lagrer..."
                     />

@@ -19,12 +19,11 @@ import Warning from '../../../assets/Warning.svg';
 import { AarsakSelect } from '../../../components/forms/AarsakSelect';
 
 interface AvlystHentingFormData {
-    avlystAarsak: string;
+    avlysningsaarsak: string;
 }
 
 const validationSchema = yup.object().shape({
-    //Usikker på hva dette gjør sånn egentlig
-    avlystAarsak: yup.string().ensure().label('årsak for avlysning').required(),
+    avlysningsaarsak: yup.string().ensure().label('årsak for avlysning').required(),
 });
 
 interface Props {
@@ -39,7 +38,7 @@ export const AvlystHentingForm: React.FC<Props> = ({ hentingToCancel, onSuccess 
         resolver: yupResolver(validationSchema),
     });
 
-    const { user } = useAuth(); //sjekk om dette er håndtert andre plasser
+    const { user } = useAuth();
 
     const updateHentingMutation = useUpdateHenting();
     const showSuccessToast = useSuccessToast();
@@ -49,7 +48,7 @@ export const AvlystHentingForm: React.FC<Props> = ({ hentingToCancel, onSuccess 
         setApiOrNetworkError(undefined);
         updateHenting({
             avlyst: true,
-            aarsakId: formData.avlystAarsak[0] || undefined,
+            aarsakId: formData.avlysningsaarsak || undefined,
             id: hentingToCancel.id,
         });
     });
@@ -86,23 +85,12 @@ export const AvlystHentingForm: React.FC<Props> = ({ hentingToCancel, onSuccess 
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction instructions={instructions} useDefault={false} />
                     <ErrorMessages globalError={apiOrNetworkError} />
-
-                    <>
-                        {user.isPartner ? ( //Diverserer midlertidig ikke på partnerårssaker og stasjonsårssaker
-                            <>
-                                <AarsakSelect name="avlysningsaarsak" label="Avlysningsårsak" required />
-                            </>
-                        ) : (
-                            <>
-                                <AarsakSelect name="avlysningsaarsak" label="Avlysningsårsak" required />
-                            </>
-                        )}
-                        <FormSubmitButton
-                            label={hentingToCancel ? 'Avlys hentingen' : 'Avlys ny henting'}
-                            isLoading={updateHentingMutation.isLoading}
-                            loadingText="Lagrer..."
-                        />
-                    </>
+                    <AarsakSelect name="avlysningsaarsak" label="Avlysningsårsak" required />
+                    <FormSubmitButton
+                        label={hentingToCancel ? 'Avlys hentingen' : 'Avlys ny henting'}
+                        isLoading={updateHentingMutation.isLoading}
+                        loadingText="Lagrer..."
+                    />
                 </Stack>
             </form>
         </FormProvider>

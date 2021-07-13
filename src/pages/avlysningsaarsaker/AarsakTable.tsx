@@ -17,6 +17,7 @@ export const AarsakTable: React.FC = () => {
             <Thead>
                 <Tr>
                     <Th scope="col">Beskrivelse</Th>
+                    <Th scope="col">Årsakstype</Th>
                     <Th scope="col">
                         <VisuallyHidden>Handlinger</VisuallyHidden>
                     </Th>
@@ -26,6 +27,7 @@ export const AarsakTable: React.FC = () => {
                 {sortedAarsaker?.map((aarsak) => (
                     <Tr key={aarsak.id}>
                         <Td>{aarsak.beskrivelse}</Td>
+                        <Td>{aarsak.type}</Td>
                         <Td textAlign="end">
                             <ButtonGroup spacing="3" size="sm">
                                 <EditAarsakButton aarsak={aarsak} />
