@@ -2,6 +2,8 @@ import * as React from 'react';
 import { NavLink, NavLinkProps } from 'react-router-dom';
 import { Box, Flex, Link, LinkProps } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
+import { Circle } from '@chakra-ui/react';
+import { colors } from '../../theme/foundations/colors';
 
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link
@@ -54,14 +56,26 @@ interface Props {
     icon: React.ReactNode;
     label: string;
     exact?: boolean;
+    notification?: { color: string; textColor: string; count?: () => number }; //TODO: Create a function instead to get number of notifications
 }
 
 export const NavItem: React.FC<Props> = (props) => (
     <StyledNavLink to={props.path} exact={props.exact}>
         <Center>
             <Icon {...iconStyle}>{props.icon}</Icon>
-            <Box as="span" marginLeft={{ base: '0', tablet: '1' }}>
+            <Box as={Flex} marginLeft={{ base: '0', tablet: '1' }} alignItems="center">
                 {props.label}
+                {props.notification ? (
+                    <Circle
+                        size={7}
+                        backgroundColor={props.notification.color}
+                        fontSize="sm"
+                        marginLeft={2}
+                        textColor={props.notification.textColor}
+                    >
+                        1
+                    </Circle>
+                ) : null}
             </Box>
         </Center>
     </StyledNavLink>
