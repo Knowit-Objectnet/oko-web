@@ -1,9 +1,6 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiHenteplanKategori } from '../henteplan/HenteplanService';
 
-export type AvlystHentingAarsakPartner = 'KAPASITET' | 'FERIE' | 'ANNET';
-export type AvlystHentingAarsakStasjon = 'STENGT' | 'VARER' | 'ANNET';
-
 export interface ApiPlanlagtHenting {
     id: string; //UUID
     startTidspunkt: string; //LocalTimeDate

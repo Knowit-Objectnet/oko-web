@@ -14,17 +14,17 @@ import { ApiError } from '../../../services/httpClient';
 import '../../../utils/forms/formErrorMessages';
 import { ApiPlanlagtHenting, ApiPlanlagtHentingPatch } from '../../../services/henting/HentingService';
 import { useUpdateHenting } from '../../../services/henting/useUpdateHenting';
-import { AvlystHentingFormAarsakPartner } from './AvlystHentingFormAarsakPartner';
 import { useAuth } from '../../../auth/useAuth';
 import Warning from '../../../assets/Warning.svg';
+import { AarsakSelect } from '../../../components/forms/AarsakSelect';
 
 interface AvlystHentingFormData {
-    avlystAarsak: Array<string>;
+    avlystAarsak: string;
 }
 
 const validationSchema = yup.object().shape({
     //Usikker på hva dette gjør sånn egentlig
-    avlystAarsak: yup.array(yup.string()).ensure().label('årsak for avlysning'),
+    avlystAarsak: yup.string().ensure().label('årsak for avlysning').required(),
 });
 
 interface Props {
@@ -39,7 +39,7 @@ export const AvlystHentingForm: React.FC<Props> = ({ hentingToCancel, onSuccess 
         resolver: yupResolver(validationSchema),
     });
 
-    const { user } = useAuth();
+    const { user } = useAuth(); //sjekk om dette er håndtert andre plasser
 
     const updateHentingMutation = useUpdateHenting();
     const showSuccessToast = useSuccessToast();
@@ -48,9 +48,8 @@ export const AvlystHentingForm: React.FC<Props> = ({ hentingToCancel, onSuccess 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
         updateHenting({
-            ...formData,
-            avlys: true,
-            aarsak: hentingToCancel.aarsak || undefined,
+            avlyst: true,
+            aarsakId: formData.avlystAarsak[0] || undefined,
             id: hentingToCancel.id,
         });
     });
@@ -87,26 +86,22 @@ export const AvlystHentingForm: React.FC<Props> = ({ hentingToCancel, onSuccess 
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction instructions={instructions} useDefault={false} />
                     <ErrorMessages globalError={apiOrNetworkError} />
+
                     <>
-                        {user.isPartner ? (
+                        {user.isPartner ? ( //Diverserer midlertidig ikke på partnerårssaker og stasjonsårssaker
                             <>
-                                <AvlystHentingFormAarsakPartner />
-                                <FormSubmitButton
-                                    label={hentingToCancel ? 'Avlys hentingen' : 'Avlys ny henting'}
-                                    isLoading={updateHentingMutation.isLoading}
-                                    loadingText="Lagrer..."
-                                />
+                                <AarsakSelect name="avlysningsaarsak" label="Avlysningsårsak" required />
                             </>
                         ) : (
                             <>
-                                <AvlystHentingFormAarsakPartner />
-                                <FormSubmitButton
-                                    label={hentingToCancel ? 'Avlys hentingen' : 'Avlys ny henting'}
-                                    isLoading={updateHentingMutation.isLoading}
-                                    loadingText="Lagrer..."
-                                />
+                                <AarsakSelect name="avlysningsaarsak" label="Avlysningsårsak" required />
                             </>
                         )}
+                        <FormSubmitButton
+                            label={hentingToCancel ? 'Avlys hentingen' : 'Avlys ny henting'}
+                            isLoading={updateHentingMutation.isLoading}
+                            loadingText="Lagrer..."
+                        />
                     </>
                 </Stack>
             </form>
