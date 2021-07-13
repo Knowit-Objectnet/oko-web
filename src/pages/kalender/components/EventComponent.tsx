@@ -7,7 +7,7 @@ import { formatTime } from '../../../utils/formatDateTime';
 import { AvlystBadge } from '../../henting/components/AvlystBadge';
 
 const getEventStyle = (event: CalendarEvent) => {
-    if (event.henting.avlyst) {
+    if (event.henting.planlagtHenting?.avlyst) {
         return {
             backgroundColor: 'errorBackground',
             color: 'onError',
@@ -67,13 +67,13 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
                 }}
             >
                 <Text as="span" marginRight={compactView ? '1' : 0} fontWeight="medium">
-                    {event.henting.aktorNavn}
+                    {event.henting.aktorNavn || 'Ingen påmeldt'}
                 </Text>
                 <Text as="span" fontStyle="italic">
                     {event.henting.stasjonNavn}
                 </Text>
             </LinkOverlay>
-            {event.henting.avlyst && !compactView ? (
+            {event.henting.planlagtHenting?.avlyst && !compactView ? (
                 <Box paddingTop="1">
                     <AvlystBadge backgroundColor="transparent" padding={0} />
                 </Box>

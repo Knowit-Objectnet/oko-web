@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, ButtonGroup, Heading, Text, VStack } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
-import { ApiPlanlagtHenting } from '../../services/henting/HentingService';
+import { ApiPlanlagtHenting } from '../../services/henting/PlanlagtHentingService';
 import { usePlanlagtHentingById } from '../../services/henting/usePlanlagtHentingById';
 import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { formatDate, formatTime } from '../../utils/formatDateTime';
@@ -15,6 +15,8 @@ import { useAuth } from '../../auth/useAuth';
 import { DetailWithIcon } from './components/DetailWithIcon';
 import { DetailWithLabel } from './components/DetailWithLabel';
 import { AvlystDetails } from './components/AvlystDetails';
+import { ApiHenting } from '../../services/henting/HentingService';
+import { useHentingById } from '../../services/henting/useHentingById';
 
 const getDayString = (date: Date) => {
     if (isToday(date)) {
@@ -29,9 +31,9 @@ interface Props {
 
 export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
     const { user } = useAuth();
-    const { state: locationState } = useLocation<{ henting?: ApiPlanlagtHenting; prevPath?: string }>();
+    const { state: locationState } = useLocation<{ henting?: ApiHenting; prevPath?: string }>();
 
-    const hentingQuery = usePlanlagtHentingById(hentingId, {
+    const hentingQuery = useHentingById(hentingId, {
         initialData: locationState?.henting,
     });
 
@@ -45,14 +47,14 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
         }
     };
 
-    const getCancelButton = (henting: ApiPlanlagtHenting) => {
-        if (!henting.avlyst && userCanCancelHenting(henting)) {
-            return <CancelPlanlagtHentingButton henting={henting} variant="outline" />;
+    const getCancelButton = (henting: ApiHenting) => {
+        if (!henting.planlagtHenting?.avlyst && userCanCancelHenting(henting)) {
+            return <CancelPlanlagtHentingButton henting={henting.planlagtHenting!} variant="outline" />;
         }
     };
 
-    const userCanCancelHenting = (henting: ApiPlanlagtHenting) => {
-        const aktorUserOwnsHenting = user.ownsResource(henting.aktorId);
+    const userCanCancelHenting = (henting: ApiHenting) => {
+        const aktorUserOwnsHenting = henting.aktorId && user.ownsResource(henting.aktorId);
         const stasjonUserOwnsHenting = user.ownsResource(henting.stasjonId);
         return user.isAdmin || aktorUserOwnsHenting || stasjonUserOwnsHenting;
     };
@@ -64,8 +66,12 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
         () => <>Klarte dessverre ikke å finne informasjon for denne hentingen</>,
         (henting) => (
             <>
-                {henting.avlyst && henting.avlystAv ? (
-                    <AvlystDetails id={henting.avlystAv} aarsakId={henting.aarsakId} mb="1em" />
+                {henting.planlagtHenting?.avlyst && henting.planlagtHenting?.avlystAv ? (
+                    <AvlystDetails
+                        id={henting.planlagtHenting.avlystAv}
+                        aarsakId={henting.planlagtHenting?.aarsakId}
+                        mb="1em"
+                    />
                 ) : null}
                 <Heading as="h1" fontWeight="normal" aria-label="Partner">
                     {henting.aktorNavn}
@@ -83,14 +89,17 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                         {` til kl. `}
                         <time>{formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))}</time>
                     </DetailWithIcon>
-                    {henting.kategorier.length > 0 ? (
+                    {henting.planlagtHenting && henting.planlagtHenting.kategorier.length > 0 ? (
                         <DetailWithLabel label="Kategorier">
-                            <KategoriList size="md" kategorier={henting.kategorier.map(({ kategori }) => kategori)} />
+                            <KategoriList
+                                size="md"
+                                kategorier={henting.planlagtHenting.kategorier.map(({ kategori }) => kategori)}
+                            />
                         </DetailWithLabel>
                     ) : null}
-                    {henting.merknad ? (
+                    {henting.planlagtHenting?.merknad ? (
                         <DetailWithLabel label="Merknad">
-                            <Text>{henting.merknad}</Text>
+                            <Text>{henting.planlagtHenting?.merknad}</Text>
                         </DetailWithLabel>
                     ) : null}
                 </VStack>
