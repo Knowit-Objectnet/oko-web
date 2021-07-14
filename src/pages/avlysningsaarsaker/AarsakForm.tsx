@@ -31,7 +31,7 @@ const aarsakTypeOptions: Array<RadioOption<AarsakType>> = [
 const validationSchema = yup.object().shape({
     type: yup
         .mixed()
-        .label('type for årsaken')
+        .label('hvem som kan benytte årsaken')
         .required()
         .oneOf(aarsakTypeOptions.map((aarsakType) => aarsakType.value)),
     beskrivelse: yup.string().label('avlysningstekst').required().min(2),
