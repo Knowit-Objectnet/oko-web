@@ -17,6 +17,7 @@ import { DetailWithLabel } from './components/DetailWithLabel';
 import { AvlystDetails } from './components/AvlystDetails';
 import { BadgeDetail } from './components/BadgeDetail';
 import { RegisterVektButton } from './components/RegisterVektButton';
+import { colors } from '../../theme/foundations/colors';
 
 const getDayString = (date: Date) => {
     if (isToday(date)) {
@@ -73,8 +74,8 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     <Heading as="h1" fontWeight="normal" aria-label="Partner">
                         {henting.aktorNavn}
                     </Heading>
-                    <BadgeDetail text="Vekt mangler" />
-                    <RegisterVektButton />
+                    <BadgeDetail text="Vekt mangler" color={colors.Red} />
+                    <RegisterVektButton henting={henting} />
                 </HStack>
 
                 <VStack spacing="3" alignItems="flex-start" marginTop="4">

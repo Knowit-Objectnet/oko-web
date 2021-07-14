@@ -3,7 +3,6 @@ import { NavLink, NavLinkProps } from 'react-router-dom';
 import { Box, Flex, Link, LinkProps } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
 import { Circle } from '@chakra-ui/react';
-import { colors } from '../../theme/foundations/colors';
 
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link

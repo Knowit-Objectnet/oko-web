@@ -4,9 +4,11 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../auth/Roles';
 import { Loading } from '../components/Loading';
 import Kategorier from '../pages/kategorier';
+import Vekt from '../pages/vekt';
 
 const Kalender = React.lazy(() => import('../pages/kalender'));
 const Henting = React.lazy(() => import('../pages/henting'));
+const Registrering = React.lazy(() => import('../pages/vekt/registrering'));
 const Avtaler = React.lazy(() => import('../pages/avtaler'));
 const Stasjoner = React.lazy(() => import('../pages/stasjoner'));
 const MineAvtaler = React.lazy(() => import('../pages/minavtale'));
@@ -26,6 +28,9 @@ export const PageRouter: React.FC = () => (
             <Route path="/henting/:hentingId">
                 <Henting />
             </Route>
+            <Route path="/vekt/:hentingId">
+                <Registrering />
+            </Route>
             <ProtectedRoute path="/avtaler" requiredRoles={[Roles.Admin]}>
                 <Avtaler />
             </ProtectedRoute>
@@ -40,6 +45,9 @@ export const PageRouter: React.FC = () => (
             </ProtectedRoute>
             <ProtectedRoute path="/ekstrauttak" requiredRoles={[Roles.Stasjon, Roles.Admin, Roles.Partner]}>
                 <EkstraUttak />
+            </ProtectedRoute>
+            <ProtectedRoute path="/vekt" requiredRoles={[Roles.Stasjon, Roles.Admin, Roles.Partner]}>
+                <Vekt />
             </ProtectedRoute>
             <Route path="/">
                 <Home />

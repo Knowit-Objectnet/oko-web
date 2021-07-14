@@ -3,19 +3,24 @@ import { extractResponse, httpClient, transformError } from '../httpClient';
 export interface ApiKategori {
     id: string;
     navn: string;
+    vektkategori: boolean;
 }
 
 export interface ApiKategoriPatch {
     id: string;
     navn?: string;
+    vektkategori?: boolean;
 }
 
 export interface ApiKategoriParams {
     id?: string;
+    navn?: string;
+    vektkategori?: boolean;
 }
 
 export interface ApiKategoriPost {
     navn: string;
+    vektkategori: boolean;
 }
 
 const kategoriEndpoint = '/kategorier';
