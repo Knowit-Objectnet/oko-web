@@ -1,24 +1,29 @@
-import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import { Box, BoxProps, Flex, Icon, Text } from '@chakra-ui/react';
 import * as React from 'react';
+import { ReactElement } from 'react';
 
 interface Props {
     text: string;
     color: string;
+    iconLeft?: any;
+    iconRight?: any;
 }
 
-export const BadgeDetail: React.FC<Props & BoxProps> = ({ text, color, ...props }) => {
+export const BadgeDetail: React.FC<Props & BoxProps> = ({ text, color, iconLeft, iconRight, ...props }) => {
     return (
-        <Box
+        <Flex
             borderRadius={100}
             fontSize="0.8rem"
             backgroundColor={color}
-            display="inline"
             padding={2}
             paddingLeft={4}
             paddingRight={4}
             {...props}
+            alignItems="center"
         >
+            {iconLeft ? <Icon as={iconLeft} marginRight={1.5} /> : null}
             {text}
-        </Box>
+            {iconRight ? <Icon as={iconRight} marginLeft={1.5} /> : null}
+        </Flex>
     );
 };
