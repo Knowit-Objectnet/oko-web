@@ -12,7 +12,7 @@ import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { ApiPlanlagtHenting, ApiPlanlagtHentingPatch } from '../../../services/henting/HentingService';
+import { ApiPlanlagtHenting, ApiPlanlagtHentingPatch } from '../../../services/henting/PlanlagtHentingService';
 import { useUpdateHenting } from '../../../services/henting/useUpdateHenting';
 import { useAuth } from '../../../auth/useAuth';
 import Warning from '../../../assets/Warning.svg';
