@@ -33,29 +33,20 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
     const { user } = useAuth();
 
     const getEventText = () => {
-        if (user.isAdmin) {
-            return (
-                <>
-                    <Text as="span" marginRight={compactView ? '1' : 0} fontWeight="medium">
-                        {event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
-                    </Text>
-                    <Text as="span" fontStyle="italic">
-                        {event.hentingWrapper.stasjonNavn}
-                    </Text>
-                </>
-            );
-        } else if (user.isPartner) {
-            return (
-                <Text as="span" fontStyle="italic">
-                    {event.hentingWrapper.stasjonNavn}
-                </Text>
-            );
-        } else
-            return (
-                <Text as="span" marginRight={compactView ? '1' : 0} fontWeight="medium">
+        return user.isAdmin ? (
+            <>
+                <Text as="span" fontWeight="medium" textAlign="center">
                     {event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
                 </Text>
-            );
+                <Text as="span" fontStyle="italic" textAlign="center">
+                    {event.hentingWrapper.stasjonNavn}
+                </Text>
+            </>
+        ) : (
+            <Text as="span" textAlign="center">
+                {user.isPartner ? event.hentingWrapper.stasjonNavn : event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
+            </Text>
+        );
     };
 
     return (
@@ -78,15 +69,18 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             overflow="hidden"
             border="1px solid"
             borderRadius="4px"
+            justifyContent="center"
+            alignContent="center"
             {...getEventStyle(event)}
             {...props}
         >
-            <Box fontSize="12px" fontWeight="normal" marginRight={compactView ? '1' : 0}>
+            {/* <Box fontSize="12px" fontWeight="normal" marginRight={compactView ? '1' : 0}>
                 <time>{formatTime(event.start)}</time>–<time>{formatTime(event.end)}</time>
-            </Box>
+            </Box> */}
             <LinkOverlay
                 display="flex"
                 flexDirection={compactView ? 'row' : 'column'}
+                width="full"
                 as={Link}
                 to={{
                     pathname: `/henting/${event.hentingWrapper.id}`,
@@ -96,11 +90,11 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             >
                 {getEventText()}
             </LinkOverlay>
-            {event.hentingWrapper.planlagtHenting?.avlyst && !compactView ? (
+            {/* {event.hentingWrapper.planlagtHenting?.avlyst && !compactView ? (
                 <Box paddingTop="1">
                     <AvlystBadge backgroundColor="transparent" padding={0} />
                 </Box>
-            ) : null}
+            ) : null} */}
         </LinkBox>
     );
 };
