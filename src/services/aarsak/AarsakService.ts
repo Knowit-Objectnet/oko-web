@@ -1,6 +1,6 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 
-export type AarsakType = 'PARTNER' | 'STASJON' | 'ALLE';
+export type AarsakType = 'PARTNER' | 'STASJON';
 
 export interface ApiAarsak {
     id: string;
