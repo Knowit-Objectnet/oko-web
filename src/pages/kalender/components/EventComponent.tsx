@@ -3,24 +3,7 @@ import { LinkBox, LinkBoxProps, LinkOverlay, Text } from '@chakra-ui/react';
 import { CalendarEvent } from '../hooks/useCalendarEvents';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../auth/useAuth';
-
-const getEventStyle = (event: CalendarEvent) => {
-    if (event.hentingWrapper.planlagtHenting?.avlyst) {
-        return {
-            backgroundColor: 'avlystHenting',
-        };
-    }
-
-    if (event.hentingWrapper.ekstraHenting && !event.hentingWrapper.ekstraHenting.godkjentUtlysning) {
-        return {
-            backgroundColor: 'ekstraHenting',
-        };
-    }
-
-    return {
-        backgroundColor: 'hentingDefault',
-    };
-};
+import { getColorOfAktor } from '../../../utils/gradientColors';
 
 interface Props extends Pick<LinkBoxProps, 'position' | 'top' | 'left' | 'height' | 'width' | 'margin'> {
     event: CalendarEvent;
@@ -30,6 +13,26 @@ interface Props extends Pick<LinkBoxProps, 'position' | 'top' | 'left' | 'height
 export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }) => {
     const location = useLocation();
     const { user } = useAuth();
+
+    const getEventStyle = (event: CalendarEvent) => {
+        if (event.hentingWrapper.planlagtHenting?.avlyst) {
+            return {
+                backgroundColor: 'avlystHenting',
+            };
+        }
+
+        if (event.hentingWrapper.ekstraHenting && !event.hentingWrapper.ekstraHenting.godkjentUtlysning) {
+            return {
+                backgroundColor: 'ekstraHenting',
+            };
+        }
+
+        return {
+            backgroundColor: user.isStasjon
+                ? getColorOfAktor(event.partnerColors, event.hentingWrapper.aktorId)
+                : getColorOfAktor(event.stasjonColors, event.hentingWrapper.stasjonId),
+        };
+    };
 
     const getEventText = () => {
         return user.isAdmin ? (
