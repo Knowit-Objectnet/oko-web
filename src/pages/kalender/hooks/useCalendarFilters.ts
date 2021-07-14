@@ -20,7 +20,12 @@ export const useCalendarFilters = (): {
     //Set default behavious to only see own events. Have to use useEffect, as user.aktorId might be undefined initially
     useEffect(() => {
         if (user.isPartner)
-            setFilter({ partnerFilter: (henting: ApiHentingWrapper) => henting.aktorId === user.aktorId });
+            setFilter({
+                partnerFilter: (henting: ApiHentingWrapper) =>
+                    henting.aktorId === user.aktorId ||
+                    henting.ekstraHenting?.utlysninger.some((utlysning) => utlysning.partnerId === user.aktorId) ||
+                    false,
+            });
         if (user.isStasjon)
             setFilter({ stasjonFilter: (henting: ApiHentingWrapper) => henting.stasjonId === user.aktorId });
     }, [user.aktorId]);

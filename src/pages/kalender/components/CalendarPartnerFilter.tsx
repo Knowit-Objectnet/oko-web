@@ -11,7 +11,11 @@ export const CalendarPartnerFilter: React.FC = () => {
             name="partner-select"
             data={partnere}
             filterName="partnerFilter"
-            filterFn={(id, henting) => henting.aktorId === id}
+            filterFn={(id, henting) =>
+                henting.aktorId === id ||
+                henting.ekstraHenting?.utlysninger.some((utlysning) => utlysning.partnerId === id) ||
+                false
+            }
         />
     );
 };
