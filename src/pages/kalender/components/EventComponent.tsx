@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Box } from '@chakra-ui/layout';
 import { formatTime } from '../../../utils/formatDateTime';
 import { AvlystBadge } from '../../henting/components/AvlystBadge';
+import { useAuth } from '../../../auth/useAuth';
 
 const getEventStyle = (event: CalendarEvent) => {
     if (event.hentingWrapper.planlagtHenting?.avlyst) {
@@ -29,6 +30,33 @@ interface Props extends Pick<LinkBoxProps, 'position' | 'top' | 'left' | 'height
 
 export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }) => {
     const location = useLocation();
+    const { user } = useAuth();
+
+    const getEventText = () => {
+        if (user.isAdmin) {
+            return (
+                <>
+                    <Text as="span" marginRight={compactView ? '1' : 0} fontWeight="medium">
+                        {event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
+                    </Text>
+                    <Text as="span" fontStyle="italic">
+                        {event.hentingWrapper.stasjonNavn}
+                    </Text>
+                </>
+            );
+        } else if (user.isPartner) {
+            return (
+                <Text as="span" fontStyle="italic">
+                    {event.hentingWrapper.stasjonNavn}
+                </Text>
+            );
+        } else
+            return (
+                <Text as="span" marginRight={compactView ? '1' : 0} fontWeight="medium">
+                    {event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
+                </Text>
+            );
+    };
 
     return (
         <LinkBox
@@ -66,12 +94,7 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
                     state: { henting: event.hentingWrapper, prevPath: location.pathname + location.search },
                 }}
             >
-                <Text as="span" marginRight={compactView ? '1' : 0} fontWeight="medium">
-                    {event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
-                </Text>
-                <Text as="span" fontStyle="italic">
-                    {event.hentingWrapper.stasjonNavn}
-                </Text>
+                {getEventText()}
             </LinkOverlay>
             {event.hentingWrapper.planlagtHenting?.avlyst && !compactView ? (
                 <Box paddingTop="1">
