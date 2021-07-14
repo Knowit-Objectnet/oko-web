@@ -2,9 +2,6 @@ import React from 'react';
 import { LinkBox, LinkBoxProps, LinkOverlay, Text } from '@chakra-ui/react';
 import { CalendarEvent } from '../hooks/useCalendarEvents';
 import { Link, useLocation } from 'react-router-dom';
-import { Box } from '@chakra-ui/layout';
-import { formatTime } from '../../../utils/formatDateTime';
-import { AvlystBadge } from '../../henting/components/AvlystBadge';
 import { useAuth } from '../../../auth/useAuth';
 
 const getEventStyle = (event: CalendarEvent) => {
@@ -74,9 +71,6 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             {...getEventStyle(event)}
             {...props}
         >
-            {/* <Box fontSize="12px" fontWeight="normal" marginRight={compactView ? '1' : 0}>
-                <time>{formatTime(event.start)}</time>–<time>{formatTime(event.end)}</time>
-            </Box> */}
             <LinkOverlay
                 display="flex"
                 flexDirection={compactView ? 'row' : 'column'}
@@ -90,11 +84,6 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             >
                 {getEventText()}
             </LinkOverlay>
-            {/* {event.hentingWrapper.planlagtHenting?.avlyst && !compactView ? (
-                <Box paddingTop="1">
-                    <AvlystBadge backgroundColor="transparent" padding={0} />
-                </Box>
-            ) : null} */}
         </LinkBox>
     );
 };
