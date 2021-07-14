@@ -3,14 +3,15 @@ import * as React from 'react';
 
 interface Props {
     text: string;
+    color: string;
 }
 
-export const BadgeDetail: React.FC<Props & BoxProps> = ({ text, ...props }) => {
+export const BadgeDetail: React.FC<Props & BoxProps> = ({ text, color, ...props }) => {
     return (
         <Box
-            borderRadius="100"
+            borderRadius={100}
             fontSize="0.8rem"
-            backgroundColor="error"
+            backgroundColor={color}
             display="inline"
             padding={2}
             paddingLeft={4}
