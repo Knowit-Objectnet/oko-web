@@ -7,9 +7,9 @@ import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHen
 import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService';
-import { useEkstraHentinger } from '../../../services/henting/useEkstraHentinger';
 import { usePrefetchEkstraHentinger } from './usePrefetchEkstraHentinger';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
+import { useEkstraHentingerWithUtlysning } from '../../../services/henting/useEkstraHentingerWithUtlysning';
 
 export interface CalendarEvent extends Event {
     start: Date;
@@ -86,7 +86,7 @@ export const useCalendarEvents = (): CalendarEvent[] => {
         },
     );
 
-    const { data: ekstraHentinger } = useEkstraHentinger(
+    const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning(
         {
             after: intervalToFetch.start.toISOString(),
             before: intervalToFetch.end.toISOString(),
