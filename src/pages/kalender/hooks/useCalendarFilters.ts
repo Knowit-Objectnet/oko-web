@@ -1,6 +1,7 @@
 import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
+import { useAuth } from '../../../auth/useAuth';
 
 export interface CalendarFilters {
     stasjonFilter?: CalendarFilterFn;
@@ -13,7 +14,16 @@ export const useCalendarFilters = (): {
     filters: CalendarFilters;
     setFilter: (filters: CalendarFilters) => void;
 } => {
+    const { user } = useAuth();
     const [filters, setFilters] = useState<CalendarFilters>({});
+
+    //Set default behavious to only see own events. Have to use useEffect, as user.aktorId might be undefined initially
+    useEffect(() => {
+        if (user.isPartner)
+            setFilter({ partnerFilter: (henting: ApiHentingWrapper) => henting.aktorId === user.aktorId });
+        if (user.isStasjon)
+            setFilter({ stasjonFilter: (henting: ApiHentingWrapper) => henting.stasjonId === user.aktorId });
+    }, [user.aktorId]);
 
     const setFilter = (filter: CalendarFilters) => {
         // Merge together other possible filters with this updated/new one
