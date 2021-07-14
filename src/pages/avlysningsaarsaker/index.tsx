@@ -8,7 +8,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ApiAarsak } from '../../services/aarsak/AarsakService';
 
 const Aarsaker: React.FC = () => {
-    const { state: locationState } = useLocation<{ henting?: ApiAarsak; prevPath?: string }>();
+    const { state: locationState } = useLocation<{ aarsak?: ApiAarsak; prevPath?: string }>();
 
     const getBackButton = () => {
         if (locationState?.prevPath) {
