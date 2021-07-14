@@ -1,27 +1,65 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Heading } from '@chakra-ui/react';
-import { Box, Flex } from '@chakra-ui/layout';
+import { Button, ButtonGroup, Heading, HStack, VStack } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/layout';
 import { AddAarsakButton } from './AddAarsakButton';
-import { AarsakTable } from './AarsakTable';
+import { AarsakList } from './AarsakList';
+import { Link, useLocation } from 'react-router-dom';
+import { ApiAarsak } from '../../services/aarsak/AarsakService';
 
-const Aarsaker: React.FC = () => (
-    <>
-        <Helmet>
-            <title>Avlysningstekster</title>
-        </Helmet>
-        <Flex as="main" direction="column" paddingY="5" paddingX="10" marginX="auto" width="full">
-            <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
-                <Heading as="h1" fontWeight="medium" fontSize="4xl">
+const Aarsaker: React.FC = () => {
+    const { state: locationState } = useLocation<{ henting?: ApiAarsak; prevPath?: string }>();
+
+    const getBackButton = () => {
+        if (locationState?.prevPath) {
+            return (
+                <Button as={Link} to={locationState.prevPath} variant="outline">
+                    Tilbake
+                </Button>
+            );
+        }
+    };
+
+    return (
+        <>
+            <Helmet>
+                <title>Avlysningstekster</title>
+            </Helmet>
+            <Flex as="main" direction="column" paddingY="5" paddingX="10" marginX="auto" width="auto">
+                <Heading
+                    as="h1"
+                    fontWeight="medium"
+                    fontSize="4xl"
+                    width="full"
+                    paddingBottom="3"
+                    marginBottom="4"
+                    borderBottom="1px solid"
+                    borderBottomColor="gray.200"
+                >
                     Avlysningstekster
                 </Heading>
-                <AddAarsakButton />
+                <HStack margin="15">
+                    <VStack marginRight="20">
+                        <Heading as="h2" fontWeight="bold" fontSize="md">
+                            Stasjon
+                        </Heading>
+                        <AarsakList isPartnerAarsaker={false} />
+                    </VStack>
+
+                    <VStack>
+                        <Heading as="h2" fontWeight="bold" fontSize="md">
+                            Partner
+                        </Heading>
+                        <AarsakList isPartnerAarsaker={true} />
+                    </VStack>
+                </HStack>
+                <ButtonGroup justifyContent="space-between">
+                    {getBackButton()}
+                    <AddAarsakButton />
+                </ButtonGroup>
             </Flex>
-            <Box width="full" overflowX="auto">
-                <AarsakTable />
-            </Box>
-        </Flex>
-    </>
-);
+        </>
+    );
+};
 
 export default Aarsaker;

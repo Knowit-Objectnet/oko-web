@@ -2,9 +2,10 @@ import * as React from 'react';
 import { useSuccessToast } from '../../components/toasts/useSuccessToast';
 import { useErrorToast } from '../../components/toasts/useErrorToast';
 import { ConfirmationPopover } from '../../components/buttons/ConfirmationPopover';
-import { DeleteButton } from '../../components/buttons/DeleteButton';
 import { useDeleteAarsak } from '../../services/aarsak/useDeleteAarsak';
 import { ApiAarsak } from '../../services/aarsak/AarsakService';
+import { Icon, IconButton } from '@chakra-ui/react';
+import Cross from '../../assets/Cross.svg';
 
 interface Props {
     aarsak: ApiAarsak;
@@ -36,7 +37,7 @@ export const DeleteAarsakButton: React.FC<Props> = ({ aarsak }) => {
             onConfirm={handleDeleteAarsak}
             isLoading={deleteAarsakMutation.isLoading}
         >
-            <DeleteButton label="Slett" aria-label="Slett årsaken" />
+            <IconButton icon={<Icon as={Cross} boxSize={5} />} colorScheme="transparent" aria-label="Slett årsaken" />
         </ConfirmationPopover>
     );
 };
