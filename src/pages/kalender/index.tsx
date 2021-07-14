@@ -5,6 +5,7 @@ import { Stack, VStack } from '@chakra-ui/react';
 import { CalendarDatePicker } from './components/CalendarDatePicker';
 import { CalendarProvider } from './CalendarProvider';
 import { CalendarStasjonFilter } from './components/CalendarStasjonFilter';
+import { CalendarPartnerFilter } from './components/CalendarPartnerFilter';
 
 const Kalender: React.FC = () => (
     <CalendarProvider>
@@ -16,6 +17,7 @@ const Kalender: React.FC = () => (
             <VStack alignItems="flex-start" spacing="5">
                 <CalendarDatePicker />
                 <CalendarStasjonFilter />
+                <CalendarPartnerFilter />
             </VStack>
             <CalendarComponent />
         </Stack>
