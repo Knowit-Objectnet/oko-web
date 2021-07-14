@@ -7,16 +7,18 @@ import { useAuth } from '../../../auth/useAuth';
 const getEventStyle = (event: CalendarEvent) => {
     if (event.hentingWrapper.planlagtHenting?.avlyst) {
         return {
-            backgroundColor: 'errorBackground',
-            color: 'onError',
-            borderColor: 'error',
+            backgroundColor: 'avlystHenting',
+        };
+    }
+
+    if (event.hentingWrapper.ekstraHenting && !event.hentingWrapper.ekstraHenting.godkjentUtlysning) {
+        return {
+            backgroundColor: 'ekstraHenting',
         };
     }
 
     return {
-        backgroundColor: 'surface',
-        color: 'onSurface',
-        borderColor: 'DarkBeige',
+        backgroundColor: 'hentingDefault',
     };
 };
 
@@ -64,7 +66,7 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             fontWeight="normal"
             lineHeight="1.3"
             overflow="hidden"
-            border="1px solid"
+            // border="1px solid"
             borderRadius="4px"
             justifyContent="center"
             alignContent="center"
