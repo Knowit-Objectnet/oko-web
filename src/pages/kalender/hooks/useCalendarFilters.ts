@@ -4,6 +4,7 @@ import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 
 export interface CalendarFilters {
     stasjonFilter?: CalendarFilterFn;
+    partnerFilter?: CalendarFilterFn;
 }
 
 export type CalendarFilterFn = (henting: ApiHentingWrapper) => boolean;
