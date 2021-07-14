@@ -14,19 +14,19 @@ export const AarsakList: React.FC<Props> = ({ isPartnerAarsaker }) => {
     const sortedAarsaker = aarsaker?.sort((aarsakA, aarsakB) => aarsakA.beskrivelse.localeCompare(aarsakB.beskrivelse));
     const sortedAarsakerByType = sortedAarsaker?.filter((aarsak) => {
         if (isPartnerAarsaker) {
-            return aarsak.type == 'PARTNER' || aarsak.type == 'ALLE' ? aarsak : null;
+            return aarsak.type == 'PARTNER' ? aarsak : null;
         } else {
-            return aarsak.type == 'STASJON' || aarsak.type == 'ALLE' ? aarsak : null;
+            return aarsak.type == 'STASJON' ? aarsak : null;
         }
     });
 
     return (
         <Flex>
             <List>
-                {sortedAarsakerByType?.map((aarsak) => (
+                {sortedAarsakerByType?.map((aarsak, valgNumber) => (
                     <ListItem key={aarsak.id}>
                         <HStack>
-                            <Text fontSize="sm">Valg </Text>
+                            <Text fontSize="sm">Valg {valgNumber + 1} </Text>
                             <DeleteAarsakButton aarsak={aarsak} />
                         </HStack>
 

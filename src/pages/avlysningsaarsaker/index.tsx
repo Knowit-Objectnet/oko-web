@@ -38,7 +38,7 @@ const Aarsaker: React.FC = () => {
                 >
                     Avlysningstekster
                 </Heading>
-                <HStack margin="15">
+                <HStack margin="15" alignItems="flex-start">
                     <VStack marginRight="20">
                         <Heading as="h2" fontWeight="bold" fontSize="md">
                             Stasjon

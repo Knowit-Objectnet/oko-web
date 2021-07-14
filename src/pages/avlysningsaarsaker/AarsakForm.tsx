@@ -26,7 +26,6 @@ interface AarsakFormData {
 const aarsakTypeOptions: Array<RadioOption<AarsakType>> = [
     { value: 'PARTNER', label: 'Partner' },
     { value: 'STASJON', label: 'Stasjon' },
-    { value: 'ALLE', label: 'Alle' },
 ];
 
 const validationSchema = yup.object().shape({
@@ -72,7 +71,7 @@ export const AarsakForm: React.FC<Props> = ({ aarsakToEdit, onSuccess }) => {
     const addAarsak = (newAarsak: ApiAarsakPost) =>
         addAarsakMutation.mutate(newAarsak, {
             onSuccess: () => {
-                onApiSubmitSuccess(`Årsak ble registrert`);
+                onApiSubmitSuccess(`Årsaken ble registrert`);
             },
             onError: onApiSubmitError,
         });
