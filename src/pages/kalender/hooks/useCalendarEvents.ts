@@ -7,14 +7,20 @@ import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHen
 import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService';
-import { useEkstraHentinger } from '../../../services/henting/useEkstraHentinger';
 import { usePrefetchEkstraHentinger } from './usePrefetchEkstraHentinger';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
+import { useEkstraHentingerWithUtlysning } from '../../../services/henting/useEkstraHentingerWithUtlysning';
+import { useEffect, useState } from 'react';
+import { usePartnere } from '../../../services/partner/usePartnere';
+import { useStasjoner } from '../../../services/stasjon/useStasjoner';
+import { getGradientColors } from '../../../utils/gradientColors';
 
 export interface CalendarEvent extends Event {
     start: Date;
     end: Date;
     hentingWrapper: ApiHentingWrapper;
+    partnerColors: Record<string, string>;
+    stasjonColors: Record<string, string>;
 }
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
@@ -35,44 +41,59 @@ const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
     }
 };
 
-const transformPlanlagteHentingerToCalendarEvent = (planlagtHenting: ApiPlanlagtHenting): CalendarEvent => ({
-    start: parseISOIgnoreTimezone(planlagtHenting.startTidspunkt),
-    end: parseISOIgnoreTimezone(planlagtHenting.sluttTidspunkt),
-    title: `${planlagtHenting.aktorNavn} - ${planlagtHenting.stasjonNavn}`,
-    hentingWrapper: {
-        id: planlagtHenting.id,
-        startTidspunkt: planlagtHenting.startTidspunkt,
-        sluttTidspunkt: planlagtHenting.sluttTidspunkt,
-        type: 'PLANLAGT',
-        planlagtHenting,
-        stasjonId: planlagtHenting.stasjonId,
-        stasjonNavn: planlagtHenting.stasjonNavn,
-        aktorId: planlagtHenting.aktorId,
-        aktorNavn: planlagtHenting.aktorNavn,
-    },
+const transformPlanlagtHentingToHentingWrapper = (planlagtHenting: ApiPlanlagtHenting): ApiHentingWrapper => ({
+    id: planlagtHenting.id,
+    startTidspunkt: planlagtHenting.startTidspunkt,
+    sluttTidspunkt: planlagtHenting.sluttTidspunkt,
+    type: 'PLANLAGT',
+    planlagtHenting,
+    stasjonId: planlagtHenting.stasjonId,
+    stasjonNavn: planlagtHenting.stasjonNavn,
+    aktorId: planlagtHenting.aktorId,
+    aktorNavn: planlagtHenting.aktorNavn,
 });
 
-const transformEkstraHentingerToCalendarEvent = (ekstraHenting: ApiEkstraHenting): CalendarEvent => ({
-    start: parseISOIgnoreTimezone(ekstraHenting.startTidspunkt),
-    end: parseISOIgnoreTimezone(ekstraHenting.sluttTidspunkt),
-    title: `${ekstraHenting.godkjentUtlysning?.partnerNavn} - ${ekstraHenting.stasjonNavn}`,
-    hentingWrapper: {
-        id: ekstraHenting.id,
-        startTidspunkt: ekstraHenting.startTidspunkt,
-        sluttTidspunkt: ekstraHenting.sluttTidspunkt,
-        type: 'EKSTRA',
-        ekstraHenting,
-        stasjonId: ekstraHenting.stasjonId,
-        stasjonNavn: ekstraHenting.stasjonNavn,
-        aktorId: ekstraHenting.godkjentUtlysning?.partnerId,
-        aktorNavn: ekstraHenting.godkjentUtlysning?.partnerNavn,
-    },
+const transformEkstraHentingToHentingWrapper = (ekstraHenting: ApiEkstraHenting): ApiHentingWrapper => ({
+    id: ekstraHenting.id,
+    startTidspunkt: ekstraHenting.startTidspunkt,
+    sluttTidspunkt: ekstraHenting.sluttTidspunkt,
+    type: 'EKSTRA',
+    ekstraHenting,
+    stasjonId: ekstraHenting.stasjonId,
+    stasjonNavn: ekstraHenting.stasjonNavn,
+    aktorId: ekstraHenting.godkjentUtlysning?.partnerId,
+    aktorNavn: ekstraHenting.godkjentUtlysning?.partnerNavn,
 });
 
 export const useCalendarEvents = (): CalendarEvent[] => {
     const { selectedView, selectedDate, filters } = useCalendarState();
+    const [partnerColors, setPartnerColors] = useState<Record<string, string>>({});
+    const [stasjonColors, setStasjonColors] = useState<Record<string, string>>({});
+    const { data: partnere, isSuccess: partnerSuccess } = usePartnere({ queryOptions: { keepPreviousData: true } });
+    const { data: stasjoner, isSuccess: stasjonSuccess } = useStasjoner({ queryOptions: { keepPreviousData: true } });
+
+    useEffect(() => {
+        if (partnerSuccess) {
+            setPartnerColors(getGradientColors(partnere));
+        }
+    }, [partnere]);
+
+    useEffect(() => {
+        if (stasjonSuccess) {
+            setStasjonColors(getGradientColors(stasjoner));
+        }
+    }, [stasjoner]);
 
     const intervalToFetch = calculateDateRange(selectedDate, selectedView);
+
+    const transformHentingWrapperToCalendarEvent = (hentingWrapper: ApiHentingWrapper): CalendarEvent => ({
+        start: parseISOIgnoreTimezone(hentingWrapper.startTidspunkt),
+        end: parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt),
+        title: `${hentingWrapper.aktorNavn} - ${hentingWrapper.stasjonNavn}`,
+        hentingWrapper: hentingWrapper,
+        partnerColors: partnerColors,
+        stasjonColors: stasjonColors,
+    });
 
     // TODO: wrap in LazyResult in order to return loading/error status?
     const { data: planlagteHentinger } = usePlanlagteHentinger(
@@ -86,7 +107,7 @@ export const useCalendarEvents = (): CalendarEvent[] => {
         },
     );
 
-    const { data: ekstraHentinger } = useEkstraHentinger(
+    const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning(
         {
             after: intervalToFetch.start.toISOString(),
             before: intervalToFetch.end.toISOString(),
@@ -101,17 +122,12 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     usePrefetchPlanlagteHentinger(intervalToFetch);
     usePrefetchEkstraHentinger(intervalToFetch);
 
-    const filteredPlanlagteHentinger = (planlagteHentinger ?? []).filter((henting) =>
-        Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting), true),
-    );
+    const filteredHentinger = (planlagteHentinger || [])
+        .map(transformPlanlagtHentingToHentingWrapper)
+        .concat((ekstraHentinger ?? []).map(transformEkstraHentingToHentingWrapper))
+        .filter((henting) => Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting), true));
 
-    const filteredEkstraHentinger = (ekstraHentinger ?? []).filter((henting) =>
-        Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting), true),
-    );
-
-    const allCalendarEvents = filteredPlanlagteHentinger
-        .map(transformPlanlagteHentingerToCalendarEvent)
-        .concat(filteredEkstraHentinger.map(transformEkstraHentingerToCalendarEvent));
+    const allCalendarEvents = filteredHentinger.map(transformHentingWrapperToCalendarEvent);
 
     return allCalendarEvents;
 };

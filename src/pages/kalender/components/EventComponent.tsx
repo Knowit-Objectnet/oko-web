@@ -2,33 +2,63 @@ import React from 'react';
 import { LinkBox, LinkBoxProps, LinkOverlay, Text } from '@chakra-ui/react';
 import { CalendarEvent } from '../hooks/useCalendarEvents';
 import { Link, useLocation } from 'react-router-dom';
-import { Box } from '@chakra-ui/layout';
-import { formatTime } from '../../../utils/formatDateTime';
-import { AvlystBadge } from '../../henting/components/AvlystBadge';
-
-const getEventStyle = (event: CalendarEvent) => {
-    if (event.hentingWrapper.planlagtHenting?.avlyst) {
-        return {
-            backgroundColor: 'errorBackground',
-            color: 'onError',
-            borderColor: 'error',
-        };
-    }
-
-    return {
-        backgroundColor: 'surface',
-        color: 'onSurface',
-        borderColor: 'DarkBeige',
-    };
-};
+import { useAuth } from '../../../auth/useAuth';
+import { getColorOfAktor } from '../../../utils/gradientColors';
+import { colors } from '../../../theme/foundations/colors';
 
 interface Props extends Pick<LinkBoxProps, 'position' | 'top' | 'left' | 'height' | 'width' | 'margin'> {
     event: CalendarEvent;
     compactView?: boolean;
 }
 
+const addColorBand = (bandColor: string, backgroundColor: string) => {
+    return `linear-gradient(225deg, ${backgroundColor} 8px, ${bandColor} 8px, ${bandColor} 24px, ${backgroundColor} 24px)`;
+};
+
 export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }) => {
     const location = useLocation();
+    const { user } = useAuth();
+
+    const getEventStyle = (event: CalendarEvent) => {
+        const defaultColor = user.isStasjon
+            ? getColorOfAktor(event.partnerColors, event.hentingWrapper.aktorId)
+            : getColorOfAktor(event.stasjonColors, event.hentingWrapper.stasjonId);
+
+        if (event.hentingWrapper.planlagtHenting?.avlyst) {
+            return {
+                background: addColorBand(colors.Red, colors.avlystHenting),
+            };
+        }
+
+        if (event.hentingWrapper.ekstraHenting) {
+            return {
+                background: !event.hentingWrapper.ekstraHenting.godkjentUtlysning
+                    ? 'ekstraHenting'
+                    : addColorBand(colors.ekstraHenting, defaultColor),
+            };
+        }
+
+        return {
+            background: defaultColor,
+        };
+    };
+
+    const getEventText = () => {
+        return user.isAdmin ? (
+            <>
+                <Text as="span" fontWeight="medium" textAlign="center">
+                    {event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
+                </Text>
+                <Text as="span" fontStyle="italic" textAlign="center">
+                    {event.hentingWrapper.stasjonNavn}
+                </Text>
+            </>
+        ) : (
+            <Text as="span" textAlign="center">
+                {user.isPartner ? event.hentingWrapper.stasjonNavn : event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
+            </Text>
+        );
+    };
 
     return (
         <LinkBox
@@ -48,17 +78,17 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             fontWeight="normal"
             lineHeight="1.3"
             overflow="hidden"
-            border="1px solid"
+            // border="1px solid"
             borderRadius="4px"
+            justifyContent="center"
+            alignContent="center"
             {...getEventStyle(event)}
             {...props}
         >
-            <Box fontSize="12px" fontWeight="normal" marginRight={compactView ? '1' : 0}>
-                <time>{formatTime(event.start)}</time>–<time>{formatTime(event.end)}</time>
-            </Box>
             <LinkOverlay
                 display="flex"
                 flexDirection={compactView ? 'row' : 'column'}
+                width="full"
                 as={Link}
                 to={{
                     pathname: `/henting/${event.hentingWrapper.id}`,
@@ -66,18 +96,8 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
                     state: { henting: event.hentingWrapper, prevPath: location.pathname + location.search },
                 }}
             >
-                <Text as="span" marginRight={compactView ? '1' : 0} fontWeight="medium">
-                    {event.hentingWrapper.aktorNavn || 'Ingen påmeldt'}
-                </Text>
-                <Text as="span" fontStyle="italic">
-                    {event.hentingWrapper.stasjonNavn}
-                </Text>
+                {getEventText()}
             </LinkOverlay>
-            {event.hentingWrapper.planlagtHenting?.avlyst && !compactView ? (
-                <Box paddingTop="1">
-                    <AvlystBadge backgroundColor="transparent" padding={0} />
-                </Box>
-            ) : null}
         </LinkBox>
     );
 };

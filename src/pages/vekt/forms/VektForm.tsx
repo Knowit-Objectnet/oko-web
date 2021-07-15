@@ -3,24 +3,24 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Input } from '../../../components/forms/input/Input';
-import { Stack } from '@chakra-ui/react';
+import { Button, Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { ApiKategori, ApiKategoriPatch, ApiKategoriPost } from '../../../services/kategori/KategoriService';
+import { ApiKategori } from '../../../services/kategori/KategoriService';
 import { useAddKategori } from '../../../services/kategori/useAddKategori';
 import { useUpdateKategori } from '../../../services/kategori/useUpdateKategori';
-import { WarningBody, WarningContainer, WarningTitle } from '../../../components/forms/Warning';
+import { Unit } from '../registrering/Vektregistrering';
 
-interface KategoriFormData {
-    navn: string;
-    vektkategori: boolean;
+interface VektFormData {
+    id: string;
+    name: string;
+    unit: Unit;
+    value: number;
 }
 
 const validationSchema = yup.object().shape({
@@ -34,14 +34,10 @@ interface Props {
     onSuccess?: () => void;
 }
 
-export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => {
-    const formMethods = useForm<KategoriFormData>({
+export const VektForm: React.FC<Props> = ({ onSuccess }) => {
+    const formMethods = useForm<VektFormData>({
         resolver: yupResolver(validationSchema),
-        defaultValues: kategoriToEdit
-            ? {
-                  navn: kategoriToEdit.navn,
-              }
-            : undefined,
+        defaultValues: undefined,
     });
 
     const addKategoriMutation = useAddKategori();
@@ -51,34 +47,12 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
-
-        if (kategoriToEdit) {
-            updateKategori({
-                id: kategoriToEdit.id,
-                navn: formData.navn,
-            });
-        } else {
-            addKategori({
-                ...formData,
-            });
-        }
+        /*
+        addKategori({
+            ...formData,
+        });
+        */
     });
-
-    const addKategori = (newKategori: ApiKategoriPost) =>
-        addKategoriMutation.mutate(newKategori, {
-            onSuccess: () => {
-                onApiSubmitSuccess(`Kategori ${newKategori.navn} ble registrert`);
-            },
-            onError: onApiSubmitError,
-        });
-
-    const updateKategori = (updateKategori: ApiKategoriPatch) =>
-        updateKategoriMutation.mutate(updateKategori, {
-            onSuccess: () => {
-                onApiSubmitSuccess(`Endringene ble lagret for ${updateKategori.navn}`);
-            },
-            onError: onApiSubmitError,
-        });
 
     const onApiSubmitSuccess = (successMessage: string) => {
         showSuccessToast({ title: successMessage });
@@ -98,23 +72,15 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
 
-                    {kategoriToEdit ? (
-                        <WarningContainer variant="warning">
-                            <WarningTitle title="Advarsel" />
-                            <WarningBody>
-                                Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.
-                            </WarningBody>
-                            <Input name="navn" label="Navn på kategori" required />
-                        </WarningContainer>
-                    ) : (
-                        <Input name="navn" label="Navn på kategori" required />
-                    )}
+                    <Button>RANDOM BUTTON</Button>
 
+                    {/*
                     <FormSubmitButton
                         label={kategoriToEdit ? 'Lagre endringer' : 'Registrer ny kategori'}
                         isLoading={updateKategoriMutation.isLoading || addKategoriMutation.isLoading}
                         loadingText="Lagrer..."
                     />
+                    */}
                 </Stack>
             </form>
         </FormProvider>
