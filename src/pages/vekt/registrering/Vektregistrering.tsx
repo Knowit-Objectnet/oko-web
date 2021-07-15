@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Button, Flex, Icon, LinkBox, LinkOverlay, useToast } from '@chakra-ui/react';
+import { Button, Flex, Icon, LinkOverlay } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { usePlanlagtHentingById } from '../../../services/henting/usePlanlagtHentingById';
 import { colors } from '../../../theme/foundations/colors';
-import { useAuth } from '../../../auth/useAuth';
 import Checkbox from '../../../assets/Checkbox.svg';
 import { useState } from 'react';
 import { Totalvekt } from './components/Totalvekt';
@@ -33,14 +32,11 @@ export enum Unit {
 }
 
 export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
-    const { user } = useAuth();
     const { state: locationState } = useLocation<{ henting?: ApiPlanlagtHenting; prevPath?: string }>();
 
     const [total, setVekting] = useState(true);
 
-    const hentingQuery = usePlanlagtHentingById(hentingId, {
-        initialData: locationState?.henting,
-    });
+    const hentingQuery = usePlanlagtHentingById(hentingId, { initialData: locationState.henting });
 
     const sToast = useSuccessToast();
 
@@ -61,6 +57,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
         () => <>Klarte dessverre ikke å finne informasjon for denne hentingen</>,
         (henting: ApiPlanlagtHenting) => (
             <>
+                {console.log(henting)}
                 {total ? (
                     <Totalvekt setState={setVekting} henting={henting} />
                 ) : (

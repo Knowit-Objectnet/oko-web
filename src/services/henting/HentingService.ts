@@ -15,7 +15,7 @@ export interface ApiHentingWrapper {
     aktorNavn?: string;
 }
 
-const hentingEndpoint = '/henting';
+const hentingEndpoint = '/hentinger';
 export const hentingDefaultQueryKey = 'findOneHentingById';
 
 export const getHentingById = (hentingId: string): Promise<ApiHentingWrapper> =>

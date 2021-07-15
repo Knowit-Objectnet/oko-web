@@ -74,7 +74,7 @@ export const RegistrerVektkategori: React.FC<Props> = ({ setState, henting }) =>
                         </Text>
                     </HStack>
                     <Flex direction="column" alignItems="flex-start" aria-label="Vektkategorier">
-                        {henting.kategorier.map((kategori) => {
+                        {henting.kategorier?.map((kategori) => {
                             if (kategori.kategori.vektkategori)
                                 return (
                                     <Kategorifelt
@@ -93,7 +93,7 @@ export const RegistrerVektkategori: React.FC<Props> = ({ setState, henting }) =>
                                     />
                                 );
                         })}
-                        {henting.kategorier.some((kategori) => !kategori.kategori.vektkategori) ? (
+                        {henting.kategorier?.some((kategori) => !kategori.kategori.vektkategori) ? (
                             <Kategorifelt
                                 id="Andre"
                                 name="Andre ombruksvarer"
