@@ -1,9 +1,9 @@
 import * as React from 'react';
+import Herretoalett from '../../assets/Herretoalett.svg';
 import List from '../../assets/List.svg';
 import Bell from '../../assets/Bell.svg';
 import Calendar from '../../assets/Calendar.svg';
-import Location from '../../assets/Location.svg';
-import Bibliotek from '../../assets/Bibliotek.svg';
+import Filtrer from '../../assets/Filtrer.svg';
 import { NavItem } from './NavItem';
 import { useAuth, UserInfo } from '../../auth/useAuth';
 import { HStack } from '@chakra-ui/react';
@@ -13,10 +13,9 @@ const getNavItemsForRole = (user: UserInfo) => {
         return (
             <>
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
-                <NavItem path="/avtaler" icon={<List />} label="Avtaler" />
-                <NavItem path="/stasjoner" icon={<Location />} label="Stasjoner" />
-                <NavItem path="/kategorier" icon={<Bibliotek />} label="Kategorier" />
+                <NavItem path="/avtaler" icon={<Herretoalett />} label="Partner" />
                 <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
+                <NavItem path="/innstillinger" icon={<Filtrer />} label="Innstillinger" />
             </>
         );
     else if (user.isPartner)

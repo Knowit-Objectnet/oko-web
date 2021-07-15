@@ -6,7 +6,7 @@ import Icon from '@chakra-ui/icon';
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link
         as={NavLink}
-        color="onPrimary"
+        color="#F8F0DD"
         height="full"
         borderBottom="solid 6px transparent"
         paddingTop="3"
@@ -22,7 +22,7 @@ const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
         }}
         _hover={{
             textDecoration: 'none',
-            borderBottomColor: 'onPrimary',
+            borderBottomColor: '#F8F0DD',
         }}
         {...props}
     />
@@ -45,7 +45,7 @@ const iconStyle = {
     maxWidth: 'full',
     flex: '1',
     sx: {
-        svg: { fill: 'onPrimary' },
+        svg: { fill: '#F8F0DD' },
     },
 };
 
