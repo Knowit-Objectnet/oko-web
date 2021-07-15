@@ -5,7 +5,7 @@ import { useCalendarState } from '../CalendarProvider';
 import {
     ApiEkstraHentingParams,
     ekstraHentingDefaultQueryKey,
-    getEkstraHentinger,
+    getEkstraHentingerWithUtlysning,
 } from '../../../services/henting/EkstraHentingService';
 
 const calculateInterval = (
@@ -21,7 +21,7 @@ const calculateInterval = (
 const prefetchEkstraHentinger = (queryClient: QueryClient, queryParams: ApiEkstraHentingParams) =>
     queryClient.prefetchQuery({
         queryKey: [ekstraHentingDefaultQueryKey, queryParams],
-        queryFn: () => getEkstraHentinger(queryParams),
+        queryFn: () => getEkstraHentingerWithUtlysning(queryParams),
     });
 
 export const usePrefetchEkstraHentinger = (currentInterval: Interval): void => {
