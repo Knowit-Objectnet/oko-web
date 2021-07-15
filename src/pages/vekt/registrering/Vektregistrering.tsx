@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Button, Flex, Icon, LinkBox, LinkOverlay, useToast } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { usePlanlagtHentingById } from '../../../services/henting/usePlanlagtHentingById';
-import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
 import { colors } from '../../../theme/foundations/colors';
 import { useAuth } from '../../../auth/useAuth';
 import Checkbox from '../../../assets/Checkbox.svg';
@@ -10,6 +9,7 @@ import { useState } from 'react';
 import { Totalvekt } from './components/Totalvekt';
 import { RegistrerVektkategori } from './components/RegistrerVektkategori';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
+import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 
 interface Props {
     hentingId: string;

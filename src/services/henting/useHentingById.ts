@@ -3,14 +3,15 @@ import { ApiPlanlagtHenting, getPlanlagtHentingById, planlagtHentingDefaultQuery
 import { useQueryWithLazyResult } from '../useQueryWithLazyResult';
 import { LazyResult } from 'lemons';
 import { ApiError } from '../httpClient';
+import { ApiHentingWrapper, getHentingById } from './HentingService';
 
-export const usePlanlagtHentingById = (
+export const useHentingById = (
     hentingId: string,
-    queryOptions?: UseQueryOptions<ApiPlanlagtHenting, ApiError>,
-): LazyResult<ApiError, ApiPlanlagtHenting> => {
-    return useQueryWithLazyResult<ApiPlanlagtHenting, ApiError>({
+    queryOptions?: UseQueryOptions<ApiHentingWrapper, ApiError>,
+): LazyResult<ApiError, ApiHentingWrapper> => {
+    return useQueryWithLazyResult<ApiHentingWrapper, ApiError>({
         queryKey: [planlagtHentingDefaultQueryKey, hentingId],
-        queryFn: () => getPlanlagtHentingById(hentingId),
+        queryFn: () => getHentingById(hentingId),
         ...queryOptions,
     });
 };

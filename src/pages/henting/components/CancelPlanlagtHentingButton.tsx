@@ -1,17 +1,19 @@
 import * as React from 'react';
-import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
+import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 import { useUpdateHenting } from '../../../services/henting/useUpdateHenting';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useErrorToast } from '../../../components/toasts/useErrorToast';
-import { ConfirmationPopover } from '../../../components/buttons/ConfirmationPopover';
-import { Button, ButtonProps } from '@chakra-ui/react';
+import { Button, ButtonProps, useDisclosure } from '@chakra-ui/react';
+import { AvlystHentingForm } from '../form/AvlystHentingForm';
+import { Modal } from '../../../components/Modal';
 
 interface Props {
     henting: ApiPlanlagtHenting;
 }
 
-export const CancelPlanlagtHentingButton: React.FC<Props & ButtonProps> = ({ henting, ...props }) => {
+export const CancelPlanlagtHentingButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ henting, ...props }) => {
     const updateHentingMutation = useUpdateHenting();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const showSuccessToast = useSuccessToast();
     const showErrorToast = useErrorToast();
@@ -34,19 +36,14 @@ export const CancelPlanlagtHentingButton: React.FC<Props & ButtonProps> = ({ hen
             },
         );
 
-    // TODO: add option to give a reason for cancelling
     return (
-        <ConfirmationPopover
-            message={{
-                title: 'Du er i ferd med å avlyse hentingen. Er du sikker?',
-                body: 'Det vil ikke være mulig å angre avlysningen.',
-                buttonLabel: 'Ja, avlys hentingen',
-            }}
-            onConfirm={handleCancelHenting}
-            isLoading={updateHentingMutation.isLoading}
-            popoverPosition="bottom"
-        >
-            <Button {...props}>Avlys denne hentingen</Button>
-        </ConfirmationPopover>
+        <>
+            <Button {...props} onClick={onOpen}>
+                Avlys hentingen
+            </Button>
+            <Modal title="Hvorfor avlyser du?" isOpen={isOpen} onClose={onClose}>
+                <AvlystHentingForm hentingToCancel={henting} onSuccess={onClose} onSubmit={handleCancelHenting} />
+            </Modal>
+        </>
     );
 };

@@ -6,7 +6,7 @@ import {
     ApiPlanlagtHentingParams,
     getPlanlagteHentinger,
     planlagtHentingDefaultQueryKey,
-} from '../../../services/henting/HentingService';
+} from '../../../services/henting/PlanlagtHentingService';
 
 const calculateInterval = (
     intervalToFetch: Interval,
@@ -18,19 +18,19 @@ const calculateInterval = (
 });
 
 //TODO: Should this be based on a general Henting, rather than PlanlagtHenting?
-const prefetchHentinger = (queryClient: QueryClient, queryParams: ApiPlanlagtHentingParams) =>
+const prefetchPlanlagteHentinger = (queryClient: QueryClient, queryParams: ApiPlanlagtHentingParams) =>
     queryClient.prefetchQuery({
         queryKey: [planlagtHentingDefaultQueryKey, queryParams],
         queryFn: () => getPlanlagteHentinger(queryParams),
     });
 
-export const usePrefetchHentinger = (currentInterval: Interval): void => {
+export const usePrefetchPlanlagteHentinger = (currentInterval: Interval): void => {
     const { selectedView } = useCalendarState();
     const intervalSize = VIEWS[selectedView].fetchInterval;
     const previousInterval = calculateInterval(currentInterval, intervalSize, -1);
     const nextInterval = calculateInterval(currentInterval, intervalSize, 1);
 
     const queryClient = useQueryClient();
-    prefetchHentinger(queryClient, previousInterval);
-    prefetchHentinger(queryClient, nextInterval);
+    prefetchPlanlagteHentinger(queryClient, previousInterval);
+    prefetchPlanlagteHentinger(queryClient, nextInterval);
 };

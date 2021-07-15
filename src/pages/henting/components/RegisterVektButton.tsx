@@ -2,8 +2,8 @@ import * as React from 'react';
 import { BoxProps, Flex, Icon, LinkBox, LinkOverlay, Text } from '@chakra-ui/react';
 import Plus from '../../../assets/Plus.svg';
 import { colors } from '../../../theme/foundations/colors';
-import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
 import { Link, useLocation } from 'react-router-dom';
+import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 
 interface Props {
     henting: ApiPlanlagtHenting;

@@ -3,9 +3,9 @@ import { Heading, VStack, Button, Icon, Flex } from '@chakra-ui/react';
 import Pencil from '../../../../assets/Pencil.svg';
 import Cross from '../../../../assets/CrossSmall.svg';
 import { Registreringsfelt } from './Registreringfelt';
-import { ApiPlanlagtHenting } from '../../../../services/henting/HentingService';
 import { useState } from 'react';
 import { Unit, Vektobjekt } from '../Vektregistrering';
+import { ApiPlanlagtHenting } from '../../../../services/henting/PlanlagtHentingService';
 
 interface Props {
     setState: React.Dispatch<React.SetStateAction<boolean>>;

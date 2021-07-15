@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Heading, VStack, HStack, Flex, Text } from '@chakra-ui/react';
 import { Kategorifelt } from './Kategorifelt';
 import { useState } from 'react';
-import { ApiPlanlagtHenting } from '../../../../services/henting/HentingService';
 import { Unit, VektKategorier, Vektobjekt } from '../Vektregistrering';
+import { ApiPlanlagtHenting } from '../../../../services/henting/PlanlagtHentingService';
 
 interface Props {
     setState: React.Dispatch<React.SetStateAction<boolean>>;
