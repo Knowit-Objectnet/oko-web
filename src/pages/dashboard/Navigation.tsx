@@ -13,7 +13,7 @@ const getNavItemsForRole = (user: UserInfo) => {
         return (
             <>
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
-                <NavItem path="/avtaler" icon={<Herretoalett />} label="Partner" />
+                <NavItem path="/avtaler" icon={<Herretoalett />} label="Partnere" />
                 <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
                 <NavItem path="/innstillinger" icon={<Filtrer />} label="Innstillinger" />
             </>
