@@ -4,6 +4,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../auth/Roles';
 import { Loading } from '../components/Loading';
 import Kategorier from '../pages/kategorier';
+import Innstillinger from '../pages/innstillinger';
 import Vekt from '../pages/vekt';
 
 const Kalender = React.lazy(() => import('../pages/kalender'));
@@ -46,6 +47,9 @@ export const PageRouter: React.FC = () => (
             </ProtectedRoute>
             <ProtectedRoute path="/aarsaker" requiredRoles={[Roles.Admin]}>
                 <Aarsaker />
+            </ProtectedRoute>
+            <ProtectedRoute path="/innstillinger" requiredRoles={[Roles.Admin]}>
+                <Innstillinger />
             </ProtectedRoute>
             <ProtectedRoute path="/ekstrauttak" requiredRoles={[Roles.Stasjon, Roles.Admin, Roles.Partner]}>
                 <EkstraUttak />
