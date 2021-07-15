@@ -33,6 +33,12 @@ const getNavItemsForRole = (user: UserInfo) => {
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
                 <NavItem path="/minavtale" icon={<List />} label="Mine avtaler" />
                 <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
+                <NavItem
+                    path="/vekt"
+                    icon={<Weight />}
+                    label="Vekt"
+                    notification={{ color: colors.Red, textColor: colors.DarkBlue }}
+                />
             </>
         );
     else if (user.isStasjon)
@@ -40,6 +46,12 @@ const getNavItemsForRole = (user: UserInfo) => {
             <>
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
                 <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
+                <NavItem
+                    path="/vekt"
+                    icon={<Weight />}
+                    label="Vekt"
+                    notification={{ color: colors.Red, textColor: colors.DarkBlue }}
+                />
             </>
         );
     return null;
