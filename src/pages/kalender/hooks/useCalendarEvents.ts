@@ -125,7 +125,9 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     const filteredHentinger = (planlagteHentinger || [])
         .map(transformPlanlagtHentingToHentingWrapper)
         .concat((ekstraHentinger ?? []).map(transformEkstraHentingToHentingWrapper))
-        .filter((henting) => Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting), true));
+        .filter((henting) =>
+            Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting) && result, true),
+        );
 
     const allCalendarEvents = filteredHentinger.map(transformHentingWrapperToCalendarEvent);
 
