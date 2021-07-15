@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Flex, Tag } from '@chakra-ui/react';
+import { HStack } from '@chakra-ui/react';
 import { Registreringsfelt } from './Registreringfelt';
-import { Unit, Vektobjekt } from '../Vektregistrering';
-import { useState } from 'react';
+import { Vektobjekt } from '../Vektregistrering';
+import { KategoriBadge } from '../../components/KategoriBadge';
 
 interface Props {
     id: string;
@@ -14,22 +14,17 @@ interface Props {
 export const Kategorifelt: React.FC<Props> = ({ name, onChange, vektobjekt }) => {
     return (
         <>
-            <Flex justifyContent="flex-end" alignItems="center" padding={2.5} alignSelf="stretch" marginBottom={3}>
-                <Tag
-                    as="li"
-                    size={'md' || 'sm'}
-                    marginBottom="1"
-                    marginRight="1"
-                    paddingX={3}
-                    paddingY={1}
-                    fontSize="1rem"
-                    fontWeight={400}
-                    marginX={4}
-                >
-                    {name}
-                </Tag>
+            <HStack
+                justifyContent="flex-end"
+                alignItems="center"
+                padding={2.5}
+                alignSelf="stretch"
+                marginBottom={3}
+                spacing={4}
+            >
+                <KategoriBadge name={name} />
                 <Registreringsfelt vektobjekt={vektobjekt} onChange={onChange} />
-            </Flex>
+            </HStack>
         </>
     );
 };

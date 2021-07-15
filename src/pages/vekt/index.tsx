@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Box, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Heading } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
-import { colors } from '../../theme/foundations/colors';
+import { MissingRegistration } from './components/MissingRegistration';
+import { NoMissingRegistration } from './components/NoMissingRegistration';
 
 const Vekt: React.FC = () => (
     <>
@@ -15,21 +16,26 @@ const Vekt: React.FC = () => (
             paddingY="5"
             paddingX="10"
             marginX="auto"
+            marginY="5"
             width={{ base: '100%', desktop: '80%' }}
         >
-            <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
-                <VStack justify="left" width="100%" align="start">
-                    <Heading as="h2" fontWeight="bold" fontSize="xl" marginBottom={4}>
+            <Flex direction="column" height="100%">
+                <Flex direction="column" marginBottom={20}>
+                    <Heading as="h2" fontSize="1.5rem" fontWeight="bold">
                         Hentinger som mangler vekt
                     </Heading>
-                    <Box backgroundColor={colors.Red} w="100%" h={20}>
-                        <HStack>
-                            <Text fontWeight="bold" fontSize="xl">
-                                Ikke registrert vekt
-                            </Text>
-                        </HStack>
-                    </Box>
-                </VStack>
+                    <Flex direction="column">
+                        <MissingRegistration />
+                    </Flex>
+                </Flex>
+                <Flex direction="column">
+                    <Heading as="h2" fontSize="1.5rem" fontWeight={400}>
+                        Tidligere veiinger
+                    </Heading>
+                    <Flex direction="column">
+                        <NoMissingRegistration />
+                    </Flex>
+                </Flex>
             </Flex>
         </Flex>
     </>

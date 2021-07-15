@@ -1,6 +1,5 @@
-import { Box, BoxProps, Flex, Icon, Text } from '@chakra-ui/react';
+import { Tag, TagLabel, TagLeftIcon, TagProps, TagRightIcon } from '@chakra-ui/react';
 import * as React from 'react';
-import { ReactElement } from 'react';
 
 interface Props {
     text: string;
@@ -9,21 +8,12 @@ interface Props {
     iconRight?: any;
 }
 
-export const BadgeDetail: React.FC<Props & BoxProps> = ({ text, color, iconLeft, iconRight, ...props }) => {
+export const BadgeDetail: React.FC<Props & TagProps> = ({ text, color, iconLeft, iconRight, ...props }) => {
     return (
-        <Flex
-            borderRadius={100}
-            fontSize="0.8rem"
-            backgroundColor={color}
-            padding={2}
-            paddingLeft={4}
-            paddingRight={4}
-            {...props}
-            alignItems="center"
-        >
-            {iconLeft ? <Icon as={iconLeft} marginRight={1.5} /> : null}
-            {text}
-            {iconRight ? <Icon as={iconRight} marginLeft={1.5} /> : null}
-        </Flex>
+        <Tag variant="solid" backgroundColor={color} padding={2} paddingLeft={4} paddingRight={4} {...props}>
+            {iconLeft ? <TagLeftIcon as={iconLeft} marginRight={1.5} /> : null}
+            <TagLabel fontSize="0.8rem">{text}</TagLabel>
+            {iconRight ? <TagRightIcon as={iconRight} marginLeft={1.5} /> : null}
+        </Tag>
     );
 };
