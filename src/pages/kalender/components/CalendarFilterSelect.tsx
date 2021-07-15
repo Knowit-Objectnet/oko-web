@@ -9,6 +9,7 @@ import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { Flex, Icon } from '@chakra-ui/react';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { ApiStasjon } from '../../../services/stasjon/StasjonService';
+import { useEffect } from 'react';
 
 interface Props {
     title: string;
@@ -21,7 +22,20 @@ interface Props {
 export const CalendarFilterSelect: React.FC<Props> = ({ title, name, data, filterName, filterFn }) => {
     const [toggled, setToggled] = useState(true);
     const { setFilter } = useCalendarState();
-    const [ids] = useState<Array<string>>([]);
+    const [ids, setIds] = useState<Array<string>>([]);
+
+    const filterFunction = (henting: ApiHentingWrapper) => {
+        if (ids.length === 0) return true;
+        else return ids.some((id) => filterFn(id, henting));
+    };
+
+    const filterFunctionObject = {
+        [filterName]: filterFunction,
+    };
+
+    useEffect(() => {
+        setFilter(filterFunctionObject);
+    }, [ids]);
 
     const onToggleClick = () => {
         setToggled(!toggled);
@@ -32,20 +46,9 @@ export const CalendarFilterSelect: React.FC<Props> = ({ title, name, data, filte
         const value = e.currentTarget.value;
         const currentSelected = value === 'default' ? undefined : value;
         const index = ids.indexOf(value);
-        if (!currentSelected) ids.length = 0;
-        else if (!~index) ids.push(currentSelected);
-        else ids.splice(index, 1);
-
-        const filterFunction = (henting: ApiHentingWrapper) => {
-            if (ids.length === 0) return true;
-            else return ids.some((id) => filterFn(id, henting));
-        };
-
-        const filterFunctionObject = {
-            [filterName]: filterFunction,
-        };
-
-        setFilter(filterFunctionObject);
+        if (!currentSelected) setIds([]);
+        else if (!~index) setIds(ids.concat(currentSelected));
+        else setIds(ids.filter((_, i) => i != index));
     };
 
     return (
