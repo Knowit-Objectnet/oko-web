@@ -38,7 +38,7 @@ export const colors = {
     warning: Colors.Yellow,
     onWarning: Colors.Black,
     ekstraHenting: Colors.Green,
-    hentingLight: '#F6FBFC',
+    hentingLight: '#E6FBFF',
     hentingDark: '#00D8FF',
     hentingDefault: Colors.LightBlue,
     avlystHenting: '#ECF1F4',

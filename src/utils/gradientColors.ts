@@ -15,7 +15,7 @@ export const getGradientColors = (list?: { id: string }[]) => {
 };
 
 export const getColorOfAktor = (list: Record<string, string>, aktorId?: string): string => {
-    return (aktorId ? list[aktorId] : undefined) || colors.errorBackground;
+    return (aktorId ? list[aktorId] : undefined) || colors.hentingDefault;
 };
 
 // Code found online, source here: https://stackoverflow.com/a/63610427
