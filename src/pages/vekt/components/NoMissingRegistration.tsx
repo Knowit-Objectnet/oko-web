@@ -6,6 +6,8 @@ import Location from '../../../assets/Location.svg';
 import Calendar from '../../../assets/Calendar.svg';
 import { KategoriBadge } from './KategoriBadge';
 import { HentingButton } from './HentingButton';
+import { KategorierMedVekt } from './KategorierMedVekt';
+import { KunTotalvekt } from './KunTotalvekt';
 
 export const NoMissingRegistration: React.FC = () => (
     <>
@@ -26,27 +28,10 @@ export const NoMissingRegistration: React.FC = () => (
                     Registrert 20.12.12
                 </Text>
             </HStack>
-            <VStack spacing={4}>
-                {/* For each kategori */}
-                <HStack>
-                    <KategoriBadge name="Bygg" />
-                    <Text fontSize="0.9rem" fontWeight="normal">
-                        23 kg
-                    </Text>
-                </HStack>
-                <HStack>
-                    <KategoriBadge name="Barn" />
-                    <Text fontSize="0.9rem" fontWeight="normal">
-                        23 kg
-                    </Text>
-                </HStack>
-                <HStack>
-                    <KategoriBadge name="Møbler" />
-                    <Text fontSize="0.9rem" fontWeight="normal">
-                        23 kg
-                    </Text>
-                </HStack>
-            </VStack>
+            {/* Registrert vekt */}
+            {/*<KategorierMedVekt />*/}
+            {/* Totalvekt */}
+            <KunTotalvekt />
             <VStack alignItems="flex-start">
                 <DetailWithIcon icon={Location} label="Stasjon">
                     Grønmo
