@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, ButtonGroup, Heading, Text, VStack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { ApiPlanlagtHenting } from '../../services/henting/PlanlagtHentingService';
 import { usePlanlagtHentingById } from '../../services/henting/usePlanlagtHentingById';
@@ -15,6 +15,9 @@ import { useAuth } from '../../auth/useAuth';
 import { DetailWithIcon } from './components/DetailWithIcon';
 import { DetailWithLabel } from './components/DetailWithLabel';
 import { AvlystDetails } from './components/AvlystDetails';
+import { BadgeDetail } from './components/BadgeDetail';
+import { RegisterVektButton } from './components/RegisterVektButton';
+import { colors } from '../../theme/foundations/colors';
 import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
 
@@ -73,9 +76,18 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                         mb="1em"
                     />
                 ) : null}
-                <Heading as="h1" fontWeight="normal" aria-label="Partner">
-                    {hentingWrapper.aktorNavn}
-                </Heading>
+
+                <HStack alignItems="center" spacing="10">
+                    <Heading as="h1" fontWeight="normal" aria-label="Partner">
+                        {hentingWrapper.aktorNavn}
+                    </Heading>
+                    {hentingWrapper.planlagtHenting ? (
+                        <>
+                            <BadgeDetail text="Vekt mangler" color={colors.Red} />
+                            <RegisterVektButton henting={hentingWrapper.planlagtHenting} />
+                        </>
+                    ) : null}
+                </HStack>
                 <VStack spacing="3" alignItems="flex-start" marginTop="4">
                     <DetailWithIcon icon={Location} label="Stasjon">
                         {hentingWrapper.stasjonNavn}

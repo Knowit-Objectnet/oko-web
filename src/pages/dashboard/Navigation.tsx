@@ -4,9 +4,11 @@ import Bell from '../../assets/Bell.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Location from '../../assets/Location.svg';
 import Bibliotek from '../../assets/Bibliotek.svg';
+import Weight from '../../assets/Weight.svg';
 import { NavItem } from './NavItem';
 import { useAuth, UserInfo } from '../../auth/useAuth';
 import { HStack } from '@chakra-ui/react';
+import { colors } from '../../theme/foundations/colors';
 
 const getNavItemsForRole = (user: UserInfo) => {
     if (user.isAdmin)
@@ -17,6 +19,12 @@ const getNavItemsForRole = (user: UserInfo) => {
                 <NavItem path="/stasjoner" icon={<Location />} label="Stasjoner" />
                 <NavItem path="/kategorier" icon={<Bibliotek />} label="Kategorier" />
                 <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
+                <NavItem
+                    path="/vekt"
+                    icon={<Weight />}
+                    label="Vekt"
+                    notification={{ color: colors.Red, textColor: colors.DarkBlue }}
+                />
             </>
         );
     else if (user.isPartner)
