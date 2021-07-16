@@ -20,7 +20,6 @@ export const AvtaleInfoList: React.FC<Props> = ({ partner }) => {
     const sortedAvtaler = (sortedAvtalerBySluttDato ?? []).sort((avtaleA, avtaleB) =>
         getAvtaleTitle(avtaleA).localeCompare(getAvtaleTitle(avtaleB)),
     );
-    console.log(sortedAvtaler);
 
     if (isLoading) {
         return <>Laster inn...</>;
