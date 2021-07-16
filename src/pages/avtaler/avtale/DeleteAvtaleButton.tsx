@@ -38,7 +38,7 @@ export const DeleteAvtaleButton: React.FC<Props & ButtonProps> = ({ avtale, ...p
             onConfirm={handleDeleteAvtale}
             isLoading={deleteAvtaleMutation.isLoading}
         >
-            <DeleteButton label="Slett avtale" {...props} />
+            <DeleteButton label="Slett avtale" borderRadius="6" {...props} />
         </ConfirmationPopover>
     );
 };

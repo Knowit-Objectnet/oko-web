@@ -17,6 +17,7 @@ export const AddKontaktPersonButton: React.FC<Props & Omit<ButtonProps, 'onClick
         <>
             <AddButton
                 label="Ny kontaktperson"
+                borderRadius="6"
                 aria-label={`Registrer ny kontaktperson for ${aktor.navn}`}
                 {...props}
                 onClick={onOpen}

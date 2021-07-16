@@ -37,7 +37,7 @@ export const DeleteHenteplanButton: React.FC<Props> = ({ henteplan }) => {
             onConfirm={handleDeleteHenteplan}
             isLoading={deleteHenteplanMutation.isLoading}
         >
-            <DeleteButton label="Slett" aria-label="Slett henteplanen" />
+            <DeleteButton label="Slett" borderRadius="6" aria-label="Slett henteplanen" />
         </ConfirmationPopover>
     );
 };

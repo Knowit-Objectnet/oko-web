@@ -14,7 +14,7 @@ export const EditAvtaleButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = 
 
     return (
         <>
-            <EditButton label="Rediger avtale" {...props} onClick={onOpen} />
+            <EditButton label="Rediger avtale" borderRadius="6" {...props} onClick={onOpen} />
             <Modal title="Rediger avtale" isOpen={isOpen} onClose={onClose}>
                 <AvtaleForm onSuccess={onClose} avtaleToEdit={avtale} />
             </Modal>

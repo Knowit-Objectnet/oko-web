@@ -18,6 +18,7 @@ export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> 
         <>
             <AddButton
                 label="Ny henteplan"
+                borderRadius="6"
                 aria-label={`Opprett ny henteplan for ${partner.navn}`}
                 {...props}
                 onClick={onOpen}

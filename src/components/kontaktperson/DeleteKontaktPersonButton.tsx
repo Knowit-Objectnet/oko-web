@@ -34,7 +34,7 @@ export const DeleteKontaktPersonButton: React.FunctionComponent<Props> = ({ kont
             onConfirm={handleDeleteKontakt}
             isLoading={deleteKontaktMutation.isLoading}
         >
-            <DeleteButton label="Slett" aria-label={`Slett ${kontakt.navn}`} />
+            <DeleteButton label="Slett" borderRadius="6" aria-label={`Slett ${kontakt.navn}`} />
         </ConfirmationPopover>
     );
 };

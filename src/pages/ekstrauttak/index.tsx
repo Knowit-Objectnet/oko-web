@@ -22,7 +22,14 @@ const EkstraUttak: React.FC = () => {
                 marginX="auto"
                 width={{ base: '100%', desktop: '80%' }}
             >
-                {user.isAdmin || user.isStasjon ? <AddEkstraUttakButton width="fit-content" marginLeft="auto" /> : null}
+                {user.isAdmin || user.isStasjon ? (
+                    <AddEkstraUttakButton
+                        width="fit-content"
+                        marginLeft="auto"
+                        borderRadius="6"
+                        backgroundColor="Green"
+                    />
+                ) : null}
                 <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
                     <Heading as="h1" fontWeight="medium" fontSize="4xl">
                         Aktive ekstrauttak
