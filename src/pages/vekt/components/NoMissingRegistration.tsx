@@ -6,11 +6,20 @@ import Location from '../../../assets/Location.svg';
 import Calendar from '../../../assets/Calendar.svg';
 import { HentingButton } from './HentingButton';
 import { KunTotalvekt } from './KunTotalvekt';
-import { usePlanlagteHentinger } from '../../../services/henting/usePlanlagteHentinger';
+import { ApiHentingParams } from '../../../services/henting/HentingService';
+import { useHentinger } from '../../../services/henting/useHentinger';
+import { useAuth } from '../../../auth/useAuth';
+import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
+import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService';
 
 export const NoMissingRegistration: React.FC = () => {
-    const planlagteHentinger = usePlanlagteHentinger();
+    const { user } = useAuth();
+    const hentingeParametere: ApiHentingParams = { aktorId: user.aktorId };
+    const { data: hentinger } = useHentinger(hentingeParametere);
 
+    //const h: Array<ApiPlanlagtHenting | ApiEkstraHenting>
+
+    hentinger?.filter((henting) => henting.sluttTidspunkt);
     return (
         <>
             <HStack
