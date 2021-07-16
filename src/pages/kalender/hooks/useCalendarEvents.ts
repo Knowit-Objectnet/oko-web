@@ -10,11 +10,17 @@ import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService
 import { usePrefetchEkstraHentinger } from './usePrefetchEkstraHentinger';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { useEkstraHentingerWithUtlysning } from '../../../services/henting/useEkstraHentingerWithUtlysning';
+import { useEffect, useState } from 'react';
+import { usePartnere } from '../../../services/partner/usePartnere';
+import { useStasjoner } from '../../../services/stasjon/useStasjoner';
+import { getGradientColors } from '../../../utils/gradientColors';
 
 export interface CalendarEvent extends Event {
     start: Date;
     end: Date;
     hentingWrapper: ApiHentingWrapper;
+    partnerColors: Record<string, string>;
+    stasjonColors: Record<string, string>;
 }
 
 const calculateDateRange = (date: Date, view: CalendarView): DateRange => {
@@ -59,17 +65,35 @@ const transformEkstraHentingToHentingWrapper = (ekstraHenting: ApiEkstraHenting)
     aktorNavn: ekstraHenting.godkjentUtlysning?.partnerNavn,
 });
 
-const transformHentingWrapperToCalendarEvent = (hentingWrapper: ApiHentingWrapper): CalendarEvent => ({
-    start: parseISOIgnoreTimezone(hentingWrapper.startTidspunkt),
-    end: parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt),
-    title: `${hentingWrapper.aktorNavn} - ${hentingWrapper.stasjonNavn}`,
-    hentingWrapper: hentingWrapper,
-});
-
 export const useCalendarEvents = (): CalendarEvent[] => {
     const { selectedView, selectedDate, filters } = useCalendarState();
+    const [partnerColors, setPartnerColors] = useState<Record<string, string>>({});
+    const [stasjonColors, setStasjonColors] = useState<Record<string, string>>({});
+    const { data: partnere, isSuccess: partnerSuccess } = usePartnere({ queryOptions: { keepPreviousData: true } });
+    const { data: stasjoner, isSuccess: stasjonSuccess } = useStasjoner({ queryOptions: { keepPreviousData: true } });
+
+    useEffect(() => {
+        if (partnerSuccess) {
+            setPartnerColors(getGradientColors(partnere));
+        }
+    }, [partnere]);
+
+    useEffect(() => {
+        if (stasjonSuccess) {
+            setStasjonColors(getGradientColors(stasjoner));
+        }
+    }, [stasjoner]);
 
     const intervalToFetch = calculateDateRange(selectedDate, selectedView);
+
+    const transformHentingWrapperToCalendarEvent = (hentingWrapper: ApiHentingWrapper): CalendarEvent => ({
+        start: parseISOIgnoreTimezone(hentingWrapper.startTidspunkt),
+        end: parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt),
+        title: `${hentingWrapper.aktorNavn} - ${hentingWrapper.stasjonNavn}`,
+        hentingWrapper: hentingWrapper,
+        partnerColors: partnerColors,
+        stasjonColors: stasjonColors,
+    });
 
     // TODO: wrap in LazyResult in order to return loading/error status?
     const { data: planlagteHentinger } = usePlanlagteHentinger(
@@ -101,7 +125,9 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     const filteredHentinger = (planlagteHentinger || [])
         .map(transformPlanlagtHentingToHentingWrapper)
         .concat((ekstraHentinger ?? []).map(transformEkstraHentingToHentingWrapper))
-        .filter((henting) => Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting), true));
+        .filter((henting) =>
+            Object.values(filters).reduce((result: boolean, filterFn) => filterFn(henting) && result, true),
+        );
 
     const allCalendarEvents = filteredHentinger.map(transformHentingWrapperToCalendarEvent);
 

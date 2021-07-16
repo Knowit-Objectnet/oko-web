@@ -3,31 +3,45 @@ import { LinkBox, LinkBoxProps, LinkOverlay, Text } from '@chakra-ui/react';
 import { CalendarEvent } from '../hooks/useCalendarEvents';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../../auth/useAuth';
-
-const getEventStyle = (event: CalendarEvent) => {
-    if (event.hentingWrapper.planlagtHenting?.avlyst) {
-        return {
-            backgroundColor: 'errorBackground',
-            color: 'onError',
-            borderColor: 'error',
-        };
-    }
-
-    return {
-        backgroundColor: 'surface',
-        color: 'onSurface',
-        borderColor: 'DarkBeige',
-    };
-};
+import { getColorOfAktor } from '../../../utils/gradientColors';
+import { colors } from '../../../theme/foundations/colors';
 
 interface Props extends Pick<LinkBoxProps, 'position' | 'top' | 'left' | 'height' | 'width' | 'margin'> {
     event: CalendarEvent;
     compactView?: boolean;
 }
 
+const addColorBand = (bandColor: string, backgroundColor: string) => {
+    return `linear-gradient(225deg, ${backgroundColor} 8px, ${bandColor} 8px, ${bandColor} 24px, ${backgroundColor} 24px)`;
+};
+
 export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }) => {
     const location = useLocation();
     const { user } = useAuth();
+
+    const getEventStyle = (event: CalendarEvent) => {
+        const defaultColor = user.isStasjon
+            ? getColorOfAktor(event.partnerColors, event.hentingWrapper.aktorId)
+            : getColorOfAktor(event.stasjonColors, event.hentingWrapper.stasjonId);
+
+        if (event.hentingWrapper.planlagtHenting?.avlyst) {
+            return {
+                background: addColorBand(colors.Red, colors.avlystHenting),
+            };
+        }
+
+        if (event.hentingWrapper.ekstraHenting) {
+            return {
+                background: !event.hentingWrapper.ekstraHenting.godkjentUtlysning
+                    ? 'ekstraHenting'
+                    : addColorBand(colors.ekstraHenting, defaultColor),
+            };
+        }
+
+        return {
+            background: defaultColor,
+        };
+    };
 
     const getEventText = () => {
         return user.isAdmin ? (
@@ -64,7 +78,7 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             fontWeight="normal"
             lineHeight="1.3"
             overflow="hidden"
-            border="1px solid"
+            // border="1px solid"
             borderRadius="4px"
             justifyContent="center"
             alignContent="center"

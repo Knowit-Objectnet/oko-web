@@ -28,10 +28,11 @@ const Aarsaker: React.FC = () => {
             <Flex as="main" direction="column" paddingY="5" paddingX="10" marginX="auto" width="auto">
                 <Heading
                     as="h1"
-                    fontWeight="medium"
+                    fontWeight="normal"
                     fontSize="4xl"
                     width="full"
                     paddingBottom="3"
+                    marginTop="5"
                     marginBottom="4"
                     borderBottom="1px solid"
                     borderBottomColor="gray.200"
