@@ -13,9 +13,16 @@ interface Props {
 }
 
 export const Henteplaner: React.FC<Props> = ({ avtale, partner }) => {
-    const henteplaner = avtale.henteplaner;
     const { user } = useAuth();
-
+    let henteplaner = avtale.henteplaner;
+    if (user.isStasjon) {
+        henteplaner = henteplaner.filter((henteplan) => {
+            if (user.aktorId === henteplan.stasjonId) {
+                console.log(`Gikk gjennom ${henteplan.stasjonId}`);
+                return henteplan;
+            }
+        });
+    }
     return (
         <>
             <Flex

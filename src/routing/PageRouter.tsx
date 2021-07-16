@@ -33,7 +33,7 @@ export const PageRouter: React.FC = () => (
             <Route path="/vekt/:hentingId">
                 <Registrering />
             </Route>
-            <ProtectedRoute path="/avtaler" requiredRoles={[Roles.Admin]}>
+            <ProtectedRoute path="/avtaler" requiredRoles={[Roles.Admin, Roles.Stasjon]}>
                 <Avtaler />
             </ProtectedRoute>
             <ProtectedRoute path="/stasjoner" requiredRoles={[Roles.Admin]}>

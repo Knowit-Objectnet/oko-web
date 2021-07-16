@@ -10,7 +10,7 @@ export interface ApiHenteplanKategori {
     kategori: ApiKategori;
     merknad?: string;
 }
-
+//Array.filter...
 export interface ApiHenteplan {
     id: string;
     avtaleId: string;

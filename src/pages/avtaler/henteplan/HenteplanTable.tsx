@@ -3,15 +3,26 @@ import { Table, Tbody, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
 import { compareAsc, parseISO } from 'date-fns';
 import { HenteplanRow } from './HenteplanRow';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
+import { useAuth } from '../../../auth/useAuth';
 
 interface Props {
     avtale: ApiAvtale;
 }
 
 export const HenteplanTable: React.FC<Props> = ({ avtale }) => {
-    const sortedHenteplaner = avtale.henteplaner.sort((henteplanA, henteplanB) =>
+    let sortedHenteplaner = avtale.henteplaner.sort((henteplanA, henteplanB) =>
         compareAsc(parseISO(henteplanA.startTidspunkt), parseISO(henteplanB.startTidspunkt)),
     );
+
+    const { user } = useAuth();
+    if (user.isStasjon) {
+        sortedHenteplaner = sortedHenteplaner.filter((henteplan) => {
+            if (user.aktorId === henteplan.stasjonId) {
+                console.log(`Gikk gjennom ${henteplan.stasjonId}`);
+                return henteplan;
+            }
+        });
+    }
 
     return (
         <Table variant="stripedNegative" size="sm">
