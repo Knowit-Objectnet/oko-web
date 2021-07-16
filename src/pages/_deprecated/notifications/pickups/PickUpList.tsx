@@ -44,16 +44,16 @@ export const PickUpList: React.FC = () => {
             return <p>Laster inn...</p>;
         }
         if (isError) {
-            return <p>Noe gikk galt, kunne ikke laste inn ekstrauttak.</p>;
+            return <p>Noe gikk galt, kunne ikke laste inn ekstrahenting.</p>;
         }
         if (sortedPickups.length === 0) {
-            return <p>Det er ikke registrert noen ekstrauttak enda.</p>;
+            return <p>Det er ikke registrert noen ekstrahenting enda.</p>;
         }
         return (
             <>
                 <HeaderRow>
                     <div>Sendt av:</div>
-                    <div>Uttak:</div>
+                    <div>Henting:</div>
                     <div>{user.isStasjon ? 'Handlingsalternativer:' : 'Påmeldte:'}</div>
                 </HeaderRow>
                 <PickUpRows>

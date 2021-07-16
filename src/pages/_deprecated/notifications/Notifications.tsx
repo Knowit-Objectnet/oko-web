@@ -49,7 +49,7 @@ export const Notifications: React.FC = () => {
                     <AddPickUpButtonContainer>
                         <FloatingActionButton
                             variant="positive"
-                            label="Nytt ekstrauttak"
+                            label="Ny ekstrahenting"
                             icon={<Plus />}
                             onClick={showNewPickUpModal}
                         />

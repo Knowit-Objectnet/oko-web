@@ -46,6 +46,12 @@ interface Props {
 export const AarsakForm: React.FC<Props> = ({ aarsakToEdit, onSuccess }) => {
     const formMethods = useForm<AarsakFormData>({
         resolver: yupResolver(validationSchema),
+        defaultValues: aarsakToEdit
+            ? {
+                  beskrivelse: aarsakToEdit.beskrivelse,
+                  type: aarsakToEdit.type,
+              }
+            : undefined,
     });
 
     const addAarsakMutation = useAddAarsak();

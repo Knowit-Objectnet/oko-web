@@ -16,7 +16,7 @@ export const RequestApprovalButton: React.FC<Props> = ({ pickupId, partnerId, on
     const queryClient = useQueryClient();
     const updatePickUpMutation = useMutation((updatedPickUp: ApiPickUpPatch) => patchPickUp(updatedPickUp), {
         onError: () => {
-            // alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrauttak ble ikke registrert.', {
+            // alert.show('Noe gikk galt, valg av samarbeidspartner til ekstrahenting ble ikke registrert.', {
             //     type: types.ERROR,
             // });
         },

@@ -13,7 +13,7 @@ const Registrering = React.lazy(() => import('../pages/vekt/registrering'));
 const Avtaler = React.lazy(() => import('../pages/avtaler'));
 const Stasjoner = React.lazy(() => import('../pages/stasjoner'));
 const MineAvtaler = React.lazy(() => import('../pages/minavtale'));
-const EkstraUttak = React.lazy(() => import('../pages/ekstrauttak'));
+const EkstraHenting = React.lazy(() => import('../pages/ekstrahenting'));
 const Aarsaker = React.lazy(() => import('../pages/avlysningsaarsaker'));
 
 const Home: React.FC = () => {
@@ -51,8 +51,8 @@ export const PageRouter: React.FC = () => (
             <ProtectedRoute path="/innstillinger" requiredRoles={[Roles.Admin]}>
                 <Innstillinger />
             </ProtectedRoute>
-            <ProtectedRoute path="/ekstrauttak" requiredRoles={[Roles.Stasjon, Roles.Admin, Roles.Partner]}>
-                <EkstraUttak />
+            <ProtectedRoute path="/ekstrahenting" requiredRoles={[Roles.Stasjon, Roles.Admin, Roles.Partner]}>
+                <EkstraHenting />
             </ProtectedRoute>
             <ProtectedRoute path="/vekt" requiredRoles={[Roles.Stasjon, Roles.Admin, Roles.Partner]}>
                 <Vekt />

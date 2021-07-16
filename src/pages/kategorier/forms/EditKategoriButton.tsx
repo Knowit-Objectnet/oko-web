@@ -16,6 +16,7 @@ export const EditKategoriButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> 
         <>
             <EditButton
                 label="Rediger"
+                borderRadius="6"
                 aria-label={`Rediger informasjon for ${kategori.navn}`}
                 {...props}
                 onClick={onOpen}

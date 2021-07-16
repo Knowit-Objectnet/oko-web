@@ -12,6 +12,7 @@ interface Props {
 export const AarsakList: React.FC<Props> = ({ isPartnerAarsaker }) => {
     const { data: aarsaker } = useAarsaker();
     const sortedAarsaker = aarsaker?.sort((aarsakA, aarsakB) => aarsakA.beskrivelse.localeCompare(aarsakB.beskrivelse));
+
     const sortedAarsakerByType = sortedAarsaker?.filter((aarsak) => {
         if (isPartnerAarsaker) {
             return aarsak.type == 'PARTNER' ? aarsak : null;
@@ -21,37 +22,35 @@ export const AarsakList: React.FC<Props> = ({ isPartnerAarsaker }) => {
     });
 
     return (
-        <Flex>
-            <List>
-                {sortedAarsakerByType?.map((aarsak, valgNumber) => (
-                    <ListItem key={aarsak.id}>
-                        <HStack>
-                            <Text fontSize="sm">Valg {valgNumber + 1} </Text>
-                            <DeleteAarsakButton aarsak={aarsak} />
-                        </HStack>
+        <List alignItems="flex-start">
+            {sortedAarsakerByType?.map((aarsak, valgNumber) => (
+                <ListItem key={aarsak.id}>
+                    <HStack>
+                        <Text fontSize="sm">Valg {valgNumber + 1} </Text>
+                        <DeleteAarsakButton aarsak={aarsak} />
+                    </HStack>
 
-                        <HStack
-                            width="full"
-                            border="2px solid"
-                            spacing="300"
-                            borderColor="gray.200"
-                            marginBottom="3"
-                            alignItems="flex-start"
-                            padding="2"
-                            key={aarsak.id}
-                        >
-                            <Flex fontSize="sm" flexGrow={1} direction="column" alignItems="flex-start">
-                                <Text fontWeight="normal" fontSize="sm" aria-label="Årsak">
-                                    {aarsak.beskrivelse}
-                                </Text>
-                            </Flex>
-                            <ButtonGroup spacing="4" size="xs">
-                                <EditAarsakButton aarsak={aarsak} />
-                            </ButtonGroup>
-                        </HStack>
-                    </ListItem>
-                ))}
-            </List>
-        </Flex>
+                    <HStack
+                        width="full"
+                        border="2px solid"
+                        spacing="300"
+                        borderColor="gray.200"
+                        marginBottom="3"
+                        alignItems="flex-start"
+                        padding="2"
+                        key={aarsak.id}
+                    >
+                        <Flex fontSize="sm" flexGrow={1} direction="column" alignItems="flex-start">
+                            <Text fontWeight="normal" fontSize="sm" aria-label="Årsak">
+                                {aarsak.beskrivelse}
+                            </Text>
+                        </Flex>
+                        <ButtonGroup spacing="4" size="xs">
+                            <EditAarsakButton aarsak={aarsak} />
+                        </ButtonGroup>
+                    </HStack>
+                </ListItem>
+            ))}
+        </List>
     );
 };
