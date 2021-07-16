@@ -15,8 +15,19 @@ export interface ApiHentingWrapper {
     aktorNavn?: string;
 }
 
+export interface ApiHentingParams {
+    id?: string; //UUID
+    before?: string; //LocalTimeDate Henting must be before this
+    after?: string; //LocalTimeDate Henting must be after this
+    aktorId?: string; //UUID
+    stasjonId?: string; //UUID
+}
+
 const hentingEndpoint = '/hentinger';
 export const hentingDefaultQueryKey = 'findOneHentingById';
 
 export const getHentingById = (hentingId: string): Promise<ApiHentingWrapper> =>
     httpClient().get<ApiHentingWrapper>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);
+
+export const getHentinger = (params: ApiHentingParams = {}): Promise<Array<ApiHentingWrapper>> =>
+    httpClient().get<Array<ApiHentingWrapper>>(hentingEndpoint, { params }).then(extractResponse, transformError);

@@ -1,6 +1,7 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiKategori } from '../kategori/KategoriService';
 import { ApiUtlysning } from '../utlysning/UtlysningService';
+import { ApiVektregistrering } from '../vektregistrering/VektregistreringService';
 
 export interface ApiEkstraHenting {
     id: string; //UUID
@@ -12,6 +13,7 @@ export interface ApiEkstraHenting {
     godkjentUtlysning: ApiUtlysning | null;
     kategorier: ApiEkstraHentingKategori[];
     utlysninger: ApiUtlysning[];
+    vektregistreringer: Array<ApiVektregistrering>;
 }
 
 export interface ApiEkstraHentingParams {
