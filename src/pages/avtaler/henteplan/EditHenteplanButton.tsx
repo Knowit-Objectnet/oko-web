@@ -20,7 +20,7 @@ export const EditHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>>
 
     return (
         <>
-            <EditButton label="Rediger" aria-label="Rediger henteplanen" {...props} onClick={onOpen} />
+            <EditButton label="Rediger" borderRadius="6" aria-label="Rediger henteplanen" {...props} onClick={onOpen} />
             <Modal title="Rediger henteplan" isOpen={isOpen} onClose={onClose}>
                 <EditHenteplanForm onSuccess={onClose} henteplan={henteplan} avtale={avtale} />
             </Modal>

@@ -18,7 +18,7 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, onRequest
     const queryClient = useQueryClient();
     const addRequestMutation = useMutation((newRequest: ApiRequestPost) => postRequest(newRequest), {
         onError: () => {
-            // alert.show('Noe gikk galt, påmelding til ekstrauttaket ble ikke registrert.', { type: types.ERROR });
+            // alert.show('Noe gikk galt, påmelding til ekstrahentingen ble ikke registrert.', { type: types.ERROR });
         },
         onSettled: () => {
             // The Promise from `invalidateQueries` will resolve when matched queries are done refetching.
@@ -39,7 +39,7 @@ export const RequestRegistrationButton: React.FC<Props> = ({ pickupId, onRequest
 
     return (
         <PositiveButton onClick={handleRequestRegistrationClick} fillWidth>
-            Meld deg på ekstrauttak
+            Meld deg på ekstrahenting
         </PositiveButton>
     );
 };

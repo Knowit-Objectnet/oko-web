@@ -37,7 +37,7 @@ export const DeleteKategoriButton: React.FC<Props> = ({ kategori }) => {
             onConfirm={handleDeleteKategori}
             isLoading={deleteKategoriMutation.isLoading}
         >
-            <DeleteButton label="Slett" aria-label="Slett kategorien" />
+            <DeleteButton label="Slett" borderRadius="6" aria-label="Slett kategorien" />
         </ConfirmationPopover>
     );
 };

@@ -52,7 +52,7 @@ export const CalendarSideMenu: React.FC<Props> = (props) => {
             )}
             {user.isStasjon && (
                 <FloatingActionButton
-                    label="Nytt ekstrauttak"
+                    label="Ny ekstrahenting"
                     hideLabel
                     icon={<Plus />}
                     variant="positive"

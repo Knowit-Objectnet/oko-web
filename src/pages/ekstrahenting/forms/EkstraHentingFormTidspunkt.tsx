@@ -2,7 +2,7 @@ import React from 'react';
 import { DateInput } from '../../../components/forms/input/DateInput';
 import { TimeInput } from '../../../components/forms/input/TimeInput';
 
-export const EkstraUttakFormTidspunkt: React.FC = () => (
+export const EkstraHentingFormTidspunkt: React.FC = () => (
     <>
         <DateInput name="dato" label="Dato" />
         <TimeInput

@@ -1,17 +1,14 @@
 import * as React from 'react';
-import { Button, space, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
-import { StasjonType } from '../../services/stasjon/StasjonService';
-import { useEkstraHentinger } from '../../services/henting/useEkstraHentinger';
+import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { KategoriList } from '../../components/KategoriList';
-import { EkstraUttakInfo } from './EkstraUttakInfo';
+import { EkstraHentingInfo } from './EkstraHentingInfo';
 import { useAuth } from '../../auth/useAuth';
-import { Roles } from '../../auth/Roles';
 import { ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
 import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
 import { PameldtInfo } from './PameldtInfo';
 import { PartnerPameldingInfo } from './PartnerPameldingInfo';
 
-export const EkstraUttakTable: React.FC = () => {
+export const EkstraHentingTable: React.FC = () => {
     const { user } = useAuth();
 
     let ekstraHentingParams: ApiEkstraHentingParams;
@@ -22,7 +19,7 @@ export const EkstraUttakTable: React.FC = () => {
     const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning({});
 
     if (ekstraHentinger && ekstraHentinger?.length <= 0) {
-        return <Text>Ingen registrerte ekstrauttak</Text>;
+        return <Text>Ingen registrerte ekstrahentinger</Text>;
     }
 
     return (
@@ -45,7 +42,7 @@ export const EkstraUttakTable: React.FC = () => {
                     >
                         <Td>{henting.beskrivelse || 'Ingen merknad skrevet'}</Td>
                         <Td>
-                            <EkstraUttakInfo henting={henting} />
+                            <EkstraHentingInfo henting={henting} />
                         </Td>
                         <Td>
                             <KategoriList

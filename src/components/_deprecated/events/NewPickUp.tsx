@@ -30,11 +30,11 @@ export const NewPickUp: React.FC<Props> = (props) => {
     const queryClient = useQueryClient();
     const addPickUpMutation = useMutation((newPickUp: ApiPickUpPost) => postPickUp(newPickUp), {
         onSuccess: () => {
-            // alert.show('Et nytt ekstrauttak ble lagt til.', { type: types.SUCCESS });
+            // alert.show('En ny ekstrahenting ble lagt til.', { type: types.SUCCESS });
             props.afterSubmit?.(true);
         },
         onError: () => {
-            // alert.show('Noe gikk galt, ekstrauttaket ble ikke lagt til.', { type: types.ERROR });
+            // alert.show('Noe gikk galt, ekstrahentingen ble ikke lagt til.', { type: types.ERROR });
             props.afterSubmit?.(false);
         },
         onSettled: () => {
@@ -86,7 +86,7 @@ export const NewPickUp: React.FC<Props> = (props) => {
     };
 
     return (
-        <EventTemplateVertical title="Utlys ekstrauttak" showEditSymbol={false} isEditing={false}>
+        <EventTemplateVertical title="Utlys ekstrahenting" showEditSymbol={false} isEditing={false}>
             <EventOptionDateRange
                 dateRange={dateRange}
                 timeRange={timeRange}
