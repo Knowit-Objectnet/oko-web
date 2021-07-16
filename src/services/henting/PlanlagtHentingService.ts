@@ -1,5 +1,6 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiHenteplanKategori } from '../henteplan/HenteplanService';
+import { ApiVektregistrering } from '../vektregistrering/VektregistreringService';
 
 export interface ApiPlanlagtHenting {
     id: string; //UUID
@@ -16,6 +17,7 @@ export interface ApiPlanlagtHenting {
     stasjonId: string; //UUID
     stasjonNavn: string;
     kategorier: Array<ApiHenteplanKategori>;
+    vektregistreringer: Array<ApiVektregistrering>;
 }
 
 export interface ApiPlanlagtHentingParams {
