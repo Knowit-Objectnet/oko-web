@@ -25,30 +25,30 @@ const Aarsaker: React.FC = () => {
             <Helmet>
                 <title>Avlysningstekster</title>
             </Helmet>
-            <Flex as="main" direction="column" paddingY="5" paddingX="10" marginX="auto" width="auto">
+            <Flex as="main" direction="column" paddingY="5" paddingX="10" marginX="auto" width="full">
                 <Heading
                     as="h1"
                     fontWeight="normal"
                     fontSize="4xl"
                     width="full"
-                    paddingBottom="3"
+                    paddingBottom="4"
                     marginTop="5"
                     marginBottom="4"
                     borderBottom="1px solid"
                     borderBottomColor="gray.200"
+                    borderBottomWidth="2"
                 >
                     Avlysningstekster
                 </Heading>
                 <HStack margin="15" alignItems="flex-start">
-                    <VStack marginRight="20">
-                        <Heading as="h2" fontWeight="bold" fontSize="md">
+                    <VStack marginRight="20" alignItems="flex-start">
+                        <Heading as="h2" fontWeight="bold" fontSize="md" minWidth="500">
                             Stasjon
                         </Heading>
                         <AarsakList isPartnerAarsaker={false} />
                     </VStack>
-
                     <VStack>
-                        <Heading as="h2" fontWeight="bold" fontSize="md">
+                        <Heading as="h2" fontWeight="bold" fontSize="md" minWidth="500">
                             Partner
                         </Heading>
                         <AarsakList isPartnerAarsaker={true} />
