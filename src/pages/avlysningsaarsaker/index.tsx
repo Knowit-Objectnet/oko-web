@@ -47,7 +47,7 @@ const Aarsaker: React.FC = () => {
                         </Heading>
                         <AarsakList isPartnerAarsaker={false} />
                     </VStack>
-                    <VStack>
+                    <VStack alignItems="flex-start">
                         <Heading as="h2" fontWeight="bold" fontSize="md" minWidth="500">
                             Partner
                         </Heading>
