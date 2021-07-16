@@ -3,7 +3,7 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Checkbox, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
@@ -19,7 +19,7 @@ import { ApiUtlysningBatchPost } from '../../../services/utlysning/UtlysningServ
 import { usePartnere } from '../../../services/partner/usePartnere';
 import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService';
 
-interface EkstraUttakFormData {
+interface EkstraHentingFormData {
     utlysningSelect: UtlysningSelectorType;
     partnere: string[];
 }
@@ -54,7 +54,7 @@ interface Props {
 }
 
 export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) => {
-    const formMethods = useForm<EkstraUttakFormData>({
+    const formMethods = useForm<EkstraHentingFormData>({
         resolver: yupResolver(validationSchema()),
     });
 

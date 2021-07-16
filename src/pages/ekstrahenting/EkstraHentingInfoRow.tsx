@@ -6,7 +6,7 @@ interface Props {
     icon: React.ReactNode;
 }
 
-export const EkstraUttakInfoRow: React.FC<Props> = ({ text, icon }) => {
+export const EkstraHentingInfoRow: React.FC<Props> = ({ text, icon }) => {
     return (
         <Flex>
             <Icon marginRight="3" aria-hidden>
