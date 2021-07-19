@@ -16,12 +16,7 @@ export const HenteplanTable: React.FC<Props> = ({ avtale }) => {
 
     const { user } = useAuth();
     if (user.isStasjon) {
-        sortedHenteplaner = sortedHenteplaner.filter((henteplan) => {
-            if (user.aktorId === henteplan.stasjonId) {
-                console.log(`Gikk gjennom ${henteplan.stasjonId}`);
-                return henteplan;
-            }
-        });
+        sortedHenteplaner = sortedHenteplaner.filter((henteplan) => user.aktorId === henteplan.stasjonId);
     }
 
     return (

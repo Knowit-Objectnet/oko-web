@@ -7,17 +7,12 @@ import { usePartnere } from '../../../services/partner/usePartnere';
 import { useAuth } from '../../../auth/useAuth';
 
 export const PartnerNavigation: React.FC = () => {
-    // TODO: handle error/loading
     const { user } = useAuth();
     const { data: partnere } = usePartnere();
 
     const sortedPartnere = (partnere ?? []).sort((partnerA, partnerB) =>
         partnerA.navn.localeCompare(partnerB.navn, 'nb'),
     );
-
-    /* const filterPartnere = partnere?.filter((partner)=>{
-        if(partner.)
-    })*/
 
     return (
         <Flex
