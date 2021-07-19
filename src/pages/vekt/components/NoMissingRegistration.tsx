@@ -6,20 +6,17 @@ import Location from '../../../assets/Location.svg';
 import Calendar from '../../../assets/Calendar.svg';
 import { HentingButton } from './HentingButton';
 import { KunTotalvekt } from './KunTotalvekt';
-import { ApiHentingParams } from '../../../services/henting/HentingService';
-import { useHentinger } from '../../../services/henting/useHentinger';
-import { useAuth } from '../../../auth/useAuth';
-import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
-import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService';
+import { ApiHenting } from '../../../services/henting/HentingService';
+import { KategorierMedVekt } from './KategorierMedVekt';
+import { getDayString } from '../../henting/HentingDetails';
+import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
+import { formatTime } from '../../../utils/formatDateTime';
 
-export const NoMissingRegistration: React.FC = () => {
-    const { user } = useAuth();
-    const hentingeParametere: ApiHentingParams = { aktorId: user.aktorId };
-    const { data: hentinger } = useHentinger(hentingeParametere);
+interface Props {
+    henting: ApiHenting;
+}
 
-    //const h: Array<ApiPlanlagtHenting | ApiEkstraHenting>
-
-    hentinger?.filter((henting) => henting.sluttTidspunkt);
+export const NoMissingRegistration: React.FC<Props> = ({ henting }) => {
     return (
         <>
             <HStack
@@ -39,26 +36,20 @@ export const NoMissingRegistration: React.FC = () => {
                         Registrert 20.12.12
                     </Text>
                 </HStack>
+                <KategorierMedVekt vektregistreringer={henting.vektregistreringer} />
                 {/* Registrert vekt */}
-                {/*<KategorierMedVekt />*/}
+                {/*<KunTotalvekt />*/}
                 {/* Totalvekt */}
-                <KunTotalvekt />
                 <VStack alignItems="flex-start">
                     <DetailWithIcon icon={Location} label="Stasjon">
                         Grønmo
                     </DetailWithIcon>
                     <DetailWithIcon icon={Calendar} label="Dato og tidspunk">
                         <Text>
-                            {/*
-                    <time>{getDayString(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
-                    {` kl `}
-                    <time>{formatTime(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
-                    {`-`}
-                    <time>{formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))}</time>
-                    */}
-                            1.3.21
+                            <time>{getDayString(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
                             {` kl `}
-                            07:00-09:00
+                            <time>{formatTime(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>-
+                            <time>{formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))}</time>
                         </Text>
                     </DetailWithIcon>
                 </VStack>

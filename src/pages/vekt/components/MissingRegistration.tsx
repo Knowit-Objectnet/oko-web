@@ -6,8 +6,16 @@ import Location from '../../../assets/Location.svg';
 import Calendar from '../../../assets/Calendar.svg';
 import { RegistervektButton } from './RegistervektButton';
 import { KategoriBadge } from './KategoriBadge';
+import { ApiHenting } from '../../../services/henting/HentingService';
+import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
+import { formatTime } from '../../../utils/formatDateTime';
+import { getDayString } from '../../henting/HentingDetails';
 
-export const MissingRegistration: React.FC = () => (
+interface Props {
+    henting: ApiHenting;
+}
+
+export const MissingRegistration: React.FC<Props> = ({ henting }) => (
     <>
         <HStack
             justifyContent="space-between"
@@ -22,30 +30,24 @@ export const MissingRegistration: React.FC = () => (
                 Ikke registrert vekt
             </Heading>
             <HStack>
-                <KategoriBadge name="Bygg" />
-                <KategoriBadge name="Barn" />
-                <KategoriBadge name="Møbler" />
+                {henting.kategorier.map((kategori) => {
+                    return <KategoriBadge key={kategori.kategori.id} name={kategori.kategori.navn} />;
+                })}
             </HStack>
             <VStack alignItems="flex-start">
                 <DetailWithIcon icon={Location} label="Stasjon">
-                    Grønmo
+                    {henting.stasjonNavn}
                 </DetailWithIcon>
                 <DetailWithIcon icon={Calendar} label="Dato og tidspunk">
                     <Text>
-                        {/*
-                    <time>{getDayString(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
-                    {` kl `}
-                    <time>{formatTime(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
-                    {`-`}
-                    <time>{formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))}</time>
-                    */}
-                        1.3.21
+                        <time>{getDayString(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
                         {` kl `}
-                        07:00-09:00
+                        <time>{formatTime(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>-
+                        <time>{formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))}</time>
                     </Text>
                 </DetailWithIcon>
             </VStack>
-            <RegistervektButton />
+            <RegistervektButton henting={henting} />
         </HStack>
     </>
 );

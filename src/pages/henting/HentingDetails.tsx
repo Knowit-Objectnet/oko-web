@@ -21,7 +21,7 @@ import { colors } from '../../theme/foundations/colors';
 import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
 
-const getDayString = (date: Date) => {
+export const getDayString = (date: Date) => {
     if (isToday(date)) {
         return 'I dag';
     }
