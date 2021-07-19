@@ -13,7 +13,7 @@ export interface ApiKontakt {
     telefon?: string;
     epost?: string;
     rolle?: string;
-    verifiseringsStatus: VerifiseringStatus;
+    verifiseringStatus: VerifiseringStatus;
 }
 
 export interface ApiKontaktPost {
