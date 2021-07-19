@@ -4,9 +4,10 @@ import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
 import { usePartnere } from '../../../services/partner/usePartnere';
+import { useAuth } from '../../../auth/useAuth';
 
 export const PartnerNavigation: React.FC = () => {
-    // TODO: handle error/loading
+    const { user } = useAuth();
     const { data: partnere } = usePartnere();
 
     const sortedPartnere = (partnere ?? []).sort((partnerA, partnerB) =>
@@ -41,7 +42,7 @@ export const PartnerNavigation: React.FC = () => {
                     </ListItem>
                 ))}
             </List>
-            <AddPartnerButton marginTop="10" width="full" variant="outlineOnSurface" />
+            {user.isAdmin ? <AddPartnerButton marginTop="10" width="full" variant="outlineOnSurface" /> : null}
         </Flex>
     );
 };
