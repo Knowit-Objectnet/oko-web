@@ -1,5 +1,11 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 
+export interface VerifiseringStatus {
+    id: string;
+    telefonVerifisert: boolean;
+    epostVerifisert: boolean;
+}
+
 export interface ApiKontakt {
     id: string;
     aktorId: string;
@@ -7,6 +13,7 @@ export interface ApiKontakt {
     telefon?: string;
     epost?: string;
     rolle?: string;
+    verifiseringsStatus: VerifiseringStatus;
 }
 
 export interface ApiKontaktPost {
