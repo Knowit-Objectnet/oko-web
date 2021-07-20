@@ -19,6 +19,7 @@ export const EditStasjonButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> =
                 aria-label={`Rediger informasjon for ${stasjon.navn}`}
                 {...props}
                 onClick={onOpen}
+                borderRadius="6"
             />
             <Modal title="Rediger stasjon" isOpen={isOpen} onClose={onClose}>
                 <StasjonForm onSuccess={onClose} stasjonToEdit={stasjon} />

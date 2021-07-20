@@ -36,7 +36,7 @@ export const DeleteStasjonButton: React.FC<Props> = ({ stasjon }) => {
             onConfirm={handleDeleteStasjon}
             isLoading={deleteStasjonMutation.isLoading}
         >
-            <DeleteButton label="Slett" aria-label="Slett stasjonen" />
+            <DeleteButton label="Slett" aria-label="Slett stasjonen" borderRadius="6" />
         </ConfirmationPopover>
     );
 };
