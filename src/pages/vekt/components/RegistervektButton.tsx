@@ -6,13 +6,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { ApiHenting } from '../../../services/henting/HentingService';
 
 interface Props {
-    henting: ApiHenting;
+    henting: ApiHenting | undefined;
 }
 
 export const RegistervektButton: React.FC<Props> = ({ henting }) => {
     const location = useLocation();
-
-    return (
+    return henting ? (
         <>
             <Button
                 variant="outline"
@@ -33,5 +32,5 @@ export const RegistervektButton: React.FC<Props> = ({ henting }) => {
                 Registrer vekt
             </Button>
         </>
-    );
+    ) : null;
 };

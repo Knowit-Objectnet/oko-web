@@ -25,7 +25,23 @@ const GlobalErrorMessage: React.FC<Props> = ({ globalError }) => {
 const FieldErrorMessages: React.FC = () => {
     const { errors, isSubmitted } = useFormState();
 
-    const errorMessages = Object.values(errors).map((error) => error.message);
+    console.log(errors);
+
+    const iterate = (obj: { [key: string]: any }): string[] => {
+        let messages: string[] = [];
+        Object.keys(obj).forEach((key) => {
+            if (!key.localeCompare('ref')) console.log('Damn ref', key);
+            else if (typeof obj[key] === 'object') {
+                const nestedMessages = iterate(obj[key]);
+                messages = messages.concat(nestedMessages);
+            } else if (key === 'message') {
+                messages.push(obj[key]);
+            }
+        });
+        return messages;
+    };
+
+    const errorMessages = iterate(errors);
     const formHasErrors = errorMessages.length > 0;
 
     return isSubmitted && formHasErrors ? (
