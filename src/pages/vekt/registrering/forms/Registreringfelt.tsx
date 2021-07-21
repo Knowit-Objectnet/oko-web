@@ -21,7 +21,7 @@ interface Props extends FormFieldProps {
     children?: React.ReactNode | FormFieldRenderProp;
 }
 
-export const Registreringsfelt: React.FC<Props> = ({ height, width, onChange, vektobjekt, setVekt, children }) => {
+export const Registreringsfelt: React.FC<Props> = ({ onChange, vektobjekt, setVekt, children }) => {
     const update = (vektobjekt: Vektobjekt) => {
         if (onChange) onChange(vektobjekt);
         else if (setVekt) setVekt(vektobjekt);
@@ -29,19 +29,6 @@ export const Registreringsfelt: React.FC<Props> = ({ height, width, onChange, ve
     };
 
     const { setValue } = useFormContext();
-
-    const {
-        formState: { errors, isSubmitted },
-    } = useFormContext();
-
-    const isInvalid = errors[vektobjekt.navn] && isSubmitted;
-
-    const renderFormField = () => {
-        if (typeof children === 'function') {
-            return children({ isInvalid });
-        }
-        return children;
-    };
 
     const options: Array<SelectOption> = [
         { label: 'Kg', value: Unit[0] },
@@ -62,15 +49,14 @@ export const Registreringsfelt: React.FC<Props> = ({ height, width, onChange, ve
                     textAlign="center"
                     placeholder="0"
                     aria-label="Vektinput"
-                    width={width || '6rem'}
-                    height={height || '2.5rem'}
+                    width="6rem"
+                    height="2.5rem"
                     marginRight={2}
                     onChange={(event) => {
                         const value = parseFloat(event.target.value);
                         vektobjekt.value = value;
                         update(vektobjekt);
                     }}
-                    defaultValue={0}
                 />
                 <Select
                     name={`${vektobjekt.navn}.unit`}
@@ -78,7 +64,8 @@ export const Registreringsfelt: React.FC<Props> = ({ height, width, onChange, ve
                     backgroundColor={colors.LightBeige}
                     style={{ textAlignLast: 'center' }}
                     aria-label="Vektenhet"
-                    height={height || '2.5rem'}
+                    height="2.5rem"
+                    width="8rem"
                     onChange={(event) => {
                         const value = parseInt(event.target.value);
                         vektobjekt.unit = value;

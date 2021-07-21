@@ -48,7 +48,11 @@ export const VektForm: React.FC<Props> = ({ henting, vektobjekter, setVekt, onSu
             validationObject[key] = yup.object({
                 id: yup.string().required(),
                 unit: yup.string().required(),
-                value: yup.number().label('Vekten må startet med et tall'),
+                value: yup
+                    .number()
+                    .typeError('Vekten må ha minst ett tall')
+                    .min(0, 'Vektregistreringen kan ikke være mindre enn 0')
+                    .label(`Mangler for kaategorien: ${key}.\n Vekten må startet med et tall`),
             });
         }
     });
