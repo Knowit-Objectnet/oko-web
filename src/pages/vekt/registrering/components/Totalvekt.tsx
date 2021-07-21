@@ -25,7 +25,6 @@ export const Totalvekt: React.FC<Props> = ({ vektobjekter }) => {
                 }
             }
         }
-        console.log('Total:', total);
         return total;
     };
     return (
