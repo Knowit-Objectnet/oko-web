@@ -100,7 +100,6 @@ export const VektForm: React.FC<Props> = ({ henting, vektobjekter, onSuccess }) 
     };
 
     const handleSubmit = formMethods.handleSubmit((formData) => {
-        console.log(formData);
         setApiOrNetworkError(undefined);
 
         batchAddVektregistrering(transformFormData(formData));
