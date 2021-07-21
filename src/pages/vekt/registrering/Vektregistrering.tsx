@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Flex, Heading, HStack, Icon, LinkOverlay, Text, VStack } from '@chakra-ui/react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { colors } from '../../../theme/foundations/colors';
 import Checkbox from '../../../assets/Checkbox.svg';
 import Cross from '../../../assets/Cross.svg';
@@ -33,6 +33,7 @@ export enum Unit {
 
 export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
     const { state: locationState } = useLocation<{ henting?: ApiHentingWrapper; prevPath?: string }>();
+    const history = useHistory();
 
     const [vektobjekter, setVekt] = useState<Vektobjekter>({});
 
@@ -46,6 +47,10 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
                 </Button>
             );
         }
+    };
+
+    const onSuccess = () => {
+        history.push(`/henting/${hentingId}`);
     };
 
     // TODO: create better UI for loading and error states
@@ -77,7 +82,12 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
                                 kun de du kan registrere vekt på. Andre kategorier går under
                                 <span style={{ fontWeight: 500 }}> Andre ombruksvarer</span>
                             </Text>
-                            <VektForm henting={veiHenting} setVekt={setVekt} vektobjekter={vektobjekter} />
+                            <VektForm
+                                henting={veiHenting}
+                                setVekt={setVekt}
+                                vektobjekter={vektobjekter}
+                                onSuccess={onSuccess}
+                            />
                         </VStack>
 
                         <Flex
