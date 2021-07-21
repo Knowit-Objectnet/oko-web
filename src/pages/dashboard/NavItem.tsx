@@ -120,7 +120,6 @@ export const VektNotification: React.FC<NotificationProps> = ({ notification }) 
     const manglerVeiing: Array<ApiHenting> = hentingType.filter((henting) => henting.vektregistreringer.length <= 0);
 
     const count: number = manglerVeiing.length;
-    console.log(hentinger);
 
     return (
         <>

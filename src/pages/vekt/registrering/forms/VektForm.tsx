@@ -17,8 +17,6 @@ import {
 import { useBatchAddVektregistrering } from '../../../../services/vektregistrering/useBatchAddVektregistrering';
 import { ApiHenting } from '../../../../services/henting/HentingService';
 import { RegistrerVektkategori } from './RegistrerVektkategori';
-import { useHistory } from 'react-router-dom';
-import { useKategorier } from '../../../../services/kategori/useKategorier';
 
 interface VektFormData {
     [key: string]: Vektobjekt;

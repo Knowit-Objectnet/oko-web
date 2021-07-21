@@ -21,7 +21,7 @@ interface Props extends FormFieldProps {
     children?: React.ReactNode | FormFieldRenderProp;
 }
 
-export const Registreringsfelt: React.FC<Props> = ({ onChange, vektobjekt, setVekt, children }) => {
+export const Registreringsfelt: React.FC<Props> = ({ onChange, vektobjekt, setVekt }) => {
     const update = (vektobjekt: Vektobjekt) => {
         if (onChange) onChange(vektobjekt);
         else if (setVekt) setVekt(vektobjekt);

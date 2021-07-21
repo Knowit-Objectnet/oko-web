@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Button, Flex, Heading, HStack, Icon, LinkOverlay, Text, VStack } from '@chakra-ui/react';
+import { Button, Flex, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { colors } from '../../../theme/foundations/colors';
 import Checkbox from '../../../assets/Checkbox.svg';
-import Cross from '../../../assets/Cross.svg';
 import { Totalvekt } from './components/Totalvekt';
 import { ApiHenting, ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { useHentingById } from '../../../services/henting/useHentingById';
@@ -97,6 +96,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
                         >
                             {getBackButton()}
                             <HStack spacing={6}>
+                                {/* //TODO: DENNE KNAPPEN ER DEAKTIVERT INNTILL VI VET HVA DEN SKAL GJØRE
                                 <Button
                                     paddingX={8}
                                     paddingY={6}
@@ -107,6 +107,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
                                 >
                                     Jeg hentet ikke varene
                                 </Button>
+                                 */}
                                 <Button
                                     type="submit"
                                     form="vekt-form"
