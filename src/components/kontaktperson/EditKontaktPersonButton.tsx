@@ -16,6 +16,7 @@ export const EditKontaktPersonButton: React.FC<Props & Omit<ButtonProps, 'onClic
         <>
             <EditButton
                 label="Rediger"
+                borderRadius="6"
                 aria-label={`Rediger kontaktinformasjon for ${kontakt.navn}`}
                 {...props}
                 onClick={onOpen}

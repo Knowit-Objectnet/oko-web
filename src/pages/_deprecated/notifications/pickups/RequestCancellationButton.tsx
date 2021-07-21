@@ -23,7 +23,7 @@ export const RequestCancellationButton: React.FC<Props> = ({ pickupId, onRequest
     const queryClient = useQueryClient();
     const deleteRequestMutation = useMutation((request: ApiRequestParams) => deleteRequest(request), {
         onError: () => {
-            // alert.show('Noe gikk galt, avmelding til ekstrauttaket ble ikke registrert.', {
+            // alert.show('Noe gikk galt, avmelding til ekstrahentingen ble ikke registrert.', {
             //     type: types.ERROR,
             // });
         },

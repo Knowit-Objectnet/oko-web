@@ -2,9 +2,9 @@ import * as yup from 'yup';
 import { transformStringToDate } from '../../../utils/forms/transformStringToDate';
 import { transformStringToDateTime } from '../../../utils/forms/transformStringToDateTime';
 import { add, isEqual } from 'date-fns';
-import { NårType, nårOptions, UtlysningSelectorType, utlysningSelectorOptions } from './EkstraUttakForm';
+import { NårType, nårOptions, UtlysningSelectorType, utlysningSelectorOptions } from './EkstraHentingForm';
 
-export const getEkstraUttakValidationSchema = (stasjonId?: string) =>
+export const getEkstraHentingValidationSchema = (stasjonId?: string) =>
     yup.object().shape({
         stasjon: yup.string().when((value: unknown, schema: yup.StringSchema) => {
             if (stasjonId) {

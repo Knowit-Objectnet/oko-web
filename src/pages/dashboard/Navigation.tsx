@@ -16,7 +16,7 @@ const getNavItemsForRole = (user: UserInfo) => {
             <>
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
                 <NavItem path="/avtaler" icon={<Herretoalett />} label="Partnere" />
-                <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
+                <NavItem path="/ekstrahenting" icon={<Bell />} label="Ekstrahenting" />
                 <NavItem path="/innstillinger" icon={<Filtrer />} label="Innstillinger" />
                 <NavItemWithNotification
                     path="/vekt"
@@ -31,7 +31,7 @@ const getNavItemsForRole = (user: UserInfo) => {
             <>
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
                 <NavItem path="/minavtale" icon={<List />} label="Mine avtaler" />
-                <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
+                <NavItem path="/ekstrahenting" icon={<Bell />} label="Ekstrahenting" />
                 <NavItemWithNotification
                     path="/vekt"
                     icon={<Weight />}
@@ -44,7 +44,9 @@ const getNavItemsForRole = (user: UserInfo) => {
         return (
             <>
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
-                <NavItem path="/ekstrauttak" icon={<Bell />} label="Ekstrauttak" />
+
+                <NavItem path="/avtaler" icon={<Herretoalett />} label="Partnere" />
+                <NavItem path="/ekstrahenting" icon={<Bell />} label="Ekstrahenting" />
                 <NavItemWithNotification
                     path="/vekt"
                     icon={<Weight />}

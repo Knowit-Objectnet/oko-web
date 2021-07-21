@@ -3,33 +3,33 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Stack } from '@chakra-ui/react';
-import { ErrorMessages } from '../../../components/forms/ErrorMessages';
-import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
-import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { ApiError } from '../../../services/httpClient';
+import { ErrorMessages } from '../../components/forms/ErrorMessages';
+import { RequiredFieldsInstruction } from '../../components/forms/RequiredFieldsInstruction';
+import { FormSubmitButton } from '../../components/forms/FormSubmitButton';
+import { useSuccessToast } from '../../components/toasts/useSuccessToast';
+import { ApiError } from '../../services/httpClient';
 
 // NB! Setting the error messages used by yup
-import '../../../utils/forms/formErrorMessages';
-import { KategoriSelect } from '../../../components/forms/KategoriSelect';
-import { TextArea } from '../../../components/forms/TextArea';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
-import { TimeInput } from '../../../components/forms/input/TimeInput';
-import { EkstraUttakFormTidspunkt } from './EkstraUttakFormTidspunkt';
-import { PartnerSelectMultiple } from '../../../components/forms/PartnerSelect';
-import { ApiEkstraHentingPost } from '../../../services/henting/EkstraHentingService';
-import { useAddEkstraHenting } from '../../../services/henting/useAddEkstraHenting';
-import { StasjonSelect } from '../../../components/forms/StasjonSelect';
-import { usePartnere } from '../../../services/partner/usePartnere';
-import { getEkstraUttakValidationSchema } from './ekstraUttakFormSchema';
-import { dateTimeToStringIgnoreTimezone, mergeDateWithTimeToString } from '../../../utils/hentingDateTimeHelpers';
+import '../../utils/forms/formErrorMessages';
+import { KategoriSelect } from '../../components/forms/KategoriSelect';
+import { TextArea } from '../../components/forms/TextArea';
+import { RadiobuttonGroup, RadioOption } from '../../components/forms/RadiobuttonGroup';
+import { TimeInput } from '../../components/forms/input/TimeInput';
+import { PartnerSelectMultiple } from '../../components/forms/PartnerSelect';
+import { ApiEkstraHentingPost } from '../../services/henting/EkstraHentingService';
+import { useAddEkstraHenting } from '../../services/henting/useAddEkstraHenting';
+import { StasjonSelect } from '../../components/forms/StasjonSelect';
+import { usePartnere } from '../../services/partner/usePartnere';
+import { dateTimeToStringIgnoreTimezone, mergeDateWithTimeToString } from '../../utils/hentingDateTimeHelpers';
+import { getEkstraHentingValidationSchema } from './forms/EkstraHentingFormSchema';
+import { EkstraHentingFormTidspunkt } from './forms/EkstraHentingFormTidspunkt';
 
-interface EkstraUttakFormData {
+interface EkstraHentingFormData {
     stasjon: string;
     beskrivelse: string;
     når: NårType;
     kategorier: string[];
-    // uttakType: UttakType;
+    // hentingType: HentingType;
     utlysningSelect: UtlysningSelectorType;
     dato: Date;
     startTidspunkt: Date;
@@ -38,7 +38,7 @@ interface EkstraUttakFormData {
 }
 
 export type NårType = 'NOW' | 'CUSTOM';
-type UttakType = 'FIRST' | 'ACCEPT';
+type HentingType = 'FIRST' | 'ACCEPT';
 export type UtlysningSelectorType = 'ALL' | 'CUSTOM';
 
 export const nårOptions: Array<RadioOption<NårType>> = [
@@ -46,7 +46,7 @@ export const nårOptions: Array<RadioOption<NårType>> = [
     { value: 'CUSTOM', label: 'Jeg vil sette tidspunkt' },
 ];
 
-export const uttakTypeOptions: Array<RadioOption<UttakType>> = [
+export const uttakTypeOptions: Array<RadioOption<HentingType>> = [
     { value: 'FIRST', label: 'Førstemann til mølla' },
     { value: 'ACCEPT', label: 'Godkjenning' },
 ];
@@ -63,9 +63,9 @@ interface Props {
     onSuccess?: () => void;
 }
 
-export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
-    const formMethods = useForm<EkstraUttakFormData>({
-        resolver: yupResolver(getEkstraUttakValidationSchema(stasjonId)),
+export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
+    const formMethods = useForm<EkstraHentingFormData>({
+        resolver: yupResolver(getEkstraHentingValidationSchema(stasjonId)),
     });
 
     const { data: allPartnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
@@ -73,7 +73,7 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
-    const transformFormData = (formData: EkstraUttakFormData): ApiEkstraHentingPost => {
+    const transformFormData = (formData: EkstraHentingFormData): ApiEkstraHentingPost => {
         return {
             stasjonId: formData.stasjon || stasjonId!,
             startTidspunkt:
@@ -132,14 +132,14 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
                     {når && når == 'NOW' ? (
                         <TimeInput name="sluttTidspunkt" label="Sluttidspunkt" helperText="Frem til kl" />
                     ) : null}
-                    {når && når == 'CUSTOM' ? <EkstraUttakFormTidspunkt /> : null}
+                    {når && når == 'CUSTOM' ? <EkstraHentingFormTidspunkt /> : null}
                     <KategoriSelect
                         name="kategorier"
                         label="Kategorier"
                         helperText="Hvilke kategorier kan hentes?"
                         required
                     />
-                    {/* <RadiobuttonGroup name="uttakType" label="Type uttak" options={uttakTypeOptions} required /> */}
+                    {/* <RadiobuttonGroup name="hentingType" label="Type henting" options={hentingTypeOptions} required /> */}
                     <RadiobuttonGroup
                         name="utlysningSelect"
                         label="Hvem kan melde seg på?"
@@ -150,7 +150,7 @@ export const EkstraUttakForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
                         <PartnerSelectMultiple name="partnere" label="Velg partnere" />
                     ) : null}
                     <FormSubmitButton
-                        label="Registrer nytt ekstrauttak"
+                        label="Registrer ny ekstrahenting"
                         isLoading={addEkstraHentingMutation.isLoading}
                         loadingText="Lagrer..."
                     />

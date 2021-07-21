@@ -9,7 +9,13 @@ export const AddKategoriButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props)
 
     return (
         <>
-            <Button leftIcon={<Icon as={Plus} />} {...props} onClick={onOpen}>
+            <Button
+                borderRadius="6"
+                aria-label="Opprett ny kategori"
+                leftIcon={<Icon as={Plus} />}
+                {...props}
+                onClick={onOpen}
+            >
                 Legg til kategori
             </Button>
             <Modal title="Legg til ny kategori" isOpen={isOpen} onClose={onClose}>

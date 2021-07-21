@@ -30,7 +30,7 @@ export const PameldtInfo: React.FC<Props> = ({ henting }) => {
                         </Text>
                     </Box>
                     {!isLoading && !isLoadingError && henting.utlysninger.length < allPartnere!.length ? (
-                        <UtlysFlerePartnereButton henting={henting} />
+                        <UtlysFlerePartnereButton henting={henting} backgroundColor="White" borderRadius="6" />
                     ) : null}
                 </Flex>
             )}

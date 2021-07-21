@@ -17,6 +17,7 @@ import {
     StasjonInfoSectionHeader,
     StasjonInfoSectionTitle,
 } from '../../pages/stasjoner/stasjon/StasjonInfoSection';
+import { useAuth } from '../../auth/useAuth';
 
 interface Props {
     aktor: ApiPartner | ApiStasjon;
@@ -25,6 +26,7 @@ interface Props {
 
 export const KontaktPersonSection: React.FC<Props> = ({ aktor, isPartner }) => {
     const { kontaktPersoner } = aktor;
+    const { user } = useAuth();
 
     if (isPartner) {
         return (
@@ -32,7 +34,7 @@ export const KontaktPersonSection: React.FC<Props> = ({ aktor, isPartner }) => {
                 <PartnerInfoSectionHeader>
                     <PartnerInfoSectionTitle>Kontaktpersoner</PartnerInfoSectionTitle>
                     <PartnerInfoSectionButtons>
-                        <AddKontaktPersonButton aktor={aktor} />
+                        {user.isStasjon ? null : <AddKontaktPersonButton aktor={aktor} />}
                     </PartnerInfoSectionButtons>
                 </PartnerInfoSectionHeader>
                 <PartnerInfoSectionContent>
