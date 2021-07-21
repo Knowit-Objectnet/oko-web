@@ -30,7 +30,7 @@ export const NoMissingRegistration: React.FC<Props> = ({ henting }) => {
             >
                 <HStack alignItems="center" spacing={4}>
                     <Heading fontSize="1.5rem" fontWeight="bold" textAlign="center">
-                        104 tonn
+                        {henting.vektregistreringer.reduce((total, next) => total + next.vekt, 0)} kg
                     </Heading>
                     <Text fontSize="0.8rem" fontWeight="normal">
                         Registrert 20.12.12
