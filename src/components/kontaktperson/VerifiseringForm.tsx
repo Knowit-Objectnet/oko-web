@@ -3,8 +3,8 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ApiKontakt, ApiVerifiserPost } from '../../services/aktor/KontaktService';
-import { Button, Flex, Heading, Icon, Stack, Text } from '@chakra-ui/react';
+import { ApiKontakt } from '../../services/aktor/KontaktService';
+import { Flex, Heading, Icon, Stack, Text } from '@chakra-ui/react';
 import { ErrorMessages } from '../forms/ErrorMessages';
 import { Input } from '../forms/input/Input';
 import { FormSubmitButton } from '../forms/FormSubmitButton';
@@ -16,7 +16,6 @@ import Check from '../../assets/Check.svg';
 // NB! Setting the error messages used by yup
 import '../../utils/forms/formErrorMessages';
 import { useVerifiser } from '../../services/aktor/useVerifiser';
-import { SendVerifiseringButton } from './SendVerifiseringButton';
 
 const validationSchema = (label: string) =>
     yup.object().shape({

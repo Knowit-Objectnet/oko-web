@@ -29,7 +29,7 @@ export const OpenVerifiseringPageButton: React.FC<Props & Omit<ButtonProps, 'onC
                 Verifiser
             </Button>
             <Modal title={`Verifiser kontaktinformasjon for ${kontakt.navn}`} isOpen={isOpen} onClose={onClose}>
-                <VerifiseringPage kontakt={kontakt} onSuccess={onClose} />
+                <VerifiseringPage kontakt={kontakt} onClose={onClose} />
             </Modal>
         </>
     );
