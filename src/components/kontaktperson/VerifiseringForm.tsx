@@ -16,40 +16,35 @@ import Check from '../../assets/Check.svg';
 // NB! Setting the error messages used by yup
 import '../../utils/forms/formErrorMessages';
 import { useVerifiser } from '../../services/aktor/useVerifiser';
-import { SendVerificationButton } from './SendVerificationButton';
+import { SendVerifiseringButton } from './SendVerifiseringButton';
 
-const validationSchema = yup.object().shape({
-    telefonKode: yup
-        .string()
-        .label('verifiseringskode for telefon')
-        .trim()
-        .matches(/^\d{6}$/, {
-            message: ({ label }: { label: string }) => `${upperFirst(label)} må være en gyldig sekssifret kode`,
-            excludeEmptyString: true,
-        })
-        .transform((code: string) => (code.length === 0 ? null : code))
-        .nullable(),
-    epostKode: yup
-        .string()
-        .label('verifiseringskode for epost')
-        .trim()
-        .matches(/^\d{6}$/, {
-            message: ({ label }: { label: string }) => `${upperFirst(label)} må være en gyldig sekssifret kode`,
-            excludeEmptyString: true,
-        })
-        .transform((code: string) => (code.length === 0 ? null : code))
-        .nullable(),
-});
+const validationSchema = (label: string) =>
+    yup.object().shape({
+        kode: yup
+            .string()
+            .label(label)
+            .trim()
+            .matches(/^\d{6}$/, {
+                message: ({ label }: { label: string }) => `${upperFirst(label)} må være en gyldig sekssifret kode`,
+                excludeEmptyString: true,
+            })
+            .transform((code: string) => (code.length === 0 ? null : code))
+            .nullable(),
+    });
 
 interface Props {
     kontakt: ApiKontakt;
-    /** Callback that will fire if registration is successful: **/
-    onSuccess: () => void;
+    type: 'telefon' | 'e-post';
 }
 
-export const VerifiseringForm: React.FC<Props> = ({ kontakt, onSuccess }) => {
-    const formMethods = useForm<ApiVerifiserPost>({
-        resolver: yupResolver(validationSchema),
+interface SingleVerifiseringType {
+    id: string;
+    kode: string;
+}
+
+export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
+    const formMethods = useForm<SingleVerifiseringType>({
+        resolver: yupResolver(validationSchema(`Verifiseringskode for ${type}`)),
         defaultValues: undefined,
     });
 
@@ -62,8 +57,9 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, onSuccess }) => {
 
         verifiserMutation.mutate(
             {
-                ...formData,
                 id: kontakt.id,
+                telefonKode: type === 'telefon' ? formData.kode : undefined,
+                epostKode: type === 'e-post' ? formData.kode : undefined,
             },
             {
                 onSuccess: (data) => {
@@ -103,72 +99,54 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, onSuccess }) => {
         );
     };
 
-    const telefonVerifisert = kontakt.verifiseringStatus.telefonVerifisert;
-    const epostVerifisert = kontakt.verifiseringStatus.epostVerifisert;
+    const isVerifisert =
+        type === 'telefon' ? kontakt.verifiseringStatus.telefonVerifisert : kontakt.verifiseringStatus.epostVerifisert;
 
-    const showTelefonForm = () => {
+    const getForm = () => {
         return (
             <>
                 <Heading as="h2" fontSize="2xl">
-                    Verifiser SMS
+                    {`Verifiser ${type === 'telefon' ? 'SMS' : 'e-post'}`}
                 </Heading>
                 <Input
-                    name="telefonKode"
-                    label="Skriv inn kode fra SMS"
+                    name="kode"
+                    label={`Skriv inn kode fra ${type === 'telefon' ? 'SMS' : 'e-post'}`}
                     type="number"
-                    isDisabled={telefonVerifisert}
-                    helperText="Vi sender en verifiseringskode til ditt telefonnummer."
+                    isDisabled={isVerifisert}
+                    helperText={`Vi sender en verifiseringskode til ${
+                        type === 'telefon' ? 'ditt telefonnummer' : 'din e-post'
+                    }.`}
                 />
-                {telefonVerifisert ? <VerifisertBox aria-label="Telefonnummer er verifisert" /> : null}
-            </>
-        );
-    };
-
-    const showEpostForm = () => {
-        return (
-            <>
-                <Heading as="h2" fontSize="2xl">
-                    Verifiser E-post
-                </Heading>
-                <Input
-                    name="epostKode"
-                    label="Skriv inn kode fra e-post"
-                    type="number"
-                    isDisabled={epostVerifisert}
-                    helperText="Vi sender en verifiseringskode til din e-post."
-                />
-                {epostVerifisert ? <VerifisertBox aria-label="E-post er verifisert" /> : null}
             </>
         );
     };
 
     return (
         <FormProvider {...formMethods}>
-            <Flex flexDirection="column">
-                <form onSubmit={handleSubmit}>
-                    <Stack direction="column" spacing="7" width="full">
-                        <ErrorMessages globalError={apiOrNetworkError} />
-                        {kontakt.telefon ? showTelefonForm() : null}
-                        {kontakt.epost ? showEpostForm() : null}
-                        <FormSubmitButton
-                            label="Verifiser"
-                            isLoading={verifiserMutation.isLoading}
-                            loadingText="Lagrer..."
-                        />
-                    </Stack>
-                </form>
-                <SendVerificationButton kontakt={kontakt} />
-                <Button
-                    variant="primary"
-                    width="fit-content"
-                    onClick={onSuccess}
-                    alignSelf="flex-end"
-                    size="lg"
-                    marginTop="7"
-                >
-                    Ferdig
-                </Button>
-            </Flex>
+            <form onSubmit={handleSubmit}>
+                <Stack direction="column" spacing="7" width="full">
+                    <ErrorMessages globalError={apiOrNetworkError} />
+                    {getForm()}
+                    <Flex width="full" justifyContent="flex-end" marginBottom="2">
+                        {isVerifisert ? (
+                            <VerifisertBox
+                                aria-label={` ${type === 'telefon' ? 'Telefonnummer' : 'E-post'} er verifisert`}
+                            />
+                        ) : (
+                            <FormSubmitButton
+                                label={`Verifiser ${type === 'telefon' ? 'SMS' : 'e-post'}`}
+                                size="lg"
+                                width="fit-content"
+                                paddingX="3"
+                                paddingY="2"
+                                margin="0"
+                                isLoading={verifiserMutation.isLoading}
+                                loadingText="Lagrer..."
+                            />
+                        )}
+                    </Flex>
+                </Stack>
+            </form>
         </FormProvider>
     );
 };

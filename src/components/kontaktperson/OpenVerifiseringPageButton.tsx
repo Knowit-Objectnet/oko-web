@@ -8,12 +8,13 @@ import { ApiStasjon } from '../../services/stasjon/StasjonService';
 import { ApiKontakt } from '../../services/aktor/KontaktService';
 import NyttVindu from '../../assets/NyttVindu.svg';
 import { VerifiseringForm } from './VerifiseringForm';
+import { VerifiseringPage } from './VerifiseringPage';
 
 interface Props {
     kontakt: ApiKontakt;
 }
 
-export const OpenVerificationFormButon: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ kontakt, ...props }) => {
+export const OpenVerifiseringPageButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ kontakt, ...props }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -28,7 +29,7 @@ export const OpenVerificationFormButon: React.FC<Props & Omit<ButtonProps, 'onCl
                 Verifiser
             </Button>
             <Modal title={`Verifiser kontaktinformasjon for ${kontakt.navn}`} isOpen={isOpen} onClose={onClose}>
-                <VerifiseringForm kontakt={kontakt} onSuccess={onClose} />
+                <VerifiseringPage kontakt={kontakt} onSuccess={onClose} />
             </Modal>
         </>
     );

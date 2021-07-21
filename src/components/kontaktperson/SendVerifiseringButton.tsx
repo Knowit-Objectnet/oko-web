@@ -1,15 +1,15 @@
-import { Button } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { ApiKontakt } from '../../services/aktor/KontaktService';
 import { useSendVerifisering } from '../../services/aktor/useSendVerifisering';
 import { useErrorToast } from '../toasts/useErrorToast';
 import { useSuccessToast } from '../toasts/useSuccessToast';
 
-interface Props {
+interface Props extends ButtonProps {
     kontakt: ApiKontakt;
 }
 
-export const SendVerificationButton: React.FC<Props> = ({ kontakt }) => {
+export const SendVerifiseringButton: React.FC<Props> = ({ kontakt, ...props }) => {
     const showSuccessToast = useSuccessToast();
     const showErrorToast = useErrorToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
@@ -45,6 +45,7 @@ export const SendVerificationButton: React.FC<Props> = ({ kontakt }) => {
             loadingText="Sender nye koder..."
             onClick={handleClick}
             aria-label="Send nye verifiseringskoder e-post og/eller SMS"
+            {...props}
         >
             {numOfVerifiseringToSend() > 1 ? 'Send nye verifiseringskoder' : 'Send ny verifiseringskode'}
         </Button>

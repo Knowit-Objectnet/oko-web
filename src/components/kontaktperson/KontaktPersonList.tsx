@@ -5,7 +5,7 @@ import { EditKontaktPersonButton } from './EditKontaktPersonButton';
 import { DeleteKontaktPersonButton } from './DeleteKontaktPersonButton';
 import { List, ListItem } from '@chakra-ui/react';
 import DefaultProfilePic from '../../assets/Default_profile_pic.svg';
-import { OpenVerificationFormButon } from './OpenVerificationFormButton';
+import { OpenVerifiseringPageButton } from './OpenVerifiseringPageButton';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;
@@ -59,7 +59,7 @@ export const KontaktPersonList: React.FC<Props> = ({ kontaktPersoner }) => {
                                 <DeleteKontaktPersonButton kontakt={kontakt} />
                                 {(kontakt.telefon && !kontakt.verifiseringStatus.telefonVerifisert) ||
                                 (kontakt.epost && !kontakt.verifiseringStatus.epostVerifisert) ? (
-                                    <OpenVerificationFormButon kontakt={kontakt} />
+                                    <OpenVerifiseringPageButton kontakt={kontakt} />
                                 ) : null}
                             </ButtonGroup>
                             <Flex marginTop="4">
