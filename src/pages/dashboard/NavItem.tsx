@@ -3,6 +3,10 @@ import { NavLink, NavLinkProps } from 'react-router-dom';
 import { Box, Flex, Link, LinkProps } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
 import { Circle } from '@chakra-ui/react';
+import { useAuth } from '../../auth/useAuth';
+import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
+import { useHentinger } from '../../services/henting/useHentinger';
+import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link
@@ -55,27 +59,82 @@ interface Props {
     icon: React.ReactNode;
     label: string;
     exact?: boolean;
-    notification?: { color: string; textColor: string; count?: () => number }; //TODO: Create a function instead to get number of notifications
 }
 
-export const NavItem: React.FC<Props> = (props) => (
-    <StyledNavLink to={props.path} exact={props.exact}>
-        <Center>
-            <Icon {...iconStyle}>{props.icon}</Icon>
-            <Box as={Flex} marginLeft={{ base: '0', tablet: '1' }} alignItems="center">
-                {props.label}
-                {props.notification ? (
-                    <Circle
-                        size={7}
-                        backgroundColor={props.notification.color}
-                        fontSize="sm"
-                        marginLeft={2}
-                        textColor={props.notification.textColor}
-                    >
-                        1
-                    </Circle>
-                ) : null}
-            </Box>
-        </Center>
-    </StyledNavLink>
-);
+export const NavItem: React.FC<Props> = ({ path, icon, label, exact }) => {
+    return (
+        <StyledNavLink to={path} exact={exact}>
+            <Center>
+                <Icon {...iconStyle}>{icon}</Icon>
+                <Box as={Flex} marginLeft={{ base: '0', tablet: '1' }} alignItems="center">
+                    {label}
+                </Box>
+            </Center>
+        </StyledNavLink>
+    );
+};
+
+export enum NotificationEnum {
+    'VEKT',
+}
+
+export interface NotificationProps {
+    notification: { color: string; textColor: string; type: NotificationEnum }; //TODO: Create a function instead to get number of notifications
+}
+
+export const NavItemWithNotification: React.FC<Props & NotificationProps> = ({
+    path,
+    icon,
+    label,
+    exact,
+    notification,
+}) => {
+    return (
+        <StyledNavLink to={path} exact={exact}>
+            <Center>
+                <Icon {...iconStyle}>{icon}</Icon>
+                <Box as={Flex} marginLeft={{ base: '0', tablet: '1' }} alignItems="center">
+                    {label}
+                    {notification.type === NotificationEnum.VEKT ? (
+                        <VektNotification notification={notification} />
+                    ) : null}
+                </Box>
+            </Center>
+        </StyledNavLink>
+    );
+};
+
+export const VektNotification: React.FC<NotificationProps> = ({ notification }) => {
+    const { user } = useAuth();
+    const hentingParametere: ApiHentingParams = { before: dateTimeToStringIgnoreTimezone(new Date()) };
+
+    if (user.isStasjon) hentingParametere.stasjonId = user.aktorId;
+    else if (user.isPartner) hentingParametere.aktorId = user.aktorId;
+
+    const { data: hentinger } = useHentinger(hentingParametere);
+    const hentingType: Array<ApiHenting> = [];
+    hentinger?.map((hentinger) => {
+        if (hentinger.planlagtHenting) hentingType.push(hentinger.planlagtHenting);
+        if (hentinger.ekstraHenting) hentingType.push(hentinger.ekstraHenting);
+    });
+    const manglerVeiing: Array<ApiHenting> = hentingType.filter((henting) => henting.vektregistreringer.length <= 0);
+
+    const count: number = manglerVeiing.length;
+    console.log(hentinger);
+
+    return (
+        <>
+            {count > 0 ? (
+                <Circle
+                    size={7}
+                    backgroundColor={notification.color}
+                    fontSize="sm"
+                    marginLeft={2}
+                    textColor={notification.textColor}
+                >
+                    {count}
+                </Circle>
+            ) : null}
+        </>
+    );
+};

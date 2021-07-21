@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { Button, ButtonGroup, color, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
-import { ApiPlanlagtHenting } from '../../services/henting/PlanlagtHentingService';
-import { usePlanlagtHentingById } from '../../services/henting/usePlanlagtHentingById';
 import { hentingStarted, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { formatDate, formatTime } from '../../utils/formatDateTime';
 import { KategoriList } from '../../components/KategoriList';
