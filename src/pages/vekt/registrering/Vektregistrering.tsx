@@ -13,11 +13,11 @@ interface Props {
     hentingId: string;
 }
 
-export interface Vektobjekter {
-    [key: string]: Vektobjekt;
+export interface VektObjects {
+    [key: string]: VektObject;
 }
 
-export interface Vektobjekt {
+export interface VektObject {
     id: string;
     navn: string;
     unit: Unit;
@@ -35,7 +35,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
     const history = useHistory();
 
     //TODO: Kan senere brukes for å oppdatere totalvekt
-    const [vektobjekter, setVekt] = useState<Vektobjekter>({});
+    const [vektObjects, setVekt] = useState<VektObjects>({});
 
     const hentingQuery = useHentingById(hentingId, { initialData: locationState?.henting });
 
@@ -76,13 +76,13 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
                             <Heading as="h1" fontSize="1.5rem" fontWeight={700}>
                                 Registrer vekt
                             </Heading>
-                            <Totalvekt vektobjekter={vektobjekter} />
+                            <Totalvekt vektObjects={vektObjects} />
                             <Text fontSize="0.75rem" fontWeight={400} maxWidth={420}>
                                 Bygg, sport, sykler, tekstiler og hvitevarer er såkalte vektkategorier hos oss, og er
                                 kun de du kan registrere vekt på. Andre kategorier går under
                                 <span style={{ fontWeight: 500 }}> Andre ombruksvarer</span>
                             </Text>
-                            <VektForm henting={veiHenting} vektobjekter={vektobjekter} onSuccess={onSuccess} />
+                            <VektForm henting={veiHenting} vektObjects={vektObjects} onSuccess={onSuccess} />
                         </VStack>
 
                         <Flex

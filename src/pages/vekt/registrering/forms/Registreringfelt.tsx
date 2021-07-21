@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Flex } from '@chakra-ui/react';
-import { Unit, Vektobjekt } from '../Vektregistrering';
+import { Unit, VektObject } from '../Vektregistrering';
 import { colors } from '../../../../theme/foundations/colors';
 import { useFormContext } from 'react-hook-form';
 import { Input } from '../../../../components/forms/input/Input';
@@ -15,11 +15,11 @@ type FormFieldRenderProp = (fieldProps: { isInvalid: boolean }) => React.ReactNo
 interface Props extends FormFieldProps {
     height?: string;
     width?: string;
-    vektobjekt: Vektobjekt;
+    vektObject: VektObject;
     children?: React.ReactNode | FormFieldRenderProp;
 }
 
-export const Registreringsfelt: React.FC<Props> = ({ vektobjekt }) => {
+export const Registreringsfelt: React.FC<Props> = ({ vektObject }) => {
     const { setValue } = useFormContext();
 
     const options: Array<SelectOption> = [
@@ -30,13 +30,13 @@ export const Registreringsfelt: React.FC<Props> = ({ vektobjekt }) => {
 
     return (
         <>
-            <Flex alignItems="center" {...setValue(`${vektobjekt.navn}.id`, vektobjekt.id)}>
+            <Flex alignItems="center" {...setValue(`${vektObject.navn}.id`, vektObject.id)}>
                 <Input
                     variant="unstyled"
                     backgroundColor="white"
                     type="number"
                     step="any"
-                    name={`${vektobjekt.navn}.value`}
+                    name={`${vektObject.navn}.value`}
                     label=""
                     textAlign="center"
                     placeholder="0"
@@ -46,7 +46,7 @@ export const Registreringsfelt: React.FC<Props> = ({ vektobjekt }) => {
                     marginRight={2}
                 />
                 <Select
-                    name={`${vektobjekt.navn}.unit`}
+                    name={`${vektObject.navn}.unit`}
                     label=""
                     backgroundColor={colors.LightBeige}
                     style={{ textAlignLast: 'center' }}

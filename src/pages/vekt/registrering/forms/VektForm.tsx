@@ -9,7 +9,7 @@ import { useSuccessToast } from '../../../../components/toasts/useSuccessToast';
 import { ApiError } from '../../../../services/httpClient';
 // NB! Setting the error messages used by yup
 import '../../../../utils/forms/formErrorMessages';
-import { Unit, Vektobjekter } from '../Vektregistrering';
+import { Unit, VektObjects } from '../Vektregistrering';
 import {
     ApiVektregistrering,
     ApiVektregistreringBatchPost,
@@ -19,10 +19,10 @@ import { ApiHenting } from '../../../../services/henting/HentingService';
 import { RegistrerVektkategori } from './RegistrerVektkategori';
 
 interface VektFormData {
-    [key: string]: Vektobjekt;
+    [key: string]: VektObject;
 }
 
-interface Vektobjekt {
+interface VektObject {
     id: string;
     unit: string;
     value: number;
@@ -34,10 +34,10 @@ interface Props {
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
     henting: ApiHenting; //UUID
-    vektobjekter: Vektobjekter;
+    vektObjects: VektObjects;
 }
 
-export const VektForm: React.FC<Props> = ({ henting, vektobjekter, onSuccess }) => {
+export const VektForm: React.FC<Props> = ({ henting, vektObjects, onSuccess }) => {
     let validation = yup.object();
 
     const validationKategoriobjekt = (key: string) => {
@@ -83,11 +83,11 @@ export const VektForm: React.FC<Props> = ({ henting, vektobjekter, onSuccess }) 
         const veiinger: number[] = [];
 
         for (const key in formData) {
-            const vektobjekt: Vektobjekt = formData[key];
-            kategoriIder.push(vektobjekt.id);
-            let vekt = vektobjekt.value;
-            if (vektobjekt.unit === Unit[1]) vekt *= 1000;
-            else if (vektobjekt.unit === Unit[2]) vekt /= 1000;
+            const vektObject: VektObject = formData[key];
+            kategoriIder.push(vektObject.id);
+            let vekt = vektObject.value;
+            if (vektObject.unit === Unit[1]) vekt *= 1000;
+            else if (vektObject.unit === Unit[2]) vekt /= 1000;
             else vekt *= 1;
             veiinger.push(vekt);
         }
@@ -124,14 +124,12 @@ export const VektForm: React.FC<Props> = ({ henting, vektobjekter, onSuccess }) 
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
-    //const vektregistreringSelect = formMethods.watch('vektregistreringSelect');
-
     return (
         <FormProvider {...formMethods}>
             <form id="vekt-form" onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <RegistrerVektkategori henting={henting} vektobjekter={vektobjekter} />
+                    <RegistrerVektkategori henting={henting} vektObjects={vektObjects} />
                 </Stack>
             </form>
         </FormProvider>
