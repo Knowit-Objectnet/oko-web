@@ -70,7 +70,11 @@ export const deleteKontakt = (kontaktId: string): Promise<ApiKontakt> =>
     httpClient().delete<ApiKontakt>(`${kontaktEndpoint}/${kontaktId}`).then(extractResponse, transformError);
 
 export const sendVerifisering = (kontaktId: string): Promise<ApiVerifiseringMelding> =>
-    httpClient().post<ApiVerifiseringMelding>(`${kontaktEndpoint}/verifisering-resend/${kontaktId}`).then(extractResponse, transformError);
+    httpClient()
+        .post<ApiVerifiseringMelding>(`${kontaktEndpoint}/verifisering-resend/${kontaktId}`)
+        .then(extractResponse, transformError);
 
 export const verifiser = (params: ApiVerifiserPost): Promise<ApiVerifiseringStatus> =>
-    httpClient().post<ApiVerifiseringStatus>(`${kontaktEndpoint}/verifiser`, params).then(extractResponse, transformError);
+    httpClient()
+        .post<ApiVerifiseringStatus>(`${kontaktEndpoint}/verifiser`, params)
+        .then(extractResponse, transformError);
