@@ -42,7 +42,7 @@ export const NoMissingRegistration: React.FC<Props> = ({ henting }) => {
                 {/* Totalvekt */}
                 <VStack alignItems="flex-start">
                     <DetailWithIcon icon={Location} label="Stasjon">
-                        Grønmo
+                        {henting.stasjonNavn}
                     </DetailWithIcon>
                     <DetailWithIcon icon={Calendar} label="Dato og tidspunk">
                         <Text>
