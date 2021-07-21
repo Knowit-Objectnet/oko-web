@@ -18,6 +18,7 @@ import { useBatchAddVektregistrering } from '../../../../services/vektregistreri
 import { ApiHenting } from '../../../../services/henting/HentingService';
 import { RegistrerVektkategori } from './RegistrerVektkategori';
 import { useHistory } from 'react-router-dom';
+import { useKategorier } from '../../../../services/kategori/useKategorier';
 
 interface VektFormData {
     [key: string]: Vektobjekt;
@@ -42,21 +43,32 @@ interface Props {
 export const VektForm: React.FC<Props> = ({ henting, vektobjekter, setVekt, onSuccess }) => {
     let validation = yup.object();
 
+    const validationKategoriobjekt = (key: string) => {
+        return {
+            id: yup.string().required(),
+            unit: yup.string().required(),
+            value: yup
+                .number()
+                .typeError(`${key} må ha minst ett tall.`)
+                .min(0, `${key} kan ikke være mindre enn 0.`)
+                .label(`Mangler for kategorien: ${key}.`),
+        };
+    };
+
     const validationObject: any = {};
+    let hasAndre = false;
     henting.kategorier.forEach((kategori) => {
         if (kategori.kategori.vektkategori) {
             const key = kategori.kategori.navn;
-            validationObject[key] = yup.object({
-                id: yup.string().required(),
-                unit: yup.string().required(),
-                value: yup
-                    .number()
-                    .typeError('Vekten må ha minst ett tall')
-                    .min(0, 'Vektregistreringen kan ikke være mindre enn 0')
-                    .label(`Mangler for kaategorien: ${key}.\n Vekten må startet med et tall`),
-            });
-        }
+            validationObject[key] = yup.object(validationKategoriobjekt(key));
+        } else hasAndre = true;
     });
+
+    if (hasAndre) {
+        const key = 'Andre ombruksvarer';
+        validationObject[key] = yup.object(validationKategoriobjekt(key));
+    }
+
     validation = validation.concat(yup.object(validationObject));
 
     const validationSchema = validation;

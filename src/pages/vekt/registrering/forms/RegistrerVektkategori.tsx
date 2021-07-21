@@ -48,11 +48,11 @@ export const RegistrerVektkategori: React.FC<Props> = ({ henting, vektobjekter, 
                     {henting.kategorier?.some((kategori) => !kategori.kategori.vektkategori) ? (
                         <Kategorifelt
                             //TODO: Create a protected id for "Andre ombruksvarer", should be used for everything
-                            id="Andre"
+                            id="0f3f3bdd-5733-45da-87ae-a9417596cb12"
                             onChange={onChanges}
                             vektobjekt={
-                                vektobjekter['Andre'] || {
-                                    id: 'Andre',
+                                vektobjekter['0f3f3bdd-5733-45da-87ae-a9417596cb12'] || {
+                                    id: '0f3f3bdd-5733-45da-87ae-a9417596cb12',
                                     navn: 'Andre ombruksvarer',
                                     unit: Unit.KG,
                                     value: 0,
