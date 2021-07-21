@@ -28,7 +28,7 @@ const FieldErrorMessages: React.FC = () => {
     const iterate = (obj: { [key: string]: any }): string[] => {
         let messages: string[] = [];
         Object.keys(obj).forEach((key) => {
-            if (!key.localeCompare('ref')) console.log('Damn ref', key);
+            if (!key.localeCompare('ref')) null;
             else if (typeof obj[key] === 'object') {
                 const nestedMessages = iterate(obj[key]);
                 messages = messages.concat(nestedMessages);
