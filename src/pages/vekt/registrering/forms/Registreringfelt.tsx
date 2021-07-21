@@ -44,6 +44,7 @@ export const Registreringsfelt: React.FC<Props> = ({ vektObject }) => {
                     width="6rem"
                     height="2.5rem"
                     marginRight={2}
+                    defaultValue={0}
                 />
                 <Select
                     name={`${vektObject.navn}.unit`}
