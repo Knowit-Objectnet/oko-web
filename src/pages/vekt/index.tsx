@@ -7,26 +7,28 @@ import { NoMissingRegistration } from './components/NoMissingRegistration';
 import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
+import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 
 const Vekt: React.FC = () => {
     const { user } = useAuth();
-    const hentingeParametere: ApiHentingParams = { aktorId: user.aktorId };
-    const { data: hentinger } = useHentinger(hentingeParametere);
+    const hentingParametere: ApiHentingParams = { before: dateTimeToStringIgnoreTimezone(new Date()) };
 
-    const h: Array<ApiHenting> = [];
+    if (user.isStasjon) hentingParametere.stasjonId = user.aktorId;
+    else if (user.isPartner) hentingParametere.aktorId = user.aktorId;
+
+    const { data: hentinger } = useHentinger(hentingParametere);
+    const hentingType: Array<ApiHenting> = [];
+
     hentinger?.map((hentinger) => {
-        if (hentinger.planlagtHenting) h.push(hentinger.planlagtHenting);
-        if (hentinger.ekstraHenting) h.push(hentinger.ekstraHenting);
+        if (hentinger.planlagtHenting) hentingType.push(hentinger.planlagtHenting);
+        if (hentinger.ekstraHenting) hentingType.push(hentinger.ekstraHenting);
     });
 
-    const today = new Date();
     const manglerVeiing: Array<ApiHenting> = [];
     const registrertVekt: Array<ApiHenting> = [];
-    h.forEach((henting) => {
-        if (new Date(henting.sluttTidspunkt) <= today && henting.vektregistreringer.length <= 0)
-            manglerVeiing.push(henting);
-        else if (new Date(henting.sluttTidspunkt) <= today && henting.vektregistreringer.length >= 1)
-            registrertVekt.push(henting);
+    hentingType.forEach((henting) => {
+        if (henting.vektregistreringer.length <= 0) manglerVeiing.push(henting);
+        else registrertVekt.push(henting);
     });
 
     return (
