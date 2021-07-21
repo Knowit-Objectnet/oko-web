@@ -25,8 +25,6 @@ const GlobalErrorMessage: React.FC<Props> = ({ globalError }) => {
 const FieldErrorMessages: React.FC = () => {
     const { errors, isSubmitted } = useFormState();
 
-    console.log(errors);
-
     const iterate = (obj: { [key: string]: any }): string[] => {
         let messages: string[] = [];
         Object.keys(obj).forEach((key) => {
