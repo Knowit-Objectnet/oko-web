@@ -35,10 +35,9 @@ interface Props {
     onSuccess?: () => void;
     henting: ApiHenting; //UUID
     vektobjekter: Vektobjekter;
-    setVekt: React.Dispatch<React.SetStateAction<Vektobjekter>>;
 }
 
-export const VektForm: React.FC<Props> = ({ henting, vektobjekter, setVekt, onSuccess }) => {
+export const VektForm: React.FC<Props> = ({ henting, vektobjekter, onSuccess }) => {
     let validation = yup.object();
 
     const validationKategoriobjekt = (key: string) => {
@@ -133,7 +132,7 @@ export const VektForm: React.FC<Props> = ({ henting, vektobjekter, setVekt, onSu
             <form id="vekt-form" onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <RegistrerVektkategori henting={henting} vektobjekter={vektobjekter} setVekt={setVekt} />
+                    <RegistrerVektkategori henting={henting} vektobjekter={vektobjekter} />
                 </Stack>
             </form>
         </FormProvider>

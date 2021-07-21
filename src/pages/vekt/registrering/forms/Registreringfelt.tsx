@@ -16,18 +16,10 @@ interface Props extends FormFieldProps {
     height?: string;
     width?: string;
     vektobjekt: Vektobjekt;
-    setVekt?: React.Dispatch<React.SetStateAction<Vektobjekt>>;
-    onChange?: (vektobjekt: Vektobjekt) => void;
     children?: React.ReactNode | FormFieldRenderProp;
 }
 
-export const Registreringsfelt: React.FC<Props> = ({ onChange, vektobjekt, setVekt }) => {
-    const update = (vektobjekt: Vektobjekt) => {
-        if (onChange) onChange(vektobjekt);
-        else if (setVekt) setVekt(vektobjekt);
-        console.log(vektobjekt);
-    };
-
+export const Registreringsfelt: React.FC<Props> = ({ vektobjekt }) => {
     const { setValue } = useFormContext();
 
     const options: Array<SelectOption> = [
@@ -52,11 +44,6 @@ export const Registreringsfelt: React.FC<Props> = ({ onChange, vektobjekt, setVe
                     width="6rem"
                     height="2.5rem"
                     marginRight={2}
-                    onChange={(event) => {
-                        const value = parseFloat(event.target.value);
-                        vektobjekt.value = value;
-                        update(vektobjekt);
-                    }}
                 />
                 <Select
                     name={`${vektobjekt.navn}.unit`}
@@ -66,11 +53,6 @@ export const Registreringsfelt: React.FC<Props> = ({ onChange, vektobjekt, setVe
                     aria-label="Vektenhet"
                     height="2.5rem"
                     width="8rem"
-                    onChange={(event) => {
-                        const value = parseInt(event.target.value);
-                        vektobjekt.unit = value;
-                        update(vektobjekt);
-                    }}
                     options={options}
                 />
             </Flex>

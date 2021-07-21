@@ -34,6 +34,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
     const { state: locationState } = useLocation<{ henting?: ApiHentingWrapper; prevPath?: string }>();
     const history = useHistory();
 
+    //TODO: Kan senere brukes for å oppdatere totalvekt
     const [vektobjekter, setVekt] = useState<Vektobjekter>({});
 
     const hentingQuery = useHentingById(hentingId, { initialData: locationState?.henting });
@@ -81,12 +82,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
                                 kun de du kan registrere vekt på. Andre kategorier går under
                                 <span style={{ fontWeight: 500 }}> Andre ombruksvarer</span>
                             </Text>
-                            <VektForm
-                                henting={veiHenting}
-                                setVekt={setVekt}
-                                vektobjekter={vektobjekter}
-                                onSuccess={onSuccess}
-                            />
+                            <VektForm henting={veiHenting} vektobjekter={vektobjekter} onSuccess={onSuccess} />
                         </VStack>
 
                         <Flex

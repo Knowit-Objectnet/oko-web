@@ -7,19 +7,9 @@ import { Kategorifelt } from './Kategorifelt';
 interface Props {
     henting: ApiHenting;
     vektobjekter: Vektobjekter;
-    setVekt: React.Dispatch<React.SetStateAction<Vektobjekter>>;
 }
 
-export const RegistrerVektkategori: React.FC<Props> = ({ henting, vektobjekter, setVekt }) => {
-    const onChanges = (vektobjekt: Vektobjekt) => {
-        setVekt((prev) => {
-            const kategorier = Object.assign({}, prev);
-            kategorier[vektobjekt.id] = vektobjekt;
-            console.log(kategorier);
-            return kategorier;
-        });
-    };
-
+export const RegistrerVektkategori: React.FC<Props> = ({ henting, vektobjekter }) => {
     return (
         <>
             <VStack alignItems="center">
@@ -41,7 +31,6 @@ export const RegistrerVektkategori: React.FC<Props> = ({ henting, vektobjekter, 
                                             value: 0,
                                         }
                                     }
-                                    onChange={onChanges}
                                 />
                             );
                     })}
@@ -49,7 +38,6 @@ export const RegistrerVektkategori: React.FC<Props> = ({ henting, vektobjekter, 
                         <Kategorifelt
                             //TODO: Create a protected id for "Andre ombruksvarer", should be used for everything else
                             id="0f3f3bdd-5733-45da-87ae-a9417596cb12"
-                            onChange={onChanges}
                             vektobjekt={
                                 vektobjekter['0f3f3bdd-5733-45da-87ae-a9417596cb12'] || {
                                     id: '0f3f3bdd-5733-45da-87ae-a9417596cb12',
