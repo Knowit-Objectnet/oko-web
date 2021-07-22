@@ -73,12 +73,21 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                         </ButtonGroup>
                     ) : null}
                 </Flex>
-                <HStack>
-                    <Text fontSize="xl" fontWeight="medium">
-                        Saksnummer
-                    </Text>
-                    <Text fontSize="sm"> {avtale.saksnummer} </Text>
-                </HStack>
+                {user.isAdmin || user.isStasjon ? (
+                    <HStack>
+                        <Text fontSize="xl" fontWeight="medium">
+                            Saksnummer i arkivsystem
+                        </Text>
+                        {avtale.saksnummer === null ? (
+                            <Text fontSize="sm" fontStyle="italic">
+                                Ingen referanse til avtaledokument
+                            </Text>
+                        ) : (
+                            <Text fontSize="sm">{avtale.saksnummer}</Text>
+                        )}
+                    </HStack>
+                ) : null}
+
                 <Henteplaner avtale={avtale} partner={partner} />
             </Flex>
         );

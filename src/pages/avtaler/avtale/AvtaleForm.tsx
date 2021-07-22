@@ -21,7 +21,7 @@ import { RadiobuttonGroup, RadioOption } from '../../../components/forms/Radiobu
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { TextArea } from '../../../components/forms/TextArea';
+import { Input } from '../../../components/forms/input/Input';
 
 interface AvtaleFormData {
     type: AvtaleType;
@@ -145,7 +145,7 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
                     <AvtaleFormStartDato avtaleToEdit={avtaleToEdit} />
                     <AvtaleFormSluttDato avtaleToEdit={avtaleToEdit} />
                     <RadiobuttonGroup name="type" label="Type avtale" options={avtaleTypeOptions} required />
-                    <TextArea name="saksnummer" label="Saksnummer" />
+                    <Input name="saksnummer" label="Saksnummer" />
                     <FormSubmitButton
                         label={avtaleToEdit ? 'Lagre endringer' : 'Registrer ny avtale'}
                         isLoading={updateAvtaleMutation.isLoading || addAvtaleMutation.isLoading}
