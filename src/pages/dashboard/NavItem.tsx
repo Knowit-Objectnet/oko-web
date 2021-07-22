@@ -6,7 +6,7 @@ import { Circle } from '@chakra-ui/react';
 import { useAuth } from '../../auth/useAuth';
 import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
 import { useHentinger } from '../../services/henting/useHentinger';
-import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { endOfToday, subMonths } from 'date-fns';
 
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
@@ -125,7 +125,7 @@ export const VektNotification: React.FC<NotificationProps> = ({ notification }) 
     });
     const now = new Date();
     const manglerVeiing: Array<ApiHenting> = hentingType.filter(
-        (henting) => henting.vektregistreringer.length <= 0 && new Date(henting.startTidspunkt) <= now,
+        (henting) => henting.vektregistreringer.length <= 0 && parseISOIgnoreTimezone(henting.startTidspunkt) <= now,
     );
 
     const count: number = manglerVeiing.length;

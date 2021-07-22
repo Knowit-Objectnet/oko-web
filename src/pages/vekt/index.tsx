@@ -7,7 +7,7 @@ import { NoMissingRegistration } from './components/NoMissingRegistration';
 import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
-import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { endOfToday, subMonths } from 'date-fns';
 
 const Vekt: React.FC = () => {
@@ -34,7 +34,7 @@ const Vekt: React.FC = () => {
     const registrertVekt: Array<ApiHenting> = [];
     const now = new Date();
     hentingType.forEach((henting) => {
-        if (henting.vektregistreringer.length <= 0 && new Date(henting.startTidspunkt) <= now)
+        if (henting.vektregistreringer.length <= 0 && parseISOIgnoreTimezone(henting.startTidspunkt) <= now)
             manglerVeiing.push(henting);
         else registrertVekt.push(henting);
     });
