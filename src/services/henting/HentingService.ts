@@ -1,6 +1,18 @@
 import { ApiPlanlagtHenting } from './PlanlagtHentingService';
 import { ApiEkstraHenting } from './EkstraHentingService';
 import { extractResponse, httpClient, transformError } from '../httpClient';
+import { ApiVektregistrering } from '../vektregistrering/VektregistreringService';
+import { ApiHentingKategori } from '../kategori/KategoriService';
+
+export interface ApiHenting {
+    id: string; //UUID
+    stasjonId: string; //UUID
+    stasjonNavn: string;
+    startTidspunkt: string; //LocalTimeDate
+    sluttTidspunkt: string; //LocalTimeDate
+    kategorier: Array<ApiHentingKategori>;
+    vektregistreringer: Array<ApiVektregistrering>;
+}
 
 export interface ApiHentingWrapper {
     id: string;

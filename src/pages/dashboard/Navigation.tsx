@@ -5,7 +5,7 @@ import Bell from '../../assets/Bell.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Filtrer from '../../assets/Filtrer.svg';
 import Weight from '../../assets/Weight.svg';
-import { NavItem } from './NavItem';
+import { NavItem, NavItemWithNotification, NotificationEnum } from './NavItem';
 import { useAuth, UserInfo } from '../../auth/useAuth';
 import { HStack } from '@chakra-ui/react';
 import { colors } from '../../theme/foundations/colors';
@@ -18,11 +18,16 @@ const getNavItemsForRole = (user: UserInfo) => {
                 <NavItem path="/avtaler" icon={<Herretoalett />} label="Partnere" />
                 <NavItem path="/ekstrahenting" icon={<Bell />} label="Ekstrahenting" />
                 <NavItem path="/innstillinger" icon={<Filtrer />} label="Innstillinger" />
-                <NavItem
+                <NavItemWithNotification
                     path="/vekt"
                     icon={<Weight />}
                     label="Vekt"
-                    notification={{ color: colors.Red, textColor: colors.DarkBlue }}
+                    notification={{
+                        color: colors.Red,
+                        textColor: colors.DarkBlue,
+                        type: NotificationEnum.VEKT,
+                        numMonthsBack: 2,
+                    }}
                 />
             </>
         );
@@ -32,14 +37,37 @@ const getNavItemsForRole = (user: UserInfo) => {
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
                 <NavItem path="/minavtale" icon={<List />} label="Mine avtaler" />
                 <NavItem path="/ekstrahenting" icon={<Bell />} label="Ekstrahenting" />
+                <NavItemWithNotification
+                    path="/vekt"
+                    icon={<Weight />}
+                    label="Vekt"
+                    notification={{
+                        color: colors.Red,
+                        textColor: colors.DarkBlue,
+                        type: NotificationEnum.VEKT,
+                        numMonthsBack: 2,
+                    }}
+                />
             </>
         );
     else if (user.isStasjon)
         return (
             <>
                 <NavItem path="/kalender" icon={<Calendar />} label="Kalender" />
+
                 <NavItem path="/avtaler" icon={<Herretoalett />} label="Partnere" />
                 <NavItem path="/ekstrahenting" icon={<Bell />} label="Ekstrahenting" />
+                <NavItemWithNotification
+                    path="/vekt"
+                    icon={<Weight />}
+                    label="Vekt"
+                    notification={{
+                        color: colors.Red,
+                        textColor: colors.DarkBlue,
+                        type: NotificationEnum.VEKT,
+                        numMonthsBack: 2,
+                    }}
+                />
             </>
         );
     return null;
