@@ -8,11 +8,12 @@ import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
 import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
-import { endOfToday, subMonths } from 'date-fns';
+import { subMonths } from 'date-fns';
 
 const Vekt: React.FC = () => {
     const { user } = useAuth();
-    const before = endOfToday();
+    const before = new Date();
+    before.setMinutes(0, 0, 0);
     const after = subMonths(before, 2);
     const hentingParametere: ApiHentingParams = {
         after: dateTimeToStringIgnoreTimezone(after),

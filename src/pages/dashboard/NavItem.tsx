@@ -7,7 +7,7 @@ import { useAuth } from '../../auth/useAuth';
 import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
-import { endOfToday, subMonths } from 'date-fns';
+import { subMonths } from 'date-fns';
 
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link
@@ -107,7 +107,8 @@ export const NavItemWithNotification: React.FC<Props & NotificationProps> = ({
 
 export const VektNotification: React.FC<NotificationProps> = ({ notification }) => {
     const { user } = useAuth();
-    const before = endOfToday();
+    const before = new Date();
+    before.setMinutes(0, 0, 0);
     const after = subMonths(before, notification.numMonthsBack || 1);
     const hentingParametere: ApiHentingParams = {
         after: dateTimeToStringIgnoreTimezone(after),
