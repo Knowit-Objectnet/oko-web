@@ -8,6 +8,7 @@ import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingServ
 import { useHentinger } from '../../services/henting/useHentinger';
 import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { subMonths } from 'date-fns';
+import { endOfToday } from 'date-fns/esm';
 
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link
@@ -107,8 +108,7 @@ export const NavItemWithNotification: React.FC<Props & NotificationProps> = ({
 
 export const VektNotification: React.FC<NotificationProps> = ({ notification }) => {
     const { user } = useAuth();
-    const before = new Date();
-    before.setMinutes(0, 0, 0);
+    const before = endOfToday();
     const after = subMonths(before, notification.numMonthsBack || 1);
     const hentingParametere: ApiHentingParams = {
         after: dateTimeToStringIgnoreTimezone(after),
@@ -124,7 +124,10 @@ export const VektNotification: React.FC<NotificationProps> = ({ notification }) 
         if (hentinger.planlagtHenting) hentingType.push(hentinger.planlagtHenting);
         if (hentinger.ekstraHenting) hentingType.push(hentinger.ekstraHenting);
     });
-    const manglerVeiing: Array<ApiHenting> = hentingType.filter((henting) => henting.vektregistreringer.length <= 0);
+    const today = new Date();
+    const manglerVeiing: Array<ApiHenting> = hentingType.filter(
+        (henting) => henting.vektregistreringer.length <= 0 && new Date(henting.startTidspunkt) <= today,
+    );
 
     const count: number = manglerVeiing.length;
 

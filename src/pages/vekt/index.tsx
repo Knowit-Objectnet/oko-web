@@ -8,12 +8,11 @@ import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
 import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
-import { subMonths } from 'date-fns';
+import { endOfToday, subMonths } from 'date-fns';
 
 const Vekt: React.FC = () => {
     const { user } = useAuth();
-    const before = new Date();
-    before.setMinutes(0, 0, 0);
+    const before = endOfToday();
     const after = subMonths(before, 2);
     const hentingParametere: ApiHentingParams = {
         after: dateTimeToStringIgnoreTimezone(after),
@@ -33,8 +32,10 @@ const Vekt: React.FC = () => {
 
     const manglerVeiing: Array<ApiHenting> = [];
     const registrertVekt: Array<ApiHenting> = [];
+    const today = new Date();
     hentingType.forEach((henting) => {
-        if (henting.vektregistreringer.length <= 0) manglerVeiing.push(henting);
+        if (henting.vektregistreringer.length <= 0 && new Date(henting.startTidspunkt) <= today)
+            manglerVeiing.push(henting);
         else registrertVekt.push(henting);
     });
 
