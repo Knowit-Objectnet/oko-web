@@ -123,9 +123,9 @@ export const VektNotification: React.FC<NotificationProps> = ({ notification }) 
         if (hentinger.planlagtHenting) hentingType.push(hentinger.planlagtHenting);
         if (hentinger.ekstraHenting) hentingType.push(hentinger.ekstraHenting);
     });
-    const today = new Date();
+    const now = new Date();
     const manglerVeiing: Array<ApiHenting> = hentingType.filter(
-        (henting) => henting.vektregistreringer.length <= 0 && new Date(henting.startTidspunkt) <= today,
+        (henting) => henting.vektregistreringer.length <= 0 && new Date(henting.startTidspunkt) <= now,
     );
 
     const count: number = manglerVeiing.length;

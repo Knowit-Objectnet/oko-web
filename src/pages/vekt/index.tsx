@@ -32,9 +32,9 @@ const Vekt: React.FC = () => {
 
     const manglerVeiing: Array<ApiHenting> = [];
     const registrertVekt: Array<ApiHenting> = [];
-    const today = new Date();
+    const now = new Date();
     hentingType.forEach((henting) => {
-        if (henting.vektregistreringer.length <= 0 && new Date(henting.startTidspunkt) <= today)
+        if (henting.vektregistreringer.length <= 0 && new Date(henting.startTidspunkt) <= now)
             manglerVeiing.push(henting);
         else registrertVekt.push(henting);
     });
