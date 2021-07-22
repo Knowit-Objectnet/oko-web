@@ -56,9 +56,9 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
         return (
             <Flex direction="column" width="full" backgroundColor="gray.100" padding="5">
                 <Flex width="full" justifyContent="space-between">
-                    <Heading fontSize="xl" as="h3" fontWeight="medium">
+                    <Heading fontSize="xl" as="h3" fontWeight="medium" paddingY="2">
                         <HStack>
-                            <Text marginRight="2">{getAvtaleTitle(avtale)}</Text>
+                            <Text>{getAvtaleTitle(avtale)}</Text>
                             <Text fontSize="sm" fontWeight="normal">
                                 {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(parseISO(avtale.startDato))}</time>{' '}
                                 til <time>{formatDate(parseISO(avtale.sluttDato))}</time>
@@ -73,6 +73,20 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                         </ButtonGroup>
                     ) : null}
                 </Flex>
+                {user.isAdmin || user.isStasjon ? (
+                    <HStack>
+                        <Text fontSize="xl" fontWeight="medium">
+                            Saksnummer i arkivsystem
+                        </Text>
+                        {avtale.saksnummer === null ? (
+                            <Text fontSize="sm" fontStyle="italic">
+                                Ingen referanse til avtaledokument
+                            </Text>
+                        ) : (
+                            <Text fontSize="sm">{avtale.saksnummer}</Text>
+                        )}
+                    </HStack>
+                ) : null}
 
                 <Henteplaner avtale={avtale} partner={partner} />
             </Flex>
