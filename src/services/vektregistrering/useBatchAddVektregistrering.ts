@@ -7,6 +7,7 @@ import {
     postBatchVektregistrering,
     vektregistreringDefaultQueryKey,
 } from './VektregistreringService';
+import { hentingDefaultQueryKey } from '../henting/HentingService';
 
 export const useBatchAddVektregistrering = (): UseMutationResult<
     ApiVektregistrering[],
@@ -15,5 +16,5 @@ export const useBatchAddVektregistrering = (): UseMutationResult<
 > =>
     useMutationWithInvalidation<ApiVektregistrering[], ApiError, ApiVektregistreringBatchPost>(
         (newVektregistreringer) => postBatchVektregistrering(newVektregistreringer),
-        [vektregistreringDefaultQueryKey],
+        [vektregistreringDefaultQueryKey, hentingDefaultQueryKey],
     );
