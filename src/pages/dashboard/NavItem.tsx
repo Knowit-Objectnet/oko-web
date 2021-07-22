@@ -7,8 +7,7 @@ import { useAuth } from '../../auth/useAuth';
 import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
-import { subMonths } from 'date-fns';
-import { endOfToday } from 'date-fns/esm';
+import { endOfToday, subMonths } from 'date-fns';
 
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link
