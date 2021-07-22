@@ -8,15 +8,21 @@ import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
 import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { endOfToday, subMonths } from 'date-fns';
 
 const Vekt: React.FC = () => {
     const { user } = useAuth();
-    const hentingParametere: ApiHentingParams = { before: dateTimeToStringIgnoreTimezone(new Date()) };
+    const before = endOfToday();
+    const after = subMonths(before, 2);
+    const hentingParametere: ApiHentingParams = {
+        after: dateTimeToStringIgnoreTimezone(after),
+        before: dateTimeToStringIgnoreTimezone(before),
+    };
 
     if (user.isStasjon) hentingParametere.stasjonId = user.aktorId;
     else if (user.isPartner) hentingParametere.aktorId = user.aktorId;
 
-    const { data: hentinger } = useHentinger(hentingParametere);
+    const { data: hentinger } = useHentinger(hentingParametere, { keepPreviousData: true });
     const hentingType: Array<ApiHenting> = [];
 
     hentinger?.map((hentinger) => {

@@ -7,6 +7,7 @@ import { useAuth } from '../../auth/useAuth';
 import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { endOfToday, subMonths } from 'date-fns';
 
 const StyledNavLink: React.FC<LinkProps | NavLinkProps> = (props) => (
     <Link
@@ -79,7 +80,7 @@ export enum NotificationEnum {
 }
 
 export interface NotificationProps {
-    notification: { color: string; textColor: string; type: NotificationEnum }; //TODO: Create a function instead to get number of notifications
+    notification: { color: string; textColor: string; type: NotificationEnum; numMonthsBack?: number }; //TODO: Create a function instead to get number of notifications
 }
 
 export const NavItemWithNotification: React.FC<Props & NotificationProps> = ({
@@ -106,12 +107,17 @@ export const NavItemWithNotification: React.FC<Props & NotificationProps> = ({
 
 export const VektNotification: React.FC<NotificationProps> = ({ notification }) => {
     const { user } = useAuth();
-    const hentingParametere: ApiHentingParams = { before: dateTimeToStringIgnoreTimezone(new Date()) };
+    const before = endOfToday();
+    const after = subMonths(before, notification.numMonthsBack || 1);
+    const hentingParametere: ApiHentingParams = {
+        after: dateTimeToStringIgnoreTimezone(after),
+        before: dateTimeToStringIgnoreTimezone(before),
+    };
 
     if (user.isStasjon) hentingParametere.stasjonId = user.aktorId;
     else if (user.isPartner) hentingParametere.aktorId = user.aktorId;
 
-    const { data: hentinger } = useHentinger(hentingParametere);
+    const { data: hentinger } = useHentinger(hentingParametere, { keepPreviousData: true });
     const hentingType: Array<ApiHenting> = [];
     hentinger?.map((hentinger) => {
         if (hentinger.planlagtHenting) hentingType.push(hentinger.planlagtHenting);

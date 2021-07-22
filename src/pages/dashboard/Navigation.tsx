@@ -22,7 +22,12 @@ const getNavItemsForRole = (user: UserInfo) => {
                     path="/vekt"
                     icon={<Weight />}
                     label="Vekt"
-                    notification={{ color: colors.Red, textColor: colors.DarkBlue, type: NotificationEnum.VEKT }}
+                    notification={{
+                        color: colors.Red,
+                        textColor: colors.DarkBlue,
+                        type: NotificationEnum.VEKT,
+                        numMonthsBack: 2,
+                    }}
                 />
             </>
         );
@@ -36,7 +41,12 @@ const getNavItemsForRole = (user: UserInfo) => {
                     path="/vekt"
                     icon={<Weight />}
                     label="Vekt"
-                    notification={{ color: colors.Red, textColor: colors.DarkBlue, type: NotificationEnum.VEKT }}
+                    notification={{
+                        color: colors.Red,
+                        textColor: colors.DarkBlue,
+                        type: NotificationEnum.VEKT,
+                        numMonthsBack: 2,
+                    }}
                 />
             </>
         );
@@ -51,7 +61,12 @@ const getNavItemsForRole = (user: UserInfo) => {
                     path="/vekt"
                     icon={<Weight />}
                     label="Vekt"
-                    notification={{ color: colors.Red, textColor: colors.DarkBlue, type: NotificationEnum.VEKT }}
+                    notification={{
+                        color: colors.Red,
+                        textColor: colors.DarkBlue,
+                        type: NotificationEnum.VEKT,
+                        numMonthsBack: 2,
+                    }}
                 />
             </>
         );
