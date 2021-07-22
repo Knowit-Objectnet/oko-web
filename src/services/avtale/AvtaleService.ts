@@ -10,6 +10,7 @@ export interface ApiAvtale {
     startDato: string; //LocalDate
     sluttDato: string; //LocalDate
     henteplaner: Array<ApiHenteplan>;
+    saksnummer: string;
 }
 
 export interface ApiAvtalePost {
@@ -18,6 +19,7 @@ export interface ApiAvtalePost {
     startDato: string; //LocalDate
     sluttDato: string; //LocalDate
     henteplaner?: Array<ApiHenteplanPost> | null;
+    saksnummer?: string;
 }
 
 export interface ApiAvtalePatch {
@@ -25,6 +27,7 @@ export interface ApiAvtalePatch {
     type?: AvtaleType;
     startDato?: string; //LocalDate
     sluttDato?: string; //LocalDate
+    saksnummer?: string;
 }
 
 export interface ApiAvtaleParams {
@@ -33,6 +36,7 @@ export interface ApiAvtaleParams {
     type?: AvtaleType;
     startDato?: string; //LocalDate
     sluttDato?: string; //LocalDate
+    saksnummer?: string;
 }
 
 const avtaleEndpoint = '/avtaler';

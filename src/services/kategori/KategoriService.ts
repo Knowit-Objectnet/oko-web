@@ -6,6 +6,10 @@ export interface ApiKategori {
     vektkategori: boolean;
 }
 
+export interface ApiHentingKategori {
+    kategori: ApiKategori;
+}
+
 export interface ApiKategoriPatch {
     id: string;
     navn?: string;

@@ -31,6 +31,12 @@ export interface ApiVektregistreringPost {
     vekt: number;
 }
 
+export interface ApiVektregistreringBatchPost {
+    hentingId: string; //UUID
+    kategoriIds: string[]; //UUIDs
+    veiinger: number[];
+}
+
 const vektregistreringEndpoint = '/vektregistrering';
 export const vektregistreringDefaultQueryKey = 'getVektregistreringer';
 
@@ -52,4 +58,11 @@ export const postVektregistrering = (newVektregistrering: ApiVektregistreringPos
 export const patchVektregistrering = (updateVektregistrering: ApiVektregistreringPatch): Promise<ApiVektregistrering> =>
     httpClient()
         .patch<ApiVektregistrering>(vektregistreringEndpoint, updateVektregistrering)
+        .then(extractResponse, transformError);
+
+export const postBatchVektregistrering = (
+    newVektregistreringer: ApiVektregistreringBatchPost,
+): Promise<ApiVektregistrering[]> =>
+    httpClient()
+        .post<ApiVektregistrering[]>(`${vektregistreringEndpoint}/batch`, newVektregistreringer)
         .then(extractResponse, transformError);

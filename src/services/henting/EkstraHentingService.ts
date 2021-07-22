@@ -1,9 +1,10 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
-import { ApiKategori } from '../kategori/KategoriService';
+import { ApiHentingKategori, ApiKategori } from '../kategori/KategoriService';
 import { ApiUtlysning } from '../utlysning/UtlysningService';
 import { ApiVektregistrering } from '../vektregistrering/VektregistreringService';
+import { ApiHenting } from './HentingService';
 
-export interface ApiEkstraHenting {
+export interface ApiEkstraHenting extends ApiHenting {
     id: string; //UUID
     startTidspunkt: string; //LocalTimeDate
     sluttTidspunkt: string; //LocalTimeDate
@@ -11,7 +12,7 @@ export interface ApiEkstraHenting {
     stasjonId: string; //UUID
     stasjonNavn: string;
     godkjentUtlysning: ApiUtlysning | null;
-    kategorier: ApiEkstraHentingKategori[];
+    kategorier: Array<ApiEkstraHentingKategori>;
     utlysninger: ApiUtlysning[];
     vektregistreringer: Array<ApiVektregistrering>;
 }
@@ -41,11 +42,11 @@ export interface ApiEkstraHentingPost {
     partnere?: string[];
 }
 
-export interface ApiEkstraHentingKategori {
+export interface ApiEkstraHentingKategori extends ApiHentingKategori {
     id: string;
     ekstraHentingId: string;
     kategoriId: string;
-    kategori: ApiKategori | null;
+    kategori: ApiKategori;
     mengde: number;
 }
 

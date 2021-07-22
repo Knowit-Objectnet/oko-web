@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { ButtonGroup, Flex, HStack, Icon, Link, Text } from '@chakra-ui/react';
+import { ButtonGroup, Flex, HStack, Icon, Link, Tag, Text } from '@chakra-ui/react';
 import { ApiKontakt } from '../../services/aktor/KontaktService';
 import { EditKontaktPersonButton } from './EditKontaktPersonButton';
 import { DeleteKontaktPersonButton } from './DeleteKontaktPersonButton';
 import { List, ListItem } from '@chakra-ui/react';
 import DefaultProfilePic from '../../assets/Default_profile_pic.svg';
+import { OpenVerifiseringPageButton } from './OpenVerifiseringPageButton';
 
 interface Props {
     kontaktPersoner: Array<ApiKontakt>;
@@ -46,14 +47,34 @@ export const KontaktPersonList: React.FC<Props> = ({ kontaktPersoner }) => {
 
                             {kontakt.epost ? (
                                 <Text aria-label="E-postadresse">
-                                    <Link href={`mailto:${kontakt.epost}`}>{kontakt.epost}</Link>
+                                    <Link href={`mailto:${kontakt.epost}`} marginRight="2">
+                                        {kontakt.epost}
+                                    </Link>
                                 </Text>
                             ) : null}
                         </Flex>
-                        <ButtonGroup spacing="4" size="xs">
-                            <EditKontaktPersonButton kontakt={kontakt} />
-                            <DeleteKontaktPersonButton kontakt={kontakt} />
-                        </ButtonGroup>
+                        <Flex flexDirection="column" height="100%" display={{ base: 'none', tablet: 'flex' }}>
+                            <ButtonGroup spacing="4" size="xs" justifyContent="flex-end">
+                                <EditKontaktPersonButton kontakt={kontakt} />
+                                <DeleteKontaktPersonButton kontakt={kontakt} />
+                                {(kontakt.telefon && !kontakt.verifiseringStatus.telefonVerifisert) ||
+                                (kontakt.epost && !kontakt.verifiseringStatus.epostVerifisert) ? (
+                                    <OpenVerifiseringPageButton kontakt={kontakt} />
+                                ) : null}
+                            </ButtonGroup>
+                            <Flex marginTop="4">
+                                {kontakt.telefon && !kontakt.verifiseringStatus.telefonVerifisert ? (
+                                    <Tag backgroundColor="Red" margin="1">
+                                        SMS ikke verifisert
+                                    </Tag>
+                                ) : null}
+                                {kontakt.epost && !kontakt.verifiseringStatus.epostVerifisert ? (
+                                    <Tag backgroundColor="Red" margin="1">
+                                        Epost ikke verifisert
+                                    </Tag>
+                                ) : null}
+                            </Flex>
+                        </Flex>
                     </HStack>
                 </ListItem>
             ))}

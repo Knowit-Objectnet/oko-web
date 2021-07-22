@@ -21,11 +21,13 @@ import { RadiobuttonGroup, RadioOption } from '../../../components/forms/Radiobu
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
+import { Input } from '../../../components/forms/input/Input';
 
 interface AvtaleFormData {
     type: AvtaleType;
     startDato: Date;
     sluttDato: Date;
+    saksnummer?: string;
 }
 
 const avtaleTypeOptions: Array<RadioOption<AvtaleType>> = [
@@ -74,6 +76,7 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
                   type: avtaleToEdit.type,
                   startDato: avtaleToEdit.startDato,
                   sluttDato: avtaleToEdit.sluttDato,
+                  saksnummer: avtaleToEdit.saksnummer,
               }
             : undefined,
     });
@@ -90,6 +93,7 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
             startDato: formatISO(formData.startDato, { representation: 'date' }),
             sluttDato: formatISO(formData.sluttDato, { representation: 'date' }),
             type: formData.type,
+            saksnummer: formData.saksnummer,
         };
 
         if (avtaleToEdit) {
@@ -141,6 +145,7 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
                     <AvtaleFormStartDato avtaleToEdit={avtaleToEdit} />
                     <AvtaleFormSluttDato avtaleToEdit={avtaleToEdit} />
                     <RadiobuttonGroup name="type" label="Type avtale" options={avtaleTypeOptions} required />
+                    <Input name="saksnummer" label="Saksnummer" />
                     <FormSubmitButton
                         label={avtaleToEdit ? 'Lagre endringer' : 'Registrer ny avtale'}
                         isLoading={updateAvtaleMutation.isLoading || addAvtaleMutation.isLoading}

@@ -1,27 +1,26 @@
 import * as React from 'react';
-import { Button, Flex, Icon, LinkOverlay } from '@chakra-ui/react';
-import { Link, useLocation } from 'react-router-dom';
-import { usePlanlagtHentingById } from '../../../services/henting/usePlanlagtHentingById';
+import { Button, Flex, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { colors } from '../../../theme/foundations/colors';
 import Checkbox from '../../../assets/Checkbox.svg';
-import { useState } from 'react';
 import { Totalvekt } from './components/Totalvekt';
-import { RegistrerVektkategori } from './components/RegistrerVektkategori';
-import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
-import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
+import { ApiHenting, ApiHentingWrapper } from '../../../services/henting/HentingService';
+import { useHentingById } from '../../../services/henting/useHentingById';
+import { useState } from 'react';
+import { VektForm } from './forms/VektForm';
 
 interface Props {
     hentingId: string;
 }
 
-export interface VektKategorier {
-    [key: string]: Vektobjekt;
+export interface VektObjects {
+    [key: string]: VektObject;
 }
 
-export interface Vektobjekt {
-    unit: Unit;
+export interface VektObject {
     id: string;
     navn: string;
+    unit: Unit;
     value: number;
 }
 
@@ -32,13 +31,13 @@ export enum Unit {
 }
 
 export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
-    const { state: locationState } = useLocation<{ henting?: ApiPlanlagtHenting; prevPath?: string }>();
+    const { state: locationState } = useLocation<{ henting?: ApiHentingWrapper; prevPath?: string }>();
+    const history = useHistory();
 
-    const [total, setVekting] = useState(true);
+    //TODO: Kan senere brukes for å oppdatere totalvekt
+    const [vektObjects, setVekt] = useState<VektObjects>({});
 
-    const hentingQuery = usePlanlagtHentingById(hentingId, { initialData: locationState.henting });
-
-    const sToast = useSuccessToast();
+    const hentingQuery = useHentingById(hentingId, { initialData: locationState?.henting });
 
     const getBackButton = () => {
         if (locationState?.prevPath) {
@@ -50,42 +49,77 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
         }
     };
 
+    const onSuccess = () => {
+        history.push(`/henting/${hentingId}`);
+    };
+
     // TODO: create better UI for loading and error states
     return hentingQuery.dispatch<React.ReactElement | null>(
         () => null,
         () => <>Vennligst vent...</>,
         () => <>Klarte dessverre ikke å finne informasjon for denne hentingen</>,
-        (henting: ApiPlanlagtHenting) => (
-            <>
-                {console.log(henting)}
-                {total ? (
-                    <Totalvekt setState={setVekting} henting={henting} />
-                ) : (
-                    <RegistrerVektkategori setState={setVekting} henting={henting} />
-                )}
+        (henting: ApiHentingWrapper) => {
+            const veiHenting: ApiHenting | undefined = henting.planlagtHenting || henting.ekstraHenting;
+            if (!veiHenting) return <>Klarte dessverre ikke å finne informasjon for denne hentingen</>;
+            else
+                return (
+                    <>
+                        <VStack
+                            width="2xl"
+                            maxWidth="2xl"
+                            marginX="auto"
+                            direction="column"
+                            paddingTop={{ base: '10', tablet: '20' }}
+                            alignItems="center"
+                            spacing={14}
+                        >
+                            <Heading as="h1" fontSize="1.5rem" fontWeight={700}>
+                                Registrer vekt
+                            </Heading>
+                            <Totalvekt vektObjects={vektObjects} />
+                            <Text fontSize="0.75rem" fontWeight={400} maxWidth={420}>
+                                Kategoriene vist nedenfor er såkalte vektkategorier hos oss, og er kun de du kan
+                                registrere vekt på. Andre kategorier går under
+                                <span style={{ fontWeight: 500 }}> Andre ombruksvarer</span>
+                            </Text>
+                            <VektForm henting={veiHenting} vektObjects={vektObjects} onSuccess={onSuccess} />
+                        </VStack>
 
-                <Flex
-                    alignSelf="stretch"
-                    alignItems="flex-start"
-                    justifyContent={getBackButton() ? 'space-between' : 'flex-end'}
-                >
-                    {getBackButton()}
-                    <Button
-                        variant="outline"
-                        rightIcon={<Icon as={Checkbox} boxSize="0.7rem" />}
-                        backgroundColor={colors.DarkBlue}
-                        textColor={colors.White}
-                        paddingX={8}
-                        paddingY={6}
-                        onClick={() => {
-                            sToast({ title: `Vekt registrert!` });
-                        }}
-                    >
-                        <LinkOverlay as={Link} to={{ pathname: `/henting/${henting.id}` }} />
-                        Lagre vekt og avslutt
-                    </Button>
-                </Flex>
-            </>
-        ),
+                        <Flex
+                            alignSelf="stretch"
+                            alignItems="flex-start"
+                            justifyContent={getBackButton() ? 'space-between' : 'flex-end'}
+                        >
+                            {getBackButton()}
+                            <HStack spacing={6}>
+                                {/* //TODO: DENNE KNAPPEN ER DEAKTIVERT INNTILL VI VET HVA DEN SKAL GJØRE
+                                <Button
+                                    paddingX={8}
+                                    paddingY={6}
+                                    rightIcon={<Icon as={Cross} boxSize="0.7rem" />}
+                                    variant="outline"
+                                    fontSize="1rem"
+                                    fontWeight={400}
+                                >
+                                    Jeg hentet ikke varene
+                                </Button>
+                                 */}
+                                <Button
+                                    type="submit"
+                                    form="vekt-form"
+                                    variant="outline"
+                                    rightIcon={<Icon as={Checkbox} boxSize="1rem" />}
+                                    backgroundColor={colors.DarkBlue}
+                                    textColor={colors.White}
+                                    paddingX={8}
+                                    paddingY={6}
+                                >
+                                    Lagre vekt og avslutt
+                                </Button>
+                            </HStack>
+                        </Flex>
+                    </>
+                );
+        },
     );
 };

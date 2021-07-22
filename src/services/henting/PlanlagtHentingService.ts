@@ -1,8 +1,9 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiHenteplanKategori } from '../henteplan/HenteplanService';
 import { ApiVektregistrering } from '../vektregistrering/VektregistreringService';
+import { ApiHenting } from './HentingService';
 
-export interface ApiPlanlagtHenting {
+export interface ApiPlanlagtHenting extends ApiHenting {
     id: string; //UUID
     startTidspunkt: string; //LocalTimeDate
     sluttTidspunkt: string; //LocalTimeDate

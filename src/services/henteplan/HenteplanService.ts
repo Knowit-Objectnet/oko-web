@@ -1,12 +1,12 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiPlanlagtHenting } from '../henting/PlanlagtHentingService';
-import { ApiKategori } from '../kategori/KategoriService';
+import { ApiHentingKategori, ApiKategori } from '../kategori/KategoriService';
 
 export type HenteplanFrekvens = 'ENKELT' | 'UKENTLIG' | 'ANNENHVER';
 
 export type Weekday = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
 
-export interface ApiHenteplanKategori {
+export interface ApiHenteplanKategori extends ApiHentingKategori {
     kategori: ApiKategori;
     merknad?: string;
 }

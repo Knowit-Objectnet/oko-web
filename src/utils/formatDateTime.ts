@@ -1,5 +1,4 @@
-import { format, formatRelative, intervalToDuration } from 'date-fns';
-import { differenceInCalendarDays } from 'date-fns/esm';
+import { differenceInCalendarDays, format, formatRelative } from 'date-fns';
 import { nb } from 'date-fns/locale';
 
 export const formatDate = (date: Date): string => format(date, 'd. MMM yyyy', { locale: nb });

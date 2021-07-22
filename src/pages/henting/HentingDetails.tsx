@@ -1,9 +1,7 @@
 import * as React from 'react';
-import { Button, ButtonGroup, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
-import { ApiPlanlagtHenting } from '../../services/henting/PlanlagtHentingService';
-import { usePlanlagtHentingById } from '../../services/henting/usePlanlagtHentingById';
-import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { hentingStarted, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { formatDate, formatTime } from '../../utils/formatDateTime';
 import { KategoriList } from '../../components/KategoriList';
 import { CancelPlanlagtHentingButton } from './components/CancelPlanlagtHentingButton';
@@ -11,6 +9,7 @@ import { isToday } from 'date-fns';
 import Location from '../../assets/Location.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Clock from '../../assets/Clock.svg';
+import Check from '../../assets/Check.svg';
 import { useAuth } from '../../auth/useAuth';
 import { DetailWithIcon } from './components/DetailWithIcon';
 import { DetailWithLabel } from './components/DetailWithLabel';
@@ -18,10 +17,10 @@ import { AvlystDetails } from './components/AvlystDetails';
 import { BadgeDetail } from './components/BadgeDetail';
 import { RegisterVektButton } from './components/RegisterVektButton';
 import { colors } from '../../theme/foundations/colors';
-import { ApiHentingWrapper } from '../../services/henting/HentingService';
+import { ApiHenting, ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
 
-const getDayString = (date: Date) => {
+export const getDayString = (date: Date) => {
     if (isToday(date)) {
         return 'I dag';
     }
@@ -67,59 +66,73 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
         () => null,
         () => <>Vennligst vent...</>,
         () => <>Klarte dessverre ikke å finne informasjon for denne hentingen</>,
-        (hentingWrapper) => (
-            <>
-                {hentingWrapper.planlagtHenting?.avlyst && hentingWrapper.planlagtHenting?.avlystAv ? (
-                    <AvlystDetails
-                        id={hentingWrapper.planlagtHenting.avlystAv}
-                        aarsakId={hentingWrapper.planlagtHenting?.aarsakId}
-                        mb="1em"
-                    />
-                ) : null}
+        (hentingWrapper) => {
+            const henting: ApiHenting | undefined = hentingWrapper.planlagtHenting || hentingWrapper.ekstraHenting;
+            if (!henting) return <>Klarte dessverre ikke å finne informasjon for denne hentingen</>;
+            return (
+                <>
+                    {hentingWrapper.planlagtHenting?.avlyst && hentingWrapper.planlagtHenting?.avlystAv ? (
+                        <AvlystDetails
+                            id={hentingWrapper.planlagtHenting.avlystAv}
+                            aarsakId={hentingWrapper.planlagtHenting?.aarsakId}
+                            mb="1em"
+                        />
+                    ) : null}
 
-                <HStack alignItems="center" spacing="10">
-                    <Heading as="h1" fontWeight="normal" aria-label="Partner">
-                        {hentingWrapper.aktorNavn}
-                    </Heading>
-                    {hentingWrapper.planlagtHenting ? (
-                        <>
-                            <BadgeDetail text="Vekt mangler" color={colors.Red} />
-                            <RegisterVektButton henting={hentingWrapper.planlagtHenting} />
-                        </>
-                    ) : null}
-                </HStack>
-                <VStack spacing="3" alignItems="flex-start" marginTop="4">
-                    <DetailWithIcon icon={Location} label="Stasjon">
-                        {hentingWrapper.stasjonNavn}
-                    </DetailWithIcon>
-                    <DetailWithIcon icon={Calendar} label="Dato">
-                        <time>{getDayString(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
-                    </DetailWithIcon>
-                    <DetailWithIcon icon={Clock} label="Tidspunkt">
-                        {`Fra kl. `}
-                        <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
-                        {` til kl. `}
-                        <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt))}</time>
-                    </DetailWithIcon>
-                    {hentingWrapper.planlagtHenting && hentingWrapper.planlagtHenting.kategorier.length > 0 ? (
-                        <DetailWithLabel label="Kategorier">
-                            <KategoriList
-                                size="md"
-                                kategorier={hentingWrapper.planlagtHenting.kategorier.map(({ kategori }) => kategori)}
-                            />
-                        </DetailWithLabel>
-                    ) : null}
-                    {hentingWrapper.planlagtHenting?.merknad ? (
-                        <DetailWithLabel label="Merknad">
-                            <Text>{hentingWrapper.planlagtHenting?.merknad}</Text>
-                        </DetailWithLabel>
-                    ) : null}
-                </VStack>
-                <ButtonGroup marginTop="10">
-                    {getBackButton()}
-                    {getCancelButton(hentingWrapper)}
-                </ButtonGroup>
-            </>
-        ),
+                    <HStack alignItems="center" spacing="10">
+                        <Heading as="h1" fontWeight="normal" aria-label="Partner">
+                            {hentingWrapper.aktorNavn}
+                        </Heading>
+                        {hentingWrapper.planlagtHenting ? (
+                            henting.vektregistreringer.length > 0 ? (
+                                <>
+                                    <BadgeDetail text="Vekt er registrert" iconLeft={Check} color={colors.LightGreen} />
+                                </>
+                            ) : (
+                                <>
+                                    <BadgeDetail text="Vekt mangler" color={colors.Red} />
+                                    {hentingStarted(henting) ? (
+                                        <RegisterVektButton henting={hentingWrapper.planlagtHenting!} />
+                                    ) : null}
+                                </>
+                            )
+                        ) : null}
+                    </HStack>
+                    <VStack spacing="3" alignItems="flex-start" marginTop="4">
+                        <DetailWithIcon icon={Location} label="Stasjon">
+                            {hentingWrapper.stasjonNavn}
+                        </DetailWithIcon>
+                        <DetailWithIcon icon={Calendar} label="Dato">
+                            <time>{getDayString(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
+                        </DetailWithIcon>
+                        <DetailWithIcon icon={Clock} label="Tidspunkt">
+                            {`Fra kl. `}
+                            <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
+                            {` til kl. `}
+                            <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt))}</time>
+                        </DetailWithIcon>
+                        {hentingWrapper.planlagtHenting && hentingWrapper.planlagtHenting.kategorier.length > 0 ? (
+                            <DetailWithLabel label="Kategorier">
+                                <KategoriList
+                                    size="md"
+                                    kategorier={hentingWrapper.planlagtHenting.kategorier.map(
+                                        ({ kategori }) => kategori,
+                                    )}
+                                />
+                            </DetailWithLabel>
+                        ) : null}
+                        {hentingWrapper.planlagtHenting?.merknad ? (
+                            <DetailWithLabel label="Merknad">
+                                <Text>{hentingWrapper.planlagtHenting?.merknad}</Text>
+                            </DetailWithLabel>
+                        ) : null}
+                    </VStack>
+                    <ButtonGroup marginTop="10">
+                        {getBackButton()}
+                        {getCancelButton(hentingWrapper)}
+                    </ButtonGroup>
+                </>
+            );
+        },
     );
 };
