@@ -1,8 +1,6 @@
 import { Box, Text, Flex, Button, Icon } from '@chakra-ui/react';
 import * as React from 'react';
 import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
-import { usePartnere } from '../../services/partner/usePartnere';
-import { UtlysFlerePartnereButton } from './forms/UtlysFlerePartnereButton';
 import { usePartnerAcceptUtlysning } from '../../services/utlysning/usePartnerAcceptUtlysning';
 import { useSuccessToast } from '../../components/toasts/useSuccessToast';
 import { useErrorToast } from '../../components/toasts/useErrorToast';
@@ -11,6 +9,7 @@ import Check from '../../assets/Check.svg';
 import Cross from '../../assets/Cross.svg';
 import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { isAfter, isBefore } from 'date-fns';
+import { colors } from '../../theme/foundations/colors';
 
 interface Props {
     henting: ApiEkstraHenting;
@@ -44,7 +43,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) =>
 
     const getUtgatt = (): JSX.Element => {
         return (
-            <Flex color="onError">
+            <Flex color="onError" alignItems="center">
                 <Icon marginRight="2" fill="onError">
                     <Cross />
                 </Icon>
@@ -58,7 +57,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) =>
     };
 
     return (
-        <Box>
+        <Box alignItems="center" justifyItems="stretch">
             {isPassed() ? getUtgatt() : null}
 
             {!isPassed() && henting.godkjentUtlysning?.partnerId === partnerId ? (
@@ -76,8 +75,8 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) =>
 
             {!isPassed() && !henting.godkjentUtlysning ? (
                 <Button
-                    backgroundColor="Green"
-                    color="DarkBlue"
+                    backgroundColor={colors.Green}
+                    color={colors.DarkBlue}
                     onClick={() => acceptUtlysning(henting.utlysninger[0].id)}
                 >
                     Meld på
