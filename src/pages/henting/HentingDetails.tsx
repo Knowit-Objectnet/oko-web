@@ -184,7 +184,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                             <Box backgroundColor={colors.White} height="10rem" width="19rem" padding="1rem">
                                 <VStack>
                                     <Text fontSize="sm">
-                                        Hvis du melder deg på gjør du at kan ingen andre melde seg på. Derfor forventes
+                                        Hvis du melder deg på gjør du at ingen andre kan melde seg på. Derfor forventes
                                         det at du kommer og henter ombruksvarene innenfor tidsintervallet.
                                     </Text>
 
