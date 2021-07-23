@@ -30,7 +30,7 @@ export const MissingRegistration: React.FC<Props> = ({ henting }) => {
 
                     <Td maxWidth="14rem">
                         <KategoriList
-                            kategorier={henting.kategorier.filter((it) => it.kategori).map((it) => it.kategori!)}
+                            kategorier={henting.kategorier.map((it) => it.kategori)}
                         />
                     </Td>
                     <Td>
