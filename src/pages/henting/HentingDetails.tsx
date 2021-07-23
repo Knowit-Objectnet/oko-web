@@ -10,7 +10,7 @@ import Location from '../../assets/Location.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Clock from '../../assets/Clock.svg';
 import Check from '../../assets/Check.svg';
-import Bell from '../../assets/Bell.svg';
+import Varsel from '../../assets/Varsel.svg';
 import { useAuth } from '../../auth/useAuth';
 import { DetailWithIcon } from './components/DetailWithIcon';
 import { DetailWithLabel } from './components/DetailWithLabel';
@@ -88,9 +88,18 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                             </Heading>
                         ) : (
                             <Heading as="h1" fontWeight="bold" aria-label="Partner" fontSize="lg">
-                                <DetailWithIcon icon={Bell} label="test">
-                                    <Text> Ekstrahenting på {hentingWrapper.ekstraHenting?.stasjonNavn} </Text>
-                                </DetailWithIcon>
+                                <HStack>
+                                    {user.isPartner ? (
+                                        <>
+                                            <Icon as={Varsel} transform="translateY(-2px)" boxSize="4rem" />
+                                            <Box>
+                                                <Text>
+                                                    Ekstrahenting på {hentingWrapper.ekstraHenting?.stasjonNavn}
+                                                </Text>
+                                            </Box>
+                                        </>
+                                    ) : null}
+                                </HStack>
                             </Heading>
                         )}
 
@@ -109,7 +118,21 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                             )
                         ) : null}
                         {hentingWrapper.ekstraHenting ? (
-                            <BadgeDetail text="Ekstrahenting" color={colors.Green} minWidth="4xs" />
+                            <>
+                                {user.isPartner ? null : (
+                                    <>
+                                        <Text
+                                            fontSize="4xl"
+                                            fontWeight="normal"
+                                            marginRight="3rem"
+                                            justifyContent="left"
+                                        >
+                                            Ekstrahenting
+                                        </Text>
+                                        <BadgeDetail text="Ekstrahenting" color={colors.Green} minWidth="4xs" />
+                                    </>
+                                )}
+                            </>
                         ) : null}
                     </HStack>
                     <HStack alignItems="center" spacing="10" justifyContent="space-between">
@@ -118,10 +141,9 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                                 <time>{getDayString(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
                             </DetailWithIcon>
                             <DetailWithIcon icon={Clock} label="Tidspunkt">
-                                {`Fra kl. `}
-                                <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
-                                {` til kl. `}
-                                <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt))}</time>
+                                {formatTime(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt)) +
+                                    ' - ' +
+                                    formatTime(parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt))}
                             </DetailWithIcon>
                             <DetailWithIcon icon={Location} label="Stasjon">
                                 {hentingWrapper.stasjonNavn}
@@ -158,7 +180,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                                 </DetailWithLabel>
                             ) : null}
                         </VStack>
-                        {hentingWrapper.type === 'EKSTRA' ? (
+                        {hentingWrapper.type === 'EKSTRA' && user.isPartner ? (
                             <Box backgroundColor={colors.White} height="10rem" width="19rem" padding="1rem">
                                 <VStack>
                                     <Text fontSize="sm">

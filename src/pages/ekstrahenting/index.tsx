@@ -32,7 +32,7 @@ const EkstraHenting: React.FC = () => {
                 ) : null}
                 <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
                     <Heading as="h1" fontWeight="medium" fontSize="4xl">
-                        Aktive ekstrahenting
+                        Aktive ekstrahentinger
                     </Heading>
                 </Flex>
                 <Box width="full" overflowX="auto">
