@@ -62,10 +62,8 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
             },
             {
                 onSuccess: (data) => {
-                    onApiSubmitSuccess(`${
-                        data.telefonVerifisert ? 'Telefon er verifisert\n' : 'Telefon er ikke verifisert\n'
-                    }
-                    ${data.epostVerifisert ? 'Epost er verifisert' : 'Epost er ikke verifisert'}`);
+                    if (type === 'telefon') onApiSubmitSuccess('Telefon er verifisert');
+                    if (type === 'e-post') onApiSubmitSuccess('E-post er verifisert');
                 },
                 onError: onApiSubmitError,
             },
@@ -73,7 +71,7 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
     });
 
     const onApiSubmitSuccess = (successMessage: string) => {
-        showSuccessToast({ title: 'Koder sendt', description: successMessage });
+        showSuccessToast({ title: successMessage });
     };
 
     const onApiSubmitError = (error: ApiError) => {
