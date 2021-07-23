@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { colors } from '../../../theme/foundations/colors';
-import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Heading, HStack, Tbody, Td, Text, Tr, VStack } from '@chakra-ui/react';
 import { DetailWithIcon } from '../../henting/components/DetailWithIcon';
 import Location from '../../../assets/Location.svg';
 import Calendar from '../../../assets/Calendar.svg';
@@ -11,6 +11,8 @@ import { KategorierMedVekt } from './KategorierMedVekt';
 import { getDayString } from '../../henting/HentingDetails';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 import { formatTime } from '../../../utils/formatDateTime';
+import { KategoriList } from '../../../components/KategoriList';
+import { EkstraHentingInfo } from '../../ekstrahenting/EkstraHentingInfo';
 
 interface Props {
     henting: ApiHenting;
@@ -18,43 +20,36 @@ interface Props {
 
 export const NoMissingRegistration: React.FC<Props> = ({ henting }) => {
     return (
-        <>
-            <HStack
-                justifyContent="space-between"
-                alignItems="center"
-                paddingX={6}
-                paddingY={4}
-                backgroundColor={colors.LightBeige}
-                marginTop={4}
-                spacing={20}
-            >
-                <HStack alignItems="center" spacing={4}>
-                    <Heading fontSize="1.5rem" fontWeight="bold" textAlign="center">
-                        {henting.vektregistreringer.reduce((total, next) => total + next.vekt, 0)} kg
-                    </Heading>
-                    <Text fontSize="0.8rem" fontWeight="normal">
-                        Registrert 20.12.12
-                    </Text>
-                </HStack>
-                <KategorierMedVekt vektregistreringer={henting.vektregistreringer} />
-                {/* Registrert vekt */}
-                {/*<KunTotalvekt />*/}
-                {/* Totalvekt */}
-                <VStack alignItems="flex-start">
-                    <DetailWithIcon icon={Location} label="Stasjon">
-                        {henting.stasjonNavn}
-                    </DetailWithIcon>
-                    <DetailWithIcon icon={Calendar} label="Dato og tidspunk">
-                        <Text>
-                            <time>{getDayString(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
-                            {` kl `}
-                            <time>{formatTime(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>-
-                            <time>{formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))}</time>
-                        </Text>
-                    </DetailWithIcon>
-                </VStack>
-                <HentingButton />
-            </HStack>
-        </>
+        <Tbody>
+            {henting.kategorier.map((kategori) => (
+                <Tr
+                    key={kategori.kategori.id}
+                    backgroundColor={colors.LightBeige}
+                    borderBottomWidth="16px"
+                    borderBottomColor="background"
+                >
+                    <Td>
+                        <HStack alignItems="center" spacing={4}>
+                            <Heading fontSize="1.5rem" fontWeight="bold" textAlign="center">
+                                {henting.vektregistreringer.reduce((total, next) => total + next.vekt, 0)} kg
+                            </Heading>
+                            <Text fontSize="0.8rem" fontWeight="normal">
+                                Registrert 20.12.12
+                            </Text>
+                        </HStack>
+                    </Td>
+
+                    <Td maxWidth="14rem">
+                        <KategorierMedVekt vektregistreringer={henting.vektregistreringer} />
+                    </Td>
+                    <Td>
+                        <EkstraHentingInfo henting={henting} />
+                    </Td>
+                    <Td>
+                        <HentingButton />
+                    </Td>
+                </Tr>
+            ))}
+        </Tbody>
     );
 };
