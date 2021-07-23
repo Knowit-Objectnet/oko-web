@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, ButtonGroup, Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Flex, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { hentingStarted, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { formatDate, formatTime } from '../../utils/formatDateTime';
@@ -10,6 +10,7 @@ import Location from '../../assets/Location.svg';
 import Calendar from '../../assets/Calendar.svg';
 import Clock from '../../assets/Clock.svg';
 import Check from '../../assets/Check.svg';
+import Varsel from '../../assets/Varsel.svg';
 import { useAuth } from '../../auth/useAuth';
 import { DetailWithIcon } from './components/DetailWithIcon';
 import { DetailWithLabel } from './components/DetailWithLabel';
@@ -19,6 +20,7 @@ import { RegisterVektButton } from './components/RegisterVektButton';
 import { colors } from '../../theme/foundations/colors';
 import { ApiHenting, ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
+import { PartnerPameldingInfo } from '../ekstrahenting/PartnerPameldingInfo';
 
 export const getDayString = (date: Date) => {
     if (isToday(date)) {
@@ -80,9 +82,27 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     ) : null}
 
                     <HStack alignItems="center" spacing="10">
-                        <Heading as="h1" fontWeight="normal" aria-label="Partner">
-                            {hentingWrapper.aktorNavn}
-                        </Heading>
+                        {hentingWrapper.type === 'PLANLAGT' ? (
+                            <Heading as="h1" fontWeight="normal" aria-label="Partner">
+                                {hentingWrapper.aktorNavn}{' '}
+                            </Heading>
+                        ) : (
+                            <Heading as="h1" fontWeight="bold" aria-label="Partner" fontSize="lg">
+                                <HStack>
+                                    {user.isPartner ? (
+                                        <>
+                                            <Icon as={Varsel} transform="translateY(-2px)" boxSize="4rem" />
+                                            <Box>
+                                                <Text>
+                                                    Ekstrahenting på {hentingWrapper.ekstraHenting?.stasjonNavn}
+                                                </Text>
+                                            </Box>
+                                        </>
+                                    ) : null}
+                                </HStack>
+                            </Heading>
+                        )}
+
                         {hentingWrapper.planlagtHenting ? (
                             henting.vektregistreringer.length > 0 ? (
                                 <>
@@ -97,39 +117,92 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                                 </>
                             )
                         ) : null}
+                        {hentingWrapper.ekstraHenting ? (
+                            <>
+                                {user.isPartner ? null : (
+                                    <>
+                                        <Text
+                                            fontSize="4xl"
+                                            fontWeight="normal"
+                                            marginRight="3rem"
+                                            justifyContent="left"
+                                        >
+                                            Ekstrahenting
+                                        </Text>
+                                        <BadgeDetail text="Ekstrahenting" color={colors.Green} minWidth="4xs" />
+                                    </>
+                                )}
+                            </>
+                        ) : null}
                     </HStack>
-                    <VStack spacing="3" alignItems="flex-start" marginTop="4">
-                        <DetailWithIcon icon={Location} label="Stasjon">
-                            {hentingWrapper.stasjonNavn}
-                        </DetailWithIcon>
-                        <DetailWithIcon icon={Calendar} label="Dato">
-                            <time>{getDayString(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
-                        </DetailWithIcon>
-                        <DetailWithIcon icon={Clock} label="Tidspunkt">
-                            {`Fra kl. `}
-                            <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
-                            {` til kl. `}
-                            <time>{formatTime(parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt))}</time>
-                        </DetailWithIcon>
-                        {hentingWrapper.planlagtHenting && hentingWrapper.planlagtHenting.kategorier.length > 0 ? (
-                            <DetailWithLabel label="Kategorier">
-                                <KategoriList
-                                    size="md"
-                                    kategorier={hentingWrapper.planlagtHenting.kategorier.map(
-                                        ({ kategori }) => kategori,
+                    <HStack alignItems="center" spacing="10" justifyContent="space-between">
+                        <VStack spacing="3" alignItems="flex-start" marginTop="4">
+                            <DetailWithIcon icon={Calendar} label="Dato">
+                                <time>{getDayString(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
+                            </DetailWithIcon>
+                            <DetailWithIcon icon={Clock} label="Tidspunkt">
+                                {formatTime(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt)) +
+                                    ' - ' +
+                                    formatTime(parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt))}
+                            </DetailWithIcon>
+                            <DetailWithIcon icon={Location} label="Stasjon">
+                                {hentingWrapper.stasjonNavn}
+                            </DetailWithIcon>
+
+                            {hentingWrapper.planlagtHenting?.merknad ? (
+                                <DetailWithLabel label="Merknad">
+                                    <Text>{hentingWrapper.planlagtHenting?.merknad}</Text>
+                                </DetailWithLabel>
+                            ) : null}
+                            {hentingWrapper.ekstraHenting?.beskrivelse ? (
+                                <DetailWithLabel label="Beskrivelse">
+                                    <Text>{hentingWrapper.ekstraHenting?.beskrivelse}</Text>
+                                </DetailWithLabel>
+                            ) : null}
+                            {hentingWrapper.planlagtHenting && hentingWrapper.planlagtHenting.kategorier.length > 0 ? (
+                                <DetailWithLabel label="Kategorier">
+                                    <KategoriList
+                                        size="md"
+                                        kategorier={hentingWrapper.planlagtHenting.kategorier.map(
+                                            ({ kategori }) => kategori,
+                                        )}
+                                    />
+                                </DetailWithLabel>
+                            ) : null}
+                            {hentingWrapper.ekstraHenting && hentingWrapper.ekstraHenting.kategorier.length > 0 ? (
+                                <DetailWithLabel label="Kategorier">
+                                    <KategoriList
+                                        size="md"
+                                        kategorier={hentingWrapper.ekstraHenting.kategorier.map(
+                                            ({ kategori }) => kategori,
+                                        )}
+                                    />
+                                </DetailWithLabel>
+                            ) : null}
+                        </VStack>
+                        {hentingWrapper.type === 'EKSTRA' && user.isPartner ? (
+                            <Box backgroundColor={colors.White} height="10rem" width="19rem" padding="1rem">
+                                <VStack>
+                                    <Text fontSize="sm">
+                                        Hvis du melder deg på gjør du at ingen andre kan melde seg på. Derfor forventes
+                                        det at du kommer og henter ombruksvarene innenfor tidsintervallet.
+                                    </Text>
+
+                                    {hentingWrapper.ekstraHenting === undefined ||
+                                    hentingWrapper.aktorId === undefined ? null : (
+                                        <PartnerPameldingInfo
+                                            henting={hentingWrapper.ekstraHenting}
+                                            partnerId={hentingWrapper.aktorId}
+                                        />
                                     )}
-                                />
-                            </DetailWithLabel>
+                                </VStack>
+                            </Box>
                         ) : null}
-                        {hentingWrapper.planlagtHenting?.merknad ? (
-                            <DetailWithLabel label="Merknad">
-                                <Text>{hentingWrapper.planlagtHenting?.merknad}</Text>
-                            </DetailWithLabel>
-                        ) : null}
-                    </VStack>
+                    </HStack>
+
                     <ButtonGroup marginTop="10">
                         {getBackButton()}
-                        {getCancelButton(hentingWrapper)}
+                        {hentingWrapper.type === 'PLANLAGT' && user.isPartner ? getCancelButton(hentingWrapper) : null}
                     </ButtonGroup>
                 </>
             );

@@ -9,7 +9,7 @@ interface Props {
 
 export const DetailWithIcon: React.FC<Props> = ({ icon, label, children }) => (
     <HStack>
-        <Icon as={icon} aria-label={label} transform="translateY(-2px)" boxSize="1.2rem" />
+        <Icon as={icon} aria-label={label} transform="translateY(-2px)" boxSize="1.5rem" />
         <Box>{children}</Box>
     </HStack>
 );

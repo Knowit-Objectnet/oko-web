@@ -20,10 +20,10 @@ export const PameldtInfo: React.FC<Props> = ({ henting }) => {
                     <Box marginRight="1">
                         <Text fontSize="sm" fontWeight="bold">
                             {isLoading || isLoadingError || henting.utlysninger.length < allPartnere!.length
-                                ? `Åpent for ${henting.utlysninger.length} ${
+                                ? `Utsendt til ${henting.utlysninger.length} ${
                                       henting.utlysninger.length === 1 ? 'partner' : 'partnere'
                                   }`
-                                : `Åpent for alle partnere`}
+                                : `Utsendt til alle partnere`}
                         </Text>
                         <Text fontSize="sm" fontStyle="italic">
                             Ingen påmeldt

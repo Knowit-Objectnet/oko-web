@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Heading } from '@chakra-ui/react';
+import { Heading, Table } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { MissingRegistration } from './components/MissingRegistration';
 import { NoMissingRegistration } from './components/NoMissingRegistration';
@@ -55,13 +55,15 @@ const Vekt: React.FC = () => {
             >
                 <Flex direction="column" height="100%">
                     <Flex direction="column" marginBottom={20}>
-                        <Heading as="h2" fontSize="1.5rem" fontWeight="bold">
+                        <Heading as="h2" fontSize="1.5rem" fontWeight="bold" marginBottom="1rem">
                             Hentinger som mangler vekt
                         </Heading>
                         <Flex direction="column">
-                            {manglerVeiing.map((henting) => {
-                                return <MissingRegistration key={henting.id} henting={henting} />;
-                            })}
+                            <Table>
+                                {manglerVeiing.map((henting) => {
+                                    return <MissingRegistration key={henting.id} henting={henting} />;
+                                })}
+                            </Table>
                         </Flex>
                     </Flex>
                     <Flex direction="column">
@@ -69,9 +71,11 @@ const Vekt: React.FC = () => {
                             Tidligere veiinger
                         </Heading>
                         <Flex direction="column">
-                            {registrertVekt.map((henting) => {
-                                return <NoMissingRegistration key={henting.id} henting={henting} />;
-                            })}
+                            <Table>
+                                {registrertVekt.map((henting) => {
+                                    return <NoMissingRegistration key={henting.id} henting={henting} />;
+                                })}
+                            </Table>
                         </Flex>
                     </Flex>
                 </Flex>

@@ -9,7 +9,7 @@ interface Props {
 export const EkstraHentingInfoRow: React.FC<Props> = ({ text, icon }) => {
     return (
         <Flex>
-            <Icon marginRight="3" aria-hidden>
+            <Icon marginRight="3" aria-hidden fontSize="2xl">
                 {icon}
             </Icon>
             <Text>{text}</Text>
