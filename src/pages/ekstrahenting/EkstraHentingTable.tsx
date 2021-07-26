@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { KategoriList } from '../../components/KategoriList';
-import { EkstraHentingInfo } from './EkstraHentingInfo';
 import { useAuth } from '../../auth/useAuth';
 import { ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
 import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
 import { PameldtInfo } from './PameldtInfo';
 import { PartnerPameldingInfo } from './PartnerPameldingInfo';
+import { HentingInfoSection } from '../../components/henting/hentingInfoSection';
 
 export const EkstraHentingTable: React.FC = () => {
     const { user } = useAuth();
@@ -42,7 +42,7 @@ export const EkstraHentingTable: React.FC = () => {
                     >
                         <Td maxWidth="18rem">{henting.beskrivelse || 'Ingen merknad skrevet'}</Td>
                         <Td>
-                            <EkstraHentingInfo henting={henting} />
+                            <HentingInfoSection henting={henting} />
                         </Td>
                         <Td maxWidth="14rem">
                             <KategoriList

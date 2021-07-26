@@ -1,26 +1,25 @@
 import { VStack } from '@chakra-ui/react';
 import React from 'react';
-import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
-import { formatDateRelative, formatTime } from '../../utils/formatDateTime';
-import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { ApiHenting } from '../../services/henting/HentingService';
 import Calendar from '../../assets/Calendar.svg';
 import Clock from '../../assets/Clock.svg';
 import Location from '../../assets/Location.svg';
-import { EkstraHentingInfoRow } from './EkstraHentingInfoRow';
-import { ApiHenting } from '../../services/henting/HentingService';
+import { HentingInfoRow } from './HentingInfoRow';
+import { formatDateRelative, formatTime } from '../../utils/formatDateTime';
+import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 
 interface Props {
-    henting: ApiEkstraHenting | ApiHenting;
+    henting: ApiHenting;
 }
 
-export const EkstraHentingInfo: React.FC<Props> = ({ henting }) => {
+export const HentingInfoSection: React.FC<Props> = ({ henting }) => {
     return (
         <VStack alignItems="flex-start">
-            <EkstraHentingInfoRow
+            <HentingInfoRow
                 icon={<Calendar />}
                 text={formatDateRelative(parseISOIgnoreTimezone(henting.startTidspunkt))}
             />
-            <EkstraHentingInfoRow
+            <HentingInfoRow
                 icon={<Clock />}
                 text={
                     formatTime(parseISOIgnoreTimezone(henting.startTidspunkt)) +
@@ -28,7 +27,7 @@ export const EkstraHentingInfo: React.FC<Props> = ({ henting }) => {
                     formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))
                 }
             />
-            <EkstraHentingInfoRow icon={<Location />} text={henting.stasjonNavn} />
+            <HentingInfoRow icon={<Location />} text={henting.stasjonNavn} />
         </VStack>
     );
 };

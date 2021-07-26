@@ -4,8 +4,8 @@ import { Heading, Tbody, Td, Tr } from '@chakra-ui/react';
 import { RegistervektButton } from './RegistervektButton';
 import { ApiHenting } from '../../../services/henting/HentingService';
 import { KategoriList } from '../../../components/KategoriList';
-import { EkstraHentingInfo } from '../../ekstrahenting/EkstraHentingInfo';
 import { useAuth } from '../../../auth/useAuth';
+import { HentingInfoSection } from '../../../components/henting/hentingInfoSection';
 
 interface Props {
     henting: ApiHenting;
@@ -29,12 +29,10 @@ export const MissingRegistration: React.FC<Props> = ({ henting }) => {
                     </Td>
 
                     <Td maxWidth="14rem">
-                        <KategoriList
-                            kategorier={henting.kategorier.map((it) => it.kategori)}
-                        />
+                        <KategoriList kategorier={henting.kategorier.map((it) => it.kategori)} />
                     </Td>
                     <Td>
-                        <EkstraHentingInfo henting={henting} />
+                        <HentingInfoSection henting={henting} />
                     </Td>
                     <Td>
                         <RegistervektButton henting={henting} />
