@@ -18,7 +18,10 @@ export const formatDateRelative = (date: Date): string => {
     const durationFromNow = differenceInCalendarDays(date, new Date());
     const isLongerThan6Days = Math.abs(durationFromNow) > 6;
     const isLongerThan1Day = Math.abs(durationFromNow) > 1;
-    if (!isLongerThan1Day) {
+    if (
+        !isLongerThan1Day ||
+        formatRelative(date, Date.now(), { locale: nb, weekStartsOn: 1 }).split(' ', 2)[0] === 'forrige'
+    ) {
         return (
             formatRelative(date, Date.now(), { locale: nb, weekStartsOn: 1 }).split(' ', 2)[0] +
             ' ' +
