@@ -25,8 +25,8 @@ export const AarsakList: React.FC<Props> = ({ isPartnerAarsaker }) => {
         <List alignItems="flex-start">
             {sortedAarsakerByType?.map((aarsak, valgNumber) => (
                 <ListItem key={aarsak.id}>
-                    <HStack>
-                        <Text fontSize="sm">Valg {valgNumber + 1} </Text>
+                    <HStack justifyContent="space-between" marginBottom="1">
+                        <Text fontSize="sm">Avlysningsårsak {valgNumber + 1} </Text>
                         <DeleteAarsakButton aarsak={aarsak} />
                     </HStack>
 
@@ -35,19 +35,16 @@ export const AarsakList: React.FC<Props> = ({ isPartnerAarsaker }) => {
                         border="2px solid"
                         spacing="300"
                         borderColor="gray.200"
-                        marginBottom="3"
+                        marginBottom="2rem"
                         alignItems="flex-start"
                         padding="2"
                         key={aarsak.id}
                     >
-                        <Flex fontSize="sm" flexGrow={1} direction="column" alignItems="flex-start">
+                        <Flex fontSize="sm" flexGrow={1} direction="column" alignItems="flex-start" width="40rem">
                             <Text fontWeight="normal" fontSize="sm" aria-label="Årsak">
                                 {aarsak.beskrivelse}
                             </Text>
                         </Flex>
-                        <ButtonGroup spacing="4" size="xs">
-                            <EditAarsakButton aarsak={aarsak} />
-                        </ButtonGroup>
                     </HStack>
                 </ListItem>
             ))}

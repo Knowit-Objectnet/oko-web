@@ -30,7 +30,7 @@ const Innstillinger: React.FC = () => {
                     </Heading>
                 </Flex>
                 <Link as={NavLink} to="/aarsaker" fontSize="2xl" marginTop="6" textDecorationLine="underline">
-                    Avlysningstekster
+                    Avlysningsårsaker
                 </Link>
                 <Link as={NavLink} to="/kategorier" fontSize="2xl" marginTop="6" textDecorationLine="underline">
                     Kategorier
