@@ -20,7 +20,7 @@ import { RadiobuttonGroup } from '../../../components/forms/RadiobuttonGroup';
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
-    organisasjonstype: yup.array(yup.string()).ensure().label('om partneren er en ideell organisasjon'),
+    organisasjonstype: yup.array(yup.string()).ensure().label('om partneren er en prioritert organisasjon'),
 });
 
 interface PartnerFormData {
@@ -105,7 +105,7 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
                     <Input name="navn" label="Navn på organisasjon" required />
                     <RadiobuttonGroup
                         name="organisasjonstype"
-                        label="Er det en ideell organisasjon?"
+                        label="Er det en prioritert organisasjon?"
                         options={[
                             { value: 'ideell', label: 'Ja' },
                             { value: 'ikke ideell', label: 'Nei' },
