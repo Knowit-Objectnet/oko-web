@@ -29,13 +29,13 @@ const Aarsaker: React.FC = () => {
                     Avlysningsårsaker
                 </Heading>
                 <HStack margin="15" alignItems="flex-start">
-                    <VStack marginRight="20" alignItems="flex-start">
+                    <VStack marginRight="20" alignItems="flex-start" flexGrow={1}>
                         <Heading as="h2" fontWeight="bold" fontSize="md" minWidth="500">
                             Stasjon
                         </Heading>
                         <AarsakList isPartnerAarsaker={false} />
                     </VStack>
-                    <VStack alignItems="flex-start">
+                    <VStack alignItems="flex-start" flexGrow={1}>
                         <Heading as="h2" fontWeight="bold" fontSize="md" minWidth="500">
                             Partner
                         </Heading>
