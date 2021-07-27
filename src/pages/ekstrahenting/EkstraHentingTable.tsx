@@ -40,18 +40,18 @@ export const EkstraHentingTable: React.FC = () => {
                         borderBottomWidth="16px"
                         borderBottomColor="background"
                     >
-                        <Td maxWidth="14rem">
+                        <Td>
                             <Text fontWeight="bold">{henting.beskrivelse || 'Ingen merknad skrevet'} </Text>
                         </Td>
-                        <Td>
+                        <Td minWidth="56">
                             <HentingInfoSection henting={henting} />
                         </Td>
-                        <Td maxWidth="18rem">
+                        <Td>
                             <KategoriList
                                 kategorier={henting.kategorier.filter((it) => it.kategori).map((it) => it.kategori!)}
                             />
                         </Td>
-                        <Td maxWidth="16rem">
+                        <Td>
                             {user.isPartner ? (
                                 <PartnerPameldingInfo henting={henting} partnerId={user.aktorId!} />
                             ) : (
