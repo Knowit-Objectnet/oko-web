@@ -21,7 +21,6 @@ import { colors } from '../../theme/foundations/colors';
 import { ApiHenting, ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
 import { PartnerPameldingInfo } from '../ekstrahenting/PartnerPameldingInfo';
-import { KontaktPersonSection } from '../../components/kontaktperson/KontaktPersonSection';
 import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
 
 export const getDayString = (date: Date) => {
@@ -210,7 +209,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                                     hentingWrapper.aktorId === undefined ? null : (
                                         <PartnerPameldingInfo
                                             henting={hentingWrapper.ekstraHenting}
-                                            partnerId={hentingWrapper.aktorId}
+                                            partnerId={user.aktorId!}
                                         />
                                     )}
                                 </VStack>

@@ -140,7 +140,7 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
                         helperText="Hvilke kategorier kan hentes?"
                         required
                     />
-                    {/* <RadiobuttonGroup name="hentingType" label="Type henting" options={hentingTypeOptions} required /> */}
+
                     <WarningContainer variant="warning">
                         <WarningBody>
                             OBS! Hvitevarer og tekstiler kan kun hentes av noen aktører. Ved valg av disse
