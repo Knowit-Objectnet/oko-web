@@ -1,31 +1,19 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Button, ButtonGroup, Heading, HStack, VStack } from '@chakra-ui/react';
+import { ButtonGroup, Heading, HStack, VStack } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { AddAarsakButton } from './AddAarsakButton';
 import { AarsakList } from './AarsakList';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ApiAarsak } from '../../services/aarsak/AarsakService';
 
 const Aarsaker: React.FC = () => {
-    const { state: locationState } = useLocation<{ aarsak?: ApiAarsak; prevPath?: string }>();
-
-    const getBackButton = () => {
-        if (locationState?.prevPath) {
-            return (
-                <Button as={Link} to={locationState.prevPath} variant="outline">
-                    Tilbake
-                </Button>
-            );
-        }
-    };
-
     return (
         <>
             <Helmet>
-                <title>Avlysningstekster</title>
+                <title>Avlysningsårsaker</title>
             </Helmet>
-            <Flex as="main" direction="column" paddingY="5" paddingX="10" marginX="auto" width="full">
+            <Flex as="main" direction="column" paddingY="5" paddingX="10" width="full">
                 <Heading
                     as="h1"
                     fontWeight="normal"
@@ -38,24 +26,23 @@ const Aarsaker: React.FC = () => {
                     borderBottomColor="gray.200"
                     borderBottomWidth="2"
                 >
-                    Avlysningstekster
+                    Avlysningsårsaker
                 </Heading>
                 <HStack margin="15" alignItems="flex-start">
-                    <VStack marginRight="20" alignItems="flex-start">
+                    <VStack marginRight="20" alignItems="flex-start" flexGrow={1}>
                         <Heading as="h2" fontWeight="bold" fontSize="md" minWidth="500">
                             Stasjon
                         </Heading>
                         <AarsakList isPartnerAarsaker={false} />
                     </VStack>
-                    <VStack alignItems="flex-start">
+                    <VStack alignItems="flex-start" flexGrow={1}>
                         <Heading as="h2" fontWeight="bold" fontSize="md" minWidth="500">
                             Partner
                         </Heading>
                         <AarsakList isPartnerAarsaker={true} />
                     </VStack>
                 </HStack>
-                <ButtonGroup justifyContent="space-between">
-                    {getBackButton()}
+                <ButtonGroup marginRight="30" justifyContent="right">
                     <AddAarsakButton />
                 </ButtonGroup>
             </Flex>
