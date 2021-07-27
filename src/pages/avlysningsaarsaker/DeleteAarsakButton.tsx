@@ -6,6 +6,7 @@ import { useDeleteAarsak } from '../../services/aarsak/useDeleteAarsak';
 import { ApiAarsak } from '../../services/aarsak/AarsakService';
 import { Icon, IconButton } from '@chakra-ui/react';
 import Cross from '../../assets/Cross.svg';
+import { DeleteButton } from '../../components/buttons/DeleteButton';
 
 interface Props {
     aarsak: ApiAarsak;
@@ -37,7 +38,7 @@ export const DeleteAarsakButton: React.FC<Props> = ({ aarsak }) => {
             onConfirm={handleDeleteAarsak}
             isLoading={deleteAarsakMutation.isLoading}
         >
-            <IconButton icon={<Icon as={Cross} boxSize={5} />} colorScheme="transparent" aria-label="Slett årsaken" />
+            <DeleteButton label="Slett" borderRadius="6" size="xs" aria-label="Slett årsaken" />
         </ConfirmationPopover>
     );
 };

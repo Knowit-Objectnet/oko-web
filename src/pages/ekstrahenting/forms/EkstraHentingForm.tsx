@@ -23,6 +23,7 @@ import { StasjonSelect } from '../../../components/forms/StasjonSelect';
 import { usePartnere } from '../../../services/partner/usePartnere';
 import { getEkstraHentingValidationSchema } from './EkstraHentingFormSchema';
 import { dateTimeToStringIgnoreTimezone, mergeDateWithTimeToString } from '../../../utils/hentingDateTimeHelpers';
+import { WarningBody, WarningContainer, WarningTitle } from '../../../components/forms/Warning';
 
 interface EkstraHentingFormData {
     stasjon: string;
@@ -140,6 +141,12 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
                         required
                     />
                     {/* <RadiobuttonGroup name="hentingType" label="Type henting" options={hentingTypeOptions} required /> */}
+                    <WarningContainer variant="warning">
+                        <WarningBody>
+                            OBS! Hvitevarer og tekstiler kan kun hentes av noen aktører. Ved valg av disse
+                            varekategoriene trykk “Velg ut hvem som kan melde seg på” for å velge aktuelle aktører.
+                        </WarningBody>
+                    </WarningContainer>
                     <RadiobuttonGroup
                         name="utlysningSelect"
                         label="Hvem kan melde seg på?"

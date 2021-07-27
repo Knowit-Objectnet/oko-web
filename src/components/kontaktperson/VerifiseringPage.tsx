@@ -16,8 +16,8 @@ interface Props {
 export const VerifiseringPage: React.FC<Props> = ({ kontakt, onClose }) => {
     return (
         <Flex flexDirection="column">
-            <VerifiseringForm kontakt={kontakt} type="telefon" />
-            <VerifiseringForm kontakt={kontakt} type="e-post" />
+            {kontakt.telefon ? <VerifiseringForm kontakt={kontakt} type="telefon" /> : null}
+            {kontakt.epost ? <VerifiseringForm kontakt={kontakt} type="e-post" /> : null}
             <SendVerifiseringButton kontakt={kontakt} marginTop="7" />
             <Button
                 variant="primary"
