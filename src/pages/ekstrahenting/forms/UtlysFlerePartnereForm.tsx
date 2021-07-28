@@ -116,7 +116,7 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
                     ) : null}
                     <FormSubmitButton
                         label="Registrer nye partnere"
-                        // isLoading={addEkstraHentingMutation.isLoading}
+                        isLoading={batchAddUtlysningMutation.isLoading}
                         loadingText="Lagrer..."
                     />
                 </Stack>

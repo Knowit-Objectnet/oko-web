@@ -1,18 +1,10 @@
 import * as React from 'react';
 import { colors } from '../../../theme/foundations/colors';
-import { Heading, HStack, Tbody, Td, Text, Tr, VStack } from '@chakra-ui/react';
-import { DetailWithIcon } from '../../henting/components/DetailWithIcon';
-import Location from '../../../assets/Location.svg';
-import Calendar from '../../../assets/Calendar.svg';
+import { Heading, HStack, Tbody, Td, Text, Tr } from '@chakra-ui/react';
 import { HentingButton } from './HentingButton';
-import { KunTotalvekt } from './KunTotalvekt';
 import { ApiHenting } from '../../../services/henting/HentingService';
 import { KategorierMedVekt } from './KategorierMedVekt';
-import { getDayString } from '../../henting/HentingDetails';
-import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
-import { formatTime } from '../../../utils/formatDateTime';
-import { KategoriList } from '../../../components/KategoriList';
-import { EkstraHentingInfo } from '../../ekstrahenting/EkstraHentingInfo';
+import { HentingInfoSection } from '../../../components/henting/HentingInfoSection';
 
 interface Props {
     henting: ApiHenting;
@@ -43,7 +35,7 @@ export const NoMissingRegistration: React.FC<Props> = ({ henting }) => {
                         <KategorierMedVekt vektregistreringer={henting.vektregistreringer} />
                     </Td>
                     <Td>
-                        <EkstraHentingInfo henting={henting} />
+                        <HentingInfoSection henting={henting} />
                     </Td>
                     <Td>
                         <HentingButton />

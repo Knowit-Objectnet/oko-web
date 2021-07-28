@@ -21,6 +21,7 @@ import { colors } from '../../theme/foundations/colors';
 import { ApiHenting, ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
 import { PartnerPameldingInfo } from '../ekstrahenting/PartnerPameldingInfo';
+import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
 
 export const getDayString = (date: Date) => {
     if (isToday(date)) {
@@ -84,23 +85,56 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     <HStack alignItems="center" spacing="10">
                         {hentingWrapper.type === 'PLANLAGT' ? (
                             <Heading as="h1" fontWeight="normal" aria-label="Partner">
-                                {hentingWrapper.aktorNavn}{' '}
+                                {hentingWrapper.aktorNavn}
                             </Heading>
                         ) : (
-                            <Heading as="h1" fontWeight="bold" aria-label="Partner" fontSize="lg">
-                                <HStack>
-                                    {user.isPartner ? (
-                                        <>
+                            <>
+                                {user.isPartner ? (
+                                    <Heading as="h1" fontWeight="bold" aria-label="Partner" fontSize="lg">
+                                        <HStack>
                                             <Icon as={Varsel} transform="translateY(-2px)" boxSize="4rem" />
                                             <Box>
                                                 <Text>
                                                     Ekstrahenting på {hentingWrapper.ekstraHenting?.stasjonNavn}
                                                 </Text>
                                             </Box>
-                                        </>
-                                    ) : null}
-                                </HStack>
-                            </Heading>
+                                        </HStack>
+                                    </Heading>
+                                ) : (
+                                    <>
+                                        {hentingWrapper.ekstraHenting ? (
+                                            hentingWrapper.ekstraHenting.godkjentUtlysning ? (
+                                                <>
+                                                    <Heading as="h1" fontWeight="normal" aria-label="Partner">
+                                                        {hentingWrapper.ekstraHenting.godkjentUtlysning.partnerNavn}
+                                                    </Heading>
+                                                    <BadgeDetail
+                                                        text="Ekstrahenting"
+                                                        color={colors.Green}
+                                                        minWidth="4xs"
+                                                    />{' '}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Heading as="h1" fontWeight="normal" aria-label="Partner">
+                                                        Ekstrahenting
+                                                    </Heading>
+                                                    <BadgeDetail
+                                                        text="Ekstrahenting"
+                                                        color={colors.Green}
+                                                        minWidth="4xs"
+                                                    />
+                                                    <BadgeDetail
+                                                        text="Ingen påmeldte"
+                                                        color={colors.Red}
+                                                        minWidth="4xs"
+                                                    />
+                                                </>
+                                            )
+                                        ) : undefined}
+                                    </>
+                                )}
+                            </>
                         )}
 
                         {hentingWrapper.planlagtHenting ? (
@@ -116,23 +150,6 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                                     ) : null}
                                 </>
                             )
-                        ) : null}
-                        {hentingWrapper.ekstraHenting ? (
-                            <>
-                                {user.isPartner ? null : (
-                                    <>
-                                        <Text
-                                            fontSize="4xl"
-                                            fontWeight="normal"
-                                            marginRight="3rem"
-                                            justifyContent="left"
-                                        >
-                                            Ekstrahenting
-                                        </Text>
-                                        <BadgeDetail text="Ekstrahenting" color={colors.Green} minWidth="4xs" />
-                                    </>
-                                )}
-                            </>
                         ) : null}
                     </HStack>
                     <HStack alignItems="center" spacing="10" justifyContent="space-between">
@@ -181,7 +198,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                             ) : null}
                         </VStack>
                         {hentingWrapper.type === 'EKSTRA' && user.isPartner ? (
-                            <Box backgroundColor={colors.White} height="10rem" width="19rem" padding="1rem">
+                            <Flex backgroundColor={colors.White} height="auto" width="19rem" padding="1rem">
                                 <VStack>
                                     <Text fontSize="sm">
                                         Hvis du melder deg på gjør du at ingen andre kan melde seg på. Derfor forventes
@@ -192,14 +209,13 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                                     hentingWrapper.aktorId === undefined ? null : (
                                         <PartnerPameldingInfo
                                             henting={hentingWrapper.ekstraHenting}
-                                            partnerId={hentingWrapper.aktorId}
+                                            partnerId={user.aktorId!}
                                         />
                                     )}
                                 </VStack>
-                            </Box>
+                            </Flex>
                         ) : null}
                     </HStack>
-
                     <ButtonGroup marginTop="10">
                         {getBackButton()}
                         {hentingWrapper.type === 'PLANLAGT' && user.isPartner ? getCancelButton(hentingWrapper) : null}
