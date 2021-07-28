@@ -111,6 +111,7 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
                             name="partnere"
                             label="Velg partnere"
                             existingPartnere={henting.utlysninger.map((utlysning) => utlysning.partnerId)}
+                            disableExisting={true}
                         />
                     ) : null}
                     <FormSubmitButton
