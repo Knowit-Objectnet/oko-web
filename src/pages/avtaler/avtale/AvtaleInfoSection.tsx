@@ -21,7 +21,7 @@ export const AvtaleInfoSection: React.FC<Props> = ({ partner }) => {
     return (
         <PartnerInfoSection key={partner.id}>
             <PartnerInfoSectionHeader>
-                <PartnerInfoSectionTitle>Avtaler</PartnerInfoSectionTitle>
+                {user.isPartner ? null : <PartnerInfoSectionTitle>Avtaler</PartnerInfoSectionTitle>}
                 {user.isAdmin ? (
                     <PartnerInfoSectionButtons>
                         <AddAvtaleButton partner={partner} />

@@ -56,7 +56,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
         return (
             <Flex direction="column" width="full" backgroundColor="gray.100" padding="5">
                 <Flex width="full" justifyContent="space-between">
-                    <Heading fontSize="xl" as="h3" fontWeight="medium" paddingY="2">
+                    <Heading fontSize="xl" as="h3" fontWeight="normal" paddingY="2">
                         <HStack>
                             <Text>{getAvtaleTitle(avtale)}</Text>
                             <Text fontSize="sm" fontWeight="normal">
@@ -75,7 +75,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                 </Flex>
                 {user.isAdmin || user.isStasjon ? (
                     <HStack>
-                        <Text fontSize="xl" fontWeight="medium">
+                        <Text fontSize="sm" fontWeight="normal">
                             Saksnummer i arkivsystem
                         </Text>
                         {avtale.saksnummer === null ? (

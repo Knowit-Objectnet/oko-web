@@ -54,7 +54,7 @@ export const uttakTypeOptions: Array<RadioOption<HentingType>> = [
 
 export const utlysningSelectorOptions: Array<RadioOption<UtlysningSelectorType>> = [
     { value: 'ALL', label: 'Alle' },
-    { value: 'CUSTOM', label: 'Velg ut hvem som kan melde seg på' },
+    { value: 'CUSTOM', label: 'Velg hvem hvem som kan melde seg på' },
 ];
 
 interface Props {

@@ -19,27 +19,29 @@ export const PartnerInfoHeader: React.FC<Props> = ({ partner }) => {
                 </Heading>
                 {user.isAdmin ? <EditPartnerButton partner={partner} size="sm" /> : null}
             </Flex>
-            <Box
-                as="section"
-                aria-label={`Generell informasjon for ${partner.navn}`}
-                backgroundColor="gray.100"
-                width="full"
-                padding="5"
-                marginBottom="4"
-                sx={{
-                    'dt, dd': {
-                        display: 'inline',
-                        marginRight: '1',
-                    },
-                }}
-            >
-                <dl>
-                    <Box>
-                        <dt>Ideell organisasjon:</dt>
-                        <dd>{partner.ideell ? 'Ja' : 'Nei'}</dd>
-                    </Box>
-                </dl>
-            </Box>
+            {user.isPartner ? null : (
+                <Box
+                    as="section"
+                    aria-label={`Generell informasjon for ${partner.navn}`}
+                    backgroundColor="gray.100"
+                    width="full"
+                    padding="5"
+                    marginBottom="4"
+                    sx={{
+                        'dt, dd': {
+                            display: 'inline',
+                            marginRight: '1',
+                        },
+                    }}
+                >
+                    <dl>
+                        <Box>
+                            <dt>Prioritert organisasjon:</dt>
+                            <dd>{partner.ideell ? 'Ja' : 'Nei'}</dd>
+                        </Box>
+                    </dl>
+                </Box>
+            )}
         </>
     );
 };
