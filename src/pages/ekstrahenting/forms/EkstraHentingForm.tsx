@@ -21,6 +21,7 @@ import { usePartnere } from '../../../services/partner/usePartnere';
 import { getEkstraHentingValidationSchema } from './EkstraHentingFormSchema';
 import { dateTimeToStringIgnoreTimezone, mergeDateWithTimeToString } from '../../../utils/hentingDateTimeHelpers';
 import { WarningBody, WarningContainer } from '../../../components/forms/Warning';
+import { utlysningSelectorOptions, UtlysningSelectorType } from './UtlysFlerePartnereForm';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
@@ -30,7 +31,7 @@ interface EkstraHentingFormData {
     beskrivelse: string;
     tidspunkt: Tidspunkt;
     kategorier: Array<string>;
-    utlysningSelect: UtlysningSelector;
+    utlysningSelect: UtlysningSelectorType;
     dato: Date;
     startTidspunkt: Date;
     sluttTidspunkt: Date;
@@ -38,16 +39,10 @@ interface EkstraHentingFormData {
 }
 
 export type Tidspunkt = 'NOW' | 'CUSTOM';
-export type UtlysningSelector = 'ALL' | 'CUSTOM';
 
 export const tidspunktOptions: Array<RadioOption<Tidspunkt>> = [
     { value: 'NOW', label: 'Med en gang' },
     { value: 'CUSTOM', label: 'Jeg vil sette tidspunkt' },
-];
-
-export const utlysningSelectorOptions: Array<RadioOption<UtlysningSelector>> = [
-    { value: 'ALL', label: 'Alle' },
-    { value: 'CUSTOM', label: 'Velg hvem som kan melde seg på' },
 ];
 
 interface Props {
