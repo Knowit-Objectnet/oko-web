@@ -107,7 +107,7 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
     };
 
     const tidspunkt = formMethods.watch('tidspunkt', undefined);
-    const utlysningsSelect = formMethods.watch('utlysningSelect');
+    const utlysningSelect = formMethods.watch('utlysningSelect');
 
     return (
         <FormProvider {...formMethods}>
@@ -144,7 +144,7 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
                         options={utlysningSelectorOptions}
                         required
                     />
-                    {utlysningsSelect === 'CUSTOM' ? (
+                    {utlysningSelect === 'CUSTOM' ? (
                         <PartnerSelectMultiple name="partnere" label="Velg partnere" />
                     ) : null}
                     <FormSubmitButton
