@@ -34,7 +34,7 @@ const validationSchema = yup.object().shape({
         .label('hvem som kan benytte årsaken')
         .required()
         .oneOf(aarsakTypeOptions.map((aarsakType) => aarsakType.value)),
-    beskrivelse: yup.string().label('avlysningstekst').required().min(2),
+    beskrivelse: yup.string().label('beskrivelse for avlysningsårsaken').required().min(2),
 });
 
 interface Props {
@@ -107,10 +107,10 @@ export const AarsakForm: React.FC<Props> = ({ aarsakToEdit, onSuccess }) => {
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <RadiobuttonGroup name="type" label="Type årsak" options={aarsakTypeOptions} required />
+                    <RadiobuttonGroup name="type" label="Kan brukes av" options={aarsakTypeOptions} required />
                     <Input name="beskrivelse" label="Beskrivelse av årsak" required />
                     <FormSubmitButton
-                        label={aarsakToEdit ? 'Lagre endringer' : 'Registrer ny avlysningstekst'}
+                        label={aarsakToEdit ? 'Lagre endringer' : 'Registrer ny avlysningsårsak'}
                         isLoading={updateAarsakMutation.isLoading || addAarsakMutation.isLoading}
                         loadingText="Lagrer..."
                     />
