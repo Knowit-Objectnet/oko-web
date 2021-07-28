@@ -4,7 +4,7 @@ import { Heading, HStack, Tbody, Td, Text, Tr } from '@chakra-ui/react';
 import { HentingButton } from './HentingButton';
 import { ApiHenting } from '../../../services/henting/HentingService';
 import { KategorierMedVekt } from './KategorierMedVekt';
-import { HentingInfoSection } from '../../../components/henting/hentingInfoSection';
+import { HentingInfoSection } from '../../../components/henting/HentingInfoSection';
 
 interface Props {
     henting: ApiHenting;

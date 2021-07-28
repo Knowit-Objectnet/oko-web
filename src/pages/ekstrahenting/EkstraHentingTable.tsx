@@ -6,7 +6,7 @@ import { ApiEkstraHentingParams } from '../../services/henting/EkstraHentingServ
 import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
 import { PameldtInfo } from './PameldtInfo';
 import { PartnerPameldingInfo } from './PartnerPameldingInfo';
-import { HentingInfoSection } from '../../components/henting/hentingInfoSection';
+import { HentingInfoSection } from '../../components/henting/HentingInfoSection';
 
 export const EkstraHentingTable: React.FC = () => {
     const { user } = useAuth();

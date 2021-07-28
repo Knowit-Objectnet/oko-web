@@ -5,7 +5,7 @@ import { RegistervektButton } from './RegistervektButton';
 import { ApiHenting } from '../../../services/henting/HentingService';
 import { KategoriList } from '../../../components/KategoriList';
 import { useAuth } from '../../../auth/useAuth';
-import { HentingInfoSection } from '../../../components/henting/hentingInfoSection';
+import { HentingInfoSection } from '../../../components/henting/HentingInfoSection';
 
 interface Props {
     henting: ApiHenting;

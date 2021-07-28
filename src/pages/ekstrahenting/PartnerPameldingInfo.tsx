@@ -43,9 +43,9 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) =>
 
     const getUtgatt = (): JSX.Element => {
         return (
-            <VStack color="onError" alignItems="left">
+            <VStack alignItems="left">
                 <Text fontWeight="semibold">Beklager</Text>
-                <Text> Du kan ikke melde deg på lengre.</Text>
+                <Text> Du kan ikke melde deg på lenger.</Text>
             </VStack>
         );
     };
