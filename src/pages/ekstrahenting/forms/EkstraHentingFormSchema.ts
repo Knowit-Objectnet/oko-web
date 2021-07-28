@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import { transformStringToDate } from '../../../utils/forms/transformStringToDate';
 import { transformStringToDateTime } from '../../../utils/forms/transformStringToDateTime';
 import { add, isEqual } from 'date-fns';
-import { NårType, nårOptions, UtlysningSelectorType, utlysningSelectorOptions } from './EkstraHentingForm';
+import { Tidspunkt, tidspunktOptions, UtlysningSelector, utlysningSelectorOptions } from './EkstraHentingForm';
 
 export const getEkstraHentingValidationSchema = (stasjonId?: string) =>
     yup.object().shape({
@@ -14,17 +14,17 @@ export const getEkstraHentingValidationSchema = (stasjonId?: string) =>
             }
         }),
         beskrivelse: yup.string().label('en beskrivelse av hva som skal hentes').required(),
-        når: yup
-            .mixed<NårType>()
+        tidspunkt: yup
+            .mixed<Tidspunkt>()
             .label('når det skal hentes')
             .required()
-            .oneOf(nårOptions.map((opt) => opt.value)),
+            .oneOf(tidspunktOptions.map((option) => option.value)),
         dato: yup
             .date()
             .label('dato for hentingen')
             .transform(transformStringToDate)
-            .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
-                if (når && når === 'CUSTOM') {
+            .when('tidspunkt', (tidspunkt: Tidspunkt | undefined, schema: yup.DateSchema) => {
+                if (tidspunkt && tidspunkt === 'CUSTOM') {
                     return schema
                         .required()
                         .min(new Date(new Date().setHours(0, 0, 0, 0)), 'Dato må være i dag eller senere');
@@ -37,8 +37,8 @@ export const getEkstraHentingValidationSchema = (stasjonId?: string) =>
             .date()
             .label('starttidspunkt for hentingen')
             .transform(transformStringToDateTime)
-            .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
-                if (når && når === 'CUSTOM') {
+            .when('tidspunkt', (tidspunkt: Tidspunkt | undefined, schema: yup.DateSchema) => {
+                if (tidspunkt && tidspunkt === 'CUSTOM') {
                     return schema.required().when('dato', {
                         is: (date: Date) => isEqual(date, new Date().setHours(0, 0, 0, 0)),
                         then: schema
@@ -54,12 +54,12 @@ export const getEkstraHentingValidationSchema = (stasjonId?: string) =>
             .date()
             .label('sluttidspunkt for hentingen')
             .transform(transformStringToDateTime)
-            .when('når', (når: NårType | undefined, schema: yup.DateSchema) => {
-                if (når && når === 'NOW') {
+            .when('tidspunkt', (tidspunkt: Tidspunkt | undefined, schema: yup.DateSchema) => {
+                if (tidspunkt && tidspunkt === 'NOW') {
                     return schema
                         .required()
                         .min(add(Date.now(), { minutes: 30 }), 'Sluttidspunktet må være om tidligst 30 minutter');
-                } else if (når && når === 'CUSTOM') {
+                } else if (tidspunkt && tidspunkt === 'CUSTOM') {
                     return schema
                         .required()
                         .when('startTidspunkt', (startTidspunkt: Date | undefined, schema: yup.DateSchema) => {
@@ -83,13 +83,13 @@ export const getEkstraHentingValidationSchema = (stasjonId?: string) =>
             .ensure()
             .min(1, 'Du må velge minst én varekategori som partneren skal kunne hente'),
         utlysningSelect: yup
-            .mixed<UtlysningSelectorType>()
+            .mixed<UtlysningSelector>()
             .label('hvem som skal få varsel')
             .required()
             .oneOf(utlysningSelectorOptions.map((opt) => opt.value)),
-        partnere: yup.array(yup.string()).when('utlysningSelect', (us: UtlysningSelectorType | undefined, schema) => {
+        partnere: yup.array(yup.string()).when('utlysningSelect', (us: UtlysningSelector | undefined, schema) => {
             if (us && us === 'CUSTOM') {
-                return schema.ensure().min(1, 'Du må velge minst én partner å sende utlysning');
+                return schema.ensure().min(1, 'Du må velge minst én partner å sende utlysning til');
             } else {
                 return schema.notRequired();
             }
