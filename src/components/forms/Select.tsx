@@ -33,6 +33,7 @@ export const Select: React.FC<Props & SelectProps> = ({
                 icon={<Icon as={ChevronDown} />}
                 placeholder={placeholder}
                 // TODO: hack for Firefox to center the option text:
+                height="12"
                 // TODO: The aria-required attribute is overridden by Chakra UI - based on the `isRequired` prop
                 //  on `FormControl`. We do not want to use the `isRequired` prop, because it also injects
                 //  the `required` attribute on the input, which causes the browser to use native popup alerts
