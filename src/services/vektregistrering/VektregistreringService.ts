@@ -4,6 +4,7 @@ export interface ApiVektregistrering {
     id: string; // uuid
     hentingId: string; // uuid
     kategoriId: string; // uuid
+    kategoriNavn: string; // uuid
     vekt: number;
     registreringsDato: string; //LocalTimeDate
 }
