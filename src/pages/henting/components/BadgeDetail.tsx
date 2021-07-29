@@ -1,6 +1,5 @@
 import { Tag, TagLabel, TagLeftIcon, TagProps, TagRightIcon } from '@chakra-ui/react';
 import * as React from 'react';
-import { colors } from '../../../theme/foundations/colors';
 
 interface Props {
     text: string;
