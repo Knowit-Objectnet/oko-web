@@ -1,19 +1,13 @@
 import * as React from 'react';
-import { Box, Button, ButtonGroup, Flex, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
-import { Link, useLocation } from 'react-router-dom';
-import { hentingStarted, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
-import { formatDate, formatTime } from '../../utils/formatDateTime';
+import { Box, Button, ButtonGroup, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { hentingStarted } from '../../utils/hentingDateTimeHelpers';
 import { KategoriList } from '../../components/KategoriList';
 import { CancelPlanlagtHentingButton } from './components/CancelPlanlagtHentingButton';
-import { isToday } from 'date-fns';
-import Location from '../../assets/Location.svg';
-import Calendar from '../../assets/Calendar.svg';
-import Clock from '../../assets/Clock.svg';
 import Check from '../../assets/Check.svg';
 import Varsel from '../../assets/Varsel.svg';
 import { useAuth } from '../../auth/useAuth';
-import { DetailWithIcon } from './components/DetailWithIcon';
-import { DetailWithLabel } from './components/DetailWithLabel';
+import { DetailWithLabel } from '../../components/henting/DetailWithLabel';
 import { AvlystDetails } from './components/AvlystDetails';
 import { BadgeDetail } from './components/BadgeDetail';
 import { RegisterVektButton } from './components/RegisterVektButton';
@@ -21,14 +15,8 @@ import { colors } from '../../theme/foundations/colors';
 import { ApiHenting, ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
 import { PartnerPameldingInfo } from '../ekstrahenting/PartnerPameldingInfo';
-import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
-
-export const getDayString = (date: Date) => {
-    if (isToday(date)) {
-        return 'I dag';
-    }
-    return formatDate(date);
-};
+import { HentingTimeLocation } from '../../components/henting/HentingTimeLocation';
+import { Flex } from '@chakra-ui/layout';
 
 interface Props {
     hentingId: string;
@@ -154,17 +142,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     </HStack>
                     <HStack alignItems="center" spacing="10" justifyContent="space-between">
                         <VStack spacing="3" alignItems="flex-start" marginTop="4">
-                            <DetailWithIcon icon={Calendar} label="Dato">
-                                <time>{getDayString(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt))}</time>
-                            </DetailWithIcon>
-                            <DetailWithIcon icon={Clock} label="Tidspunkt">
-                                {formatTime(parseISOIgnoreTimezone(hentingWrapper.startTidspunkt)) +
-                                    ' - ' +
-                                    formatTime(parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt))}
-                            </DetailWithIcon>
-                            <DetailWithIcon icon={Location} label="Stasjon">
-                                {hentingWrapper.stasjonNavn}
-                            </DetailWithIcon>
+                            <HentingTimeLocation henting={hentingWrapper} />
 
                             {hentingWrapper.planlagtHenting?.merknad ? (
                                 <DetailWithLabel label="Merknad">
@@ -179,7 +157,6 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                             {hentingWrapper.planlagtHenting && hentingWrapper.planlagtHenting.kategorier.length > 0 ? (
                                 <DetailWithLabel label="Kategorier">
                                     <KategoriList
-                                        size="md"
                                         kategorier={hentingWrapper.planlagtHenting.kategorier.map(
                                             ({ kategori }) => kategori,
                                         )}
@@ -189,7 +166,6 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                             {hentingWrapper.ekstraHenting && hentingWrapper.ekstraHenting.kategorier.length > 0 ? (
                                 <DetailWithLabel label="Kategorier">
                                     <KategoriList
-                                        size="md"
                                         kategorier={hentingWrapper.ekstraHenting.kategorier.map(
                                             ({ kategori }) => kategori,
                                         )}
