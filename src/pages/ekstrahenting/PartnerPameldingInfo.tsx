@@ -51,7 +51,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) =>
     };
 
     const isPassed = () => {
-        return isAfter(Date.now(), parseISOIgnoreTimezone(henting.startTidspunkt));
+        return isAfter(Date.now(), parseISOIgnoreTimezone(henting.sluttTidspunkt));
     };
 
     return (
