@@ -48,9 +48,7 @@ export const EkstraHentingTable: React.FC = () => {
                         </Td>
                         <Td>
                             <KategoriList
-                                kategorier={henting.kategorier
-                                    .filter((hentingKategori) => hentingKategori.kategori)
-                                    .map((hentingKategori) => hentingKategori.kategori!)}
+                                kategorier={henting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
                             />
                         </Td>
                         <Td>

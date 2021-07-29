@@ -64,7 +64,7 @@ const Vekt: React.FC = () => {
                 paddingX={{ base: '6', desktop: '10' }}
                 marginX="auto"
                 width={{ base: 'full', xl: '90%' }}
-                maxWidth={{ base: 'full', desktop: '1200px' }}
+                maxWidth={{ base: 'full', desktop: 'container.xl' }}
             >
                 <Heading width="full" as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
                     Vektregistrering

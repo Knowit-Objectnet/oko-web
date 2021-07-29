@@ -11,17 +11,13 @@ export const HentingVektItemTitle: React.FC<HentingerVektListChildProps> = ({ he
 
     return (
         <VStack alignItems="flex-start" spacing="1" {...props}>
-            <Flex flexWrap="wrap" alignItems="center">
+            <Flex flexWrap="wrap" alignItems="center" fontSize="1.25rem">
                 {!user.isPartner ? (
-                    <Text fontSize="1.25rem" fontWeight="bold" paddingEnd="3">
+                    <Text fontWeight="bold" paddingEnd="3">
                         {getAktorNavn(henting)}
                     </Text>
                 ) : null}
-                {!missingVekt ? (
-                    <Text fontSize="1.25rem" whiteSpace="nowrap">
-                        {getVektSum(henting)} kg
-                    </Text>
-                ) : null}
+                {!missingVekt ? <Text whiteSpace="nowrap">{getVektSum(henting)} kg</Text> : null}
             </Flex>
             {missingVekt ? (
                 <Text whiteSpace="nowrap" fontStyle="italic">

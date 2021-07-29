@@ -30,6 +30,7 @@ export const HentingVektList: React.FC<Props> = ({ missingVekt, hentinger }) => 
                 paddingY="4"
                 paddingX="5"
                 spacing="5"
+                maxWidth="full"
             >
                 <HentingVektItemTitle
                     width={{ base: 'full', tablet: '25%' }}
@@ -37,7 +38,7 @@ export const HentingVektList: React.FC<Props> = ({ missingVekt, hentinger }) => 
                     missingVekt={missingVekt}
                 />
                 <HentingVektItemKategori
-                    width={{ base: 'full', tablet: '35%' }}
+                    width={{ base: 'full', tablet: '30%' }}
                     henting={henting}
                     missingVekt={missingVekt}
                 />
