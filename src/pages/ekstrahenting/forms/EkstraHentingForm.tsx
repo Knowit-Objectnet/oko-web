@@ -8,9 +8,6 @@ import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFie
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { ApiError } from '../../../services/httpClient';
-
-// NB! Setting the error messages used by yup
-import '../../../utils/forms/formErrorMessages';
 import { KategoriSelect } from '../../../components/forms/KategoriSelect';
 import { TextArea } from '../../../components/forms/TextArea';
 import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
@@ -23,38 +20,29 @@ import { StasjonSelect } from '../../../components/forms/StasjonSelect';
 import { usePartnere } from '../../../services/partner/usePartnere';
 import { getEkstraHentingValidationSchema } from './EkstraHentingFormSchema';
 import { dateTimeToStringIgnoreTimezone, mergeDateWithTimeToString } from '../../../utils/hentingDateTimeHelpers';
-import { WarningBody, WarningContainer, WarningTitle } from '../../../components/forms/Warning';
+import { WarningBody, WarningContainer } from '../../../components/forms/Warning';
+import { utlysningSelectorOptions, UtlysningSelectorType } from './UtlysFlerePartnereForm';
+
+// NB! Setting the error messages used by yup
+import '../../../utils/forms/formErrorMessages';
 
 interface EkstraHentingFormData {
     stasjon: string;
     beskrivelse: string;
-    når: NårType;
-    kategorier: string[];
-    // hentingType: HentingType;
+    tidspunkt: Tidspunkt;
+    kategorier: Array<string>;
     utlysningSelect: UtlysningSelectorType;
     dato: Date;
     startTidspunkt: Date;
     sluttTidspunkt: Date;
-    partnere: string[];
+    partnere: Array<string>;
 }
 
-export type NårType = 'NOW' | 'CUSTOM';
-type HentingType = 'FIRST' | 'ACCEPT';
-export type UtlysningSelectorType = 'ALL' | 'CUSTOM';
+export type Tidspunkt = 'NOW' | 'CUSTOM';
 
-export const nårOptions: Array<RadioOption<NårType>> = [
+export const tidspunktOptions: Array<RadioOption<Tidspunkt>> = [
     { value: 'NOW', label: 'Med en gang' },
     { value: 'CUSTOM', label: 'Jeg vil sette tidspunkt' },
-];
-
-export const uttakTypeOptions: Array<RadioOption<HentingType>> = [
-    { value: 'FIRST', label: 'Førstemann til mølla' },
-    { value: 'ACCEPT', label: 'Godkjenning' },
-];
-
-export const utlysningSelectorOptions: Array<RadioOption<UtlysningSelectorType>> = [
-    { value: 'ALL', label: 'Alle' },
-    { value: 'CUSTOM', label: 'Velg hvem hvem som kan melde seg på' },
 ];
 
 interface Props {
@@ -69,26 +57,26 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
         resolver: yupResolver(getEkstraHentingValidationSchema(stasjonId)),
     });
 
-    const { data: allPartnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
+    const { data: allPartnere } = usePartnere({ queryOptions: { keepPreviousData: true } });
     const addEkstraHentingMutation = useAddEkstraHenting();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
     const transformFormData = (formData: EkstraHentingFormData): ApiEkstraHentingPost => {
         return {
-            stasjonId: formData.stasjon || stasjonId!,
+            stasjonId: stasjonId || formData.stasjon,
             startTidspunkt:
-                formData.når === 'NOW'
+                formData.tidspunkt === 'NOW'
                     ? dateTimeToStringIgnoreTimezone(new Date())
                     : mergeDateWithTimeToString(formData.dato, formData.startTidspunkt),
             sluttTidspunkt:
-                formData.når === 'NOW'
+                formData.tidspunkt === 'NOW'
                     ? mergeDateWithTimeToString(new Date(), formData.sluttTidspunkt)
                     : mergeDateWithTimeToString(formData.dato, formData.sluttTidspunkt),
             beskrivelse: formData.beskrivelse,
-            kategorier: formData.kategorier.map((kategoriId) => {
-                return { kategoriId: kategoriId };
-            }),
+            kategorier: formData.kategorier.map((kategoriId) => ({ kategoriId })),
+            // TODO: next line is not a very robust solution, can potentially set `partnere` to `undefined`
+            //  if there is a problem fetching the partners from the api
             partnere: formData.partnere || allPartnere?.map((partner) => partner.id),
         };
     };
@@ -118,8 +106,8 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
         setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
     };
 
-    const når = formMethods.watch('når', undefined);
-    const utlysningsSelect = formMethods.watch('utlysningSelect');
+    const tidspunkt = formMethods.watch('tidspunkt', undefined);
+    const utlysningSelect = formMethods.watch('utlysningSelect');
 
     return (
         <FormProvider {...formMethods}>
@@ -129,18 +117,21 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
                     <ErrorMessages globalError={apiOrNetworkError} />
                     {!stasjonId ? <StasjonSelect name="stasjon" label="Velg stasjon" required /> : null}
                     <TextArea name="beskrivelse" label="Beskrivelse" required />
-                    <RadiobuttonGroup name="når" label="Når?" options={nårOptions} required />
-                    {når && når == 'NOW' ? (
-                        <TimeInput name="sluttTidspunkt" label="Sluttidspunkt" helperText="Frem til kl" />
+                    <RadiobuttonGroup name="tidspunkt" label="Når?" options={tidspunktOptions} required />
+                    {tidspunkt === 'NOW' ? (
+                        <TimeInput
+                            name="sluttTidspunkt"
+                            label="Sluttidspunkt"
+                            helperText="Til hvilket tidspunkt kan partneren komme og hente?"
+                        />
                     ) : null}
-                    {når && når == 'CUSTOM' ? <EkstraHentingFormTidspunkt /> : null}
+                    {tidspunkt === 'CUSTOM' ? <EkstraHentingFormTidspunkt /> : null}
                     <KategoriSelect
                         name="kategorier"
                         label="Kategorier"
                         helperText="Hvilke kategorier kan hentes?"
                         required
                     />
-
                     <WarningContainer variant="warning">
                         <WarningBody>
                             OBS! Hvitevarer og tekstiler kan kun hentes av noen aktører. Ved valg av disse
@@ -153,7 +144,7 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
                         options={utlysningSelectorOptions}
                         required
                     />
-                    {utlysningsSelect && utlysningsSelect == 'CUSTOM' ? (
+                    {utlysningSelect === 'CUSTOM' ? (
                         <PartnerSelectMultiple name="partnere" label="Velg partnere" />
                     ) : null}
                     <FormSubmitButton
