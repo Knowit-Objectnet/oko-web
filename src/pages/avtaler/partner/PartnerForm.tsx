@@ -16,16 +16,25 @@ import { ApiError } from '../../../services/httpClient';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { RadiobuttonGroup } from '../../../components/forms/RadiobuttonGroup';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
+
+const organisasjonTypeOptions: Array<RadioOption<string>> = [
+    { value: 'true', label: 'Ja' },
+    { value: 'false', label: 'Nei' },
+];
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
-    organisasjonstype: yup.array(yup.string()).ensure().label('om partneren er en ideell organisasjon'),
+    organisasjonstype: yup
+        .mixed()
+        .label('om partneren er en prioritert organisasjon')
+        .required()
+        .oneOf(organisasjonTypeOptions.map((organisasjonType) => organisasjonType.value)),
 });
 
 interface PartnerFormData {
     navn: string;
-    organisasjonstype: Array<string>;
+    organisasjonstype: string;
 }
 
 interface Props {
@@ -41,7 +50,7 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
         defaultValues: partnerToEdit
             ? {
                   navn: partnerToEdit.navn,
-                  organisasjonstype: partnerToEdit.ideell ? ['ideell'] : ['ikke ideell'],
+                  organisasjonstype: partnerToEdit.ideell.toString(),
               }
             : undefined,
     });
@@ -56,9 +65,9 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
 
         const partner = {
             navn: formData.navn,
-            ideell: formData.organisasjonstype.some((type) => type === 'ideell'),
+            ideell: formData.organisasjonstype === 'true',
         };
-
+        console.log(partner);
         if (partnerToEdit) {
             updatePartner({
                 id: partnerToEdit.id,
@@ -105,11 +114,8 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
                     <Input name="navn" label="Navn på organisasjon" required />
                     <RadiobuttonGroup
                         name="organisasjonstype"
-                        label="Er det en ideell organisasjon?"
-                        options={[
-                            { value: 'ideell', label: 'Ja' },
-                            { value: 'ikke ideell', label: 'Nei' },
-                        ]}
+                        label="Er det en prioritert organisasjon?"
+                        options={organisasjonTypeOptions}
                         required
                     />
                     <FormSubmitButton

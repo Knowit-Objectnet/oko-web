@@ -68,7 +68,7 @@ const Vekt: React.FC = () => {
                     </Flex>
                     <Flex direction="column">
                         <Heading as="h2" fontSize="1.5rem" fontWeight={400}>
-                            Tidligere veiinger
+                            Tidligere vektregistreringer
                         </Heading>
                         <Flex direction="column">
                             <Table>

@@ -9,9 +9,6 @@ import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFie
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { ApiError } from '../../../services/httpClient';
-
-// NB! Setting the error messages used by yup
-import '../../../utils/forms/formErrorMessages';
 import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 import { PartnerSelectMultiple } from '../../../components/forms/PartnerSelect';
 import { useBatchAddUtlysning } from '../../../services/utlysning/useBatchAddUtlysning';
@@ -19,33 +16,37 @@ import { ApiUtlysningBatchPost } from '../../../services/utlysning/UtlysningServ
 import { usePartnere } from '../../../services/partner/usePartnere';
 import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService';
 
+// NB! Setting the error messages used by yup
+import '../../../utils/forms/formErrorMessages';
+
 interface EkstraHentingFormData {
     utlysningSelect: UtlysningSelectorType;
-    partnere: string[];
+    partnere: Array<string>;
 }
 
-type UtlysningSelectorType = 'ALL' | 'CUSTOM';
+export type UtlysningSelectorType = 'ALL' | 'CUSTOM';
 
 export const utlysningSelectorOptions: Array<RadioOption<UtlysningSelectorType>> = [
     { value: 'ALL', label: 'Alle' },
-    { value: 'CUSTOM', label: 'Velg ut hvem som kan melde seg på' },
+    { value: 'CUSTOM', label: 'Velg hvem som kan melde seg på' },
 ];
 
-const validationSchema = () =>
-    yup.object().shape({
-        utlysningSelect: yup
-            .mixed<UtlysningSelectorType>()
-            .label('hvem som skal få varsel')
-            .required()
-            .oneOf(utlysningSelectorOptions.map((opt) => opt.value)),
-        partnere: yup.array(yup.string()).when('utlysningSelect', (us: UtlysningSelectorType | undefined, schema) => {
-            if (us && us === 'CUSTOM') {
-                return schema.ensure().min(1, 'Du må velge minst én partner å sende utlysning');
+const validationSchema = yup.object().shape({
+    utlysningSelect: yup
+        .mixed<UtlysningSelectorType>()
+        .label('hvem som skal få varsel')
+        .required()
+        .oneOf(utlysningSelectorOptions.map((option) => option.value)),
+    partnere: yup
+        .array(yup.string())
+        .when('utlysningSelect', (utlysningSelector: UtlysningSelectorType | undefined, schema) => {
+            if (utlysningSelector === 'CUSTOM') {
+                return schema.ensure().min(1, 'Du må velge minst én partner å sende utlysning til');
             } else {
                 return schema.notRequired();
             }
         }),
-    });
+});
 
 interface Props {
     henting: ApiEkstraHenting;
@@ -54,11 +55,18 @@ interface Props {
 }
 
 export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) => {
+    const existingPartnere = henting.utlysninger.map((utlysning) => utlysning.partnerId);
+
     const formMethods = useForm<EkstraHentingFormData>({
-        resolver: yupResolver(validationSchema()),
+        resolver: yupResolver(validationSchema),
+        defaultValues: {
+            // This assumes that the form is only accessed when the `Ekstrahenting` is not sent to all partners already
+            utlysningSelect: 'CUSTOM',
+            partnere: existingPartnere,
+        },
     });
 
-    const { data: allPartnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
+    const { data: allPartnere } = usePartnere({ queryOptions: { keepPreviousData: true } });
     const batchAddUtlysningMutation = useBatchAddUtlysning();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
@@ -68,6 +76,8 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
 
         batchAddUtlysning({
             hentingId: henting.id,
+            // TODO: next line is not a very robust solution, can potentially set `partnere` to `undefined`
+            //  if there is a problem fetching the partners from the api
             partnerIds: formData.partnere || allPartnere?.map((partner) => partner.id),
         });
     });
@@ -106,17 +116,17 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
                         options={utlysningSelectorOptions}
                         required
                     />
-                    {utlysningsSelect && utlysningsSelect == 'CUSTOM' ? (
+                    {utlysningsSelect === 'CUSTOM' ? (
                         <PartnerSelectMultiple
                             name="partnere"
                             label="Velg partnere"
-                            existingPartnere={henting.utlysninger.map((utlysning) => utlysning.partnerId)}
-                            disableExisting={true}
+                            existingPartnere={existingPartnere}
+                            disableExisting
                         />
                     ) : null}
                     <FormSubmitButton
-                        label="Registrer nye partnere"
-                        // isLoading={addEkstraHentingMutation.isLoading}
+                        label="Send utlysning til partnere"
+                        isLoading={batchAddUtlysningMutation.isLoading}
                         loadingText="Lagrer..."
                     />
                 </Stack>

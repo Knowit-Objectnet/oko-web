@@ -4,9 +4,9 @@ import { Heading, HStack, Tbody, Td, Text, Tr } from '@chakra-ui/react';
 import { HentingButton } from './HentingButton';
 import { ApiHenting } from '../../../services/henting/HentingService';
 import { KategorierMedVekt } from './KategorierMedVekt';
-import { EkstraHentingInfo } from '../../ekstrahenting/EkstraHentingInfo';
 import { formatDate } from '../../../utils/formatDateTime';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
+import { HentingInfoSection } from '../../../components/henting/HentingInfoSection';
 
 interface Props {
     henting: ApiHenting;
@@ -42,7 +42,7 @@ export const NoMissingRegistration: React.FC<Props> = ({ henting }) => {
                         <KategorierMedVekt vektregistreringer={henting.vektregistreringer} />
                     </Td>
                     <Td>
-                        <EkstraHentingInfo henting={henting} />
+                        <HentingInfoSection henting={henting} />
                     </Td>
                     <Td>
                         <HentingButton />

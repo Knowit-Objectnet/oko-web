@@ -1,4 +1,4 @@
-import { Box, Text, Flex, Button, Icon } from '@chakra-ui/react';
+import { Box, Text, Flex, Button, Icon, VStack } from '@chakra-ui/react';
 import * as React from 'react';
 import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
 import { usePartnerAcceptUtlysning } from '../../services/utlysning/usePartnerAcceptUtlysning';
@@ -43,12 +43,10 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) =>
 
     const getUtgatt = (): JSX.Element => {
         return (
-            <Flex color="onError" alignItems="center">
-                <Icon marginRight="2" fill="onError">
-                    <Cross />
-                </Icon>
-                <Text fontWeight="semibold">Utgått</Text>
-            </Flex>
+            <VStack alignItems="left">
+                <Text fontWeight="semibold">Beklager</Text>
+                <Text> Du kan ikke melde deg på lenger.</Text>
+            </VStack>
         );
     };
 
