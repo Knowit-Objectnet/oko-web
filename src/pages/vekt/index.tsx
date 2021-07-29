@@ -1,43 +1,56 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Heading, Table } from '@chakra-ui/react';
+import { Heading, VStack } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
-import { MissingRegistration } from './components/MissingRegistration';
-import { NoMissingRegistration } from './components/NoMissingRegistration';
 import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
-import { ApiHenting, ApiHentingParams } from '../../services/henting/HentingService';
 import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
-import { endOfToday, subMonths } from 'date-fns';
+import { compareDesc, endOfToday, subMonths } from 'date-fns';
+import { partition } from 'lodash';
+import { ApiHentingWrapper } from '../../services/henting/HentingService';
+import { HentingVektList } from './components/HentingVektList';
+import { isMissingVekt, isNotInFuture, isValidForVektregistrering } from '../../utils/wrappedHentingHelpers';
+import { HentingVektListWrapper } from './components/HentingVektListWrapper';
+
+export const HentingerVektSection: React.FC = ({ children }) => (
+    <VStack as="section" spacing="5" width="full" alignItems="flex-start">
+        {children}
+    </VStack>
+);
+
+export const HentingerVektHeader: React.FC = ({ children }) => (
+    <Heading as="h2" fontSize="1.5rem" fontWeight="bold">
+        {children}
+    </Heading>
+);
 
 const Vekt: React.FC = () => {
     const { user } = useAuth();
+
     const before = endOfToday();
     const after = subMonths(before, 2);
-    const hentingParametere: ApiHentingParams = {
+
+    const {
+        data: hentinger,
+        isLoading,
+        isError,
+    } = useHentinger({
         after: dateTimeToStringIgnoreTimezone(after),
         before: dateTimeToStringIgnoreTimezone(before),
-    };
-
-    if (user.isStasjon) hentingParametere.stasjonId = user.aktorId;
-    else if (user.isPartner) hentingParametere.aktorId = user.aktorId;
-
-    const { data: hentinger } = useHentinger(hentingParametere, { keepPreviousData: true });
-    const hentingType: Array<ApiHenting> = [];
-
-    hentinger?.map((hentinger) => {
-        if (hentinger.planlagtHenting) hentingType.push(hentinger.planlagtHenting);
-        if (hentinger.ekstraHenting) hentingType.push(hentinger.ekstraHenting);
+        stasjonId: user.isStasjon ? user.aktorId : undefined,
+        aktorId: user.isPartner ? user.aktorId : undefined,
     });
 
-    const manglerVeiing: Array<ApiHenting> = [];
-    const registrertVekt: Array<ApiHenting> = [];
-    const now = new Date();
-    hentingType.forEach((henting) => {
-        if (henting.vektregistreringer.length <= 0 && parseISOIgnoreTimezone(henting.startTidspunkt) <= now)
-            manglerVeiing.push(henting);
-        else registrertVekt.push(henting);
-    });
+    const sortedHentinger = hentinger
+        ?.filter((henting) => isValidForVektregistrering(henting) && isNotInFuture(henting))
+        .sort((hentingA, hentingB) =>
+            compareDesc(
+                parseISOIgnoreTimezone(hentingA.startTidspunkt),
+                parseISOIgnoreTimezone(hentingB.startTidspunkt),
+            ),
+        );
+
+    const [hentingerMissingVekt, hentingerWithVekt] = partition<ApiHentingWrapper>(sortedHentinger, isMissingVekt);
 
     return (
         <>
@@ -47,38 +60,29 @@ const Vekt: React.FC = () => {
             <Flex
                 as="main"
                 direction="column"
-                paddingY="5"
-                paddingX="10"
+                paddingY="10"
+                paddingX={{ base: '6', desktop: '10' }}
                 marginX="auto"
-                marginY="5"
-                width={{ base: '100%', desktop: '80%' }}
+                width={{ base: 'full', xl: '90%' }}
+                maxWidth={{ base: 'full', desktop: '1200px' }}
             >
-                <Flex direction="column" height="100%">
-                    <Flex direction="column" marginBottom={20}>
-                        <Heading as="h2" fontSize="1.5rem" fontWeight="bold" marginBottom="1rem">
-                            Hentinger som mangler vekt
-                        </Heading>
-                        <Flex direction="column">
-                            <Table>
-                                {manglerVeiing.map((henting) => {
-                                    return <MissingRegistration key={henting.id} henting={henting} />;
-                                })}
-                            </Table>
-                        </Flex>
-                    </Flex>
-                    <Flex direction="column">
-                        <Heading as="h2" fontSize="1.5rem" fontWeight={400}>
-                            Tidligere vektregistreringer
-                        </Heading>
-                        <Flex direction="column">
-                            <Table>
-                                {registrertVekt.map((henting) => {
-                                    return <NoMissingRegistration key={henting.id} henting={henting} />;
-                                })}
-                            </Table>
-                        </Flex>
-                    </Flex>
-                </Flex>
+                <Heading width="full" as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
+                    Vektregistrering
+                </Heading>
+                <VStack spacing="8" alignItems="flex-start">
+                    <HentingerVektSection>
+                        <HentingerVektHeader>Hentinger som mangler vekt</HentingerVektHeader>
+                        <HentingVektListWrapper isLoading={isLoading} isError={isError}>
+                            <HentingVektList missingVekt hentinger={hentingerMissingVekt} />
+                        </HentingVektListWrapper>
+                    </HentingerVektSection>
+                    <HentingerVektSection>
+                        <HentingerVektHeader>Tidligere vektregistreringer </HentingerVektHeader>
+                        <HentingVektListWrapper isLoading={isLoading} isError={isError}>
+                            <HentingVektList hentinger={hentingerWithVekt} />
+                        </HentingVektListWrapper>
+                    </HentingerVektSection>
+                </VStack>
             </Flex>
         </>
     );
