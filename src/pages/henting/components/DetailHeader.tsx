@@ -44,22 +44,13 @@ export const DetailHeader: React.FC<Props> = ({ henting }) => {
                             )
                         ) : (
                             <>
-                                {henting.ekstraHenting?.godkjentUtlysning ? (
-                                    <>
-                                        <Heading as="h1" fontWeight="normal" aria-label="Partner">
-                                            {henting.ekstraHenting.godkjentUtlysning.partnerNavn}
-                                        </Heading>
-                                        <BadgeDetail text="Ekstrahenting" color={colors.Green} minWidth="4xs" />
-                                    </>
-                                ) : (
-                                    <>
-                                        <Heading as="h1" fontWeight="normal" aria-label="Partner">
-                                            Ekstrahenting
-                                        </Heading>
-                                        <BadgeDetail text="Ekstrahenting" color={colors.Green} minWidth="4xs" />
-                                        <BadgeDetail text="Ingen påmeldte" color={colors.Red} minWidth="4xs" />
-                                    </>
-                                )}
+                                <Heading as="h1" fontWeight="normal" aria-label="Partner">
+                                    {henting.ekstraHenting?.godkjentUtlysning?.partnerNavn || 'Ekstrahenting'}
+                                </Heading>
+                                <BadgeDetail text="Ekstrahenting" color={colors.Green} minWidth="4xs" />
+                                {!henting.ekstraHenting?.godkjentUtlysning ? (
+                                    <BadgeDetail text="Ingen påmeldte" color={colors.Red} minWidth="4xs" />
+                                ) : null}
                             </>
                         )}
                     </>
