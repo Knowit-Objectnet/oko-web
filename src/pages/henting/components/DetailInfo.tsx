@@ -7,6 +7,7 @@ import { useAuth } from '../../../auth/useAuth';
 import { HentingTimeLocation } from '../../../components/henting/HentingTimeLocation';
 import { DetailCategories } from './DetailCategories';
 import { DetailDescription } from './DetailDescription';
+import { DetailExtraRegistrationInfo } from './DetailExtraRegistrationInfo';
 
 interface Props {
     henting: ApiHentingWrapper;
@@ -24,22 +25,7 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
 
                     <DetailCategories henting={henting.planlagtHenting || henting.ekstraHenting} />
                 </VStack>
-                {henting.ekstraHenting && user.isPartner ? (
-                    (henting.ekstraHenting.godkjentUtlysning &&
-                        henting.ekstraHenting.godkjentUtlysning.partnerId !== user.aktorId) ||
-                    !henting.ekstraHenting.godkjentUtlysning ? (
-                        <Flex backgroundColor={colors.White} height="auto" width="19rem" padding="1rem">
-                            <VStack>
-                                <Text fontSize="sm">
-                                    Hvis du melder deg på gjør du at ingen andre kan melde seg på. Derfor forventes det
-                                    at du kommer og henter ombruksvarene innenfor tidsintervallet.
-                                </Text>
-
-                                <PartnerPameldingInfo henting={henting.ekstraHenting} partnerId={user.aktorId!} />
-                            </VStack>
-                        </Flex>
-                    ) : null
-                ) : null}
+                {henting.ekstraHenting ? <DetailExtraRegistrationInfo henting={henting.ekstraHenting} /> : null}
             </HStack>
         </>
     );
