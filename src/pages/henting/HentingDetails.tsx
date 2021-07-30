@@ -60,7 +60,9 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
 
                     <ButtonGroup marginTop="10">
                         {getBackButton()}
-                        {hentingWrapper.planlagtHenting && user.isPartner
+                        {hentingWrapper.planlagtHenting &&
+                        user.isPartner &&
+                        new Date(hentingWrapper.startTidspunkt) > new Date()
                             ? getCancelButton(hentingWrapper.planlagtHenting)
                             : null}
                     </ButtonGroup>

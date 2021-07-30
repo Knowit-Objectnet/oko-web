@@ -19,7 +19,7 @@ export const DetailHeader: React.FC<Props> = ({ henting }) => {
         <>
             <HStack alignItems="center" spacing="10">
                 {henting.planlagtHenting ? (
-                    <Heading as="h1" fontSize="lg" aria-label="Partner">
+                    <Heading as="h1" fontSize="xl" aria-label="Partner">
                         {user.isPartner ? `Din henting hos ${henting.stasjonNavn}` : henting.aktorNavn}
                     </Heading>
                 ) : (
@@ -27,7 +27,7 @@ export const DetailHeader: React.FC<Props> = ({ henting }) => {
                         {user.isPartner ? (
                             henting.ekstraHenting?.godkjentUtlysning?.partnerId === user.aktorId ? (
                                 <>
-                                    <Heading as="h1" fontSize="lg" aria-label="Partner">
+                                    <Heading as="h1" fontSize="xl" aria-label="Partner">
                                         {`Din henting hos ${henting.stasjonNavn}`}
                                     </Heading>
                                     <BadgeDetail text="Ekstrahenting" color={colors.Green} minWidth="4xs" />

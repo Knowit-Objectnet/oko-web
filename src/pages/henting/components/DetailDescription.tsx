@@ -11,11 +11,11 @@ export const DetailDescription: React.FC<Props> = ({ henting }) => (
     <>
         {henting.planlagtHenting && henting.planlagtHenting.merknad ? (
             <DetailWithLabel label="Merknad">
-                <Text>{henting.planlagtHenting.merknad}</Text>
+                <Text fontWeight={700}>{henting.planlagtHenting.merknad}</Text>
             </DetailWithLabel>
         ) : henting.ekstraHenting && henting.ekstraHenting.beskrivelse ? (
             <DetailWithLabel label="Beskrivelse">
-                <Text>{henting.ekstraHenting.beskrivelse}</Text>
+                <Text fontWeight={700}>{henting.ekstraHenting.beskrivelse}</Text>
             </DetailWithLabel>
         ) : null}
     </>
