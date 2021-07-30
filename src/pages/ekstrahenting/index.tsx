@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Heading } from '@chakra-ui/react';
 import { AddEkstraHentingButton } from './forms/AddEkstraHentingButton';
-import { Box, Flex } from '@chakra-ui/layout';
-import { EkstraHentingTable } from './EkstraHentingTable';
+import { Flex } from '@chakra-ui/layout';
 import { useAuth } from '../../auth/useAuth';
+import { EkstraHentingSortedInfo } from './EkstraHentingSortedInfo';
 
 const EkstraHenting: React.FC = () => {
     const { user } = useAuth();
@@ -30,14 +29,7 @@ const EkstraHenting: React.FC = () => {
                         backgroundColor="Green"
                     />
                 ) : null}
-                <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
-                    <Heading as="h1" fontWeight="medium" fontSize="4xl">
-                        Aktive ekstrahentinger
-                    </Heading>
-                </Flex>
-                <Box width="full" overflowX="auto">
-                    <EkstraHentingTable />
-                </Box>
+                <EkstraHentingSortedInfo />
             </Flex>
         </>
     );
