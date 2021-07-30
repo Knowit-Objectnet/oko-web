@@ -2,16 +2,7 @@ import { ApiHentingWrapper } from '../services/henting/HentingService';
 import { parseISOIgnoreTimezone } from './hentingDateTimeHelpers';
 import { ApiVektregistrering } from '../services/vektregistrering/VektregistreringService';
 import { ApiKategori } from '../services/kategori/KategoriService';
-
-export const getAktorNavn = (henting: ApiHentingWrapper): string | null => {
-    if (henting.planlagtHenting) {
-        return henting.planlagtHenting.aktorNavn;
-    }
-    if (henting.ekstraHenting?.godkjentUtlysning) {
-        return henting.ekstraHenting.godkjentUtlysning.partnerNavn;
-    }
-    return null;
-};
+import { isPast } from 'date-fns';
 
 export const getKategorier = (henting: ApiHentingWrapper): Array<ApiKategori> => {
     const kategorier = henting.planlagtHenting?.kategorier || henting.ekstraHenting?.kategorier;
@@ -30,7 +21,7 @@ export const getVektregistreringDate = (henting: ApiHentingWrapper): string =>
 export const isMissingVekt = (henting: ApiHentingWrapper): boolean => getVektregistreringer(henting).length <= 0;
 
 export const isNotInFuture = (henting: ApiHentingWrapper): boolean =>
-    parseISOIgnoreTimezone(henting.startTidspunkt) <= new Date();
+    isPast(parseISOIgnoreTimezone(henting.startTidspunkt));
 
 export const isValidForVektregistrering = (henting: ApiHentingWrapper): boolean =>
     henting.ekstraHenting?.godkjentUtlysning !== null;
