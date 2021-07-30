@@ -1,20 +1,50 @@
 import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
+import { isFuture, isPast, startOfDay, startOfToday } from 'date-fns';
+import { partition } from 'lodash';
 import React from 'react';
+import { useAuth } from '../../auth/useAuth';
 import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
+import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
+import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { sortedEkstraHentingerByDatoDesc } from './EkstraHentingSortedInfo';
 import { EkstraHentingTable } from './EkstraHentingTable';
 
-interface Props {
-    dineKommendeEkstraHentinger: ApiEkstraHenting[];
-    aktiveEkstraHentinger: ApiEkstraHenting[];
-}
+export const EkstraHentingInfoListPartner: React.FC = () => {
+    const { user } = useAuth();
 
-export const EkstraHentingInfoListPartner: React.FC<Props> = ({
-    dineKommendeEkstraHentinger,
-    aktiveEkstraHentinger,
-}) => {
+    const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning({
+        after: dateTimeToStringIgnoreTimezone(startOfToday()),
+    });
+
+    const sortedEkstraHentinger = sortedEkstraHentingerByDatoDesc(ekstraHentinger ?? []);
+
+    const [paameldteEkstraHentinger, tilbudteEkstraHentinger] = partition<ApiEkstraHenting>(
+        sortedEkstraHentinger,
+        (ekstraHenting) => ekstraHenting.godkjentUtlysning?.partnerId == user.aktorId,
+    );
+
+    const dineKommendeEkstraHentinger = paameldteEkstraHentinger.filter((ekstraHenting) =>
+        isFuture(parseISOIgnoreTimezone(ekstraHenting.sluttTidspunkt)),
+    );
+
+    const [ikkePaameldteEkstraHentinger, kanIkkeMeldePaaEkstraHentinger] = partition<ApiEkstraHenting>(
+        tilbudteEkstraHentinger,
+        (ekstraHenting) =>
+            !ekstraHenting.godkjentUtlysning && isFuture(parseISOIgnoreTimezone(ekstraHenting.sluttTidspunkt)),
+    );
+
     return (
         <VStack>
-            <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
+            <Flex justifyContent="space-between" width="full" marginY="12" alignItems="center">
+                <Heading as="h1" fontWeight="normal" fontSize="2xl">
+                    Aktive ekstrahentinger
+                </Heading>
+            </Flex>
+            <Box width="full" overflowX="auto">
+                <EkstraHentingTable ekstraHentinger={ikkePaameldteEkstraHentinger} />
+            </Box>
+
+            <Flex justifyContent="space-between" width="full" marginY="12" alignItems="center">
                 <Heading as="h1" fontWeight="normal" fontSize="2xl">
                     Dine kommende ekstrahentinger
                 </Heading>
@@ -22,13 +52,13 @@ export const EkstraHentingInfoListPartner: React.FC<Props> = ({
             <Box width="full" overflowX="auto">
                 <EkstraHentingTable ekstraHentinger={dineKommendeEkstraHentinger} />
             </Box>
-            <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
+            <Flex justifyContent="space-between" width="full" marginY="12" alignItems="center">
                 <Text fontWeight="normal" fontSize="2xl">
-                    Aktive ekstrahentinger
+                    Utgåtte ekstrahentinger
                 </Text>
             </Flex>
             <Box width="full" overflowX="auto">
-                <EkstraHentingTable ekstraHentinger={aktiveEkstraHentinger} />
+                <EkstraHentingTable ekstraHentinger={kanIkkeMeldePaaEkstraHentinger} />
             </Box>
         </VStack>
     );

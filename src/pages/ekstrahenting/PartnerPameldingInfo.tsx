@@ -45,7 +45,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) =>
         return (
             <VStack alignItems="left">
                 <Text fontWeight="semibold">Beklager</Text>
-                <Text> Du kan ikke melde deg på lenger.</Text>
+                <Text> Du rakk ikke melde deg på.</Text>
             </VStack>
         );
     };
@@ -56,9 +56,9 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) =>
 
     return (
         <Box alignItems="center" justifyItems="stretch">
-            {isPassed() ? getUtgatt() : null}
+            {isPassed() && henting.godkjentUtlysning?.partnerId !== partnerId ? getUtgatt() : null}
 
-            {!isPassed() && henting.godkjentUtlysning?.partnerId === partnerId ? (
+            {henting.godkjentUtlysning?.partnerId === partnerId ? (
                 <Flex color="DarkGreen">
                     <Icon marginRight="2" fill="DarkGreen">
                         <Check />
@@ -68,7 +68,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) =>
             ) : null}
 
             {!isPassed() && henting.godkjentUtlysning && henting.godkjentUtlysning.partnerId != partnerId
-                ? getUtgatt()
+                ? 'Noen andre har meldt seg på'
                 : null}
 
             {!isPassed() && !henting.godkjentUtlysning ? (

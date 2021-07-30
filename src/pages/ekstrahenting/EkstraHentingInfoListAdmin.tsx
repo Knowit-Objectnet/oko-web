@@ -4,28 +4,39 @@ import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
 import { EkstraHentingTable } from './EkstraHentingTable';
 import ArrowRight from '../../assets/ArrowRight.svg';
 import { useAuth } from '../../auth/useAuth';
+import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
+import { partition } from 'lodash';
+import { isFuture, startOfDay } from 'date-fns';
+import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { sortedEkstraHentingerByDatoAsc, sortedEkstraHentingerByDatoDesc } from './EkstraHentingSortedInfo';
 
-interface Props {
-    tidligereEkstraHentinger: ApiEkstraHenting[];
-    aktiveEkstraHentinger: ApiEkstraHenting[];
-}
-
-export const EkstraHentingInfoList: React.FC<Props> = ({ tidligereEkstraHentinger, aktiveEkstraHentinger }) => {
+export const EkstraHentingInfoListAdmin: React.FC = () => {
     const { user } = useAuth();
+    const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning();
+
+    //const sortedEkstraHentinger = sortedEkstraHentingerByDato(ekstraHentinger ?? []);
+
+    const [aktiveEkstraHentinger, tidligereEkstraHentinger] = partition<ApiEkstraHenting>(
+        ekstraHentinger,
+        (ekstraHenting) => isFuture(parseISOIgnoreTimezone(ekstraHenting.sluttTidspunkt)),
+    );
+    const sortedTidligereEkstraHentinger = sortedEkstraHentingerByDatoAsc(tidligereEkstraHentinger);
+    const sortedAktiveEkstraHentinger = sortedEkstraHentingerByDatoDesc(aktiveEkstraHentinger);
+
     return (
         <>
-            <Flex justifyContent="space-between" width="full" marginY="4" alignItems="center">
+            <Flex justifyContent="space-between" width="full" marginY="12" alignItems="center">
                 <Heading as="h1" fontWeight="normal" fontSize="2xl">
                     Aktive ekstrahentinger
                 </Heading>
             </Flex>
             <Box width="full" overflowX="auto">
-                <EkstraHentingTable ekstraHentinger={aktiveEkstraHentinger} />
+                <EkstraHentingTable ekstraHentinger={sortedAktiveEkstraHentinger} />
             </Box>
             {user.isAdmin ? (
                 <AccordionItem>
                     {({ isExpanded }) => (
-                        <Flex direction="column" width="full" marginY="4">
+                        <Flex direction="column" width="full" marginY="12">
                             <Heading as="h3" flex="1" marginBottom="4">
                                 <AccordionButton
                                     width="fit-content"
@@ -46,7 +57,7 @@ export const EkstraHentingInfoList: React.FC<Props> = ({ tidligereEkstraHentinge
                             </Heading>
 
                             <AccordionPanel padding="0">
-                                <EkstraHentingTable ekstraHentinger={tidligereEkstraHentinger} />
+                                <EkstraHentingTable ekstraHentinger={sortedTidligereEkstraHentinger} />
                             </AccordionPanel>
                         </Flex>
                     )}
