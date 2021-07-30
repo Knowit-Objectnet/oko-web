@@ -1,19 +1,12 @@
 import { Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import * as React from 'react';
-import { formatTime } from '../../../utils/formatDateTime';
-import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
-import { getDayString } from '../HentingDetails';
-import { DetailWithIcon } from './DetailWithIcon';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
-import Location from '../../../assets/Location.svg';
-import Calendar from '../../../assets/Calendar.svg';
-import Clock from '../../../assets/Clock.svg';
-import { DetailWithLabel } from './DetailWithLabel';
 import { KategoriList } from '../../../components/KategoriList';
 import { colors } from '../../../theme/foundations/colors';
 import { PartnerPameldingInfo } from '../../ekstrahenting/PartnerPameldingInfo';
 import { useAuth } from '../../../auth/useAuth';
 import { HentingTimeLocation } from '../../../components/henting/HentingTimeLocation';
+import { DetailWithLabel } from '../../../components/henting/DetailWithLabel';
 
 interface Props {
     henting: ApiHentingWrapper;
@@ -40,7 +33,6 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
                     {henting.planlagtHenting && henting.planlagtHenting.kategorier.length > 0 ? (
                         <DetailWithLabel label="Kategorier">
                             <KategoriList
-                                size="md"
                                 kategorier={henting.planlagtHenting.kategorier.map(({ kategori }) => kategori)}
                             />
                         </DetailWithLabel>
@@ -48,13 +40,12 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
                     {henting.ekstraHenting && henting.ekstraHenting.kategorier.length > 0 ? (
                         <DetailWithLabel label="Kategorier">
                             <KategoriList
-                                size="md"
                                 kategorier={henting.ekstraHenting.kategorier.map(({ kategori }) => kategori)}
                             />
                         </DetailWithLabel>
                     ) : null}
                 </VStack>
-                {henting.type === 'EKSTRA' && user.isPartner ? (
+                {henting.ekstraHenting && user.isPartner ? (
                     <Flex backgroundColor={colors.White} height="auto" width="19rem" padding="1rem">
                         <VStack>
                             <Text fontSize="sm">
@@ -62,7 +53,7 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
                                 du kommer og henter ombruksvarene innenfor tidsintervallet.
                             </Text>
 
-                            {henting.ekstraHenting === undefined || henting.aktorId === undefined ? null : (
+                            {!henting.ekstraHenting || !henting.aktorId ? null : (
                                 <PartnerPameldingInfo henting={henting.ekstraHenting} partnerId={user.aktorId!} />
                             )}
                         </VStack>
