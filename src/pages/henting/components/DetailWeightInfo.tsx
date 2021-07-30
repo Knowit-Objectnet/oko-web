@@ -15,7 +15,8 @@ export const DetailWeightInfo: React.FC<Props> = ({ henting }) => {
     const { user } = useAuth();
     return (
         <>
-            {henting.aktorId === user.aktorId ? (
+            {henting.aktorId === user.aktorId ||
+            ((henting.stasjonId === user.aktorId || user.isAdmin) && henting.ekstraHenting?.godkjentUtlysning) ? (
                 (henting.planlagtHenting && henting.planlagtHenting.vektregistreringer.length > 0) ||
                 (henting.ekstraHenting && henting.ekstraHenting.vektregistreringer.length > 0) ? (
                     <>
