@@ -13,7 +13,7 @@ export interface ApiEkstraHenting extends ApiHenting {
     stasjonNavn: string;
     godkjentUtlysning: ApiUtlysning | null;
     kategorier: Array<ApiEkstraHentingKategori>;
-    utlysninger: ApiUtlysning[];
+    utlysninger: Array<ApiUtlysning>;
     vektregistreringer: Array<ApiVektregistrering>;
 }
 
@@ -30,7 +30,7 @@ export interface ApiEkstraHentingPatch {
     startTidspunkt?: string; //LocalTimeDate
     sluttTidspunkt?: string; //LocalTimeDate
     beskrivelse?: string;
-    kategorier?: ApiEkstraHentingKategoriPost[];
+    kategorier?: Array<ApiEkstraHentingKategoriPost>;
 }
 
 export interface ApiEkstraHentingPost {
@@ -38,8 +38,8 @@ export interface ApiEkstraHentingPost {
     sluttTidspunkt?: string; //LocalTimeDate
     beskrivelse: string;
     stasjonId: string; //UUID
-    kategorier?: ApiEkstraHentingKategoriPost[];
-    partnere?: string[];
+    kategorier?: Array<ApiEkstraHentingKategoriPost>;
+    partnere?: Array<string>;
 }
 
 export interface ApiEkstraHentingKategori extends ApiHentingKategori {

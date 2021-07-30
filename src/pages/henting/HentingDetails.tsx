@@ -1,23 +1,14 @@
 import * as React from 'react';
+import { useAuth } from '../../auth/useAuth';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
-import { formatDate } from '../../utils/formatDateTime';
 import { CancelPlanlagtHentingButton } from './components/CancelPlanlagtHentingButton';
-import { isToday } from 'date-fns';
-import { useAuth } from '../../auth/useAuth';
 import { AvlystDetails } from './components/AvlystDetails';
 import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
 import { DetailHeader } from './components/DetailHeader';
 import { DetailInfo } from './components/DetailInfo';
 import { ApiPlanlagtHenting } from '../../services/henting/PlanlagtHentingService';
-
-export const getDayString = (date: Date) => {
-    if (isToday(date)) {
-        return 'I dag';
-    }
-    return formatDate(date);
-};
 
 interface Props {
     hentingId: string;

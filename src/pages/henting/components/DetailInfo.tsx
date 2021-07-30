@@ -13,6 +13,7 @@ import { KategoriList } from '../../../components/KategoriList';
 import { colors } from '../../../theme/foundations/colors';
 import { PartnerPameldingInfo } from '../../ekstrahenting/PartnerPameldingInfo';
 import { useAuth } from '../../../auth/useAuth';
+import { HentingTimeLocation } from '../../../components/henting/HentingTimeLocation';
 
 interface Props {
     henting: ApiHentingWrapper;
@@ -24,17 +25,7 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
         <>
             <HStack alignItems="center" spacing="10" justifyContent="space-between">
                 <VStack spacing="3" alignItems="flex-start" marginTop="4">
-                    <DetailWithIcon icon={Calendar} label="Dato">
-                        <time>{getDayString(parseISOIgnoreTimezone(henting.startTidspunkt))}</time>
-                    </DetailWithIcon>
-                    <DetailWithIcon icon={Clock} label="Tidspunkt">
-                        {formatTime(parseISOIgnoreTimezone(henting.startTidspunkt)) +
-                            ' - ' +
-                            formatTime(parseISOIgnoreTimezone(henting.sluttTidspunkt))}
-                    </DetailWithIcon>
-                    <DetailWithIcon icon={Location} label="Stasjon">
-                        {henting.stasjonNavn}
-                    </DetailWithIcon>
+                    <HentingTimeLocation henting={henting} />
 
                     {henting.planlagtHenting?.merknad ? (
                         <DetailWithLabel label="Merknad">
