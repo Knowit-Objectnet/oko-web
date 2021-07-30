@@ -9,6 +9,7 @@ import { useHentingById } from '../../services/henting/useHentingById';
 import { DetailHeader } from './components/DetailHeader';
 import { DetailInfo } from './components/DetailInfo';
 import { ApiPlanlagtHenting } from '../../services/henting/PlanlagtHentingService';
+import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 
 interface Props {
     hentingId: string;
@@ -60,7 +61,8 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
 
                     <ButtonGroup marginTop="10">
                         {getBackButton()}
-                        {hentingWrapper.planlagtHenting && new Date(hentingWrapper.startTidspunkt) > new Date()
+                        {hentingWrapper.planlagtHenting &&
+                        parseISOIgnoreTimezone(hentingWrapper.startTidspunkt) > new Date()
                             ? getCancelButton(hentingWrapper.planlagtHenting)
                             : null}
                     </ButtonGroup>
