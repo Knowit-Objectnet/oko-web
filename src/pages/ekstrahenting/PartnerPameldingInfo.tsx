@@ -6,9 +6,8 @@ import { useSuccessToast } from '../../components/toasts/useSuccessToast';
 import { useErrorToast } from '../../components/toasts/useErrorToast';
 import { ApiError } from '../../services/httpClient';
 import Check from '../../assets/Check.svg';
-import Cross from '../../assets/Cross.svg';
 import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
-import { isAfter, isBefore } from 'date-fns';
+import { isAfter } from 'date-fns';
 import { colors } from '../../theme/foundations/colors';
 
 interface Props {
