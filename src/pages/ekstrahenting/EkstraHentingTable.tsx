@@ -6,7 +6,7 @@ import { ApiEkstraHentingParams } from '../../services/henting/EkstraHentingServ
 import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
 import { PameldtInfo } from './PameldtInfo';
 import { PartnerPameldingInfo } from './PartnerPameldingInfo';
-import { HentingInfoSection } from '../../components/henting/HentingInfoSection';
+import { HentingTimeLocation } from '../../components/henting/HentingTimeLocation';
 
 export const EkstraHentingTable: React.FC = () => {
     const { user } = useAuth();
@@ -44,11 +44,11 @@ export const EkstraHentingTable: React.FC = () => {
                             <Text fontWeight="bold">{henting.beskrivelse || 'Ingen merknad skrevet'} </Text>
                         </Td>
                         <Td minWidth="56">
-                            <HentingInfoSection henting={henting} />
+                            <HentingTimeLocation henting={henting} />
                         </Td>
                         <Td>
                             <KategoriList
-                                kategorier={henting.kategorier.filter((it) => it.kategori).map((it) => it.kategori!)}
+                                kategorier={henting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
                             />
                         </Td>
                         <Td>

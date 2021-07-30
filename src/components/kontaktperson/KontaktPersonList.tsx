@@ -62,18 +62,14 @@ export const KontaktPersonList: React.FC<Props> = ({ kontaktPersoner }) => {
                                     <OpenVerifiseringPageButton kontakt={kontakt} />
                                 ) : null}
                             </ButtonGroup>
-                            <Flex marginTop="4">
+                            <HStack marginTop="4" spacing="1">
                                 {kontakt.telefon && !kontakt.verifiseringStatus.telefonVerifisert ? (
-                                    <Tag backgroundColor="Red" margin="1">
-                                        SMS ikke verifisert
-                                    </Tag>
+                                    <Tag variant="warning">SMS ikke verifisert</Tag>
                                 ) : null}
                                 {kontakt.epost && !kontakt.verifiseringStatus.epostVerifisert ? (
-                                    <Tag backgroundColor="Red" margin="1">
-                                        Epost ikke verifisert
-                                    </Tag>
+                                    <Tag variant="warning">E-post ikke verifisert</Tag>
                                 ) : null}
-                            </Flex>
+                            </HStack>
                         </Flex>
                     </HStack>
                 </ListItem>
