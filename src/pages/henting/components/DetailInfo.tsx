@@ -1,12 +1,12 @@
 import { Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import * as React from 'react';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
-import { KategoriList } from '../../../components/KategoriList';
 import { colors } from '../../../theme/foundations/colors';
 import { PartnerPameldingInfo } from '../../ekstrahenting/PartnerPameldingInfo';
 import { useAuth } from '../../../auth/useAuth';
 import { HentingTimeLocation } from '../../../components/henting/HentingTimeLocation';
-import { DetailWithLabel } from '../../../components/henting/DetailWithLabel';
+import { DetailCategories } from './DetailCategories';
+import { DetailDescription } from './DetailDescription';
 
 interface Props {
     henting: ApiHentingWrapper;
@@ -20,30 +20,9 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
                 <VStack spacing="3" alignItems="flex-start" marginTop="4">
                     <HentingTimeLocation henting={henting} />
 
-                    {henting.planlagtHenting?.merknad ? (
-                        <DetailWithLabel label="Merknad">
-                            <Text>{henting.planlagtHenting?.merknad}</Text>
-                        </DetailWithLabel>
-                    ) : null}
-                    {henting.ekstraHenting?.beskrivelse ? (
-                        <DetailWithLabel label="Beskrivelse">
-                            <Text>{henting.ekstraHenting?.beskrivelse}</Text>
-                        </DetailWithLabel>
-                    ) : null}
-                    {henting.planlagtHenting && henting.planlagtHenting.kategorier.length > 0 ? (
-                        <DetailWithLabel label="Kategorier">
-                            <KategoriList
-                                kategorier={henting.planlagtHenting.kategorier.map(({ kategori }) => kategori)}
-                            />
-                        </DetailWithLabel>
-                    ) : null}
-                    {henting.ekstraHenting && henting.ekstraHenting.kategorier.length > 0 ? (
-                        <DetailWithLabel label="Kategorier">
-                            <KategoriList
-                                kategorier={henting.ekstraHenting.kategorier.map(({ kategori }) => kategori)}
-                            />
-                        </DetailWithLabel>
-                    ) : null}
+                    <DetailDescription henting={henting} />
+
+                    <DetailCategories henting={henting.planlagtHenting || henting.ekstraHenting} />
                 </VStack>
                 {henting.ekstraHenting && user.isPartner ? (
                     <Flex backgroundColor={colors.White} height="auto" width="19rem" padding="1rem">
@@ -53,9 +32,9 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
                                 du kommer og henter ombruksvarene innenfor tidsintervallet.
                             </Text>
 
-                            {!henting.ekstraHenting || !henting.aktorId ? null : (
+                            {henting.aktorId ? (
                                 <PartnerPameldingInfo henting={henting.ekstraHenting} partnerId={user.aktorId!} />
-                            )}
+                            ) : null}
                         </VStack>
                     </Flex>
                 ) : null}

@@ -63,14 +63,14 @@ export const DetailHeader: React.FC<Props> = ({ henting }) => {
                     <>
                         <BadgeDetail text="Vekt er registrert" iconLeft={Check} color={colors.LightGreen} />
                     </>
-                ) : (
+                ) : new Date(henting.startTidspunkt) < new Date() ? (
                     <>
                         <BadgeDetail text="Vekt mangler" color={colors.Red} />
                         {hentingStarted(henting.planlagtHenting || henting.ekstraHenting) ? (
-                            <RegisterVektButton henting={henting.planlagtHenting!} />
+                            <RegisterVektButton henting={henting.planlagtHenting || henting.ekstraHenting} />
                         ) : null}
                     </>
-                )}
+                ) : null}
             </HStack>
         </>
     );
