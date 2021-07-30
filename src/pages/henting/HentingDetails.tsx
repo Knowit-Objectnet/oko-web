@@ -6,7 +6,7 @@ import { CancelPlanlagtHentingButton } from './components/CancelPlanlagtHentingB
 import { isToday } from 'date-fns';
 import { useAuth } from '../../auth/useAuth';
 import { AvlystDetails } from './components/AvlystDetails';
-import { ApiHenting, ApiHentingWrapper } from '../../services/henting/HentingService';
+import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { useHentingById } from '../../services/henting/useHentingById';
 import { DetailHeader } from './components/DetailHeader';
 import { DetailInfo } from './components/DetailInfo';

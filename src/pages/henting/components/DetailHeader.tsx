@@ -20,9 +20,9 @@ export const DetailHeader: React.FC<Props> = ({ henting }) => {
     return (
         <>
             <HStack alignItems="center" spacing="10">
-                {henting.type === 'PLANLAGT' ? (
+                {henting.planlagtHenting ? (
                     <Heading as="h1" fontWeight="normal" aria-label="Partner">
-                        {henting.aktorNavn}
+                        {user.isPartner ? `Din henting hos ${henting.stasjonNavn}` : henting.aktorNavn}
                     </Heading>
                 ) : (
                     <>
