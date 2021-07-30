@@ -5,7 +5,7 @@ import { useAuth } from '../../auth/useAuth';
 import { ApiEkstraHenting, ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
 import { PameldtInfo } from './PameldtInfo';
 import { PartnerPameldingInfo } from './PartnerPameldingInfo';
-import { HentingInfoSection } from '../../components/henting/HentingInfoSection';
+import { HentingTimeLocation } from '../../components/henting/HentingTimeLocation';
 
 interface Props {
     ekstraHentinger: Array<ApiEkstraHenting>;
@@ -46,13 +46,11 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger }) => {
                                 <Text fontWeight="bold">{henting.beskrivelse || 'Ingen merknad skrevet'} </Text>
                             </Td>
                             <Td minWidth="56">
-                                <HentingInfoSection henting={henting} />
+                                <HentingTimeLocation henting={henting} />
                             </Td>
                             <Td>
                                 <KategoriList
-                                    kategorier={henting.kategorier
-                                        .filter((it) => it.kategori)
-                                        .map((it) => it.kategori!)}
+                                    kategorier={henting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
                                 />
                             </Td>
                             <Td>

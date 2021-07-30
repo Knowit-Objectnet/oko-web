@@ -3,9 +3,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../auth/Roles';
 import { Loading } from '../components/Loading';
-import Kategorier from '../pages/kategorier';
-import Innstillinger from '../pages/innstillinger';
-import Vekt from '../pages/vekt';
 
 const Kalender = React.lazy(() => import('../pages/kalender'));
 const Henting = React.lazy(() => import('../pages/henting'));
@@ -15,6 +12,9 @@ const Stasjoner = React.lazy(() => import('../pages/stasjoner'));
 const MineAvtaler = React.lazy(() => import('../pages/minavtale'));
 const EkstraHenting = React.lazy(() => import('../pages/ekstrahenting'));
 const Aarsaker = React.lazy(() => import('../pages/avlysningsaarsaker'));
+const Innstillinger = React.lazy(() => import('../pages/innstillinger'));
+const Kategorier = React.lazy(() => import('../pages/kategorier'));
+const Vekt = React.lazy(() => import('../pages/vekt'));
 
 const Home: React.FC = () => {
     // const { user } = useAuth();
@@ -51,12 +51,12 @@ export const PageRouter: React.FC = () => (
             <ProtectedRoute path="/innstillinger" requiredRoles={[Roles.Admin]}>
                 <Innstillinger />
             </ProtectedRoute>
-            <ProtectedRoute path="/ekstrahenting" requiredRoles={[Roles.Stasjon, Roles.Admin, Roles.Partner]}>
+            <Route path="/ekstrahenting">
                 <EkstraHenting />
-            </ProtectedRoute>
-            <ProtectedRoute path="/vekt" requiredRoles={[Roles.Stasjon, Roles.Admin, Roles.Partner]}>
+            </Route>
+            <Route path="/vekt">
                 <Vekt />
-            </ProtectedRoute>
+            </Route>
             <Route path="/">
                 <Home />
             </Route>

@@ -36,7 +36,7 @@ export interface ApiHentingParams {
 }
 
 const hentingEndpoint = '/hentinger';
-export const hentingDefaultQueryKey = 'findOneHentingById';
+export const hentingDefaultQueryKey = 'getHentinger';
 
 export const getHentingById = (hentingId: string): Promise<ApiHentingWrapper> =>
     httpClient().get<ApiHentingWrapper>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);

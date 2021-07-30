@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { useStasjoner } from '../../services/stasjon/useStasjoner';
-import { Select, SelectOption } from './Select';
 import { FormFieldProps } from './FormField';
 import { usePartnere } from '../../services/partner/usePartnere';
 import { CheckboxGroupSkeleton } from './checkbox/CheckboxGroupSkeleton';
