@@ -5,10 +5,7 @@ import { useAuth } from '../../../auth/useAuth';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { BadgeDetail } from './BadgeDetail';
 import Varsel from '../../../assets/Varsel.svg';
-import Check from '../../../assets/Check.svg';
 import { colors } from '../../../theme/foundations/colors';
-import { RegisterVektButton } from './RegisterVektButton';
-import { hentingStarted } from '../../../utils/hentingDateTimeHelpers';
 import { DetailWeightInfo } from './DetailWeightInfo';
 
 interface Props {
