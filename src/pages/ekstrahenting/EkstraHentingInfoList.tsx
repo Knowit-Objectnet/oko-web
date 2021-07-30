@@ -26,7 +26,7 @@ export const EkstraHentingInfoList: React.FC<Props> = ({ tidligereEkstraHentinge
                 <AccordionItem>
                     {({ isExpanded }) => (
                         <Flex direction="column" width="full" marginY="4">
-                            <Heading as="h3" flex="1">
+                            <Heading as="h3" flex="1" marginBottom="4">
                                 <AccordionButton
                                     width="fit-content"
                                     fontSize="2xl"
