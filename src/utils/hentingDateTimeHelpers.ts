@@ -28,8 +28,8 @@ export const dateTimeToStringIgnoreTimezone = (dateTime: Date): string =>
 export const getDateStringFromISOString = (ISOdate: string): string => ISOdate.slice(0, 10);
 export const getTimeStringFromISOString = (ISOdate: string): string => ISOdate.slice(11, 16);
 
-export const hentingStarted = (henting: ApiHenting): boolean => {
+export const hentingStarted = (henting: ApiHenting | undefined): boolean => {
     const today = new Date();
-    if (new Date(henting.startTidspunkt) > today) return false;
+    if (new Date(henting?.startTidspunkt || '') > today) return false;
     return true;
 };
