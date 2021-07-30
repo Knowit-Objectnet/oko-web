@@ -14,8 +14,7 @@ export const DetailExtraRegistrationInfo: React.FC<Props> = ({ henting }) => {
     return (
         <>
             {henting && user.isPartner ? (
-                (henting.godkjentUtlysning && henting.godkjentUtlysning.partnerId !== user.aktorId) ||
-                !henting.godkjentUtlysning ? (
+                henting.godkjentUtlysning?.partnerId !== user.aktorId || !henting.godkjentUtlysning ? (
                     <Flex backgroundColor={colors.White} height="auto" width="19rem" padding="1rem">
                         <VStack>
                             <Text fontSize="sm">

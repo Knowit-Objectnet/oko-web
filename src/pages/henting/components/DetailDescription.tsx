@@ -9,11 +9,11 @@ interface Props {
 
 export const DetailDescription: React.FC<Props> = ({ henting }) => (
     <>
-        {henting.planlagtHenting && henting.planlagtHenting.merknad ? (
+        {henting.planlagtHenting?.merknad ? (
             <DetailWithLabel label="Merknad">
                 <Text fontWeight={700}>{henting.planlagtHenting.merknad}</Text>
             </DetailWithLabel>
-        ) : henting.ekstraHenting && henting.ekstraHenting.beskrivelse ? (
+        ) : henting.ekstraHenting?.beskrivelse ? (
             <DetailWithLabel label="Beskrivelse">
                 <Text fontWeight={700}>{henting.ekstraHenting.beskrivelse}</Text>
             </DetailWithLabel>
