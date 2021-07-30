@@ -30,6 +30,6 @@ export const getTimeStringFromISOString = (ISOdate: string): string => ISOdate.s
 
 export const hentingStarted = (henting: ApiHenting | undefined): boolean => {
     const today = new Date();
-    if (new Date(henting?.startTidspunkt || '') > today) return false;
+    if (parseISOIgnoreTimezone(henting?.startTidspunkt || '') > today) return false;
     return true;
 };
