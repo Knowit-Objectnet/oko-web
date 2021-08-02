@@ -53,7 +53,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
         (hentingWrapper) => {
             return (
                 <>
-                    {hentingWrapper.planlagtHenting ? <AvlystDetails henting={hentingWrapper} /> : null}
+                    {hentingWrapper.planlagtHenting?.aarsakId ? <AvlystDetails henting={hentingWrapper} /> : null}
 
                     <DetailHeader henting={hentingWrapper} />
 
