@@ -1,16 +1,18 @@
-import { Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { HStack, VStack } from '@chakra-ui/react';
 import * as React from 'react';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { HentingTimeLocation } from '../../../components/henting/HentingTimeLocation';
 import { DetailCategories } from './DetailCategories';
 import { DetailDescription } from './DetailDescription';
-import { DetailExtraRegistrationInfo } from './DetailExtraRegistrationInfo';
+import { useAuth } from '../../../auth/useAuth';
+import { DetailEkstraHentingPameldingInfo } from './DetailEkstraHentingPameldingInfo';
 
 interface Props {
     henting: ApiHentingWrapper;
 }
 
 export const DetailInfo: React.FC<Props> = ({ henting }) => {
+    const { user } = useAuth();
     return (
         <>
             <HStack alignItems="center" spacing="10" justifyContent="space-between">
@@ -21,7 +23,9 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
 
                     <DetailCategories henting={henting.planlagtHenting || henting.ekstraHenting} />
                 </VStack>
-                {henting.ekstraHenting ? <DetailExtraRegistrationInfo henting={henting.ekstraHenting} /> : null}
+                {henting.ekstraHenting && user.isPartner ? (
+                    <DetailEkstraHentingPameldingInfo henting={henting.ekstraHenting} />
+                ) : null}
             </HStack>
         </>
     );

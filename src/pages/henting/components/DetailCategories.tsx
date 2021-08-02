@@ -7,12 +7,13 @@ interface Props {
     henting: ApiHenting | undefined;
 }
 
-export const DetailCategories: React.FC<Props> = ({ henting }) => (
-    <>
-        {henting && henting.kategorier.length > 0 ? (
+export const DetailCategories: React.FC<Props> = ({ henting }) => {
+    if (henting && henting.kategorier.length > 0) {
+        return (
             <DetailWithLabel label="Kategorier">
                 <KategoriList kategorier={henting.kategorier.map(({ kategori }) => kategori)} />
             </DetailWithLabel>
-        ) : null}
-    </>
-);
+        );
+    }
+    return null;
+};
