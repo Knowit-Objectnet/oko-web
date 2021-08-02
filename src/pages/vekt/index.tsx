@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Heading, VStack } from '@chakra-ui/react';
+import { Heading, HStack, VStack } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
@@ -11,6 +11,7 @@ import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { HentingVektList } from './components/HentingVektList';
 import { isMissingVekt, isNotInFuture, isValidForVektregistrering } from '../../utils/wrappedHentingHelpers';
 import { HentingVektListWrapper } from './components/HentingVektListWrapper';
+import { DownloadStatisticsButton } from './components/DownloadStatisticsButton';
 
 export const HentingerVektSection: React.FC = ({ children }) => (
     <VStack as="section" spacing="5" width="full" alignItems="flex-start">
@@ -66,9 +67,12 @@ const Vekt: React.FC = () => {
                 width={{ base: 'full', xl: '90%' }}
                 maxWidth={{ base: 'full', desktop: 'container.xl' }}
             >
-                <Heading width="full" as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
-                    Vektregistrering
-                </Heading>
+                <HStack>
+                    <Heading width="full" as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
+                        Vektregistrering
+                    </Heading>
+                    {user.isAdmin ? <DownloadStatisticsButton /> : null}
+                </HStack>
                 <VStack spacing="8" alignItems="flex-start">
                     <HentingerVektSection>
                         <HentingerVektHeader>Hentinger som mangler vekt</HentingerVektHeader>
