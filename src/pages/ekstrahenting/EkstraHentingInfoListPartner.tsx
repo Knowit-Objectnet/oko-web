@@ -1,13 +1,14 @@
-import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react';
-import { isFuture, isPast, startOfDay, startOfToday } from 'date-fns';
+import { Accordion } from '@chakra-ui/react';
+import { isFuture, startOfToday } from 'date-fns';
 import { partition } from 'lodash';
 import React from 'react';
 import { useAuth } from '../../auth/useAuth';
 import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
 import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
 import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { EkstraHentingAccordion } from './EkstraHentingAccordion';
+import { EkstraHentingHeading } from './EkstraHentingHeading';
 import { sortedEkstraHentingerByDatoDesc } from './EkstraHentingSortedInfo';
-import { EkstraHentingTable } from './EkstraHentingTable';
 
 export const EkstraHentingInfoListPartner: React.FC = () => {
     const { user } = useAuth();
@@ -34,32 +35,13 @@ export const EkstraHentingInfoListPartner: React.FC = () => {
     );
 
     return (
-        <VStack>
-            <Flex justifyContent="space-between" width="full" marginY="12" alignItems="center">
-                <Heading as="h1" fontWeight="normal" fontSize="2xl">
-                    Aktive ekstrahentinger
-                </Heading>
-            </Flex>
-            <Box width="full" overflowX="auto">
-                <EkstraHentingTable ekstraHentinger={ikkePaameldteEkstraHentinger} />
-            </Box>
-
-            <Flex justifyContent="space-between" width="full" marginY="12" alignItems="center">
-                <Heading as="h1" fontWeight="normal" fontSize="2xl">
-                    Dine kommende ekstrahentinger
-                </Heading>
-            </Flex>
-            <Box width="full" overflowX="auto">
-                <EkstraHentingTable ekstraHentinger={dineKommendeEkstraHentinger} />
-            </Box>
-            <Flex justifyContent="space-between" width="full" marginY="12" alignItems="center">
-                <Text fontWeight="normal" fontSize="2xl">
-                    Utgåtte ekstrahentinger
-                </Text>
-            </Flex>
-            <Box width="full" overflowX="auto">
-                <EkstraHentingTable ekstraHentinger={kanIkkeMeldePaaEkstraHentinger} />
-            </Box>
-        </VStack>
+        <Accordion allowToggle borderColor="transparent" allowMultiple>
+            <EkstraHentingHeading ekstraHentinger={ikkePaameldteEkstraHentinger} label="Aktive ekstrahentinger" />
+            <EkstraHentingAccordion
+                ekstraHentinger={dineKommendeEkstraHentinger}
+                label="Dine kommende ekstrahentinger"
+            />
+            <EkstraHentingAccordion ekstraHentinger={kanIkkeMeldePaaEkstraHentinger} label="Utgåtte ekstrahentinger" />
+        </Accordion>
     );
 };
