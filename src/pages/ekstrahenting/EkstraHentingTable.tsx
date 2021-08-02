@@ -1,14 +1,17 @@
 import * as React from 'react';
-import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import { Accordion, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { KategoriList } from '../../components/KategoriList';
 import { useAuth } from '../../auth/useAuth';
-import { ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
-import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
+import { ApiEkstraHenting, ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
 import { PameldtInfo } from './PameldtInfo';
 import { PartnerPameldingInfo } from './PartnerPameldingInfo';
 import { HentingTimeLocation } from '../../components/henting/HentingTimeLocation';
 
-export const EkstraHentingTable: React.FC = () => {
+interface Props {
+    ekstraHentinger: Array<ApiEkstraHenting>;
+}
+
+export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger }) => {
     const { user } = useAuth();
 
     let ekstraHentingParams: ApiEkstraHentingParams;
@@ -16,10 +19,8 @@ export const EkstraHentingTable: React.FC = () => {
     // else if (user.isPartner) ekstraHentingParams = {} //TODO: Add possibility of getting only ones related to partner
     else ekstraHentingParams = {};
 
-    const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning({});
-
     if (ekstraHentinger && ekstraHentinger?.length <= 0) {
-        return <Text>Ingen registrerte ekstrahentinger</Text>;
+        return <Text fontStyle="italic">Ingen registrerte ekstrahentinger</Text>;
     }
 
     return (
