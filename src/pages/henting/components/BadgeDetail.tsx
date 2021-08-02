@@ -1,11 +1,11 @@
-import { Tag, TagLabel, TagLeftIcon, TagProps, TagRightIcon } from '@chakra-ui/react';
+import { ComponentWithAs, IconProps, Tag, TagLabel, TagLeftIcon, TagProps, TagRightIcon } from '@chakra-ui/react';
 import * as React from 'react';
 
 interface Props {
     text: string;
     color: string;
-    iconLeft?: any;
-    iconRight?: any;
+    iconLeft?: ComponentWithAs<'svg', IconProps>;
+    iconRight?: ComponentWithAs<'svg', IconProps>;
 }
 
 export const BadgeDetail: React.FC<Props & TagProps> = ({ text, color, iconLeft, iconRight, ...props }) => {

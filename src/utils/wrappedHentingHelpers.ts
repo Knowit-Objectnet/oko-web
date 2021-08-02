@@ -23,5 +23,16 @@ export const isMissingVekt = (henting: ApiHentingWrapper): boolean => getVektreg
 export const isNotInFuture = (henting: ApiHentingWrapper): boolean =>
     isPast(parseISOIgnoreTimezone(henting.startTidspunkt));
 
-export const isValidForVektregistrering = (henting: ApiHentingWrapper): boolean =>
-    henting.ekstraHenting?.godkjentUtlysning !== null;
+export const hasVektregistrering = (henting: ApiHentingWrapper): boolean => getVektregistreringer(henting).length > 0;
+
+export const isValidForVektregistrering = (henting: ApiHentingWrapper): boolean => {
+    const validPlanlagtHenting = henting.planlagtHenting && !henting.planlagtHenting.avlyst;
+    const validEkstraHenting = henting.ekstraHenting && henting.ekstraHenting.godkjentUtlysning;
+    const hasStarted = isPast(parseISOIgnoreTimezone(henting.startTidspunkt));
+
+    if (validPlanlagtHenting || validEkstraHenting) {
+        return hasStarted;
+    }
+
+    return false;
+};

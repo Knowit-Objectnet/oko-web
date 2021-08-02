@@ -14,8 +14,8 @@ const Henting: React.FC = () => {
             </Helmet>
             <Flex as="main" width="full" minHeight="full" backgroundColor="surface">
                 <Flex
-                    width="2xl"
-                    maxWidth="2xl"
+                    minWidth="2xl"
+                    maxWidth="90%"
                     marginX="auto"
                     direction="column"
                     padding="10"
