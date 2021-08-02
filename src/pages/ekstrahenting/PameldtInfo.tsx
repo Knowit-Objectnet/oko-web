@@ -5,23 +5,23 @@ import { usePartnere } from '../../services/partner/usePartnere';
 import { UtlysFlerePartnereButton } from './forms/UtlysFlerePartnereButton';
 
 interface Props {
-    henting: ApiEkstraHenting;
+    ekstraHenting: ApiEkstraHenting;
 }
 
-export const PameldtInfo: React.FC<Props> = ({ henting }) => {
+export const PameldtInfo: React.FC<Props> = ({ ekstraHenting }) => {
     const { data: allPartnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
 
     return (
         <>
-            {henting.godkjentUtlysning ? (
-                <Text>{henting.godkjentUtlysning.partnerNavn}</Text>
+            {ekstraHenting.godkjentUtlysning ? (
+                <Text>{ekstraHenting.godkjentUtlysning.partnerNavn}</Text>
             ) : (
                 <Flex justifyContent="space-between">
                     <Box marginRight="1">
                         <Text fontSize="sm" fontWeight="bold">
-                            {isLoading || isLoadingError || henting.utlysninger.length < allPartnere!.length
-                                ? `Utsendt til ${henting.utlysninger.length} ${
-                                      henting.utlysninger.length === 1 ? 'partner' : 'partnere'
+                            {isLoading || isLoadingError || ekstraHenting.utlysninger.length < allPartnere!.length
+                                ? `Utsendt til ${ekstraHenting.utlysninger.length} ${
+                                      ekstraHenting.utlysninger.length === 1 ? 'partner' : 'partnere'
                                   }`
                                 : `Utsendt til alle partnere`}
                         </Text>
@@ -29,8 +29,8 @@ export const PameldtInfo: React.FC<Props> = ({ henting }) => {
                             Ingen påmeldt
                         </Text>
                     </Box>
-                    {!isLoading && !isLoadingError && henting.utlysninger.length < allPartnere!.length ? (
-                        <UtlysFlerePartnereButton henting={henting} backgroundColor="White" borderRadius="6" />
+                    {!isLoading && !isLoadingError && ekstraHenting.utlysninger.length < allPartnere!.length ? (
+                        <UtlysFlerePartnereButton henting={ekstraHenting} backgroundColor="White" borderRadius="6" />
                     ) : null}
                 </Flex>
             )}

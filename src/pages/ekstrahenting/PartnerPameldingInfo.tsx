@@ -1,84 +1,55 @@
-import { Box, Text, Flex, Button, Icon, VStack } from '@chakra-ui/react';
+import { Box, Flex, Icon, Text, VStack } from '@chakra-ui/react';
 import * as React from 'react';
 import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
-import { usePartnerAcceptUtlysning } from '../../services/utlysning/usePartnerAcceptUtlysning';
-import { useSuccessToast } from '../../components/toasts/useSuccessToast';
-import { useErrorToast } from '../../components/toasts/useErrorToast';
-import { ApiError } from '../../services/httpClient';
 import Check from '../../assets/Check.svg';
-import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
-import { isAfter } from 'date-fns';
-import { colors } from '../../theme/foundations/colors';
+import { useAuth } from '../../auth/useAuth';
+import { hasEnded } from '../../utils/wrappedHentingHelpers';
+import { AcceptUtlysningButton } from './AcceptUtlysningButton';
 
 interface Props {
-    henting: ApiEkstraHenting;
-    partnerId: string;
+    ekstraHenting: ApiEkstraHenting;
 }
 
-export const PartnerPameldingInfo: React.FC<Props> = ({ henting, partnerId }) => {
-    const acceptUtlysningMutation = usePartnerAcceptUtlysning();
-    const showSuccessToast = useSuccessToast();
-    const showErrorToast = useErrorToast();
+export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
+    const { user } = useAuth();
 
-    const acceptUtlysning = (utlysningId: string) => {
-        acceptUtlysningMutation.mutate(
-            { id: utlysningId, toAccept: true },
-            {
-                onSuccess: () => {
-                    onApiSubmitSuccess('Utlysning godtatt!');
-                },
-                onError: onApiSubmitError,
-            },
-        );
-    };
+    const isPassed = hasEnded(ekstraHenting);
+    const noUserAccepted = !ekstraHenting.godkjentUtlysning;
+    const userCanAccept = !isPassed && noUserAccepted;
 
-    const onApiSubmitSuccess = (successMessage: string) => {
-        showSuccessToast({ title: successMessage });
-    };
+    const utgattMessage = (aarsak: string) => (
+        <VStack alignItems="flex-start">
+            <Text fontWeight="semibold">Beklager</Text>
+            <Text>{aarsak}</Text>
+        </VStack>
+    );
 
-    const onApiSubmitError = (error: ApiError) => {
-        showErrorToast({ title: error.message });
-    };
+    const getPameldingStatus = () => {
+        const thisUserAccepted =
+            ekstraHenting.godkjentUtlysning && user.ownsResource(ekstraHenting.godkjentUtlysning.partnerId);
+        const otherUserAccepted =
+            ekstraHenting.godkjentUtlysning && !user.ownsResource(ekstraHenting.godkjentUtlysning.partnerId);
+        const hasExpired = isPassed && !thisUserAccepted;
 
-    const getUtgatt = (): JSX.Element => {
-        return (
-            <VStack alignItems="left">
-                <Text fontWeight="semibold">Beklager</Text>
-                <Text> Du rakk ikke melde deg på.</Text>
-            </VStack>
-        );
-    };
+        if (hasExpired) {
+            return utgattMessage('Du rakk ikke melde deg på før ekstrahentingen var slutt');
+        }
 
-    const isPassed = () => {
-        return isAfter(Date.now(), parseISOIgnoreTimezone(henting.sluttTidspunkt));
-    };
+        if (otherUserAccepted) {
+            return utgattMessage('Noen andre har meldt seg på');
+        }
 
-    return (
-        <Box alignItems="center" justifyItems="stretch">
-            {isPassed() && henting.godkjentUtlysning?.partnerId !== partnerId ? getUtgatt() : null}
-
-            {henting.godkjentUtlysning?.partnerId === partnerId ? (
+        if (thisUserAccepted) {
+            return (
                 <Flex color="DarkGreen">
-                    <Icon marginRight="2" fill="DarkGreen">
-                        <Check />
-                    </Icon>
+                    <Icon as={Check} marginRight="2" fill="DarkGreen" />
                     <Text fontWeight="semibold">Meldt på</Text>
                 </Flex>
-            ) : null}
+            );
+        }
 
-            {!isPassed() && henting.godkjentUtlysning && henting.godkjentUtlysning.partnerId != partnerId
-                ? 'Noen andre har meldt seg på'
-                : null}
+        return null;
+    };
 
-            {!isPassed() && !henting.godkjentUtlysning ? (
-                <Button
-                    backgroundColor={colors.Green}
-                    color={colors.DarkBlue}
-                    onClick={() => acceptUtlysning(henting.utlysninger[0].id)}
-                >
-                    Meld på
-                </Button>
-            ) : null}
-        </Box>
-    );
+    return <Box>{userCanAccept ? <AcceptUtlysningButton ekstraHenting={ekstraHenting} /> : getPameldingStatus()}</Box>;
 };

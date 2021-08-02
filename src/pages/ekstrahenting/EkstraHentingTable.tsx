@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Accordion, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { KategoriList } from '../../components/KategoriList';
 import { useAuth } from '../../auth/useAuth';
 import { ApiEkstraHenting, ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
@@ -13,11 +13,6 @@ interface Props {
 
 export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger }) => {
     const { user } = useAuth();
-
-    let ekstraHentingParams: ApiEkstraHentingParams;
-    if (user.isStasjon) ekstraHentingParams = { stasjonId: user.aktorId };
-    // else if (user.isPartner) ekstraHentingParams = {} //TODO: Add possibility of getting only ones related to partner
-    else ekstraHentingParams = {};
 
     if (ekstraHentinger && ekstraHentinger?.length <= 0) {
         return <Text fontStyle="italic">Ingen registrerte ekstrahentinger</Text>;
@@ -34,29 +29,29 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger }) => {
                 </Tr>
             </Thead>
             <Tbody>
-                {ekstraHentinger?.map((henting) => (
+                {ekstraHentinger?.map((ekstraHenting) => (
                     <Tr
-                        key={henting.id}
+                        key={ekstraHenting.id}
                         backgroundColor="surface"
                         borderBottomWidth="16px"
                         borderBottomColor="background"
                     >
                         <Td>
-                            <Text fontWeight="bold">{henting.beskrivelse || 'Ingen merknad skrevet'} </Text>
+                            <Text fontWeight="bold">{ekstraHenting.beskrivelse || 'Ingen merknad skrevet'} </Text>
                         </Td>
                         <Td minWidth="56">
-                            <HentingTimeLocation henting={henting} />
+                            <HentingTimeLocation henting={ekstraHenting} />
                         </Td>
                         <Td>
                             <KategoriList
-                                kategorier={henting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
+                                kategorier={ekstraHenting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
                             />
                         </Td>
                         <Td>
                             {user.isPartner ? (
-                                <PartnerPameldingInfo henting={henting} partnerId={user.aktorId!} />
+                                <PartnerPameldingInfo ekstraHenting={ekstraHenting} />
                             ) : (
-                                <PameldtInfo henting={henting} />
+                                <PameldtInfo ekstraHenting={ekstraHenting} />
                             )}
                         </Td>
                     </Tr>

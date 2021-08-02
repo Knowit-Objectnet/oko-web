@@ -6,13 +6,13 @@ import { useAuth } from '../../../auth/useAuth';
 import { ApiEkstraHenting } from '../../../services/henting/EkstraHentingService';
 
 interface Props {
-    henting: ApiEkstraHenting;
+    ekstraHenting: ApiEkstraHenting;
 }
 
-export const DetailEkstraHentingPameldingInfo: React.FC<Props> = ({ henting }) => {
+export const DetailEkstraHentingPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
     const { user } = useAuth();
 
-    if (!henting.godkjentUtlysning || henting.godkjentUtlysning.partnerId !== user.aktorId) {
+    if (!ekstraHenting.godkjentUtlysning || ekstraHenting.godkjentUtlysning.partnerId !== user.aktorId) {
         return (
             <Flex backgroundColor={colors.White} height="auto" width="19rem" padding="1rem">
                 <VStack>
@@ -21,7 +21,7 @@ export const DetailEkstraHentingPameldingInfo: React.FC<Props> = ({ henting }) =
                         og henter ombruksvarene innenfor tidsintervallet.
                     </Text>
 
-                    <PartnerPameldingInfo henting={henting} partnerId={user.aktorId!} />
+                    <PartnerPameldingInfo ekstraHenting={ekstraHenting} />
                 </VStack>
             </Flex>
         );
