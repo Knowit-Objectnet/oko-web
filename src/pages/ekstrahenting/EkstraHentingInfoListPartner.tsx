@@ -37,10 +37,7 @@ export const EkstraHentingInfoListPartner: React.FC = () => {
     return (
         <Accordion allowToggle borderColor="transparent" allowMultiple>
             <EkstraHentingHeading ekstraHentinger={ikkePaameldteEkstraHentinger} label="Aktive ekstrahentinger" />
-            <EkstraHentingAccordion
-                ekstraHentinger={dineKommendeEkstraHentinger}
-                label="Dine kommende ekstrahentinger"
-            />
+            <EkstraHentingHeading ekstraHentinger={dineKommendeEkstraHentinger} label="Dine kommende ekstrahentinger" />
             <EkstraHentingAccordion ekstraHentinger={kanIkkeMeldePaaEkstraHentinger} label="Utgåtte ekstrahentinger" />
         </Accordion>
     );

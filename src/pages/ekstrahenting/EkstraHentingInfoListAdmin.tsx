@@ -12,8 +12,6 @@ import { EkstraHentingAccordion } from './EkstraHentingAccordion';
 export const EkstraHentingInfoListAdmin: React.FC = () => {
     const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning();
 
-    //const sortedEkstraHentinger = sortedEkstraHentingerByDato(ekstraHentinger ?? []);
-
     const [aktiveEkstraHentinger, tidligereEkstraHentinger] = partition<ApiEkstraHenting>(
         ekstraHentinger,
         (ekstraHenting) => isFuture(parseISOIgnoreTimezone(ekstraHenting.sluttTidspunkt)),

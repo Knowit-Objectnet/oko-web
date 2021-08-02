@@ -24,46 +24,44 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger }) => {
     }
 
     return (
-        <Accordion allowToggle>
-            <Table>
-                <Thead>
-                    <Tr>
-                        <Th scope="col">Beskrivelse</Th>
-                        <Th scope="col">Informasjon</Th>
-                        <Th scope="col">Kategorier</Th>
-                        <Th scope="col">{user.isPartner ? 'Påmelding' : 'Påmeldt'}</Th>
+        <Table>
+            <Thead>
+                <Tr>
+                    <Th scope="col">Beskrivelse</Th>
+                    <Th scope="col">Informasjon</Th>
+                    <Th scope="col">Kategorier</Th>
+                    <Th scope="col">{user.isPartner ? 'Påmelding' : 'Påmeldt'}</Th>
+                </Tr>
+            </Thead>
+            <Tbody>
+                {ekstraHentinger?.map((henting) => (
+                    <Tr
+                        key={henting.id}
+                        backgroundColor="surface"
+                        borderBottomWidth="16px"
+                        borderBottomColor="background"
+                    >
+                        <Td>
+                            <Text fontWeight="bold">{henting.beskrivelse || 'Ingen merknad skrevet'} </Text>
+                        </Td>
+                        <Td minWidth="56">
+                            <HentingTimeLocation henting={henting} />
+                        </Td>
+                        <Td>
+                            <KategoriList
+                                kategorier={henting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
+                            />
+                        </Td>
+                        <Td>
+                            {user.isPartner ? (
+                                <PartnerPameldingInfo henting={henting} partnerId={user.aktorId!} />
+                            ) : (
+                                <PameldtInfo henting={henting} />
+                            )}
+                        </Td>
                     </Tr>
-                </Thead>
-                <Tbody>
-                    {ekstraHentinger?.map((henting) => (
-                        <Tr
-                            key={henting.id}
-                            backgroundColor="surface"
-                            borderBottomWidth="16px"
-                            borderBottomColor="background"
-                        >
-                            <Td>
-                                <Text fontWeight="bold">{henting.beskrivelse || 'Ingen merknad skrevet'} </Text>
-                            </Td>
-                            <Td minWidth="56">
-                                <HentingTimeLocation henting={henting} />
-                            </Td>
-                            <Td>
-                                <KategoriList
-                                    kategorier={henting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
-                                />
-                            </Td>
-                            <Td>
-                                {user.isPartner ? (
-                                    <PartnerPameldingInfo henting={henting} partnerId={user.aktorId!} />
-                                ) : (
-                                    <PameldtInfo henting={henting} />
-                                )}
-                            </Td>
-                        </Tr>
-                    ))}
-                </Tbody>
-            </Table>
-        </Accordion>
+                ))}
+            </Tbody>
+        </Table>
     );
 };
