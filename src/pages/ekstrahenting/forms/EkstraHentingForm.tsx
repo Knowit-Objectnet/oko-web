@@ -90,7 +90,7 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
     const addEkstraHenting = (newHenting: ApiEkstraHentingPost) =>
         addEkstraHentingMutation.mutate(newHenting, {
             onSuccess: () => {
-                onApiSubmitSuccess(`Hentingen ble registrert`);
+                onApiSubmitSuccess(`Ekstrahentingen ble registrert`);
             },
             onError: onApiSubmitError,
         });

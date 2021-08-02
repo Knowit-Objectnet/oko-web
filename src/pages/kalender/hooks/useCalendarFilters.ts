@@ -1,4 +1,3 @@
-import { ApiPlanlagtHenting } from '../../../services/henting/PlanlagtHentingService';
 import { useEffect, useState } from 'react';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { useAuth } from '../../../auth/useAuth';
