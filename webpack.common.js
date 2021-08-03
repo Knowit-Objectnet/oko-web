@@ -16,6 +16,11 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.ts(x?)$/,
+                loader: 'ts-loader',
+                exclude: /node_modules/,
+            },
+            {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
             },
@@ -31,7 +36,7 @@ module.exports = {
     },
     plugins: [
         // Uncomment next line to run bundle analytics on build/run (https://www.npmjs.com/package/webpack-bundle-analyzer)
-        // new BundleAnalyzerPlugin(),
+        new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'public', 'index.html'),
         }),
