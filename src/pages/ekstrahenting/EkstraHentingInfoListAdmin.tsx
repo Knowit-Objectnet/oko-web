@@ -10,7 +10,7 @@ import { EkstraHentingHeading } from './EkstraHentingHeading';
 import { EkstraHentingAccordion } from './EkstraHentingAccordion';
 
 export const EkstraHentingInfoListAdmin: React.FC = () => {
-    const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning();
+    const { data: ekstraHentinger, isLoading, isError } = useEkstraHentingerWithUtlysning();
 
     const [aktiveEkstraHentinger, tidligereEkstraHentinger] = partition<ApiEkstraHenting>(
         ekstraHentinger,
@@ -21,10 +21,17 @@ export const EkstraHentingInfoListAdmin: React.FC = () => {
 
     return (
         <Accordion allowToggle borderColor="transparent" allowMultiple>
-            <EkstraHentingHeading ekstraHentinger={sortedAktiveEkstraHentinger} label="Aktive ekstrahentinger" />
+            <EkstraHentingHeading
+                ekstraHentinger={sortedAktiveEkstraHentinger}
+                label="Aktive ekstrahentinger"
+                isLoading={isLoading}
+                isError={isError}
+            />
             <EkstraHentingAccordion
                 ekstraHentinger={sortedTidligereEkstraHentinger}
                 label="Tidligere ekstrahentinger"
+                isLoading={isLoading}
+                isError={isError}
             />
         </Accordion>
     );

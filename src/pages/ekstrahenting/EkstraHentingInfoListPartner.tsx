@@ -13,7 +13,11 @@ import { sortedEkstraHentingerByDatoDesc } from './EkstraHentingSortedInfo';
 export const EkstraHentingInfoListPartner: React.FC = () => {
     const { user } = useAuth();
 
-    const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning({
+    const {
+        data: ekstraHentinger,
+        isLoading,
+        isError,
+    } = useEkstraHentingerWithUtlysning({
         after: dateTimeToStringIgnoreTimezone(startOfToday()),
     });
 
@@ -36,9 +40,24 @@ export const EkstraHentingInfoListPartner: React.FC = () => {
 
     return (
         <Accordion allowToggle borderColor="transparent" allowMultiple>
-            <EkstraHentingHeading ekstraHentinger={ikkePaameldteEkstraHentinger} label="Aktive ekstrahentinger" />
-            <EkstraHentingHeading ekstraHentinger={dineKommendeEkstraHentinger} label="Dine kommende ekstrahentinger" />
-            <EkstraHentingAccordion ekstraHentinger={kanIkkeMeldePaaEkstraHentinger} label="Utgåtte ekstrahentinger" />
+            <EkstraHentingHeading
+                ekstraHentinger={ikkePaameldteEkstraHentinger}
+                label="Aktive ekstrahentinger"
+                isLoading={isLoading}
+                isError={isError}
+            />
+            <EkstraHentingHeading
+                ekstraHentinger={dineKommendeEkstraHentinger}
+                label="Dine kommende ekstrahentinger"
+                isLoading={isLoading}
+                isError={isError}
+            />
+            <EkstraHentingAccordion
+                ekstraHentinger={kanIkkeMeldePaaEkstraHentinger}
+                label="Utgåtte ekstrahentinger"
+                isLoading={isLoading}
+                isError={isError}
+            />
         </Accordion>
     );
 };

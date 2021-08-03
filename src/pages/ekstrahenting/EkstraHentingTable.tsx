@@ -2,17 +2,27 @@ import * as React from 'react';
 import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { KategoriList } from '../../components/KategoriList';
 import { useAuth } from '../../auth/useAuth';
-import { ApiEkstraHenting, ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
+import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
 import { PameldtInfo } from './PameldtInfo';
 import { PartnerPameldingInfo } from './PartnerPameldingInfo';
 import { HentingTimeLocation } from '../../components/henting/HentingTimeLocation';
+import { HentingListLoading } from '../../components/henting/HentingListLoading';
 
 interface Props {
     ekstraHentinger: Array<ApiEkstraHenting>;
+    isLoading: boolean;
+    isError: boolean;
 }
 
-export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger }) => {
+export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading, isError }) => {
     const { user } = useAuth();
+
+    if (isLoading) {
+        return <HentingListLoading />;
+    }
+    if (isError) {
+        return <Text>Beklager, klarte ikke å laste ekstrahentinger.</Text>;
+    }
 
     if (ekstraHentinger && ekstraHentinger?.length <= 0) {
         return <Text fontStyle="italic">Ingen registrerte ekstrahentinger</Text>;

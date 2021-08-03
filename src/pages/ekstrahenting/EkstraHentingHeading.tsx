@@ -8,9 +8,11 @@ import { AddEkstraHentingButton } from './forms/AddEkstraHentingButton';
 interface Props {
     ekstraHentinger: Array<ApiEkstraHenting>;
     label: string;
+    isLoading: boolean;
+    isError: boolean;
 }
 
-export const EkstraHentingHeading: React.FC<Props> = ({ ekstraHentinger, label }) => {
+export const EkstraHentingHeading: React.FC<Props> = ({ ekstraHentinger, label, isLoading, isError }) => {
     const { user } = useAuth();
     return (
         <>
@@ -28,7 +30,7 @@ export const EkstraHentingHeading: React.FC<Props> = ({ ekstraHentinger, label }
                 ) : null}
             </Flex>
             <Box width="full" overflowX="auto" marginBottom="12">
-                <EkstraHentingTable ekstraHentinger={ekstraHentinger} />
+                <EkstraHentingTable ekstraHentinger={ekstraHentinger} isLoading={isLoading} isError={isError} />
             </Box>
         </>
     );
