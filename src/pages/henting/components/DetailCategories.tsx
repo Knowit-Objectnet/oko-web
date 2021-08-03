@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ApiHenting } from '../../../services/henting/HentingService';
-import { KategoriList } from '../../../components/KategoriList';
+import { KategoriList } from '../../../components/kategorier/KategoriList';
 import { DetailWithLabel } from '../../../components/henting/DetailWithLabel';
 
 interface Props {

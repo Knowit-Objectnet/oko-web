@@ -9,7 +9,7 @@ import { useAuth } from '../../../auth/useAuth';
 import { EditHenteplanButton } from './EditHenteplanButton';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
-import { KategoriList } from '../../../components/KategoriList';
+import { KategoriList } from '../../../components/kategorier/KategoriList';
 
 const FREKVENS: Record<HenteplanFrekvens, string> = {
     ENKELT: 'Én gang',
