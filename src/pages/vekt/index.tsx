@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import { Heading, VStack } from '@chakra-ui/react';
-import { Flex } from '@chakra-ui/layout';
 import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
@@ -10,7 +9,6 @@ import { partition } from 'lodash';
 import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { HentingVektList } from './components/HentingVektList';
 import { hasVektregistrering, isValidForVektregistrering } from '../../utils/wrappedHentingHelpers';
-import { HentingVektListWrapper } from './components/HentingVektListWrapper';
 
 export const HentingerVektSection: React.FC = ({ children }) => (
     <VStack as="section" spacing="5" width="full" alignItems="flex-start">
@@ -19,7 +17,7 @@ export const HentingerVektSection: React.FC = ({ children }) => (
 );
 
 export const HentingerVektHeader: React.FC = ({ children }) => (
-    <Heading as="h2" fontSize="1.5rem" fontWeight="bold">
+    <Heading as="h2" fontWeight="normal" fontSize="3xl">
         {children}
     </Heading>
 );
@@ -60,33 +58,30 @@ const Vekt: React.FC = () => {
             <Helmet>
                 <title>Vekt</title>
             </Helmet>
-            <Flex
+            <VStack
                 as="main"
-                direction="column"
                 paddingY="10"
                 paddingX={{ base: '6', desktop: '10' }}
                 marginX="auto"
                 width={{ base: 'full', xl: '90%' }}
                 maxWidth={{ base: 'full', desktop: 'container.xl' }}
+                spacing="10"
+                alignItems="flex-start"
             >
-                <Heading width="full" as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
-                    Vektregistrering
-                </Heading>
-                <VStack spacing="8" alignItems="flex-start">
-                    <HentingerVektSection>
-                        <HentingerVektHeader>Hentinger som mangler vekt</HentingerVektHeader>
-                        <HentingVektListWrapper isLoading={isLoading} isError={isError}>
-                            <HentingVektList missingVekt hentinger={hentingerMissingVekt} />
-                        </HentingVektListWrapper>
-                    </HentingerVektSection>
-                    <HentingerVektSection>
-                        <HentingerVektHeader>Tidligere vektregistreringer </HentingerVektHeader>
-                        <HentingVektListWrapper isLoading={isLoading} isError={isError}>
-                            <HentingVektList hentinger={hentingerWithVekt} />
-                        </HentingVektListWrapper>
-                    </HentingerVektSection>
-                </VStack>
-            </Flex>
+                <HentingerVektSection>
+                    <HentingerVektHeader>Hentinger som mangler vekt</HentingerVektHeader>
+                    <HentingVektList
+                        missingVekt
+                        hentinger={hentingerMissingVekt}
+                        isError={isError}
+                        isLoading={isLoading}
+                    />
+                </HentingerVektSection>
+                <HentingerVektSection>
+                    <HentingerVektHeader>Tidligere vektregistreringer</HentingerVektHeader>
+                    <HentingVektList hentinger={hentingerWithVekt} isError={isError} isLoading={isLoading} />
+                </HentingerVektSection>
+            </VStack>
         </>
     );
 };
