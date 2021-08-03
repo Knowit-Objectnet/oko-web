@@ -9,7 +9,7 @@ import { compareDesc, endOfToday, subMonths } from 'date-fns';
 import { partition } from 'lodash';
 import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { HentingVektList } from './components/HentingVektList';
-import { isMissingVekt, isNotInFuture, isValidForVektregistrering } from '../../utils/wrappedHentingHelpers';
+import { hasVektregistrering, isValidForVektregistrering } from '../../utils/wrappedHentingHelpers';
 import { HentingVektListWrapper } from './components/HentingVektListWrapper';
 
 export const HentingerVektSection: React.FC = ({ children }) => (
@@ -42,7 +42,7 @@ const Vekt: React.FC = () => {
     });
 
     const sortedHentinger = hentinger
-        ?.filter((henting) => isValidForVektregistrering(henting) && isNotInFuture(henting))
+        ?.filter(isValidForVektregistrering)
         .sort((hentingA, hentingB) =>
             compareDesc(
                 parseISOIgnoreTimezone(hentingA.startTidspunkt),
@@ -50,7 +50,10 @@ const Vekt: React.FC = () => {
             ),
         );
 
-    const [hentingerMissingVekt, hentingerWithVekt] = partition<ApiHentingWrapper>(sortedHentinger, isMissingVekt);
+    const [hentingerWithVekt, hentingerMissingVekt] = partition<ApiHentingWrapper>(
+        sortedHentinger,
+        hasVektregistrering,
+    );
 
     return (
         <>

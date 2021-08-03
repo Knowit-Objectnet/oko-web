@@ -7,9 +7,11 @@ import {
     patchUtlysningPartnerAccept,
     utlysningDefaultQueryKey,
 } from './UtlysningService';
+import { ekstraHentingDefaultQueryKey } from '../henting/EkstraHentingService';
+import { hentingDefaultQueryKey } from '../henting/HentingService';
 
 export const usePartnerAcceptUtlysning = (): UseMutationResult<ApiUtlysning, ApiError, ApiUtlysningPartnerAccept> =>
     useMutationWithInvalidation<ApiUtlysning, ApiError, ApiUtlysningPartnerAccept>(
         (utlysningAccept) => patchUtlysningPartnerAccept(utlysningAccept),
-        [utlysningDefaultQueryKey],
+        [utlysningDefaultQueryKey, ekstraHentingDefaultQueryKey, hentingDefaultQueryKey],
     );

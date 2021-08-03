@@ -24,7 +24,7 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
                     <DetailCategories henting={henting.planlagtHenting || henting.ekstraHenting} />
                 </VStack>
                 {henting.ekstraHenting && user.isPartner ? (
-                    <DetailEkstraHentingPameldingInfo henting={henting.ekstraHenting} />
+                    <DetailEkstraHentingPameldingInfo ekstraHenting={henting.ekstraHenting} />
                 ) : null}
             </HStack>
         </>

@@ -85,7 +85,7 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
     const batchAddUtlysning = (newUtlysninger: ApiUtlysningBatchPost) => {
         batchAddUtlysningMutation.mutate(newUtlysninger, {
             onSuccess: () => {
-                onApiSubmitSuccess('Utlysningene gjennomført');
+                onApiSubmitSuccess(`Utlysning ble sendt til nye partnere`);
             },
             onError: onApiSubmitError,
         });
@@ -99,7 +99,7 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
     const onApiSubmitError = (error: ApiError) => {
         // TODO: get details from error and set appropriate message.
         //  If caused by user: set message to correct field
-        setApiOrNetworkError('Uffda, noe gikk galt ved registreringen. Vennligst prøv igjen.');
+        setApiOrNetworkError('Uffda, noe gikk galt ved utlysningen. Vennligst prøv igjen.');
     };
 
     const utlysningsSelect = formMethods.watch('utlysningSelect');
