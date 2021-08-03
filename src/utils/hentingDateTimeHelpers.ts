@@ -1,5 +1,4 @@
 import { format, formatISO } from 'date-fns';
-import { ApiHenting } from '../services/henting/HentingService';
 
 //TODO: This is done to circumvent issues regarding daylight saving. This might need a more robust solution.
 // It effectively makes it so Date fields are read as strings, with no regards to time zones.
@@ -27,9 +26,3 @@ export const dateTimeToStringIgnoreTimezone = (dateTime: Date): string =>
 
 export const getDateStringFromISOString = (ISOdate: string): string => ISOdate.slice(0, 10);
 export const getTimeStringFromISOString = (ISOdate: string): string => ISOdate.slice(11, 16);
-
-export const hentingStarted = (henting: ApiHenting | undefined): boolean => {
-    const today = new Date();
-    if (parseISOIgnoreTimezone(henting?.startTidspunkt || '') > today) return false;
-    return true;
-};
