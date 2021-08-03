@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { BadgeDetail } from './BadgeDetail';
-import { hentingStarted, parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 import { RegisterVektButton } from './RegisterVektButton';
 import { colors } from '../../../theme/foundations/colors';
 import Check from '../../../assets/Check.svg';

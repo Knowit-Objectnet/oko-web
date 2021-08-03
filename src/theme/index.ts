@@ -10,6 +10,7 @@ import { typography } from './foundations/typography';
 import { Button } from './components/button';
 import { Modal } from './components/modal';
 import { Alert } from './components/alert';
+import { Spinner } from './components/spinner';
 import { Tag } from './components/tag';
 import { Form } from './components/form';
 import { FormLabel } from './components/form-label';
@@ -33,6 +34,7 @@ const overrides = {
         Button,
         Modal,
         Alert,
+        Spinner,
         Tag,
         Form,
         FormLabel,
@@ -48,5 +50,4 @@ const overrides = {
 
 export const theme = {
     ...extendTheme(overrides),
-    // TODO: colors, // Overriding all colors except our own
 };
