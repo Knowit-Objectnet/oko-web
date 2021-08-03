@@ -36,7 +36,7 @@ module.exports = {
     },
     plugins: [
         // Uncomment next line to run bundle analytics on build/run (https://www.npmjs.com/package/webpack-bundle-analyzer)
-        new BundleAnalyzerPlugin(),
+        // new BundleAnalyzerPlugin(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'public', 'index.html'),
         }),
