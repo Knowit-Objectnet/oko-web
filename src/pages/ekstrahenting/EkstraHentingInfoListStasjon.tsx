@@ -6,11 +6,22 @@ import { EkstraHentingHeading } from './EkstraHentingHeading';
 import { sortedEkstraHentingerByDatoDesc } from './EkstraHentingSortedInfo';
 
 export const EkstraHentingInfoListStasjon: React.FC = () => {
-    const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning({
+    const {
+        data: ekstraHentinger,
+        isLoading,
+        isError,
+    } = useEkstraHentingerWithUtlysning({
         after: dateTimeToStringIgnoreTimezone(startOfToday()),
     });
 
     const sortedEkstraHentinger = sortedEkstraHentingerByDatoDesc(ekstraHentinger ?? []);
 
-    return <EkstraHentingHeading ekstraHentinger={sortedEkstraHentinger} label="Aktive ekstrahentinger" />;
+    return (
+        <EkstraHentingHeading
+            ekstraHentinger={sortedEkstraHentinger}
+            label="Aktive ekstrahentinger"
+            isLoading={isLoading}
+            isError={isError}
+        />
+    );
 };

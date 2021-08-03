@@ -7,9 +7,11 @@ import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
 interface Props {
     ekstraHentinger: Array<ApiEkstraHenting>;
     label: string;
+    isLoading: boolean;
+    isError: boolean;
 }
 
-export const EkstraHentingAccordion: React.FC<Props> = ({ ekstraHentinger, label }) => {
+export const EkstraHentingAccordion: React.FC<Props> = ({ ekstraHentinger, label, isLoading, isError }) => {
     return (
         <>
             <AccordionItem>
@@ -35,7 +37,11 @@ export const EkstraHentingAccordion: React.FC<Props> = ({ ekstraHentinger, label
                         </Heading>
 
                         <AccordionPanel padding="0">
-                            <EkstraHentingTable ekstraHentinger={ekstraHentinger} />
+                            <EkstraHentingTable
+                                ekstraHentinger={ekstraHentinger}
+                                isLoading={isLoading}
+                                isError={isError}
+                            />
                         </AccordionPanel>
                     </Flex>
                 )}
