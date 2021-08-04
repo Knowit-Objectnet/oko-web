@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useAarsaker } from '../../services/aarsak/useAarsaker';
-import { CheckboxGroupSkeleton } from './checkbox/CheckboxGroupSkeleton';
+import { ListSkeleton } from './checkbox/ListSkeleton';
 import { FormFieldProps } from './FormField';
 import { RadiobuttonGroup, RadioOption } from './RadiobuttonGroup';
 import { WarningBody, WarningContainer, WarningTitle } from './Warning';
@@ -10,7 +10,7 @@ export const AarsakSelect: React.FC<FormFieldProps> = ({ name, ...props }) => {
 
     const getLoadingPlaceholder = (): React.ReactNode => {
         if (isLoading) {
-            return <CheckboxGroupSkeleton loadingText="Laster inn avlysningsårsaker..." />;
+            return <ListSkeleton loadingText="Laster inn avlysningsårsaker..." />;
         }
         if (isLoadingError) {
             return (

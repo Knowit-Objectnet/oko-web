@@ -69,8 +69,8 @@ export const useCalendarEvents = (): CalendarEvent[] => {
     const { selectedView, selectedDate, filters } = useCalendarState();
     const [partnerColors, setPartnerColors] = useState<Record<string, string>>({});
     const [stasjonColors, setStasjonColors] = useState<Record<string, string>>({});
-    const { data: partnere, isSuccess: partnerSuccess } = usePartnere({ queryOptions: { keepPreviousData: true } });
-    const { data: stasjoner, isSuccess: stasjonSuccess } = useStasjoner({ queryOptions: { keepPreviousData: true } });
+    const { data: partnere, isSuccess: partnerSuccess } = usePartnere();
+    const { data: stasjoner, isSuccess: stasjonSuccess } = useStasjoner();
 
     useEffect(() => {
         if (partnerSuccess) {
