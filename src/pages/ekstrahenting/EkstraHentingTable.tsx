@@ -2,24 +2,30 @@ import * as React from 'react';
 import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { KategoriList } from '../../components/KategoriList';
 import { useAuth } from '../../auth/useAuth';
-import { ApiEkstraHentingParams } from '../../services/henting/EkstraHentingService';
-import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
+import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
 import { PameldtInfo } from './PameldtInfo';
 import { PartnerPameldingInfo } from './PartnerPameldingInfo';
 import { HentingTimeLocation } from '../../components/henting/HentingTimeLocation';
+import { HentingListLoading } from '../../components/henting/HentingListLoading';
 
-export const EkstraHentingTable: React.FC = () => {
+interface Props {
+    ekstraHentinger: Array<ApiEkstraHenting>;
+    isLoading: boolean;
+    isError: boolean;
+}
+
+export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading, isError }) => {
     const { user } = useAuth();
 
-    let ekstraHentingParams: ApiEkstraHentingParams;
-    if (user.isStasjon) ekstraHentingParams = { stasjonId: user.aktorId };
-    // else if (user.isPartner) ekstraHentingParams = {} //TODO: Add possibility of getting only ones related to partner
-    else ekstraHentingParams = {};
-
-    const { data: ekstraHentinger } = useEkstraHentingerWithUtlysning({});
+    if (isLoading) {
+        return <HentingListLoading />;
+    }
+    if (isError) {
+        return <Text>Beklager, klarte ikke å laste ekstrahentinger.</Text>;
+    }
 
     if (ekstraHentinger && ekstraHentinger?.length <= 0) {
-        return <Text>Ingen registrerte ekstrahentinger</Text>;
+        return <Text fontStyle="italic">Ingen registrerte ekstrahentinger</Text>;
     }
 
     return (
@@ -33,29 +39,29 @@ export const EkstraHentingTable: React.FC = () => {
                 </Tr>
             </Thead>
             <Tbody>
-                {ekstraHentinger?.map((henting) => (
+                {ekstraHentinger?.map((ekstraHenting) => (
                     <Tr
-                        key={henting.id}
+                        key={ekstraHenting.id}
                         backgroundColor="surface"
                         borderBottomWidth="16px"
                         borderBottomColor="background"
                     >
                         <Td>
-                            <Text fontWeight="bold">{henting.beskrivelse || 'Ingen merknad skrevet'} </Text>
+                            <Text fontWeight="bold">{ekstraHenting.beskrivelse || 'Ingen merknad skrevet'} </Text>
                         </Td>
                         <Td minWidth="56">
-                            <HentingTimeLocation henting={henting} />
+                            <HentingTimeLocation henting={ekstraHenting} />
                         </Td>
                         <Td>
                             <KategoriList
-                                kategorier={henting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
+                                kategorier={ekstraHenting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
                             />
                         </Td>
                         <Td>
                             {user.isPartner ? (
-                                <PartnerPameldingInfo henting={henting} partnerId={user.aktorId!} />
+                                <PartnerPameldingInfo ekstraHenting={ekstraHenting} />
                             ) : (
-                                <PameldtInfo henting={henting} />
+                                <PameldtInfo ekstraHenting={ekstraHenting} />
                             )}
                         </Td>
                     </Tr>

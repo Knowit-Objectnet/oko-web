@@ -1,5 +1,3 @@
-import { ApiPartner } from '../services/partner/PartnerService';
-import { ApiStasjon } from '../services/stasjon/StasjonService';
 import { colors } from '../theme/foundations/colors';
 
 export const getGradientColors = (list?: { id: string }[]) => {

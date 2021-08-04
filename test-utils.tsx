@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, RenderOptions, RenderResult } from '@testing-library/react';
 import { theme } from './src/theme';
-import ModalProvider from './src/components/_deprecated/modal/Provider';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import { mocked } from 'ts-jest/utils';
@@ -24,9 +23,7 @@ const queryClient = new QueryClient();
 const GlobalProviders: React.FC = ({ children }) => {
     return (
         <ChakraProvider theme={theme}>
-            <QueryClientProvider client={queryClient}>
-                <ModalProvider>{children}</ModalProvider>
-            </QueryClientProvider>
+            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
         </ChakraProvider>
     );
 };

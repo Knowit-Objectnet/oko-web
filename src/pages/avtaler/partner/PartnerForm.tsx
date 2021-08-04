@@ -13,10 +13,10 @@ import { ApiPartner, ApiPartnerPatch, ApiPartnerPost } from '../../../services/p
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useUpdatePartner } from '../../../services/partner/useUpdatePartner';
 import { ApiError } from '../../../services/httpClient';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 const organisasjonTypeOptions: Array<RadioOption<string>> = [
     { value: 'true', label: 'Ja' },
@@ -67,7 +67,7 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
             navn: formData.navn,
             ideell: formData.organisasjonstype === 'true',
         };
-        console.log(partner);
+
         if (partnerToEdit) {
             updatePartner({
                 id: partnerToEdit.id,

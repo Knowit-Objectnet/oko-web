@@ -84,16 +84,6 @@ The cache (contained in a `QueryClient` instance) has utility methods (like `inv
 
 ### User interface
 
-> The prototype used [styled-components](https://styled-components.com/) to create the visual appearance of components.
-> For the MVP and final product, the project will be migrated to `Chakra UI` (and `emotion`, when absolutely necessary)
-> 
-> **NOTE:** Many of the deprecated components rely on a `theme` provided by a `<ThemeProvider>`. This has been removed from
-> `App.tsx`. If the need arises for rendering some of these components, the app must be wrapped in this provider, with 
-> the theme from `/theme/_deprecated/oldTheme.ts`
-
-
-#### Chakra UI
-
 [Chakra UI](https://chakra-ui.com/) is chosen as the underlying UI component library, which is based on the following benefits:
 
 * Provides common components with base functionality (layout/container elements, form elements, modals, alerts, etc.)
@@ -122,9 +112,6 @@ The cache (contained in a `QueryClient` instance) has utility methods (like `inv
 * To customize the styling of predefined library components, we're using [the theme system](https://chakra-ui.com/docs/theming/component-style) 
   (if possible). Theme files are located in the `theme` folder. 
 
-> Chakra UI relies on [`emotion`](https://emotion.sh/docs/introduction) and [`framer/motion`](https://www.framer.com/motion/).
-> If necessary, these libraries can be used (rather than `styled-components` and `react-transition-group`).
-
 #### Forms 
 
 * [React Hook Form](https://react-hook-form.com/) for keeping track of form state.
@@ -141,7 +128,6 @@ The cache (contained in a `QueryClient` instance) has utility methods (like `inv
 * [Jest](https://jestjs.io/): testing framework
 * `ts-jest`: [transforms `.ts` and `.tsx` test files to CommonJS](https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#the-presets) so that Jest can run them. Also provides a [`mocked()` test helper function](https://kulshekhar.github.io/ts-jest/docs/guides/test-helpers#mockedtitem-t-deep--false) for fixing typing issues with mocks.
 * [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and [jest-dom](https://github.com/testing-library/jest-dom)
-* [Axios Mock Adapter](https://www.npmjs.com/package/axios-mock-adapter) ([should probably be replaced with Mock Service Worker](https://testing-library.com/docs/react-testing-library/example-intro/))
 
 #### Linting / code formatting
 

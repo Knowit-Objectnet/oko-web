@@ -90,7 +90,9 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
     const addEkstraHenting = (newHenting: ApiEkstraHentingPost) =>
         addEkstraHentingMutation.mutate(newHenting, {
             onSuccess: () => {
-                onApiSubmitSuccess(`Hentingen ble registrert`);
+                onApiSubmitSuccess(
+                    'Ekstrahentingen ble registrert, og varsel om utlysning er sendt til valgte partnere',
+                );
             },
             onError: onApiSubmitError,
         });
@@ -150,7 +152,7 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
                     <FormSubmitButton
                         label="Registrer ny ekstrahenting"
                         isLoading={addEkstraHentingMutation.isLoading}
-                        loadingText="Lagrer..."
+                        loadingText="Registrerer..."
                     />
                 </Stack>
             </form>
