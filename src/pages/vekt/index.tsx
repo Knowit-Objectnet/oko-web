@@ -69,8 +69,8 @@ const Vekt: React.FC = () => {
                 spacing="10"
                 alignItems="flex-start"
             >
-                <HStack>
-                    <Heading width="full" as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
+                <HStack width="full" justifyContent="space-between">
+                    <Heading as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
                         Vektregistrering
                     </Heading>
                     {user.isAdmin ? <DownloadStatisticsButton /> : null}
