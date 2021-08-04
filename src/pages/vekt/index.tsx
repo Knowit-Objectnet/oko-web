@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Heading, VStack } from '@chakra-ui/react';
+import { Heading, HStack, VStack } from '@chakra-ui/react';
 import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
@@ -8,6 +8,7 @@ import { compareDesc, endOfToday, subMonths } from 'date-fns';
 import { partition } from 'lodash';
 import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { HentingVektList } from './components/HentingVektList';
+import { DownloadStatisticsButton } from './components/DownloadStatisticsButton';
 import { hasVektregistrering, isValidForVektregistrering } from '../../utils/wrappedHentingHelpers';
 
 export const HentingerVektSection: React.FC = ({ children }) => (
@@ -68,6 +69,12 @@ const Vekt: React.FC = () => {
                 spacing="10"
                 alignItems="flex-start"
             >
+                <HStack width="full" justifyContent="space-between">
+                    <Heading as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
+                        Vektregistrering
+                    </Heading>
+                    {user.isAdmin ? <DownloadStatisticsButton /> : null}
+                </HStack>
                 <HentingerVektSection>
                     <HentingerVektHeader>Hentinger som mangler vekt</HentingerVektHeader>
                     <HentingVektList
