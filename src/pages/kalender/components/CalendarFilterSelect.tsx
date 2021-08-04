@@ -2,22 +2,26 @@ import * as React from 'react';
 import { useState } from 'react';
 import { useCalendarState } from '../CalendarProvider';
 import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
-import { CheckboxGroup, Flex, Text } from '@chakra-ui/react';
+import { CheckboxGroup, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { ApiStasjon } from '../../../services/stasjon/StasjonService';
 import { CalendarFilterFn } from '../hooks/useCalendarFilters';
 import { ListSkeleton } from '../../../components/forms/checkbox/ListSkeleton';
+import { UseQueryResult } from 'react-query';
+import { Box } from '@chakra-ui/layout';
+import Filter from '../../../assets/Filter.svg';
 
 interface Props {
-    title: string;
-    name: 'stasjonFilter' | 'partnerFilter';
-    data: Array<ApiPartner> | Array<ApiStasjon> | undefined;
-    isLoading?: boolean;
-    isError?: boolean;
-    filterFn: (aktorIds: Array<string>) => CalendarFilterFn;
+    labels: {
+        title: string;
+        error: string;
+    };
+    name: string;
+    query: UseQueryResult<Array<ApiPartner> | Array<ApiStasjon>>;
+    filterFnFactory: (aktorIds: Array<string>) => CalendarFilterFn;
 }
 
-export const CalendarFilterSelect: React.FC<Props> = ({ title, name, data, isLoading, isError, filterFn }) => {
+export const CalendarFilterSelect: React.FC<Props> = ({ labels, name, query, filterFnFactory }) => {
     const { setFilter, clearFilter } = useCalendarState();
     const [selectedAktorIds, setSelectedAktorIds] = useState<Array<string>>([]);
 
@@ -27,7 +31,8 @@ export const CalendarFilterSelect: React.FC<Props> = ({ title, name, data, isLoa
         if (checkboxValues.length === 0) {
             clearFilter(name);
         } else {
-            setFilter(name, filterFn(checkboxValues));
+            const filterFn = filterFnFactory(checkboxValues);
+            setFilter(name, filterFn);
         }
     };
 
@@ -39,17 +44,17 @@ export const CalendarFilterSelect: React.FC<Props> = ({ title, name, data, isLoa
     };
 
     const getCheckboxes = () => {
-        if (isLoading) {
+        if (query.isLoading) {
             return <ListSkeleton />;
         }
-        if (isError) {
-            return <Text>Klarte ikke å hente</Text>;
+        if (query.isLoadingError) {
+            return <Text>{labels.error}</Text>;
         }
-        if (data) {
+        if (query.data) {
             return (
                 <>
                     <CheckboxGroup onChange={handleSelectionChange} value={selectedAktorIds}>
-                        {data.map((aktor) => (
+                        {query.data.map((aktor) => (
                             <Checkbox key={aktor.id} name={name} value={aktor.id} label={aktor.navn} />
                         ))}
                     </CheckboxGroup>
@@ -66,11 +71,16 @@ export const CalendarFilterSelect: React.FC<Props> = ({ title, name, data, isLoa
     };
 
     return (
-        <Flex as="form" flexDirection="column" justifyContent="center">
-            <Flex as="fieldset" flexDirection="column" alignItems="flex-start" justifyContent="center">
-                <Text as="legend">{title}</Text>
+        <Box as="form" width="full">
+            <VStack as="fieldset" alignItems="flex-start" width="full" spacing="0">
+                <HStack paddingBottom="2" paddingLeft="1.5">
+                    <Icon as={Filter} aria-hidden boxSize="1.2rem" />
+                    <Text as="legend" fontWeight="medium" fontSize="lg">
+                        {labels.title}
+                    </Text>
+                </HStack>
                 {getCheckboxes()}
-            </Flex>
-        </Flex>
+            </VStack>
+        </Box>
     );
 };

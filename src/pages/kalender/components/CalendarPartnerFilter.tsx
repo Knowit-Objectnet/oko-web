@@ -4,23 +4,25 @@ import { CalendarFilterSelect } from './CalendarFilterSelect';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { partnerHasUtlysning } from '../../../utils/ekstraHentingHelpers';
 
+const partnerFilterFnFactory = (partnerIds: Array<string>) => {
+    return (henting: ApiHentingWrapper) =>
+        partnerIds.some((partnerId) => {
+            const partnerOwnsHenting = henting.aktorId === partnerId;
+            const partnerCanAcceptEkstrahenting =
+                !henting.ekstraHenting?.godkjentUtlysning && partnerHasUtlysning(henting.ekstraHenting, partnerId);
+            return partnerOwnsHenting || partnerCanAcceptEkstrahenting;
+        });
+};
+
 export const CalendarPartnerFilter: React.FC = () => {
-    const { data: partnere, isLoading, isError } = usePartnere();
+    const partnerQuery = usePartnere();
 
     return (
         <CalendarFilterSelect
-            title="Velg enkelte partnere"
+            labels={{ title: 'Filtrer på partner', error: 'Beklager, klarte ikke hente partnere.' }}
             name="partnerFilter"
-            data={partnere}
-            isLoading={isLoading}
-            isError={isError}
-            filterFn={(partnerIds) => {
-                return (henting: ApiHentingWrapper) =>
-                    partnerIds.some(
-                        (partnerId) =>
-                            henting.aktorId === partnerId || partnerHasUtlysning(henting.ekstraHenting, partnerId),
-                    );
-            }}
+            query={partnerQuery}
+            filterFnFactory={partnerFilterFnFactory}
         />
     );
 };
