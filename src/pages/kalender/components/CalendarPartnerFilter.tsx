@@ -8,9 +8,9 @@ const partnerFilterFnFactory = (partnerIds: Array<string>) => {
     return (henting: ApiHentingWrapper) =>
         partnerIds.some((partnerId) => {
             const partnerOwnsHenting = henting.aktorId === partnerId;
-            const partnerCanAcceptEkstrahenting =
+            const partnerCanAcceptEkstraHenting =
                 !henting.ekstraHenting?.godkjentUtlysning && partnerHasUtlysning(henting.ekstraHenting, partnerId);
-            return partnerOwnsHenting || partnerCanAcceptEkstrahenting;
+            return partnerOwnsHenting || partnerCanAcceptEkstraHenting;
         });
 };
 
