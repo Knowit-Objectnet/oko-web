@@ -65,7 +65,12 @@ const useCalendarRedirect = () => {
     };
 };
 
-export const useCalendarView = (): [CalendarView, (view: CalendarView) => void] => {
+export interface CalendarViewState {
+    selectedView: CalendarView;
+    setSelectedView: (view: CalendarView) => void;
+}
+
+export const useCalendarView = (): CalendarViewState => {
     // Getting view name from path (URL)
     const { view: viewFromPath } = useParams<CalendarParams>();
 
@@ -89,5 +94,5 @@ export const useCalendarView = (): [CalendarView, (view: CalendarView) => void] 
         redirectToCalendar({ view });
     };
 
-    return [persistedView, setView];
+    return { selectedView: persistedView, setSelectedView: setView };
 };

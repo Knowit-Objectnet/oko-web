@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useStasjoner } from '../../../services/stasjon/useStasjoner';
 import { CalendarFilterSelect } from './CalendarFilterSelect';
+import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 
 export const CalendarStasjonFilter: React.FC = () => {
     const { data: stasjoner } = useStasjoner();
@@ -8,10 +9,11 @@ export const CalendarStasjonFilter: React.FC = () => {
     return (
         <CalendarFilterSelect
             title="Velg enkelte stasjoner"
-            name="stasjon-select"
             data={stasjoner}
-            filterName="stasjonFilter"
-            filterFn={(id, henting) => henting.stasjonId === id}
+            name="stasjonFilter"
+            filterFn={(stasjonIds) => {
+                return (henting: ApiHentingWrapper) => stasjonIds.some((stasjonId) => henting.stasjonId === stasjonId);
+            }}
         />
     );
 };

@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { usePartnere } from '../../../services/partner/usePartnere';
 import { CalendarFilterSelect } from './CalendarFilterSelect';
+import { ApiHentingWrapper } from '../../../services/henting/HentingService';
+import { partnerHasUtlysning } from '../../../utils/ekstraHentingHelpers';
 
 export const CalendarPartnerFilter: React.FC = () => {
     const { data: partnere } = usePartnere();
@@ -8,14 +10,15 @@ export const CalendarPartnerFilter: React.FC = () => {
     return (
         <CalendarFilterSelect
             title="Velg enkelte partnere"
-            name="partner-select"
+            name="partnerFilter"
             data={partnere}
-            filterName="partnerFilter"
-            filterFn={(id, henting) =>
-                henting.aktorId === id ||
-                henting.ekstraHenting?.utlysninger.some((utlysning) => utlysning.partnerId === id) ||
-                false
-            }
+            filterFn={(partnerIds) => {
+                return (henting: ApiHentingWrapper) =>
+                    partnerIds.some(
+                        (partnerId) =>
+                            henting.aktorId === partnerId || partnerHasUtlysning(henting.ekstraHenting, partnerId),
+                    );
+            }}
         />
     );
 };
