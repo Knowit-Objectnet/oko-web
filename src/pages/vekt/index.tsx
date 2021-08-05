@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Heading, HStack, Stack, VStack } from '@chakra-ui/react';
+import { Heading, VStack } from '@chakra-ui/react';
 import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
@@ -10,7 +10,7 @@ import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { HentingVektList } from './components/HentingVektList';
 import { DownloadStatisticsButton } from './components/DownloadStatisticsButton';
 import { hasVektregistrering, isValidForVektregistrering } from '../../utils/wrappedHentingHelpers';
-import { Box, Flex } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/layout';
 
 export const HentingerVektSection: React.FC = ({ children }) => (
     <VStack as="section" spacing="5" width="full" alignItems="flex-start">

@@ -37,7 +37,7 @@ export const useCalendarEvents = (): LazyResult<string, Array<CalendarEvent>> =>
     const transformToCalendarEvent = (hentingWrapper: ApiHentingWrapper): CalendarEvent => ({
         start: parseISOIgnoreTimezone(hentingWrapper.startTidspunkt),
         end: parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt),
-        hentingWrapper: hentingWrapper,
+        hentingWrapper,
         color: user.isPartner ? getAktorColor(hentingWrapper.stasjonId) : getAktorColor(hentingWrapper.aktorId),
     });
 
