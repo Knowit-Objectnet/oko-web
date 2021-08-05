@@ -3,13 +3,15 @@ import { Text, Spinner, VStack, Fade, Flex } from '@chakra-ui/react';
 
 interface Props {
     label?: string;
+    hideLabel?: boolean;
+    isFullPage?: boolean;
 }
 
-export const Loading: React.FC<Props> = ({ label }) => (
+export const Loading: React.FC<Props> = ({ label, hideLabel, isFullPage }) => (
     <Flex
-        as="main"
+        as={isFullPage ? 'main' : 'div'}
         width="full"
-        height="100vh"
+        height={isFullPage ? '100vh' : 'full'}
         alignItems="center"
         justifyContent="center"
         textAlign="center"
@@ -18,7 +20,12 @@ export const Loading: React.FC<Props> = ({ label }) => (
         <Fade in>
             <VStack spacing="6">
                 <Spinner speed="0.9s" thickness="0.4rem" size="2xl" color="primary" aria-hidden />
-                <Text fontSize={{ base: '2xl', tablet: '4xl' }} maxWidth="lg" fontWeight="normal">
+                <Text
+                    fontSize={{ base: '2xl', tablet: '4xl' }}
+                    maxWidth="lg"
+                    fontWeight="normal"
+                    opacity={hideLabel ? 0 : 1}
+                >
                     {label || 'Laster inn...'}
                 </Text>
             </VStack>
