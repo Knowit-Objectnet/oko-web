@@ -57,7 +57,7 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
         resolver: yupResolver(getEkstraHentingValidationSchema(stasjonId)),
     });
 
-    const { data: allPartnere } = usePartnere({ queryOptions: { keepPreviousData: true } });
+    const { data: allPartnere } = usePartnere();
     const addEkstraHentingMutation = useAddEkstraHenting();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();

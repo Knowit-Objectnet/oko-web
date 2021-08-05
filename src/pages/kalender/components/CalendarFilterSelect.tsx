@@ -1,89 +1,86 @@
 import * as React from 'react';
 import { useState } from 'react';
-import Filter from '../../../assets/Filter.svg';
-import ArrowRight from '../../../assets/ArrowRight.svg';
-import ArrowDown from '../../../assets/ArrowDown.svg';
 import { useCalendarState } from '../CalendarProvider';
 import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
-import { ApiHentingWrapper } from '../../../services/henting/HentingService';
-import { Flex, Icon } from '@chakra-ui/react';
+import { CheckboxGroup, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { ApiStasjon } from '../../../services/stasjon/StasjonService';
-import { useEffect } from 'react';
+import { CalendarFilterFn } from '../hooks/useCalendarFilters';
+import { ListSkeleton } from '../../../components/forms/checkbox/ListSkeleton';
+import { UseQueryResult } from 'react-query';
+import { Box } from '@chakra-ui/layout';
+import Filter from '../../../assets/Filter.svg';
 
 interface Props {
-    title: string;
+    labels: {
+        title: string;
+        error: string;
+    };
     name: string;
-    data: ApiPartner[] | ApiStasjon[] | undefined;
-    filterName: 'stasjonFilter' | 'partnerFilter';
-    filterFn: (id: string, henting: ApiHentingWrapper) => boolean;
+    query: UseQueryResult<Array<ApiPartner> | Array<ApiStasjon>>;
+    filterFnFactory: (aktorIds: Array<string>) => CalendarFilterFn;
 }
 
-export const CalendarFilterSelect: React.FC<Props> = ({ title, name, data, filterName, filterFn }) => {
-    const [toggled, setToggled] = useState(true);
-    const { setFilter } = useCalendarState();
-    const [ids, setIds] = useState<Array<string>>([]);
+export const CalendarFilterSelect: React.FC<Props> = ({ labels, name, query, filterFnFactory }) => {
+    const { setFilter, clearFilter } = useCalendarState();
+    const [selectedAktorIds, setSelectedAktorIds] = useState<Array<string>>([]);
 
-    const filterFunction = (henting: ApiHentingWrapper) => {
-        if (ids.length === 0) return true;
-        else return ids.some((id) => filterFn(id, henting));
+    const handleSelectionChange = (checkboxValues: Array<string>) => {
+        setSelectedAktorIds(checkboxValues);
+
+        if (checkboxValues.length === 0) {
+            clearFilter(name);
+        } else {
+            const filterFn = filterFnFactory(checkboxValues);
+            setFilter(name, filterFn);
+        }
     };
 
-    const filterFunctionObject = {
-        [filterName]: filterFunction,
+    const handleSelectAlleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        if (event.currentTarget.checked) {
+            handleSelectionChange([]);
+        }
     };
 
-    useEffect(() => {
-        setFilter(filterFunctionObject);
-    }, [ids]);
-
-    const onToggleClick = () => {
-        setToggled(!toggled);
-    };
-
-    const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.persist();
-        const value = e.currentTarget.value;
-        const currentSelected = value === 'default' ? undefined : value;
-        const index = ids.indexOf(value);
-        if (!currentSelected) setIds([]);
-        else if (!~index) setIds(ids.concat(currentSelected));
-        else setIds(ids.filter((_, i) => i != index));
+    const getCheckboxes = () => {
+        if (query.isLoading) {
+            return <ListSkeleton />;
+        }
+        if (query.isLoadingError) {
+            return <Text>{labels.error}</Text>;
+        }
+        if (query.data) {
+            return (
+                <>
+                    <CheckboxGroup onChange={handleSelectionChange} value={selectedAktorIds}>
+                        {query.data.map((aktor) => (
+                            <Checkbox key={aktor.id} name={name} value={aktor.id} label={aktor.navn} />
+                        ))}
+                    </CheckboxGroup>
+                    <Checkbox
+                        name={name}
+                        value="-1"
+                        label="Alle"
+                        isChecked={selectedAktorIds.length === 0}
+                        onChange={handleSelectAlleChange}
+                    />
+                </>
+            );
+        }
     };
 
     return (
-        <Flex flexDirection="column" marginTop="12" justifyContent="center">
-            <Flex alignItems="center" marginBottom="4">
-                <Icon as={Filter} height="100%" marginRight="2.5" />
-                {title}
-                {toggled ? (
-                    <Icon as={ArrowRight} onClick={onToggleClick} />
-                ) : (
-                    <Icon as={ArrowDown} onClick={onToggleClick} />
-                )}
-            </Flex>
-            {toggled && (
-                <Flex flexDirection="column" alignItems="flex-start" justifyContent="center">
-                    {data?.map((aktor) => (
-                        <Checkbox
-                            key={aktor.id}
-                            name={name}
-                            value={aktor.id}
-                            isChecked={ids.some((id) => id === aktor.id)}
-                            onChange={handleValueChange}
-                            label={aktor.navn}
-                        ></Checkbox>
-                    ))}
-                    <Checkbox
-                        key="AllCheckboxes"
-                        name={name}
-                        value="default"
-                        isChecked={ids.length === 0}
-                        onChange={handleValueChange}
-                        label="Alle"
-                    ></Checkbox>
-                </Flex>
-            )}
-        </Flex>
+        <Box as="form" width="full">
+            <VStack as="fieldset" alignItems="flex-start" width="full" spacing="0">
+                <HStack paddingBottom="2" paddingLeft="1.5">
+                    <Icon as={Filter} aria-hidden boxSize="1.2rem" />
+                    <Text as="legend" fontWeight="medium" fontSize="lg">
+                        {labels.title}
+                    </Text>
+                </HStack>
+                {getCheckboxes()}
+            </VStack>
+        </Box>
     );
 };

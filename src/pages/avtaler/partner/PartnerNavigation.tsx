@@ -5,14 +5,31 @@ import { AddPartnerButton } from './AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
 import { usePartnere } from '../../../services/partner/usePartnere';
 import { useAuth } from '../../../auth/useAuth';
+import { ListSkeleton } from '../../../components/forms/checkbox/ListSkeleton';
 
 export const PartnerNavigation: React.FC = () => {
     const { user } = useAuth();
-    const { data: partnere } = usePartnere();
+    const { data: partnere, isError, isLoading } = usePartnere();
 
-    const sortedPartnere = (partnere ?? []).sort((partnerA, partnerB) =>
-        partnerA.navn.localeCompare(partnerB.navn, 'nb'),
-    );
+    const getPartnerList = () => {
+        if (isLoading) {
+            return <ListSkeleton loadingText="Laster inn partnere..." startColor="gray.500" endColor="gray.300" />;
+        }
+        if (isError) {
+            return 'Beklager, klarte ikke laste inn partnere.';
+        }
+        if (partnere) {
+            return (
+                <List spacing="3">
+                    {partnere.map((partner) => (
+                        <ListItem key={partner.id}>
+                            <PartnerNavItem partner={partner} />
+                        </ListItem>
+                    ))}
+                </List>
+            );
+        }
+    };
 
     return (
         <Flex
@@ -35,13 +52,7 @@ export const PartnerNavigation: React.FC = () => {
             >
                 Samarbeidspartnere
             </Heading>
-            <List spacing="3">
-                {sortedPartnere.map((partner) => (
-                    <ListItem key={partner.id}>
-                        <PartnerNavItem partner={partner} />
-                    </ListItem>
-                ))}
-            </List>
+            {getPartnerList()}
             {user.isAdmin ? <AddPartnerButton marginTop="10" width="full" variant="outlineOnSurface" /> : null}
         </Flex>
     );

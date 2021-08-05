@@ -66,7 +66,7 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
         },
     });
 
-    const { data: allPartnere } = usePartnere({ queryOptions: { keepPreviousData: true } });
+    const { data: allPartnere } = usePartnere();
     const batchAddUtlysningMutation = useBatchAddUtlysning();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();

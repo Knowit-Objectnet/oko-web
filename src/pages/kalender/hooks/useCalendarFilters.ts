@@ -1,43 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
-import { useAuth } from '../../../auth/useAuth';
 
-export interface CalendarFilters {
-    stasjonFilter?: CalendarFilterFn;
-    partnerFilter?: CalendarFilterFn;
-}
+export type CalendarFilters = Map<string, CalendarFilterFn>;
 
 export type CalendarFilterFn = (henting: ApiHentingWrapper) => boolean;
 
-export const useCalendarFilters = (): {
+export interface CalendarFilterState {
     filters: CalendarFilters;
-    setFilter: (filters: CalendarFilters) => void;
-} => {
-    const { user } = useAuth();
-    const [filters, setFilters] = useState<CalendarFilters>({});
+    setFilter: (filterName: string, filterFn: CalendarFilterFn) => void;
+    clearFilter: (filterName: string) => void;
+}
 
-    //Set default behavious to only see own events. Have to use useEffect, as user.aktorId might be undefined initially
-    useEffect(() => {
-        if (user.isPartner)
-            setFilter({
-                partnerFilter: (henting: ApiHentingWrapper) =>
-                    henting.aktorId === user.aktorId ||
-                    henting.ekstraHenting?.utlysninger.some((utlysning) => utlysning.partnerId === user.aktorId) ||
-                    false,
-            });
-        if (user.isStasjon)
-            setFilter({ stasjonFilter: (henting: ApiHentingWrapper) => henting.stasjonId === user.aktorId });
-    }, [user.aktorId]);
+export const useCalendarFilters = (): CalendarFilterState => {
+    const [filters, setFilters] = useState<CalendarFilters>(new Map());
 
-    const setFilter = (filter: CalendarFilters) => {
-        // Merge together other possible filters with this updated/new one
-        const updatedFilters = {
-            ...filters,
-            ...filter,
-        };
-
-        setFilters(updatedFilters);
+    const setFilter = (filterName: string, filterFn: CalendarFilterFn) => {
+        setFilters((currentFilters) => new Map(currentFilters).set(filterName, filterFn));
     };
 
-    return { filters, setFilter };
+    const clearFilter = (filterName: string) => {
+        setFilters((currentFilters) => {
+            const newFilters = new Map(currentFilters);
+            newFilters.delete(filterName);
+            return newFilters;
+        });
+    };
+
+    return { filters, setFilter, clearFilter };
 };

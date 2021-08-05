@@ -8,7 +8,12 @@ const parseDate = (date?: string) => {
 
 export const formatDate = (date: Date): string => formatISO(date, { representation: 'date' });
 
-export const useCalendarDate = (): [Date, (date: Date) => void] => {
+export interface CalendarDateState {
+    selectedDate: Date;
+    setSelectedDate: (date: Date) => void;
+}
+
+export const useCalendarDate = (): CalendarDateState => {
     // Getting "dato" value from URL query, if present
     const [queryDate, setQueryDate] = useQueryStringKey('dato');
 
@@ -18,5 +23,5 @@ export const useCalendarDate = (): [Date, (date: Date) => void] => {
         setQueryDate(formatDate(date));
     };
 
-    return [date, setDate];
+    return { selectedDate: date, setSelectedDate: setDate };
 };
