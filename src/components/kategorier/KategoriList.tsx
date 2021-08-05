@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { ApiKategori } from '../../services/kategori/KategoriService';
 import { List, ListItem, Tag } from '@chakra-ui/react';
-import { KategorierSorted } from './KategorierSorted';
+import { kategorierSorted } from './kategorierSorted';
 
 interface Props {
     kategorier: Array<ApiKategori>;
 }
 
 export const KategoriList: React.FC<Props> = ({ kategorier }) => {
-    const sortedKategorier = KategorierSorted(kategorier);
+    const sortedKategorier = kategorierSorted(kategorier);
     return (
         <List display="flex" flexFlow="row wrap" margin="0" paddingTop="1">
             {sortedKategorier.map((kategori) => (

@@ -4,7 +4,7 @@ import { CheckboxGroup, CheckboxOption } from './checkbox/CheckboxGroup';
 import { CheckboxGroupSkeleton } from './checkbox/CheckboxGroupSkeleton';
 import { WarningBody, WarningContainer, WarningTitle } from './Warning';
 import { FormFieldProps } from './FormField';
-import { KategorierSorted } from '../kategorier/KategorierSorted';
+import { kategorierSorted } from '../kategorier/kategorierSorted';
 
 export const KategoriSelect: React.FC<FormFieldProps> = ({ name, ...props }) => {
     const { data: kategorier, isLoading, isLoadingError } = useKategorier({ queryOptions: { keepPreviousData: true } });
@@ -30,7 +30,7 @@ export const KategoriSelect: React.FC<FormFieldProps> = ({ name, ...props }) => 
         return null;
     };
 
-    const sortedKategorier = KategorierSorted(kategorier || []);
+    const sortedKategorier = kategorierSorted(kategorier || []);
 
     const getKategoriCheckBoxes = (): Array<CheckboxOption> =>
         sortedKategorier.map((kategori) => ({

@@ -4,7 +4,7 @@ import { useKategorier } from '../../services/kategori/useKategorier';
 import { DeleteKategoriButton } from './forms/DeleteKategoriButton';
 import { EditKategoriButton } from './forms/EditKategoriButton';
 import { createArrayFromLength } from '../../utils/createArrayFromLength';
-import { KategorierSorted } from '../../components/kategorier/KategorierSorted';
+import { kategorierSorted } from '../../components/kategorier/kategorierSorted';
 
 export const KategoriTableLoading: React.FC = () => (
     <VStack width="full" spacing="2" aria-label="Laster inn...">
@@ -17,7 +17,7 @@ export const KategoriTableLoading: React.FC = () => (
 export const KategoriTable: React.FC = () => {
     const { data: kategorier, isLoading, isError } = useKategorier();
 
-    const sortedKategorier = KategorierSorted(kategorier || []);
+    const sortedKategorier = kategorierSorted(kategorier || []);
 
     if (isLoading) {
         return <KategoriTableLoading />;
