@@ -1,3 +1,4 @@
+import { partition } from 'lodash';
 import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
 import { ApiKategori, ApiKategoriParams, getKategorier, kategoriDefaultQueryKey } from './KategoriService';
 
@@ -13,5 +14,15 @@ export const useKategorier = (params?: UseKategorierParams): UseQueryResult<Arra
         queryKey: [kategoriDefaultQueryKey, params?.params],
         queryFn: () => getKategorier(params?.params),
         ...params?.queryOptions,
+        select: (kategorier: Array<ApiKategori>): Array<ApiKategori> => {
+            const sortedKategorier = kategorier.sort((kategoriA, kategoriB) =>
+                kategoriA.navn.localeCompare(kategoriB.navn, 'nb'),
+            );
+            const [diverseKategori, alleAndreKategorier] = partition<ApiKategori>(
+                sortedKategorier,
+                (kategori) => kategori.navn === 'Diverse',
+            );
+            return alleAndreKategorier.concat(diverseKategori);
+        },
     });
 };

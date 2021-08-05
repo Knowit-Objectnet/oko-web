@@ -4,7 +4,6 @@ import { useKategorier } from '../../services/kategori/useKategorier';
 import { DeleteKategoriButton } from './forms/DeleteKategoriButton';
 import { EditKategoriButton } from './forms/EditKategoriButton';
 import { createArrayFromLength } from '../../utils/createArrayFromLength';
-import { kategorierSorted } from '../../components/kategorier/kategorierSorted';
 
 export const KategoriTableLoading: React.FC = () => (
     <VStack width="full" spacing="2" aria-label="Laster inn...">
@@ -16,8 +15,6 @@ export const KategoriTableLoading: React.FC = () => (
 
 export const KategoriTable: React.FC = () => {
     const { data: kategorier, isLoading, isError } = useKategorier();
-
-    const sortedKategorier = kategorierSorted(kategorier || []);
 
     if (isLoading) {
         return <KategoriTableLoading />;
@@ -40,7 +37,7 @@ export const KategoriTable: React.FC = () => {
                 </Tr>
             </Thead>
             <Tbody>
-                {sortedKategorier?.map((kategori) => (
+                {(kategorier || []).map((kategori) => (
                     <Tr key={kategori.id}>
                         <Td>{kategori.navn}</Td>
                         <Td textAlign="end">
