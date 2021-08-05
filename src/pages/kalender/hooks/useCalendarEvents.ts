@@ -6,11 +6,14 @@ import { ApiHentingWrapper, getHentinger, hentingDefaultQueryKey } from '../../.
 import { useQueries, UseQueryResult } from 'react-query';
 import { getAllISOWeeksInMonth, getSingleISOWeek } from '../../../utils/ISOWeekHelpers';
 import { Failure, LazyResult, Loading, Success } from 'lemons';
+import { useCalendarEventColors } from './useCalendarEventColors';
+import { useAuth } from '../../../auth/useAuth';
 
 export interface CalendarEvent extends Event {
     start: Date;
     end: Date;
     hentingWrapper: ApiHentingWrapper;
+    color: string;
 }
 
 const getISOWeeksToFetch = (date: Date, view: CalendarView): Array<DateRange> => {
@@ -25,14 +28,18 @@ const getISOWeeksToFetch = (date: Date, view: CalendarView): Array<DateRange> =>
     }
 };
 
-const transformToCalendarEvent = (hentingWrapper: ApiHentingWrapper): CalendarEvent => ({
-    start: parseISOIgnoreTimezone(hentingWrapper.startTidspunkt),
-    end: parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt),
-    hentingWrapper: hentingWrapper,
-});
-
 export const useCalendarEvents = (): LazyResult<string, Array<CalendarEvent>> => {
     const { selectedView, selectedDate, filters } = useCalendarState();
+
+    const { user } = useAuth();
+    const getAktorColor = useCalendarEventColors();
+
+    const transformToCalendarEvent = (hentingWrapper: ApiHentingWrapper): CalendarEvent => ({
+        start: parseISOIgnoreTimezone(hentingWrapper.startTidspunkt),
+        end: parseISOIgnoreTimezone(hentingWrapper.sluttTidspunkt),
+        hentingWrapper: hentingWrapper,
+        color: user.isPartner ? getAktorColor(hentingWrapper.stasjonId) : getAktorColor(hentingWrapper.aktorId),
+    });
 
     // Fetching hentinger week-by-week, so that each week gets an entry in the cache
     //  This allows us to reuse the cached data when the user switches views, while also
