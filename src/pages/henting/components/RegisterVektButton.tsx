@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { Button, ButtonProps, Icon } from '@chakra-ui/react';
 import Plus from '../../../assets/Plus.svg';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
+import { HentingDetailsRoutingProps } from '../HentingDetails';
 
 interface Props {
     henting: ApiHentingWrapper;
 }
 
 export const RegisterVektButton: React.FC<Props & ButtonProps> = ({ henting, ...props }) => {
-    const location = useLocation();
+    const linkState: HentingDetailsRoutingProps = { henting: henting, showBackButton: true };
+
     return (
         <Button
             as={Link}
@@ -17,7 +19,7 @@ export const RegisterVektButton: React.FC<Props & ButtonProps> = ({ henting, ...
             rightIcon={<Icon as={Plus} />}
             to={{
                 pathname: `/vekt/${henting.id}`,
-                state: { henting: henting, prevPath: location.pathname + location.search },
+                state: linkState,
             }}
             {...props}
         >

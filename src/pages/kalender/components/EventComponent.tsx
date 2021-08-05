@@ -1,9 +1,10 @@
 import React from 'react';
-import { LinkBox, LinkBoxProps, LinkOverlay, Stack, Text } from '@chakra-ui/react';
+import { LinkBox, LinkBoxProps, LinkOverlay, Text } from '@chakra-ui/react';
 import { CalendarEvent } from '../hooks/useCalendarEvents';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../../auth/useAuth';
 import { colors } from '../../../theme/foundations/colors';
+import { HentingDetailsRoutingProps } from '../../henting/HentingDetails';
 
 const addColorBand = (bandColor: string, backgroundColor: string) => {
     return `linear-gradient(225deg, ${backgroundColor} 8px, ${bandColor} 8px, ${bandColor} 24px, ${backgroundColor} 24px)`;
@@ -35,7 +36,6 @@ interface Props extends Pick<LinkBoxProps, 'position' | 'top' | 'left' | 'height
 }
 
 export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }) => {
-    const location = useLocation();
     const { user } = useAuth();
 
     const getEventText = () => {
@@ -60,6 +60,9 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             </Text>
         );
     };
+
+    // We pass the henting object, to avoid unnecessary loading state in details view
+    const linkState: HentingDetailsRoutingProps = { henting: event.hentingWrapper, showBackButton: true };
 
     return (
         <LinkBox
@@ -93,8 +96,7 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
                 as={Link}
                 to={{
                     pathname: `/henting/${event.hentingWrapper.id}`,
-                    // We pass the henting object, to avoid unnecessary loading state in details view
-                    state: { henting: event.hentingWrapper, prevPath: location.pathname + location.search },
+                    state: linkState,
                 }}
             >
                 {getEventText()}

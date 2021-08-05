@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useAuth } from '../../auth/useAuth';
-import { Button, ButtonGroup } from '@chakra-ui/react';
-import { Link, useLocation } from 'react-router-dom';
+import { ButtonGroup } from '@chakra-ui/react';
+import { useLocation } from 'react-router-dom';
 import { CancelPlanlagtHentingButton } from './components/CancelPlanlagtHentingButton';
 import { AvlystDetails } from './components/AvlystDetails';
 import { ApiHentingWrapper } from '../../services/henting/HentingService';
@@ -9,7 +9,13 @@ import { useHentingById } from '../../services/henting/useHentingById';
 import { DetailHeader } from './components/DetailHeader';
 import { DetailInfo } from './components/DetailInfo';
 import { ApiPlanlagtHenting } from '../../services/henting/PlanlagtHentingService';
-import { parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
+import { hasStarted } from '../../utils/wrappedHentingHelpers';
+import { BackButton } from '../../components/buttons/BackButton';
+
+export interface HentingDetailsRoutingProps {
+    henting?: ApiHentingWrapper;
+    showBackButton?: boolean;
+}
 
 interface Props {
     hentingId: string;
@@ -17,21 +23,11 @@ interface Props {
 
 export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
     const { user } = useAuth();
-    const { state: locationState } = useLocation<{ henting?: ApiHentingWrapper; prevPath?: string }>();
+    const { state: locationState } = useLocation<HentingDetailsRoutingProps>();
 
     const hentingQuery = useHentingById(hentingId, {
         initialData: locationState?.henting,
     });
-
-    const getBackButton = () => {
-        if (locationState?.prevPath) {
-            return (
-                <Button as={Link} to={locationState.prevPath} variant="outline">
-                    Tilbake
-                </Button>
-            );
-        }
-    };
 
     const getCancelButton = (henting: ApiPlanlagtHenting) => {
         if (!henting.avlyst && userCanCancelHenting(henting)) {
@@ -60,9 +56,8 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     <DetailInfo henting={hentingWrapper} />
 
                     <ButtonGroup marginTop="10">
-                        {getBackButton()}
-                        {hentingWrapper.planlagtHenting &&
-                        parseISOIgnoreTimezone(hentingWrapper.startTidspunkt) > new Date()
+                        <BackButton visible={locationState?.showBackButton} />
+                        {hentingWrapper.planlagtHenting && !hasStarted(hentingWrapper.planlagtHenting)
                             ? getCancelButton(hentingWrapper.planlagtHenting)
                             : null}
                     </ButtonGroup>
