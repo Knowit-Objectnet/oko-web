@@ -15,8 +15,8 @@ import '../calendar-style.css';
 export const CalendarComponent: React.FC = () => {
     const { selectedView, setSelectedView, selectedDate, setSelectedDate } = useCalendarState();
 
-    // TODO: get loading-status for displaying in calendar
-    const events = useCalendarEvents();
+    // TODO: display loading and error status in calendar
+    const eventsLazyResult = useCalendarEvents();
 
     const handleViewChange = (view: View) => {
         const calendarView = getCalendarViewFromType(view);
@@ -37,7 +37,7 @@ export const CalendarComponent: React.FC = () => {
         <Box width="full" height="full">
             <Calendar<CalendarEvent>
                 culture="nb-no"
-                events={events}
+                events={eventsLazyResult.isSuccess() ? eventsLazyResult.value() : []}
                 date={selectedDate}
                 views={Object.values(VIEWS).map((viewProperties) => viewProperties.type)}
                 view={VIEWS[selectedView].type}

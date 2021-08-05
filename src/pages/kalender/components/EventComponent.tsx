@@ -11,37 +11,37 @@ interface Props extends Pick<LinkBoxProps, 'position' | 'top' | 'left' | 'height
     compactView?: boolean;
 }
 
-const addColorBand = (bandColor: string, backgroundColor: string) => {
-    return `linear-gradient(225deg, ${backgroundColor} 8px, ${bandColor} 8px, ${bandColor} 24px, ${backgroundColor} 24px)`;
-};
+// const addColorBand = (bandColor: string, backgroundColor: string) => {
+//     return `linear-gradient(225deg, ${backgroundColor} 8px, ${bandColor} 8px, ${bandColor} 24px, ${backgroundColor} 24px)`;
+// };
 
 export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }) => {
     const location = useLocation();
     const { user } = useAuth();
 
-    const getEventStyle = (event: CalendarEvent) => {
-        const defaultColor = user.isStasjon
-            ? getColorOfAktor(event.partnerColors, event.hentingWrapper.aktorId)
-            : getColorOfAktor(event.stasjonColors, event.hentingWrapper.stasjonId);
-
-        if (event.hentingWrapper.planlagtHenting?.avlyst) {
-            return {
-                background: addColorBand(colors.Red, colors.avlystHenting),
-            };
-        }
-
-        if (event.hentingWrapper.ekstraHenting) {
-            return {
-                background: !event.hentingWrapper.ekstraHenting.godkjentUtlysning
-                    ? 'ekstraHenting'
-                    : addColorBand(colors.ekstraHenting, defaultColor),
-            };
-        }
-
-        return {
-            background: defaultColor,
-        };
-    };
+    // const getEventStyle = (event: CalendarEvent) => {
+    //     const defaultColor = user.isStasjon
+    //         ? getColorOfAktor(event.partnerColors, event.hentingWrapper.aktorId)
+    //         : getColorOfAktor(event.stasjonColors, event.hentingWrapper.stasjonId);
+    //
+    //     if (event.hentingWrapper.planlagtHenting?.avlyst) {
+    //         return {
+    //             background: addColorBand(colors.Red, colors.avlystHenting),
+    //         };
+    //     }
+    //
+    //     if (event.hentingWrapper.ekstraHenting) {
+    //         return {
+    //             background: !event.hentingWrapper.ekstraHenting.godkjentUtlysning
+    //                 ? 'ekstraHenting'
+    //                 : addColorBand(colors.ekstraHenting, defaultColor),
+    //         };
+    //     }
+    //
+    //     return {
+    //         background: defaultColor,
+    //     };
+    // };
 
     const getEventText = () => {
         return user.isAdmin ? (
@@ -82,9 +82,10 @@ export const EventComponent: React.FC<Props> = ({ event, compactView, ...props }
             borderRadius="4px"
             justifyContent="center"
             alignContent="center"
-            {...getEventStyle(event)}
+            backgroundColor={event.hentingWrapper.type === 'EKSTRA' ? 'LightGreen' : 'accent'}
             {...props}
         >
+            {/*{...getEventStyle(event)}*/}
             <LinkOverlay
                 display="flex"
                 flexDirection={compactView ? 'row' : 'column'}
