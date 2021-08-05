@@ -30,7 +30,7 @@ const Kalender: React.FC = () => {
                 <VStack alignItems="flex-start" spacing="6">
                     <CalendarDatePicker />
                     {/* TODO: make filters container on next line scroll if it overflows the full window height */}
-                    <VStack paddingX="5" spacing="8">
+                    <VStack paddingX="5" spacing="8" width="full">
                         {user.isStasjon ? null : <CalendarStasjonFilter />}
                         {user.isPartner ? null : <CalendarPartnerFilter />}
                     </VStack>
