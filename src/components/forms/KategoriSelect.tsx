@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { useKategorier } from '../../services/kategori/useKategorier';
 import { CheckboxGroup, CheckboxOption } from './checkbox/CheckboxGroup';
-import { CheckboxGroupSkeleton } from './checkbox/CheckboxGroupSkeleton';
+import { ListSkeleton } from './checkbox/ListSkeleton';
 import { WarningBody, WarningContainer, WarningTitle } from './Warning';
 import { FormFieldProps } from './FormField';
 
 export const KategoriSelect: React.FC<FormFieldProps> = ({ name, ...props }) => {
-    const { data: kategorier, isLoading, isLoadingError } = useKategorier({ queryOptions: { keepPreviousData: true } });
+    const { data: kategorier, isLoading, isLoadingError } = useKategorier();
 
     const getLoadingPlaceholder = (): React.ReactNode => {
         if (isLoading) {
-            return <CheckboxGroupSkeleton loadingText="Laster inn kategorier..." />;
+            return <ListSkeleton loadingText="Laster inn kategorier..." />;
         }
         if (isLoadingError) {
             return (

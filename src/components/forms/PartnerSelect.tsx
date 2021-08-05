@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormFieldProps } from './FormField';
 import { usePartnere } from '../../services/partner/usePartnere';
-import { CheckboxGroupSkeleton } from './checkbox/CheckboxGroupSkeleton';
+import { ListSkeleton } from './checkbox/ListSkeleton';
 import { WarningBody, WarningContainer, WarningTitle } from './Warning';
 import { CheckboxGroup, CheckboxOption } from './checkbox/CheckboxGroup';
 
@@ -15,11 +15,11 @@ export const PartnerSelectMultiple: React.FC<FormFieldProps & Props> = ({
     existingPartnere = [],
     ...props
 }) => {
-    const { data: partnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
+    const { data: partnere, isLoading, isLoadingError } = usePartnere();
 
     const getLoadingPlaceholder = (): React.ReactNode => {
         if (isLoading) {
-            return <CheckboxGroupSkeleton loadingText="Laster inn partnere..." />;
+            return <ListSkeleton loadingText="Laster inn partnere..." />;
         }
         if (isLoadingError) {
             return (

@@ -4,7 +4,7 @@ import { Select, SelectOption } from './Select';
 import { FormFieldProps } from './FormField';
 
 export const StasjonSelect: React.FC<FormFieldProps> = (props) => {
-    const { data: stasjoner, isLoading, isLoadingError } = useStasjoner({ queryOptions: { keepPreviousData: true } });
+    const { data: stasjoner, isLoading, isLoadingError } = useStasjoner();
 
     const stasjonOptions: Array<SelectOption> = (stasjoner ?? []).map((stasjon) => ({
         label: stasjon.navn,

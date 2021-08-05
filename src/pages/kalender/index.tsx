@@ -17,11 +17,23 @@ const Kalender: React.FC = () => {
                 {/*TODO: create title from calendar state*/}
                 <title>Kalender</title>
             </Helmet>
-            <Stack direction="row" as="main" spacing="5" padding="5" alignItems="flex-start" minWidth="full">
-                <VStack alignItems="flex-start" spacing="5">
+            <Stack
+                direction="row"
+                as="main"
+                padding="5"
+                paddingLeft="0"
+                alignItems="flex-start"
+                minWidth="full"
+                spacing="4"
+                minHeight="min-content"
+            >
+                <VStack alignItems="flex-start" spacing="6">
                     <CalendarDatePicker />
-                    {user.isStasjon ? null : <CalendarStasjonFilter />}
-                    {user.isPartner ? null : <CalendarPartnerFilter />}
+                    {/* TODO: make filters container on next line scroll if it overflows the full window height */}
+                    <VStack paddingX="5" spacing="8">
+                        {user.isStasjon ? null : <CalendarStasjonFilter />}
+                        {user.isPartner ? null : <CalendarPartnerFilter />}
+                    </VStack>
                 </VStack>
                 <CalendarComponent />
             </Stack>

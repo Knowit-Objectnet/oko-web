@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const PameldtInfo: React.FC<Props> = ({ ekstraHenting }) => {
-    const { data: allPartnere, isLoading, isLoadingError } = usePartnere({ queryOptions: { keepPreviousData: true } });
+    const { data: allPartnere, isLoading, isLoadingError } = usePartnere();
 
     return (
         <>

@@ -13,6 +13,9 @@ export const useKategorier = (params?: UseKategorierParams): UseQueryResult<Arra
         //  If you make changes to the key here, make sure that it is reflected in `usePrefetchKategorier` as well.
         queryKey: [kategoriDefaultQueryKey, params?.params],
         queryFn: () => getKategorier(params?.params),
+        // Returning previously fetched data by default, while waiting for a refetch. If it is important
+        //  to not use potentially stale data, override `keepPreviousData` by passing false in the params.queryOptions argument
+        keepPreviousData: true,
         ...params?.queryOptions,
         select: (kategorier: Array<ApiKategori>): Array<ApiKategori> => {
             const sortedKategorier = kategorier.sort((kategoriA, kategoriB) =>
