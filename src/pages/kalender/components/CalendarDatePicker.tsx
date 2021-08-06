@@ -43,6 +43,7 @@ export const CalendarDatePicker: React.FC = () => {
 
     return (
         <Box
+            marginLeft="-3"
             sx={{
                 '.DayPicker-Day--today': {
                     color: 'primary',

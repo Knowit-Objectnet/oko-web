@@ -7,7 +7,12 @@ const stasjonFilterFnFactory = (stasjonIds: Array<string>) => {
     return (henting: ApiHentingWrapper) => stasjonIds.some((stasjonId) => henting.stasjonId === stasjonId);
 };
 
-export const CalendarStasjonFilter: React.FC = () => {
+interface Props {
+    selectedStasjonIds: Array<string>;
+    setSelectedStasjonIds: (stasjonIds: Array<string>) => void;
+}
+
+export const CalendarStasjonFilter: React.FC<Props> = ({ selectedStasjonIds, setSelectedStasjonIds }) => {
     const stasjonerQuery = useStasjoner();
 
     return (
@@ -16,6 +21,8 @@ export const CalendarStasjonFilter: React.FC = () => {
             name="stasjonFilter"
             query={stasjonerQuery}
             filterFnFactory={stasjonFilterFnFactory}
+            selectedAktorIds={selectedStasjonIds}
+            setSelectedAktorIds={setSelectedStasjonIds}
         />
     );
 };

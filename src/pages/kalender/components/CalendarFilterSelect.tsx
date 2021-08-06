@@ -19,11 +19,19 @@ interface Props {
     name: string;
     query: UseQueryResult<Array<ApiPartner> | Array<ApiStasjon>>;
     filterFnFactory: (aktorIds: Array<string>) => CalendarFilterFn;
+    selectedAktorIds: Array<string>;
+    setSelectedAktorIds: (aktorIds: Array<string>) => void;
 }
 
-export const CalendarFilterSelect: React.FC<Props> = ({ labels, name, query, filterFnFactory }) => {
+export const CalendarFilterSelect: React.FC<Props> = ({
+    labels,
+    name,
+    query,
+    filterFnFactory,
+    selectedAktorIds,
+    setSelectedAktorIds,
+}) => {
     const { setFilter, clearFilter } = useCalendarState();
-    const [selectedAktorIds, setSelectedAktorIds] = useState<Array<string>>([]);
 
     const handleSelectionChange = (checkboxValues: Array<string>) => {
         setSelectedAktorIds(checkboxValues);
