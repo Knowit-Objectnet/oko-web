@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
                 <Box
                     flex="1"
                     width={{ base: '100vw', tablet: 'full' }}
-                    height={{ base: '16', tablet: 'full' }}
+                    height={{ base: 'navbar.mobile', tablet: 'full' }}
                     position={{ base: 'fixed', tablet: 'static' }}
                     bottom={{ base: '0', tablet: 'unset' }}
                     left={{ base: '0', tablet: 'unset' }}
