@@ -82,8 +82,7 @@ export const useCalendarView = (): CalendarViewState => {
     // TODO: validate view name from localstorage, in case user has manipulated it?
     const [persistedView, setPersistedView] = usePersistedState<CalendarView>('OKOcalView', DEFAULT_VIEW);
 
-    // Setting default view for small screens
-    const [shouldHideSidebar, shouldShowMobileView] = useMediaQuery(['(max-width: 1024px)', '(max-width: 768px)']);
+    const [shouldHideSidebar, shouldShowMobileView] = useMediaQuery(['(max-width: 1200px)', '(max-width: 768px)']);
 
     const redirectToCalendar = useCalendarRedirect();
 
@@ -102,6 +101,7 @@ export const useCalendarView = (): CalendarViewState => {
     };
 
     return {
+        // We're always returning the mobile view if the screen is small
         selectedView: shouldShowMobileView ? DEFAULT_MOBILE_VIEW : persistedView,
         setSelectedView: setView,
         shouldHideSidebar,
