@@ -4,10 +4,12 @@ import { Duration } from 'date-fns';
 import React, { useEffect } from 'react';
 import { usePersistedState } from '../../../utils/usePersistedState';
 import findKey from 'lodash/findKey';
+import { useMediaQuery } from '@chakra-ui/react';
 
 export type CalendarView = 'maned' | 'dag' | 'uke' /*| 'liste'*/;
 
 const DEFAULT_VIEW: CalendarView = 'uke';
+const DEFAULT_MOBILE_VIEW: CalendarView = 'dag';
 
 export type ViewProperties = {
     label: string;
@@ -68,6 +70,8 @@ const useCalendarRedirect = () => {
 export interface CalendarViewState {
     selectedView: CalendarView;
     setSelectedView: (view: CalendarView) => void;
+    shouldHideSidebar?: boolean;
+    shouldShowMobileView?: boolean;
 }
 
 export const useCalendarView = (): CalendarViewState => {
@@ -77,6 +81,9 @@ export const useCalendarView = (): CalendarViewState => {
     // View name is persisted to localstorage, with a default value if not provided in path (URL)
     // TODO: validate view name from localstorage, in case user has manipulated it?
     const [persistedView, setPersistedView] = usePersistedState<CalendarView>('OKOcalView', DEFAULT_VIEW);
+
+    // Setting default view for small screens
+    const [shouldHideSidebar, shouldShowMobileView] = useMediaQuery(['(max-width: 1024px)', '(max-width: 768px)']);
 
     const redirectToCalendar = useCalendarRedirect();
 
@@ -94,5 +101,10 @@ export const useCalendarView = (): CalendarViewState => {
         redirectToCalendar({ view });
     };
 
-    return { selectedView: persistedView, setSelectedView: setView };
+    return {
+        selectedView: shouldShowMobileView ? DEFAULT_MOBILE_VIEW : persistedView,
+        setSelectedView: setView,
+        shouldHideSidebar,
+        shouldShowMobileView,
+    };
 };
