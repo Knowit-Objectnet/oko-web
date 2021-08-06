@@ -7,7 +7,6 @@ import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../../components/forms/ErrorMessages';
 import { useSuccessToast } from '../../../../components/toasts/useSuccessToast';
 import { ApiError } from '../../../../services/httpClient';
-import { Unit } from '../Vektregistrering';
 import {
     ApiVektregistrering,
     ApiVektregistreringBatchPost,
@@ -25,7 +24,6 @@ interface VektFormData {
 
 interface VektObject {
     id: string;
-    unit: string;
     value: number;
 }
 
@@ -44,7 +42,6 @@ export const VektForm: React.FC<Props> = ({ henting, onSuccess, setVekt }) => {
     const validationKategoriobjekt = (key: string) => {
         return {
             id: yup.string().required(),
-            unit: yup.string().required(),
             value: yup
                 .number()
                 .typeError(`${key} må ha minst ett tall.`)
@@ -86,11 +83,7 @@ export const VektForm: React.FC<Props> = ({ henting, onSuccess, setVekt }) => {
         for (const key in formData) {
             const vektObject: VektObject = formData[key];
             kategoriIder.push(vektObject.id);
-            let vekt = vektObject.value;
-            if (vektObject.unit === Unit[1]) vekt *= 1000;
-            else if (vektObject.unit === Unit[2]) vekt /= 1000;
-            else vekt *= 1;
-            veiinger.push(vekt);
+            veiinger.push(vektObject.value);
         }
 
         return {

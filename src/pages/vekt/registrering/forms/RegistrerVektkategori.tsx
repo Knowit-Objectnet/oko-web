@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Heading, VStack, Flex } from '@chakra-ui/react';
-import { Unit, VektObjects, VektObject } from '../Vektregistrering';
 import { ApiHenting } from '../../../../services/henting/HentingService';
 import { Kategorifelt } from './Kategorifelt';
 import { Dispatch, SetStateAction } from 'react';
@@ -28,7 +27,6 @@ export const RegistrerVektkategori: React.FC<Props> = ({ henting, setVekt }) => 
                                     vektObject={{
                                         id: kategori.kategori.id,
                                         navn: kategori.kategori.navn,
-                                        unit: Unit.KG,
                                         value: 0,
                                     }}
                                 />
@@ -41,7 +39,6 @@ export const RegistrerVektkategori: React.FC<Props> = ({ henting, setVekt }) => 
                             vektObject={{
                                 id: '0f3f3bdd-5733-45da-87ae-a9417596cb12',
                                 navn: 'Andre ombruksvarer',
-                                unit: Unit.KG,
                                 value: 0,
                             }}
                             setVekt={setVekt}

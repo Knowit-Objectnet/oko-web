@@ -20,14 +20,7 @@ export interface VektObjects {
 export interface VektObject {
     id: string;
     navn: string;
-    unit: Unit;
     value: number;
-}
-
-export enum Unit {
-    'KG',
-    'TONN',
-    'GRAM',
 }
 
 export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
