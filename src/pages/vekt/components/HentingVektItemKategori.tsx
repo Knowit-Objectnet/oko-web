@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { KategoriList } from '../../../components/KategoriList';
+import { KategoriList } from '../../../components/kategorier/KategoriList';
 import { KategoriVektList } from './KategoriVektList';
 import { HentingerVektListChildProps } from './HentingVektList';
 import { Box } from '@chakra-ui/layout';

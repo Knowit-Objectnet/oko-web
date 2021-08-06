@@ -116,8 +116,8 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                                         <Text marginRight="2">{getAvtaleTitle(avtale)}</Text>
                                     </AccordionButton>
                                     <Text fontSize="sm" fontWeight="normal">
-                                        {AVTALE_TYPE[avtale.type]}, fra{' '}
-                                        <time>{formatDate(parseISO(avtale.startDato))}</time> til{' '}
+                                        {AVTALE_TYPE[avtale.type]}, fra
+                                        <time>{formatDate(parseISO(avtale.startDato))}</time> til
                                         <time>{formatDate(parseISO(avtale.sluttDato))}</time>
                                     </Text>
                                 </HStack>

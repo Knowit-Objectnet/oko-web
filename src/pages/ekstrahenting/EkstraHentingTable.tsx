@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
-import { KategoriList } from '../../components/KategoriList';
+import { KategoriList } from '../../components/kategorier/KategoriList';
 import { useAuth } from '../../auth/useAuth';
 import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
 import { PameldtInfo } from './PameldtInfo';
