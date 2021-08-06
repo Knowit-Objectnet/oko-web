@@ -16,7 +16,6 @@ export const useKategorier = (params?: UseKategorierParams): UseQueryResult<Arra
         // Returning previously fetched data by default, while waiting for a refetch. If it is important
         //  to not use potentially stale data, override `keepPreviousData` by passing false in the params.queryOptions argument
         keepPreviousData: true,
-        ...params?.queryOptions,
         select: (kategorier: Array<ApiKategori>): Array<ApiKategori> => {
             const sortedKategorier = kategorier.sort((kategoriA, kategoriB) =>
                 kategoriA.navn.localeCompare(kategoriB.navn, 'nb'),
@@ -27,5 +26,6 @@ export const useKategorier = (params?: UseKategorierParams): UseQueryResult<Arra
             );
             return alleAndreKategorier.concat(diverseKategori);
         },
+        ...params?.queryOptions,
     });
 };
