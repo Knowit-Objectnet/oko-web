@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { useCalendarState } from '../CalendarProvider';
 import DayPicker from 'react-day-picker';
+import { Box } from '@chakra-ui/layout';
+import { Icon } from '@chakra-ui/react';
+import Calendar from '../../../assets/Calendar.svg';
+import { CalendarDrawerWrapper } from './CalendarDrawerWrapper';
 
 import 'react-day-picker/lib/style.css';
-import { Box } from '@chakra-ui/layout';
 
 export const CalendarDatePicker: React.FC = () => {
     const { selectedDate, setSelectedDate } = useCalendarState();
@@ -42,26 +45,36 @@ export const CalendarDatePicker: React.FC = () => {
     };
 
     return (
-        <Box
-            marginLeft="-3"
-            sx={{
-                '.DayPicker-Day--today': {
-                    color: 'primary',
-                },
-                '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)': {
-                    backgroundColor: 'primary',
-                },
-            }}
+        <CalendarDrawerWrapper
+            triggerLabel="Velg dato"
+            triggerIcon={<Icon as={Calendar} />}
+            footerCloseButtonLabel="Sett dato"
         >
-            <DayPicker
-                onDayClick={handleDateChange}
-                selectedDays={selectedDate}
-                showOutsideDays
-                firstDayOfWeek={firstDayOfWeek['nb-no']}
-                weekdaysShort={weekdaysShort['nb-no']}
-                weekdaysLong={weekdaysLong['nb-no']}
-                months={months['nb-no']}
-            />
-        </Box>
+            <Box
+                marginX="auto"
+                width="min-content"
+                sx={{
+                    '.DayPicker-Month': {
+                        margin: '0.25rem',
+                    },
+                    '.DayPicker-Day--today': {
+                        color: 'primary',
+                    },
+                    '.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)': {
+                        backgroundColor: 'primary',
+                    },
+                }}
+            >
+                <DayPicker
+                    onDayClick={handleDateChange}
+                    selectedDays={selectedDate}
+                    showOutsideDays
+                    firstDayOfWeek={firstDayOfWeek['nb-no']}
+                    weekdaysShort={weekdaysShort['nb-no']}
+                    weekdaysLong={weekdaysLong['nb-no']}
+                    months={months['nb-no']}
+                />
+            </Box>
+        </CalendarDrawerWrapper>
     );
 };
