@@ -3,13 +3,14 @@ import { Heading, VStack, Flex } from '@chakra-ui/react';
 import { Unit, VektObjects, VektObject } from '../Vektregistrering';
 import { ApiHenting } from '../../../../services/henting/HentingService';
 import { Kategorifelt } from './Kategorifelt';
+import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
     henting: ApiHenting;
-    vektObjects: VektObjects;
+    setVekt: Dispatch<SetStateAction<Record<string, number>>>;
 }
 
-export const RegistrerVektkategori: React.FC<Props> = ({ henting, vektObjects }) => {
+export const RegistrerVektkategori: React.FC<Props> = ({ henting, setVekt }) => {
     return (
         <>
             <VStack alignItems="center">
@@ -23,14 +24,13 @@ export const RegistrerVektkategori: React.FC<Props> = ({ henting, vektObjects })
                                 <Kategorifelt
                                     key={kategori.kategori.id}
                                     id={kategori.kategori.id}
-                                    vektObject={
-                                        vektObjects[kategori.kategori.id] || {
-                                            id: kategori.kategori.id,
-                                            navn: kategori.kategori.navn,
-                                            unit: Unit.KG,
-                                            value: 0,
-                                        }
-                                    }
+                                    setVekt={setVekt}
+                                    vektObject={{
+                                        id: kategori.kategori.id,
+                                        navn: kategori.kategori.navn,
+                                        unit: Unit.KG,
+                                        value: 0,
+                                    }}
                                 />
                             );
                     })}
@@ -38,14 +38,13 @@ export const RegistrerVektkategori: React.FC<Props> = ({ henting, vektObjects })
                         <Kategorifelt
                             //TODO: Create a protected id for "Andre ombruksvarer", should be used for everything else
                             id="0f3f3bdd-5733-45da-87ae-a9417596cb12"
-                            vektObject={
-                                vektObjects['0f3f3bdd-5733-45da-87ae-a9417596cb12'] || {
-                                    id: '0f3f3bdd-5733-45da-87ae-a9417596cb12',
-                                    navn: 'Andre ombruksvarer',
-                                    unit: Unit.KG,
-                                    value: 0,
-                                }
-                            }
+                            vektObject={{
+                                id: '0f3f3bdd-5733-45da-87ae-a9417596cb12',
+                                navn: 'Andre ombruksvarer',
+                                unit: Unit.KG,
+                                value: 0,
+                            }}
+                            setVekt={setVekt}
                         />
                     ) : null}
                 </Flex>

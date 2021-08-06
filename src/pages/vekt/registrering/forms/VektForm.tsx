@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,9 +7,7 @@ import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../../components/forms/ErrorMessages';
 import { useSuccessToast } from '../../../../components/toasts/useSuccessToast';
 import { ApiError } from '../../../../services/httpClient';
-// NB! Setting the error messages used by yup
-import '../../../../utils/forms/formErrorMessages';
-import { Unit, VektObjects } from '../Vektregistrering';
+import { Unit } from '../Vektregistrering';
 import {
     ApiVektregistrering,
     ApiVektregistreringBatchPost,
@@ -17,6 +15,9 @@ import {
 import { useBatchAddVektregistrering } from '../../../../services/vektregistrering/useBatchAddVektregistrering';
 import { ApiHenting } from '../../../../services/henting/HentingService';
 import { RegistrerVektkategori } from './RegistrerVektkategori';
+
+// NB! Setting the error messages used by yup
+import '../../../../utils/forms/formErrorMessages';
 
 interface VektFormData {
     [key: string]: VektObject;
@@ -34,10 +35,10 @@ interface Props {
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
     henting: ApiHenting; //UUID
-    vektObjects: VektObjects;
+    setVekt: Dispatch<SetStateAction<Record<string, number>>>;
 }
 
-export const VektForm: React.FC<Props> = ({ henting, vektObjects, onSuccess }) => {
+export const VektForm: React.FC<Props> = ({ henting, onSuccess, setVekt }) => {
     let validation = yup.object();
 
     const validationKategoriobjekt = (key: string) => {
@@ -129,7 +130,7 @@ export const VektForm: React.FC<Props> = ({ henting, vektObjects, onSuccess }) =
             <form id="vekt-form" onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <RegistrerVektkategori henting={henting} vektObjects={vektObjects} />
+                    <RegistrerVektkategori henting={henting} setVekt={setVekt} />
                 </Stack>
             </form>
         </FormProvider>
