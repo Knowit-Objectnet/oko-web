@@ -14,7 +14,12 @@ const partnerFilterFnFactory = (partnerIds: Array<string>) => {
         });
 };
 
-export const CalendarPartnerFilter: React.FC = () => {
+interface Props {
+    selectedPartnerIds: Array<string>;
+    setSelectedPartnerIds: (stasjonIds: Array<string>) => void;
+}
+
+export const CalendarPartnerFilter: React.FC<Props> = ({ selectedPartnerIds, setSelectedPartnerIds }) => {
     const partnerQuery = usePartnere();
 
     return (
@@ -23,6 +28,8 @@ export const CalendarPartnerFilter: React.FC = () => {
             name="partnerFilter"
             query={partnerQuery}
             filterFnFactory={partnerFilterFnFactory}
+            selectedAktorIds={selectedPartnerIds}
+            setSelectedAktorIds={setSelectedPartnerIds}
         />
     );
 };
