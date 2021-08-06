@@ -9,6 +9,9 @@ import { useMediaQuery } from '@chakra-ui/react';
 export type CalendarView = 'maned' | 'dag' | 'uke' /*| 'liste'*/;
 
 const DEFAULT_VIEW: CalendarView = 'uke';
+
+// The view used for small screens
+//  TODO: this should probably be the "liste" view (unless "dag" is chosen by the user), if/when we support this view
 const DEFAULT_MOBILE_VIEW: CalendarView = 'dag';
 
 export type ViewProperties = {

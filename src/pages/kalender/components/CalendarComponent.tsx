@@ -8,7 +8,7 @@ import { CalendarEvent, useCalendarEvents } from '../hooks/useCalendarEvents';
 import { getCalendarViewFromType, VIEWS } from '../hooks/useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
 import { Box } from '@chakra-ui/layout';
-import { Loading } from '../../../components/Loading';
+import { Spinner, Text, HStack } from '@chakra-ui/react';
 
 // TODO: write our own CSS for the calendar
 import '../calendar-style.css';
@@ -27,25 +27,32 @@ export const CalendarComponent: React.FC = () => {
     const formats: Formats = {
         dayRangeHeaderFormat: (range: DateRange, culture?: Culture, localizer?: DateLocalizer) => {
             if (culture != 'nb-no') `Week ${getISOWeek(range.start)}`;
-            return `Uke ${getISOWeek(range.start)}`;
+            return `Uke ${getISOWeek(range.start)} – ${localizer?.format(range.start, 'yyyy', culture || 'nb-no')}`;
         },
         dayHeaderFormat: (date: Date, culture?: Culture, localizer?: DateLocalizer) => {
-            return `${localizer?.format(date, 'cccc dd', culture || 'nb-no')}`;
+            return `${localizer?.format(date, 'cccc dd. MMM yyyy', culture || 'nb-no')}`;
         },
     };
 
     return (
         <Box width="full" height="full" position="relative">
             {eventsLazyResult.isLoading() ? (
-                <Box
-                    width="full"
-                    height="full"
+                <HStack
                     position="absolute"
-                    backgroundColor="hsla(0, 0%, 100%, 25%)"
                     zIndex="15"
+                    top="100px"
+                    right="6"
+                    backgroundColor="gray.100"
+                    paddingY="2"
+                    paddingX="6"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    fontSize="md"
+                    maxWidth="min-content"
                 >
-                    <Loading hideLabel />
-                </Box>
+                    <Spinner speed="0.9s" thickness="0.2rem" size="sm" color="primary" aria-hidden />
+                    <Text whiteSpace="nowrap">Laster inn hendelser...</Text>
+                </HStack>
             ) : null}
             <Calendar<CalendarEvent>
                 culture="nb-no"

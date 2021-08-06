@@ -1,10 +1,9 @@
 import React from 'react';
 import { ToolbarProps, View } from 'react-big-calendar';
-import { Button, ButtonGroup, Flex, Heading, Icon, Stack } from '@chakra-ui/react';
+import { Button, ButtonGroup, Flex, Heading, Icon } from '@chakra-ui/react';
 import ArrowLeft from '../../../assets/ArrowLeft.svg';
 import ArrowRight from '../../../assets/ArrowRight.svg';
 import { ViewProperties, VIEWS } from '../hooks/useCalendarView';
-import { IconButton } from '../../../components/buttons/IconButton';
 import { useCalendarState } from '../CalendarProvider';
 
 interface Props {
@@ -28,52 +27,50 @@ export const CalendarToolbar: React.FC<ToolbarProps> = ({ onNavigate, label, vie
     const { shouldShowMobileView } = useCalendarState();
 
     return (
-        <Stack
-            // direction={{ base: 'column', tablet: 'row' }}
-            justifyContent="space-between"
-            marginBottom={5}
-            spacing="3"
-            direction="row"
-        >
+        <Flex justifyContent="space-between" marginBottom={5} direction="row" flexWrap="wrap">
             <ButtonGroup
                 as={Flex}
                 size="sm"
-                // width={{ base: 'full', tablet: 'unset' }}
                 justifyContent="center"
+                flexGrow={1}
+                marginBottom={shouldShowMobileView ? '3' : '0'}
             >
-                <IconButton
-                    icon={<Icon as={ArrowLeft} />}
+                <Button
+                    leftIcon={<Icon as={ArrowLeft} />}
                     aria-label="Gå til forrige periode"
                     onClick={() => {
                         onNavigate('PREV');
                     }}
-                />
+                >
+                    Forrige
+                </Button>
                 <Button
-                    size="sm"
                     onClick={() => {
                         onNavigate('TODAY');
                     }}
                 >
                     I dag
                 </Button>
-                <IconButton
-                    icon={<Icon as={ArrowRight} />}
+                <Button
+                    rightIcon={<Icon as={ArrowRight} />}
                     aria-label="Gå til neste periode"
                     onClick={() => {
                         onNavigate('NEXT');
                     }}
-                />
+                >
+                    Neste
+                </Button>
             </ButtonGroup>
-            <Heading as="h2" fontSize="1.75rem" flexGrow={1} textAlign="center">
+            <Heading as="h1" fontSize="2xl" flexGrow={100} textAlign="center" fontWeight="medium">
                 {label}
             </Heading>
             {!shouldShowMobileView ? (
-                <ButtonGroup isAttached size="sm" aria-label="Visningsmodus">
+                <ButtonGroup isAttached size="sm" aria-label="Visningsmodus" flexGrow={1}>
                     {Object.values(VIEWS).map((view: ViewProperties) => (
                         <ViewToggleButton key={view.type} view={view} currentView={currentView} onViewChange={onView} />
                     ))}
                 </ButtonGroup>
             ) : null}
-        </Stack>
+        </Flex>
     );
 };
