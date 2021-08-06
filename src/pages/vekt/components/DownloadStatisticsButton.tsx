@@ -29,16 +29,7 @@ export const DownloadStatisticsButton: React.FC<ButtonProps> = ({ ...props }) =>
     };
 
     return (
-        <Button
-            paddingX={8}
-            paddingY={6}
-            variant="outline"
-            fontSize="1rem"
-            fontWeight={400}
-            aria-label="Last ned vektstatistikk"
-            {...props}
-            onClick={() => downloadStatistics()}
-        >
+        <Button variant="outline" width="full" {...props} onClick={downloadStatistics}>
             Last ned vektstatistikk
         </Button>
     );

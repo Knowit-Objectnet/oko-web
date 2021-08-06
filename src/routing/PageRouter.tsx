@@ -22,7 +22,7 @@ const Home: React.FC = () => {
 };
 
 export const PageRouter: React.FC = () => (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading isFullPage />}>
         <Switch>
             <Route path="/kalender/:view?">
                 <Kalender />

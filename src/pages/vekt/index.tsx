@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { Heading, HStack, VStack } from '@chakra-ui/react';
+import { Heading, VStack } from '@chakra-ui/react';
 import { useAuth } from '../../auth/useAuth';
 import { useHentinger } from '../../services/henting/useHentinger';
 import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
@@ -10,6 +10,7 @@ import { ApiHentingWrapper } from '../../services/henting/HentingService';
 import { HentingVektList } from './components/HentingVektList';
 import { DownloadStatisticsButton } from './components/DownloadStatisticsButton';
 import { hasVektregistrering, isValidForVektregistrering } from '../../utils/wrappedHentingHelpers';
+import { Flex } from '@chakra-ui/layout';
 
 export const HentingerVektSection: React.FC = ({ children }) => (
     <VStack as="section" spacing="5" width="full" alignItems="flex-start">
@@ -68,13 +69,15 @@ const Vekt: React.FC = () => {
                 maxWidth={{ base: 'full', desktop: 'container.xl' }}
                 spacing="10"
                 alignItems="flex-start"
+                position="relative"
             >
-                <HStack width="full" justifyContent="space-between">
-                    <Heading as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
-                        Vektregistrering
-                    </Heading>
+                <Flex
+                    alignSelf="flex-end"
+                    position={{ base: 'initial', tablet: 'absolute' }}
+                    width={{ base: 'full', tablet: 'auto' }}
+                >
                     {user.isAdmin ? <DownloadStatisticsButton /> : null}
-                </HStack>
+                </Flex>
                 <HentingerVektSection>
                     <HentingerVektHeader>Hentinger som mangler vekt</HentingerVektHeader>
                     <HentingVektList

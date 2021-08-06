@@ -8,6 +8,8 @@ import { ApiHenting, ApiHentingWrapper } from '../../../services/henting/Henting
 import { useHentingById } from '../../../services/henting/useHentingById';
 import { useState } from 'react';
 import { VektForm } from './forms/VektForm';
+import { BackButton } from '../../../components/buttons/BackButton';
+import { HentingDetailsRoutingProps } from '../../henting/HentingDetails';
 
 interface Props {
     hentingId: string;
@@ -31,23 +33,13 @@ export enum Unit {
 }
 
 export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
-    const { state: locationState } = useLocation<{ henting?: ApiHentingWrapper; prevPath?: string }>();
+    const { state: locationState } = useLocation<HentingDetailsRoutingProps>();
     const history = useHistory();
 
     //TODO: Kan senere brukes for å oppdatere totalvekt
     const [vektObjects, setVekt] = useState<VektObjects>({});
 
     const hentingQuery = useHentingById(hentingId, { initialData: locationState?.henting });
-
-    const getBackButton = () => {
-        if (locationState?.prevPath) {
-            return (
-                <Button as={Link} to={locationState.prevPath} variant="outline">
-                    Tilbake
-                </Button>
-            );
-        }
-    };
 
     const onSuccess = () => {
         history.push(`/henting/${hentingId}`);
@@ -88,9 +80,9 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
                         <Flex
                             alignSelf="stretch"
                             alignItems="flex-start"
-                            justifyContent={getBackButton() ? 'space-between' : 'flex-end'}
+                            justifyContent={locationState?.showBackButton ? 'space-between' : 'flex-end'}
                         >
-                            {getBackButton()}
+                            <BackButton visible={locationState?.showBackButton} />
                             <HStack spacing={6}>
                                 {/* //TODO: DENNE KNAPPEN ER DEAKTIVERT INNTILL VI VET HVA DEN SKAL GJØRE
                                 <Button

@@ -8,6 +8,7 @@ import { CalendarEvent, useCalendarEvents } from '../hooks/useCalendarEvents';
 import { getCalendarViewFromType, VIEWS } from '../hooks/useCalendarView';
 import { useCalendarState } from '../CalendarProvider';
 import { Box } from '@chakra-ui/layout';
+import { Loading } from '../../../components/Loading';
 
 // TODO: write our own CSS for the calendar
 import '../calendar-style.css';
@@ -15,8 +16,8 @@ import '../calendar-style.css';
 export const CalendarComponent: React.FC = () => {
     const { selectedView, setSelectedView, selectedDate, setSelectedDate } = useCalendarState();
 
-    // TODO: get loading-status for displaying in calendar
-    const events = useCalendarEvents();
+    // TODO: display error status in calendar
+    const eventsLazyResult = useCalendarEvents();
 
     const handleViewChange = (view: View) => {
         const calendarView = getCalendarViewFromType(view);
@@ -34,10 +35,21 @@ export const CalendarComponent: React.FC = () => {
     };
 
     return (
-        <Box width="full" height="full">
+        <Box width="full" height="full" position="relative">
+            {eventsLazyResult.isLoading() ? (
+                <Box
+                    width="full"
+                    height="full"
+                    position="absolute"
+                    backgroundColor="hsla(0, 0%, 100%, 25%)"
+                    zIndex="15"
+                >
+                    <Loading hideLabel />
+                </Box>
+            ) : null}
             <Calendar<CalendarEvent>
                 culture="nb-no"
-                events={events}
+                events={eventsLazyResult.isSuccess() ? eventsLazyResult.value() : []}
                 date={selectedDate}
                 views={Object.values(VIEWS).map((viewProperties) => viewProperties.type)}
                 view={VIEWS[selectedView].type}
