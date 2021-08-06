@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Flex } from '@chakra-ui/react';
-import { Unit, VektObject } from '../Vektregistrering';
-import { colors } from '../../../../theme/foundations/colors';
+import { Flex, Text } from '@chakra-ui/react';
+import { VektObject } from '../Vektregistrering';
 import { useFormContext } from 'react-hook-form';
 import { Input } from '../../../../components/forms/input/Input';
-import { Select, SelectOption } from '../../../../components/forms/Select';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 interface FormFieldProps {
     required?: boolean;
@@ -17,16 +16,23 @@ interface Props extends FormFieldProps {
     width?: string;
     vektObject: VektObject;
     children?: React.ReactNode | FormFieldRenderProp;
+    setVekt: Dispatch<SetStateAction<Record<string, number>>>;
 }
 
-export const Registreringsfelt: React.FC<Props> = ({ vektObject }) => {
-    const { setValue } = useFormContext();
+export const Registreringsfelt: React.FC<Props> = ({ vektObject, setVekt }) => {
+    const { setValue, watch } = useFormContext();
 
-    const options: Array<SelectOption> = [
-        { label: 'Kg', value: Unit[0] },
-        { label: 'Tonn', value: Unit[1] },
-        { label: 'Gram', value: Unit[2] },
-    ];
+    const fieldName = `${vektObject.navn}.value`;
+    const fieldValue = watch(fieldName);
+
+    useEffect(() => {
+        setVekt((currentVekt) => {
+            return {
+                ...currentVekt,
+                [fieldName]: Number(fieldValue),
+            };
+        });
+    }, [fieldName, fieldValue, setVekt]);
 
     return (
         <>
@@ -36,26 +42,19 @@ export const Registreringsfelt: React.FC<Props> = ({ vektObject }) => {
                     backgroundColor="white"
                     type="number"
                     step="any"
-                    name={`${vektObject.navn}.value`}
+                    name={fieldName}
+                    fontSize="md"
                     label=""
                     textAlign="center"
                     placeholder="0"
-                    aria-label="Vektinput"
-                    width="6rem"
-                    height="2.5rem"
+                    aria-label="Skriv inn vekt"
+                    width="16"
+                    height="full"
                     marginRight={2}
+                    marginBottom={2}
                     defaultValue={0}
                 />
-                <Select
-                    name={`${vektObject.navn}.unit`}
-                    label=""
-                    backgroundColor={colors.LightBeige}
-                    style={{ textAlignLast: 'center' }}
-                    aria-label="Vektenhet"
-                    height="2.5rem"
-                    width="8rem"
-                    options={options}
-                />
+                <Text fontSize="md">kg</Text>
             </Flex>
         </>
     );
