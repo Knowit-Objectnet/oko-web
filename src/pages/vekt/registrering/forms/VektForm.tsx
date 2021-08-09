@@ -9,6 +9,7 @@ import { useSuccessToast } from '../../../../components/toasts/useSuccessToast';
 import { ApiError } from '../../../../services/httpClient';
 import {
     ApiVektregistrering,
+    ApiVektregistreringBatchPatch,
     ApiVektregistreringBatchPost,
 } from '../../../../services/vektregistrering/VektregistreringService';
 import { useBatchAddVektregistrering } from '../../../../services/vektregistrering/useBatchAddVektregistrering';
@@ -17,26 +18,28 @@ import { RegistrerVektkategori } from './RegistrerVektkategori';
 
 // NB! Setting the error messages used by yup
 import '../../../../utils/forms/formErrorMessages';
+import { useBatchUpdateVektregistrering } from '../../../../services/vektregistrering/useBatchUpdateVektregistrering';
 
 interface VektFormData {
     [key: string]: VektObject;
 }
 
 interface VektObject {
-    id: string;
+    vektId?: string;
+    kategoriId: string;
     value: number;
 }
 
 interface Props {
     /** By passing an existing Vektregistrering, the form will be in edit mode **/
-    vektregistreringToEdit?: ApiVektregistrering;
+    vektregistreringToEdit?: ApiVektregistrering[];
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
     henting: ApiHenting; //UUID
     setVekt: Dispatch<SetStateAction<Record<string, number>>>;
 }
 
-export const VektForm: React.FC<Props> = ({ henting, onSuccess, setVekt }) => {
+export const VektForm: React.FC<Props> = ({ vektregistreringToEdit, henting, onSuccess, setVekt }) => {
     let validation = yup.object();
 
     const validationKategoriobjekt = (key: string) => {
@@ -68,21 +71,36 @@ export const VektForm: React.FC<Props> = ({ henting, onSuccess, setVekt }) => {
 
     const validationSchema = validation;
 
+    const editVektFormData = (): VektFormData => {
+        const vektFormData: VektFormData = {};
+        vektregistreringToEdit?.forEach((vektregistrering) => {
+            const key = vektregistrering.kategoriNavn;
+            vektFormData[key] = {
+                vektId: vektregistrering.id,
+                kategoriId: vektregistrering.kategoriId,
+                value: vektregistrering.vekt,
+            };
+        });
+        return vektFormData;
+    };
+
     const formMethods = useForm<VektFormData>({
         resolver: yupResolver(validationSchema),
+        defaultValues: vektregistreringToEdit ? editVektFormData() : undefined,
     });
 
     const batchAddVektregistreringMutation = useBatchAddVektregistrering();
+    const batchUpdateVektregistreringMutation = useBatchUpdateVektregistrering();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
 
-    const transformFormData = (formData: VektFormData): ApiVektregistreringBatchPost => {
+    const transformPostFormData = (formData: VektFormData): ApiVektregistreringBatchPost => {
         const kategoriIder: string[] = [];
         const veiinger: number[] = [];
 
         for (const key in formData) {
             const vektObject: VektObject = formData[key];
-            kategoriIder.push(vektObject.id);
+            kategoriIder.push(vektObject.kategoriId);
             veiinger.push(vektObject.value);
         }
 
@@ -93,16 +111,50 @@ export const VektForm: React.FC<Props> = ({ henting, onSuccess, setVekt }) => {
         };
     };
 
+    const transformPatchFormData = (formData: VektFormData): ApiVektregistreringBatchPatch => {
+        const registreringIder: string[] = [];
+        const veiinger: number[] = [];
+
+        for (const key in formData) {
+            const vektObject: VektObject = formData[key];
+            vektObject.vektId ? registreringIder.push(vektObject.vektId) : null;
+            veiinger.push(vektObject.value);
+        }
+
+        return {
+            hentingId: henting.id,
+            vektregistreringIds: registreringIder,
+            veiinger: veiinger,
+        };
+    };
+
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        batchAddVektregistrering(transformFormData(formData));
+        const vektregistrering = vektregistreringToEdit
+            ? transformPatchFormData(formData)
+            : transformPostFormData(formData);
+
+        if (vektregistreringToEdit) {
+            batchUpdateVektregistrering(vektregistrering as ApiVektregistreringBatchPatch);
+        } else {
+            batchAddVektregistrering(vektregistrering as ApiVektregistreringBatchPost);
+        }
     });
 
     const batchAddVektregistrering = (newVektregistreringer: ApiVektregistreringBatchPost) => {
         batchAddVektregistreringMutation.mutate(newVektregistreringer, {
             onSuccess: () => {
                 onApiSubmitSuccess('Vektregistreringene er gjennomført');
+            },
+            onError: onApiSubmitError,
+        });
+    };
+
+    const batchUpdateVektregistrering = (updatedVektregistreringer: ApiVektregistreringBatchPatch) => {
+        batchUpdateVektregistreringMutation.mutate(updatedVektregistreringer, {
+            onSuccess: () => {
+                onApiSubmitSuccess('Endringen for vektregistreringen er gjennomført');
             },
             onError: onApiSubmitError,
         });

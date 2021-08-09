@@ -2,15 +2,15 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet';
 import { Flex } from '@chakra-ui/layout';
 import { useRouteMatch } from 'react-router-dom';
-import { Vektregistrering } from './Vektregistrering';
+import { Vektregistrering } from '../registrering/Vektregistrering';
 
-const Registrering: React.FC = () => {
+const Redigering: React.FC = () => {
     const { params } = useRouteMatch<{ hentingId?: string }>();
 
     return (
         <>
             <Helmet>
-                <title>Vektregistrering</title>
+                <title>Redigering av vekt</title>
             </Helmet>
             <Flex
                 as="main"
@@ -23,7 +23,7 @@ const Registrering: React.FC = () => {
                 padding={10}
             >
                 {params.hentingId ? (
-                    <Vektregistrering hentingId={params.hentingId} label="Registrer vekt" />
+                    <Vektregistrering hentingId={params.hentingId} label="Rediger vekt" />
                 ) : (
                     'Klarte ikke å finne denne hentingen.'
                 )}
@@ -32,4 +32,4 @@ const Registrering: React.FC = () => {
     );
 };
 
-export default Registrering;
+export default Redigering;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Flex, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { colors } from '../../../theme/foundations/colors';
 import Checkbox from '../../../assets/Checkbox.svg';
 import { Totalvekt } from './components/Totalvekt';
@@ -13,6 +13,7 @@ import { HentingDetailsRoutingProps } from '../../henting/HentingDetails';
 
 interface Props {
     hentingId: string;
+    label: string;
 }
 
 export interface VektObjects {
@@ -25,7 +26,7 @@ export interface VektObject {
     value: number;
 }
 
-export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
+export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
     const { state: locationState } = useLocation<HentingDetailsRoutingProps>();
     const history = useHistory();
 
@@ -58,7 +59,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
                             spacing={14}
                         >
                             <Heading as="h1" fontSize="1.5rem" fontWeight={700}>
-                                Registrer vekt
+                                {label}
                             </Heading>
                             <Totalvekt vektObjects={vektObjects} />
                             <Text fontSize="0.75rem" fontWeight={400} maxWidth={420}>
@@ -66,7 +67,12 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId }) => {
                                 registeres under egne vektkategorier. Alle andre varer skal registreres på
                                 <span style={{ fontWeight: 500 }}> Andre ombruksvarer.</span>
                             </Text>
-                            <VektForm henting={veiHenting} setVekt={setVekt} onSuccess={onSuccess} />
+                            <VektForm
+                                vektregistreringToEdit={veiHenting.vektregistreringer}
+                                henting={veiHenting}
+                                setVekt={setVekt}
+                                onSuccess={onSuccess}
+                            />
                         </VStack>
 
                         <Flex
