@@ -6,7 +6,8 @@ import { Loading } from '../components/Loading';
 
 const Kalender = React.lazy(() => import('../pages/kalender'));
 const Henting = React.lazy(() => import('../pages/henting'));
-const Registrering = React.lazy(() => import('../pages/vekt/registrering'));
+const VektRegistrering = React.lazy(() => import('../pages/vekt/registrering'));
+const VektRedigering = React.lazy(() => import('../pages/vekt/redigering'));
 const Avtaler = React.lazy(() => import('../pages/avtaler'));
 const Stasjoner = React.lazy(() => import('../pages/stasjoner'));
 const MineAvtaler = React.lazy(() => import('../pages/minavtale'));
@@ -30,9 +31,12 @@ export const PageRouter: React.FC = () => (
             <Route path="/henting/:hentingId">
                 <Henting />
             </Route>
-            <Route path="/vekt/:hentingId">
-                <Registrering />
+            <Route path="/vekt/registrer/:hentingId">
+                <VektRegistrering />
             </Route>
+            <ProtectedRoute path="/vekt/rediger/:hentingId" requiredRoles={[Roles.Admin]}>
+                <VektRedigering />
+            </ProtectedRoute>
             <ProtectedRoute path="/avtaler" requiredRoles={[Roles.Admin, Roles.Stasjon]}>
                 <Avtaler />
             </ProtectedRoute>

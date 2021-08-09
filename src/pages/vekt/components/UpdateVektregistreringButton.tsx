@@ -16,7 +16,7 @@ export const UpdateVektregistreringButton: React.FC<Props & ButtonProps> = ({ he
             {...props}
             as={Link}
             to={{
-                pathname: `/vekt/${henting.id}`,
+                pathname: `/vekt/registrer/${henting.id}`,
                 state: linkState,
             }}
         >
