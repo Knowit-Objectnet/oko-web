@@ -1,23 +1,33 @@
 import * as React from 'react';
+import { useState } from 'react';
+import { Icon, VStack } from '@chakra-ui/react';
 import { useAuth } from '../../../auth/useAuth';
-import { useCalendarState } from '../CalendarProvider';
-import { VStack } from '@chakra-ui/react';
-import { CalendarDatePicker } from './CalendarDatePicker';
 import { CalendarStasjonFilter } from './CalendarStasjonFilter';
 import { CalendarPartnerFilter } from './CalendarPartnerFilter';
-import { useState } from 'react';
+import Filter from '../../../assets/Filter.svg';
+import { CalendarDrawerWrapper } from './CalendarDrawerWrapper';
 
-export const CalendarSidebar: React.FC = () => {
+export const CalendarFilters: React.FC = () => {
     const { user } = useAuth();
-    const { shouldHideSidebar } = useCalendarState();
 
     // We have to store this state here, so that it is preserved across conditional renders of the filter components
     const [selectedStasjonIds, setSelectedStasjonIds] = useState<Array<string>>([]);
     const [selectedPartnerIds, setSelectedPartnerIds] = useState<Array<string>>([]);
 
-    return !shouldHideSidebar ? (
-        <VStack alignItems="flex-start" spacing="2">
-            <CalendarDatePicker />
+    const getFilterCount = () => {
+        const filterCount = [selectedStasjonIds, selectedPartnerIds].reduce(
+            (result: number, currentFilter) => result + currentFilter.length,
+            0,
+        );
+        return filterCount > 0 ? ` (${filterCount} aktive)` : '';
+    };
+
+    return (
+        <CalendarDrawerWrapper
+            triggerLabel={`Filtrer${getFilterCount()}`}
+            triggerIcon={<Icon as={Filter} />}
+            footerCloseButtonLabel="Sett filtre"
+        >
             {/* TODO: make filters container on next line scroll if it overflows the full window height */}
             <VStack spacing="6" width="full">
                 {user.isStasjon ? null : (
@@ -33,6 +43,6 @@ export const CalendarSidebar: React.FC = () => {
                     />
                 )}
             </VStack>
-        </VStack>
-    ) : null;
+        </CalendarDrawerWrapper>
+    );
 };

@@ -3,7 +3,8 @@ import { Helmet } from 'react-helmet';
 import { CalendarComponent } from './components/CalendarComponent';
 import { Stack } from '@chakra-ui/react';
 import { CalendarProvider } from './CalendarProvider';
-import { CalendarSidebar } from './components/CalendarSidebar';
+import { CalendarDatePicker } from './components/CalendarDatePicker';
+import { CalendarFilters } from './components/CalendarFilters';
 
 const Kalender: React.FC = () => (
     <CalendarProvider>
@@ -12,15 +13,18 @@ const Kalender: React.FC = () => (
             <title>Kalender</title>
         </Helmet>
         <Stack
-            direction="row"
+            direction={{ base: 'column', tablet: 'row' }}
             as="main"
             padding="5"
             alignItems="flex-start"
             minWidth="full"
-            spacing="4"
+            spacing={{ base: '2', tablet: '6' }}
             minHeight="min-content"
         >
-            <CalendarSidebar />
+            <Stack direction={{ base: 'row', tablet: 'column' }} spacing="2" width={{ base: 'full', tablet: 'auto' }}>
+                <CalendarDatePicker />
+                <CalendarFilters />
+            </Stack>
             <CalendarComponent />
         </Stack>
     </CalendarProvider>
