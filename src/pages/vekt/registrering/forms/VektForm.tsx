@@ -31,20 +31,20 @@ interface VektObject {
 }
 
 interface Props {
-    /** By passing an existing Vektregistrering, the form will be in edit mode **/
-    vektregistreringToEdit?: ApiVektregistrering[];
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
     henting: ApiHenting; //UUID
     setVekt: Dispatch<SetStateAction<Record<string, number>>>;
 }
 
-export const VektForm: React.FC<Props> = ({ vektregistreringToEdit, henting, onSuccess, setVekt }) => {
+export const VektForm: React.FC<Props> = ({ henting, onSuccess, setVekt }) => {
     let validation = yup.object();
+
+    const previousRegistreringer = henting.vektregistreringer;
 
     const validationKategoriobjekt = (key: string) => {
         return {
-            id: yup.string().required(),
+            kategoriId: yup.string().required(),
             value: yup
                 .number()
                 .typeError(`${key} må ha minst ett tall.`)
@@ -73,7 +73,7 @@ export const VektForm: React.FC<Props> = ({ vektregistreringToEdit, henting, onS
 
     const editVektFormData = (): VektFormData => {
         const vektFormData: VektFormData = {};
-        vektregistreringToEdit?.forEach((vektregistrering) => {
+        previousRegistreringer?.forEach((vektregistrering) => {
             const key = vektregistrering.kategoriNavn;
             vektFormData[key] = {
                 vektId: vektregistrering.id,
@@ -86,7 +86,7 @@ export const VektForm: React.FC<Props> = ({ vektregistreringToEdit, henting, onS
 
     const formMethods = useForm<VektFormData>({
         resolver: yupResolver(validationSchema),
-        defaultValues: vektregistreringToEdit ? editVektFormData() : undefined,
+        defaultValues: previousRegistreringer ? editVektFormData() : undefined,
     });
 
     const batchAddVektregistreringMutation = useBatchAddVektregistrering();
@@ -131,11 +131,10 @@ export const VektForm: React.FC<Props> = ({ vektregistreringToEdit, henting, onS
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        const vektregistrering = vektregistreringToEdit
-            ? transformPatchFormData(formData)
-            : transformPostFormData(formData);
+        const vektregistrering =
+            previousRegistreringer?.length > 0 ? transformPatchFormData(formData) : transformPostFormData(formData);
 
-        if (vektregistreringToEdit) {
+        if (previousRegistreringer?.length > 0) {
             batchUpdateVektregistrering(vektregistrering as ApiVektregistreringBatchPatch);
         } else {
             batchAddVektregistrering(vektregistrering as ApiVektregistreringBatchPost);

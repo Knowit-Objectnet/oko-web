@@ -25,7 +25,7 @@ export const RegistrerVektkategori: React.FC<Props> = ({ henting, setVekt }) => 
                                     id={kategori.kategori.id}
                                     setVekt={setVekt}
                                     vektObject={{
-                                        id: kategori.kategori.id,
+                                        kategoriId: kategori.kategori.id,
                                         navn: kategori.kategori.navn,
                                         value: 0,
                                     }}
@@ -37,7 +37,7 @@ export const RegistrerVektkategori: React.FC<Props> = ({ henting, setVekt }) => 
                             //TODO: Create a protected id for "Andre ombruksvarer", should be used for everything else
                             id="0f3f3bdd-5733-45da-87ae-a9417596cb12"
                             vektObject={{
-                                id: '0f3f3bdd-5733-45da-87ae-a9417596cb12',
+                                kategoriId: '0f3f3bdd-5733-45da-87ae-a9417596cb12',
                                 navn: 'Andre ombruksvarer',
                                 value: 0,
                             }}
