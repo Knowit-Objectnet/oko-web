@@ -9,9 +9,10 @@ interface Props {
     label: string;
     isLoading: boolean;
     isError: boolean;
+    isPast: boolean;
 }
 
-export const EkstraHentingAccordion: React.FC<Props> = ({ ekstraHentinger, label, isLoading, isError }) => {
+export const EkstraHentingAccordion: React.FC<Props> = ({ ekstraHentinger, label, isLoading, isError, isPast }) => {
     return (
         <>
             <AccordionItem>
@@ -41,6 +42,7 @@ export const EkstraHentingAccordion: React.FC<Props> = ({ ekstraHentinger, label
                                 ekstraHentinger={ekstraHentinger}
                                 isLoading={isLoading}
                                 isError={isError}
+                                isPast={isPast}
                             />
                         </AccordionPanel>
                     </Flex>

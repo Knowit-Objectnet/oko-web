@@ -45,18 +45,21 @@ export const EkstraHentingInfoListPartner: React.FC = () => {
                 label="Aktive ekstrahentinger"
                 isLoading={isLoading}
                 isError={isError}
+                isPast={false}
             />
             <EkstraHentingHeading
                 ekstraHentinger={dineKommendeEkstraHentinger}
                 label="Dine kommende ekstrahentinger"
                 isLoading={isLoading}
                 isError={isError}
+                isPast={false}
             />
             <EkstraHentingAccordion
                 ekstraHentinger={kanIkkeMeldePaaEkstraHentinger}
                 label="Utgåtte ekstrahentinger"
                 isLoading={isLoading}
                 isError={isError}
+                isPast={true}
             />
         </Accordion>
     );

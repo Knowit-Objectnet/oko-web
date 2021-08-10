@@ -26,12 +26,14 @@ export const EkstraHentingInfoListAdmin: React.FC = () => {
                 label="Aktive ekstrahentinger"
                 isLoading={isLoading}
                 isError={isError}
+                isPast={false}
             />
             <EkstraHentingAccordion
                 ekstraHentinger={sortedTidligereEkstraHentinger}
                 label="Tidligere ekstrahentinger"
                 isLoading={isLoading}
                 isError={isError}
+                isPast={true}
             />
         </Accordion>
     );

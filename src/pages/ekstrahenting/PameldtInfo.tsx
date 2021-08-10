@@ -6,9 +6,10 @@ import { UtlysFlerePartnereButton } from './forms/UtlysFlerePartnereButton';
 
 interface Props {
     ekstraHenting: ApiEkstraHenting;
+    isPast: boolean;
 }
 
-export const PameldtInfo: React.FC<Props> = ({ ekstraHenting }) => {
+export const PameldtInfo: React.FC<Props> = ({ ekstraHenting, isPast }) => {
     const { data: allPartnere, isLoading, isLoadingError } = usePartnere();
 
     return (
@@ -29,7 +30,10 @@ export const PameldtInfo: React.FC<Props> = ({ ekstraHenting }) => {
                             Ingen påmeldt
                         </Text>
                     </Box>
-                    {!isLoading && !isLoadingError && ekstraHenting.utlysninger.length < allPartnere!.length ? (
+                    {!isLoading &&
+                    !isLoadingError &&
+                    ekstraHenting.utlysninger.length < allPartnere!.length &&
+                    !isPast ? (
                         <UtlysFlerePartnereButton henting={ekstraHenting} backgroundColor="White" borderRadius="6" />
                     ) : null}
                 </Flex>

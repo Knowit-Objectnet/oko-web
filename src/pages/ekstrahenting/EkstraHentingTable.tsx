@@ -12,9 +12,10 @@ interface Props {
     ekstraHentinger: Array<ApiEkstraHenting>;
     isLoading: boolean;
     isError: boolean;
+    isPast: boolean;
 }
 
-export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading, isError }) => {
+export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading, isError, isPast }) => {
     const { user } = useAuth();
 
     if (isLoading) {
@@ -61,7 +62,7 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading
                             {user.isPartner ? (
                                 <PartnerPameldingInfo ekstraHenting={ekstraHenting} />
                             ) : (
-                                <PameldtInfo ekstraHenting={ekstraHenting} />
+                                <PameldtInfo ekstraHenting={ekstraHenting} isPast={isPast} />
                             )}
                         </Td>
                     </Tr>

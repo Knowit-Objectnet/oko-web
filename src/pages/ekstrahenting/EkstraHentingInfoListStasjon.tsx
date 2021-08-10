@@ -22,6 +22,7 @@ export const EkstraHentingInfoListStasjon: React.FC = () => {
             label="Aktive ekstrahentinger"
             isLoading={isLoading}
             isError={isError}
+            isPast={false}
         />
     );
 };
