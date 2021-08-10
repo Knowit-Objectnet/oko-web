@@ -102,7 +102,13 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
                         <WarningContainer variant="warning">
                             <WarningTitle title="Advarsel" />
                             <WarningBody>
-                                Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.
+                                Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres. Dersom
+                                nytt kategorinavn har en annen betydning enn nåværende navn, bør det vurderes å opprette
+                                en ny kategori.
+                            </WarningBody>
+                            <WarningBody>
+                                For eksempel bør man vurdere opprettelse av ny kategori ved navnebytte fra "Sport- og
+                                friluftsutstyr" til "Ski".
                             </WarningBody>
                             <Input name="navn" label="Navn på kategori" required />
                         </WarningContainer>
