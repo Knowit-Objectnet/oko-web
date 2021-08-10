@@ -78,7 +78,10 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
             hentingId: henting.id,
             // TODO: next line is not a very robust solution, can potentially set `partnere` to `undefined`
             //  if there is a problem fetching the partners from the api
-            partnerIds: formData.partnere || allPartnere?.map((partner) => partner.id),
+            partnerIds:
+                formData.utlysningSelect === 'ALL'
+                    ? allPartnere?.map((partner) => partner.id) || []
+                    : formData.partnere,
         });
     });
 
