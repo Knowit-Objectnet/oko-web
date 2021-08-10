@@ -107,8 +107,8 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
                                 en ny kategori.
                             </WarningBody>
                             <WarningBody>
-                                For eksempel bør man vurdere opprettelse av ny kategori ved navnebytte fra "Sport- og
-                                friluftsutstyr" til "Ski".
+                                For eksempel bør man vurdere opprettelse av ny kategori ved navnebytte fra &quot;Sport-
+                                og friluftsutstyr&quot; til &quot;Ski&quot;.
                             </WarningBody>
                             <Input name="navn" label="Navn på kategori" required />
                         </WarningContainer>
