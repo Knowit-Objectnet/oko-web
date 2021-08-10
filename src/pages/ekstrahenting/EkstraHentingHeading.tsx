@@ -10,9 +10,10 @@ interface Props {
     label: string;
     isLoading: boolean;
     isError: boolean;
+    isPast: boolean;
 }
 
-export const EkstraHentingHeading: React.FC<Props> = ({ ekstraHentinger, label, isLoading, isError }) => {
+export const EkstraHentingHeading: React.FC<Props> = ({ ekstraHentinger, label, isLoading, isError, isPast }) => {
     const { user } = useAuth();
     return (
         <>
@@ -30,7 +31,12 @@ export const EkstraHentingHeading: React.FC<Props> = ({ ekstraHentinger, label, 
                 ) : null}
             </Flex>
             <Box width="full" overflowX="auto" marginBottom="12">
-                <EkstraHentingTable ekstraHentinger={ekstraHentinger} isLoading={isLoading} isError={isError} />
+                <EkstraHentingTable
+                    ekstraHentinger={ekstraHentinger}
+                    isLoading={isLoading}
+                    isError={isError}
+                    isPast={isPast}
+                />
             </Box>
         </>
     );
