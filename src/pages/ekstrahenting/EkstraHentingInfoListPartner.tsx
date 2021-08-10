@@ -59,7 +59,7 @@ export const EkstraHentingInfoListPartner: React.FC = () => {
                 label="Utgåtte ekstrahentinger"
                 isLoading={isLoading}
                 isError={isError}
-                isPast={true}
+                isPast={false}
             />
         </Accordion>
     );
