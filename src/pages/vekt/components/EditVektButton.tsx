@@ -8,7 +8,7 @@ interface Props {
     henting: ApiHentingWrapper;
 }
 
-export const UpdateVektregistreringButton: React.FC<Props & ButtonProps> = ({ henting, ...props }) => {
+export const EditVektButton: React.FC<Props & ButtonProps> = ({ henting, ...props }) => {
     const linkState: HentingDetailsRoutingProps = { henting: henting, showBackButton: true };
 
     return (
@@ -16,11 +16,11 @@ export const UpdateVektregistreringButton: React.FC<Props & ButtonProps> = ({ he
             {...props}
             as={Link}
             to={{
-                pathname: `/vekt/registrer/${henting.id}`,
+                pathname: `/vekt/rediger/${henting.id}`,
                 state: linkState,
             }}
         >
-            Registrer vekt
+            Rediger vekt
         </Button>
     );
 };

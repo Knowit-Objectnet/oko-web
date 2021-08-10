@@ -9,12 +9,17 @@ export interface ApiVektregistrering {
     registreringsDato: string; //LocalTimeDate
 }
 
-// IKKE STØTTE FOR UPDATE I BACKEND
 export interface ApiVektregistreringPatch {
     id: string; // uuid
     hentingId?: string; // uuid
     kategoriId?: string; // uuid
     vekt?: number;
+}
+
+export interface ApiVektregistreringBatchPatch {
+    hentingId: string; //UUID
+    vektregistreringIds: string[];
+    veiinger: number[];
 }
 
 export interface ApiVektregistreringParams {
@@ -59,6 +64,13 @@ export const postVektregistrering = (newVektregistrering: ApiVektregistreringPos
 export const patchVektregistrering = (updateVektregistrering: ApiVektregistreringPatch): Promise<ApiVektregistrering> =>
     httpClient()
         .patch<ApiVektregistrering>(vektregistreringEndpoint, updateVektregistrering)
+        .then(extractResponse, transformError);
+
+export const patchBatchVektregistrering = (
+    updatedVektregistreringer: ApiVektregistreringBatchPatch,
+): Promise<ApiVektregistrering[]> =>
+    httpClient()
+        .patch<ApiVektregistrering[]>(`${vektregistreringEndpoint}/batch`, updatedVektregistreringer)
         .then(extractResponse, transformError);
 
 export const postBatchVektregistrering = (
