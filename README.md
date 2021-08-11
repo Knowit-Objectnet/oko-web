@@ -243,7 +243,7 @@ public consists of all the static files, like `index.html`.
 
 ### Src
 
-Inside _src_ are alle the source kode for the application, and they are organized in folders and files.
+Inside _src_ are all the source kode for the application, and they are organized in folders and files.
 
 -   `index` and `app` are the root of the application, like in most React projects.
 -   `assets` is where all the images and fonts are stored.
