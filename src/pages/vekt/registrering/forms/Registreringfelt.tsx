@@ -36,7 +36,7 @@ export const Registreringsfelt: React.FC<Props> = ({ vektObject, setVekt }) => {
 
     return (
         <>
-            <Flex alignItems="center" {...setValue(`${vektObject.navn}.id`, vektObject.id)}>
+            <Flex alignItems="center" {...setValue(`${vektObject.navn}.kategoriId`, vektObject.kategoriId)}>
                 <Input
                     variant="unstyled"
                     backgroundColor="white"

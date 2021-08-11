@@ -18,7 +18,7 @@ export const RegisterVektButton: React.FC<Props & ButtonProps> = ({ henting, ...
             variant="primary"
             rightIcon={<Icon as={Plus} />}
             to={{
-                pathname: `/vekt/${henting.id}`,
+                pathname: `/vekt/registrer/${henting.id}`,
                 state: linkState,
             }}
             {...props}

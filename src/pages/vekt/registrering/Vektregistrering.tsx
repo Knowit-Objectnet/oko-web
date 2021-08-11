@@ -21,7 +21,7 @@ export interface VektObjects {
 }
 
 export interface VektObject {
-    id: string;
+    kategoriId: string;
     navn: string;
     value: number;
 }
@@ -67,12 +67,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
                                 registeres under egne vektkategorier. Alle andre varer skal registreres på
                                 <span style={{ fontWeight: 500 }}> Andre ombruksvarer.</span>
                             </Text>
-                            <VektForm
-                                vektregistreringToEdit={veiHenting.vektregistreringer}
-                                henting={veiHenting}
-                                setVekt={setVekt}
-                                onSuccess={onSuccess}
-                            />
+                            <VektForm henting={veiHenting} setVekt={setVekt} onSuccess={onSuccess} />
                         </VStack>
 
                         <Flex
