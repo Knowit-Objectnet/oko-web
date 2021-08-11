@@ -93,8 +93,9 @@ Type `ls` in the _terminal_, or `dir` in _Command Prompt_ to see the root folder
 
 Before running/building locally the first time, copy the file `.env-sample` and rename to `.env`. The file provides the environment variables required. See ["Building and environment variables"](#building-and-environment-variables) below.
 
--   To start the development server simply execute the following in a _terminal_:
+-   To start the development server simply execute the following in a _terminal_ to install dependencies and run the application:
     ```sh
+    yarn install
     yarn start
     ```
 -   **Not recommended:** it is also possible to use the provided docker container by going into the folder `container` and executing `docker-compose up`.
