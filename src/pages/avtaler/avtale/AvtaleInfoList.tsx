@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Accordion, Stack } from '@chakra-ui/react';
-import { AvtaleInfoItem } from './AvtaleInfoItem';
+import { AvtaleInfoItem, getAvtaleTitle } from './AvtaleInfoItem';
 import { compareDesc, parseISO } from 'date-fns';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { useAvtaler } from '../../../services/avtale/useAvtaler';
@@ -13,8 +13,12 @@ export const AvtaleInfoList: React.FC<Props> = ({ partner }) => {
     // TODO: loading/error handling
     const { data: avtaler, isLoading, isError } = useAvtaler({ aktorId: partner.id });
 
-    const sortedAvtaler = (avtaler ?? []).sort((avtaleA, avtaleB) =>
+    const sortedAvtalerBySluttDato = (avtaler ?? []).sort((avtaleA, avtaleB) =>
         compareDesc(parseISO(avtaleA.sluttDato), parseISO(avtaleB.sluttDato)),
+    );
+
+    const sortedAvtaler = (sortedAvtalerBySluttDato ?? []).sort((avtaleA, avtaleB) =>
+        getAvtaleTitle(avtaleA).localeCompare(getAvtaleTitle(avtaleB)),
     );
 
     if (isLoading) {

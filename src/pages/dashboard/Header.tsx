@@ -16,20 +16,25 @@ export const Header: React.FC = () => {
                 paddingRight="4"
                 justifyContent="space-between"
                 position="relative"
+                maxWidth="100vw"
+                overflowX="auto"
             >
                 <RouterLink to="/" height="full" aria-label="Til forsiden">
                     <Icon as={OsloKommuneLogo} height="full" width="auto" aria-hidden />
                 </RouterLink>
                 <Box
                     flex="1"
-                    width="full"
-                    height={{ base: '16', tablet: 'full' }}
+                    width={{ base: '100vw', tablet: 'full' }}
+                    height={{ base: 'navbar.mobile', tablet: 'full' }}
                     position={{ base: 'fixed', tablet: 'static' }}
                     bottom={{ base: '0', tablet: 'unset' }}
                     left={{ base: '0', tablet: 'unset' }}
+                    paddingX={{ base: '3', tablet: '0' }}
                     backgroundColor="inherit"
                     // TODO: Z-index because of react-big-calendar default styles, try to remove after customizing stules for calendar
-                    zIndex="docked"
+                    zIndex="sticky"
+                    overflowX={{ base: 'auto', tablet: 'unset' }}
+                    maxWidth="100vw"
                 >
                     <Navigation />
                 </Box>
@@ -44,6 +49,7 @@ export const Header: React.FC = () => {
                     color="onPrimary"
                     display="block"
                     verticalAlign="center"
+                    whiteSpace="nowrap"
                 >
                     <Icon
                         as={Profile}

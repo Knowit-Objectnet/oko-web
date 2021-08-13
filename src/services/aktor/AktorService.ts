@@ -7,10 +7,11 @@ export interface ApiAktor {
     id: string;
     navn: string;
     kontaktPersoner: Array<ApiKontakt>;
+    aktorType: AktorType;
 }
 
 const aktorEndpoint = '/aktor';
 export const aktorDefaultQueryKey = 'findOneAktor';
 
-export const findOneAktor = (aktorId: string): Promise<AktorType> =>
-    httpClient().get<AktorType>(`${aktorEndpoint}/${aktorId}`).then(extractResponse, transformError);
+export const findOneAktor = (aktorId: string): Promise<ApiAktor> =>
+    httpClient().get<ApiAktor>(`${aktorEndpoint}/${aktorId}`).then(extractResponse, transformError);

@@ -26,9 +26,10 @@ export const useAuth = (): AuthContext => {
     const [keycloakGroupId, setKeycloakGroupId] = useState<string>();
 
     useEffect(() => {
-        keycloak.loadUserInfo().then((keycloakCustomUserInfo: { GroupID?: string }) => {
-            setKeycloakGroupId(keycloakCustomUserInfo.GroupID);
-        });
+        if (!keycloak.authenticated) {
+            keycloak.login();
+        }
+        setKeycloakGroupId(keycloak?.tokenParsed?.GroupID);
     }, [keycloak]);
 
     const user: UserInfo = {

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { FormModal } from '../../../components/forms/FormModal';
+import { Modal } from '../../../components/Modal';
 import { AddButton } from '../../../components/buttons/AddButton';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { HenteplanForm } from './HenteplanForm';
+import { AddHenteplanForm } from './form/AddHenteplanForm';
 
 interface Props {
     avtale: ApiAvtale;
@@ -18,13 +18,14 @@ export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> 
         <>
             <AddButton
                 label="Ny henteplan"
+                borderRadius="6"
                 aria-label={`Opprett ny henteplan for ${partner.navn}`}
                 {...props}
                 onClick={onOpen}
             />
-            <FormModal title={`Ny henteplan for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
-                <HenteplanForm avtale={avtale} onSuccess={onClose} />
-            </FormModal>
+            <Modal title={`Ny henteplan for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
+                <AddHenteplanForm avtale={avtale} onSuccess={onClose} />
+            </Modal>
         </>
     );
 };

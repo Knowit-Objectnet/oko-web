@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { ButtonGroup, Table, Tbody, Td, Text, Th, Thead, Tr, VisuallyHidden } from '@chakra-ui/react';
-import { EditButton } from '../../components/buttons/EditButton';
 import { useStasjoner } from '../../services/stasjon/useStasjoner';
 import { DeleteStasjonButton } from './forms/DeleteStasjonButton';
 import { StasjonType } from '../../services/stasjon/StasjonService';
@@ -40,7 +39,7 @@ export const StasjonTable: React.FC = () => {
                         <Td>{STASJONTYPE[stasjon.type] ?? 'Ukjent type'}</Td>
                         <Td>{stasjon.id}</Td>
                         <Td textAlign="end">
-                            <ButtonGroup spacing="4" size="sm">
+                            <ButtonGroup spacing="3" size="sm">
                                 <EditStasjonButton stasjon={stasjon} />
                                 {process.env.NODE_ENV === 'development' ? (
                                     // TODO: hacky solution to only show station deletion button

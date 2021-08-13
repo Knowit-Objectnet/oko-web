@@ -1,44 +1,30 @@
-import { useQueryString } from 'use-route-as-state';
-import { ApiStasjon } from '../../../services/stasjon/StasjonService';
-import { ApiPlanlagtHenting } from '../../../services/henting/HentingService';
-import { useStasjoner } from '../../../services/stasjon/useStasjoner';
+import { useState } from 'react';
+import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 
-export interface CalendarFilters {
-    stasjon?: string;
+export type CalendarFilters = Map<string, CalendarFilterFn>;
+
+export type CalendarFilterFn = (henting: ApiHentingWrapper) => boolean;
+
+export interface CalendarFilterState {
+    filters: CalendarFilters;
+    setFilter: (filterName: string, filterFn: CalendarFilterFn) => void;
+    clearFilter: (filterName: string) => void;
 }
 
-export type CalendarFilterFn = (event: ApiPlanlagtHenting) => boolean;
+export const useCalendarFilters = (): CalendarFilterState => {
+    const [filters, setFilters] = useState<CalendarFilters>(new Map());
 
-const isValidStasjon = (stasjonName: string, stasjoner?: Array<ApiStasjon>) =>
-    (stasjoner ?? []).reduce((result: boolean, stasjon) => (stasjon.navn === stasjonName ? true : result), false);
-
-export const useCalendarFilters = (): {
-    filters: CalendarFilters;
-    filterFns: Array<CalendarFilterFn>;
-    setFilters: (updatedFilters: CalendarFilters) => void;
-} => {
-    // Getting all key=value query pairs from URL
-    const [queryFilters, setQueryFilters] = useQueryString();
-
-    const filters: CalendarFilters = {};
-    const filterFns = [];
-
-    // Checking for valid station filter name, and adding filter if present
-    const { data: stasjoner } = useStasjoner();
-    if (isValidStasjon(queryFilters.stasjon, stasjoner)) {
-        const stasjonFilter = (event: ApiPlanlagtHenting): boolean => {
-            if (queryFilters.stasjon !== undefined) {
-                return event.stasjonNavn === queryFilters.stasjon;
-            }
-            return true;
-        };
-        filterFns.push(stasjonFilter);
-        filters.stasjon = queryFilters.stasjon;
-    }
-
-    const setFilters = (updatedFilters: CalendarFilters) => {
-        setQueryFilters({ ...queryFilters, ...updatedFilters });
+    const setFilter = (filterName: string, filterFn: CalendarFilterFn) => {
+        setFilters((currentFilters) => new Map(currentFilters).set(filterName, filterFn));
     };
 
-    return { filters, filterFns, setFilters };
+    const clearFilter = (filterName: string) => {
+        setFilters((currentFilters) => {
+            const newFilters = new Map(currentFilters);
+            newFilters.delete(filterName);
+            return newFilters;
+        });
+    };
+
+    return { filters, setFilter, clearFilter };
 };

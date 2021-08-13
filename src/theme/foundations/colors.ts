@@ -1,4 +1,5 @@
 // Oslo's color scheme
+// TODO: we might want to name these colors differently
 export enum Colors {
     DarkBlue = '#2A2859',
     Blue = '#6FE9FF',
@@ -22,8 +23,10 @@ export const colors = {
     primary: Colors.DarkBlue,
     onPrimary: Colors.White,
     primaryHover: '#1F42AA',
-    secondary: Colors.Blue,
+    secondary: Colors.LightBlue,
     onSecondary: Colors.Black,
+    accent: Colors.Blue,
+    onAccent: Colors.Black,
     background: Colors.White,
     onBackground: Colors.Black,
     surface: Colors.LightBeige,
@@ -34,6 +37,11 @@ export const colors = {
     disabled: Colors.Disabled,
     warning: Colors.Yellow,
     onWarning: Colors.Black,
+    ekstraHenting: Colors.Green,
+    hentingLight: '#E6FBFF',
+    hentingDark: '#00D8FF',
+    hentingDefault: Colors.LightBlue,
+    avlystHenting: '#ECF1F4',
 
-    ...Colors, // TODO: we might want to name these colors differently
+    ...Colors,
 };

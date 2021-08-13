@@ -1,47 +1,45 @@
+import { ApiPlanlagtHenting } from './PlanlagtHentingService';
+import { ApiEkstraHenting } from './EkstraHentingService';
 import { extractResponse, httpClient, transformError } from '../httpClient';
+import { ApiVektregistrering } from '../vektregistrering/VektregistreringService';
+import { ApiHentingKategori } from '../kategori/KategoriService';
 
-export interface ApiPlanlagtHenting {
+export interface ApiHenting {
     id: string; //UUID
-    startTidspunkt: string; //LocalTimeDate
-    sluttTidspunkt: string; //LocalTimeDate
-    merknad: string | null;
-    henteplanId: string; //UUID
-    avlyst: string | null; //LocalTimeDate
-    avtaleId: string; //UUID
-    aktorId: string; //UUID
-    aktorNavn: string;
     stasjonId: string; //UUID
     stasjonNavn: string;
+    startTidspunkt: string; //LocalTimeDate
+    sluttTidspunkt: string; //LocalTimeDate
+    kategorier: Array<ApiHentingKategori>;
+    vektregistreringer: Array<ApiVektregistrering>;
 }
 
-export interface ApiPlanlagtHentingParams {
+export interface ApiHentingWrapper {
+    id: string;
+    startTidspunkt: string; //LocalTimeDate
+    sluttTidspunkt: string; //LocalTimeDate
+    type: 'PLANLAGT' | 'EKSTRA';
+    planlagtHenting?: ApiPlanlagtHenting;
+    ekstraHenting?: ApiEkstraHenting;
+    stasjonId: string;
+    stasjonNavn: string;
+    aktorId?: string;
+    aktorNavn?: string;
+}
+
+export interface ApiHentingParams {
     id?: string; //UUID
     before?: string; //LocalTimeDate Henting must be before this
     after?: string; //LocalTimeDate Henting must be after this
-    merknad?: string;
-    henteplanId?: string;
-    avlyst?: boolean;
+    aktorId?: string; //UUID
+    stasjonId?: string; //UUID
 }
 
-export interface ApiPlanlagtHentingPatch {
-    id: string; //UUID
-    startTidspunkt?: string; //LocalTimeDate
-    sluttTidspunkt?: string; //LocalTimeDate
-    merknad?: string;
-    avlyst?: string; //LocalTimeDate
-}
+const hentingEndpoint = '/hentinger';
+export const hentingDefaultQueryKey = 'getHentinger';
 
-const hentingEndpoint = '/planlagte-hentinger';
-export const planlagtHentingDefaultQueryKey = 'getPlanlagteHentinger';
+export const getHentingById = (hentingId: string): Promise<ApiHentingWrapper> =>
+    httpClient().get<ApiHentingWrapper>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);
 
-export const getPlanlagteHentinger = (params: ApiPlanlagtHentingParams = {}): Promise<Array<ApiPlanlagtHenting>> =>
-    httpClient().get<Array<ApiPlanlagtHenting>>(hentingEndpoint, { params }).then(extractResponse, transformError);
-
-export const getPlanlagtHentingById = (hentingId: string): Promise<ApiPlanlagtHenting> =>
-    httpClient().get<ApiPlanlagtHenting>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);
-
-export const deletePlanlagtHenting = (hentingId: string): Promise<ApiPlanlagtHenting> =>
-    httpClient().delete<ApiPlanlagtHenting>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);
-
-export const patchPlanlagtHenting = (updatedHenting: ApiPlanlagtHentingPatch): Promise<ApiPlanlagtHenting> =>
-    httpClient().patch<ApiPlanlagtHenting>(hentingEndpoint, updatedHenting).then(extractResponse, transformError);
+export const getHentinger = (params: ApiHentingParams = {}): Promise<Array<ApiHentingWrapper>> =>
+    httpClient().get<Array<ApiHentingWrapper>>(hentingEndpoint, { params }).then(extractResponse, transformError);

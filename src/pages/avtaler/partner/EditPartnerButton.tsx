@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { FormModal } from '../../../components/forms/FormModal';
+import { Modal } from '../../../components/Modal';
 import { PartnerForm } from './PartnerForm';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
@@ -16,13 +16,14 @@ export const EditPartnerButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> =
         <>
             <EditButton
                 label="Rediger partner"
+                borderRadius="6"
                 aria-label={`Rediger informasjon for ${partner.navn}`}
                 {...props}
                 onClick={onOpen}
             />
-            <FormModal title="Rediger samarbeidspartner" isOpen={isOpen} onClose={onClose}>
+            <Modal title="Rediger samarbeidspartner" isOpen={isOpen} onClose={onClose}>
                 <PartnerForm onSuccess={onClose} partnerToEdit={partner} />
-            </FormModal>
+            </Modal>
         </>
     );
 };

@@ -1,43 +1,60 @@
 import * as React from 'react';
-import { FormControl, FormErrorMessage, FormHelperText, RadioGroup as ChakraRadioGroup, Stack } from '@chakra-ui/react';
+import {
+    FormControl,
+    FormErrorMessage,
+    FormHelperText,
+    Radio,
+    RadioGroup as ChakraRadioGroup,
+    VStack,
+} from '@chakra-ui/react';
 import { FormLabel } from './FormLabel';
-import { Radiobutton } from './Radiobutton';
 import { ErrorMessage } from '@hookform/error-message';
-import { useFormContext } from 'react-hook-form';
+import { useController } from 'react-hook-form';
+import { FormFieldProps } from './FormField';
 
 export interface RadioOption<TValue = string, TLabel = string> {
-    label: TLabel;
     value: TValue;
+    label: TLabel;
 }
 
-interface Props {
-    label: string;
-    name: string;
-    options: Array<RadioOption>;
-    required?: boolean;
-    helperText?: string;
+interface Props<TValue = string, TLabel = string> extends FormFieldProps {
+    defaultValues?: TValue[];
+    options?: Array<RadioOption<TValue, TLabel>>;
+    /** Component to display as placeholder for the radio list, e.g. while waiting for dynamically loaded options **/
+    optionsPlaceholder?: React.ReactNode;
 }
 
-export const RadiobuttonGroup: React.FC<Props> = ({ label, name, options, required, helperText }) => {
+export const RadiobuttonGroup: React.FC<Props> = ({
+    name,
+    label,
+    options,
+    required,
+    helperText,
+    optionsPlaceholder,
+    defaultValues,
+}) => {
     const {
-        watch,
+        field: { onChange, value },
         formState: { errors, isSubmitted },
-    } = useFormContext();
+    } = useController({ name, defaultValue: defaultValues });
 
-    const radioGroupValue = watch(name);
     const isInvalid = errors[name] && isSubmitted;
+
+    const getRadiobuttons = () =>
+        options?.map(({ value, label: RadiobuttonLabel }) => (
+            <Radio key={value} value={value} name={name} isInvalid={isInvalid}>
+                {' '}
+                {RadiobuttonLabel}{' '}
+            </Radio>
+        ));
 
     return (
         <FormControl isInvalid={isInvalid}>
             <fieldset>
                 <FormLabel as="legend" label={label} required={required} />
                 {helperText ? <FormHelperText>{helperText}</FormHelperText> : null}
-                <ChakraRadioGroup value={radioGroupValue}>
-                    <Stack direction="column" spacing="0">
-                        {options.map(({ value, label: radioLabel }) => (
-                            <Radiobutton name={name} key={value} value={value} label={radioLabel} />
-                        ))}
-                    </Stack>
+                <ChakraRadioGroup onChange={onChange} value={value}>
+                    {optionsPlaceholder || <VStack spacing="0">{getRadiobuttons()}</VStack>}
                 </ChakraRadioGroup>
             </fieldset>
             <FormErrorMessage>

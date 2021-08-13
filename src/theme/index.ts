@@ -10,6 +10,8 @@ import { typography } from './foundations/typography';
 import { Button } from './components/button';
 import { Modal } from './components/modal';
 import { Alert } from './components/alert';
+import { Spinner } from './components/spinner';
+import { Tag } from './components/tag';
 import { Form } from './components/form';
 import { FormLabel } from './components/form-label';
 import { Input } from './components/input';
@@ -18,6 +20,7 @@ import { Select } from './components/select';
 import { Radio } from './components/radio';
 import { Checkbox } from './components/checkbox';
 import { FormError } from './components/form-error';
+import { Table } from './components/table';
 
 const overrides = {
     colors,
@@ -31,6 +34,8 @@ const overrides = {
         Button,
         Modal,
         Alert,
+        Spinner,
+        Tag,
         Form,
         FormLabel,
         Input,
@@ -39,10 +44,10 @@ const overrides = {
         Radio,
         Checkbox,
         FormError,
+        Table,
     },
 };
 
 export const theme = {
     ...extendTheme(overrides),
-    // TODO: colors, // Overriding all colors except our own
 };

@@ -3,29 +3,38 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Input } from '../../../components/forms/Input';
+import { Input } from '../../../components/forms/input/Input';
 import { Stack } from '@chakra-ui/react';
 import { ErrorMessages } from '../../../components/forms/ErrorMessages';
 import { RequiredFieldsInstruction } from '../../../components/forms/RequiredFieldsInstruction';
-import { CheckboxGroup } from '../../../components/forms/CheckboxGroup';
 import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { useAddPartner } from '../../../services/partner/useAddPartner';
 import { ApiPartner, ApiPartnerPatch, ApiPartnerPost } from '../../../services/partner/PartnerService';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useUpdatePartner } from '../../../services/partner/useUpdatePartner';
 import { ApiError } from '../../../services/httpClient';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
 
+const organisasjonTypeOptions: Array<RadioOption<string>> = [
+    { value: 'true', label: 'Ja' },
+    { value: 'false', label: 'Nei' },
+];
+
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn for samarbeidspartneren').trim().required().min(2),
-    ideell: yup.boolean().label('Om partneren er en ideell organisasjon').required(),
+    organisasjonstype: yup
+        .mixed()
+        .label('om partneren er en prioritert organisasjon')
+        .required()
+        .oneOf(organisasjonTypeOptions.map((organisasjonType) => organisasjonType.value)),
 });
 
 interface PartnerFormData {
     navn: string;
-    ideell: boolean;
+    organisasjonstype: string;
 }
 
 interface Props {
@@ -41,7 +50,7 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
         defaultValues: partnerToEdit
             ? {
                   navn: partnerToEdit.navn,
-                  ideell: partnerToEdit.ideell,
+                  organisasjonstype: partnerToEdit.ideell.toString(),
               }
             : undefined,
     });
@@ -54,13 +63,18 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
+        const partner = {
+            navn: formData.navn,
+            ideell: formData.organisasjonstype === 'true',
+        };
+
         if (partnerToEdit) {
             updatePartner({
                 id: partnerToEdit.id,
-                ...formData,
+                ...partner,
             });
         } else {
-            addPartner(formData);
+            addPartner(partner);
         }
     });
 
@@ -98,9 +112,10 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
                     <Input name="navn" label="Navn på organisasjon" required />
-                    <CheckboxGroup
-                        label="Organisasjonstype"
-                        options={[{ name: 'ideell', label: 'Ideell organisasjon' }]}
+                    <RadiobuttonGroup
+                        name="organisasjonstype"
+                        label="Er det en prioritert organisasjon?"
+                        options={organisasjonTypeOptions}
                         required
                     />
                     <FormSubmitButton

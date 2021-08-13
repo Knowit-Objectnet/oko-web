@@ -23,7 +23,7 @@ export const Logout: React.FC = () => {
             <Helmet>
                 <title>Logger deg ut...</title>
             </Helmet>
-            <Loading text="Logger ut..." />
+            <Loading isFullPage label="Logger ut..." />
         </>
     );
 };

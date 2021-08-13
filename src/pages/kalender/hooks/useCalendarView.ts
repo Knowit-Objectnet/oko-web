@@ -4,10 +4,15 @@ import { Duration } from 'date-fns';
 import React, { useEffect } from 'react';
 import { usePersistedState } from '../../../utils/usePersistedState';
 import findKey from 'lodash/findKey';
+import { useMediaQuery } from '@chakra-ui/react';
 
-export type CalendarView = 'dag' | 'uke' | 'liste' | 'maned';
+export type CalendarView = 'maned' | 'dag' | 'uke' /*| 'liste'*/;
 
 const DEFAULT_VIEW: CalendarView = 'uke';
+
+// The view used for small screens
+//  TODO: this should probably be the "liste" view (unless "dag" is chosen by the user), if/when we support this view
+const DEFAULT_MOBILE_VIEW: CalendarView = 'dag';
 
 export type ViewProperties = {
     label: string;
@@ -32,11 +37,11 @@ export const VIEWS: Record<CalendarView, ViewProperties> = {
         type: 'day',
         fetchInterval: 'weeks',
     },
-    liste: {
-        label: 'Liste',
-        type: 'agenda',
-        fetchInterval: 'months',
-    },
+    // liste: {
+    //     label: 'Liste',
+    //     type: 'agenda',
+    //     fetchInterval: 'months',
+    // },
 };
 
 export const isValidView = (view?: string): view is CalendarView => (view ? Object.keys(VIEWS).includes(view) : false);
@@ -65,13 +70,22 @@ const useCalendarRedirect = () => {
     };
 };
 
-export const useCalendarView = (): [CalendarView, (view: CalendarView) => void] => {
+export interface CalendarViewState {
+    selectedView: CalendarView;
+    setSelectedView: (view: CalendarView) => void;
+    shouldHideSidebar?: boolean;
+    shouldShowMobileView?: boolean;
+}
+
+export const useCalendarView = (): CalendarViewState => {
     // Getting view name from path (URL)
     const { view: viewFromPath } = useParams<CalendarParams>();
 
     // View name is persisted to localstorage, with a default value if not provided in path (URL)
     // TODO: validate view name from localstorage, in case user has manipulated it?
     const [persistedView, setPersistedView] = usePersistedState<CalendarView>('OKOcalView', DEFAULT_VIEW);
+
+    const [shouldHideSidebar, shouldShowMobileView] = useMediaQuery(['(max-width: 1200px)', '(max-width: 768px)']);
 
     const redirectToCalendar = useCalendarRedirect();
 
@@ -89,5 +103,11 @@ export const useCalendarView = (): [CalendarView, (view: CalendarView) => void] 
         redirectToCalendar({ view });
     };
 
-    return [persistedView, setView];
+    return {
+        // We're always returning the mobile view if the screen is small
+        selectedView: shouldShowMobileView ? DEFAULT_MOBILE_VIEW : persistedView,
+        setSelectedView: setView,
+        shouldHideSidebar,
+        shouldShowMobileView,
+    };
 };

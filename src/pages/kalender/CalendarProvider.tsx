@@ -1,39 +1,27 @@
 import React, { useContext } from 'react';
-import { CalendarView, useCalendarView } from './hooks/useCalendarView';
-import { useCalendarDate } from './hooks/useCalendarDate';
-import { CalendarFilters, CalendarFilterFn, useCalendarFilters } from './hooks/useCalendarFilters';
+import { CalendarViewState, useCalendarView } from './hooks/useCalendarView';
+import { CalendarDateState, useCalendarDate } from './hooks/useCalendarDate';
+import { CalendarFilterState, useCalendarFilters } from './hooks/useCalendarFilters';
 
-export interface CalendarContext {
-    selectedView: CalendarView;
-    setSelectedView: (view: CalendarView) => void;
-    selectedDate: Date;
-    setSelectedDate: (date: Date) => void;
-    filters: CalendarFilters;
-    filterFns: Array<CalendarFilterFn>;
-    setFilters: (filter: CalendarFilters) => void;
-}
+export type CalendarState = CalendarViewState & CalendarDateState & CalendarFilterState;
 
-export const CalendarContext = React.createContext<CalendarContext | undefined>(undefined);
+export const CalendarContext = React.createContext<CalendarState | undefined>(undefined);
 
 export const CalendarProvider: React.FC = ({ children }) => {
-    const [selectedView, setSelectedView] = useCalendarView();
-    const [selectedDate, setSelectedDate] = useCalendarDate();
-    const { filters, filterFns, setFilters } = useCalendarFilters();
+    const viewState = useCalendarView();
+    const dateState = useCalendarDate();
+    const filterState = useCalendarFilters();
 
     const value = {
-        selectedView,
-        setSelectedView,
-        selectedDate,
-        setSelectedDate,
-        filters,
-        filterFns,
-        setFilters,
+        ...viewState,
+        ...dateState,
+        ...filterState,
     };
 
     return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
 };
 
-export const useCalendarState = (): CalendarContext => {
+export const useCalendarState = (): CalendarState => {
     const context = useContext(CalendarContext);
     if (context === undefined) {
         throw new Error('useCalendarState must be used within a CalendarProvider');

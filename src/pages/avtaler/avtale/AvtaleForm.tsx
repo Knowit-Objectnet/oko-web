@@ -10,22 +10,24 @@ import { FormSubmitButton } from '../../../components/forms/FormSubmitButton';
 import { formatISO } from 'date-fns';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { ApiAvtale, ApiAvtalePatch, ApiAvtalePost, AvtaleType } from '../../../services/avtale/AvtaleService';
-import { transformDate } from '../../../utils/forms/transformDate';
+import { transformStringToDate } from '../../../utils/forms/transformStringToDate';
 import { useSuccessToast } from '../../../components/toasts/useSuccessToast';
 import { useAddAvtale } from '../../../services/avtale/useAddAvtale';
-import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 import { ApiError } from '../../../services/httpClient';
 import { useUpdateAvtale } from '../../../services/avtale/useUpdateAvtale';
 import { AvtaleFormSluttDato } from './AvtaleFormSluttDato';
+import { AvtaleFormStartDato } from './AvtaleFormStartDato';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
-import { AvtaleFormStartDato } from './AvtaleFormStartDato';
+import { Input } from '../../../components/forms/input/Input';
 
 interface AvtaleFormData {
     type: AvtaleType;
     startDato: Date;
     sluttDato: Date;
+    saksnummer?: string;
 }
 
 const avtaleTypeOptions: Array<RadioOption<AvtaleType>> = [
@@ -34,11 +36,11 @@ const avtaleTypeOptions: Array<RadioOption<AvtaleType>> = [
 ];
 
 const validationSchema = yup.object().shape({
-    startDato: yup.date().label('startdato for avtalen').transform(transformDate).required().nullable(),
+    startDato: yup.date().label('startdato for avtalen').transform(transformStringToDate).required().nullable(),
     sluttDato: yup
         .date()
         .label('sluttdato for avtalen')
-        .transform(transformDate)
+        .transform(transformStringToDate)
         .required()
         .min(yup.ref('startDato'), 'Sluttdato kan ikke være før startdato')
         .nullable(),
@@ -74,6 +76,7 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
                   type: avtaleToEdit.type,
                   startDato: avtaleToEdit.startDato,
                   sluttDato: avtaleToEdit.sluttDato,
+                  saksnummer: avtaleToEdit.saksnummer,
               }
             : undefined,
     });
@@ -90,6 +93,7 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
             startDato: formatISO(formData.startDato, { representation: 'date' }),
             sluttDato: formatISO(formData.sluttDato, { representation: 'date' }),
             type: formData.type,
+            saksnummer: formData.saksnummer,
         };
 
         if (avtaleToEdit) {
@@ -141,6 +145,7 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
                     <AvtaleFormStartDato avtaleToEdit={avtaleToEdit} />
                     <AvtaleFormSluttDato avtaleToEdit={avtaleToEdit} />
                     <RadiobuttonGroup name="type" label="Type avtale" options={avtaleTypeOptions} required />
+                    <Input name="saksnummer" label="Saksnummer" />
                     <FormSubmitButton
                         label={avtaleToEdit ? 'Lagre endringer' : 'Registrer ny avtale'}
                         isLoading={updateAvtaleMutation.isLoading || addAvtaleMutation.isLoading}

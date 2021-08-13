@@ -16,7 +16,7 @@ export const App: React.FC = () => {
     return (
         <ChakraProvider theme={theme}>
             <ErrorBoundary FallbackComponent={GlobalError}>
-                <AuthProvider fallback={<Loading />}>
+                <AuthProvider fallback={<Loading isFullPage />}>
                     <QueryClientProvider client={queryClient}>
                         <Helmet titleTemplate="%s – Oslo kommune REG">
                             <html lang="nb" />

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
-import { CalendarComponent } from './CalendarComponent';
-import { Stack, VStack } from '@chakra-ui/react';
-import { CalendarDatePicker } from './CalendarDatePicker';
+import { CalendarComponent } from './components/CalendarComponent';
+import { Stack } from '@chakra-ui/react';
 import { CalendarProvider } from './CalendarProvider';
-import { CalendarStasjonFilter } from './CalendarStasjonFilter';
+import { CalendarDatePicker } from './components/CalendarDatePicker';
+import { CalendarFilters } from './components/CalendarFilters';
 
 const Kalender: React.FC = () => (
     <CalendarProvider>
@@ -12,11 +12,19 @@ const Kalender: React.FC = () => (
             {/*TODO: create title from calendar state*/}
             <title>Kalender</title>
         </Helmet>
-        <Stack direction="row" as="main" spacing="5" padding="5" alignItems="flex-start" minWidth="full">
-            <VStack alignItems="flex-start" spacing="5">
+        <Stack
+            direction={{ base: 'column', tablet: 'row' }}
+            as="main"
+            padding="5"
+            alignItems="flex-start"
+            minWidth="full"
+            spacing={{ base: '2', tablet: '6' }}
+            minHeight="min-content"
+        >
+            <Stack direction={{ base: 'row', tablet: 'column' }} spacing="2" width={{ base: 'full', tablet: 'auto' }}>
                 <CalendarDatePicker />
-                <CalendarStasjonFilter />
-            </VStack>
+                <CalendarFilters />
+            </Stack>
             <CalendarComponent />
         </Stack>
     </CalendarProvider>

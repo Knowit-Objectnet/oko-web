@@ -1,9 +1,15 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
-import { ApiPlanlagtHenting } from '../henting/HentingService';
+import { ApiPlanlagtHenting } from '../henting/PlanlagtHentingService';
+import { ApiHentingKategori, ApiKategori } from '../kategori/KategoriService';
 
 export type HenteplanFrekvens = 'ENKELT' | 'UKENTLIG' | 'ANNENHVER';
 
 export type Weekday = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
+
+export interface ApiHenteplanKategori extends ApiHentingKategori {
+    kategori: ApiKategori;
+    merknad?: string;
+}
 
 export interface ApiHenteplan {
     id: string;
@@ -13,18 +19,23 @@ export interface ApiHenteplan {
     startTidspunkt: string; //LocalTimeDate: Time used for Henting time
     sluttTidspunkt: string; //LocalTimeDate: Time used for Henting time
     ukedag: Weekday;
-    merknad: string | null;
+    merknad: string;
     planlagteHentinger: Array<ApiPlanlagtHenting>;
+    kategorier: Array<ApiHenteplanKategori>;
 }
 
 export interface ApiHenteplanPost {
     avtaleId: string;
     stasjonId: string;
     frekvens: HenteplanFrekvens;
-    ukedag?: Weekday;
     startTidspunkt: string;
     sluttTidspunkt: string;
+    ukedag?: Weekday;
     merknad?: string;
+    kategorier: Array<{
+        kategoriId: string;
+        merknad?: string;
+    }>;
 }
 
 export interface ApiHenteplanPatch {
@@ -34,6 +45,10 @@ export interface ApiHenteplanPatch {
     sluttTidspunkt?: string;
     ukedag?: Weekday;
     merknad?: string;
+    kategorier: Array<{
+        kategoriId: string;
+        merknad?: string;
+    }>;
 }
 
 export interface ApiHenteplanParams {
