@@ -41,6 +41,7 @@ export const AcceptUtlysningButton: React.FC<Props> = ({ ekstraHenting }) => {
         <Button
             backgroundColor={colors.Green}
             color={colors.DarkBlue}
+            fontSize={{ base: '20px', tablet: '16px' }}
             onClick={acceptUtlysning}
             isLoading={acceptUtlysningMutation.isLoading}
             loadingText="Registrerer..."

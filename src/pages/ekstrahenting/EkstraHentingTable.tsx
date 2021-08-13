@@ -32,7 +32,7 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading
     return (
         <Table>
             <Thead>
-                <Tr>
+                <Tr display={{ bigTablet: 'table-row', base: 'none' }}>
                     <Th scope="col">Beskrivelse</Th>
                     <Th scope="col">Informasjon</Th>
                     <Th scope="col">Kategorier</Th>
@@ -43,6 +43,9 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading
                 {ekstraHentinger?.map((ekstraHenting) => (
                     <Tr
                         key={ekstraHenting.id}
+                        display={{ bigTablet: 'table-row', base: 'flex' }}
+                        flexDir="column"
+                        alignItems="center"
                         backgroundColor="surface"
                         borderBottomWidth="16px"
                         borderBottomColor="background"
@@ -50,6 +53,7 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading
                         <Td>
                             <Text fontWeight="bold">{ekstraHenting.beskrivelse || 'Ingen merknad skrevet'} </Text>
                         </Td>
+
                         <Td minWidth="56">
                             <HentingTimeLocation henting={ekstraHenting} />
                         </Td>
@@ -58,6 +62,7 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading
                                 kategorier={ekstraHenting.kategorier.map((hentingKategori) => hentingKategori.kategori)}
                             />
                         </Td>
+
                         <Td>
                             {user.isPartner ? (
                                 <PartnerPameldingInfo ekstraHenting={ekstraHenting} />

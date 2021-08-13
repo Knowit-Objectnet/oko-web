@@ -17,14 +17,22 @@ export const EkstraHentingHeading: React.FC<Props> = ({ ekstraHentinger, label, 
     const { user } = useAuth();
     return (
         <>
-            <Flex justifyContent="space-between" width="full" marginY="4" marginTop="12" alignItems="center">
+            <Flex
+                justifyContent="space-between"
+                width="full"
+                marginY="4"
+                marginTop="12"
+                alignItems="center"
+                direction={{ base: 'column', tablet: 'row' }}
+            >
                 <Heading as="h1" fontWeight="normal" fontSize="2xl">
                     {label}
                 </Heading>
                 {user.isAdmin || user.isStasjon ? (
                     <AddEkstraHentingButton
                         width="fit-content"
-                        marginLeft="auto"
+                        marginLeft={{ tablet: 'auto', base: 'none' }}
+                        marginTop={{ tablet: '0', base: '10px' }}
                         borderRadius="6"
                         backgroundColor="Green"
                     />
