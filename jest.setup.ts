@@ -1,20 +1,16 @@
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+// Mock of authentication hook. For tests that renders components that calls the `useAuth` hook,
+// it is also necessary to instantiate the hook with the `setupUseAuthMock()` method.
+jest.mock('./src/auth/useAuth');
 
-configure({ adapter: new Adapter() });
-
-/* For some god forsaken reason this needs to be imported to replace the global promise
- * as multiple different libraries using their own version of promise makes everything
- * boil, explode, make my will to live disappear, and make the keycloak mock not work
- */
-global.Promise = jest.requireActual('promise');
-
-// Keycloak mock to intercept function calls
-jest.mock('./src/keycloak', () => ({
+// Keycloak mock for testing of KeycloakProvider
+jest.mock('./src/auth/keycloak', () => ({
     __esModule: true,
     default: {
         constructor: jest.fn(),
-        init: jest.fn(),
+        init: jest.fn(() => {
+            // KeycloakProvider expects a Promise returned, so we pass one that's always resolving
+            return Promise.resolve();
+        }),
         login: jest.fn(),
         createLoginUrl: jest.fn(),
         logout: jest.fn(),
@@ -34,20 +30,3 @@ jest.mock('./src/keycloak', () => ({
         tokenParsed: {},
     },
 }));
-
-const originalError = console.error;
-
-beforeAll(() => {
-    console.error = (...args: any[]) => {
-        if (/Warning.*not wrapped in act/.test(args[0])) {
-            return;
-        } else if (/Warning: You called act/.test(args[0])) {
-            return;
-        }
-        originalError.call(console, ...args);
-    };
-});
-
-afterAll(() => {
-    console.error = originalError;
-});

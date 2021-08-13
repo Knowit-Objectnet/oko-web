@@ -1,47 +1,33 @@
 import React from 'react';
-import { KeycloakProvider } from '@react-keycloak/web';
-import keycloak from './keycloak';
-import { RouterComponent } from './router/router';
-import { GlobalStyle } from './global-styles';
-import { SWRConfig } from 'swr';
-import ModalProvider from './sharedComponents/Modal/Provider';
-import AlertTemplate from 'react-alert-template-basic';
-import { positions, Provider as AlertProvider, transitions } from 'react-alert';
-import { ThemeProvider } from 'styled-components';
-import theme from './theme';
+import { MainRouter } from './routing/MainRouter';
+import { theme } from './theme';
 import { Helmet } from 'react-helmet';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ChakraProvider } from '@chakra-ui/react';
+import { AuthProvider } from './auth/AuthProvider';
+import { Loading } from './components/Loading';
+import 'focus-visible/dist/focus-visible';
+import { ErrorBoundary } from 'react-error-boundary';
+import { GlobalError } from './components/GlobalError';
 
-const alertOptions = {
-    position: positions.TOP_CENTER,
-    timeout: 5000,
-    offset: '30px',
-    transition: transitions.SCALE,
-};
+const queryClient = new QueryClient();
 
 export const App: React.FC = () => {
     return (
-        <KeycloakProvider keycloak={keycloak}>
-            <ThemeProvider theme={theme}>
-                <AlertProvider template={AlertTemplate} {...alertOptions}>
-                    <ModalProvider>
-                        <SWRConfig
-                            value={{
-                                refreshInterval: 0,
-                                revalidateOnFocus: true,
-                                revalidateOnReconnect: true,
-                            }}
-                        >
-                            <Helmet titleTemplate="Oslo kommune REG | %s">
-                                <html lang="no" />
-                                <meta name="description" content="Oslo kommune REG" />
-                            </Helmet>
-                            <RouterComponent />
-                            <GlobalStyle />
-                        </SWRConfig>
-                    </ModalProvider>
-                </AlertProvider>
-            </ThemeProvider>
-        </KeycloakProvider>
+        <ChakraProvider theme={theme}>
+            <ErrorBoundary FallbackComponent={GlobalError}>
+                <AuthProvider fallback={<Loading isFullPage />}>
+                    <QueryClientProvider client={queryClient}>
+                        <Helmet titleTemplate="%s – Oslo kommune REG">
+                            <html lang="nb" />
+                            {/* TODO write a SEO-friendly description: */}
+                            <meta name="description" content="Oslo kommune REG" />
+                        </Helmet>
+                        <MainRouter />
+                    </QueryClientProvider>
+                </AuthProvider>
+            </ErrorBoundary>
+        </ChakraProvider>
     );
 };
 
