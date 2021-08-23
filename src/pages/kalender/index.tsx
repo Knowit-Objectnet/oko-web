@@ -6,6 +6,7 @@ import { CalendarProvider } from './CalendarProvider';
 import { CalendarDatePicker } from './components/CalendarDatePicker';
 import { CalendarFilters } from './components/CalendarFilters';
 import { NavLink } from 'react-router-dom';
+import { Box } from '@chakra-ui/layout';
 
 const Kalender: React.FC = () => (
     <CalendarProvider>
@@ -25,24 +26,18 @@ const Kalender: React.FC = () => (
             <Stack direction={{ base: 'row', tablet: 'column' }} spacing="2" width={{ base: 'full', tablet: 'auto' }}>
                 <CalendarDatePicker />
                 <CalendarFilters />
-                <Link
-                    as={NavLink}
-                    to="/personvern"
-                    textDecorationLine="underline"
-                    display={{ base: 'none', tablet: 'flex' }}
-                >
-                    Om personvern i tjenesten
-                </Link>
+                <Box display={{ base: 'none', tablet: 'flex' }} textDecorationLine="underline">
+                    <Link as={NavLink} to="/personvern" marginTop="4">
+                        Om personvern i tjenesten
+                    </Link>
+                </Box>
             </Stack>
             <CalendarComponent />
-            <Link
-                as={NavLink}
-                to="/personvern"
-                textDecorationLine="underline"
-                display={{ base: 'box', tablet: 'none' }}
-            >
-                Om personvern i tjenesten
-            </Link>
+            <Box display={{ base: 'box', tablet: 'none' }} width="full" textAlign="center">
+                <Link as={NavLink} to="/personvern" textDecorationLine="underline">
+                    Om personvern i tjenesten
+                </Link>
+            </Box>
         </Stack>
     </CalendarProvider>
 );
