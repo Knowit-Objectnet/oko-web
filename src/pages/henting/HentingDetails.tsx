@@ -11,6 +11,7 @@ import { DetailInfo } from './components/DetailInfo';
 import { ApiPlanlagtHenting } from '../../services/henting/PlanlagtHentingService';
 import { hasStarted } from '../../utils/wrappedHentingHelpers';
 import { BackButton } from '../../components/buttons/BackButton';
+import { Flex } from '@chakra-ui/layout';
 
 export interface HentingDetailsRoutingProps {
     henting?: ApiHentingWrapper;
@@ -48,7 +49,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
         () => <>Klarte dessverre ikke å finne informasjon for denne hentingen</>,
         (hentingWrapper) => {
             return (
-                <>
+                <Flex width="100%" direction="column">
                     {hentingWrapper.planlagtHenting?.aarsakId ? <AvlystDetails henting={hentingWrapper} /> : null}
 
                     <DetailHeader henting={hentingWrapper} />
@@ -61,7 +62,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                             ? getCancelButton(hentingWrapper.planlagtHenting)
                             : null}
                     </ButtonGroup>
-                </>
+                </Flex>
             );
         },
     );

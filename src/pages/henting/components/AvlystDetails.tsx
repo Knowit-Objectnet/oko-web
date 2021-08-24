@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Heading, HStack, Icon, StackProps, Text } from '@chakra-ui/react';
+import { Flex, Heading, HStack, Icon, StackProps, Text } from '@chakra-ui/react';
 import Warning from '../../../assets/Warning.svg';
 import { useAarsakById } from '../../../services/aarsak/useAarsakById';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
+import { Box } from '@chakra-ui/layout';
 
 interface Props {
     henting: ApiHentingWrapper;
@@ -12,7 +13,7 @@ export const AvlystDetails: React.FC<Props & StackProps> = ({ henting, ...props 
     const { data: aarsak } = useAarsakById(henting.planlagtHenting?.aarsakId || '');
 
     return (
-        <>
+        <Box>
             {henting.planlagtHenting?.avlyst && henting.planlagtHenting?.avlystAv ? (
                 <HStack
                     spacing={2}
@@ -20,17 +21,17 @@ export const AvlystDetails: React.FC<Props & StackProps> = ({ henting, ...props 
                     paddingLeft="1rem"
                     backgroundColor="error"
                     {...props}
-                    align="center"
+                    justify="center"
                 >
                     <Icon as={Warning} boxSize="2rem" />
-                    <HStack spacing={10} alignItems="baseline">
+                    <Flex spacing={10} alignItems="baseline" direction="column">
                         <Heading fontSize="lg">Henting avlyst av {henting.aktorNavn || 'Admin'}</Heading>
-                        <Text fontSize="sm" marginTop={4}>
+                        <Text fontSize="sm" marginTop={1}>
                             {aarsak?.beskrivelse || null}
                         </Text>
-                    </HStack>
+                    </Flex>
                 </HStack>
             ) : null}
-        </>
+        </Box>
     );
 };
