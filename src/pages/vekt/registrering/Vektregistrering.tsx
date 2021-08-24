@@ -50,7 +50,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
                 return (
                     <>
                         <VStack
-                            width="2xl"
+                            width="100%"
                             maxWidth="2xl"
                             marginX="auto"
                             direction="column"
@@ -72,8 +72,9 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
 
                         <Flex
                             alignSelf="stretch"
-                            alignItems="flex-start"
+                            alignItems={{ base: 'center', handheld: 'flex-start' }}
                             justifyContent={locationState?.showBackButton ? 'space-between' : 'flex-end'}
+                            flexDir={{ base: 'column-reverse', handheld: 'row' }}
                         >
                             <BackButton visible={locationState?.showBackButton} />
                             <HStack spacing={6}>
@@ -96,8 +97,9 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
                                     rightIcon={<Icon as={Checkbox} boxSize="1rem" />}
                                     backgroundColor={colors.DarkBlue}
                                     textColor={colors.White}
-                                    paddingX={8}
-                                    paddingY={6}
+                                    paddingX={{ base: 2, tablet: 8 }}
+                                    paddingY={{ base: 1, tablet: 6 }}
+                                    marginBottom={{ base: '4', handheld: '0' }}
                                 >
                                     Lagre vekt og avslutt
                                 </Button>
