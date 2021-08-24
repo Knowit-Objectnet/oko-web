@@ -1,4 +1,4 @@
-import { Heading, HStack } from '@chakra-ui/layout';
+import { Flex, Heading, HStack } from '@chakra-ui/layout';
 import { Icon } from '@chakra-ui/react';
 import * as React from 'react';
 import { useAuth } from '../../../auth/useAuth';
@@ -37,25 +37,27 @@ export const DetailHeader: React.FC<Props> = ({ henting }) => {
         const missingGodkjentPartner = !henting.ekstraHenting?.godkjentUtlysning;
 
         return (
-            <>
-                <BadgeDetail text="Ekstrahenting" color={colors.Green} minWidth="4xs" />
+            <Flex direction="row">
+                <BadgeDetail text="Ekstrahenting" color={colors.Green} />
                 {missingGodkjentPartner ? (
                     <BadgeDetail text="Ingen påmeldte" color={colors.Red} minWidth="4xs" />
                 ) : null}
-            </>
+            </Flex>
         );
     };
 
     return (
-        <HStack alignItems="center" spacing="3">
-            {henting.ekstraHenting && user.isPartner ? (
-                <Icon as={Varsel} transform="translateY(-2px)" boxSize="4rem" aria-hidden />
-            ) : null}
-            <Heading as="h1" fontWeight="normal" fontSize="3xl">
-                {henting.ekstraHenting ? getEkstraHentingTitle() : getPlanlagtHentingTitle()}
-            </Heading>
+        <Flex direction="column">
+            <Flex direction="row" marginBottom="1rem" align="center">
+                {henting.ekstraHenting && user.isPartner ? (
+                    <Icon as={Varsel} transform="translateY(-2px)" boxSize="4rem" aria-hidden />
+                ) : null}
+                <Heading as="h1" fontWeight="normal" fontSize="2xl">
+                    {henting.ekstraHenting ? getEkstraHentingTitle() : getPlanlagtHentingTitle()}
+                </Heading>
+            </Flex>
             {henting.ekstraHenting ? getEkstraHentingBadges() : null}
             <DetailVektInfo henting={henting} />
-        </HStack>
+        </Flex>
     );
 };

@@ -12,16 +12,8 @@ const Henting: React.FC = () => {
             <Helmet>
                 <title>Detaljer for henting</title>
             </Helmet>
-            <Flex as="main" width="full" minHeight="full" backgroundColor="surface">
-                <Flex
-                    minWidth="2xl"
-                    maxWidth="90%"
-                    marginX="auto"
-                    direction="column"
-                    padding="10"
-                    paddingTop={{ base: '10', tablet: '20' }}
-                    fontSize="18px"
-                >
+            <Flex as="main" width="full" minHeight="full" backgroundColor="surface" direction="column">
+                <Flex marginX="auto" padding="10" paddingTop={{ base: '10', tablet: '20' }} fontSize="18px">
                     {params.hentingId ? (
                         <HentingDetails hentingId={params.hentingId} />
                     ) : (
