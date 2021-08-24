@@ -16,6 +16,7 @@ const Aarsaker = React.lazy(() => import('../pages/avlysningsaarsaker'));
 const Innstillinger = React.lazy(() => import('../pages/innstillinger'));
 const Kategorier = React.lazy(() => import('../pages/kategorier'));
 const Vekt = React.lazy(() => import('../pages/vekt'));
+const Personvern = React.lazy(() => import('../pages/personvern'));
 
 const Home: React.FC = () => {
     // const { user } = useAuth();
@@ -60,6 +61,9 @@ export const PageRouter: React.FC = () => (
             </Route>
             <Route path="/vekt">
                 <Vekt />
+            </Route>
+            <Route path="/personvern">
+                <Personvern />
             </Route>
             <Route path="/">
                 <Home />
