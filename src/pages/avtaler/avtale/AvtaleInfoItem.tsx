@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/layout';
+import { Box, Flex } from '@chakra-ui/layout';
 import {
     AccordionButton,
     AccordionItem,
@@ -9,6 +9,8 @@ import {
     Icon,
     HStack,
     Text,
+    VStack,
+    Stack,
 } from '@chakra-ui/react';
 import ArrowRight from '../../../assets/ArrowRight.svg';
 import * as React from 'react';
@@ -57,13 +59,17 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
             <Flex direction="column" width="full" backgroundColor="gray.100" padding="5">
                 <Flex width="full" justifyContent="space-between">
                     <Heading fontSize="xl" as="h3" fontWeight="normal" paddingY="2">
-                        <HStack>
+                        <Stack
+                            direction={{ base: 'column', tablet: 'row' }}
+                            spacing="4"
+                            alignItems={{ base: 'flex-start', tablet: 'center' }}
+                        >
                             <Text>{getAvtaleTitle(avtale)}</Text>
                             <Text fontSize="sm" fontWeight="normal">
                                 {AVTALE_TYPE[avtale.type]}, fra <time>{formatDate(parseISO(avtale.startDato))}</time>{' '}
                                 til <time>{formatDate(parseISO(avtale.sluttDato))}</time>
                             </Text>
-                        </HStack>
+                        </Stack>
                     </Heading>
 
                     {user.isAdmin ? (
