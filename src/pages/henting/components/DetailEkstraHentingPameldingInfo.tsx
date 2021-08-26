@@ -14,15 +14,24 @@ export const DetailEkstraHentingPameldingInfo: React.FC<Props> = ({ ekstraHentin
 
     if (!ekstraHenting.godkjentUtlysning || ekstraHenting.godkjentUtlysning.partnerId !== user.aktorId) {
         return (
-            <Flex backgroundColor={colors.White} height="auto" width="19rem" padding="1rem" marginTop="1rem">
-                <VStack>
-                    <Text fontSize="sm">
-                        Hvis du melder deg på gjør du at ingen andre kan melde seg på. Derfor forventes det at du kommer
-                        og henter ombruksvarene innenfor tidsintervallet.
-                    </Text>
+            <Flex
+                backgroundColor={colors.White}
+                height="auto"
+                padding="1rem"
+                marginTop="1rem"
+                marginLeft={{
+                    base: '0rem',
+                    desktop: '1.5rem',
+                }}
+                direction="column"
+                width={{ base: '100%', desktop: '50%' }}
+            >
+                <Text fontSize="sm">
+                    Hvis du melder deg på gjør du at ingen andre kan melde seg på. Derfor forventes det at du kommer og
+                    henter ombruksvarene innenfor tidsintervallet.
+                </Text>
 
-                    <PartnerPameldingInfo ekstraHenting={ekstraHenting} />
-                </VStack>
+                <PartnerPameldingInfo ekstraHenting={ekstraHenting} />
             </Flex>
         );
     }

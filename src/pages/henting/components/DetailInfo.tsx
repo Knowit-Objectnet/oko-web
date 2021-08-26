@@ -18,7 +18,6 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
         <>
             <Flex
                 spacing="10"
-                justifyContent="space-between"
                 direction={{
                     base: 'column',
                     desktop: 'row',
