@@ -5,6 +5,7 @@ import Check from '../../assets/Check.svg';
 import { useAuth } from '../../auth/useAuth';
 import { hasEnded } from '../../utils/wrappedHentingHelpers';
 import { AcceptUtlysningButton } from './AcceptUtlysningButton';
+import { colors } from '../../theme/foundations/colors';
 
 interface Props {
     ekstraHenting: ApiEkstraHenting;
@@ -42,7 +43,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
         if (thisUserAccepted) {
             console.log('Accepted');
             return (
-                <Flex color="DarkGreen">
+                <Flex color="DarkGreen" backgroundColor={colors.Green} padding="2" align="center">
                     <Icon as={Check} marginRight="2" fill="DarkGreen" />
                     <Text fontWeight="semibold">Meldt på</Text>
                 </Flex>
