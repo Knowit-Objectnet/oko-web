@@ -12,7 +12,7 @@ interface Props {
 export const DetailEkstraHentingPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
     const { user } = useAuth();
 
-    if (!ekstraHenting.godkjentUtlysning || ekstraHenting.godkjentUtlysning.partnerId !== user.aktorId) {
+    if (!ekstraHenting.godkjentUtlysning || ekstraHenting.godkjentUtlysning.partnerId === user.aktorId) {
         return (
             <Flex
                 backgroundColor={colors.White}
