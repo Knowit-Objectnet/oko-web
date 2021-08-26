@@ -15,26 +15,26 @@ interface Props {
 export const DetailInfo: React.FC<Props> = ({ henting }) => {
     const { user } = useAuth();
     return (
-        <>
-            <Flex
-                spacing="10"
-                direction={{
-                    base: 'column',
-                    desktop: 'row',
-                }}
-                marginTop="2rem"
-            >
-                <VStack spacing="3" alignItems="flex-start">
-                    <HentingTimeLocation henting={henting} />
+        <Flex
+            direction={{
+                base: 'column',
+                desktop: 'row',
+            }}
+            marginTop="2rem"
+        >
+            <VStack spacing="3" alignItems="flex-start">
+                <HentingTimeLocation henting={henting} />
 
-                    <DetailDescription henting={henting} />
+                <DetailDescription henting={henting} />
 
-                    <DetailCategories henting={henting.planlagtHenting || henting.ekstraHenting} />
-                </VStack>
-                {henting.ekstraHenting && user.isPartner ? (
-                    <DetailEkstraHentingPameldingInfo ekstraHenting={henting.ekstraHenting} />
-                ) : null}
-            </Flex>
-        </>
+                <DetailCategories henting={henting.planlagtHenting || henting.ekstraHenting} />
+            </VStack>
+            {henting.ekstraHenting && user.isPartner ? (
+                <Flex>
+                    {' '}
+                    <DetailEkstraHentingPameldingInfo ekstraHenting={henting.ekstraHenting} />{' '}
+                </Flex>
+            ) : null}
+        </Flex>
     );
 };

@@ -40,6 +40,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
         }
 
         if (thisUserAccepted) {
+            console.log('Accepted');
             return (
                 <Flex color="DarkGreen">
                     <Icon as={Check} marginRight="2" fill="DarkGreen" />
@@ -51,5 +52,9 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
         return null;
     };
 
-    return <Box>{userCanAccept ? <AcceptUtlysningButton ekstraHenting={ekstraHenting} /> : getPameldingStatus()}</Box>;
+    return (
+        <Box marginTop="0.5rem">
+            {userCanAccept ? <AcceptUtlysningButton ekstraHenting={ekstraHenting} /> : getPameldingStatus()}
+        </Box>
+    );
 };
