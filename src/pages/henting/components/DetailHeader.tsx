@@ -40,7 +40,7 @@ export const DetailHeader: React.FC<Props> = ({ henting }) => {
             <Flex direction="row">
                 <BadgeDetail text="Ekstrahenting" color={colors.Green} />
                 {missingGodkjentPartner ? (
-                    <BadgeDetail text="Ingen påmeldte" color={colors.Red} minWidth="4xs" />
+                    <BadgeDetail marginLeft="0.3rem" text="Ingen påmeldte" color={colors.Red} minWidth="4xs" />
                 ) : null}
             </Flex>
         );
