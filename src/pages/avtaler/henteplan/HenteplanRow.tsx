@@ -61,16 +61,16 @@ export const HenteplanRow: React.FC<Props> = ({ henteplan, avtale }) => {
     // TODO: handle loading/error
     const { data: stasjon } = useStasjonById(henteplan.stasjonId);
     const { user } = useAuth();
-    const isSmallScreen = useBreakpointValue({ base: true, md: false });
+    const isSmallScreen = useBreakpointValue({ base: true, xl: false });
 
     return (
         <Tr
             key={henteplan.id}
             verticalAlign="top"
-            display={{ base: 'flex', tablet: 'table-row' }}
+            display={{ base: 'flex', xl: 'table-row' }}
             flexDir="column"
-            backgroundColor={{ base: 'white', tablet: 'inherit' }}
-            marginTop={{ base: '4', tablet: '0' }}
+            backgroundColor={{ base: 'white', xl: 'inherit' }}
+            marginTop={{ base: '4', xl: '0' }}
         >
             {isSmallScreen ? (
                 <Td>

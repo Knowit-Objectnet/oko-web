@@ -22,17 +22,23 @@ export const Henteplaner: React.FC<Props> = ({ avtale, partner }) => {
         <>
             <Flex
                 justifyContent="space-between"
-                alignItems="center"
+                flexDir={{ base: 'column', handheld: 'row' }}
                 width="full"
                 marginTop="4"
                 marginBottom="3"
                 paddingTop="3"
             >
-                <Heading as="h4" fontSize="lg" fontWeight="bold">
+                <Heading as="h4" fontSize="lg" fontWeight="bold" marginBottom={{ base: '4', handheld: '0' }}>
                     {henteplaner.length > 0 ? 'Henteplaner' : 'Ingen registrerte henteplaner'}
                 </Heading>
                 {user.isAdmin ? (
-                    <AddHenteplanButton backgroundColor="white" size="sm" avtale={avtale} partner={partner} />
+                    <AddHenteplanButton
+                        backgroundColor="white"
+                        size="sm"
+                        avtale={avtale}
+                        partner={partner}
+                        alignSelf="center"
+                    />
                 ) : null}
             </Flex>
             {henteplaner.length > 0 ? <HenteplanTable avtale={avtale} /> : null}

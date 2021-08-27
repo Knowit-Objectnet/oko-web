@@ -25,6 +25,20 @@ export const Tag = {
                 color: 'onSecondary',
             },
         },
+        aktivAvtale: {
+            ...Theme.components.Tag.variants.solid,
+            container: {
+                backgroundColor: 'Green',
+                color: 'Black',
+            },
+        },
+        kommendeAvtale: {
+            ...Theme.components.Tag.variants.solid,
+            container: {
+                backgroundColor: 'DarkBeige',
+                color: 'Black',
+            },
+        },
         warning: {
             ...Theme.components.Tag.variants.solid,
             container: {
