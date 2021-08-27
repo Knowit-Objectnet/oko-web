@@ -48,7 +48,7 @@ export const DetailHeader: React.FC<Props> = ({ henting }) => {
 
     return (
         <Flex direction="column">
-            <Flex direction="row" marginBottom="1rem" align="center">
+            <Flex direction="row" marginBottom="4" align="center">
                 {henting.ekstraHenting && user.isPartner ? (
                     <Icon as={Varsel} transform="translateY(-2px)" boxSize="16" aria-hidden />
                 ) : null}
