@@ -19,7 +19,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
     const userCanAccept = !isPassed && noUserAccepted;
 
     const utgattMessage = (aarsak: string) => (
-        <VStack alignItems="flex-start" marginTop="0.5rem">
+        <VStack alignItems="flex-start" marginTop="2">
             <Text fontWeight="semibold">Beklager</Text>
             <Text>{aarsak}</Text>
         </VStack>
