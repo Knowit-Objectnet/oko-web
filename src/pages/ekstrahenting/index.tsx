@@ -15,7 +15,7 @@ const EkstraHenting: React.FC = () => {
                 paddingY="5"
                 paddingX="10"
                 marginX="auto"
-                width={{ base: '100%', desktop: '80%' }}
+                width={{ base: '100%', xl: '80%', tablet: '80%', bigTablet: '100%' }}
             >
                 <EkstraHentingSortedInfo />
             </Flex>

@@ -10,6 +10,8 @@ import { useState } from 'react';
 import { VektForm } from './forms/VektForm';
 import { BackButton } from '../../../components/buttons/BackButton';
 import { HentingDetailsRoutingProps } from '../../henting/HentingDetails';
+import { PartnerPameldingInfo } from '../../ekstrahenting/PartnerPameldingInfo';
+import { useAuth } from '../../../auth/useAuth';
 
 interface Props {
     hentingId: string;
@@ -34,6 +36,8 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
 
     const hentingQuery = useHentingById(hentingId, { initialData: locationState?.henting });
 
+    const { user } = useAuth();
+
     const onSuccess = () => {
         history.push(`/henting/${hentingId}`);
     };
@@ -49,31 +53,51 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
             else
                 return (
                     <>
-                        <VStack
-                            width="2xl"
-                            maxWidth="2xl"
-                            marginX="auto"
-                            direction="column"
-                            paddingTop={{ base: '10', tablet: '20' }}
-                            alignItems="center"
-                            spacing={14}
-                        >
-                            <Heading as="h1" fontSize="1.5rem" fontWeight={700}>
-                                {label}
-                            </Heading>
-                            <Totalvekt vektObjects={vektObjects} />
-                            <Text fontSize="0.75rem" fontWeight={400} maxWidth={420}>
-                                Byggevarer og materialer, sport- og fritidsutstyr, sykler, tekstiler og hvitevarer skal
-                                registeres under egne vektkategorier. Alle andre varer skal registreres på
-                                <span style={{ fontWeight: 500 }}> Andre ombruksvarer.</span>
-                            </Text>
-                            <VektForm henting={veiHenting} setVekt={setVekt} onSuccess={onSuccess} />
-                        </VStack>
-
+                        <Flex direction={{ desktop: 'row', base: 'column-reverse' }} align="center">
+                            <VStack
+                                width="100%"
+                                maxWidth="2xl"
+                                marginX="auto"
+                                direction="column"
+                                paddingTop={{ base: '10', tablet: '20' }}
+                                alignItems="center"
+                                spacing={10}
+                            >
+                                <Heading as="h1" fontSize="2xl" fontWeight={700}>
+                                    {label}
+                                </Heading>
+                                <Totalvekt vektObjects={vektObjects} />
+                                <Text fontSize={{ base: 'md', desktop: 'xl' }} fontWeight="normal" maxWidth={420}>
+                                    Byggevarer og materialer, sport- og fritidsutstyr, sykler, tekstiler og hvitevarer
+                                    skal registeres under egne vektkategorier. Alle andre varer skal registreres på
+                                    <span style={{ fontWeight: 'bold' }}> Andre ombruksvarer.</span>
+                                </Text>
+                                <VektForm henting={veiHenting} setVekt={setVekt} onSuccess={onSuccess} />
+                            </VStack>
+                            {user.isStasjon && (
+                                <Flex
+                                    backgroundColor={colors.White}
+                                    height="fit-content"
+                                    width="80"
+                                    padding="4"
+                                    direction="column"
+                                    justify="center"
+                                >
+                                    <Heading as="h4" size="xl">
+                                        OBS!
+                                    </Heading>
+                                    <Text fontSize="sm">
+                                        Legg merke til at du er logget inn som stasjon. Skjema for vektregistrering er
+                                        hovedsakelig ment for partnere.
+                                    </Text>
+                                </Flex>
+                            )}
+                        </Flex>
                         <Flex
                             alignSelf="stretch"
-                            alignItems="flex-start"
+                            alignItems={{ base: 'center', handheld: 'flex-start' }}
                             justifyContent={locationState?.showBackButton ? 'space-between' : 'flex-end'}
+                            flexDir={{ base: 'column-reverse', handheld: 'row' }}
                         >
                             <BackButton visible={locationState?.showBackButton} />
                             <HStack spacing={6}>
@@ -96,8 +120,9 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
                                     rightIcon={<Icon as={Checkbox} boxSize="1rem" />}
                                     backgroundColor={colors.DarkBlue}
                                     textColor={colors.White}
-                                    paddingX={8}
-                                    paddingY={6}
+                                    paddingX={{ base: 2, tablet: 8 }}
+                                    paddingY={{ base: 1, tablet: 6 }}
+                                    marginBottom={{ base: '4', handheld: '0' }}
                                 >
                                     Lagre vekt og avslutt
                                 </Button>

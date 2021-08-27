@@ -4,6 +4,18 @@ import { Helmet } from 'react-helmet';
 import { NavLink } from 'react-router-dom';
 
 const Innstillinger: React.FC = () => {
+    const routeLink = (to: string, text: string) => (
+        <Link
+            as={NavLink}
+            to={to}
+            fontSize={{ base: 'xl', handheld: '2xl' }}
+            marginTop="6"
+            textDecorationLine="underline"
+        >
+            {text}
+        </Link>
+    );
+
     return (
         <>
             <Helmet>
@@ -18,26 +30,35 @@ const Innstillinger: React.FC = () => {
                 width="full"
                 alignItems="flex-start"
             >
-                <Flex
-                    justifyContent="space-between"
+                <Heading
                     width="full"
-                    marginTop="4"
+                    as="h1"
+                    fontWeight="normal"
+                    fontSize={{ base: '2xl', handheld: '4xl' }}
+                    marginTop="10"
+                    paddingBottom="4"
                     borderBottom="1px solid"
                     borderBottomColor="gray.200"
                 >
-                    <Heading width="full" as="h1" fontWeight="normal" fontSize="4xl" marginBottom="4">
-                        Innstillinger
-                    </Heading>
-                </Flex>
-                <Link as={NavLink} to="/aarsaker" fontSize="2xl" marginTop="6" textDecorationLine="underline">
-                    Avlysningsårsaker
-                </Link>
-                <Link as={NavLink} to="/kategorier" fontSize="2xl" marginTop="6" textDecorationLine="underline">
-                    Kategorier
-                </Link>
-                <Link as={NavLink} to="/stasjoner" fontSize="2xl" marginTop="6" textDecorationLine="underline">
-                    Stasjoner
-                </Link>
+                    Innstillinger
+                </Heading>
+                {routeLink('/aarsaker', 'Avlysningsårsaker')}
+                {routeLink('/kategorier', 'Kategorier')}
+                {routeLink('/stasjoner', 'Stasjoner')}
+
+                <Heading
+                    width="full"
+                    as="h1"
+                    fontWeight="normal"
+                    fontSize={{ base: '2xl', handheld: '4xl' }}
+                    marginTop="10"
+                    paddingBottom="4"
+                    borderBottom="1px solid"
+                    borderBottomColor="gray.200"
+                >
+                    Personvern
+                </Heading>
+                {routeLink('/personvern', 'Om personvern i tjenesten')}
             </Flex>
         </>
     );

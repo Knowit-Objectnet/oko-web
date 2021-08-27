@@ -17,7 +17,7 @@ export const PameldtInfo: React.FC<Props> = ({ ekstraHenting, isPast }) => {
             {ekstraHenting.godkjentUtlysning ? (
                 <Text>{ekstraHenting.godkjentUtlysning.partnerNavn}</Text>
             ) : (
-                <Flex justifyContent="space-between">
+                <Flex justifyContent="space-between" direction={{ base: 'column', xl: 'row' }}>
                     <Box marginRight="1">
                         <Text fontSize="sm" fontWeight="bold">
                             {isLoading || isLoadingError || ekstraHenting.utlysninger.length < allPartnere!.length
@@ -34,7 +34,12 @@ export const PameldtInfo: React.FC<Props> = ({ ekstraHenting, isPast }) => {
                     !isLoadingError &&
                     ekstraHenting.utlysninger.length < allPartnere!.length &&
                     !isPast ? (
-                        <UtlysFlerePartnereButton henting={ekstraHenting} backgroundColor="White" borderRadius="6" />
+                        <UtlysFlerePartnereButton
+                            henting={ekstraHenting}
+                            backgroundColor="White"
+                            borderRadius="6"
+                            marginTop={{ base: '10px', xl: '0' }}
+                        />
                     ) : null}
                 </Flex>
             )}
