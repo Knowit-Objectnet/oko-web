@@ -20,7 +20,7 @@ export const DetailEkstraHentingPameldingInfo: React.FC<Props> = ({ ekstraHentin
                 marginTop="1rem"
                 marginLeft={{
                     base: '0rem',
-                    desktop: '1.5rem',
+                    desktop: '6',
                 }}
                 direction="column"
                 align="center"
