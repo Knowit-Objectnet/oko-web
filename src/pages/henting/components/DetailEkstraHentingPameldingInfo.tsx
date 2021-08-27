@@ -16,7 +16,7 @@ export const DetailEkstraHentingPameldingInfo: React.FC<Props> = ({ ekstraHentin
         return (
             <Flex
                 backgroundColor={colors.White}
-                padding="1rem"
+                padding="4"
                 marginTop="4"
                 marginLeft={{
                     base: '0rem',
