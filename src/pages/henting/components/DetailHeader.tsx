@@ -50,7 +50,7 @@ export const DetailHeader: React.FC<Props> = ({ henting }) => {
         <Flex direction="column">
             <Flex direction="row" marginBottom="1rem" align="center">
                 {henting.ekstraHenting && user.isPartner ? (
-                    <Icon as={Varsel} transform="translateY(-2px)" boxSize="4rem" aria-hidden />
+                    <Icon as={Varsel} transform="translateY(-2px)" boxSize="16" aria-hidden />
                 ) : null}
                 <Heading as="h1" fontWeight="normal" fontSize="2xl">
                     {henting.ekstraHenting ? getEkstraHentingTitle() : getPlanlagtHentingTitle()}
