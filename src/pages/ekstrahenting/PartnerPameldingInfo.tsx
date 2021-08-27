@@ -5,6 +5,7 @@ import Check from '../../assets/Check.svg';
 import { useAuth } from '../../auth/useAuth';
 import { hasEnded } from '../../utils/wrappedHentingHelpers';
 import { AcceptUtlysningButton } from './AcceptUtlysningButton';
+import { colors } from '../../theme/foundations/colors';
 
 interface Props {
     ekstraHenting: ApiEkstraHenting;
@@ -18,7 +19,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
     const userCanAccept = !isPassed && noUserAccepted;
 
     const utgattMessage = (aarsak: string) => (
-        <VStack alignItems="flex-start">
+        <VStack alignItems="flex-start" marginTop="2">
             <Text fontWeight="semibold">Beklager</Text>
             <Text>{aarsak}</Text>
         </VStack>
@@ -41,7 +42,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
 
         if (thisUserAccepted) {
             return (
-                <Flex color="DarkGreen">
+                <Flex color="DarkGreen" align="center">
                     <Icon as={Check} marginRight="2" fill="DarkGreen" />
                     <Text fontWeight="semibold">Meldt på</Text>
                 </Flex>
@@ -51,5 +52,9 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
         return null;
     };
 
-    return <Box>{userCanAccept ? <AcceptUtlysningButton ekstraHenting={ekstraHenting} /> : getPameldingStatus()}</Box>;
+    return (
+        <Box marginTop="2">
+            {userCanAccept ? <AcceptUtlysningButton ekstraHenting={ekstraHenting} /> : getPameldingStatus()}
+        </Box>
+    );
 };
