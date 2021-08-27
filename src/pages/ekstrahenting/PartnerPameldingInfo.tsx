@@ -41,7 +41,6 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
         }
 
         if (thisUserAccepted) {
-            console.log('Accepted');
             return (
                 <Flex color="DarkGreen" align="center">
                     <Icon as={Check} marginRight="2" fill="DarkGreen" />
