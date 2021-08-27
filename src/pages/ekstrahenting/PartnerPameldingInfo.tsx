@@ -43,7 +43,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
         if (thisUserAccepted) {
             console.log('Accepted');
             return (
-                <Flex color="DarkGreen" backgroundColor={colors.Green} padding="2" align="center">
+                <Flex color="DarkGreen" align="center">
                     <Icon as={Check} marginRight="2" fill="DarkGreen" />
                     <Text fontWeight="semibold">Meldt på</Text>
                 </Flex>
