@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useAuth } from '../../auth/useAuth';
-import { ButtonGroup } from '@chakra-ui/react';
+import { ButtonGroup, useBreakpointValue } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 import { CancelPlanlagtHentingButton } from './components/CancelPlanlagtHentingButton';
 import { AvlystDetails } from './components/AvlystDetails';
@@ -25,6 +25,7 @@ interface Props {
 export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
     const { user } = useAuth();
     const { state: locationState } = useLocation<HentingDetailsRoutingProps>();
+    const isSmallScreen = useBreakpointValue({ base: true, md: false });
 
     const hentingQuery = useHentingById(hentingId, {
         initialData: locationState?.henting,
@@ -55,13 +56,14 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     <DetailHeader henting={hentingWrapper} />
 
                     <DetailInfo henting={hentingWrapper} />
-
-                    <ButtonGroup marginTop="10">
-                        <BackButton visible={locationState?.showBackButton} />
-                        {hentingWrapper.planlagtHenting && !hasStarted(hentingWrapper.planlagtHenting)
-                            ? getCancelButton(hentingWrapper.planlagtHenting)
-                            : null}
-                    </ButtonGroup>
+                    {!isSmallScreen && (
+                        <ButtonGroup marginTop="10">
+                            <BackButton visible={locationState?.showBackButton} />
+                            {hentingWrapper.planlagtHenting && !hasStarted(hentingWrapper.planlagtHenting)
+                                ? getCancelButton(hentingWrapper.planlagtHenting)
+                                : null}
+                        </ButtonGroup>
+                    )}
                 </Flex>
             );
         },
