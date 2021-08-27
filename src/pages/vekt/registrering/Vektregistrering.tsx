@@ -62,7 +62,7 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
                                 {label}
                             </Heading>
                             <Totalvekt vektObjects={vektObjects} />
-                            <Text fontSize={{ base: '1rem', desktop: '1.25rem ' }} fontWeight={400} maxWidth={420}>
+                            <Text fontSize={{ base: 'md', desktop: 'xl ' }} fontWeight={normal} maxWidth={420}>
                                 Byggevarer og materialer, sport- og fritidsutstyr, sykler, tekstiler og hvitevarer skal
                                 registeres under egne vektkategorier. Alle andre varer skal registreres på
                                 <span style={{ fontWeight: semibold }}> Andre ombruksvarer.</span>
