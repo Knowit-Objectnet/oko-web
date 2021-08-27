@@ -20,7 +20,7 @@ export const DetailInfo: React.FC<Props> = ({ henting }) => {
                 base: 'column',
                 desktop: 'row',
             }}
-            marginTop="2rem"
+            marginTop="8"
         >
             <VStack spacing="3" alignItems="flex-start">
                 <HentingTimeLocation henting={henting} />
