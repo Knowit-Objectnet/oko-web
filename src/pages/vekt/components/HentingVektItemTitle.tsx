@@ -30,7 +30,7 @@ export const HentingVektItemTitle: React.FC<HentingerVektListChildProps> = ({ he
     const getVektStatusLabel = () => {
         if (missingVekt) {
             return (
-                <Text whiteSpace="nowrap" fontStyle="italic">
+                <Text whiteSpace="nowrap" fontWeight="bold">
                     Ikke registrert vekt
                 </Text>
             );
@@ -46,7 +46,7 @@ export const HentingVektItemTitle: React.FC<HentingerVektListChildProps> = ({ he
 
     return (
         <VStack alignItems="flex-start" spacing="1" {...width}>
-            <Flex flexWrap="wrap" alignItems="center" fontSize="xl">
+            <Flex flexWrap="wrap" alignItems="center" fontSize="xl" fontWeight="bold">
                 {getAktorNavnLabel()}
                 {getVektSumLabel()}
             </Flex>
