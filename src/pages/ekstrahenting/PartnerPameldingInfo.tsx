@@ -54,7 +54,7 @@ export const PartnerPameldingInfo: React.FC<Props> = ({ ekstraHenting }) => {
     };
 
     return (
-        <Box marginTop="0.5rem">
+        <Box marginTop="2">
             {userCanAccept ? <AcceptUtlysningButton ekstraHenting={ekstraHenting} /> : getPameldingStatus()}
         </Box>
     );
