@@ -63,14 +63,14 @@ export const Vektregistrering: React.FC<Props> = ({ hentingId, label }) => {
                                 alignItems="center"
                                 spacing={10}
                             >
-                                <Heading as="h1" fontSize="1.5rem" fontWeight={700}>
+                                <Heading as="h1" fontSize="2xl" fontWeight={700}>
                                     {label}
                                 </Heading>
                                 <Totalvekt vektObjects={vektObjects} />
-                                <Text fontSize="0.75rem" fontWeight={400} maxWidth={420}>
+                                <Text fontSize={{ base: 'md', desktop: 'xl' }} fontWeight="normal" maxWidth={420}>
                                     Byggevarer og materialer, sport- og fritidsutstyr, sykler, tekstiler og hvitevarer
                                     skal registeres under egne vektkategorier. Alle andre varer skal registreres på
-                                    <span style={{ fontWeight: 500 }}> Andre ombruksvarer.</span>
+                                    <span style={{ fontWeight: 'bold' }}> Andre ombruksvarer.</span>
                                 </Text>
                                 <VektForm henting={veiHenting} setVekt={setVekt} onSuccess={onSuccess} />
                             </VStack>
