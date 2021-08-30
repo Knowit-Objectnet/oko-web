@@ -3,10 +3,11 @@ import { Link, Tag } from '@chakra-ui/react';
 import * as React from 'react';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { Box } from '@chakra-ui/layout';
-import { isFuture, isPast, isWithinInterval, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { AVTALE_TYPE, getAvtaleTitle } from '../avtale/AvtaleInfoItem';
 import { isNull } from 'lodash';
 import { formatDate } from '../../../utils/formatDateTime';
+import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 
 interface Props {
     partner: ApiPartner;
@@ -14,7 +15,29 @@ interface Props {
 
 export const PartnerNavItem: React.FC<Props> = ({ partner }) => {
     const { url } = useRouteMatch();
-    const nyesteAvtale = partner.avtaler.length > 0 ? partner.avtaler[0] : null;
+    const getNyesteAvtale = (avtaler: Array<ApiAvtale>): ApiAvtale | null => {
+        if (avtaler.length == 0) return null;
+
+        const compare = (a: ApiAvtale, b: ApiAvtale): number => {
+            const aTitle = getAvtaleTitle(a);
+            const bTitle = getAvtaleTitle(b);
+            const prio: Record<string, number> = {
+                'Aktiv avtale': -1,
+                'Kommende avtale': 1,
+                'Tidligere avtale': 2,
+                'Avtale med udefinert tidsrom': 3,
+            };
+
+            if (aTitle == bTitle) return a.type == 'FAST' ? -1 : 1;
+
+            return prio[aTitle] - prio[bTitle];
+        };
+
+        avtaler.sort((a, b) => compare(a, b));
+        return avtaler[0];
+    };
+
+    const nyesteAvtale = getNyesteAvtale(partner.avtaler);
 
     return (
         <Link
