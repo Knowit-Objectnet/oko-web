@@ -32,7 +32,7 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading
     return (
         <Table>
             <Thead>
-                <Tr display={{ bigTablet: 'table-row', base: 'none' }}>
+                <Tr display={{ base: 'none', desktop: 'table-row' }}>
                     <Th scope="col">Beskrivelse</Th>
                     <Th scope="col">Informasjon</Th>
                     <Th scope="col">Kategorier</Th>
@@ -43,7 +43,7 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading
                 {ekstraHentinger?.map((ekstraHenting) => (
                     <Tr
                         key={ekstraHenting.id}
-                        display={{ bigTablet: 'table-row', base: 'flex' }}
+                        display={{ base: 'flex', desktop: 'table-row' }}
                         flexDir="column"
                         alignItems="center"
                         backgroundColor="surface"
