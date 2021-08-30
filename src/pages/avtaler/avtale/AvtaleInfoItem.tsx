@@ -93,15 +93,14 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
 
                 {user.isAdmin || user.isStasjon ? (
                     <HStack gridArea="saksnummer">
-                        <Text fontSize="sm" fontWeight="normal">
-                            Saksnummer i arkivsystem
-                        </Text>
                         {avtale.saksnummer === null ? (
                             <Text fontSize="sm" fontStyle="italic">
                                 Ingen referanse til avtaledokument
                             </Text>
                         ) : (
-                            <Text fontSize="sm">{avtale.saksnummer}</Text>
+                            <Text fontSize="sm" fontWeight="normal">
+                                Saksnummer i arkivsystem: {avtale.saksnummer}
+                            </Text>
                         )}
                     </HStack>
                 ) : null}
@@ -163,10 +162,23 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                         <Box gridArea="timeframe">
                             <Fade in={isExpanded} unmountOnExit>
                                 <Text fontSize="sm" fontWeight="normal" marginTop="4">
-                                    {AVTALE_TYPE[avtale.type]}, fra
-                                    <time>{formatDate(parseISO(avtale.startDato))}</time> til
+                                    {AVTALE_TYPE[avtale.type]}, fra{' '}
+                                    <time>{formatDate(parseISO(avtale.startDato))}</time> til{' '}
                                     <time>{formatDate(parseISO(avtale.sluttDato))}</time>
                                 </Text>
+                                {user.isAdmin || user.isStasjon ? (
+                                    <HStack gridArea="saksnummer">
+                                        {avtale.saksnummer === null || avtale.saksnummer === '' ? (
+                                            <Text fontSize="sm" fontStyle="italic">
+                                                Ingen referanse til avtaledokument
+                                            </Text>
+                                        ) : (
+                                            <Text fontSize="sm" fontWeight="normal">
+                                                Saksnummer i arkivsystem: {avtale.saksnummer}
+                                            </Text>
+                                        )}
+                                    </HStack>
+                                ) : null}
                             </Fade>
                         </Box>
 
