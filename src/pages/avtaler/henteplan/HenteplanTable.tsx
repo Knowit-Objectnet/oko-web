@@ -22,7 +22,7 @@ export const HenteplanTable: React.FC<Props> = ({ avtale }) => {
     return (
         <Table variant="stripedNegative" size="sm">
             <Thead>
-                <Tr>
+                <Tr display={{ base: 'none', xl: 'table-row' }}>
                     <Th scope="col">Ukedag</Th>
                     <Th scope="col">Tidsrom</Th>
                     <Th scope="col">Stasjon</Th>
