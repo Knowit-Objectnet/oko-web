@@ -59,7 +59,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
     if (getAvtaleTitle(avtale) == 'Aktiv avtale') {
         return (
             <Grid
-                templateColumns={{ base: 'auto', tablet: 'auto 250px' }}
+                templateColumns={{ base: 'auto', tablet: 'auto 64' }}
                 templateAreas={{
                     base: "'title' 'timeframe' 'saksnummer' 'buttons' 'henteplan'",
                     tablet: "'title buttons' 'timeframe timeframe' 'saksnummer saksnummer' 'henteplan henteplan'",
