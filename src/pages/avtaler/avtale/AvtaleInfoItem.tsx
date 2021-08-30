@@ -116,7 +116,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
             <AccordionItem id={avtale.id}>
                 {({ isExpanded }) => (
                     <Grid
-                        templateColumns={{ base: 'auto', tablet: 'auto 250px' }}
+                        templateColumns={{ base: 'auto', tablet: 'auto 64' }}
                         templateAreas={{
                             base: "'title' 'timeframe' 'buttons' 'henteplan'",
                             tablet: "'title buttons' 'timeframe timeframe' 'henteplan henteplan'",
