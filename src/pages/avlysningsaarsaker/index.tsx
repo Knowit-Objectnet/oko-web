@@ -18,7 +18,7 @@ const Aarsaker: React.FC = () => {
                     as="h1"
                     fontWeight="normal"
                     fontSize="4xl"
-                    width="full"
+                    width="fit-content"
                     paddingBottom="4"
                     marginTop="5"
                     marginBottom="4"
@@ -28,8 +28,8 @@ const Aarsaker: React.FC = () => {
                 >
                     Avlysningsårsaker
                 </Heading>
-                <HStack margin="15" alignItems="flex-start">
-                    <VStack marginRight="20" alignItems="flex-start" flexGrow={1}>
+                <Flex direction={{ base: 'column', desktop: 'row' }} margin="15" alignItems="flex-start">
+                    <VStack alignItems="flex-start" flexGrow={1}>
                         <Heading as="h2" fontWeight="bold" fontSize="md" minWidth="500">
                             Stasjon
                         </Heading>
@@ -41,7 +41,7 @@ const Aarsaker: React.FC = () => {
                         </Heading>
                         <AarsakList isPartnerAarsaker={true} />
                     </VStack>
-                </HStack>
+                </Flex>
                 <ButtonGroup marginRight="30" justifyContent="right">
                     <AddAarsakButton />
                 </ButtonGroup>
