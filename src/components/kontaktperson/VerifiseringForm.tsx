@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { ChangeEvent, FormEventHandler, useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -99,22 +99,19 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
     const isVerifisert =
         type === 'telefon' ? kontakt.verifiseringStatus.telefonVerifisert : kontakt.verifiseringStatus.epostVerifisert;
 
+    const [codeLength, setCodeLength] = useState(0);
+
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setCodeLength(event.target.value.length);
+
     const getForm = () => {
         return (
-            <>
-                <Heading as="h2" fontSize="2xl">
-                    {`Verifiser ${type === 'telefon' ? 'SMS' : 'e-post'}`}
-                </Heading>
-                <Input
-                    name="kode"
-                    label={`Skriv inn kode fra ${type === 'telefon' ? 'SMS' : 'e-post'}`}
-                    type="number"
-                    isDisabled={isVerifisert}
-                    helperText={`Vi sender en verifiseringskode til ${
-                        type === 'telefon' ? 'ditt telefonnummer' : 'din e-post'
-                    }.`}
-                />
-            </>
+            <Input
+                name="kode"
+                label={`Skriv inn kode fra ${type === 'telefon' ? 'SMS' : 'e-post'}`}
+                type="number"
+                onInput={handleInputChange}
+                isDisabled={isVerifisert}
+            />
         );
     };
 
@@ -136,6 +133,8 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
                                 width="fit-content"
                                 paddingX="3"
                                 paddingY="2"
+                                variant="primaryLight"
+                                isDisabled={codeLength != 6}
                                 margin="0"
                                 isLoading={verifiserMutation.isLoading}
                                 loadingText="Lagrer..."
