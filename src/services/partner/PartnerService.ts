@@ -1,11 +1,13 @@
 import { extractResponse, httpClient, transformError } from '../httpClient';
 import { ApiKontakt } from '../aktor/KontaktService';
+import { ApiAvtale } from '../avtale/AvtaleService';
 
 export interface ApiPartner {
     id: string;
     navn: string;
     kontaktPersoner: Array<ApiKontakt>;
     ideell: boolean;
+    avtaler: Array<ApiAvtale>;
 }
 
 export interface ApiPartnerPatch {
@@ -23,6 +25,7 @@ export interface ApiPartnerParams {
     id?: string;
     navn?: string;
     ideell?: boolean;
+    includeAvtaler?: boolean;
 }
 
 const partnerEndpoint = '/partnere';

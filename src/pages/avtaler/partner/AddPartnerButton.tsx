@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Button, ButtonProps, Icon, useDisclosure } from '@chakra-ui/react';
-import Plus from '../../../assets/Plus.svg';
+import { ButtonProps, useDisclosure } from '@chakra-ui/react';
 import { Modal } from '../../../components/Modal';
+import { AddButton } from '../../../components/buttons/AddButton';
 import { PartnerForm } from './PartnerForm';
 
 export const AddPartnerButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props) => {
@@ -9,9 +9,7 @@ export const AddPartnerButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props) 
 
     return (
         <>
-            <Button leftIcon={<Icon as={Plus} />} {...props} onClick={onOpen}>
-                Legg til samarbeidspartner
-            </Button>
+            <AddButton label="Legg til samarbeidspartner" borderRadius="6" {...props} onClick={onOpen} />
             <Modal title="Legg til ny samarbeidspartner" isOpen={isOpen} onClose={onClose}>
                 <PartnerForm onSuccess={onClose} />
             </Modal>

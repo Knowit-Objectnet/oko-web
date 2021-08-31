@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ApiKontakt } from '../../services/aktor/KontaktService';
-import { Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 
 // NB! Setting the error messages used by yup
 import '../../utils/forms/formErrorMessages';
@@ -16,16 +16,21 @@ interface Props {
 export const VerifiseringPage: React.FC<Props> = ({ kontakt, onClose }) => {
     return (
         <Flex flexDirection="column">
+            <Box marginBottom="20">
+                <Text>Vi sender en verifiseringskode til ditt telefonnummer og e-post.</Text>
+                <SendVerifiseringButton kontakt={kontakt} marginTop="7" />
+            </Box>
+
             {kontakt.telefon ? <VerifiseringForm kontakt={kontakt} type="telefon" /> : null}
             {kontakt.epost ? <VerifiseringForm kontakt={kontakt} type="e-post" /> : null}
-            <SendVerifiseringButton kontakt={kontakt} marginTop="7" />
+
             <Button
                 variant="primary"
                 width="fit-content"
                 onClick={onClose}
                 alignSelf="flex-end"
                 size="lg"
-                marginTop="7"
+                marginTop="20"
             >
                 Ferdig
             </Button>

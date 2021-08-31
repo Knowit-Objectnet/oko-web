@@ -39,7 +39,7 @@ export const SendVerifiseringButton: React.FC<Props> = ({ kontakt, ...props }) =
         <Button
             type="submit"
             width="full"
-            variant="outlineOnSurface"
+            variant="primary"
             size="lg"
             isLoading={sendVerifiseringMutation.isLoading}
             loadingText="Sender nye koder..."

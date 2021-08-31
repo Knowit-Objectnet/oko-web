@@ -46,6 +46,39 @@ export const Button = {
                 },
             },
         },
+        primaryLight: {
+            backgroundColor: 'primaryLight',
+            color: 'onPrimaryLight',
+            border: 'none',
+            '& svg': { fill: 'onPrimaryLight' },
+            // TODO: we should use [layer styles](https://chakra-ui.com/docs/features/text-and-layer-styles#layer-style)
+            //  here to avoid duplication - as soon as [this bug is fixed](https://github.com/chakra-ui/chakra-ui/issues/3883)
+            _focus: {
+                backgroundColor: 'primaryLightHover',
+                textDecoration: 'underline',
+                boxShadow: 'none',
+            },
+            _hover: {
+                backgroundColor: 'primaryLightHover',
+                textDecoration: 'underline',
+                _disabled: {
+                    backgroundColor: 'gray.200',
+                    textDecoration: 'none',
+                },
+            },
+            _active: {
+                backgroundColor: 'primaryLightHover',
+                textDecoration: 'none',
+            },
+            _disabled: {
+                backgroundColor: 'gray.200',
+                color: 'gray.600',
+                '& svg': { fill: 'gray.500' },
+                _focus: {
+                    textDecoration: 'none',
+                },
+            },
+        },
         outlineOnSurface: {
             fontWeight: 'medium',
             backgroundColor: 'transparent',

@@ -9,19 +9,25 @@ export const PartnerInfoSection: React.FC = ({ children }) => (
 );
 
 export const PartnerInfoSectionHeader: React.FC = ({ children }) => (
-    <Flex justifyContent="space-between" width="full" marginBottom="4" paddingBottom="4">
+    <Flex
+        justifyContent="space-between"
+        width="full"
+        marginBottom={{ base: '0', handheld: '4' }}
+        paddingBottom="4"
+        direction={{ base: 'column', handheld: 'row' }}
+    >
         {children}
     </Flex>
 );
 
 export const PartnerInfoSectionTitle: React.FC = ({ children }) => (
-    <Heading as="h2" fontSize="2xl" fontWeight="medium">
+    <Heading as="h2" fontSize="2xl" fontWeight="medium" marginBottom={{ base: '4', handheld: '0' }}>
         {children}
     </Heading>
 );
 
 export const PartnerInfoSectionButtons: React.FC = ({ children }) => (
-    <ButtonGroup spacing="3" size="sm">
+    <ButtonGroup spacing="3" size="sm" alignSelf="center">
         {children}
     </ButtonGroup>
 );
