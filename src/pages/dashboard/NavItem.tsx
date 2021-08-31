@@ -68,13 +68,19 @@ export const NavItem: React.FC<Props> = ({ path, icon, label, exact }) => {
     return (
         <StyledNavLink to={path} exact={exact}>
             <Center>
-                <Icon {...iconStyle} minWidth="6" minHeight="6" textAlign="center">
+                <Icon
+                    {...iconStyle}
+                    minWidth={{ base: '6', tablet: '4', desktop: '6' }}
+                    minHeight={{ base: '6', tablet: '4', desktop: '6' }}
+                    textAlign="center"
+                >
                     {icon}
                 </Icon>
                 <Box
                     as={Flex}
                     paddingLeft={{ base: '0', tablet: '1' }}
                     alignItems="center"
+                    fontSize={{ base: '16', tablet: '16', xl: '20' }}
                     whiteSpace="nowrap"
                     marginTop={{ base: '1', tablet: '0' }}
                 >

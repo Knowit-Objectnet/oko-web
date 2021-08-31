@@ -22,7 +22,7 @@ export const AarsakList: React.FC<Props> = ({ isPartnerAarsaker }) => {
     });
 
     return (
-        <List alignItems="flex-start" width="full">
+        <List alignItems="flex-start" width={{ base: '50%', tablet: 'full', desktop: '80%' }}>
             {sortedAarsakerByType?.map((aarsak, valgNumber) => (
                 <ListItem key={aarsak.id}>
                     <HStack justifyContent="space-between" marginBottom="1">

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Heading, List, ListItem } from '@chakra-ui/react';
+import { Heading, List, ListItem, useDisclosure } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
@@ -9,7 +9,7 @@ import { ListSkeleton } from '../../../components/forms/checkbox/ListSkeleton';
 
 export const PartnerNavigation: React.FC = () => {
     const { user } = useAuth();
-    const { data: partnere, isError, isLoading } = usePartnere();
+    const { data: partnere, isError, isLoading } = usePartnere({ params: { includeAvtaler: true } });
 
     const getPartnerList = () => {
         if (isLoading) {
@@ -20,7 +20,7 @@ export const PartnerNavigation: React.FC = () => {
         }
         if (partnere) {
             return (
-                <List spacing="3">
+                <List spacing="10" width="full">
                     {partnere.map((partner) => (
                         <ListItem key={partner.id}>
                             <PartnerNavItem partner={partner} />
@@ -36,24 +36,24 @@ export const PartnerNavigation: React.FC = () => {
             direction="column"
             as="nav"
             alignItems="flex-start"
-            backgroundColor="surface"
             height="full"
             padding="5"
-            width="300px"
+            width={{ base: 'full', desktop: '70%', '2xl': '50%' }}
+            margin="auto"
         >
-            <Heading
-                as="h2"
+            <Flex
+                justifyContent="space-between"
                 width="full"
-                fontSize="xl"
-                paddingBottom="3"
-                marginBottom="4"
-                borderBottom="1px solid"
-                borderBottomColor="DarkBeige"
+                marginY="6"
+                alignItems="center"
+                flexDir={{ base: 'column', tablet: 'row' }}
             >
-                Samarbeidspartnere
-            </Heading>
+                <Heading as="h2" fontSize="xl" marginBottom={{ base: '4', tablet: '0' }}>
+                    Samarbeidspartnere
+                </Heading>
+                {user.isAdmin ? <AddPartnerButton fontSize="14" /> : null}
+            </Flex>
             {getPartnerList()}
-            {user.isAdmin ? <AddPartnerButton marginTop="10" width="full" variant="outlineOnSurface" /> : null}
         </Flex>
     );
 };
