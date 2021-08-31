@@ -17,14 +17,24 @@ import { ApiKategori, ApiKategoriPatch, ApiKategoriPost } from '../../../service
 import { useAddKategori } from '../../../services/kategori/useAddKategori';
 import { useUpdateKategori } from '../../../services/kategori/useUpdateKategori';
 import { WarningBody, WarningContainer, WarningTitle } from '../../../components/forms/Warning';
+import { RadiobuttonGroup, RadioOption } from '../../../components/forms/RadiobuttonGroup';
 
 interface KategoriFormData {
     navn: string;
-    vektkategori: boolean;
+    vektkategori: string;
 }
+const vektRegistreringOptions: Array<RadioOption<string>> = [
+    { value: 'true', label: 'Ja' },
+    { value: 'false', label: 'Nei' },
+];
 
 const validationSchema = yup.object().shape({
     navn: yup.string().label('navn på kategori').required().min(2),
+    vektkategori: yup
+        .mixed()
+        .label('om kategorien skal registrere vekt')
+        .required()
+        .oneOf(vektRegistreringOptions.map((vektRegistrering) => vektRegistrering.value)),
 });
 
 interface Props {
@@ -40,6 +50,7 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
         defaultValues: kategoriToEdit
             ? {
                   navn: kategoriToEdit.navn,
+                  vektkategori: kategoriToEdit.vektkategori.toString(),
               }
             : undefined,
     });
@@ -48,7 +59,6 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
     const updateKategoriMutation = useUpdateKategori();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
-
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
@@ -56,10 +66,12 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
             updateKategori({
                 id: kategoriToEdit.id,
                 navn: formData.navn,
+                vektkategori: formData.vektkategori === 'true',
             });
         } else {
             addKategori({
-                ...formData,
+                navn: formData.navn,
+                vektkategori: formData.vektkategori === 'true',
             });
         }
     });
@@ -97,23 +109,38 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-
                     {kategoriToEdit ? (
-                        <WarningContainer variant="warning">
-                            <WarningTitle title="Advarsel" />
-                            <WarningBody>
-                                Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres. Dersom
-                                nytt kategorinavn har en annen betydning enn nåværende navn, bør det vurderes å opprette
-                                en ny kategori.
-                            </WarningBody>
-                            <WarningBody>
-                                For eksempel bør man vurdere opprettelse av ny kategori ved navnebytte fra &quot;Sport-
-                                og friluftsutstyr&quot; til &quot;Ski&quot;.
-                            </WarningBody>
+                        <>
+                            <WarningContainer variant="warning">
+                                <WarningTitle title="Advarsel" />
+                                <WarningBody>
+                                    Ved endring av navn vil vektrapporter tilknyttet denne kategorien også endres.
+                                    Dersom nytt kategorinavn har en annen betydning enn nåværende navn, bør det vurderes
+                                    å opprette en ny kategori.
+                                </WarningBody>
+                                <WarningBody>
+                                    For eksempel bør man vurdere opprettelse av ny kategori ved navnebytte fra
+                                    &quot;Sport- og friluftsutstyr&quot; til &quot;Ski&quot;.
+                                </WarningBody>
+                            </WarningContainer>
                             <Input name="navn" label="Navn på kategori" required />
-                        </WarningContainer>
+                            <RadiobuttonGroup
+                                name="vektkategori"
+                                label="Skal kategori registrere vekt?"
+                                options={vektRegistreringOptions}
+                                required
+                            />
+                        </>
                     ) : (
-                        <Input name="navn" label="Navn på kategori" required />
+                        <>
+                            <Input name="navn" label="Navn på kategori" required />
+                            <RadiobuttonGroup
+                                name="vektkategori"
+                                label="Skal kategori registrere vekt?"
+                                options={vektRegistreringOptions}
+                                required
+                            />
+                        </>
                     )}
 
                     <FormSubmitButton
