@@ -4,10 +4,6 @@ import Warning from '../../../assets/Warning.svg';
 import { useAarsakById } from '../../../services/aarsak/useAarsakById';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { Box } from '@chakra-ui/layout';
-import { useAuth } from '../../../auth/useAuth';
-import { findOneAktor } from '../../../services/aktor/AktorService';
-import { useAktorById } from '../../../services/aktor/useAktorById';
-import { useStasjonById } from '../../../services/stasjon/useStasjonById';
 
 interface Props {
     henting: ApiHentingWrapper;
@@ -15,15 +11,15 @@ interface Props {
 
 export const AvlystDetails: React.FC<Props & StackProps> = ({ henting, ...props }) => {
     const { data: aarsak } = useAarsakById(henting.planlagtHenting?.aarsakId || '');
-    const { data: aktor } = useAktorById(henting.planlagtHenting?.avlystAv || '');
-    const { data: stasjon } = useStasjonById(henting.planlagtHenting?.avlystAv || '');
-    let avlystAv = 'Admin';
-    if (aktor) {
-        avlystAv = aktor.navn;
+    let avlystAv = '';
+    if (henting.planlagtHenting?.avlystAv == '00000000-0000-0000-0000-000000000000') {
+        avlystAv = 'Admin';
+    } else if (henting.planlagtHenting?.avlystAv == henting.stasjonId) {
+        avlystAv = henting.stasjonNavn;
+    } else if (henting.aktorNavn !== undefined && henting.planlagtHenting?.avlystAv == henting.aktorId) {
+        avlystAv = henting.aktorNavn;
     }
-    if (stasjon) {
-        avlystAv = stasjon.navn;
-    }
+
     return (
         <Box>
             {henting.planlagtHenting?.avlyst && henting.planlagtHenting?.avlystAv ? (
