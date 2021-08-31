@@ -11,6 +11,14 @@ interface Props {
 
 export const AvlystDetails: React.FC<Props & StackProps> = ({ henting, ...props }) => {
     const { data: aarsak } = useAarsakById(henting.planlagtHenting?.aarsakId || '');
+    let avlystAv = '';
+    if (henting.planlagtHenting?.avlystAv == '00000000-0000-0000-0000-000000000000') {
+        avlystAv = 'Admin';
+    } else if (henting.planlagtHenting?.avlystAv == henting.stasjonId) {
+        avlystAv = henting.stasjonNavn;
+    } else if (henting.aktorNavn !== undefined && henting.planlagtHenting?.avlystAv == henting.aktorId) {
+        avlystAv = henting.aktorNavn;
+    }
 
     return (
         <Box>
@@ -25,7 +33,7 @@ export const AvlystDetails: React.FC<Props & StackProps> = ({ henting, ...props 
                 >
                     <Icon as={Warning} boxSize="2rem" />
                     <Flex spacing={10} alignItems="baseline" direction="column">
-                        <Heading fontSize="lg">Henting avlyst av {henting.aktorNavn || 'Admin'}</Heading>
+                        <Heading fontSize="lg">Henting avlyst av {avlystAv}</Heading>
                         <Text fontSize="sm" marginTop={1}>
                             {aarsak?.beskrivelse || null}
                         </Text>
