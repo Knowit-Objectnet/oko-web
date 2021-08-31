@@ -99,9 +99,9 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
     const isVerifisert =
         type === 'telefon' ? kontakt.verifiseringStatus.telefonVerifisert : kontakt.verifiseringStatus.epostVerifisert;
 
-    const [isNotEmpty, setIsNotEmpty] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(true);
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setIsNotEmpty(event.target.value.length > 0);
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setIsEmpty(event.target.value.length == 0);
 
     const getForm = () => {
         return (
@@ -134,7 +134,7 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
                                 paddingX="3"
                                 paddingY="2"
                                 variant="primaryLight"
-                                isDisabled={!isNotEmpty}
+                                isDisabled={isEmpty}
                                 margin="0"
                                 isLoading={verifiserMutation.isLoading}
                                 loadingText="Lagrer..."
