@@ -6,7 +6,6 @@ export const breakpoints = createBreakpoints({
     base: '0px', // mobile
     handheld: '480px', // oversized phones and portrait-oriented tablet
     tablet: '768px',
-    bigTablet: '896px',
     desktop: '992px',
     maxWidth: '1800px',
 

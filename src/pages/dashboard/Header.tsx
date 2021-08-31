@@ -53,9 +53,9 @@ export const Header: React.FC = () => {
                 >
                     <Icon
                         as={Profile}
-                        marginRight={{ base: '2', tablet: '3' }}
+                        marginRight={{ base: '2', desktop: '3' }}
                         fill="onPrimary"
-                        height={{ base: '5', tablet: '8' }}
+                        height={{ base: '5', desktop: '8' }}
                         width="auto"
                         aria-hidden
                     />
