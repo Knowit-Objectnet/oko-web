@@ -4,6 +4,7 @@ import OsloKommuneLogo from '../../assets/Oslo_kommune_logo.svg';
 import { RouterLink } from '../../routing/RouterLink';
 import { Box, HStack, Icon } from '@chakra-ui/react';
 import Profile from '../../assets/Default_profile_pic.svg';
+import { SkipNavLink, SkipNavContent } from '@chakra-ui/skip-nav';
 
 export const Header: React.FC = () => {
     return (
@@ -19,6 +20,7 @@ export const Header: React.FC = () => {
                 maxWidth="100vw"
                 overflowX="auto"
             >
+                <SkipNavLink>Skip to content</SkipNavLink>
                 <RouterLink to="/" height="full" aria-label="Til forsiden">
                     <Icon as={OsloKommuneLogo} height="full" width="auto" aria-hidden />
                 </RouterLink>
@@ -61,6 +63,7 @@ export const Header: React.FC = () => {
                     />
                     Logg ut
                 </RouterLink>
+                <SkipNavContent />
             </HStack>
         </header>
     );
