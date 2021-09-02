@@ -8,6 +8,7 @@ import { AVTALE_TYPE, getAvtaleTitle } from '../avtale/AvtaleInfoItem';
 import { isNull } from 'lodash';
 import { formatDate } from '../../../utils/formatDateTime';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
+import { useAuth } from '../../../auth/useAuth';
 
 interface Props {
     partner: ApiPartner;
@@ -15,6 +16,7 @@ interface Props {
 
 export const PartnerNavItem: React.FC<Props> = ({ partner }) => {
     const { url } = useRouteMatch();
+    const { user } = useAuth();
     const getNyesteAvtale = (avtaler: Array<ApiAvtale>): ApiAvtale | null => {
         if (avtaler.length == 0) return null;
 
@@ -72,7 +74,10 @@ export const PartnerNavItem: React.FC<Props> = ({ partner }) => {
                     </Box>
 
                     <Box fontSize="12" gridArea="henteplan" marginLeft={{ base: 'auto', tablet: 'inherit' }}>
-                        {nyesteAvtale.henteplaner.length} &nbsp;
+                        {user.isStasjon
+                            ? nyesteAvtale.henteplaner.filter((henteplan) => user.aktorId === henteplan.stasjonId)
+                                  .length
+                            : nyesteAvtale.henteplaner.length}{' '}
                         {nyesteAvtale.henteplaner.length == 1 ? 'henteplan' : 'henteplaner'}
                     </Box>
 
