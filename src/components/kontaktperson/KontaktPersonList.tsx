@@ -54,10 +54,10 @@ export const KontaktPersonList: React.FC<Props> = ({ kontaktPersoner }) => {
                             ) : null}
                             <VStack marginTop="4" spacing="2" display={{ desktop: 'none', tablet: 'none' }}>
                                 <EditKontaktPersonButton width="28" size="sm" kontakt={kontakt} />
-                                <DeleteKontaktPersonButton width="max-content" size="sm" kontakt={kontakt} />
+                                <DeleteKontaktPersonButton width="28" size="sm" kontakt={kontakt} />
                                 {(kontakt.telefon && !kontakt.verifiseringStatus.telefonVerifisert) ||
                                 (kontakt.epost && !kontakt.verifiseringStatus.epostVerifisert) ? (
-                                    <OpenVerifiseringPageButton width="max-content" size="sm" kontakt={kontakt} />
+                                    <OpenVerifiseringPageButton width="28" size="sm" kontakt={kontakt} />
                                 ) : null}
                                 {kontakt.telefon && !kontakt.verifiseringStatus.telefonVerifisert ? (
                                     <Tag variant="warning">SMS ikke verifisert</Tag>
