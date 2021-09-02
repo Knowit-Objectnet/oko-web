@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ButtonGroup, Flex, HStack, Icon, Link, Tag, Text } from '@chakra-ui/react';
+import { ButtonGroup, Flex, HStack, Icon, Link, Tag, Text, VStack } from '@chakra-ui/react';
 import { ApiKontakt } from '../../services/aktor/KontaktService';
 import { EditKontaktPersonButton } from './EditKontaktPersonButton';
 import { DeleteKontaktPersonButton } from './DeleteKontaktPersonButton';
@@ -52,6 +52,20 @@ export const KontaktPersonList: React.FC<Props> = ({ kontaktPersoner }) => {
                                     </Link>
                                 </Text>
                             ) : null}
+                            <VStack marginTop="4" spacing="2" display={{ desktop: 'none', tablet: 'none' }}>
+                                <EditKontaktPersonButton width="28" size="sm" kontakt={kontakt} />
+                                <DeleteKontaktPersonButton width="max-content" size="sm" kontakt={kontakt} />
+                                {(kontakt.telefon && !kontakt.verifiseringStatus.telefonVerifisert) ||
+                                (kontakt.epost && !kontakt.verifiseringStatus.epostVerifisert) ? (
+                                    <OpenVerifiseringPageButton width="max-content" size="sm" kontakt={kontakt} />
+                                ) : null}
+                                {kontakt.telefon && !kontakt.verifiseringStatus.telefonVerifisert ? (
+                                    <Tag variant="warning">SMS ikke verifisert</Tag>
+                                ) : null}
+                                {kontakt.epost && !kontakt.verifiseringStatus.epostVerifisert ? (
+                                    <Tag variant="warning">E-post ikke verifisert</Tag>
+                                ) : null}
+                            </VStack>
                         </Flex>
                         <Flex flexDirection="column" height="100%" display={{ base: 'none', tablet: 'flex' }}>
                             <ButtonGroup spacing="4" size="xs" justifyContent="flex-end">
