@@ -78,7 +78,6 @@ export const PartnerNavItem: React.FC<Props> = ({ partner }) => {
                             ? nyesteAvtale.henteplaner.filter((henteplan) => user.aktorId === henteplan.stasjonId)
                                   .length
                             : nyesteAvtale.henteplaner.length}{' '}
-                        &nbsp;
                         {nyesteAvtale.henteplaner.length == 1 ? 'henteplan' : 'henteplaner'}
                     </Box>
 
