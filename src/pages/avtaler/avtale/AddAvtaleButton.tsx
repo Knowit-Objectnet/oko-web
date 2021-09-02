@@ -4,6 +4,8 @@ import { Modal } from '../../../components/Modal';
 import { AddButton } from '../../../components/buttons/AddButton';
 import { AvtaleForm } from './AvtaleForm';
 import { ApiPartner } from '../../../services/partner/PartnerService';
+import { FormRedirect, FormWrapper } from '../../../components/forms/FormRedirect';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     partner: ApiPartner;
@@ -11,6 +13,7 @@ interface Props {
 
 export const AddAvtaleButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ partner, ...props }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
 
     return (
         <>
@@ -21,9 +24,9 @@ export const AddAvtaleButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = (
                 {...props}
                 onClick={onOpen}
             />
-            <Modal title={`Ny avtale for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
+            <FormWrapper to="ny" callback="e">
                 <AvtaleForm partner={partner} onSuccess={onClose} />
-            </Modal>
+            </FormWrapper>
         </>
     );
 };
