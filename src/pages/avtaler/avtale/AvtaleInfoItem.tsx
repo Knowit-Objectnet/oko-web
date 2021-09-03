@@ -93,7 +93,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
 
                 {user.isAdmin || user.isStasjon ? (
                     <HStack gridArea="saksnummer">
-                        {avtale.saksnummer === null ? (
+                        {avtale.saksnummer === null || avtale.saksnummer.trim() === '' ? (
                             <Text fontSize="sm" fontStyle="italic">
                                 Ingen referanse til avtaledokument
                             </Text>
@@ -168,7 +168,7 @@ export const AvtaleInfoItem: React.FC<Props> = ({ avtale, partner }) => {
                                 </Text>
                                 {user.isAdmin || user.isStasjon ? (
                                     <HStack gridArea="saksnummer">
-                                        {avtale.saksnummer === null || avtale.saksnummer === '' ? (
+                                        {avtale.saksnummer === null || avtale.saksnummer.trim() === '' ? (
                                             <Text fontSize="sm" fontStyle="italic">
                                                 Ingen referanse til avtaledokument
                                             </Text>

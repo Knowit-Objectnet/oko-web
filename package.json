@@ -82,6 +82,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^1.6.1",
+    "@chakra-ui/skip-nav": "^1.1.11",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@hookform/error-message": "^2.0.0",
