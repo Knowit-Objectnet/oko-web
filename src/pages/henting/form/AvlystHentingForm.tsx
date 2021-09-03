@@ -56,7 +56,7 @@ export const AvlystHentingForm: React.FC<Props> = ({ hentingToCancel, onSuccess 
     const updateHenting = (updateHenting: ApiPlanlagtHentingPatch) =>
         updateHentingMutation.mutate(updateHenting, {
             onSuccess: () => {
-                onApiSubmitSuccess(`Endringene ble lagret for ${updateHenting.id}`);
+                onApiSubmitSuccess(`Endringene ble lagret`);
             },
             onError: onApiSubmitError,
         });
