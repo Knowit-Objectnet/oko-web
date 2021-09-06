@@ -1,29 +1,27 @@
 import * as React from 'react';
-import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../Modal';
+import { ButtonProps } from '@chakra-ui/react';
 import { EditButton } from '../buttons/EditButton';
 import { ApiKontakt } from '../../services/aktor/KontaktService';
-import { KontaktPersonForm } from './KontaktPersonForm';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 interface Props {
     kontakt: ApiKontakt;
 }
 
 export const EditKontaktPersonButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ kontakt, ...props }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
+    const { url } = useRouteMatch();
+
+    const onClick = () =>
+        history.push(`/partnere/kontakt/rediger?kontaktId=${kontakt.id}`, { kontaktToEdit: kontakt, callback: url });
 
     return (
-        <>
-            <EditButton
-                label="Rediger"
-                borderRadius="6"
-                aria-label={`Rediger kontaktinformasjon for ${kontakt.navn}`}
-                {...props}
-                onClick={onOpen}
-            />
-            <Modal title="Rediger kontaktinformasjon" isOpen={isOpen} onClose={onClose}>
-                <KontaktPersonForm onSuccess={onClose} kontaktToEdit={kontakt} />
-            </Modal>
-        </>
+        <EditButton
+            label="Rediger"
+            borderRadius="6"
+            aria-label={`Rediger kontaktinformasjon for ${kontakt.navn}`}
+            {...props}
+            onClick={onClick}
+        />
     );
 };

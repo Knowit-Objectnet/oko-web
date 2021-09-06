@@ -1,20 +1,17 @@
 import * as React from 'react';
-import { Button, ButtonProps, Icon, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonProps, Icon } from '@chakra-ui/react';
 import Plus from '../../../assets/Plus.svg';
-import { Modal } from '../../../components/Modal';
-import { StasjonForm } from './StasjonForm';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 export const AddStasjonButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
+    const { url } = useRouteMatch();
+
+    const onClick = () => history.push(`/stasjoner/ny`, { callback: url });
 
     return (
-        <>
-            <Button leftIcon={<Icon as={Plus} />} {...props} onClick={onOpen}>
-                Legg til stasjon
-            </Button>
-            <Modal title="Legg til ny stasjon" isOpen={isOpen} onClose={onClose}>
-                <StasjonForm onSuccess={onClose} />
-            </Modal>
-        </>
+        <Button leftIcon={<Icon as={Plus} />} {...props} onClick={onClick}>
+            Legg til stasjon
+        </Button>
     );
 };

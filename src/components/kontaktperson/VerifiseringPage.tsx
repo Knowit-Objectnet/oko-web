@@ -8,26 +8,26 @@ import { SendVerifiseringButton } from './SendVerifiseringButton';
 import { VerifiseringForm } from './VerifiseringForm';
 
 interface Props {
-    kontakt: ApiKontakt;
+    kontakt?: ApiKontakt;
     /** Callback that will fire if registration is successful: **/
-    onClose: () => void;
+    onSuccess?: () => void;
 }
 
-export const VerifiseringPage: React.FC<Props> = ({ kontakt, onClose }) => {
+export const VerifiseringPage: React.FC<Props> = ({ kontakt, onSuccess }) => {
     return (
         <Flex flexDirection="column">
             <Box marginBottom="20">
                 <Text>Vi sender en verifiseringskode til ditt telefonnummer og e-post.</Text>
-                <SendVerifiseringButton kontakt={kontakt} marginTop="7" />
+                <SendVerifiseringButton kontakt={kontakt!} marginTop="7" />
             </Box>
 
-            {kontakt.telefon ? <VerifiseringForm kontakt={kontakt} type="telefon" /> : null}
-            {kontakt.epost ? <VerifiseringForm kontakt={kontakt} type="e-post" /> : null}
+            {kontakt!.telefon ? <VerifiseringForm kontakt={kontakt!} type="telefon" /> : null}
+            {kontakt!.epost ? <VerifiseringForm kontakt={kontakt!} type="e-post" /> : null}
 
             <Button
                 variant="primary"
                 width="fit-content"
-                onClick={onClose}
+                onClick={onSuccess}
                 alignSelf="flex-end"
                 size="lg"
                 marginTop="20"

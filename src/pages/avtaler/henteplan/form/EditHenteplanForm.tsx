@@ -8,30 +8,30 @@ import { useSuccessToast } from '../../../../components/toasts/useSuccessToast';
 import { getDateStringFromISOString, getTimeStringFromISOString } from '../../../../utils/hentingDateTimeHelpers';
 
 interface Props {
-    avtale: ApiAvtale;
-    henteplan: ApiHenteplan;
+    avtale?: ApiAvtale;
+    henteplan?: ApiHenteplan;
     /** Callback that will fire if registration is successful: **/
     onSuccess?: () => void;
 }
 
 export const EditHenteplanForm: React.FC<Props> = ({ avtale, henteplan, onSuccess }) => {
     const formValues = {
-        stasjonId: henteplan.stasjonId,
-        frekvens: henteplan.frekvens,
-        ukedag: henteplan.ukedag,
-        startDato: getDateStringFromISOString(henteplan.startTidspunkt),
-        sluttDato: getDateStringFromISOString(henteplan.sluttTidspunkt),
-        startTidspunkt: getTimeStringFromISOString(henteplan.startTidspunkt),
-        sluttTidspunkt: getTimeStringFromISOString(henteplan.sluttTidspunkt),
-        kategorier: henteplan.kategorier.map(({ kategori }) => kategori.id),
-        merknad: henteplan.merknad,
+        stasjonId: henteplan!.stasjonId,
+        frekvens: henteplan!.frekvens,
+        ukedag: henteplan!.ukedag,
+        startDato: getDateStringFromISOString(henteplan!.startTidspunkt),
+        sluttDato: getDateStringFromISOString(henteplan!.sluttTidspunkt),
+        startTidspunkt: getTimeStringFromISOString(henteplan!.startTidspunkt),
+        sluttTidspunkt: getTimeStringFromISOString(henteplan!.sluttTidspunkt),
+        kategorier: henteplan!.kategorier.map(({ kategori }) => kategori.id),
+        merknad: henteplan!.merknad,
     };
 
     const updateHenteplanMutation = useUpdateHenteplan();
     const showSuccessToast = useSuccessToast();
 
     const handleSubmit = (formData: HenteplanFormData) => {
-        const updatedHenteplan = createUpdatedHenteplan(henteplan.id, formData);
+        const updatedHenteplan = createUpdatedHenteplan(henteplan!.id, formData);
 
         return updateHenteplanMutation.mutateAsync(updatedHenteplan, {
             onSuccess: () => {
@@ -45,7 +45,7 @@ export const EditHenteplanForm: React.FC<Props> = ({ avtale, henteplan, onSucces
         <HenteplanForm
             isEditing
             defaultFormValues={formValues}
-            avtale={avtale}
+            avtale={avtale!}
             onSubmit={handleSubmit}
             submitLoading={updateHenteplanMutation.isLoading}
         />

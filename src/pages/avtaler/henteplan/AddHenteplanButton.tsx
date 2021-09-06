@@ -5,6 +5,7 @@ import { AddButton } from '../../../components/buttons/AddButton';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { AddHenteplanForm } from './form/AddHenteplanForm';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 interface Props {
     avtale: ApiAvtale;
@@ -12,7 +13,10 @@ interface Props {
 }
 
 export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ avtale, partner, ...props }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
+    const { url } = useRouteMatch();
+
+    const onClick = () => history.push(`${url}/henteplan/ny?avtaleId=${avtale.id}`, { avtale: avtale, callback: url });
 
     return (
         <>
@@ -21,11 +25,8 @@ export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> 
                 borderRadius="6"
                 aria-label={`Opprett ny henteplan for ${partner.navn}`}
                 {...props}
-                onClick={onOpen}
+                onClick={onClick}
             />
-            <Modal title={`Ny henteplan for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
-                <AddHenteplanForm avtale={avtale} onSuccess={onClose} />
-            </Modal>
         </>
     );
 };

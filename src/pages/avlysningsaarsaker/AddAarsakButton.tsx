@@ -1,21 +1,20 @@
 import * as React from 'react';
-import { Button, ButtonProps, Icon, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonProps, Icon } from '@chakra-ui/react';
 import Plus from '../../assets/Plus.svg';
-import { Modal } from '../../components/Modal';
-import { AarsakForm } from './AarsakForm';
 import { Flex } from '@chakra-ui/layout';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 export const AddAarsakButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
+    const { url } = useRouteMatch();
+
+    const onClick = () => history.push(`${url}/ny`, { callback: url });
 
     return (
         <Flex margin="15">
-            <Button variant="primary" leftIcon={<Icon as={Plus} />} {...props} onClick={onOpen}>
+            <Button variant="primary" leftIcon={<Icon as={Plus} />} {...props} onClick={onClick}>
                 Legg til avlysningsårsak
             </Button>
-            <Modal title="Legg til ny årsak" isOpen={isOpen} onClose={onClose}>
-                <AarsakForm onSuccess={onClose} />
-            </Modal>
         </Flex>
     );
 };

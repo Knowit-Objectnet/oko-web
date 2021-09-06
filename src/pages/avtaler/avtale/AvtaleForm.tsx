@@ -53,12 +53,12 @@ const validationSchema = yup.object().shape({
 
 interface Props {
     /** Callback that will fire if registration is successful: **/
-    onSuccess: () => void;
+    onSuccess?: () => void;
 }
 
 interface AddModeProps extends Props {
     /**  Partner is only required for adding Avtale, and not allowed in edit mode. **/
-    partner: ApiPartner;
+    partner?: ApiPartner;
     avtaleToEdit?: never;
 }
 

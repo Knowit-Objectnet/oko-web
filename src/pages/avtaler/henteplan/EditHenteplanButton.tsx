@@ -5,6 +5,7 @@ import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { EditHenteplanForm } from './form/EditHenteplanForm';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 interface Props {
     avtale: ApiAvtale;
@@ -16,14 +17,17 @@ export const EditHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>>
     avtale,
     ...props
 }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
+    const { url } = useRouteMatch();
+
+    const onClick = () =>
+        history.push(`${url}/henteplan/rediger?henteplanId=${henteplan.id}`, {
+            henteplan: henteplan,
+            avtale: avtale,
+            callback: url,
+        });
 
     return (
-        <>
-            <EditButton label="Rediger" borderRadius="6" aria-label="Rediger henteplanen" {...props} onClick={onOpen} />
-            <Modal title="Rediger henteplan" isOpen={isOpen} onClose={onClose}>
-                <EditHenteplanForm onSuccess={onClose} henteplan={henteplan} avtale={avtale} />
-            </Modal>
-        </>
+        <EditButton label="Rediger" borderRadius="6" aria-label="Rediger henteplanen" {...props} onClick={onClick} />
     );
 };

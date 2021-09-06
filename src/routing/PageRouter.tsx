@@ -3,6 +3,10 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Roles } from '../auth/Roles';
 import { Loading } from '../components/Loading';
+import { PartnerForm } from '../pages/avtaler/partner/PartnerForm';
+import { FormRoute } from '../components/forms/FormRoute';
+import { KontaktPersonForm } from '../components/kontaktperson/KontaktPersonForm';
+import { VerifiseringPage } from '../components/kontaktperson/VerifiseringPage';
 
 const Kalender = React.lazy(() => import('../pages/kalender'));
 const Henting = React.lazy(() => import('../pages/henting'));
@@ -56,6 +60,21 @@ export const PageRouter: React.FC = () => (
             <ProtectedRoute path="/innstillinger" requiredRoles={[Roles.Admin]}>
                 <Innstillinger />
             </ProtectedRoute>
+            <FormRoute path="/partnere/rediger" title="Rediger samarbeidspartner">
+                <PartnerForm />
+            </FormRoute>
+            <FormRoute path="/partnere/ny" title="Legg til ny samarbeidspartner">
+                <PartnerForm />
+            </FormRoute>
+            <FormRoute path="/partnere/kontakt/ny" title="Legg til ny kontaktperson">
+                <KontaktPersonForm />
+            </FormRoute>
+            <FormRoute path="/partnere/kontakt/rediger" title="Rediger kontaktinformasjon">
+                <KontaktPersonForm />
+            </FormRoute>
+            <FormRoute path="/partnere/kontakt/verifiser" title="Verifiser kontaktinformasjon">
+                <VerifiseringPage />
+            </FormRoute>
             <Route path="/ekstrahenting">
                 <EkstraHenting />
             </Route>
