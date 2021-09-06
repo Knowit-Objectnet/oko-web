@@ -60,19 +60,27 @@ export const PageRouter: React.FC = () => (
             <ProtectedRoute path="/innstillinger" requiredRoles={[Roles.Admin]}>
                 <Innstillinger />
             </ProtectedRoute>
-            <FormRoute path="/partnere/rediger" title="Rediger samarbeidspartner">
+            <FormRoute path="/partnere/rediger" title="Rediger samarbeidspartner" requiredRoles={[Roles.Admin]}>
                 <PartnerForm />
             </FormRoute>
-            <FormRoute path="/partnere/ny" title="Legg til ny samarbeidspartner">
+            <FormRoute path="/partnere/ny" title="Legg til ny samarbeidspartner" requiredRoles={[Roles.Admin]}>
                 <PartnerForm />
             </FormRoute>
-            <FormRoute path="/partnere/kontakt/ny" title="Legg til ny kontaktperson">
+            <FormRoute path="/partnere/kontakt/ny" title="Legg til ny kontaktperson" requiredRoles={[Roles.Admin]}>
                 <KontaktPersonForm />
             </FormRoute>
-            <FormRoute path="/partnere/kontakt/rediger" title="Rediger kontaktinformasjon">
+            <FormRoute
+                path="/partnere/kontakt/rediger"
+                title="Rediger kontaktinformasjon"
+                requiredRoles={[Roles.Admin]}
+            >
                 <KontaktPersonForm />
             </FormRoute>
-            <FormRoute path="/partnere/kontakt/verifiser" title="Verifiser kontaktinformasjon">
+            <FormRoute
+                path="/partnere/kontakt/verifiser"
+                title="Verifiser kontaktinformasjon"
+                requiredRoles={[Roles.Admin]}
+            >
                 <VerifiseringPage />
             </FormRoute>
             <Route path="/ekstrahenting">

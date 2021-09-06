@@ -4,10 +4,14 @@ import { Redirect, Route, useHistory, useLocation, useRouteMatch, withRouter } f
 import { ApiPartner } from '../../services/partner/PartnerService';
 import { isNull } from 'lodash';
 import { usePartnerById } from '../../services/partner/usePartnerById';
+import { Roles } from '../../auth/Roles';
+import { isUndefined } from 'webpack-merge/dist/utils';
+import { ProtectedRoute } from '../../routing/ProtectedRoute';
 
 interface Props {
     path: string;
     title: string;
+    requiredRoles?: Array<Roles>;
 }
 
 interface LocationState {
@@ -15,7 +19,7 @@ interface LocationState {
     callback: string;
 }
 
-export const FormRoute: React.FC<Props> = ({ path, title, children }) => {
+export const FormRoute: React.FC<Props> = ({ path, title, requiredRoles, children }) => {
     // const { params } = useRouteMatch<{ partnerId?: string }>();
     const history = useHistory();
     const callback_fn = () => history.push(state.callback);
@@ -31,20 +35,31 @@ export const FormRoute: React.FC<Props> = ({ path, title, children }) => {
         return React.cloneElement(child, { onSuccess: callback_fn, ...state });
     };
 
-    return (
-        <Route exact path={path}>
-            <Flex
-                as="main"
-                direction="column"
-                width="full"
-                alignItems="center"
-                backgroundColor="surface"
-                justifyContent="center"
-                padding="10"
-            >
-                <Heading marginBottom="4">{title}</Heading>
-                <Callback>{children}</Callback>
-            </Flex>
-        </Route>
+    const FormPage: React.FC = () => (
+        <Flex
+            as="main"
+            direction="column"
+            width="full"
+            alignItems="center"
+            backgroundColor="surface"
+            justifyContent="center"
+            padding="10"
+        >
+            <Heading marginBottom="4">{title}</Heading>
+            <Callback>{children}</Callback>
+        </Flex>
     );
+
+    if (isUndefined(requiredRoles))
+        return (
+            <Route exact path={path}>
+                <FormPage />
+            </Route>
+        );
+    else
+        return (
+            <ProtectedRoute exact path={path} requiredRoles={requiredRoles!}>
+                <FormPage />
+            </ProtectedRoute>
+        );
 };
