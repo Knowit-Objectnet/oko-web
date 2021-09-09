@@ -1,15 +1,22 @@
 import * as React from 'react';
-import { Heading, List, ListItem, useDisclosure } from '@chakra-ui/react';
+import { Heading, HStack, List, ListItem, useDisclosure } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
 import { usePartnere } from '../../../services/partner/usePartnere';
 import { useAuth } from '../../../auth/useAuth';
 import { ListSkeleton } from '../../../components/forms/checkbox/ListSkeleton';
+import { PartnerFilterSelect } from './PartnerFilterSelect';
+import { useEffect, useState } from 'react';
 
 export const PartnerNavigation: React.FC = () => {
     const { user } = useAuth();
     const { data: partnere, isError, isLoading } = usePartnere({ params: { includeAvtaler: true } });
+    const [selectedAvtaler, setSelectedAvtaler] = useState<string[]>([]);
+
+    useEffect(() => {
+        //Basert på filter, mappe riktig avtaler
+    }, [selectedAvtaler]);
 
     const getPartnerList = () => {
         if (isLoading) {
@@ -20,13 +27,17 @@ export const PartnerNavigation: React.FC = () => {
         }
         if (partnere) {
             return (
-                <List spacing="10" width="full">
-                    {partnere.map((partner) => (
-                        <ListItem key={partner.id}>
-                            <PartnerNavItem partner={partner} />
-                        </ListItem>
-                    ))}
-                </List>
+                <Flex direction="row">
+                    <PartnerFilterSelect selectedAvtaler={selectedAvtaler} setSelectedAvtaler={setSelectedAvtaler} />
+
+                    <List spacing="10" width="full">
+                        {partnere.map((partner) => (
+                            <ListItem key={partner.id}>
+                                <PartnerNavItem partner={partner} />
+                            </ListItem>
+                        ))}
+                    </List>
+                </Flex>
             );
         }
     };
