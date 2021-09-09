@@ -8,14 +8,24 @@ import { useAuth } from '../../../auth/useAuth';
 import { ListSkeleton } from '../../../components/forms/checkbox/ListSkeleton';
 import { PartnerFilterSelect } from './PartnerFilterSelect';
 import { useEffect, useState } from 'react';
+import { getAvtaleTitle } from '../avtale/AvtaleInfoItem';
+import { ApiPartner } from '../../../services/partner/PartnerService';
 
 export const PartnerNavigation: React.FC = () => {
     const { user } = useAuth();
     const { data: partnere, isError, isLoading } = usePartnere({ params: { includeAvtaler: true } });
     const [selectedAvtaler, setSelectedAvtaler] = useState<string[]>([]);
-
+    let filteredList: ApiPartner[] | undefined = [];
     useEffect(() => {
         //Basert på filter, mappe riktig avtaler
+        //Mulige verdier: aktiv, ingen, kommende
+        //Hvis jeg bytter value fra checkboksene til å være det samme som getAvtaleTitle så kan jeg la en enkel sjekk for alle
+        if (partnere && selectedAvtaler.includes('aktiv')) {
+            filteredList = partnere.filter((partner) =>
+                partner.avtaler.some((avtale) => getAvtaleTitle(avtale) === 'Aktiv avtale'),
+            );
+            console.log(filteredList);
+        }
     }, [selectedAvtaler]);
 
     const getPartnerList = () => {
