@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Heading, HStack, List, ListItem, useDisclosure } from '@chakra-ui/react';
+import { Heading, HStack, List, ListItem, useDisclosure, VStack } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
@@ -27,16 +27,23 @@ export const PartnerNavigation: React.FC = () => {
         }
         if (partnere) {
             return (
-                <Flex direction="row">
+                <Flex direction={{ desktop: 'row', base: 'column' }} marginY="6">
                     <PartnerFilterSelect selectedAvtaler={selectedAvtaler} setSelectedAvtaler={setSelectedAvtaler} />
-
-                    <List spacing="10" width="full">
-                        {partnere.map((partner) => (
-                            <ListItem key={partner.id}>
-                                <PartnerNavItem partner={partner} />
-                            </ListItem>
-                        ))}
-                    </List>
+                    <VStack marginLeft={{ desktop: '8', base: '0' }}>
+                        <Flex justifyContent="space-between" width="full" flexDir={{ base: 'column', tablet: 'row' }}>
+                            <Heading as="h2" fontSize="xl" marginBottom={{ base: '4', tablet: '0' }}>
+                                Samarbeidspartnere
+                            </Heading>
+                            {user.isAdmin ? <AddPartnerButton fontSize="14" /> : null}
+                        </Flex>
+                        <List spacing="10" width="full">
+                            {partnere.map((partner) => (
+                                <ListItem key={partner.id}>
+                                    <PartnerNavItem partner={partner} />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </VStack>
                 </Flex>
             );
         }
@@ -49,21 +56,9 @@ export const PartnerNavigation: React.FC = () => {
             alignItems="flex-start"
             height="full"
             padding="5"
-            width={{ base: 'full', desktop: '70%', '2xl': '50%' }}
+            width={{ base: 'full', desktop: '80%', '2xl': '50%' }}
             margin="auto"
         >
-            <Flex
-                justifyContent="space-between"
-                width="full"
-                marginY="6"
-                alignItems="center"
-                flexDir={{ base: 'column', tablet: 'row' }}
-            >
-                <Heading as="h2" fontSize="xl" marginBottom={{ base: '4', tablet: '0' }}>
-                    Samarbeidspartnere
-                </Heading>
-                {user.isAdmin ? <AddPartnerButton fontSize="14" /> : null}
-            </Flex>
             {getPartnerList()}
         </Flex>
     );

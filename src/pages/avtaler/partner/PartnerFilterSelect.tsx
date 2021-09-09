@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { CheckboxGroup, Heading, VStack } from '@chakra-ui/react';
+import { CheckboxGroup, Heading, HStack, Icon, VStack } from '@chakra-ui/react';
 import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
-import { useState } from 'react';
+import Filter from '../../../assets/Filter.svg';
 
 interface Props {
     selectedAvtaler: Array<string>;
@@ -15,10 +15,14 @@ export const PartnerFilterSelect: React.FC<Props> = ({ selectedAvtaler, setSelec
     };
 
     return (
-        <VStack>
-            <Heading as="h2" fontSize="xl" marginBottom={{ base: '4', tablet: '0' }}>
-                Filter
-            </Heading>
+        <VStack marginBottom={{ base: '8' }}>
+            <HStack>
+                <Icon as={Filter} height="6" width="auto" />
+                <Heading as="h2" fontSize="xl" marginBottom={{ base: '4', tablet: '0' }}>
+                    Filter
+                </Heading>
+            </HStack>
+
             <CheckboxGroup onChange={handleSelectionChange} value={selectedAvtaler}>
                 <Checkbox name="aktivAvtale" value="aktiv" label="Aktiv avtale" />
                 <Checkbox name="kommendeAvtale" value="kommende" label="Kommende avtale" />
