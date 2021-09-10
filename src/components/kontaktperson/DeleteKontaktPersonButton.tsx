@@ -5,12 +5,13 @@ import { useSuccessToast } from '../toasts/useSuccessToast';
 import { useErrorToast } from '../toasts/useErrorToast';
 import { ConfirmationPopover } from '../buttons/ConfirmationPopover';
 import { DeleteButton } from '../buttons/DeleteButton';
+import { ButtonProps } from '@chakra-ui/react';
 
 interface Props {
     kontakt: ApiKontakt;
 }
 
-export const DeleteKontaktPersonButton: React.FunctionComponent<Props> = ({ kontakt }) => {
+export const DeleteKontaktPersonButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ kontakt, ...props }) => {
     const deleteKontaktMutation = useDeleteKontakt();
     const showSuccessToast = useSuccessToast();
     const showErrorToast = useErrorToast();
@@ -34,7 +35,7 @@ export const DeleteKontaktPersonButton: React.FunctionComponent<Props> = ({ kont
             onConfirm={handleDeleteKontakt}
             isLoading={deleteKontaktMutation.isLoading}
         >
-            <DeleteButton label="Slett" borderRadius="6" aria-label={`Slett ${kontakt.navn}`} />
+            <DeleteButton {...props} label="Slett" borderRadius="6" aria-label={`Slett ${kontakt.navn}`} />
         </ConfirmationPopover>
     );
 };
