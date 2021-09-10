@@ -21,7 +21,6 @@ export const EkstraHentingInfoListStasjon: React.FC = () => {
     const aktiveEkstrahentinger = sortedEkstraHentinger.filter((ekstraHentinger) =>
         isFuture(parseISOIgnoreTimezone(ekstraHentinger.sluttTidspunkt)),
     );
-
     const sortedTidligereEkstraHentinger = sortedEkstraHentinger.filter((ekstraHentinger) =>
         isPast(parseISOIgnoreTimezone(ekstraHentinger.sluttTidspunkt)),
     );
