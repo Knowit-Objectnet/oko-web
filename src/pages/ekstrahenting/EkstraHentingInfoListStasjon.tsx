@@ -1,5 +1,5 @@
 import { Accordion } from '@chakra-ui/react';
-import { isFuture, isPast, startOfToday, startOfWeek } from 'date-fns';
+import { isFuture, isPast, startOfToday, startOfWeek, subWeeks } from 'date-fns';
 import React from 'react';
 import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
 import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
@@ -13,7 +13,7 @@ export const EkstraHentingInfoListStasjon: React.FC = () => {
         isLoading,
         isError,
     } = useEkstraHentingerWithUtlysning({
-        after: dateTimeToStringIgnoreTimezone(startOfWeek(startOfToday())),
+        after: dateTimeToStringIgnoreTimezone(subWeeks(startOfToday(), 1)),
     });
 
     const sortedEkstraHentinger = sortedEkstraHentingerByDatoDesc(ekstraHentinger ?? []);
