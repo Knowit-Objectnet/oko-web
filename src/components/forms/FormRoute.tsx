@@ -51,7 +51,7 @@ function recreateState(params: ParsedQuery) {
         kategoriId: useKategoriById,
     };
 
-    const state: Record<string, keyof LocationState> = {};
+    const state: Record<string, any> = {};
     let loading = false;
     let error = false;
 
@@ -74,7 +74,7 @@ function recreateState(params: ParsedQuery) {
         error = error || isError;
     });
 
-    return { state, loading, error };
+    return { state, isLoading: loading, isError: error };
 }
 
 export const FormRoute: React.FC<Props> = ({ path, title, requiredRoles, children }) => {
@@ -88,13 +88,13 @@ export const FormRoute: React.FC<Props> = ({ path, title, requiredRoles, childre
     if (state === undefined) {
         const recreatedState = recreateState(params);
         state = recreatedState.state;
-        isLoading = recreatedState.loading;
-        isError = recreatedState.error;
+        isLoading = recreatedState.isLoading;
+        isError = recreatedState.isError;
     }
 
     const StatefulForm: React.FC = (props) => {
         const child: any = React.Children.only(props.children);
-        return React.cloneElement(child, { onSuccess: callback_fn, ...state });
+        return React.cloneElement(child, { onSuccess: callback_fn, ...state, ...params });
     };
 
     const FormPage: React.FC = () => (
