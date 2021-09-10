@@ -39,17 +39,17 @@ const validationSchema = yup.object().shape({
 
 interface Props {
     /** By passing an existing stasjon, the form will be in edit mode **/
-    stasjonToEdit?: ApiStasjon;
+    stasjon?: ApiStasjon;
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
 }
 
-export const StasjonForm: React.FC<Props> = ({ stasjonToEdit, onSuccess }) => {
+export const StasjonForm: React.FC<Props> = ({ stasjon, onSuccess }) => {
     const formMethods = useForm<StasjonFormData>({
         resolver: yupResolver(validationSchema),
-        defaultValues: stasjonToEdit
+        defaultValues: stasjon
             ? {
-                  navn: stasjonToEdit.navn,
+                  navn: stasjon.navn,
               }
             : undefined,
     });
@@ -62,9 +62,9 @@ export const StasjonForm: React.FC<Props> = ({ stasjonToEdit, onSuccess }) => {
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        if (stasjonToEdit) {
+        if (stasjon) {
             updateStasjon({
-                id: stasjonToEdit.id,
+                id: stasjon.id,
                 navn: formData.navn,
                 // TODO: pass type here when we want to set station type in form
             });
@@ -114,7 +114,7 @@ export const StasjonForm: React.FC<Props> = ({ stasjonToEdit, onSuccess }) => {
                     {/* TODO: uncomment when we want to set station type :
                     <RadiobuttonGroup name="type" label="Type stasjon" options={stasjonTypeOptions} required />*/}
                     <FormSubmitButton
-                        label={stasjonToEdit ? 'Lagre endringer' : 'Registrer ny stasjon'}
+                        label={stasjon ? 'Lagre endringer' : 'Registrer ny stasjon'}
                         isLoading={updateStasjonMutation.isLoading || addStasjonMutation.isLoading}
                         loadingText="Lagrer..."
                     />

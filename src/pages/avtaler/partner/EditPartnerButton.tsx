@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../../../components/Modal';
-import { PartnerForm } from './PartnerForm';
+import { ButtonProps } from '@chakra-ui/react';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     partner: ApiPartner;
@@ -12,10 +10,8 @@ interface Props {
 
 export const EditPartnerButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ partner, ...props }) => {
     const history = useHistory();
-    const { url } = useRouteMatch();
 
-    const onClick = () =>
-        history.push(`/partnere/rediger?partnerId=${partner.id}`, { partnerToEdit: partner, callback: url });
+    const onClick = () => history.push(`/partnere/rediger?partnerId=${partner.id}`, { partner: partner });
 
     return (
         <>

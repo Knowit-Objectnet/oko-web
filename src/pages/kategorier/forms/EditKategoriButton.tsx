@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../../../components/Modal';
-import { KategoriForm } from './KategoriForm';
+import { ButtonProps } from '@chakra-ui/react';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiKategori } from '../../../services/kategori/KategoriService';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     kategori: ApiKategori;
@@ -12,10 +10,8 @@ interface Props {
 
 export const EditKategoriButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ kategori, ...props }) => {
     const history = useHistory();
-    const { url } = useRouteMatch();
 
-    const onClick = () =>
-        history.push(`/kategorier/rediger?kategoriId=${kategori.id}`, { kategoriToEdit: kategori, callback: url });
+    const onClick = () => history.push(`/kategorier/rediger?kategoriId=${kategori.id}`, { kategori: kategori });
 
     return (
         <>

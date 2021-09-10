@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { PartnerInfo } from './partner/PartnerInfo';
 import { PartnerNavigation } from './partner/PartnerNavigation';
@@ -19,26 +19,28 @@ const Avtaler: React.FC = () => {
                 <title>Avtaler</title>
             </Helmet>
             <Stack direction="row" flex="1" alignItems="stretch" spacing="10" marginX="auto">
-                <Route exact path={url}>
-                    <PartnerNavigation />
-                </Route>
-                <Route exact path={`${url}/:partnerId/`}>
-                    <Box width={{ base: 'full', desktop: '80%' }} marginX="auto">
-                        <PartnerInfo />
-                    </Box>
-                </Route>
-                <FormRoute path={`${url}/:partnerId/ny`} title="Legg til ny avtale">
-                    <AvtaleForm />
-                </FormRoute>
-                <FormRoute path={`${url}/:partnerId/rediger`} title="Rediger avtale">
-                    <AvtaleForm />
-                </FormRoute>
-                <FormRoute path={`${url}/:partnerId/henteplan/ny`} title="Legg til ny henteplan">
-                    <AddHenteplanForm />
-                </FormRoute>
-                <FormRoute path={`${url}/:partnerId/henteplan/rediger`} title="Rediger henteplan">
-                    <EditHenteplanForm />
-                </FormRoute>
+                <Switch>
+                    <FormRoute path={`${url}/ny`} title="Legg til ny avtale">
+                        <AvtaleForm />
+                    </FormRoute>
+                    <FormRoute path={`${url}/rediger`} title="Rediger avtale">
+                        <AvtaleForm />
+                    </FormRoute>
+                    <FormRoute path={`${url}/henteplan/ny`} title="Legg til ny henteplan">
+                        <AddHenteplanForm />
+                    </FormRoute>
+                    <FormRoute path={`${url}/henteplan/rediger`} title="Rediger henteplan">
+                        <EditHenteplanForm />
+                    </FormRoute>
+                    <Route exact path={url}>
+                        <PartnerNavigation />
+                    </Route>
+                    <Route exact path={`${url}/:partnerId/`}>
+                        <Box width={{ base: 'full', desktop: '80%' }} marginX="auto">
+                            <PartnerInfo />
+                        </Box>
+                    </Route>
+                </Switch>
             </Stack>
         </>
     );

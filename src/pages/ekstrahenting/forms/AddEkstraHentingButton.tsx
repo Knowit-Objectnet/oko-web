@@ -10,7 +10,8 @@ export const AddEkstraHentingButton: React.FC<Omit<ButtonProps, 'onClick'>> = (p
     const { url } = useRouteMatch();
     const stasjonId = user.isStasjon ? user.aktorId : undefined;
 
-    const onClick = () => history.push(`${url}/ny?stasjonId=${stasjonId}`, { stasjonId: stasjonId, callback: url });
+    const onClick = () =>
+        history.push(`${url}/ny${stasjonId ? '?stasjonId=' + stasjonId : ''}`, { stasjonId: stasjonId });
 
     return (
         <Button leftIcon={<Icon as={Plus} />} {...props} onClick={onClick}>

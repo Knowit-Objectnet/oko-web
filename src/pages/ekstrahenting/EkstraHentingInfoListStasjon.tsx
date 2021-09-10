@@ -1,6 +1,6 @@
 import { startOfToday } from 'date-fns';
 import React from 'react';
-import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
+import { useEkstraHentinger } from '../../services/henting/useEkstraHentinger';
 import { dateTimeToStringIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { EkstraHentingHeading } from './EkstraHentingHeading';
 import { sortedEkstraHentingerByDatoDesc } from './EkstraHentingSortedInfo';
@@ -10,7 +10,7 @@ export const EkstraHentingInfoListStasjon: React.FC = () => {
         data: ekstraHentinger,
         isLoading,
         isError,
-    } = useEkstraHentingerWithUtlysning({
+    } = useEkstraHentinger({
         after: dateTimeToStringIgnoreTimezone(startOfToday()),
     });
 

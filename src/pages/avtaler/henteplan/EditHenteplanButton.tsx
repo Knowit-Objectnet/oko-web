@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../../../components/Modal';
+import { ButtonProps } from '@chakra-ui/react';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
-import { EditHenteplanForm } from './form/EditHenteplanForm';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     avtale: ApiAvtale;
@@ -18,13 +16,11 @@ export const EditHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>>
     ...props
 }) => {
     const history = useHistory();
-    const { url } = useRouteMatch();
 
     const onClick = () =>
-        history.push(`${url}/henteplan/rediger?henteplanId=${henteplan.id}`, {
+        history.push(`/avtaler/henteplan/rediger?henteplanId=${henteplan.id}&avtaleId=${avtale.id}`, {
             henteplan: henteplan,
             avtale: avtale,
-            callback: url,
         });
 
     return (

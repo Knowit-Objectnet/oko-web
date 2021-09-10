@@ -16,15 +16,15 @@ interface Props {
 
 export const EditHenteplanForm: React.FC<Props> = ({ avtale, henteplan, onSuccess }) => {
     const formValues = {
-        stasjonId: henteplan!.stasjonId,
-        frekvens: henteplan!.frekvens,
-        ukedag: henteplan!.ukedag,
+        stasjonId: henteplan?.stasjonId,
+        frekvens: henteplan?.frekvens,
+        ukedag: henteplan?.ukedag,
         startDato: getDateStringFromISOString(henteplan!.startTidspunkt),
         sluttDato: getDateStringFromISOString(henteplan!.sluttTidspunkt),
         startTidspunkt: getTimeStringFromISOString(henteplan!.startTidspunkt),
         sluttTidspunkt: getTimeStringFromISOString(henteplan!.sluttTidspunkt),
-        kategorier: henteplan!.kategorier.map(({ kategori }) => kategori.id),
-        merknad: henteplan!.merknad,
+        kategorier: henteplan?.kategorier.map(({ kategori }) => kategori.id),
+        merknad: henteplan?.merknad,
     };
 
     const updateHenteplanMutation = useUpdateHenteplan();

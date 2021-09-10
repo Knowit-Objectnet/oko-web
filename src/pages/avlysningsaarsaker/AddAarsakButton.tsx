@@ -8,7 +8,7 @@ export const AddAarsakButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props) =
     const history = useHistory();
     const { url } = useRouteMatch();
 
-    const onClick = () => history.push(`${url}/ny`, { callback: url });
+    const onClick = () => history.push(`${url}/ny`);
 
     return (
         <Flex margin="15">

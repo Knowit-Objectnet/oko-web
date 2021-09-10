@@ -55,7 +55,7 @@ interface Props {
 }
 
 export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) => {
-    const existingPartnere = henting!.utlysninger.map((utlysning) => utlysning.partnerId);
+    const existingPartnere = henting?.utlysninger.map((utlysning) => utlysning.partnerId);
 
     const formMethods = useForm<EkstraHentingFormData>({
         resolver: yupResolver(validationSchema),
@@ -75,7 +75,7 @@ export const UtlysFlerePartnereForm: React.FC<Props> = ({ henting, onSuccess }) 
         setApiOrNetworkError(undefined);
 
         batchAddUtlysning({
-            hentingId: henting!.id,
+            hentingId: henting?.id,
             // TODO: next line is not a very robust solution, can potentially set `partnere` to `undefined`
             //  if there is a problem fetching the partners from the api
             partnerIds:

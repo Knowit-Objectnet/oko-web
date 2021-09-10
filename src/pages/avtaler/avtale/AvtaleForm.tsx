@@ -59,24 +59,24 @@ interface Props {
 interface AddModeProps extends Props {
     /**  Partner is only required for adding Avtale, and not allowed in edit mode. **/
     partner?: ApiPartner;
-    avtaleToEdit?: never;
+    avtale?: never;
 }
 
 interface EditModeProps extends Props {
     partner?: never;
     /**  By passing an existing Kontakt, the form will be in edit mode (not allowed in add mode) **/
-    avtaleToEdit: ApiAvtale;
+    avtale: ApiAvtale;
 }
 
-export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, avtaleToEdit, onSuccess }) => {
+export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, avtale, onSuccess }) => {
     const formMethods = useForm<AvtaleFormData>({
         resolver: yupResolver(validationSchema),
-        defaultValues: avtaleToEdit
+        defaultValues: avtale
             ? {
-                  type: avtaleToEdit.type,
-                  startDato: avtaleToEdit.startDato,
-                  sluttDato: avtaleToEdit.sluttDato,
-                  saksnummer: avtaleToEdit.saksnummer,
+                  type: avtale.type,
+                  startDato: avtale.startDato,
+                  sluttDato: avtale.sluttDato,
+                  saksnummer: avtale.saksnummer,
               }
             : undefined,
     });
@@ -89,21 +89,21 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        const avtale: Omit<ApiAvtalePost, 'aktorId'> = {
+        const avtaleData: Omit<ApiAvtalePost, 'aktorId'> = {
             startDato: formatISO(formData.startDato, { representation: 'date' }),
             sluttDato: formatISO(formData.sluttDato, { representation: 'date' }),
             type: formData.type,
             saksnummer: formData.saksnummer,
         };
 
-        if (avtaleToEdit) {
+        if (avtale) {
             updateAvtale({
-                ...avtale,
-                id: avtaleToEdit.id,
+                ...avtaleData,
+                id: avtale.id,
             });
         } else if (partner) {
             addAvtale({
-                ...avtale,
+                ...avtaleData,
                 aktorId: partner.id,
             });
         }
@@ -142,12 +142,12 @@ export const AvtaleForm: React.FC<AddModeProps | EditModeProps> = ({ partner, av
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    <AvtaleFormStartDato avtaleToEdit={avtaleToEdit} />
-                    <AvtaleFormSluttDato avtaleToEdit={avtaleToEdit} />
+                    <AvtaleFormStartDato avtaleToEdit={avtale} />
+                    <AvtaleFormSluttDato avtaleToEdit={avtale} />
                     <RadiobuttonGroup name="type" label="Type avtale" options={avtaleTypeOptions} required />
                     <Input name="saksnummer" label="Saksnummer" />
                     <FormSubmitButton
-                        label={avtaleToEdit ? 'Lagre endringer' : 'Registrer ny avtale'}
+                        label={avtale ? 'Lagre endringer' : 'Registrer ny avtale'}
                         isLoading={updateAvtaleMutation.isLoading || addAvtaleMutation.isLoading}
                         loadingText="Lagrer..."
                     />

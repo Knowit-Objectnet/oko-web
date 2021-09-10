@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../../../components/Modal';
+import { ButtonProps } from '@chakra-ui/react';
 import { AddButton } from '../../../components/buttons/AddButton';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { AddHenteplanForm } from './form/AddHenteplanForm';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     avtale: ApiAvtale;
@@ -14,9 +12,8 @@ interface Props {
 
 export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ avtale, partner, ...props }) => {
     const history = useHistory();
-    const { url } = useRouteMatch();
 
-    const onClick = () => history.push(`${url}/henteplan/ny?avtaleId=${avtale.id}`, { avtale: avtale, callback: url });
+    const onClick = () => history.push(`/avtaler/henteplan/ny?avtaleId=${avtale.id}`, { avtale: avtale });
 
     return (
         <>

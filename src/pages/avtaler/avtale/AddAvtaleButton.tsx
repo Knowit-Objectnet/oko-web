@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ButtonProps } from '@chakra-ui/react';
 import { AddButton } from '../../../components/buttons/AddButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     partner: ApiPartner;
@@ -10,9 +10,8 @@ interface Props {
 
 export const AddAvtaleButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ partner, ...props }) => {
     const history = useHistory();
-    const { url } = useRouteMatch();
 
-    const onClick = () => history.push(`${url}/ny`, { partner: partner, callback: url });
+    const onClick = () => history.push(`/avtaler/ny?partnerId=${partner.id}`, { partner: partner });
 
     return (
         <AddButton

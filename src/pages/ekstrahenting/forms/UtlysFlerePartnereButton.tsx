@@ -12,8 +12,7 @@ export const UtlysFlerePartnereButton: React.FC<Omit<ButtonProps, 'onClick'> & P
     const history = useHistory();
     const { url } = useRouteMatch();
 
-    const onClick = () =>
-        history.push(`${url}/leggtil?hentingId=${props.henting.id}`, { henting: props.henting, callback: url });
+    const onClick = () => history.push(`${url}/leggtil?hentingId=${props.henting.id}`, { henting: props.henting });
 
     return (
         <AddButton
