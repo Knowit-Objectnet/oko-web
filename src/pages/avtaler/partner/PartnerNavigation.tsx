@@ -35,19 +35,16 @@ export const PartnerNavigation: React.FC = () => {
             let temp: ApiPartner[] = [];
 
             /*
-             * TODO
-             * 1. Ved filtrering av "Ingen avtaler" så blir elementet mye smalere. Må beholde full bredde uansett filter for smooth animasjon
-             * 2. Fikse problem med at ledeteksten i noen av partnere endrer seg - Eirik nevnte at dette var pga av noe forskjellig på sortering inne i partnere og da
+             *  Fikse problem med at ledeteksten i noen av partnere endrer seg - Eirik nevnte at dette var pga av noe forskjellig på sortering inne i partnere og da
              * vil metoden som henter nyeste avtale displaye feil på et eller annet tidspunkt
-             * 3. Legge til søkefunksjon
+             *  Legge til søkefunksjon
+             *  Viser feil antall henteplaner
              */
 
             if (selectedAvtaler.includes('aktiv')) {
-                console.log('aktiv');
                 temp = temp.concat(aktiveAvtaler);
             }
             if (partnere && selectedAvtaler.includes('kommende')) {
-                console.log('kommende');
                 temp = temp.concat(kommendeAvtaler);
             }
             if (partnere && selectedAvtaler.includes('ingen')) {
@@ -63,7 +60,7 @@ export const PartnerNavigation: React.FC = () => {
     }, [selectedAvtaler, isLoading]);
 
     useEffect(() => {
-        console.log('Filtered list:', filteredList);
+        return;
     }, [filteredList]);
 
     const getPartnerList = () => {
@@ -75,23 +72,32 @@ export const PartnerNavigation: React.FC = () => {
         }
         if (filteredList) {
             return (
-                <Flex direction={{ desktop: 'row', base: 'column' }} marginY="6">
+                <Flex width="full" direction={{ desktop: 'row', base: 'column' }} marginY="6">
                     <PartnerFilterSelect selectedAvtaler={selectedAvtaler} setSelectedAvtaler={setSelectedAvtaler} />
-                    <VStack marginLeft={{ desktop: '8', base: '0' }}>
-                        <Flex justifyContent="space-between" width="full" flexDir={{ base: 'column', tablet: 'row' }}>
+                    <Flex
+                        direction="column"
+                        width={{ base: 'auto', desktop: '70%' }}
+                        marginLeft={{ desktop: '8', base: '0' }}
+                    >
+                        <Flex
+                            justifyContent="space-between"
+                            marginBottom="3"
+                            width="full"
+                            flexDir={{ base: 'column', tablet: 'row' }}
+                        >
                             <Heading as="h2" fontSize="xl" marginBottom={{ base: '4', tablet: '0' }}>
                                 Samarbeidspartnere
                             </Heading>
                             {user.isAdmin ? <AddPartnerButton fontSize="14" /> : null}
                         </Flex>
-                        <List spacing="10" width="full">
+                        <List width="full" spacing="10">
                             {filteredList.map((partner) => (
                                 <ListItem key={partner.id}>
                                     <PartnerNavItem partner={partner} />
                                 </ListItem>
                             ))}
                         </List>
-                    </VStack>
+                    </Flex>
                 </Flex>
             );
         }

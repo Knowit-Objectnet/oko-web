@@ -2,6 +2,7 @@ import * as React from 'react';
 import { CheckboxGroup, Heading, HStack, Icon, VStack } from '@chakra-ui/react';
 import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
 import Filter from '../../../assets/Filter.svg';
+import { Flex } from '@chakra-ui/layout';
 
 interface Props {
     selectedAvtaler: Array<string>;
@@ -11,23 +12,22 @@ interface Props {
 export const PartnerFilterSelect: React.FC<Props> = ({ selectedAvtaler, setSelectedAvtaler }) => {
     const handleSelectionChange = (checkboxValues: Array<string>) => {
         setSelectedAvtaler(checkboxValues);
-        console.log(checkboxValues);
     };
 
     return (
-        <VStack marginBottom={{ base: '8' }}>
-            <HStack width="100%">
-                <Icon as={Filter} height="6" width="auto" />
+        <Flex direction="column" marginBottom={{ base: '8' }}>
+            <Flex direction="row">
+                <Icon as={Filter} height="8" width="auto" />
                 <Heading as="h2" fontSize="xl" marginBottom={{ base: '4', tablet: '0' }}>
                     Filtrer på avtale
                 </Heading>
-            </HStack>
+            </Flex>
 
             <CheckboxGroup onChange={handleSelectionChange} value={selectedAvtaler}>
-                <Checkbox name="aktivAvtale" value="aktiv" label="Aktiv avtale" />
-                <Checkbox name="kommendeAvtale" value="kommende" label="Kommende avtale" />
-                <Checkbox name="ingenAvtale" value="ingen" label="Ingen avtale" />
+                <Checkbox marginTop="3" name="aktivAvtale" value="aktiv" label="Aktiv avtale" />
+                <Checkbox marginTop="3" name="kommendeAvtale" value="kommende" label="Kommende avtale" />
+                <Checkbox marginTop="3" name="ingenAvtale" value="ingen" label="Ingen avtale" />
             </CheckboxGroup>
-        </VStack>
+        </Flex>
     );
 };
