@@ -33,6 +33,9 @@ export const kategoriDefaultQueryKey = 'getKategorier';
 export const getKategorier = (params: ApiKategoriParams = {}): Promise<Array<ApiKategori>> =>
     httpClient().get<Array<ApiKategori>>(kategoriEndpoint, { params }).then(extractResponse, transformError);
 
+export const getKategoriById = (kategoriId: string): Promise<ApiKategori> =>
+    httpClient().get<ApiKategori>(`${kategoriEndpoint}/${kategoriId}`).then(extractResponse, transformError);
+
 export const deleteKategori = (kategoriId: string): Promise<ApiKategori> =>
     httpClient().delete<ApiKategori>(`${kategoriEndpoint}/${kategoriId}`).then(extractResponse, transformError);
 

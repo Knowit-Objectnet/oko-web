@@ -39,18 +39,18 @@ const validationSchema = yup.object().shape({
 
 interface Props {
     /** By passing an existing kategori, the form will be in edit mode **/
-    kategoriToEdit?: ApiKategori;
+    kategori?: ApiKategori;
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
 }
 
-export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => {
+export const KategoriForm: React.FC<Props> = ({ kategori, onSuccess }) => {
     const formMethods = useForm<KategoriFormData>({
         resolver: yupResolver(validationSchema),
-        defaultValues: kategoriToEdit
+        defaultValues: kategori
             ? {
-                  navn: kategoriToEdit.navn,
-                  vektkategori: kategoriToEdit.vektkategori.toString(),
+                  navn: kategori.navn,
+                  vektkategori: kategori.vektkategori.toString(),
               }
             : undefined,
     });
@@ -62,9 +62,9 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        if (kategoriToEdit) {
+        if (kategori) {
             updateKategori({
-                id: kategoriToEdit.id,
+                id: kategori.id,
                 navn: formData.navn,
                 vektkategori: formData.vektkategori === 'true',
             });
@@ -109,7 +109,7 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
                 <Stack direction="column" spacing="7">
                     <RequiredFieldsInstruction />
                     <ErrorMessages globalError={apiOrNetworkError} />
-                    {kategoriToEdit ? (
+                    {kategori ? (
                         <>
                             <WarningContainer variant="warning">
                                 <WarningTitle title="Advarsel" />
@@ -144,7 +144,7 @@ export const KategoriForm: React.FC<Props> = ({ kategoriToEdit, onSuccess }) => 
                     )}
 
                     <FormSubmitButton
-                        label={kategoriToEdit ? 'Lagre endringer' : 'Registrer ny kategori'}
+                        label={kategori ? 'Lagre endringer' : 'Registrer ny kategori'}
                         isLoading={updateKategoriMutation.isLoading || addKategoriMutation.isLoading}
                         loadingText="Lagrer..."
                     />
