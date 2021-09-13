@@ -15,18 +15,56 @@ export const PartnerNavigation: React.FC = () => {
     const { user } = useAuth();
     const { data: partnere, isError, isLoading } = usePartnere({ params: { includeAvtaler: true } });
     const [selectedAvtaler, setSelectedAvtaler] = useState<string[]>([]);
-    let filteredList: ApiPartner[] | undefined = [];
+    const [filteredList, setFilteredList] = useState<ApiPartner[]>([]);
+
     useEffect(() => {
-        //Basert på filter, mappe riktig avtaler
-        //Mulige verdier: aktiv, ingen, kommende
-        //Hvis jeg bytter value fra checkboksene til å være det samme som getAvtaleTitle så kan jeg la en enkel sjekk for alle
-        if (partnere && selectedAvtaler.includes('aktiv')) {
-            filteredList = partnere.filter((partner) =>
+        if (isLoading) {
+            return;
+        }
+        if (partnere) {
+            const aktiveAvtaler = partnere.filter((partner) =>
                 partner.avtaler.some((avtale) => getAvtaleTitle(avtale) === 'Aktiv avtale'),
             );
-            console.log(filteredList);
+
+            const kommendeAvtaler = partnere.filter((partner) =>
+                partner.avtaler.some((avtale) => getAvtaleTitle(avtale) === 'Kommende avtale'),
+            );
+
+            const ingenAvtaler = partnere.filter((partner) => partner.avtaler.length === 0);
+
+            let temp: ApiPartner[] = [];
+
+            /*
+             * TODO
+             * 1. Ved filtrering av "Ingen avtaler" så blir elementet mye smalere. Må beholde full bredde uansett filter for smooth animasjon
+             * 2. Fikse problem med at ledeteksten i noen av partnere endrer seg - Eirik nevnte at dette var pga av noe forskjellig på sortering inne i partnere og da
+             * vil metoden som henter nyeste avtale displaye feil på et eller annet tidspunkt
+             * 3. Legge til søkefunksjon
+             */
+
+            if (selectedAvtaler.includes('aktiv')) {
+                console.log('aktiv');
+                temp = temp.concat(aktiveAvtaler);
+            }
+            if (partnere && selectedAvtaler.includes('kommende')) {
+                console.log('kommende');
+                temp = temp.concat(kommendeAvtaler);
+            }
+            if (partnere && selectedAvtaler.includes('ingen')) {
+                temp = temp.concat(ingenAvtaler);
+            }
+            if (selectedAvtaler.length === 0) {
+                setFilteredList(partnere);
+            }
+            if (temp.length > 0) {
+                setFilteredList(Array.from(new Set(temp)));
+            }
         }
-    }, [selectedAvtaler]);
+    }, [selectedAvtaler, isLoading]);
+
+    useEffect(() => {
+        console.log('Filtered list:', filteredList);
+    }, [filteredList]);
 
     const getPartnerList = () => {
         if (isLoading) {
@@ -35,7 +73,7 @@ export const PartnerNavigation: React.FC = () => {
         if (isError) {
             return 'Beklager, klarte ikke laste inn partnere.';
         }
-        if (partnere) {
+        if (filteredList) {
             return (
                 <Flex direction={{ desktop: 'row', base: 'column' }} marginY="6">
                     <PartnerFilterSelect selectedAvtaler={selectedAvtaler} setSelectedAvtaler={setSelectedAvtaler} />
@@ -47,7 +85,7 @@ export const PartnerNavigation: React.FC = () => {
                             {user.isAdmin ? <AddPartnerButton fontSize="14" /> : null}
                         </Flex>
                         <List spacing="10" width="full">
-                            {partnere.map((partner) => (
+                            {filteredList.map((partner) => (
                                 <ListItem key={partner.id}>
                                     <PartnerNavItem partner={partner} />
                                 </ListItem>

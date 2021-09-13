@@ -16,10 +16,10 @@ export const PartnerFilterSelect: React.FC<Props> = ({ selectedAvtaler, setSelec
 
     return (
         <VStack marginBottom={{ base: '8' }}>
-            <HStack>
+            <HStack width="100%">
                 <Icon as={Filter} height="6" width="auto" />
                 <Heading as="h2" fontSize="xl" marginBottom={{ base: '4', tablet: '0' }}>
-                    Filter
+                    Filtrer på avtale
                 </Heading>
             </HStack>
 
