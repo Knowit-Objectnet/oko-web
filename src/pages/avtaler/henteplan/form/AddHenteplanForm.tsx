@@ -6,22 +6,22 @@ import { useSuccessToast } from '../../../../components/toasts/useSuccessToast';
 import { ApiAvtale } from '../../../../services/avtale/AvtaleService';
 
 interface Props {
-    avtale: ApiAvtale;
+    avtale?: ApiAvtale;
     /** Callback that will fire if registration is successful: **/
     onSuccess?: () => void;
 }
 
 export const AddHenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
     const formValues = {
-        startDato: avtale.startDato,
-        sluttDato: avtale.sluttDato,
+        startDato: avtale!.startDato,
+        sluttDato: avtale!.sluttDato,
     };
 
     const addHenteplanMutation = useAddHenteplan();
     const showSuccessToast = useSuccessToast();
 
     const handleSubmit = (formData: HenteplanFormData) => {
-        const newHenteplan = createNewHenteplan(avtale.id, formData);
+        const newHenteplan = createNewHenteplan(avtale!.id, formData);
 
         return addHenteplanMutation.mutateAsync(newHenteplan, {
             onSuccess: () => {
@@ -33,7 +33,7 @@ export const AddHenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
 
     return (
         <HenteplanForm
-            avtale={avtale}
+            avtale={avtale!}
             defaultFormValues={formValues}
             onSubmit={handleSubmit}
             submitLoading={addHenteplanMutation.isLoading}

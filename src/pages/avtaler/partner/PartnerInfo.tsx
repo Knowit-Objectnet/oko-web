@@ -31,7 +31,7 @@ export const PartnerInfo: React.FC = () => {
     }
 
     return (
-        <Flex as="main" alignItems="flex-start" direction="column" flex="1" height="full">
+        <Flex as="main" alignItems="flex-start" direction="column" flex="1" height="full" padding="5">
             <PartnerInfoHeader partner={partner} />
             <AvtaleInfoSection partner={partner} />
             {user.isStasjon ? null : <KontaktPersonSection aktor={partner} isPartner={true} />}

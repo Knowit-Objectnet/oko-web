@@ -1,22 +1,21 @@
 import * as React from 'react';
-import { Button, ButtonProps, Icon, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonProps, Icon } from '@chakra-ui/react';
 import Plus from '../../../assets/Plus.svg';
-import { EkstraHentingForm } from './EkstraHentingForm';
 import { useAuth } from '../../../auth/useAuth';
-import { Modal } from '../../../components/Modal';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 export const AddEkstraHentingButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const { user } = useAuth();
+    const history = useHistory();
+    const { url } = useRouteMatch();
+    const stasjonId = user.isStasjon ? user.aktorId : undefined;
+
+    const onClick = () =>
+        history.push(`${url}/ny${stasjonId ? '?stasjonId=' + stasjonId : ''}`, { stasjonId: stasjonId });
 
     return (
-        <>
-            <Button leftIcon={<Icon as={Plus} />} {...props} onClick={onOpen}>
-                Legg til ekstrahenting
-            </Button>
-            <Modal title="Legg til ny ekstrahenting" isOpen={isOpen} onClose={onClose}>
-                <EkstraHentingForm onSuccess={onClose} stasjonId={user.isStasjon ? user.aktorId : undefined} />
-            </Modal>
-        </>
+        <Button leftIcon={<Icon as={Plus} />} {...props} onClick={onClick}>
+            Legg til ekstrahenting
+        </Button>
     );
 };

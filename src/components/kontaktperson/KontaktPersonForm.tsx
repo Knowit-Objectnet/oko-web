@@ -40,30 +40,30 @@ const validationSchema = yup.object().shape({
 
 interface Props {
     /** Callback that will fire if registration is successful: **/
-    onSuccess: () => void;
+    onSuccess?: () => void;
 }
 
 interface AddModeProps extends Props {
     /**  Partner is only required for adding Kontakt, and not allowed in edit mode. **/
-    aktor: ApiPartner | ApiStasjon;
-    kontaktToEdit?: never;
+    aktor?: ApiPartner | ApiStasjon;
+    kontakt?: never;
 }
 
 interface EditModeProps extends Props {
     aktor?: never;
     /**  By passing an existing Kontakt, the form will be in edit mode (not allowed in add mode) **/
-    kontaktToEdit: ApiKontakt;
+    kontakt: ApiKontakt;
 }
 
-export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ aktor, kontaktToEdit, onSuccess }) => {
+export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ aktor, kontakt, onSuccess }) => {
     const formMethods = useForm<ApiKontaktPost>({
         resolver: yupResolver(validationSchema),
-        defaultValues: kontaktToEdit
+        defaultValues: kontakt
             ? {
-                  navn: kontaktToEdit.navn,
-                  rolle: kontaktToEdit.rolle,
-                  telefon: kontaktToEdit.telefon?.replace(/^\+47/, ''),
-                  epost: kontaktToEdit.epost,
+                  navn: kontakt.navn,
+                  rolle: kontakt.rolle,
+                  telefon: kontakt.telefon?.replace(/^\+47/, ''),
+                  epost: kontakt.epost,
               }
             : undefined,
     });
@@ -76,10 +76,10 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ akto
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        if (kontaktToEdit) {
+        if (kontakt) {
             updateKontakt({
                 ...formData,
-                id: kontaktToEdit.id,
+                id: kontakt.id,
             });
         } else if (aktor) {
             addKontakt({
@@ -141,7 +141,7 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ akto
                     />
                     <Input type="email" name="epost" label="E-postadresse" required={false} />
                     <FormSubmitButton
-                        label={kontaktToEdit ? 'Lagre endringer' : 'Registrer ny kontaktperson'}
+                        label={kontakt ? 'Lagre endringer' : 'Registrer ny kontaktperson'}
                         isLoading={updateKontaktMutation.isLoading || addKontaktMutation.isLoading}
                         loadingText="Lagrer..."
                     />
