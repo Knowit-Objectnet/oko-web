@@ -110,15 +110,8 @@ const Personvern: React.FC = () => {
                 {headingText('Spørsmål og henvendelser om behandling')}
 
                 <Text marginBottom="4">
-                    Har du spørsmål eller ønsker å utøve dine rettigheter kan du gjøre det ved å sende oss e-post til
-                    <Link href="mailto:gitte.gronner@reg.oslo.kommune.no"> gitte.gronner@reg.oslo.kommune.no</Link>,
-                    eller brev til:
-                </Text>
-
-                <Text marginBottom="4">
-                    Renovasjons- og gjenvinningsetaten <br />
-                    Postboks 14 Vollebekk <br />
-                    0516 OSLO
+                    Har du spørsmål knyttet til personvern, kan du sende epost til:
+                    <Link href="mailto:postmottak@reg.oslo.kommune.no"> postmottak@reg.oslo.kommune.no</Link>.
                 </Text>
 
                 <Text as="i" marginBottom="20">

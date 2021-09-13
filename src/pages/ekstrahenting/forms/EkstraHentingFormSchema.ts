@@ -44,7 +44,7 @@ export const getEkstraHentingValidationSchema = (stasjonId?: string) =>
                         is: (date: Date) => isEqual(date, new Date().setHours(0, 0, 0, 0)),
                         then: schema
                             .required()
-                            .min(add(Date.now(), { minutes: 30 }), 'Sluttidspunktet må være om tidligst 30 minutter'),
+                            .min(add(Date.now(), { minutes: 30 }), 'Starttidspunktet må være om tidligst 30 minutter'),
                     });
                 } else {
                     return schema.notRequired();

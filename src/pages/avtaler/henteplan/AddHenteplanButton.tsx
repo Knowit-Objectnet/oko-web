@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../../../components/Modal';
+import { ButtonProps } from '@chakra-ui/react';
 import { AddButton } from '../../../components/buttons/AddButton';
 import { ApiAvtale } from '../../../services/avtale/AvtaleService';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { AddHenteplanForm } from './form/AddHenteplanForm';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     avtale: ApiAvtale;
@@ -12,7 +11,9 @@ interface Props {
 }
 
 export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ avtale, partner, ...props }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
+
+    const onClick = () => history.push(`/avtaler/henteplan/ny?avtaleId=${avtale.id}`, { avtale: avtale });
 
     return (
         <>
@@ -21,11 +22,8 @@ export const AddHenteplanButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> 
                 borderRadius="6"
                 aria-label={`Opprett ny henteplan for ${partner.navn}`}
                 {...props}
-                onClick={onOpen}
+                onClick={onClick}
             />
-            <Modal title={`Ny henteplan for ${partner.navn}`} isOpen={isOpen} onClose={onClose}>
-                <AddHenteplanForm avtale={avtale} onSuccess={onClose} />
-            </Modal>
         </>
     );
 };

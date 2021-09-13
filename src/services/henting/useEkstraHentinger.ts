@@ -2,8 +2,8 @@ import { useQuery, UseQueryOptions, UseQueryResult } from 'react-query';
 import {
     ApiEkstraHenting,
     ApiEkstraHentingParams,
-    getEkstraHentinger,
     ekstraHentingDefaultQueryKey,
+    getEkstraHentinger,
 } from './EkstraHentingService';
 
 export const useEkstraHentinger = (
