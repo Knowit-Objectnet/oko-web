@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Heading, HStack, List, ListItem, useDisclosure, VStack } from '@chakra-ui/react';
+import { Heading, List, ListItem } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
@@ -16,6 +16,7 @@ export const PartnerNavigation: React.FC = () => {
     const { data: partnere, isError, isLoading } = usePartnere({ params: { includeAvtaler: true } });
     const [selectedAvtaler, setSelectedAvtaler] = useState<string[]>([]);
     const [filteredList, setFilteredList] = useState<ApiPartner[]>([]);
+    const [inputFieldValue, setInputFieldValue] = useState<string>('');
 
     useEffect(() => {
         if (isLoading) {
@@ -31,33 +32,65 @@ export const PartnerNavigation: React.FC = () => {
             );
 
             const ingenAvtaler = partnere.filter((partner) => partner.avtaler.length === 0);
-
             let temp: ApiPartner[] = [];
-
-            /*
-             *  Fikse problem med at ledeteksten i noen av partnere endrer seg - Eirik nevnte at dette var pga av noe forskjellig på sortering inne i partnere og da
-             * vil metoden som henter nyeste avtale displaye feil på et eller annet tidspunkt
-             *  Legge til søkefunksjon
-             *  Viser feil antall henteplaner
-             */
-
+            //Per nå kan man ikke backspace etter et søk og få tilbake flere treff. Det funker uten filter, men ikke med.
             if (selectedAvtaler.includes('aktiv')) {
-                temp = temp.concat(aktiveAvtaler);
+                if (inputFieldValue.trim() !== '') {
+                    const searchedItems = filteredList.filter((partner) =>
+                        partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
+                    );
+                    temp = temp.concat(searchedItems);
+                } else {
+                    temp = temp.concat(aktiveAvtaler);
+                }
             }
             if (partnere && selectedAvtaler.includes('kommende')) {
-                temp = temp.concat(kommendeAvtaler);
+                if (inputFieldValue.trim() !== '') {
+                    const searchedItems = filteredList.filter((partner) =>
+                        partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
+                    );
+                    temp = temp.concat(searchedItems);
+                } else {
+                    temp = temp.concat(kommendeAvtaler);
+                }
             }
             if (partnere && selectedAvtaler.includes('ingen')) {
-                temp = temp.concat(ingenAvtaler);
+                if (inputFieldValue.trim() !== '') {
+                    const searchedItems = filteredList.filter((partner) =>
+                        partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
+                    );
+                    temp = temp.concat(searchedItems);
+                } else {
+                    temp = temp.concat(ingenAvtaler);
+                }
+            }
+            if (selectedAvtaler.length === 0 && inputFieldValue.trim() !== '') {
+                const searchedItems = partnere.filter((partner) =>
+                    partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
+                );
+                temp = temp.concat(searchedItems);
             }
             if (selectedAvtaler.length === 0) {
                 setFilteredList(partnere);
             }
+
             if (temp.length > 0) {
                 setFilteredList(Array.from(new Set(temp)));
             }
         }
-    }, [selectedAvtaler, isLoading]);
+    }, [selectedAvtaler, isLoading, inputFieldValue]);
+
+    /*useEffect(() => {
+        if (partnere && inputFieldValue.trim() !== '') {
+            const searchedItems = filteredList.filter((partner) =>
+                partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()));
+
+            setFilteredList(searchedItems);
+        }
+        if (partnere && inputFieldValue.trim() === '') {
+            setFilteredList(partnere);
+        }
+    }, []);*/
 
     useEffect(() => {
         return;
@@ -73,7 +106,11 @@ export const PartnerNavigation: React.FC = () => {
         if (filteredList) {
             return (
                 <Flex width="full" direction={{ desktop: 'row', base: 'column' }} marginY="6">
-                    <PartnerFilterSelect selectedAvtaler={selectedAvtaler} setSelectedAvtaler={setSelectedAvtaler} />
+                    <PartnerFilterSelect
+                        setInputFieldValue={setInputFieldValue}
+                        selectedAvtaler={selectedAvtaler}
+                        setSelectedAvtaler={setSelectedAvtaler}
+                    />
                     <Flex
                         direction="column"
                         width={{ base: 'auto', desktop: '70%' }}
