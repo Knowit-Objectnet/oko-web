@@ -76,15 +76,13 @@ export const HenteplanForm: React.FC<Props> = ({
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
         onSubmit(formData)
-            .then(() => onApiSubmitSuccess())
+            .then(() => onApiSubmitSuccess(`Henteplanen ble ${isEditing ? 'oppdatert' : 'registrert'}.`))
             .catch(onApiSubmitError);
     });
 
     const showSuccessToast = useSuccessToast();
-
-    // Denne brukes kun når onSuccess option i mutate query ikke kjøres riktig av en eller annen grunn.
-    const onApiSubmitSuccess = () => {
-        showSuccessToast({ title: `Henteplanen ble ${isEditing ? 'oppdatert' : 'registrert'}.` });
+    const onApiSubmitSuccess = (successMessage: string) => {
+        showSuccessToast({ title: successMessage });
         onSuccess?.();
     };
 
