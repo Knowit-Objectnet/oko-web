@@ -140,7 +140,6 @@ export const PartnerNavigation: React.FC = () => {
             padding="5"
             width={{ base: 'full', desktop: '80%', '2xl': '50%' }}
             margin="auto"
-            marginTop="10"
         >
             {getPartnerList()}
         </Flex>
