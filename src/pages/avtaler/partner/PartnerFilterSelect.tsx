@@ -3,6 +3,7 @@ import { CheckboxGroup, Heading, Icon, Input } from '@chakra-ui/react';
 import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
 import Filter from '../../../assets/Filter.svg';
 import { Flex } from '@chakra-ui/layout';
+import { ChangeEvent } from 'react';
 
 interface Props {
     setInputFieldValue: (input: string) => void;
@@ -14,8 +15,7 @@ export const PartnerFilterSelect: React.FC<Props> = ({ setInputFieldValue, selec
     const handleSelectionChange = (checkboxValues: Array<string>) => {
         setSelectedAvtaler(checkboxValues);
     };
-    //Bytte type til riktig
-    const handleInputChange = (e: any) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
         setInputFieldValue(inputValue);
     };

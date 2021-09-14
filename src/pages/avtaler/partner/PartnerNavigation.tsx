@@ -26,71 +26,62 @@ export const PartnerNavigation: React.FC = () => {
             const aktiveAvtaler = partnere.filter((partner) =>
                 partner.avtaler.some((avtale) => getAvtaleTitle(avtale) === 'Aktiv avtale'),
             );
-
             const kommendeAvtaler = partnere.filter((partner) =>
                 partner.avtaler.some((avtale) => getAvtaleTitle(avtale) === 'Kommende avtale'),
             );
-
             const ingenAvtaler = partnere.filter((partner) => partner.avtaler.length === 0);
-            let temp: ApiPartner[] = [];
-            //Per nå kan man ikke backspace etter et søk og få tilbake flere treff. Det funker uten filter, men ikke med.
+            let tempFilteredList: ApiPartner[] = [];
+
             if (selectedAvtaler.includes('aktiv')) {
                 if (inputFieldValue.trim() !== '') {
-                    const searchedItems = filteredList.filter((partner) =>
+                    const searchedItems = partnere.filter((partner) =>
                         partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
                     );
-                    temp = temp.concat(searchedItems);
+                    tempFilteredList = tempFilteredList.concat(
+                        searchedItems.filter((value) => aktiveAvtaler.includes(value)),
+                    );
                 } else {
-                    temp = temp.concat(aktiveAvtaler);
+                    tempFilteredList = tempFilteredList.concat(aktiveAvtaler);
                 }
             }
             if (partnere && selectedAvtaler.includes('kommende')) {
                 if (inputFieldValue.trim() !== '') {
-                    const searchedItems = filteredList.filter((partner) =>
+                    const searchedItems = partnere.filter((partner) =>
                         partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
                     );
-                    temp = temp.concat(searchedItems);
+                    tempFilteredList = tempFilteredList.concat(
+                        searchedItems.filter((value) => kommendeAvtaler.includes(value)),
+                    );
                 } else {
-                    temp = temp.concat(kommendeAvtaler);
+                    tempFilteredList = tempFilteredList.concat(kommendeAvtaler);
                 }
             }
             if (partnere && selectedAvtaler.includes('ingen')) {
                 if (inputFieldValue.trim() !== '') {
-                    const searchedItems = filteredList.filter((partner) =>
+                    const searchedItems = partnere.filter((partner) =>
                         partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
                     );
-                    temp = temp.concat(searchedItems);
+                    tempFilteredList = tempFilteredList.concat(
+                        searchedItems.filter((value) => ingenAvtaler.includes(value)),
+                    );
                 } else {
-                    temp = temp.concat(ingenAvtaler);
+                    tempFilteredList = tempFilteredList.concat(ingenAvtaler);
                 }
             }
             if (selectedAvtaler.length === 0 && inputFieldValue.trim() !== '') {
                 const searchedItems = partnere.filter((partner) =>
                     partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
                 );
-                temp = temp.concat(searchedItems);
+                tempFilteredList = tempFilteredList.concat(searchedItems);
             }
             if (selectedAvtaler.length === 0) {
                 setFilteredList(partnere);
             }
-
-            if (temp.length > 0) {
-                setFilteredList(Array.from(new Set(temp)));
+            if (tempFilteredList.length > 0) {
+                setFilteredList(Array.from(new Set(tempFilteredList)));
             }
         }
     }, [selectedAvtaler, isLoading, inputFieldValue]);
-
-    /*useEffect(() => {
-        if (partnere && inputFieldValue.trim() !== '') {
-            const searchedItems = filteredList.filter((partner) =>
-                partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()));
-
-            setFilteredList(searchedItems);
-        }
-        if (partnere && inputFieldValue.trim() === '') {
-            setFilteredList(partnere);
-        }
-    }, []);*/
 
     useEffect(() => {
         return;
