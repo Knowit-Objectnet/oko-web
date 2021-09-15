@@ -98,12 +98,10 @@ export const KontaktPersonForm: React.FC<EditModeProps | AddModeProps> = ({ akto
         });
 
     const updateKontakt = (updatedKontakt: ApiKontaktPatch) =>
-        updateKontaktMutation.mutate(updatedKontakt, {
-            onSuccess: () => {
-                onApiSubmitSuccess(`Endringene ble lagret for ${updatedKontakt.navn}`);
-            },
-            onError: onApiSubmitError,
-        });
+        updateKontaktMutation
+            .mutateAsync(updatedKontakt)
+            .then(() => onApiSubmitSuccess(`Endringene ble lagret for ${updatedKontakt.navn}`))
+            .catch(onApiSubmitError);
 
     const onApiSubmitSuccess = (successMessage: string) => {
         showSuccessToast({ title: successMessage });
