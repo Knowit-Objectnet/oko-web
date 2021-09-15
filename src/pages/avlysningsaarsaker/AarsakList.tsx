@@ -27,7 +27,10 @@ export const AarsakList: React.FC<Props> = ({ isPartnerAarsaker }) => {
                 <ListItem key={aarsak.id}>
                     <HStack justifyContent="space-between" marginBottom="1">
                         <Text fontSize="sm">Avlysningsårsak {valgNumber + 1} </Text>
-                        <DeleteAarsakButton aarsak={aarsak} />
+                        <ButtonGroup>
+                            <EditAarsakButton aarsak={aarsak} />
+                            <DeleteAarsakButton aarsak={aarsak} />
+                        </ButtonGroup>
                     </HStack>
 
                     <HStack

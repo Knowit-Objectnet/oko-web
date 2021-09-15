@@ -21,6 +21,8 @@ import { useKategoriById } from '../../services/kategori/useKategoriById';
 import { useAvtaleById } from '../../services/avtale/useAvtaleById';
 import { useEkstraHentingById } from '../../services/henting/useEkstraHentingById';
 import queryString, { ParsedQuery } from 'query-string';
+import { ApiAarsak } from '../../services/aarsak/AarsakService';
+import { useAarsakById } from '../../services/aarsak/useAarsakById';
 
 interface Props {
     path: string;
@@ -37,6 +39,7 @@ interface LocationState {
     aktor?: ApiAktor;
     kontakt?: ApiKontakt;
     kategori?: ApiKategori;
+    aarsak?: ApiAarsak;
 }
 
 function recreateState(params: ParsedQuery) {
@@ -49,6 +52,7 @@ function recreateState(params: ParsedQuery) {
         kontaktId: useKontaktById,
         aktorId: useAktorById,
         kategoriId: useKategoriById,
+        aarsakId: useAarsakById,
     };
 
     const state: Record<string, any> = {};
@@ -64,6 +68,7 @@ function recreateState(params: ParsedQuery) {
         kontaktId: 'kontakt',
         aktorId: 'aktor',
         kategoriId: 'kategori',
+        aarsakId: 'aarsak',
     };
 
     Object.keys(params).forEach((key) => {
