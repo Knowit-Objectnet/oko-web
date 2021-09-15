@@ -63,7 +63,7 @@ export const EkstraHentingTable: React.FC<Props> = ({ ekstraHentinger, isLoading
                             />
                         </Td>
 
-                        <Td>
+                        <Td minWidth="60">
                             {user.isPartner ? (
                                 <PartnerPameldingInfo ekstraHenting={ekstraHenting} />
                             ) : (
