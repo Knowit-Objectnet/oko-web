@@ -54,6 +54,9 @@ const Aarsaker: React.FC = () => {
             <FormRoute path={`${url}/ny`} title="Legg til ny årsak">
                 <AarsakForm />
             </FormRoute>
+            <FormRoute path={`${url}/rediger`} title="Rediger årsak">
+                <AarsakForm />
+            </FormRoute>
         </>
     );
 };
