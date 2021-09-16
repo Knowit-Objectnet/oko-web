@@ -77,7 +77,10 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
             kategorier: formData.kategorier.map((kategoriId) => ({ kategoriId })),
             // TODO: next line is not a very robust solution, can potentially set `partnere` to `undefined`
             //  if there is a problem fetching the partners from the api
-            partnere: formData.partnere || allPartnere?.map((partner) => partner.id),
+            partnere:
+                formData.partnere && formData.partnere.length > 0
+                    ? formData.partnere
+                    : allPartnere?.map((partner) => partner.id),
         };
     };
 
@@ -110,6 +113,7 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
 
     const tidspunkt = formMethods.watch('tidspunkt', undefined);
     const utlysningSelect = formMethods.watch('utlysningSelect');
+    //console.log(utlysningSelect)
 
     return (
         <FormProvider {...formMethods}>
