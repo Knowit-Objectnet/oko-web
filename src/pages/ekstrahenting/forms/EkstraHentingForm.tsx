@@ -78,9 +78,7 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
             // TODO: next line is not a very robust solution, can potentially set `partnere` to `undefined`
             //  if there is a problem fetching the partners from the api
             partnere:
-                formData.partnere && formData.partnere.length > 0
-                    ? formData.partnere
-                    : allPartnere?.map((partner) => partner.id),
+                formData.utlysningSelect === 'ALL' ? allPartnere?.map((partner) => partner.id) : formData.partnere,
         };
     };
 
