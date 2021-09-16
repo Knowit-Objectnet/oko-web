@@ -1,18 +1,12 @@
 import * as React from 'react';
-import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../../../components/Modal';
+import { ButtonProps } from '@chakra-ui/react';
 import { AddButton } from '../../../components/buttons/AddButton';
-import { PartnerForm } from './PartnerForm';
+import { useHistory } from 'react-router-dom';
 
 export const AddPartnerButton: React.FC<Omit<ButtonProps, 'onClick'>> = (props) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
 
-    return (
-        <>
-            <AddButton label="Legg til samarbeidspartner" borderRadius="6" {...props} onClick={onOpen} />
-            <Modal title="Legg til ny samarbeidspartner" isOpen={isOpen} onClose={onClose}>
-                <PartnerForm onSuccess={onClose} />
-            </Modal>
-        </>
-    );
+    const onClick = () => history.push('/partnere/ny');
+
+    return <AddButton label="Legg til samarbeidspartner" borderRadius="6" {...props} onClick={onClick} />;
 };

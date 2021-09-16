@@ -12,7 +12,7 @@ export const StasjonNavItem: React.FC<Props> = ({ stasjon }) => {
     return (
         <Link
             as={NavLink}
-            to={`${url}/${stasjon.id}`}
+            to={`/stasjoner/${stasjon.id}`}
             _activeLink={{
                 fontWeight: 'bold',
                 '&:before': {

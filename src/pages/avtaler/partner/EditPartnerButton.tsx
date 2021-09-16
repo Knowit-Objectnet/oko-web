@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../../../components/Modal';
-import { PartnerForm } from './PartnerForm';
+import { ButtonProps } from '@chakra-ui/react';
 import { EditButton } from '../../../components/buttons/EditButton';
 import { ApiPartner } from '../../../services/partner/PartnerService';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     partner: ApiPartner;
 }
 
 export const EditPartnerButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ partner, ...props }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
+
+    const onClick = () => history.push(`/partnere/rediger?partnerId=${partner.id}`, { partner: partner });
 
     return (
         <>
@@ -19,11 +20,8 @@ export const EditPartnerButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> =
                 borderRadius="6"
                 aria-label={`Rediger informasjon for ${partner.navn}`}
                 {...props}
-                onClick={onOpen}
+                onClick={onClick}
             />
-            <Modal title="Rediger samarbeidspartner" isOpen={isOpen} onClose={onClose}>
-                <PartnerForm onSuccess={onClose} partnerToEdit={partner} />
-            </Modal>
         </>
     );
 };

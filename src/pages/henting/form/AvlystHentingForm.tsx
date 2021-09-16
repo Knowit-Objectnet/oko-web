@@ -17,6 +17,8 @@ import { useUpdateHenting } from '../../../services/henting/useUpdateHenting';
 import { useAuth } from '../../../auth/useAuth';
 import Warning from '../../../assets/Warning.svg';
 import { AarsakSelect } from '../../../components/forms/AarsakSelect';
+import { hasStarted } from '../../../utils/wrappedHentingHelpers';
+import { WarningBody, WarningContainer } from '../../../components/forms/Warning';
 
 interface AvlystHentingFormData {
     avlysningsaarsak: string;
@@ -83,8 +85,16 @@ export const AvlystHentingForm: React.FC<Props> = ({ hentingToCancel, onSuccess 
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit}>
                 <Stack direction="column" spacing="7">
+                    {hasStarted(hentingToCancel) && (
+                        <WarningContainer variant="warning">
+                            <WarningBody>
+                                OBS! Du er i ferd med å avlyse en henting som allerede er startet.
+                            </WarningBody>
+                        </WarningContainer>
+                    )}
                     <RequiredFieldsInstruction instructions={instructions} useDefault={false} />
                     <ErrorMessages globalError={apiOrNetworkError} />
+
                     <AarsakSelect name="avlysningsaarsak" label="Avlysningsårsak" required />
                     <FormSubmitButton
                         label={hentingToCancel ? 'Avlys hentingen' : 'Avlys ny henting'}

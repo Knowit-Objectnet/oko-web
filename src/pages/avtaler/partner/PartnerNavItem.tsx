@@ -24,13 +24,16 @@ export const PartnerNavItem: React.FC<Props> = ({ partner }) => {
             const aTitle = getAvtaleTitle(a);
             const bTitle = getAvtaleTitle(b);
             const prio: Record<string, number> = {
-                'Aktiv avtale': -1,
-                'Kommende avtale': 1,
-                'Tidligere avtale': 2,
-                'Avtale med udefinert tidsrom': 3,
+                'Aktiv avtale': 1,
+                'Kommende avtale': 2,
+                'Tidligere avtale': 3,
+                'Avtale med udefinert tidsrom': 4,
             };
 
-            if (aTitle == bTitle) return a.type == 'FAST' ? -1 : 1;
+            if (aTitle == bTitle) {
+                if (a.type === b.type) return new Date(b.sluttDato).getTime() - new Date(a.sluttDato).getTime();
+                return a.type == 'FAST' ? -1 : 1;
+            }
 
             return prio[aTitle] - prio[bTitle];
         };

@@ -4,7 +4,7 @@ import { partition } from 'lodash';
 import React from 'react';
 import { useAuth } from '../../auth/useAuth';
 import { ApiEkstraHenting } from '../../services/henting/EkstraHentingService';
-import { useEkstraHentingerWithUtlysning } from '../../services/henting/useEkstraHentingerWithUtlysning';
+import { useEkstraHentinger } from '../../services/henting/useEkstraHentinger';
 import { dateTimeToStringIgnoreTimezone, parseISOIgnoreTimezone } from '../../utils/hentingDateTimeHelpers';
 import { EkstraHentingAccordion } from './EkstraHentingAccordion';
 import { EkstraHentingHeading } from './EkstraHentingHeading';
@@ -17,7 +17,7 @@ export const EkstraHentingInfoListPartner: React.FC = () => {
         data: ekstraHentinger,
         isLoading,
         isError,
-    } = useEkstraHentingerWithUtlysning({
+    } = useEkstraHentinger({
         after: dateTimeToStringIgnoreTimezone(startOfToday()),
     });
 

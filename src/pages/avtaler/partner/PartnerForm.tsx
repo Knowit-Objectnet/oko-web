@@ -39,18 +39,18 @@ interface PartnerFormData {
 
 interface Props {
     /** By passing an existing partner, the form will be in edit mode **/
-    partnerToEdit?: ApiPartner;
+    partner?: ApiPartner;
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
 }
 
-export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
+export const PartnerForm: React.FC<Props> = ({ partner, onSuccess }) => {
     const formMethods = useForm<PartnerFormData>({
         resolver: yupResolver(validationSchema),
-        defaultValues: partnerToEdit
+        defaultValues: partner
             ? {
-                  navn: partnerToEdit.navn,
-                  organisasjonstype: partnerToEdit.ideell.toString(),
+                  navn: partner.navn,
+                  organisasjonstype: partner.ideell.toString(),
               }
             : undefined,
     });
@@ -63,18 +63,18 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        const partner = {
+        const partnerData = {
             navn: formData.navn,
             ideell: formData.organisasjonstype === 'true',
         };
 
-        if (partnerToEdit) {
+        if (partner) {
             updatePartner({
-                id: partnerToEdit.id,
-                ...partner,
+                id: partner.id,
+                ...partnerData,
             });
         } else {
-            addPartner(partner);
+            addPartner(partnerData);
         }
     });
 
@@ -119,7 +119,7 @@ export const PartnerForm: React.FC<Props> = ({ partnerToEdit, onSuccess }) => {
                         required
                     />
                     <FormSubmitButton
-                        label={partnerToEdit ? 'Lagre endringer' : 'Registrer ny samarbeidspartner'}
+                        label={partner ? 'Lagre endringer' : 'Registrer ny samarbeidspartner'}
                         isLoading={updatePartnerMutation.isLoading || addPartnerMutation.isLoading}
                         loadingText="Lagrer..."
                     />

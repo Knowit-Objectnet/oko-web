@@ -59,14 +59,7 @@ const hentingEndpoint = '/ekstra-hentinger';
 export const ekstraHentingDefaultQueryKey = 'getEkstraHentinger';
 
 export const getEkstraHentinger = (params: ApiEkstraHentingParams = {}): Promise<Array<ApiEkstraHenting>> =>
-    httpClient().get<Array<ApiEkstraHenting>>(hentingEndpoint, { params }).then(extractResponse, transformError);
-
-export const getEkstraHentingerWithUtlysning = (
-    params: ApiEkstraHentingParams = {},
-): Promise<Array<ApiEkstraHenting>> =>
-    httpClient()
-        .get<Array<ApiEkstraHenting>>(`${hentingEndpoint}/med-utlysning`, { params })
-        .then(extractResponse, transformError);
+    httpClient().get<Array<ApiEkstraHenting>>(`${hentingEndpoint}`, { params }).then(extractResponse, transformError);
 
 export const getEkstraHentingById = (hentingId: string): Promise<ApiEkstraHenting> =>
     httpClient().get<ApiEkstraHenting>(`${hentingEndpoint}/${hentingId}`).then(extractResponse, transformError);
