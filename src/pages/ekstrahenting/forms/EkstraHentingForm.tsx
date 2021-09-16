@@ -111,7 +111,6 @@ export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => 
 
     const tidspunkt = formMethods.watch('tidspunkt', undefined);
     const utlysningSelect = formMethods.watch('utlysningSelect');
-    //console.log(utlysningSelect)
 
     return (
         <FormProvider {...formMethods}>
