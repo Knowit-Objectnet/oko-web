@@ -31,7 +31,11 @@ export const PameldtInfo: React.FC<Props> = ({ ekstraHenting, isPast }) => {
                                 aria-label="Se utlyste partnere"
                                 onClick={onOpen}
                             />
-                            <Modal title="Utsendt til" isOpen={isOpen} onClose={onClose}>
+                            <Modal
+                                title={`Påmelding for "${ekstraHenting.beskrivelse}" er sendt til`}
+                                isOpen={isOpen}
+                                onClose={onClose}
+                            >
                                 <UnorderedList marginBottom="4" padding="2">
                                     {ekstraHenting &&
                                         ekstraHenting.utlysninger.map((partner) => (
