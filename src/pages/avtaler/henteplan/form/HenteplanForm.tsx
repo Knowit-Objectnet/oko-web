@@ -17,6 +17,7 @@ import { ApiError } from '../../../../services/httpClient';
 import { HenteplanFormStasjon } from './HenteplanFormStasjon';
 import { HenteplanFormAvtaleInfo } from './HenteplanFormAvtaleInfo';
 import { HenteplanFormFrekvens } from './HenteplanFormFrekvens';
+import { useSuccessToast } from '../../../../components/toasts/useSuccessToast';
 
 // NB! Setting the global error messages used by yup
 import '../../../../utils/forms/formErrorMessages';
@@ -47,11 +48,19 @@ export interface Props {
     avtale: ApiAvtale;
     defaultFormValues: HenteplanFormDefaultValues;
     onSubmit: (formData: HenteplanFormData) => Promise<ApiHenteplan>;
+    onSuccess?: () => void;
     submitLoading: boolean;
     isEditing?: boolean;
 }
 
-export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSubmit, submitLoading, isEditing }) => {
+export const HenteplanForm: React.FC<Props> = ({
+    avtale,
+    defaultFormValues,
+    onSubmit,
+    onSuccess,
+    submitLoading,
+    isEditing,
+}) => {
     const validationSchema = getHenteplanValidationSchema(avtale, isEditing);
     const formMethods = useForm<HenteplanFormData>({
         resolver: yupResolver(validationSchema),
@@ -66,8 +75,16 @@ export const HenteplanForm: React.FC<Props> = ({ avtale, defaultFormValues, onSu
 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
-        onSubmit(formData).catch(onApiSubmitError);
+        onSubmit(formData)
+            .then(() => onApiSubmitSuccess(`Henteplanen ble ${isEditing ? 'oppdatert' : 'registrert'}.`))
+            .catch(onApiSubmitError);
     });
+
+    const showSuccessToast = useSuccessToast();
+    const onApiSubmitSuccess = (successMessage: string) => {
+        showSuccessToast({ title: successMessage });
+        onSuccess?.();
+    };
 
     const onApiSubmitError = (error: ApiError) => {
         // TODO: get details from error and set appropriate message.

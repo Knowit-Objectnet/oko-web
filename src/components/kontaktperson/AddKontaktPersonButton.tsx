@@ -1,30 +1,26 @@
 import * as React from 'react';
-import { ButtonProps, useDisclosure } from '@chakra-ui/react';
-import { Modal } from '../Modal';
+import { ButtonProps } from '@chakra-ui/react';
 import { AddButton } from '../buttons/AddButton';
 import { ApiPartner } from '../../services/partner/PartnerService';
-import { KontaktPersonForm } from './KontaktPersonForm';
 import { ApiStasjon } from '../../services/stasjon/StasjonService';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
     aktor: ApiPartner | ApiStasjon;
 }
 
 export const AddKontaktPersonButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ aktor, ...props }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const history = useHistory();
+
+    const onClick = () => history.push(`/partnere/kontakt/ny?aktorId=${aktor.id}`, { aktor: aktor });
 
     return (
-        <>
-            <AddButton
-                label="Ny kontaktperson"
-                borderRadius="6"
-                aria-label={`Registrer ny kontaktperson for ${aktor.navn}`}
-                {...props}
-                onClick={onOpen}
-            />
-            <Modal title={`Ny kontaktperson for ${aktor.navn}`} isOpen={isOpen} onClose={onClose}>
-                <KontaktPersonForm aktor={aktor} onSuccess={onClose} />
-            </Modal>
-        </>
+        <AddButton
+            label="Ny kontaktperson"
+            borderRadius="6"
+            aria-label={`Registrer ny kontaktperson for ${aktor.navn}`}
+            {...props}
+            onClick={onClick}
+        />
     );
 };

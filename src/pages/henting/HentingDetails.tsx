@@ -9,7 +9,7 @@ import { useHentingById } from '../../services/henting/useHentingById';
 import { DetailHeader } from './components/DetailHeader';
 import { DetailInfo } from './components/DetailInfo';
 import { ApiPlanlagtHenting } from '../../services/henting/PlanlagtHentingService';
-import { hasStarted } from '../../utils/wrappedHentingHelpers';
+import { hasEnded } from '../../utils/wrappedHentingHelpers';
 import { BackButton } from '../../components/buttons/BackButton';
 import { Flex } from '@chakra-ui/layout';
 
@@ -59,7 +59,7 @@ export const HentingDetails: React.FC<Props> = ({ hentingId }) => {
                     {!isSmallScreen && (
                         <ButtonGroup marginTop="10">
                             <BackButton visible={locationState?.showBackButton} />
-                            {hentingWrapper.planlagtHenting && !hasStarted(hentingWrapper.planlagtHenting)
+                            {hentingWrapper.planlagtHenting && !hasEnded(hentingWrapper.planlagtHenting)
                                 ? getCancelButton(hentingWrapper.planlagtHenting)
                                 : null}
                         </ButtonGroup>
