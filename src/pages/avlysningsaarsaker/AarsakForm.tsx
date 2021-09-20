@@ -38,18 +38,18 @@ const validationSchema = yup.object().shape({
 });
 
 interface Props {
-    aarsakToEdit?: ApiAarsak;
+    aarsak?: ApiAarsak;
     /** Callback that will fire if submission of form is successful: **/
     onSuccess?: () => void;
 }
 
-export const AarsakForm: React.FC<Props> = ({ aarsakToEdit, onSuccess }) => {
+export const AarsakForm: React.FC<Props> = ({ aarsak, onSuccess }) => {
     const formMethods = useForm<AarsakFormData>({
         resolver: yupResolver(validationSchema),
-        defaultValues: aarsakToEdit
+        defaultValues: aarsak
             ? {
-                  beskrivelse: aarsakToEdit.beskrivelse,
-                  type: aarsakToEdit.type,
+                  beskrivelse: aarsak.beskrivelse,
+                  type: aarsak.type,
               }
             : undefined,
     });
@@ -62,9 +62,9 @@ export const AarsakForm: React.FC<Props> = ({ aarsakToEdit, onSuccess }) => {
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
 
-        if (aarsakToEdit) {
+        if (aarsak) {
             updateAarsak({
-                id: aarsakToEdit.id,
+                id: aarsak.id,
                 beskrivelse: formData.beskrivelse,
             });
         } else {
@@ -110,7 +110,7 @@ export const AarsakForm: React.FC<Props> = ({ aarsakToEdit, onSuccess }) => {
                     <RadiobuttonGroup name="type" label="Kan brukes av" options={aarsakTypeOptions} required />
                     <Input name="beskrivelse" label="Beskrivelse av årsak" required />
                     <FormSubmitButton
-                        label={aarsakToEdit ? 'Lagre endringer' : 'Registrer ny avlysningsårsak'}
+                        label={aarsak ? 'Lagre endringer' : 'Registrer ny avlysningsårsak'}
                         isLoading={updateAarsakMutation.isLoading || addAarsakMutation.isLoading}
                         loadingText="Lagrer..."
                     />

@@ -13,22 +13,15 @@ interface Props {
 
 export const AddHenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
     const formValues = {
-        startDato: avtale!.startDato,
-        sluttDato: avtale!.sluttDato,
+        startDato: avtale?.startDato,
+        sluttDato: avtale?.sluttDato,
     };
 
     const addHenteplanMutation = useAddHenteplan();
-    const showSuccessToast = useSuccessToast();
 
     const handleSubmit = (formData: HenteplanFormData) => {
         const newHenteplan = createNewHenteplan(avtale!.id, formData);
-
-        return addHenteplanMutation.mutateAsync(newHenteplan, {
-            onSuccess: () => {
-                showSuccessToast({ title: `Henteplanen ble registrert` });
-                onSuccess?.();
-            },
-        });
+        return addHenteplanMutation.mutateAsync(newHenteplan);
     };
 
     return (
@@ -36,6 +29,7 @@ export const AddHenteplanForm: React.FC<Props> = ({ avtale, onSuccess }) => {
             avtale={avtale!}
             defaultFormValues={formValues}
             onSubmit={handleSubmit}
+            onSuccess={onSuccess}
             submitLoading={addHenteplanMutation.isLoading}
         />
     );

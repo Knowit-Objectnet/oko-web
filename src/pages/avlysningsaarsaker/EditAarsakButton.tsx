@@ -1,29 +1,27 @@
 import * as React from 'react';
-import { ButtonProps, IconButton, useDisclosure, Icon } from '@chakra-ui/react';
-import { Modal } from '../../components/Modal';
+import { ButtonProps } from '@chakra-ui/react';
 import { ApiAarsak } from '../../services/aarsak/AarsakService';
-import { AarsakForm } from './AarsakForm';
-import Pencil from '../../assets/Pencil.svg';
+import { EditButton } from '../../components/buttons/EditButton';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 interface Props {
     aarsak: ApiAarsak;
 }
 
 export const EditAarsakButton: React.FC<Props & Omit<ButtonProps, 'onClick'>> = ({ aarsak, ...props }) => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { url } = useRouteMatch();
+    const history = useHistory();
+
+    const onClick = () => history.push(`${url}/rediger?aarsakId=${aarsak.id}`, { aarsak: aarsak });
 
     return (
-        <>
-            <IconButton
-                icon={<Icon as={Pencil} backgroundColor="white" boxSize={5} />}
-                aria-label="Rediger informasjon."
-                colorScheme="transparent"
-                {...props}
-                onClick={onOpen}
-            />
-            <Modal title="Rediger årsak" isOpen={isOpen} onClose={onClose}>
-                <AarsakForm onSuccess={onClose} aarsakToEdit={aarsak} />
-            </Modal>
-        </>
+        <EditButton
+            label="Rediger"
+            borderRadius="6"
+            size="xs"
+            aria-label="Rediger informasjon"
+            onClick={onClick}
+            {...props}
+        />
     );
 };

@@ -28,17 +28,10 @@ export const EditHenteplanForm: React.FC<Props> = ({ avtale, henteplan, onSucces
     };
 
     const updateHenteplanMutation = useUpdateHenteplan();
-    const showSuccessToast = useSuccessToast();
 
     const handleSubmit = (formData: HenteplanFormData) => {
         const updatedHenteplan = createUpdatedHenteplan(henteplan!.id, formData);
-
-        return updateHenteplanMutation.mutateAsync(updatedHenteplan, {
-            onSuccess: () => {
-                showSuccessToast({ title: `Henteplanen ble oppdatert` });
-                onSuccess?.();
-            },
-        });
+        return updateHenteplanMutation.mutateAsync(updatedHenteplan);
     };
 
     return (
@@ -47,6 +40,7 @@ export const EditHenteplanForm: React.FC<Props> = ({ avtale, henteplan, onSucces
             defaultFormValues={formValues}
             avtale={avtale!}
             onSubmit={handleSubmit}
+            onSuccess={onSuccess}
             submitLoading={updateHenteplanMutation.isLoading}
         />
     );
