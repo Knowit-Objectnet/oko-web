@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Flex, Text, VStack } from '@chakra-ui/react';
 import { useAuth } from '../../../auth/useAuth';
 import { HentingerVektListChildProps } from './HentingVektList';
-import { getVektregistreringDate, getVektSum } from '../../../utils/wrappedHentingHelpers';
+import { getVektregistreringAv, getVektregistreringDate, getVektSum } from '../../../utils/wrappedHentingHelpers';
 import { formatDate } from '../../../utils/formatDateTime';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 
@@ -34,14 +34,24 @@ export const HentingVektItemTitle: React.FC<HentingerVektListChildProps> = ({ he
                     Ikke registrert vekt
                 </Text>
             );
+        } else if (user.isAdmin) {
+            return (
+                <Text fontSize="sm">
+                    {getVektregistreringDate(henting)
+                        ? `Registrert: ${formatDate(parseISOIgnoreTimezone(getVektregistreringDate(henting)))} av ` +
+                          getVektregistreringAv(henting)
+                        : null}
+                </Text>
+            );
+        } else {
+            return (
+                <Text fontSize="sm">
+                    {getVektregistreringDate(henting)
+                        ? `Registrert: ${formatDate(parseISOIgnoreTimezone(getVektregistreringDate(henting)))}`
+                        : null}
+                </Text>
+            );
         }
-        return (
-            <Text fontSize="sm">
-                {getVektregistreringDate(henting)
-                    ? `Registrert: ${formatDate(parseISOIgnoreTimezone(getVektregistreringDate(henting)))}`
-                    : null}
-            </Text>
-        );
     };
 
     return (
