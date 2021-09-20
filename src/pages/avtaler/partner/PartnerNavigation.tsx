@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Heading, List, ListItem } from '@chakra-ui/react';
+import { Heading, List, ListItem, Text } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/layout';
 import { AddPartnerButton } from './AddPartnerButton';
 import { PartnerNavItem } from './PartnerNavItem';
@@ -31,7 +31,6 @@ export const PartnerNavigation: React.FC = () => {
             );
             const ingenAvtaler = partnere.filter((partner) => partner.avtaler.length === 0);
             let tempFilteredList: ApiPartner[] = [];
-
             if (selectedAvtaler.includes('aktiv')) {
                 if (inputFieldValue.trim() !== '') {
                     const searchedItems = partnere.filter((partner) =>
@@ -40,11 +39,13 @@ export const PartnerNavigation: React.FC = () => {
                     tempFilteredList = tempFilteredList.concat(
                         searchedItems.filter((value) => aktiveAvtaler.includes(value)),
                     );
+                } else if (aktiveAvtaler.length === 0) {
+                    setFilteredList([]);
                 } else {
                     tempFilteredList = tempFilteredList.concat(aktiveAvtaler);
                 }
             }
-            if (partnere && selectedAvtaler.includes('kommende')) {
+            if (selectedAvtaler.includes('kommende')) {
                 if (inputFieldValue.trim() !== '') {
                     const searchedItems = partnere.filter((partner) =>
                         partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
@@ -52,11 +53,13 @@ export const PartnerNavigation: React.FC = () => {
                     tempFilteredList = tempFilteredList.concat(
                         searchedItems.filter((value) => kommendeAvtaler.includes(value)),
                     );
+                } else if (kommendeAvtaler.length === 0) {
+                    setFilteredList([]);
                 } else {
                     tempFilteredList = tempFilteredList.concat(kommendeAvtaler);
                 }
             }
-            if (partnere && selectedAvtaler.includes('ingen')) {
+            if (selectedAvtaler.includes('ingen')) {
                 if (inputFieldValue.trim() !== '') {
                     const searchedItems = partnere.filter((partner) =>
                         partner.navn.toLowerCase().startsWith(inputFieldValue.toLowerCase()),
@@ -64,6 +67,8 @@ export const PartnerNavigation: React.FC = () => {
                     tempFilteredList = tempFilteredList.concat(
                         searchedItems.filter((value) => ingenAvtaler.includes(value)),
                     );
+                } else if (ingenAvtaler.length === 0) {
+                    setFilteredList([]);
                 } else {
                     tempFilteredList = tempFilteredList.concat(ingenAvtaler);
                 }
@@ -118,13 +123,17 @@ export const PartnerNavigation: React.FC = () => {
                             </Heading>
                             {user.isAdmin ? <AddPartnerButton fontSize="14" /> : null}
                         </Flex>
-                        <List width="full" spacing="10">
-                            {filteredList.map((partner) => (
-                                <ListItem key={partner.id}>
-                                    <PartnerNavItem partner={partner} />
-                                </ListItem>
-                            ))}
-                        </List>
+                        {filteredList.length !== 0 ? (
+                            <List width="full" spacing="10">
+                                {filteredList.map((partner) => (
+                                    <ListItem key={partner.id}>
+                                        <PartnerNavItem partner={partner} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        ) : (
+                            <Text fontStyle="italic">Ingen partnere funnet</Text>
+                        )}
                     </Flex>
                 </Flex>
             );
