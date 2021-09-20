@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChangeEvent, FormEventHandler, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -50,6 +50,17 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
     const verifiserMutation = useVerifiser();
     const showSuccessToast = useSuccessToast();
     const [apiOrNetworkError, setApiOrNetworkError] = useState<string>();
+    const [isVerifisert, setIsVerifisert] = useState<boolean>(
+        type === 'telefon' ? kontakt.verifiseringStatus.telefonVerifisert : kontakt.verifiseringStatus.epostVerifisert,
+    );
+
+    useEffect(() => {
+        setIsVerifisert(
+            type === 'telefon'
+                ? kontakt.verifiseringStatus.telefonVerifisert
+                : kontakt.verifiseringStatus.epostVerifisert,
+        );
+    }, [kontakt.verifiseringStatus]);
 
     const handleSubmit = formMethods.handleSubmit((formData) => {
         setApiOrNetworkError(undefined);
@@ -72,6 +83,7 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
 
     const onApiSubmitSuccess = (successMessage: string) => {
         showSuccessToast({ title: successMessage });
+        setIsVerifisert(true);
     };
 
     const onApiSubmitError = (error: ApiError) => {
@@ -95,9 +107,6 @@ export const VerifiseringForm: React.FC<Props> = ({ kontakt, type }) => {
             </Flex>
         );
     };
-
-    const isVerifisert =
-        type === 'telefon' ? kontakt.verifiseringStatus.telefonVerifisert : kontakt.verifiseringStatus.epostVerifisert;
 
     const [isEmpty, setIsEmpty] = useState(true);
 
