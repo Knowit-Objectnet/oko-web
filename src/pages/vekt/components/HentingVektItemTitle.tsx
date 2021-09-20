@@ -2,12 +2,7 @@ import * as React from 'react';
 import { Flex, Text, VStack } from '@chakra-ui/react';
 import { useAuth } from '../../../auth/useAuth';
 import { HentingerVektListChildProps } from './HentingVektList';
-import {
-    getVektregistreringAv,
-    getVektregistreringDate,
-    getVektregistreringer,
-    getVektSum,
-} from '../../../utils/wrappedHentingHelpers';
+import { getVektregistreringAv, getVektregistreringDate, getVektSum } from '../../../utils/wrappedHentingHelpers';
 import { formatDate } from '../../../utils/formatDateTime';
 import { parseISOIgnoreTimezone } from '../../../utils/hentingDateTimeHelpers';
 

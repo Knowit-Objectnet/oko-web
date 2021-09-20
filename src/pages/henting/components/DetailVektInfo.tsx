@@ -7,7 +7,6 @@ import Check from '../../../assets/Check.svg';
 import { useAuth } from '../../../auth/useAuth';
 import {
     getVektregistreringAv,
-    getVektregistreringer,
     hasVektregistrering,
     isValidForVektregistrering,
 } from '../../../utils/wrappedHentingHelpers';
