@@ -23,6 +23,19 @@ export const getVektSum = (henting: ApiHentingWrapper): number =>
 export const getVektregistreringDate = (henting: ApiHentingWrapper): string =>
     getVektregistreringer(henting)[0]?.registreringsDato;
 
+export const getVektregistreringAv = (henting: ApiHentingWrapper): string => {
+    const vektregistreringAv = getVektregistreringer(henting)[0]?.vektRegistreringAv.toString();
+    let vektRegAv = '';
+    if (vektregistreringAv == '00000000-0000-0000-0000-000000000000') {
+        vektRegAv = 'Admin';
+    } else if (vektregistreringAv == henting.stasjonId) {
+        vektRegAv = henting.stasjonNavn;
+    } else if (henting.aktorNavn !== undefined && vektregistreringAv == henting.aktorId) {
+        vektRegAv = henting.aktorNavn;
+    }
+    return vektRegAv;
+};
+
 export const hasVektregistrering = (henting: ApiHentingWrapper): boolean => getVektregistreringer(henting).length > 0;
 
 export const isValidForVektregistrering = (henting: ApiHentingWrapper): boolean => {

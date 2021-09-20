@@ -17,10 +17,11 @@ export const SendVerifiseringButton: React.FC<Props> = ({ kontakt, ...props }) =
 
     const handleClick = () => {
         setApiOrNetworkError(undefined);
-
+        const successTitle =
+            numOfVerifiseringToSend() > 1 ? `Verifikasjonskoder er sendt` : `Verifikasjonskode er sendt`;
         sendVerifiseringMutation.mutate(kontakt.id, {
             onSuccess: () => {
-                showSuccessToast({ title: `Verifikasjonskoder er sendt` });
+                showSuccessToast({ title: successTitle });
             },
             onError: () => {
                 showErrorToast({ title: 'Uffda, noe gikk galt med utsendingen. Vennligst prøv igjen.' });
@@ -42,12 +43,12 @@ export const SendVerifiseringButton: React.FC<Props> = ({ kontakt, ...props }) =
             variant="primary"
             size="lg"
             isLoading={sendVerifiseringMutation.isLoading}
-            loadingText="Sender nye koder..."
+            loadingText={numOfVerifiseringToSend() > 1 ? 'Sender verifiseringskoder...' : 'Sender verifiseringskode...'}
             onClick={handleClick}
-            aria-label="Send nye verifiseringskoder e-post og/eller SMS"
+            aria-label="Send verifiseringskoder e-post og/eller SMS"
             {...props}
         >
-            {numOfVerifiseringToSend() > 1 ? 'Send nye verifiseringskoder' : 'Send ny verifiseringskode'}
+            {numOfVerifiseringToSend() > 1 ? 'Send verifiseringskoder' : 'Send verifiseringskode'}
         </Button>
     );
 };
