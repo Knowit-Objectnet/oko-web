@@ -7,6 +7,7 @@ export interface ApiVektregistrering {
     kategoriNavn: string; // uuid
     vekt: number;
     registreringsDato: string; //LocalTimeDate
+    vektRegistreringAv: string; //UUID
 }
 
 export interface ApiVektregistreringPatch {
