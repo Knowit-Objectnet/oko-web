@@ -14,7 +14,7 @@ import { ApiPartner } from '../../../services/partner/PartnerService';
 export const PartnerNavigation: React.FC = () => {
     const { user } = useAuth();
     const { data: partnere, isError, isLoading } = usePartnere({ params: { includeAvtaler: true } });
-    const [selectedAvtaler, setSelectedAvtaler] = useState<string[]>([]);
+    const [selectedAvtaler, setSelectedAvtaler] = useState<string[]>(['aktiv']);
     const [filteredList, setFilteredList] = useState<ApiPartner[]>([]);
     const [inputFieldValue, setInputFieldValue] = useState<string>('');
 
