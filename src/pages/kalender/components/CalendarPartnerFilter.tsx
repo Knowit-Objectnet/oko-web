@@ -3,6 +3,9 @@ import { usePartnere } from '../../../services/partner/usePartnere';
 import { CalendarFilterSelect } from './CalendarFilterSelect';
 import { ApiHentingWrapper } from '../../../services/henting/HentingService';
 import { partnerHasUtlysning } from '../../../utils/ekstraHentingHelpers';
+import { useKeycloak } from '@react-keycloak/web';
+import { useStasjoner } from '../../../services/stasjon/useStasjoner';
+import { useAuth } from '../../../auth/useAuth';
 
 const partnerFilterFnFactory = (partnerIds: Array<string>) => {
     return (henting: ApiHentingWrapper) =>
@@ -20,7 +23,7 @@ interface Props {
 }
 
 export const CalendarPartnerFilter: React.FC<Props> = ({ selectedPartnerIds, setSelectedPartnerIds }) => {
-    const partnerQuery = usePartnere();
+    const partnerQuery = usePartnere({ params: { includeAvtaler: true } });
 
     return (
         <CalendarFilterSelect
