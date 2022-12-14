@@ -71,6 +71,10 @@ export const PartnerNavigation: React.FC = () => {
                     setFilteredList([]);
                 } else {
                     tempFilteredList = tempFilteredList.concat(ingenAvtaler);
+                    const today = new Date();
+                    tempFilteredList = tempFilteredList.concat(
+                        partnere.filter((value) => value.avtaler.every((avtale) => new Date(avtale.sluttDato) < today)),
+                    );
                 }
             }
             if (selectedAvtaler.length === 0 && inputFieldValue.trim() !== '') {
