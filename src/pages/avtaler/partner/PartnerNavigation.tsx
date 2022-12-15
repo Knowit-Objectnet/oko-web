@@ -94,14 +94,12 @@ export const PartnerNavigation: React.FC = () => {
 
     //All names starting with * will always be put last in the list
     const sortFilteredItems = (a: ApiPartner, b: ApiPartner): number => {
-        if (a.navn[0] === '*' && b.navn[0] === '*') {
-            return a.navn.length - b.navn.length;
-        } else if (a.navn[0] === '*') {
-            return -1;
+        if (a.navn[0] === '*') {
+            return 1;
         } else if (b.navn[0] === '*') {
             return -1;
         } else {
-            return a.navn.length - b.navn.length;
+            return 0;
         }
     };
 
