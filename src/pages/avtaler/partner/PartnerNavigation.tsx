@@ -98,6 +98,17 @@ export const PartnerNavigation: React.FC = () => {
         return;
     }, [filteredList]);
 
+    //All names starting with * will always be put last in the list
+    const sortFilteredItems = (a: ApiPartner, b: ApiPartner): number => {
+        if (a.navn[0] === '*') {
+            return 1;
+        } else if (b.navn[0] === '*') {
+            return -1;
+        } else {
+            return 0;
+        }
+    };
+
     const getPartnerList = () => {
         if (isLoading) {
             return <ListSkeleton loadingText="Laster inn partnere..." startColor="gray.500" endColor="gray.300" />;
@@ -131,7 +142,7 @@ export const PartnerNavigation: React.FC = () => {
                         </Flex>
                         {filteredList.length !== 0 ? (
                             <List width="full" spacing="10">
-                                {filteredList.map((partner) => (
+                                {filteredList.sort(sortFilteredItems).map((partner) => (
                                     <ListItem key={partner.id}>
                                         <PartnerNavItem partner={partner} />
                                     </ListItem>
