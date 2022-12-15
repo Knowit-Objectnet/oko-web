@@ -14,7 +14,7 @@ import { ApiPartner } from '../../../services/partner/PartnerService';
 export const PartnerNavigation: React.FC = () => {
     const { user } = useAuth();
     const { data: partnere, isError, isLoading } = usePartnere({ params: { includeAvtaler: true } });
-    const [selectedAvtaler, setSelectedAvtaler] = useState<string[]>([]);
+    const [selectedAvtaler, setSelectedAvtaler] = useState<string[]>(['aktiv']);
     const [filteredList, setFilteredList] = useState<ApiPartner[]>([]);
     const [inputFieldValue, setInputFieldValue] = useState<string>('');
 
@@ -29,7 +29,13 @@ export const PartnerNavigation: React.FC = () => {
             const kommendeAvtaler = partnere.filter((partner) =>
                 partner.avtaler.some((avtale) => getAvtaleTitle(avtale) === 'Kommende avtale'),
             );
-            const ingenAvtaler = partnere.filter((partner) => partner.avtaler.length === 0);
+            const today = new Date();
+            const ingenAvtaler = partnere.filter(
+                (partner) =>
+                    partner.avtaler.length === 0 ||
+                    partner.avtaler.every((avtale) => new Date(avtale.sluttDato) < today),
+            );
+
             let tempFilteredList: ApiPartner[] = [];
             if (selectedAvtaler.includes('aktiv')) {
                 if (inputFieldValue.trim() !== '') {
