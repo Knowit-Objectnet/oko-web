@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { useCalendarState } from '../CalendarProvider';
 import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
 import { CheckboxGroup, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { ApiStasjon } from '../../../services/stasjon/StasjonService';
 import { CalendarFilterFn } from '../hooks/useCalendarFilters';
 import { ListSkeleton } from '../../../components/forms/checkbox/ListSkeleton';
 import { UseQueryResult } from 'react-query';
 import { Box } from '@chakra-ui/layout';
 import Filter from '../../../assets/Filter.svg';
+import { ApiAvtale } from '../../../services/avtale/AvtaleService';
+import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
+import { useAuth } from '../../../auth/useAuth';
+import { ApiStasjon } from '../../../services/stasjon/StasjonService';
 
 interface Props {
     labels: {
@@ -32,7 +34,19 @@ export const CalendarFilterSelect: React.FC<Props> = ({
     setSelectedAktorIds,
 }) => {
     const { setFilter, clearFilter } = useCalendarState();
-
+    const user = useAuth();
+    const today = new Date();
+    const data: undefined | Array<ApiPartner> | Array<ApiStasjon> = query.data;
+    const filteredPartnerData: ApiPartner[] | undefined = (data as ApiPartner[])?.filter(
+        (partner: ApiPartner | undefined) =>
+            partner?.avtaler.some((avtale: ApiAvtale | undefined) => {
+                if (avtale !== undefined && new Date(avtale.sluttDato) > today) {
+                    return avtale?.henteplaner.some(
+                        (henteplan: ApiHenteplan | undefined) => henteplan?.stasjonId == user.user.aktorId,
+                    );
+                }
+            }),
+    );
     const handleSelectionChange = (checkboxValues: Array<string>) => {
         setSelectedAktorIds(checkboxValues);
 
@@ -62,7 +76,7 @@ export const CalendarFilterSelect: React.FC<Props> = ({
             return (
                 <>
                     <CheckboxGroup onChange={handleSelectionChange} value={selectedAktorIds}>
-                        {query.data.map((aktor) => (
+                        {filteredPartnerData?.map((aktor: ApiPartner) => (
                             <Checkbox key={aktor.id} name={name} value={aktor.id} label={aktor.navn} />
                         ))}
                     </CheckboxGroup>
