@@ -29,7 +29,13 @@ export const PartnerNavigation: React.FC = () => {
             const kommendeAvtaler = partnere.filter((partner) =>
                 partner.avtaler.some((avtale) => getAvtaleTitle(avtale) === 'Kommende avtale'),
             );
-            const ingenAvtaler = partnere.filter((partner) => partner.avtaler.length === 0);
+            const today = new Date();
+            const ingenAvtaler = partnere.filter(
+                (partner) =>
+                    partner.avtaler.length === 0 ||
+                    partner.avtaler.every((avtale) => new Date(avtale.sluttDato) < today),
+            );
+
             let tempFilteredList: ApiPartner[] = [];
             if (selectedAvtaler.includes('aktiv')) {
                 if (inputFieldValue.trim() !== '') {
@@ -71,10 +77,6 @@ export const PartnerNavigation: React.FC = () => {
                     setFilteredList([]);
                 } else {
                     tempFilteredList = tempFilteredList.concat(ingenAvtaler);
-                    const today = new Date();
-                    tempFilteredList = tempFilteredList.concat(
-                        partnere.filter((value) => value.avtaler.every((avtale) => new Date(avtale.sluttDato) < today)),
-                    );
                 }
             }
             if (selectedAvtaler.length === 0 && inputFieldValue.trim() !== '') {
