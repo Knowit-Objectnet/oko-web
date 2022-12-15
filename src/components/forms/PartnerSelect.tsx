@@ -15,7 +15,11 @@ export const PartnerSelectMultiple: React.FC<FormFieldProps & Props> = ({
     existingPartnere = [],
     ...props
 }) => {
-    const { data: partnere, isLoading, isLoadingError } = usePartnere();
+    const { data: partnere, isLoading, isLoadingError } = usePartnere({ params: { includeAvtaler: true } });
+    const today = new Date();
+    const filteredPartners = partnere?.filter((value) =>
+        value.avtaler.some((avtale) => new Date(avtale.sluttDato) >= today),
+    );
 
     const getLoadingPlaceholder = (): React.ReactNode => {
         if (isLoading) {
@@ -29,14 +33,14 @@ export const PartnerSelectMultiple: React.FC<FormFieldProps & Props> = ({
                 </WarningContainer>
             );
         }
-        if (partnere && partnere.length < 1) {
+        if (filteredPartners && filteredPartners.length < 1) {
             return 'Fant ingen partnere å velge mellom.';
         }
         return null;
     };
 
     const getPartnerCheckBoxes = (): Array<CheckboxOption> =>
-        (partnere || []).map((partner) => ({
+        (filteredPartners || []).map((partner) => ({
             value: partner.id,
             label: partner.navn,
             disabled: disableExisting && existingPartnere.indexOf(partner.id) >= 0,
