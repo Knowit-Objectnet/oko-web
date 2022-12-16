@@ -39,7 +39,7 @@ export const CalendarFilterSelect: React.FC<Props> = ({
     const data: undefined | Array<ApiPartner> | Array<ApiStasjon> = query.data;
     const filteredPartnerData: ApiPartner[] = ((data as ApiPartner[]) || [])?.filter((partner: ApiPartner) =>
         partner?.avtaler?.some((avtale: ApiAvtale) => {
-            if (new Date(avtale.sluttDato) > today) {
+            if (new Date(avtale?.sluttDato) > today) {
                 return avtale?.henteplaner?.some(
                     (henteplan: ApiHenteplan) => henteplan?.stasjonId == user.user.aktorId,
                 );
