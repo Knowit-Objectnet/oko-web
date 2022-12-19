@@ -4,6 +4,7 @@ import { usePartnere } from '../../services/partner/usePartnere';
 import { ListSkeleton } from './checkbox/ListSkeleton';
 import { WarningBody, WarningContainer, WarningTitle } from './Warning';
 import { CheckboxGroup, CheckboxOption } from './checkbox/CheckboxGroup';
+import { ApiPartner } from '../../services/partner/PartnerService';
 
 interface Props {
     existingPartnere?: string[];
@@ -16,10 +17,21 @@ export const PartnerSelectMultiple: React.FC<FormFieldProps & Props> = ({
     ...props
 }) => {
     const { data: partnere, isLoading, isLoadingError } = usePartnere({ params: { includeAvtaler: true } });
+
+    const sortFilteredItems = (a: ApiPartner, b: ApiPartner): number => {
+        if (a.navn[0] === '*') {
+            return 1;
+        } else if (b.navn[0] === '*') {
+            return -1;
+        } else {
+            return 0;
+        }
+    };
+
     const today = new Date();
-    const filteredPartners = partnere?.filter((value) =>
-        value.avtaler.some((avtale) => new Date(avtale.sluttDato) >= today),
-    );
+    const filteredPartners = partnere
+        ?.sort(sortFilteredItems)
+        .filter((value) => value.avtaler.some((avtale) => new Date(avtale.sluttDato) >= today));
 
     const getLoadingPlaceholder = (): React.ReactNode => {
         if (isLoading) {
