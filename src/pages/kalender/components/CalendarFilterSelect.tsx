@@ -5,12 +5,8 @@ import { CheckboxGroup, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { ApiPartner } from '../../../services/partner/PartnerService';
 import { CalendarFilterFn } from '../hooks/useCalendarFilters';
 import { ListSkeleton } from '../../../components/forms/checkbox/ListSkeleton';
-import { UseQueryResult } from 'react-query';
 import { Box } from '@chakra-ui/layout';
 import Filter from '../../../assets/Filter.svg';
-import { ApiAvtale } from '../../../services/avtale/AvtaleService';
-import { ApiHenteplan } from '../../../services/henteplan/HenteplanService';
-import { useAuth } from '../../../auth/useAuth';
 import { ApiStasjon } from '../../../services/stasjon/StasjonService';
 
 interface Props {
@@ -19,7 +15,9 @@ interface Props {
         error: string;
     };
     name: string;
-    query: UseQueryResult<Array<ApiPartner> | Array<ApiStasjon>>;
+    data: ApiPartner[] | ApiStasjon[] | undefined;
+    isLoading: boolean;
+    isLoadingError: boolean;
     filterFnFactory: (aktorIds: Array<string>) => CalendarFilterFn;
     selectedAktorIds: Array<string>;
     setSelectedAktorIds: (aktorIds: Array<string>) => void;
@@ -28,24 +26,15 @@ interface Props {
 export const CalendarFilterSelect: React.FC<Props> = ({
     labels,
     name,
-    query,
+    data,
+    isLoading,
+    isLoadingError,
     filterFnFactory,
     selectedAktorIds,
     setSelectedAktorIds,
 }) => {
     const { setFilter, clearFilter } = useCalendarState();
-    const user = useAuth();
-    const today = new Date();
-    const data: undefined | Array<ApiPartner> | Array<ApiStasjon> = query.data;
-    const filteredPartnerData: ApiPartner[] = ((data as ApiPartner[]) || [])?.filter((partner: ApiPartner) =>
-        partner?.avtaler?.some((avtale: ApiAvtale) => {
-            if (new Date(avtale?.sluttDato) > today) {
-                return avtale?.henteplaner?.some(
-                    (henteplan: ApiHenteplan) => henteplan?.stasjonId == user.user.aktorId,
-                );
-            }
-        }),
-    );
+
     const handleSelectionChange = (checkboxValues: Array<string>) => {
         setSelectedAktorIds(checkboxValues);
 
@@ -65,17 +54,17 @@ export const CalendarFilterSelect: React.FC<Props> = ({
     };
 
     const getCheckboxes = () => {
-        if (query.isLoading) {
+        if (isLoading) {
             return <ListSkeleton />;
         }
-        if (query.isLoadingError) {
+        if (isLoadingError) {
             return <Text>{labels.error}</Text>;
         }
-        if (query.data) {
+        if (data) {
             return (
                 <>
                     <CheckboxGroup onChange={handleSelectionChange} value={selectedAktorIds}>
-                        {filteredPartnerData?.map((aktor: ApiPartner) => (
+                        {data.map((aktor) => (
                             <Checkbox key={aktor.id} name={name} value={aktor.id} label={aktor.navn} />
                         ))}
                     </CheckboxGroup>

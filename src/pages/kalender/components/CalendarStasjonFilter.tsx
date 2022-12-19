@@ -19,7 +19,9 @@ export const CalendarStasjonFilter: React.FC<Props> = ({ selectedStasjonIds, set
         <CalendarFilterSelect
             labels={{ title: 'Filtrer på stasjon', error: 'Beklager, klarte ikke å laste stasjoner.' }}
             name="stasjonFilter"
-            query={stasjonerQuery}
+            data={stasjonerQuery.data}
+            isLoading={stasjonerQuery.isLoading}
+            isLoadingError={stasjonerQuery.isLoadingError}
             filterFnFactory={stasjonFilterFnFactory}
             selectedAktorIds={selectedStasjonIds}
             setSelectedAktorIds={setSelectedStasjonIds}
