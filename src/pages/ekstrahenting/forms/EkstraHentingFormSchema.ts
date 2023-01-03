@@ -4,8 +4,9 @@ import { transformStringToDateTime } from '../../../utils/forms/transformStringT
 import { add, isEqual } from 'date-fns';
 import { Tidspunkt, tidspunktOptions } from './EkstraHentingForm';
 import { utlysningSelectorOptions, UtlysningSelectorType } from './UtlysFlerePartnereForm';
+import { AuthContext } from '../../../auth/useAuth';
 
-export const getEkstraHentingValidationSchema = (stasjonId?: string) =>
+export const getEkstraHentingValidationSchema = (stasjonId?: string, user?: AuthContext) =>
     yup.object().shape({
         stasjon: yup.string().when((value: unknown, schema: yup.StringSchema) => {
             if (stasjonId) {
@@ -25,7 +26,7 @@ export const getEkstraHentingValidationSchema = (stasjonId?: string) =>
             .label('dato for hentingen')
             .transform(transformStringToDate)
             .when('tidspunkt', (tidspunkt: Tidspunkt | undefined, schema: yup.DateSchema) => {
-                if (tidspunkt === 'CUSTOM') {
+                if (tidspunkt === 'CUSTOM' && !user?.user.isAdmin) {
                     return schema
                         .required()
                         .min(new Date(new Date().setHours(0, 0, 0, 0)), 'Dato må være i dag eller senere');

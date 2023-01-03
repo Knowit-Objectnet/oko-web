@@ -1,15 +1,13 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { useCalendarState } from '../CalendarProvider';
 import { Checkbox } from '../../../components/forms/checkbox/Checkbox';
 import { CheckboxGroup, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { ApiPartner } from '../../../services/partner/PartnerService';
-import { ApiStasjon } from '../../../services/stasjon/StasjonService';
 import { CalendarFilterFn } from '../hooks/useCalendarFilters';
 import { ListSkeleton } from '../../../components/forms/checkbox/ListSkeleton';
-import { UseQueryResult } from 'react-query';
 import { Box } from '@chakra-ui/layout';
 import Filter from '../../../assets/Filter.svg';
+import { ApiStasjon } from '../../../services/stasjon/StasjonService';
 
 interface Props {
     labels: {
@@ -17,7 +15,9 @@ interface Props {
         error: string;
     };
     name: string;
-    query: UseQueryResult<Array<ApiPartner> | Array<ApiStasjon>>;
+    data: ApiPartner[] | ApiStasjon[] | undefined;
+    isLoading: boolean;
+    isLoadingError: boolean;
     filterFnFactory: (aktorIds: Array<string>) => CalendarFilterFn;
     selectedAktorIds: Array<string>;
     setSelectedAktorIds: (aktorIds: Array<string>) => void;
@@ -26,7 +26,9 @@ interface Props {
 export const CalendarFilterSelect: React.FC<Props> = ({
     labels,
     name,
-    query,
+    data,
+    isLoading,
+    isLoadingError,
     filterFnFactory,
     selectedAktorIds,
     setSelectedAktorIds,
@@ -52,17 +54,17 @@ export const CalendarFilterSelect: React.FC<Props> = ({
     };
 
     const getCheckboxes = () => {
-        if (query.isLoading) {
+        if (isLoading) {
             return <ListSkeleton />;
         }
-        if (query.isLoadingError) {
+        if (isLoadingError) {
             return <Text>{labels.error}</Text>;
         }
-        if (query.data) {
+        if (data) {
             return (
                 <>
                     <CheckboxGroup onChange={handleSelectionChange} value={selectedAktorIds}>
-                        {query.data.map((aktor) => (
+                        {data.map((aktor) => (
                             <Checkbox key={aktor.id} name={name} value={aktor.id} label={aktor.navn} />
                         ))}
                     </CheckboxGroup>
