@@ -4,6 +4,7 @@ import { usePartnere } from '../../services/partner/usePartnere';
 import { ListSkeleton } from './checkbox/ListSkeleton';
 import { WarningBody, WarningContainer, WarningTitle } from './Warning';
 import { CheckboxGroup, CheckboxOption } from './checkbox/CheckboxGroup';
+import { ApiPartner } from '../../services/partner/PartnerService';
 
 interface Props {
     existingPartnere?: string[];
@@ -15,7 +16,22 @@ export const PartnerSelectMultiple: React.FC<FormFieldProps & Props> = ({
     existingPartnere = [],
     ...props
 }) => {
-    const { data: partnere, isLoading, isLoadingError } = usePartnere();
+    const { data: partnere, isLoading, isLoadingError } = usePartnere({ params: { includeAvtaler: true } });
+
+    const sortFilteredItems = (a: ApiPartner, b: ApiPartner): number => {
+        if (a.navn[0] === '*') {
+            return 1;
+        } else if (b.navn[0] === '*') {
+            return -1;
+        } else {
+            return 0;
+        }
+    };
+
+    const today = new Date();
+    const filteredPartners = partnere
+        ?.sort(sortFilteredItems)
+        .filter((value) => value.avtaler.some((avtale) => new Date(avtale.sluttDato) >= today));
 
     const getLoadingPlaceholder = (): React.ReactNode => {
         if (isLoading) {
@@ -29,14 +45,14 @@ export const PartnerSelectMultiple: React.FC<FormFieldProps & Props> = ({
                 </WarningContainer>
             );
         }
-        if (partnere && partnere.length < 1) {
+        if (filteredPartners && filteredPartners.length < 1) {
             return 'Fant ingen partnere å velge mellom.';
         }
         return null;
     };
 
     const getPartnerCheckBoxes = (): Array<CheckboxOption> =>
-        (partnere || []).map((partner) => ({
+        (filteredPartners || []).map((partner) => ({
             value: partner.id,
             label: partner.navn,
             disabled: disableExisting && existingPartnere.indexOf(partner.id) >= 0,

@@ -25,6 +25,7 @@ import { utlysningSelectorOptions, UtlysningSelectorType } from './UtlysFlerePar
 
 // NB! Setting the error messages used by yup
 import '../../../utils/forms/formErrorMessages';
+import { useAuth } from '../../../auth/useAuth';
 
 interface EkstraHentingFormData {
     stasjon: string;
@@ -53,8 +54,9 @@ interface Props {
 }
 
 export const EkstraHentingForm: React.FC<Props> = ({ stasjonId, onSuccess }) => {
+    const user = useAuth();
     const formMethods = useForm<EkstraHentingFormData>({
-        resolver: yupResolver(getEkstraHentingValidationSchema(stasjonId)),
+        resolver: yupResolver(getEkstraHentingValidationSchema(stasjonId, user)),
     });
 
     const { data: allPartnere } = usePartnere();
